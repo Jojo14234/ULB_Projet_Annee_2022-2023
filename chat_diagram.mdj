@@ -31,7 +31,7 @@
 							"left": 656,
 							"top": 504,
 							"width": 17,
-							"height": 321
+							"height": 505
 						},
 						{
 							"_type": "UMLTextBoxView",
@@ -73,7 +73,7 @@
 							},
 							"font": "Arial;13;0",
 							"lineStyle": 1,
-							"points": "664:856;664:824",
+							"points": "664:1032;664:1008",
 							"lineMode": 1
 						},
 						{
@@ -307,18 +307,6 @@
 						},
 						{
 							"_type": "UMLTextView",
-							"_id": "AAAAAAGErzIwubHQhak=",
-							"_parent": {
-								"$ref": "AAAAAAFF+qBtyKM79qY="
-							},
-							"font": "Arial;13;0",
-							"left": 168,
-							"top": 760,
-							"width": 60,
-							"height": 15
-						},
-						{
-							"_type": "UMLTextView",
 							"_id": "AAAAAAGErzJFRrHTE/Y=",
 							"_parent": {
 								"$ref": "AAAAAAFF+qBtyKM79qY="
@@ -329,54 +317,6 @@
 							"width": 202.72802734375,
 							"height": 25,
 							"text": "notifyNewMessage()"
-						},
-						{
-							"_type": "UMLFrameView",
-							"_id": "AAAAAAGErzMEdrHd5Rg=",
-							"_parent": {
-								"$ref": "AAAAAAFF+qBtyKM79qY="
-							},
-							"model": {
-								"$ref": "AAAAAAFF+h6SjaM2Hec="
-							},
-							"subViews": [
-								{
-									"_type": "LabelView",
-									"_id": "AAAAAAGErzMEdrHei3w=",
-									"_parent": {
-										"$ref": "AAAAAAGErzMEdrHd5Rg="
-									},
-									"font": "Arial;16;0",
-									"left": 75,
-									"top": 885,
-									"width": 31.25,
-									"height": 16,
-									"text": "loop"
-								},
-								{
-									"_type": "LabelView",
-									"_id": "AAAAAAGErzMEdrHf7+A=",
-									"_parent": {
-										"$ref": "AAAAAAGErzMEdrHd5Rg="
-									},
-									"font": "Arial;16;1",
-									"left": 69,
-									"top": 885,
-									"width": 1,
-									"height": 16
-								}
-							],
-							"font": "Arial;16;0",
-							"left": 64,
-							"top": 880,
-							"width": 257,
-							"height": 121,
-							"nameLabel": {
-								"$ref": "AAAAAAGErzMEdrHei3w="
-							},
-							"frameTypeLabel": {
-								"$ref": "AAAAAAGErzMEdrHf7+A="
-							}
 						},
 						{
 							"_type": "UMLTextView",
