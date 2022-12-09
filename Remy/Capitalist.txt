@@ -584,3 +584,28 @@ Les maison/hotel -> *, **, ***, ****, H
 
 
 
+Questions : 
+	-> rejoindre partie : 4chiffres aléatoire (ex: 1234, 9876, ...)
+	-> vision des game ouvert : NON 
+	-> langue du jeu : Suspend
+	-> taille max du username : 32
+	-> taille min du username : 1 (alphabet+nombre+charSpéciaux) exception (espace)
+	-> taille max map : 128
+	-> taille min mdp : 4 (alphabet+nombre+charSpéciaux) exception (espace)
+	-> taille max msg : 1024
+	-> 
+	-> quitte la partie : 1min pour rejoindre (pas de mode spectateur en cas de non reconnection)
+	-> changement de pseudo : NON 
+
+	
+Gestion db : 
+	-> User
+
+Gestion du classement :
+	-> score : somme(point gagné en jouant)
+	-> point gagné en jouant : !classement de la partie (1er: nbr_de_player, 2em: nbr_player-1 , ... dernier: 0)
+
+
+
+
+
