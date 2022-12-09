@@ -1,0 +1,586 @@
+Capitali$t :
+
+Player : 
+- Achète propriété 
+- posé des maisons
+- Hypothèque
+- lancer les dés
+- participer ventes aux enchère
+- piocher des cartes chances et caisse communauté
+
+Banque :
+- Verser salaire et prime
+- Encaisser l'argent taxes et amendes
+- Vends propriété
+- Dirige ventes au enchères
+- Vend maison et hôtel
+- Prête argent pour hypothèque
+
+Board:
+- 40 cases
+- 16 cartes chances
+- 16 carte caisse de communauté
+
+- 2 groupe de 2 (4)
+- 6 groupes de 3 (18)
+- 4 gares
+- Départ, Prison, Parking Gratuit, Allez en prison (4)
+- 2 impôts
+- 2 sociétés (eau et elec)
+- 3 cases caisse communauté
+- 3 cases chance
+
+- position des joueurs
+- joueurs en prison
+- nbr de maison et hotel posé
+- a qui de jouer
+
+CARTE : propriété
+- propriétaire
+- prix unitaire
+- prix en groupe
+- prix 1maison
+- prix 2maison
+- prix 3maison
+- prix 4maison
+- prix hotel
+- valeur d'hypothèque
+- NOM + COULEUR
+
+CARTE : chance et communauté 
+- Texte avec message
+- type : {positif, négatif, déplacement, sortie de prison}
+- faire payer
+- donner de l'argent
+- déplacer
+- garder carte
+
+CARTE : compagnie
+- prix unitaire
+- prix ensemble
+
+Carte : Taxe
+- faire payer les taxes
+
+CARTE : Gare
+- prix 1
+- prix 2
+- prix 3
+- prix 4
+
+Case Prison : 
+- Retenir 3dernier coup 
+- faire payer la sortie
+- utiliser la carte
+
+Case départ :
+- Donner argent à chaque tour
+
+Case allez en prison :
+- déplace joueur sur prison
+
+
+INIT PARTIE : 
+- Joueur sur case départ
+- Joueur avec argent de départ sans propriété 
+- Définir ordre
+- Lancer début de partie (timer)(nbr de tour=0)
+
+UN TOUR :
+- Construire bâtiment
+- Racheter un terrain -> négociation
+- vendre bâtiment
+- hypothèque terrain
+-> lancé les dés -> se déplacer
+- payer ce qu'on doit
+- acheter la case
+- finir le tour
+
+CAS spéciaux:
+Double -> relance dès
+3double -> prison
+Case aller en prison -> prison
+Case départ -> 200$
+Taxe -> payer
+Carte Chance -> piocher
+Carte communauté -> piocher
+
+
+
+
+
+
+Résumer réunion avec le client : 
+CLIENT : 
+	- Ne pas hésiter à poser des questions
+	- canaux de communication : mail / teams
+	- 7h de décalage
+SRD : 
+	- Décrire ce que fait le programme (≠ comment fonctionne le programme)
+	- éviter les grosse description
+	- Diagramme dans le corps du texte + introduction de chaque diagramme + préciser cas non repris dans le diagramme
+	- Diviser les diagramme de classe
+	- Langue principale du sud : Français, langue pour les diagramme UML : Anglais
+ 
+JEU : 
+	- nombre de carte finis : -> remettre une carte dans le paquet après l'avoir tirée
+	- fichier externe (.json, .txt, ...) pour les configs
+	- Chat in-game -> sert pour échange
+	- HISTORIQUE DE CHAT -> à voir avec la privacité des msg 
+	- échange -> lors de son tour pour éviter d'être en faillite 
+	- Si joueur déco -> 1minutes pour se reco -> sinon faillite 
+	- Possibilité de quitter la partie quand on le désire. --> faillite
+	- faillite signifie : -> argent à la banque / -> propriété remise en vente
+	- Projet en ligne : mais dans un premier temps en local -> plusieurs terminal jouent ensemble
+	- Partie 2 : afficher dans le terminal un plateau 
+	- Nbr max de joueur : 6
+	- On ne rejoint pas une partie en cours
+
+
+Questions en suspend : 
+	- chat in-game (pour échange) && chat personnel (en lien avec ses amis sur le jeu) ?? 
+	- est ce que MVC ?? 
+	- langue du srd 
+	- utilisation de process/thread
+	- 
+
+
+Use case MenuPrincipale
+
+Acteurs 
+	- Joueur
+	- Amis
+	- Serveur
+Action 
+	- se connecter
+	- crée une partie
+	- rejoindre une partie
+	- voire sa liste d'amis
+	- ajouté un amis
+	- supprimer un amis
+	- envoyer un msg à un amis
+
+
+
+
+
+
+
+
+-_-_-_-_-_-_-_Besoin Fonctionnel User-_-_-_-_-_-_-_
+
+Pré/post conditions 
+Cas normaux / exceptionnels
+
+Connexion : Trop détaillé
+-> bull use case : action de l'utilisateur : juste create account et login
+-> autre infos dans système/design
+-> sémantique bas authentification
+
+Ecran d'accueil : pas assez concise
+-> option de se déconnecter
+-> voire classement joueur 
+-> comment invité un amis (msg privé ou partie ouvert)
+-> chat 
+
+In game : 
+-> Rectangle système manquant
+-> format conditions
+-> mise au enchère sans gagnant ? 
+-> possibilité d'abandonner ? Plutôt que de se déco ?
+
+-_-_-_-_-_-_-_Besoin non fonctionnel user-_-_-_-_-_-_-_
+
+-> langue du jeu (Français Anglais) ??
+-> Limite de caractère pour le userName et le passWord
+
+-> + d'infos sur l'interface que l'utilisateur aura dans le terminal.
+-> sons et bruitage -> ça dégage (on l'ajoutera plustard si on a le temp de l'implémenter).
+
+-_-_-_-_-_-_-_Besoin Fonctionnel système-_-_-_-_-_-_-_
+
+-> ajouté joueur + serveur accès à internet
+-> Partie réseau quelle protocole : TCP IP ? 
+-> Système antiCheat ?? 
+-> Efficacité du serveur et du client -> pas de requête inutile à traiter
+-> Langage de programmation utilisé : C++/C
+->Taille d'un msg dans le chat
+
+-_-_-_-_-_-_-_-_-_-_-_-_-_-_ Design -_-_-_-_-_-_-_-_-_-_-_-_-_-_
+
+-> inclure ce qu'on a mis dans besoin utilisateur (Attention incomplet mais bon début)
+-> Classe client / Classe Server
+-> Ajouté de la doc sur les méthodes de classe
+-> MVC POUR LE CLIENT
+-> Constructeur avec arguments
+-> Destructeur -> ça dégage (sauf si utilité)
+-> std pas nécessaire 
+-> Convention des noms de var/Class/méthode/attributs
+
+-_-_-_-_-_-_-_-_-_-_-_-_-_-_ Figure 4 -_-_-_-_-_-_-_-_-_-_-_-_-_-_
+
+-> Ajt légende, + légende couleur
+-> ClassServer/ClassClient (indiquer)
+-> AbstractClass (indiquer)
+-> AuctionClass + BankruptClass + NegociationClass + PlayerTurnClass (alt ou préciser)
+-> Association player/sortie_de_prison
+
+
+-_-_-_-_-_-_-_-_-_-_-_-_-_-_ Figure 5 -_-_-_-_-_-_-_-_-_-_-_-_-_-_
+
+-> avt doc sur class/méthode/attributs pour comprendre ce qu'elles font
+-> Légende -> couleur plutôt que nom en FR
+-> ClassServer/ClassClient (indiquer)
+-> association user/server après authentification (sans passer par la db)
+-> 
+-> SignInManager (ajt)
+-> Méthode du client pour communiquer avec le serveur
+-> Méthode gestion amis/gestion classement/ invitation
+
+-> Ajt détail sur comm client/serveur
+-> Chat comment on le gère ? 
+
+-_-_-_-_-_-_-_-_-_-_-_-_-_-_ Partie dynamique -_-_-_-_-_-_-_-_-_-_-_-_-_-_
+
+-> attention au convention UML
+	- utiliser des classe objet (avec des bonhomme) (ex: 2 objet de la classe Player)
+	- rectangle verticaux == activation de la classe/l'objet
+-> manque ':' pour les classes
+-> utiliser un diagramme d'activité si plusieurs lèches avec conditions différentes
+-> flèche réponse pas correct
+
+-_-_-_-_-_-_-_-_-_-_-_-_-_-_ Figure 6 -_-_-_-_-_-_-_-_-_-_-_-_-_-_	
+-> Not Recognised =!= pas convention UML
+-> SignInRequest n'est pas dans la classe User dans la figure 5 (registreManager ???)
+
+-_-_-_-_-_-_-_-_-_-_-_-_-_-_ Figure 7 -_-_-_-_-_-_-_-_-_-_-_-_-_-_
+
+-> Correct =!= pas convention UML
+-> GameRoom n'est pas dans diagramme de classe
+
+-_-_-_-_-_-_-_-_-_-_-_-_-_-_ Figure 8 -_-_-_-_-_-_-_-_-_-_-_-_-_-_
+
+-> temps dépassé : il se passe quoi ?? 
+
+-_-_-_-_-_-_-_-_-_-_-_-_-_-_ Figure 9 -_-_-_-_-_-_-_-_-_-_-_-_-_-_
+
+-> diff : takeCard/UseCard/giveCard ???? (Préciser)
+->sellThing = vendre quoi ? (Préciser)
+-> Sortie de prison ? 
+-> échange carte avec autre joueur pour éviter bankrupt
+-> money == 0 =!= convention UML
+
+-_-_-_-_-_-_-_-_-_-_-_-_-_-_ Figure 10 -_-_-_-_-_-_-_-_-_-_-_-_-_-_
+
+-> + de détail sur la partie Chat
+
+-_-_-_-_-_-_-_-_-_-_-_-_-_-_ Figure 11 -_-_-_-_-_-_-_-_-_-_-_-_-_-_
+
+-> inclure carte Sortie de prison
+
+
+
+
+Description Dynamique pour le menu principale
+Système pour vérifier que les règles de jeu soit respectées ? Vérifier coté user/coté server ?
+Ajt diagramme de déploiement
+
+
+
+
+
+
+
+
+
+
+
+
+
+Note durant réunion sur srd partiel.
+
+Agéabilité : temps de réponse en temps (pas prioritaire)
+
+Figure 1:
+	Juste log et create 
+	On est très haut niveau 
+	Pré/Post/Cas normal/Cas excpetionnel
+
+	Garder : se connnecter/ créer un compte (explication)
+
+	Passer le diagramme dans la partie système/design
+
+Figure 2 : 
+	-> check friend_list/show == same
+	-> meme remarque que dans fig1
+	-> garder seulement les useCase
+		-> le reste dans système et design
+
+	Classement joueur / option de se déconnecter
+
+	Préciser comment rejoindre une game 
+		-> avec les conditions
+
+	Ajt CHAT dans Ecran d'accueil
+		-> comment on l'utilise : 
+
+Figure 3 :
+	-> Pas claire 
+	-> tjs les même choses : faire + conci
+
+	-> useCase ≠ etat 
+	faire ptt 2-3 Use case en fonction des état 
+	Use case lors de son tour/lors de pas son tour
+
+
+reformuler les enchère 
+
+Ajt une option pour se déco 
+Langue du jeu (Français)
+Contrainte pour la longueur du mdp et du userName + char accepté
+
+Supprimé le fait de pouvoir changer de pseudo
+
+AntiDDos, si on appuie trop de fois sur un btn ou si on envoit trop de msg
+
+
+
+
+
+Test askip art plateau de jeu
+
+
+Case : 
+Il faut son nom 
+Le joueur dessus -> 1, 2, 3, 4, 5, 6
+Les maison/hotel -> *, **, ***, ****, H
+
+
+
+						CAPITALI$TE PLATEAU
+
+
+      ++++++++========--------================================--------================++++++++
+      +PRISON+|ROSE 1|| COMP ||ROSE 2||ROSE 3|| GARE ||ORANG1||CAISSE||ORANG2||ORANG3|+ FREE +
+      +123456+|****  || ELEC ||****  ||****  ||  2   ||****  ||COMMUN||****  ||****  |+ PARK +
+      +123456+|123456||123456||123456||123456||      ||123456||      ||123456||123456|+      +
+      ++++++++========--------========--------================--------================++++++++
+      ========                                                                        ========
+      |BLEUc3|                                                                        |ROUGE1|
+      |****  |                                                                        |****  |
+      |123456|                                                                        |123456|
+      ========                                                                        ========
+      ========                                                                        --------
+      |BLEUc2|                                                                        |      |
+      |****  |                                                                        |CHANCE|
+      |123456|                                                                        |      |
+      ========                                                                        --------
+      --------                                                                        ========
+      |      |                                                                        |ROUGE2|
+      |CHANCE|                                                                        |****  |
+      |      |                                                                        |123456|
+      --------                                                                        ========
+      ========                                                                        |ROUGE3|
+      |BLEUc1|                                                                        |****  |
+      |****  |                                                                        |123456|
+      |123456|                                                                        ========
+      ========                                                                        ========
+      | GARE |                                                                        | GARE |
+      |  1   |                                                                        |  3   |
+      |      |                                                                        |      |
+      ========                                                                        ========
+      --------                                                                        ========
+      |IMPOTS|                                                                        |JAUNE1|
+      |REVENU|                                                                        |****  |
+      |      |                                                                        |123456|
+      --------                                                                        ========
+      ========                                                                        ========
+      |BRUN2 |                                                                        |JAUNE2
+      |****  |                                                                        |****  |
+      |123456|                                                                        |123456|
+      ========                                                                        ========
+      --------                                                                        ========
+      |CAISSE|                                                                        | COMP |
+      |COMMUN|                                                                        | EAUX |
+      |      |                                                                        |123456|
+      --------                                                                        ========
+      ========                                                                        ========
+      |BRUN 1|                                                                        |JAUNE3|
+      |****  |                                                                        |****  |
+      |123456|                                                                        |123456|
+      ========                                                                        ========
+      ++++++++========--------========--------================--------================++++++++
+      +Départ+|BLUEf2|| TAXE ||BLEUf1||      || GARE ||VERT 3||CAISSE||VERT 2||VERT 1|+ALLEZ +
+      +      +|****  ||  DE  ||****  ||CHANCE||  4   ||****  ||COMMUN||****  ||****  |+EN    +
+      +123456+|123456|| LUXE ||123456||      ||      ||123456||      ||123456||123456|+PRISON+
+      ++++++++========--------========--------================--------================++++++++
+
+
+
+      ========================================================================================
+      |PRISON||ROSE 1|| COMP ||ROSE 2||ROSE 3|| GARE ||ORANG1||CAISSE||ORANG2||ORANG3|| FREE |
+      |123456||****  || ELEC ||****  ||****  ||  2   ||****  ||COMMUN||****  ||****  || PARK |
+      |123456||123456||123456||123456||123456||      ||123456||      ||123456||123456||      |
+      ========================================================================================
+      ========                                                                        ========
+      |BLEUc3|                                                                        |ROUGE1|
+      |****  |                                                                        |****  |
+      |123456|                                                                        |123456|
+      ========                                                                        ========
+      ========                                                                        ========
+      |BLEUc2|                                                                        |      |
+      |****  |                                                                        |CHANCE|
+      |123456|                                                                        |      |
+      ========                                                                        ========
+      ========                                                                        ========
+      |      |                                                                        |ROUGE2|
+      |CHANCE|                                                                        |****  |
+      |      |                                                                        |123456|
+      ========                                                                        ========
+      ========                                                                        |ROUGE3|
+      |BLEUc1|                                                                        |****  |
+      |****  |                                                                        |123456|
+      |123456|                                                                        ========
+      ========                                                                        ========
+      | GARE |                                                                        | GARE |
+      |  1   |                                                                        |  3   |
+      |      |                                                                        |      |
+      ========                                                                        ========
+      ========                                                                        ========
+      |IMPOTS|                                                                        |JAUNE1|
+      |REVENU|                                                                        |****  |
+      |      |                                                                        |123456|
+      ========                                                                        ========
+      ========                                                                        ========
+      |BRUN2 |                                                                        |JAUNE2
+      |****  |                                                                        |****  |
+      |123456|                                                                        |123456|
+      ========                                                                        ========
+      ========                                                                        ========
+      |CAISSE|                                                                        | COMP |
+      |COMMUN|                                                                        | EAUX |
+      |      |                                                                        |123456|
+      ========                                                                        ========
+      ========                                                                        ========
+      |BRUN 1|                                                                        |JAUNE3|
+      |****  |                                                                        |****  |
+      |123456|                                                                        |123456|
+      ========                                                                        ========
+      ========================================================================================
+      |Départ||BLUEf2|| TAXE ||BLEUf1||      || GARE ||VERT 3||CAISSE||VERT 2||VERT 1||ALLEZ |
+      |      ||****  ||  DE  ||****  ||CHANCE||  4   ||****  ||COMMUN||****  ||****  ||EN    |
+      |123456||123456|| LUXE ||123456||      ||      ||123456||      ||123456||123456||PRISON|
+      ========================================================================================
+
+
+      ----------------------------------------------------------------------------------------
+      |PRISON||ROSE 1|| COMP ||ROSE 2||ROSE 3|| GARE ||ORANG1||CAISSE||ORANG2||ORANG3|| FREE |
+      |      ||      || ELEC ||      ||      ||  2   ||      ||COMMUN||      ||      || PARK |
+      |      ||      ||      ||      ||      ||      ||      ||      ||      ||      ||      |
+      ----------------------------------------------------------------------------------------
+      --------                                                                        --------
+      |BLEUc3|                                                                        |ROUGE1|
+      |      |                                                                        |      |
+      |      |                                                                        |      |
+      --------                                                                        --------
+      --------                                                                        --------
+      |BLEUc2|                                                                        |      |
+      |      |                                                                        |CHANCE|
+      |      |                                                                        |      |
+      --------                                                                        --------
+      --------                                                                        --------
+      |      |                                                                        |ROUGE2|
+      |CHANCE|                                                                        |      |
+      |      |                                                                        |      |
+      --------                                                                        --------
+      --------                                                                        --------
+      |BLEUc1|                                                                        |ROUGE3|
+      |      |                                                                        |****  |
+      |      |                                                                        |      |
+      --------                                                                        --------
+      --------                                                                        --------
+      | GARE |                                                                        | GARE |
+      |  1   |                                                                        |  3   |
+      |      |                                                                        |      |
+      --------                                                                        --------
+      --------                                                                        --------
+      |IMPOTS|                                                                        |JAUNE1|
+      |REVENU|                                                                        |      |
+      |      |                                                                        |      |
+      --------                                                                        --------
+      --------                                                                        --------
+      |BRUN2 |                                                                        |JAUNE2
+      |      |                                                                        |      |
+      |      |                                                                        |      |
+      --------                                                                        --------
+      --------                                                                        --------
+      |CAISSE|                                                                        | COMP |
+      |COMMUN|                                                                        | EAUX |
+      |      |                                                                        |      |
+      --------                                                                        --------
+      --------                                                                        --------
+      |BRUN 1|                                                                        |JAUNE3|
+      |      |                                                                        |      |
+      |      |                                                                        |      |
+      --------                                                                        --------
+      ----------------------------------------------------------------------------------------
+      |Départ||BLUEf2|| TAXE ||BLEUf1||      || GARE ||VERT 3||CAISSE||VERT 2||VERT 1||ALLEZ |
+      |      ||      || LUXE ||      ||CHANCE||  4   ||      ||COMMUN||      ||      ||EN    |
+      |      ||      ||      ||      ||      ||      ||      ||      ||      ||      ||PRISON|
+      ----------------------------------------------------------------------------------------
+
+
+
+    45 ____________________________________________________________________________
+      |PRISON|ROSE 1| COMP |ROSE 2|ROSE 3| GARE |ORANG1|CAISSE|ORANG2|ORANG3| FREE | 
+      |      |      | ELEC |      |      | NORD |      |COMMUN|      |      | PARK |
+      |      |      |      |      |      |      |      |      |      |      |      |
+      |______|______|______|______|______|______|______|______|______|______|______|
+    40|BLEUc3|                                                              |ROUGE1|
+      |      |                                                              |      |
+      |      |  ________________________                                    |      |
+      |______| |                        |                                   |______|
+      |BLEUc2| |  CAISSE                |                                   |CARTE |
+      |      | |         DE             |                                   |CHANCE|
+      |      | |            COMMUNAUTÉ  |                                   |      |
+      |______| |________________________|                                   |______|
+      |CARTE |                                                              |ROUGE2|
+      |CHANCE|                                                              |      |
+    30|      |                                                              |      |
+      |______|                                                              |______|
+      |BLEUc1|                                                              |ROUGE3|
+      |      |                         _                     _              |****  |
+      |      |      __          ____  |_| _____        _    |_|  _ _____    |      |
+      |______|     / _|   /\   |  _ \  _ |_   _| /\   | |    _  | |_   _|   |______|                                                       
+      | GARE |    | |    /  \  | |_) || |  | |  /  \  | |   | |/ __)| |     | GARE |                                                             
+      | OUEST|    | |   / /\ \ |  __/ | |  | | / /\ \ | |   | |\__ \| |     | EST  |                                                        
+      |      |    | |_ /  __  \| |    | |  | |/ ____ \| |__ | |(   /| |     |      |
+      |______|     \__|__/  \__\_|    |_|  |_/_/    \_\____||_| |_| |_|     |______|
+    20|IMPOTS|                                                              |JAUNE1|
+      |REVENU|                                                              |      |
+      |      |   ______________                                             |      |
+      |______|  |              |                                            |______|
+      |BRUN2 |  | LÉGENDE :    |                                            |JAUNE2|
+      |      |  |              |                                            |      |
+      |      |  | * : maison   |                                            |      |
+      |______|  | $ : hotel    |                  ________________________  |______|
+      |CAISSE|  | 1-6: Joueurs |                 |                        | | COMP |
+      |COMMUN|  |______________|                 |    CARTE               | | EAUX |
+    10|      |                                   |                        | |      |
+      |______|                                   |               CHANCE   | |______|
+      |BRUN 1|                                   |________________________| |JAUNE3|
+      |      |                                                              |      |
+      |      |                                                              |      |
+      |______|______________________________________________________________|______|
+      |Départ|BLUEf2| TAXE |BLEUf1|CARTE | GARE |VERT 3|CAISSE|VERT 2|VERT 1|ALLEZ |
+      |      |      | LUXE |      |CHANCE| SUD  |      |COMMUN|      |      |EN    |
+      |      |      |      |      |      |      |      |      |      |      |PRISON|
+      |______|______|______|______|______|______|______|______|______|______|______|
+     0         1         2         3         4         5         6         7       7                                       
+     0         0         0         0         0         0         0         0       8                                                 
+
+
+	
+
+
+
