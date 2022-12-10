@@ -609,3 +609,31 @@ Gestion du classement :
 
 
 
+CLIENT DIAGRAM
+	Lance le luncher
+		-> launcher accède à la db ?? Ou envoie des requêtes au server ? 
+		-> Munu de connexion 
+	EVENT : click on create account 
+			-> enter username 
+			-> enter password 
+			-> check in db if username already in ? 
+			if not : create a new user inside db
+			if already in : inform user that username is already used
+			-> account created 
+				->> connexion to the account or back to the connexion screen ? 
+
+	EVENT : click log in 
+			-> enter username
+			-> enter password 
+			-> Check in db for username 
+			if not in : inform user that username is not in the db
+			if yes : -> check password db and password typed are the same
+					if not : inform that password is not correct
+					if yes : connexion 
+			 
+
+Question : est ce qu'on prévoit qu'un utilisateur puisse supprimé son compte ? 
+
+
+
+
