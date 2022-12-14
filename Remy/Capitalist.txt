@@ -670,6 +670,15 @@ Client : Client Connected : showWelcomeScreenUI
 			
 
 
+
+
+
+
+
+
+
+
+
 MenuPrincipale : 
 	Client -> WelcomeScreenManager.show() -> Affiche : /create | /join | /scoreboard | /friends | /msg username message | /leave
 		 -> InputsHandler : récupère les infos dans le terminal et les parse 
@@ -678,11 +687,11 @@ MenuPrincipale :
 		
 		-> /create :
 			-> WelcomeScreen.CreateGameManager.show() : /p Mode MODE (change le mode), 
-										/p MaxPlayer nbMaxPlayer (change le nombre maximum de joueur) 
-										/p Money AmountMoney (change le montant d'argent avec lequel on démarre)
-										/p AuctionDuration duration(change le temps des enchère)
-										/p leave (quitte le mode création de partie
-										/p start (Crée la game quand vous avez finis de la paramétrer)
+								    /p MaxPlayer nbMaxPlayer (change le nombre maximum de joueur) 
+						    		    /p Money AmountMoney (change le montant d'argent avec lequel on démarre)
+								    /p AuctionDuration duration(change le temps des enchère)
+								    /p leave (quitte le mode création de partie
+								    /p start (Crée la game quand vous avez finis de la paramétrer)
 
 			->  handle inputs -> et effectue les commandes nécessaire
 			-> send request server : (CREATE PARAM1, PARAM2, ...) (même ceux par défauts).
@@ -707,6 +716,7 @@ MenuPrincipale :
 			-> WelcomeScreenManager.ScoreBoardManager.show() : 10meilleursJoueurs par ordre croissant (place. username : points)
 										/sc top (pour voire les 10 meilleurs joueurs) | /sc bottom (pour voire les 10 pires joueurs)
 										/sc leave (pour quitter le classement)
+										/sc position (renvoie la position du joueur dans le scoreboard)
 
 			-> handleInputs -> récupère la commande 
 				if /sc top || /sc bottom  -> send request to server : getTopTenPlayer() | getBottomTenPlayer() 
