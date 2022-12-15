@@ -637,3 +637,201 @@ Question : est ce qu'on prévoit qu'un utilisateur puisse supprimé son compte ?
 
 
 
+<<<<<<< Updated upstream
+=======
+
+
+
+
+
+
+Connexion au server: 
+
+	Client -> connexion(): demande à l'utilisateur de s'enregistrer / se connecter
+		-> ConnexionManager : 
+			1) affiche (Pour vous connecter faite : /login username password | Pour vous enregistrez faites /register username password)
+/!\			2) Récupère l'input et l'envoie dans AuthentificationManager
+				-> AuthentificationManager : Check la validité du (taille+chararacter) du username et password : true | false
+			true : Client reçois username et password ainsi que CONNEXION_STATUS
+			false : Affiche un msg d'erreur + redemande d'entrer un input 
+		Send requête à server: (LOGIN|REGISTER username password)
+	Server -> receiveMSG()
+		LOGIN username password -> checkConnectionValidity()
+			-> 1 : vérifie que username in db 
+			-> 2 : vérifie que password correspondence à user.password
+			-> 3.a : renvoie true si les 2 conditions sont valide
+			-> 3.b : renvoie false si une des 2 conditions n'est pas valide 
+
+		REGISTER username password -> registerNewAccount()
+			-> 1 : vérifie que username n'est pas dans db
+				true : add newUser to db and return true
+				false : return false
+						
+		-> sendMSG()
+			Client : 
+			-> false : msg d'erreur + connexion()
+			-> true + userConnected : client.userConnecter = userConnected
+		
+		IF TRUE : clients.push_back(userConnected)
+
+Client : Client Connected : showWelcomeScreenUI
+			
+
+
+
+
+
+
+
+
+
+
+
+MenuPrincipale : 
+	Client -> WelcomeScreenManager.show() -> Affiche : /create | /join | /scoreboard | /friends | /msg username message | /leave
+		 -> InputsHandler : récupère les infos dans le terminal et les parse 
+			-> Si commence par un / -> commande
+			-> Si ne commence pas par un / -> message pour le chat générale
+		
+		-> /create :
+			-> WelcomeScreen.CreateGameManager.show() : /p Mode MODE (change le mode), 
+										/p MaxPlayer nbMaxPlayer (change le nombre maximum de joueur) 
+										/p Money AmountMoney (change le montant d'argent avec lequel on démarre)
+										/p AuctionDuration duration(change le temps des enchère)
+										/p leave (quitte le mode création de partie
+										/p start (Crée la game quand vous avez finis de la paramétrer)
+
+			->  handle inputs -> et effectue les commandes nécessaire
+			-> send request server : (CREATE PARAM1, PARAM2, ...) (même ceux par défauts).
+			Server : receive msg 
+				-> CREATE -> create à CapitalistGame with params 
+				-> ADD instance of the game in the games vector 
+				-> ADD user in game.User as the owner
+
+		-> /join : 
+			-> WelcomeScreen.JoinGameManager.show() : /joingame : GAMECODE 
+			-> handle inputs -> récupère le GAMECODE
+			-> Send request server : (GAME GAMECODE)
+			Server : search in games vector if GAMECODE is in
+				true : send msg to client : game find : connection to the game 
+					ADD user to game.player
+				false : send msg to client : game not find : try another game code
+
+
+		-> /scoreboard : 
+			-> send request to server : GetTopTenPlayer()
+				-> recherche dans la db et renvoie 10 utilisateur classé par ordre croissant de points
+			-> WelcomeScreenManager.ScoreBoardManager.show() : 10meilleursJoueurs par ordre croissant (place. username : points)
+										/sc top (pour voire les 10 meilleurs joueurs) | /sc bottom (pour voire les 10 pires joueurs)
+										/sc leave (pour quitter le classement)
+
+			-> handleInputs -> récupère la commande 
+				if /sc top || /sc bottom  -> send request to server : getTopTenPlayer() | getBottomTenPlayer() 
+				if /sc leave -> WelcomeScreen.show()
+
+		-> /friends :
+			-> WelcomeScreenManager.FriendListManager.show() -> /f request (montre les demandes d'amis)
+											  /f show (affiche les amis)
+											  /f username yes | no (accept ou non la demande d'amis de quelqu'un)
+											  /f username add (envoie une dea	mande d'amis)
+											  /f username remove (retire un de vos amis)
+											  /f username show (affiche la conversation avec username si elle existe sinon rien)
+		-> /msg username msg
+			-> send request server : USERNAME message (ici username est le receivers)
+			-> Server : find user in db 
+				-> if user connected : send user msg (USERNAME message) ici username est le senders
+				-> if user not connected : add message to user Conversation
+
+		-> message : -> chat générale 
+			-> send request server : message 
+			-> Server : if msgSender in game : send to every user in game (username : message) username = senders
+				      if msgSender not in game : send to every user connected not in game  
+		
+		-> /leave : 
+			-> send request server : LEAVE
+			-> server déconnecté user
+			-> client get Back to connexionManager
+
+
+
+
+
+
+
+
+
+
+Connection d'un utilisateur à son compte : 
+	L'executable server doit être lancé. 
+		-Instantiation de la classe Server :	• database : loaded
+					 			• connect : empty
+								• games : empty 
+					 			• server_sock : initialisation
+								• server_addr : initialisation
+	
+	Lancement de l'executable client. 
+		- Instantiation de la classe ClientControler (qui va permettre de lire les inputs dans le terminal)
+								• view = ConnexionUI
+								• model = Client
+								• status = CONNEXION
+		- view affiche : ConnexionUI	• LoginUI -> Pour vous connectez faites : /login [username] [password]
+				    			• RegisterUI -> Pour vous enregistrez faites : /register [username] [password]
+
+		- ClientControler : enregistrement + parsing des inputs :
+
+
+					• /register username password -> 
+						client : client.authentification() fait appel à AuthentificationManager
+								• return true si username et password respecte bien toutes les conditions
+								• return false si une condition n'est pas respecter
+							   if false : client.authentification()
+							   if true : Client.sendMsg(REGISTER username password)
+								Server : ReceiveMsg(): 
+									parseAndExecuteMessage()
+										-> register(username, password)
+											• database.contain(username) 
+												• true if contains
+												• false if not contains
+											if false : create new user; return true
+											if true : return false
+										if false : SendMsg(REGISTER error)
+										if true : add_connected(user_created); sendMsg(REGISTER done)
+						Client : ReceiveMsg():
+							parseAndExecuteMessage(): 
+								if REGISTER error : client.authentification() + message d'erreur
+								if REGISTER done : Status = WELCOME; user = user_created
+
+
+
+					• /login username password ->
+						client : client.authentification() fait appel à AuthentificationManager
+								• return true/false (voire plus haut)
+							   if false : client.authentification()
+							   if true : client.sendMsg(LOGIN username password)
+								Server : receiveMsg()
+									parseAndExecuteMessage()
+										-> login(username, password)
+											• database.contain(username)
+												• return true/false (voire plus haut)
+											if false : return false;
+											if true : return password == user.password;
+										if false : sendMsg(LOGIN error)
+										if true : add_connected(user_find); senMsg(LOGIN done)
+						Client : ReceiveMsg():
+							parseAndExecuteMessage():
+								if LOGIN error : client.authentification()
+								if LOGIN done : Status = Welcome + user = user_find
+
+		- if status == WELCOME : view affiche : WelcomeScreenUI 
+					
+									
+											 
+						
+
+
+		
+
+
+
+
+>>>>>>> Stashed changes
