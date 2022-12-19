@@ -637,15 +637,7 @@ Question : est ce qu'on prévoit qu'un utilisateur puisse supprimé son compte ?
 
 
 
-<<<<<<< Updated upstream
-=======
-
-
-
-
-
-
-Connexion au server: 
+Connexion au server:
 
 	Client -> connexion(): demande à l'utilisateur de s'enregistrer / se connecter
 		-> ConnexionManager : 
@@ -694,7 +686,7 @@ MenuPrincipale :
 			-> Si ne commence pas par un / -> message pour le chat générale
 		
 		-> /create :
-			-> WelcomeScreen.CreateGameManager.show() : /p Mode MODE (change le mode), 
+			-> WelcomeScreen.CreateGameManager.show() : /p Mode MODE (change le mode),
 										/p MaxPlayer nbMaxPlayer (change le nombre maximum de joueur) 
 										/p Money AmountMoney (change le montant d'argent avec lequel on démarre)
 										/p AuctionDuration duration(change le temps des enchère)
@@ -724,7 +716,7 @@ MenuPrincipale :
 			-> WelcomeScreenManager.ScoreBoardManager.show() : 10meilleursJoueurs par ordre croissant (place. username : points)
 										/sc top (pour voire les 10 meilleurs joueurs) | /sc bottom (pour voire les 10 pires joueurs)
 										/sc leave (pour quitter le classement)
-
+										/sc position (renvoie la position du joueur dans le scoreboard)
 			-> handleInputs -> récupère la commande 
 				if /sc top || /sc bottom  -> send request to server : getTopTenPlayer() | getBottomTenPlayer() 
 				if /sc leave -> WelcomeScreen.show()
@@ -751,13 +743,6 @@ MenuPrincipale :
 			-> send request server : LEAVE
 			-> server déconnecté user
 			-> client get Back to connexionManager
-
-
-
-
-
-
-
 
 
 
@@ -823,15 +808,4 @@ Connection d'un utilisateur à son compte :
 								if LOGIN done : Status = Welcome + user = user_find
 
 		- if status == WELCOME : view affiche : WelcomeScreenUI 
-					
-									
-											 
-						
 
-
-		
-
-
-
-
->>>>>>> Stashed changes
