@@ -1,5 +1,12 @@
 CXX = $(shell [ `g++ -v 2>&1 | grep -o 'version [0-9]\+' | cut -d' ' -f2` -le 9 ] && echo g++-10 || echo g++)
-CXXFLAGS = -std=c++20 -Wall -Wextra -Wpedantic -Werror=all -D_GNU_SOURCE #-fanalyzer
+CXXFLAGS = -std=c++20 -Wall -Wextra -Wpedantic -Werror=all -D_GNU_SOURCE -fanalyzer -Walloc-zero -Wcast-align \
+			-Wdeprecated-copy-dtor -Wduplicated-branches -Wduplicated-cond -Wextra-semi -Wfloat-equal \
+			-Wformat-signedness -Winit-self -Wlogical-op -Wmismatched-tags -Wnon-virtual-dtor -Wnull-dereference \
+			-fdelete-null-pointer-checks -Woverloaded-virtual -Wsign-promo -Wstrict-null-sentinel -Wsuggest-attribute=cold \
+			-Wsuggest-attribute=const -Wsuggest-attribute=noreturn -Wsuggest-attribute=pure -Wsuggest-final-methods \
+			-Wsuggest-final-types -Wsuggest-override -Wundef -Wuseless-cast -Wvolatile \
+			-Wformat=2 #-fsanitize=address,leak -Wswitch-default -Wswitch-enum -Wzero-as-null-pointer-constant
+
 LDLIBS 	 = -lpthread -lsfml-network -lsfml-system
 
 ifneq ($(shell uname -s), Linux)
