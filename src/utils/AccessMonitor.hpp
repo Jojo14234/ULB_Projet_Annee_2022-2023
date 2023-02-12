@@ -8,9 +8,14 @@
 class AccessMonitor {
 
 	sem_t write_access;
+	int readers_count = 0;
+
+// To temporarily disable a warning that is triggered by the use of PTHREAD_MUTEX_INITIALIZER
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wzero-as-null-pointer-constant"
 	pthread_mutex_t new_access          = PTHREAD_MUTEX_INITIALIZER;
 	pthread_mutex_t reader_registration = PTHREAD_MUTEX_INITIALIZER;
-	int readers_count = 0;
+#pragma GCC diagnostic pop
 
 public:
 

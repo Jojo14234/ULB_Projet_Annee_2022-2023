@@ -5,7 +5,7 @@ CXXFLAGS = -std=c++20 -Wall -Wextra -Wpedantic -Werror=all -D_GNU_SOURCE -fanaly
 			-fdelete-null-pointer-checks -Woverloaded-virtual -Wsign-promo -Wstrict-null-sentinel -Wsuggest-attribute=cold \
 			-Wsuggest-attribute=const -Wsuggest-attribute=noreturn -Wsuggest-attribute=pure -Wsuggest-final-methods \
 			-Wsuggest-final-types -Wsuggest-override -Wundef -Wuseless-cast -Wvolatile \
-			-Wformat=2 #-fsanitize=address,leak -Wswitch-default -Wswitch-enum -Wzero-as-null-pointer-constant
+			-Wformat=2  -Wzero-as-null-pointer-constant #-fsanitize=address,leak #-Wswitch-default -Wswitch-enum
 
 LDLIBS 	 = -lpthread -lsfml-network -lsfml-system
 
@@ -21,7 +21,6 @@ CLIENT_BINS = $(patsubst Client/%.cpp, Client/%.o, $(wildcard Client/*.cpp))
 SERVER_BINS = $(patsubst Server/%.cpp, Server/%.o, $(wildcard Server/*.cpp))
 SERVER_CLIENTMANAGER_BINS = $(patsubst Server/ClientManager/%.cpp, Server/ClientManager/%.o, $(wildcard Server/ClientManager/*.cpp))
 SERVER_DATABASE_BINS = $(patsubst Server/Database/%.cpp, Server/Database/%.o, $(wildcard Server/Database/*.cpp))
-#SERVER_GAME_BINS = 
 
 
 .PHONY: default
