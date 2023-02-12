@@ -13,13 +13,12 @@
 
 void Client::mainLoop() {
     while (true) {
-        // MESSAGE DE BIENVENUE
+        // WELCOME MESSAGE
         Message msg;
         msg.connexionMsg();
         while (!connectToAccount) {
-            // Tentative de connexion
-            // Si connexionLoop renvoie false c'est que l'utilisateur a entré la cmd /disconnect
-            if (!this->connexionLoop()) { return;}
+            // Try to connect
+            if (!this->connexionLoop()) { return; }
         }
         std::cout << "You are now connected to your account !" << std::endl;
         while (connectToAccount) {
@@ -27,7 +26,6 @@ void Client::mainLoop() {
             std::string input;
             std::cout << ">";
             std::getline(std::cin, input);
-
             // Parse the input
             InputParser parser{input};
             // Send input to the server
@@ -43,27 +41,27 @@ void Client::mainLoop() {
 
 
 bool Client::connexionLoop() {
-    // RECUPERATION DE l'INPUT
+    // GET INPUT
     std::string input;
     std::cout << "> ";
     std::getline(std::cin, input);
 
-    // PARSE L INPUT
+    // PARSE THE INPUT
     InputParser connexionInput{input};
     QUERY_TYPE query = connexionInput.getQueryType();
 
-    // 2 POSSIBILITÉS EN MODE CONNEXION
-    // #1 : /login || /register + username et mdp (2 paramètres)
+    // 2 POSSIBILIES IN CONNECTION MODE
+    // #1 : /login || /register + username and password (2 args)
     if ((query == QUERY_TYPE::LOGIN || query == QUERY_TYPE::REGISTER) && connexionInput.getNbParameters() == 2) {
         this->sendToServer(connexionInput);
         connectToAccount = checkAccountConnexion(connexionInput.getQueryType());
     }
-    // #2 : /disconnect (sans paramètre)
+    // #2 : /disconnect (0 args)
     else if (query == QUERY_TYPE::DISCONNECT) {
         this->disconnectToServer();
         return false;
     }
-    // #3 : Non-respect des commandes disponibles
+    // #3 : BAD COMMAND
     else {
         Message msg;
         msg.badConnexionInput();
@@ -75,11 +73,11 @@ bool Client::checkAccountConnexion(QUERY_TYPE query) {
     std::string output;
     Message msg;
     this->receiveFromServer(output);
-    // CONNEXION || CREATION ACCEPTER
+    // CONNECTION || CREATION ACCEPTED
     if (output == "TRUE") {return true;}
-    // CREATION REFUSER
+    // CREATION REFUSED
     if (query == QUERY_TYPE::REGISTER) {msg.refuseRegister();}
-    // CONNEXION REFUSER
+    // CONNECTION REFUSED
     else if (query == QUERY_TYPE::LOGIN) {msg.refuseLogin();}
     return false;
 }
@@ -118,3 +116,4 @@ void Client::receiveFromServer(std::string &output) {
 	if (this->socket.receive(packet) !=  sf::Socket::Done) { throw ReadPipeClientException(); }
 	packet >> output;
 }
+

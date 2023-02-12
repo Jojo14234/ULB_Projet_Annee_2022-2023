@@ -12,6 +12,8 @@ class Client {
 
 	sf::TcpSocket socket;
 
+    bool connectToAccount = false;
+	
 	// Connect the client to the server
 	void connectToServer();
 
@@ -24,16 +26,11 @@ class Client {
 	// Receive a message from the server
 	void receiveFromServer(std::string &output);
 
-    //Connexion loop
-    // Renvoie True lors d'une connexion réussie,
-    // Renvoie false si l'utilisateur décide de se déconnecter (en gros de quitter le programme ./capitalist)
+    // Try to connect to an account
     bool connexionLoop();
 
-    // Renvoie true si la connexion/création du compte est valide
-    // Renvoie false si la connexion/création du compte est invalide
+	// If the account connection/creation is valid 
     bool checkAccountConnexion(QUERY_TYPE query);
-
-    bool connectToAccount = false;
 
 public:
 
