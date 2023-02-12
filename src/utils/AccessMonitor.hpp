@@ -15,17 +15,19 @@ class AccessMonitor {
 public:
 
 	// Writer
+	// Lock
 	void lockWriter() {
 		pthread_mutex_lock(&this->new_access);
 		sem_wait(&this->write_access);
 		pthread_mutex_unlock(&this->new_access);
 	}
-
+	// Unlock
 	void unlockWriter() {
 		sem_post(&this->write_access);
 	}
 
 	// Reader
+	// Lock
 	void lockReader() {
 		pthread_mutex_lock(&this->new_access);
 		pthread_mutex_lock(&this->reader_registration);
@@ -34,7 +36,7 @@ public:
 		pthread_mutex_unlock(&this->new_access);
 		pthread_mutex_unlock(&this->reader_registration);
 	}
-
+	// Unlock
 	void unlockReader() {
 		pthread_mutex_lock(&this->reader_registration);
 		(this->readers_count)--;

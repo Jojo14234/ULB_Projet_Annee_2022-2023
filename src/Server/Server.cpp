@@ -80,39 +80,30 @@ void Server::connectClient() {
 
 void Server::clientProcessQuery(ClientManager &client, QUERY_TYPE query) {
 	switch (query) {
-
 		case QUERY_TYPE::LOGIN :
 			this->clientProcessLogin(client);
 			break;
-		
 		case QUERY_TYPE::REGISTER :
 			this->clientProcessRegister(client);
 			break;
-		
 		case QUERY_TYPE::JOIN_GAME :
 			this->clientProcessJoinGame(client);
 			break;
-
 		case QUERY_TYPE::CREATE_GAME :
 			this->clientProcessCreateGame(client);
 			break;	
-
 		case QUERY_TYPE::RANKING : 
 			this->clientProcessRanking(client);
 			break;
-
 		case QUERY_TYPE::FRIENDS : 
 			this->clientProcessFriends(client);
 			break;
-
 		case QUERY_TYPE::MESSAGE : 
 			this->clientProcessMessage(client);
 			break;
-
         case QUERY_TYPE::DISCONNECT :
             client.send("Déconnexion");
             break;
-
 		default : break;
 	}
 }

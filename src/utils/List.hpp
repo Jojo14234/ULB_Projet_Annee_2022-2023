@@ -19,12 +19,13 @@ protected:
 public:
 	using std::vector<std::shared_ptr<T>>::vector;
 
+	// Add an element
 	void add(const std::shared_ptr<T> &elem) {
 		this->am.lockWriter();
 		this->push_back(elem);
 		this->am.unlockWriter();
 	}
-	
+	// Remove and element
 	void remove(const T &elem) {
 		this->am.lockWriter();
 		for ( auto &it : *this ) { 

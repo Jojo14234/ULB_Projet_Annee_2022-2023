@@ -1,32 +1,27 @@
 #include "Database.hpp"
-
 #include "User.hpp"
 
-using std::fopen; using std::fclose;
-using std::fread; using std::fwrite;
-using std::cout; using std::endl;
-using std::fseek; using std::ftell;
 
 void Database::load() {
 	this->am.lockWriter();
 	FILE *file = fopen(path, "rb");
-	if (!file) {data.reserve(10); cout << "Database empty !" << endl; return;}
-	data.reserve(fileSize(file)/sizeof(User));
+	if (!file) { this->data.reserve(10); std::cout << "Database empty !" << std::endl; return; }
+	this->data.reserve(this->fileSize(file)/sizeof(User));
 	User user;
-	while (fread(&user, sizeof(User), 1, file)) data.push_back(user);
+	while (fread(&user, sizeof(User), 1, file)) this->data.push_back(user);
 	fclose(file);
-	cout << "Database loaded : [" << this->getSize() << " account registered]" << endl;
+	std::cout << "Database loaded : [" << this->getSize() << " account registered]" << std::endl;
 	this->am.unlockWriter();
 }
 
 size_t Database::fileSize(FILE *file) {
-	// Save la position de debut du fichier de la db
+	// Save the start position of the db file
 	size_t cursor = ftell(file);
-	// Envoie le curseur à la fin du fichier
+	// Place the cursor at the end of the file
 	fseek(file, 0, SEEK_END);
-	// Récupère la taille du fichier
-	size_t size = std::ftell(file);
-	// Remet le curseur au debut
+	// Get the file size
+	size_t size = ftell(file);
+	// Replace the cursor at the start
 	fseek(file, 0, cursor);
 	return size;
 }
@@ -35,9 +30,9 @@ void Database::save() {
 	this->am.lockReader();
 	FILE  *file = fopen(path, "w+");
 	if (!file) exit(0);
-	if (fwrite(data.data(), sizeof(User), data.size(), file) < 0) cout << "Database not saved" << endl;
+	if (fwrite(data.data(), sizeof(User), data.size(), file) < 0) std::cout << "Database not saved" << std::endl;
 	fclose(file);
-	cout << "Database saved : [" << this->getSize() << " account saved]"<< endl;
+	std::cout << "Database saved : [" << this->getSize() << " account saved]"<< std::endl;
 	this->am.unlockReader();
 }
 

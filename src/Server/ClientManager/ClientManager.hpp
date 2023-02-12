@@ -20,6 +20,7 @@ class ClientManager {
 	// If client is connected
 	bool connected = true;
 
+	// A link to his account
     User* account = nullptr;
 
 	// The tid of the thread where the ClientManager is running
@@ -37,7 +38,7 @@ public:
 	// Receive infos from the client
 	void receive(QUERY_TYPE &query);
 
-	//
+	// To compare
 	bool operator==(const ClientManager& other) { return this->tid == other.tid; }
 
 	// Disconnect the client
@@ -49,17 +50,17 @@ public:
 	bool inGame() const { return bool(game_server); }
 
 	// To get args (parsed from the client)
-	int getCode() const { return args.code; }
-	const std::string& getS1() const { return args.s1; }
-	const std::string& getS2() const { return args.s2; }
+	int getCode() const { return this->args.code; }
+	const std::string& getS1() const { return this->args.s1; }
+	const std::string& getS2() const { return this->args.s2; }
 
-	// To set attributes
+	// GETTERS
 	sf::TcpSocket &getSocket() { return this->socket; }
 	pthread_t* getTidPtr() { return &(this->tid); }
-
-
-    void setAccount(User *user) {account = user;}
-    User* getAccount() {return account;}
+    User* getAccount() { return this->account; }
+	
+	// SETTERS
+    void setAccount(User *user) { this->account = user; }
 
 };
 

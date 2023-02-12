@@ -8,11 +8,11 @@
 
 
 class ClientManagerList : public List<ClientManager> {
-
 public:
-
 	using List<ClientManager>::List;
 
+	// Join the ended threads
+	// Remove the ended ClientManager from the list
 	void clean() {
 		this->am.lockWriter();
 		for ( auto &cm : *this ) {
