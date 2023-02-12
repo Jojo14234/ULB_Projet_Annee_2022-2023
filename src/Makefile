@@ -28,11 +28,12 @@ rm:
 	-rm capitalist server_capitalist 2> /dev/null
 
 
-main: client server clean
+main: client server
 
 client: ${CLIENT_BINS}
 	${CXX} ${CXXFLAGS} -o capitalist $^ ${LDLIBS}
+	make clean
 
 server: ${SERVER_BINS} ${SERVER_CLIENTMANAGER_BINS} ${SERVER_DATABASE_BINS}
 	${CXX} ${CXXFLAGS} -o server_capitalist $^ ${LDLIBS}
-
+	make clean

@@ -19,7 +19,6 @@ Server::Server() {
 }
 
 void Server::mainLoop() {
-	std::cout << "here" << std::endl;
 	while (this->server_online) {
 		this->clients.clean();
 		try { this->connectClient(); }

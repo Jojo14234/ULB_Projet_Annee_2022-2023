@@ -3,7 +3,6 @@
 
 
 void Database::load() {
-	this->am.lockWriter();
 	FILE *file = std::fopen(path, "rb");
 	if (!file) { this->data.reserve(10); std::cout << "Database empty !" << std::endl; return; }
 	this->data.reserve(this->fileSize(file)/sizeof(User));
@@ -11,7 +10,6 @@ void Database::load() {
 	while (std::fread(&user, sizeof(User), 1, file)) this->data.push_back(user);
 	std::fclose(file);
 	std::cout << "Database loaded : [" << this->getSize() << " account registered]" << std::endl;
-	this->am.unlockWriter();
 }
 
 size_t Database::fileSize(FILE *file) {

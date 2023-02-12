@@ -14,6 +14,8 @@ class AccessMonitor {
 
 public:
 
+	AccessMonitor() { sem_init(&this->write_access, 0, 1); }
+
 	// Writer
 	// Lock
 	void lockWriter() {
