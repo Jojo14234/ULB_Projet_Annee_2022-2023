@@ -53,7 +53,7 @@ public:
     bool isValid() {return status == PARAMS_STATUS::SUCCESSFUL;}
 
     void showErrorMessage(ConnectionUI &ui) {
-        switch (getStatus()) {
+        switch (this->status) {
             case USERNAME_TOO_SHORT:
             case PASSWORD_TOO_SHORT:
                 ui.too_short();
