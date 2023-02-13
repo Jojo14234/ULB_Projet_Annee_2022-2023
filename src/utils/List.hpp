@@ -25,7 +25,7 @@ public:
 		this->push_back(elem);
 		this->am.unlockWriter();
 	}
-	// Remove and element
+	// Remove an element
 	void remove(const T &elem) {
 		this->am.lockWriter();
 		for ( auto &it : *this ) { 

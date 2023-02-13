@@ -809,3 +809,52 @@ Connection d'un utilisateur à son compte :
 
 		- if status == WELCOME : view affiche : WelcomeScreenUI 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+// Note srd
+
+Glossaire -> ordre alphabétique
+Sous-server -> pas fan du mot 
+
+Caractère utilisable -> spécifié genre ascii - UTF-8
+
+-> rendre version rudimentaire du projet pour la phase 2 
+
+-> pas enregistrer les msg des amis `
+
+-> admin lance server / pas utilisateur
+
+-> vérifiable que les diagramme de classe montre toute les classe utilisée dedans
+
+-> faire un fichier config avec les constantes modifiables (ex nbr max player, chemin bdd, ...)
+
+-> art doc sur le menu principale (fig 14)
+
+-> vue -> contrôler -> modèle (contrôler entre vue et modèle)
+
+-> gestion du temps Classe ??? 
+
+-> base de donnée expliqué quelle type 
+
+-> un thread par client 
+
+-> diagramme de déploiement
+
+-> diagramme de séquence => diagramme 24 (pas compris) (que envois, pas de retour) 
+-> AMELIORE les diagramme de classe et séquence. 
+
+-> 25% srd (mais la note qu'on obtient maintenant peut encore changer (1/3 note la plus basse, 2/3 note la plus haute)
+

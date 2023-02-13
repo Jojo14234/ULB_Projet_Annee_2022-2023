@@ -1,119 +1,119 @@
 #include <iostream>
 #include <string>
+#include <stdlib.h>     /* strtol */
 #include <SFML/Network.hpp>
 
+#include "AuthentificationManager.hpp"
 #include "../utils/Configs.hpp"
 #include "../utils/Exceptions.hpp"
-#include "./Message/Message.hpp"
 #include "Client.hpp"
 #include "InputParser.hpp"
 
 
 // Public
 
+void Client::connectToServer() {
+    if (this->socket.connect(IP, PORT) != sf::Socket::Done) {
+        throw ConnectServerClientException();
+    }
+}
+
+void Client::disconnectFromServer() {
+    this->sendToServer(InputParser{"/disconnect"});
+    std::string output;
+    this->receiveFromServer(output);
+    this->ui.disconnect();
+}
+
+void Client::sendToServer(const InputParser &input) {
+    sf::Packet packet;
+    packet << static_cast<int>(input.getQueryType());
+    switch(input.getQueryType()) {
+        case QUERY_TYPE::JOIN_GAME : packet << stoi(input[1]); break;
+        case QUERY_TYPE::MESSAGE :	// same as under
+        case QUERY_TYPE::LOGIN :    // same as under
+        case QUERY_TYPE::REGISTER : packet << input[1] << input[2]; break;
+        default : break;
+    }
+    if (this->socket.send(packet) !=  sf::Socket::Done) { throw WritePipeClientException(); }
+}
+
+void Client::receiveFromServer(std::string &output) {
+    sf::Packet packet;
+    if (this->socket.receive(packet) !=  sf::Socket::Done) { throw ReadPipeClientException(); }
+    packet >> output;
+}
+
 void Client::mainLoop() {
     while (true) {
-        // WELCOME MESSAGE
-        Message msg;
-        msg.connexionMsg();
-        while (!connectToAccount) {
-            // Try to connect
-            if (!this->connexionLoop()) { return; }
+        this->ui.connexionMsg();
+        while (not connectedToAnAccount) {
+            // Si l'utilisateur à fait /disconnect dans le menu de connexion, cela ferme l'application
+            if (!this->connectionLoop()) { return; }
         }
-        std::cout << "You are now connected to your account !" << std::endl;
-        while (connectToAccount) {
-            // Get input
-            std::string input;
-            std::cout << ">";
-            std::getline(std::cin, input);
-            // Parse the input
+        while (connectedToAnAccount) {
+            std::string input = controller.getNewInput();
+            std::cout << "Vous venez d'entrer : " << input << std::endl;
             InputParser parser{input};
-            // Send input to the server
-            this->sendToServer(parser);
-            // Receive a message (for now it just show it on stdout)
+            if (parser.getQueryType() != QUERY_TYPE::NONE) {this->sendToServer(parser);}
             std::string output;
             this->receiveFromServer(output);
-            std::cout << "Received: " << output << std::endl;
-            if (output == "Déconnexion") {connectToAccount = false; break;}
+            std::cout << "Réponse du server (avant analyse): " << output << std::endl;
+            output = this->analyseServerResponse(output);
+            std::cout << "Réponse du server (après analyse): " << output << std::endl;
         }
     }
 }
 
+bool Client::connectionLoop() {
+    std::string input = this->controller.getNewInput();
+    InputParser parser{input};
+    QUERY_TYPE query = parser.getQueryType();
 
-bool Client::connexionLoop() {
-    // GET INPUT
-    std::string input;
-    std::cout << "> ";
-    std::getline(std::cin, input);
-
-    // PARSE THE INPUT
-    InputParser connexionInput{input};
-    QUERY_TYPE query = connexionInput.getQueryType();
-
-    // 2 POSSIBILIES IN CONNECTION MODE
-    // #1 : /login || /register + username and password (2 args)
-    if ((query == QUERY_TYPE::LOGIN || query == QUERY_TYPE::REGISTER) && connexionInput.getNbParameters() == 2) {
-        this->sendToServer(connexionInput);
-        connectToAccount = checkAccountConnexion(connexionInput.getQueryType());
+    if ((query == QUERY_TYPE::REGISTER || query == QUERY_TYPE::LOGIN) && parser.getNbParameters() == 2) {
+        //check la taille du pseudo et du mdp
+        AuthentificationManager authentication{parser[1], parser[2]};
+        authentication.showErrorMessage(ui);
+        if (!authentication.isValid()) { return true; }
+        //envoyer au serveur pour check dans la db
+        this->sendToServer(parser);
+        std::string output;
+        this->receiveFromServer(output);
+        connectedToAnAccount = this->checkAccountConnection(output, query);
     }
-    // #2 : /disconnect (0 args)
-    else if (query == QUERY_TYPE::DISCONNECT) {
-        this->disconnectToServer();
-        return false;
-    }
-    // #3 : BAD COMMAND
-    else {
-        Message msg;
-        msg.badConnexionInput();
-    }
+    //L'utilisateur souhaite quitter l'application
+    else if (query == QUERY_TYPE::DISCONNECT) {this->disconnectFromServer(); return false;}
+    //L'utilisateur a rentré une mauvaise commande
+    else { this->ui.badConnexionInput(); }
     return true;
 }
 
-bool Client::checkAccountConnexion(QUERY_TYPE query) {
-    std::string output;
-    Message msg;
-    this->receiveFromServer(output);
-    // CONNECTION || CREATION ACCEPTED
-    if (output == "TRUE") {return true;}
-    // CREATION REFUSED
-    if (query == QUERY_TYPE::REGISTER) {msg.refuseRegister();}
-    // CONNECTION REFUSED
-    else if (query == QUERY_TYPE::LOGIN) {msg.refuseLogin();}
+bool Client::checkAccountConnection(std::string &output, QUERY_TYPE query) {
+    if (output == "TRUE") {
+        (query == QUERY_TYPE::REGISTER) ? this->ui.acceptRegister() : this->ui.acceptLogin();
+        return true;
+    }
+    (query == QUERY_TYPE::REGISTER) ? this->ui.refuseRegister() : this->ui.refuseLogin();
     return false;
 }
 
 
-// Private
-
-void Client::connectToServer() {
-	if (this->socket.connect(IP, PORT) != sf::Socket::Done) {
-		throw ConnectServerClientException();
-	}
+int isInteger(std::string &s) {
+    char* pEnd;
+    int i = strtol(s.c_str(), &pEnd, 10);
+    return i;
 }
 
-void Client::disconnectToServer() {
-	this->sendToServer(InputParser{"/disconnect"});
-}
-
-void Client::sendToServer(const InputParser &input) {
-	sf::Packet packet;
-	packet << static_cast<int>(input.getQueryType());
-
-	switch(input.getQueryType()) {
-
-		case QUERY_TYPE::JOIN_GAME : packet << stoi(input[1]); break;
-		case QUERY_TYPE::MESSAGE :	// same as under
-		case QUERY_TYPE::LOGIN :    // same as under
-		case QUERY_TYPE::REGISTER : packet << input[1] << input[2]; break;
-
-		default : break;
-	}
-	if (this->socket.send(packet) !=  sf::Socket::Done) { throw WritePipeClientException(); }
-}
-
-void Client::receiveFromServer(std::string &output) {
-	sf::Packet packet;
-	if (this->socket.receive(packet) !=  sf::Socket::Done) { throw ReadPipeClientException(); }
-	packet >> output;
+std::string Client::analyseServerResponse(std::string &output) {
+    if (output == "DISCONNECT") {
+        this->connectedToAnAccount = false;
+        return "Déconnexion de votre compte";
+    }
+    else if (output[0] == '1' && output[1] == '.') {
+        return output + "Fin du classement";
+    }
+    else {
+        return "Pas d'analyse !";
+    }
 }
 

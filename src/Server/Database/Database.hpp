@@ -49,6 +49,8 @@ public:
 	User* getUser(const char username[32]);
 	int getSize() const { return this->data.size(); }
 
+    // GetRanking
+    void getRanking(std::vector<User*> &ranking);
 };
 
 #endif

@@ -76,3 +76,39 @@ void Database::print_in_file() {
 	}
 	file.close();
 }
+
+void bubble_sort(std::vector<User> &data) {
+    for (int i(0); i < data.size(); i++) {
+        for (int j(0); j < data.size() - i; j++) {
+            if (data[j].getStats().getScore() > data[j+1].getStats().getScore()) {
+                std::swap(data[j], data[j+1]);
+            }
+                // Dans le cas d'une égalité, on prend le score moyen (score/nb_game)
+            else if (data[j].getStats().getScore() == data[j+1].getStats().getScore()) {
+                if (data[j].getStats().calculateMiddleScore() > data[j+1].getStats().calculateMiddleScore()) {
+                    std::swap(data[j], data[j+1]);
+                }
+            }
+        }
+    }
+}
+
+void Database::getRanking(std::vector<User*> &ranking) {
+    // 1. Créer une copie de la db
+    std::vector<User> data_copy;
+    for (auto user : data) {data_copy.push_back(user);}
+
+    // 2. Trié ce nouveau vecteur
+    bubble_sort(data_copy);
+    // 3. Récupérer les id des 5 premiers dans la db trié
+    int j(0);
+    while (j <= data_copy.size() || j < 5) {
+        // 4. Chercher dans la vraie db les 5 id
+        User* user = getUser(data_copy[data_copy.size()-j].getId());
+        // 5. Ajouter leur adresse à un vecteur
+        ranking.push_back(user);
+        j++;
+    }
+}
+
+
