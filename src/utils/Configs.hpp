@@ -9,6 +9,12 @@
 const auto IP = "127.0.0.1";
 const auto PORT = 8080;
 
+// AuthentificationManager constante
+const int username_min_length = 1;
+const int username_max_length = 32;
+const int password_min_length = 4;
+const int password_max_length = 64;
+const char banned_character[] = {'-', '+', '*', '$', '&', '@', '?', '!'}; //'§', '£'
 
 
 // Queries

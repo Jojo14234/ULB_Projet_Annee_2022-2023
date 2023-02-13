@@ -116,6 +116,7 @@ void Server::clientProcessRegister(ClientManager &client) {
 
     if (!this->database.contains(client.getS1().c_str())) {
         database.addUser(client.getS1(), client.getS2());
+        database.save();
         std::cout << "Register approved" << std::endl;
 
         //TODO := verif =: connecter le client à son compte fraichement créer

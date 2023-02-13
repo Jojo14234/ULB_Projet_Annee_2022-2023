@@ -6,39 +6,25 @@
 #include <SFML/Network.hpp>
 
 #include "InputParser.hpp"
-
+#include "ClientController.hpp"
+#include "./UI/ConnectionUI.hpp"
 
 class Client {
+    sf::TcpSocket socket;
+    bool connectedToAnAccount = false;
+    ClientController controller{};
+    ConnectionUI ui{};
 
-	sf::TcpSocket socket;
+    void connectToServer();
+    void disconnectFromServer();
+    void sendToServer(const InputParser &input);
+    void receiveFromServer(std::string &output);
 
-    bool connectToAccount = false;
-	
-	// Connect the client to the server
-	void connectToServer();
-
-	// Send to server a message to disconnect
-	void disconnectToServer();
-
-	// Send a message to the server
-	void sendToServer(const InputParser &input);
-
-	// Receive a message from the server
-	void receiveFromServer(std::string &output);
-
-    // Try to connect to an account
-    bool connexionLoop();
-
-	// If the account connection/creation is valid 
-    bool checkAccountConnexion(QUERY_TYPE query);
-
+    bool checkAccountConnection(std::string &output, QUERY_TYPE query);
 public:
-
-	Client() { this->connectToServer(); }
-
-	// Main Loop of the client
-	void mainLoop();
-
+    Client() {this->connectToServer();};
+    void mainLoop();
+    bool connectionLoop();
 };
 
 #endif
