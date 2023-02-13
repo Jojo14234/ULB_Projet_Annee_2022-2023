@@ -11,7 +11,6 @@
 
 // Public
 
-//////////////////////////////////////////////////////////////////
 void Client::connectToServer() {
     if (this->socket.connect(IP, PORT) != sf::Socket::Done) {
         throw ConnectServerClientException();
@@ -21,16 +20,14 @@ void Client::connectToServer() {
 void Client::disconnectFromServer() {
     this->sendToServer(InputParser{"/disconnect"});
     std::string output;
-    receiveFromServer(output);
-    ui.disconnect();
+    this->receiveFromServer(output);
+    this->ui.disconnect();
 }
 
 void Client::sendToServer(const InputParser &input) {
     sf::Packet packet;
     packet << static_cast<int>(input.getQueryType());
-
     switch(input.getQueryType()) {
-
         case QUERY_TYPE::JOIN_GAME : packet << stoi(input[1]); break;
         case QUERY_TYPE::MESSAGE :	// same as under
         case QUERY_TYPE::LOGIN :    // same as under
@@ -48,20 +45,20 @@ void Client::receiveFromServer(std::string &output) {
 
 void Client::mainLoop() {
     while (true) {
-        ui.connexionMsg();
+        this->ui.connexionMsg();
         while (not connectedToAnAccount) {
             // Si l'utilisateur à fait /disconnect dans le menu de connexion, cela ferme l'application
-            if (!connectionLoop()) {return;}
+            if (!this->connectionLoop()) { return; }
         }
         while (connectedToAnAccount) {
             std::string input = controller.getNewInput();
-            std::cout << "Vous venez de taper : " << input << std::endl;
+            std::cout << "Vous venez d'entrer : " << input << std::endl;
         }
     }
 }
 
 bool Client::connectionLoop() {
-    std::string input = controller.getNewInput();
+    std::string input = this->controller.getNewInput();
     InputParser parser{input};
     QUERY_TYPE query = parser.getQueryType();
 
@@ -69,9 +66,8 @@ bool Client::connectionLoop() {
         //check la taille du pseudo et du mdp
         AuthentificationManager authentication{parser[1], parser[2]};
         authentication.showErrorMessage(ui);
-        if (!authentication.isValid()) {return true;}
+        if (!authentication.isValid()) { return true; }
         //envoyer au serveur pour check dans la db
-
         this->sendToServer(parser);
         std::string output;
         this->receiveFromServer(output);
@@ -80,15 +76,15 @@ bool Client::connectionLoop() {
     //L'utilisateur souhaite quitter l'application
     else if (query == QUERY_TYPE::DISCONNECT) {this->disconnectFromServer(); return false;}
     //L'utilisateur a rentré une mauvaise commande
-    else {ui.badConnexionInput();}
+    else { this->ui.badConnexionInput(); }
     return true;
 }
 
 bool Client::checkAccountConnection(std::string &output, QUERY_TYPE query) {
     if (output == "TRUE") {
-        (query == QUERY_TYPE::REGISTER) ? ui.acceptRegister() : ui.acceptLogin();
+        (query == QUERY_TYPE::REGISTER) ? this->ui.acceptRegister() : this->ui.acceptLogin();
         return true;
     }
-    (query == QUERY_TYPE::REGISTER) ? ui.refuseRegister() : ui.refuseLogin();
+    (query == QUERY_TYPE::REGISTER) ? this->ui.refuseRegister() : this->ui.refuseLogin();
     return false;
 }

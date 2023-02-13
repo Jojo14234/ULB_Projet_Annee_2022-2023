@@ -9,22 +9,39 @@
 #include "ClientController.hpp"
 #include "./UI/ConnectionUI.hpp"
 
+
 class Client {
+
     sf::TcpSocket socket;
     bool connectedToAnAccount = false;
-    ClientController controller{};
-    ConnectionUI ui{};
+    ClientController controller;
+    ConnectionUI ui;
 
+    // Connect the client to the server
     void connectToServer();
+
+    // Send to server a message to disconnect
     void disconnectFromServer();
+
+    // Send a message to the server
     void sendToServer(const InputParser &input);
+
+    // Receive a message from the server
     void receiveFromServer(std::string &output);
 
+    // If the account connection/creation is valid 
     bool checkAccountConnection(std::string &output, QUERY_TYPE query);
-public:
-    Client() {this->connectToServer();};
-    void mainLoop();
+
+    // Try to connect to an account
     bool connectionLoop();
+
+public:
+
+    Client() { this->connectToServer(); }
+    
+    // Main Loop of the client
+    void mainLoop();
+
 };
 
 #endif
