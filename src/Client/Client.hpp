@@ -35,6 +35,8 @@ class Client {
     // Try to connect to an account
     bool connectionLoop();
 
+    std::string analyseServerResponse(std::string &output);
+
 public:
 
     Client() { this->connectToServer(); }

@@ -18,16 +18,19 @@ public:
 		played+=other.played;
 		wins+=other.wins;
 	}
-	
+
+    // Calculate middle score
+    int calculateMiddleScore() const {return this->score/this->played;}
+
+    // GETTERS
+    int getScore() const { return score; }
+    int getPlayed() const { return played; }
+    int getWins() const { return wins; }
+
 	// To compare
 	bool operator==(const GameStats &other) const { return score==other.score and played==other.played and wins==other.wins; }
 	auto operator<=>(const GameStats &other) const { return score <=> other.score; }
 
-	// GETTERS
-	int getScore() const { return score; }
-	int getPlayed() const { return played; }
-	int getWins() const { return wins; }
-	
 };
 
 #endif

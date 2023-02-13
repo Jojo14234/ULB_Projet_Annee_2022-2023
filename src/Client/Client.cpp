@@ -1,5 +1,6 @@
 #include <iostream>
 #include <string>
+#include <stdlib.h>     /* strtol */
 #include <SFML/Network.hpp>
 
 #include "AuthentificationManager.hpp"
@@ -53,6 +54,13 @@ void Client::mainLoop() {
         while (connectedToAnAccount) {
             std::string input = controller.getNewInput();
             std::cout << "Vous venez d'entrer : " << input << std::endl;
+            InputParser parser{input};
+            if (parser.getQueryType() != QUERY_TYPE::NONE) {this->sendToServer(parser);}
+            std::string output;
+            this->receiveFromServer(output);
+            std::cout << "Réponse du server (avant analyse): " << output << std::endl;
+            output = this->analyseServerResponse(output);
+            std::cout << "Réponse du server (après analyse): " << output << std::endl;
         }
     }
 }
@@ -88,3 +96,24 @@ bool Client::checkAccountConnection(std::string &output, QUERY_TYPE query) {
     (query == QUERY_TYPE::REGISTER) ? this->ui.refuseRegister() : this->ui.refuseLogin();
     return false;
 }
+
+
+int isInteger(std::string &s) {
+    char* pEnd;
+    int i = strtol(s.c_str(), &pEnd, 10);
+    return i;
+}
+
+std::string Client::analyseServerResponse(std::string &output) {
+    if (output == "DISCONNECT") {
+        this->connectedToAnAccount = false;
+        return "Déconnexion de votre compte";
+    }
+    else if (output[0] == '1' && output[1] == '.') {
+        return output + "Fin du classement";
+    }
+    else {
+        return "Pas d'analyse !";
+    }
+}
+

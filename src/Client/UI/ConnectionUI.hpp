@@ -53,11 +53,10 @@ public:
 
     void disconnect() {
         std::cout << "+———————————————————————————————CAPITALI$T———————————————————————————————+" << std::endl;
-        std::cout << "| Vous avez choisis de quitter l'application !                           |" << std::endl;
-        std::cout << "| Merci d'avoir joué à notre jeu CAPITALI$T !                            |" << std::endl;
-        std::cout << "| Au plaisir de vous revoir, bye !                                       |" << std::endl;
+        std::cout << "|              Vous avez choisis de quitter l'application !              |" << std::endl;
+        std::cout << "|              Merci d'avoir joué à notre jeu CAPITALI$T !               |" << std::endl;
+        std::cout << "|                    Au plaisir de vous revoir, bye !                    |" << std::endl;
         std::cout << "+————————————————————————————————————————————————————————————————————————+" << std::endl;
-
     }
 };
 

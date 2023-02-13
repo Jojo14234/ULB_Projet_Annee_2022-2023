@@ -40,9 +40,9 @@ void Server::clientLoop(ClientManager &client) {
 		
 		// Execute the query
 		this->clientProcessQuery(client, query);
-        if (query == QUERY_TYPE::DISCONNECT && client.getAccount() == nullptr) {break;}
-        if (query == QUERY_TYPE::DISCONNECT && client.getAccount()) {
-            std::cout << client.getAccount()->getUsername() <<" just disconnected from his account" << std::endl;
+        if (query == QUERY_TYPE::DISCONNECT) {
+            if (!client.getAccount()) { break; }
+            std::cout << client.getAccount()->getUsername() << " disconnected from his account !" << std::endl;
             client.setAccount(nullptr);
         }
 	}
@@ -92,8 +92,8 @@ void Server::clientProcessQuery(ClientManager &client, QUERY_TYPE query) {
 		case QUERY_TYPE::CREATE_GAME :
 			this->clientProcessCreateGame(client);
 			break;	
-		case QUERY_TYPE::RANKING : 
-			this->clientProcessRanking(client);
+		case QUERY_TYPE::RANKING :
+            this->clientProcessRanking(client);
 			break;
 		case QUERY_TYPE::FRIENDS : 
 			this->clientProcessFriends(client);
@@ -102,7 +102,7 @@ void Server::clientProcessQuery(ClientManager &client, QUERY_TYPE query) {
 			this->clientProcessMessage(client);
 			break;
         case QUERY_TYPE::DISCONNECT :
-            client.send("Déconnexion");
+            client.send("DISCONNECT");
             break;
 		default : break;
 	}
@@ -163,7 +163,14 @@ void Server::clientProcessCreateGame(ClientManager &client) {
 }
 
 void Server::clientProcessRanking(ClientManager &client) {
-	client.inGame();	// pour pas avoir le warning unused parameter et empecher la compilation
+    std::vector<User*> ranking;
+    database.getRanking(ranking);
+    std::string input = "";
+    for (int i(1); i <= 5; i++) {
+        //std::cout << i << ". " << ranking[i]->getUsername() << " avec " << ranking[i]->getStats().getScore() << " points." << std::endl;
+        input += std::to_string(i) + ". " + ranking[i]->getUsername() + " avec " + std::to_string(ranking[i]->getStats().getScore()) + " point(s).\n";
+    }
+    client.send(input);
 }
 
 void Server::clientProcessFriends(ClientManager &client) {

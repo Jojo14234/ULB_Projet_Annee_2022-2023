@@ -17,8 +17,8 @@ public:
 
     void acceptRegister() {
         std::cout << "+———————————————————————————————CAPITALI$T———————————————————————————————+" << std::endl;
-        std::cout << "|La création du compte à réussi !                                        |" << std::endl;
-        std::cout << "|Vous avez été automatiquement connecté à votre nouveau compte           |" << std::endl;
+        std::cout << "|                    La création du compte à réussi !                    |" << std::endl;
+        std::cout << "|     Vous avez été automatiquement connecté à votre nouveau compte.     |" << std::endl;
         std::cout << "+————————————————————————————————————————————————————————————————————————+" << std::endl;
     }
 };
