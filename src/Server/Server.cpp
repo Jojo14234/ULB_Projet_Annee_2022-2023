@@ -1,5 +1,6 @@
 #include <memory>
 #include <pthread.h>
+#include <string>
 
 #include "Server.hpp"
 #include "ClientManager/ClientManager.hpp"
@@ -80,30 +81,14 @@ void Server::connectClient() {
 
 void Server::clientProcessQuery(ClientManager &client, QUERY_TYPE query) {
 	switch (query) {
-		case QUERY_TYPE::LOGIN :
-			this->clientProcessLogin(client);
-			break;
-		case QUERY_TYPE::REGISTER :
-			this->clientProcessRegister(client);
-			break;
-		case QUERY_TYPE::JOIN_GAME :
-			this->clientProcessJoinGame(client);
-			break;
-		case QUERY_TYPE::CREATE_GAME :
-			this->clientProcessCreateGame(client);
-			break;	
-		case QUERY_TYPE::RANKING :
-            this->clientProcessRanking(client);
-			break;
-		case QUERY_TYPE::FRIENDS : 
-			this->clientProcessFriends(client);
-			break;
-		case QUERY_TYPE::MESSAGE : 
-			this->clientProcessMessage(client);
-			break;
-        case QUERY_TYPE::DISCONNECT :
-            client.send("DISCONNECT");
-            break;
+		case QUERY_TYPE::LOGIN: this->clientProcessLogin(client); break;
+		case QUERY_TYPE::REGISTER: this->clientProcessRegister(client); break;
+		case QUERY_TYPE::JOIN_GAME: this->clientProcessJoinGame(client); break;
+		case QUERY_TYPE::CREATE_GAME: this->clientProcessCreateGame(client); break;
+		case QUERY_TYPE::RANKING: this->clientProcessRanking(client); break;
+		case QUERY_TYPE::FRIENDS: this->clientProcessFriends(client); break;
+		case QUERY_TYPE::MESSAGE: this->clientProcessMessage(client); break;
+        case QUERY_TYPE::DISCONNECT: client.send("DISCONNECT"); break;
 		default : break;
 	}
 }
@@ -155,11 +140,18 @@ void Server::clientProcessLogin(ClientManager &client) {
 }
 
 void Server::clientProcessJoinGame(ClientManager &client) {
-	client.inGame();	// pour pas avoir le warning unused parameter et empecher la compilation
+	std::string output = "you failed to join a game";
+	if (games.joinGame(client, client.getCode())) output = "you joined a game";
+	client.send(output);
+	// TODO rentrer dans la loop du jeu
 }
 
 void Server::clientProcessCreateGame(ClientManager &client) {
-	client.inGame();	// pour pas avoir le warning unused parameter et empecher la compilation
+	std::string output = "you create a game with code : ";
+	int code = games.createGame(client);
+	output += std::to_string(code);
+	client.send(output);
+	// TODO rentrer dans la loop du jeu
 }
 
 void Server::clientProcessRanking(ClientManager &client) {

@@ -31,6 +31,11 @@ enum class QUERY_TYPE {
 	NONE
 };
 
+
+// Game
+const short unsigned int MAX_NB_PLAYER = 6; 
+
+
 void printMenu();
 void printStart();
 
