@@ -9,7 +9,7 @@ class GameCode {
 
 	// maybe add mutex here
 
-	static std::unordered_set<int> codes;
+	static inline std::unordered_set<int> codes;
 	int code;
 
 	// Search a code not used between 1000 and 9999

@@ -25,10 +25,12 @@ public:
 	void clientLoop(ClientManager &client);
 
 	// Add a client to the game 
-	void addClient(ClientManager* client) { this->clients.push_back(client); }
+	void addClient(ClientManager* client);
 
 	// GETTERS
-	int getGameCode() const { return code.getCode(); }
+	int getCode() const { return code.getCode(); }
+	
+	bool isCode(int other) const { return code.getCode() == other; }
 
 };
 
