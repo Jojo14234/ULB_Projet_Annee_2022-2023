@@ -1,9 +1,11 @@
 #include "GameServerList.hpp"
+#include "GameServer.hpp"
 
 
 int GameServerList::createGame(ClientManager* client) {
-	this->emplace_back();
-	return this->back()->getGameCode();
+	GameServer &gs = this->emplace_back();
+	gs.addClient(client);
+	return gs.getGameCode();
 }
 
 
