@@ -8,7 +8,6 @@
 class GameCode {
 
 	// maybe add mutex here
-
 	static std::unordered_set<int> codes;
 	int code;
 
