@@ -20,17 +20,49 @@ class Player {
     PLAYER_STATUS status = FREE;
     bool online = true;
 
+
     void inPrisonAction();
-public:
-    void play();
-    void setPosition(Cell* cell);
-    bool buyProperty(Property property);
-    bool pay(int amount);
+
+    //use a GOOJ card, if available
     bool useGetOutOfJailCard();
-    void propertyAction(); //c'est quoi?
+
+    //exectues action based on current cell
+    void propertyAction();
+
+
     bool isMine(Property property);
+
+
     //void partakeInAuction(Auction auction); classe Auction pas encore créée
-    void rollDice
+
+    //rolls dice
+    void rollDice(*Dice dice); //waiting for dice merge
+
+    //quit game
+    void leaveGame();
+
+public:
+
+    // what does this do?
+    void play();
+
+    //set player to specific cell
+    void setPosition(Cell* cell);
+
+    //pay for property and add property to properties
+    bool buyProperty(Property property);
+
+    //pay an amount of money, return false if not capable
+    bool pay(int amount);
+
+    //moves player depending on result from dice
+    void move();
+
+    //exectues exchange agreed to by the 2 players involved (should this be in this class?)
+    void exchange(Negociation negociation); //requires modifications to Negociation class compared to what is discribed in srd
+
+    //wtf? getCurrentProperty maybe?
+    void getProperty(); //ça fait quoi? c'est quoi le return type??
 
 
 };
