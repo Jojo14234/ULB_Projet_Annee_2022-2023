@@ -15,7 +15,7 @@ class GameCode {
 	// Search a code not used between 1000 and 9999
 	void attributeCode() {
 		do { this->code = std::rand() % 10000; }
-		while ( codes.contains(this->code) or this->code < 1000 )
+		while ( codes.contains(this->code) or this->code < 1000 );
 	}
 
 public:
