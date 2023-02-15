@@ -11,13 +11,16 @@ class InputParser {
 
 	const std::string input;
 	std::vector<std::string> input_splited;
-	QUERY_TYPE query_type;
+	QUERY_TYPE query_type = QUERY_TYPE::NONE;
 	
 	// Parse the input from the client
 	void parse();
 
 	// Split the input to a list of string seperate by a ' '
     void split();
+
+	
+	bool isValidCode();
 
 public:
 

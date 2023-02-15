@@ -7,17 +7,24 @@
 
 class ClientController {
 
-    std::string input;
+	std::string input;
 
 public:
 
-    std::string getInput() { return this->input; }
+	std::string getInput() { return this->input; }
 
-    std::string getNewInput() {
-        std::cout << "> ";
-        std::getline(std::cin, this->input);
-        return input;
-    }
+	std::string getNewInput() {
+		std::cout << "> ";
+		std::getline(std::cin, this->input);
+		return input;
+	}
+
+	InputParser getNewParsedInput() {
+		std::cout << "> ";
+		std::getline(std::cin, this->input);
+		std::cout << "Vous venez d'entrer : " << input << std::endl;
+		return InputParser{input};
+	}
 
 };
 

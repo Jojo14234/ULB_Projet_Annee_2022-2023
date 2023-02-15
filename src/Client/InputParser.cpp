@@ -6,20 +6,14 @@
 void InputParser::parse() {
 	this->split();	
 	const std::string &query = this->input_splited[0];
-
-    if ( query == "/login" ) {
-        this-> query_type = QUERY_TYPE::LOGIN;
-    }
-    else if ( query == "/register" ) {
-         this->query_type = QUERY_TYPE::REGISTER;
-    }
+    if ( query == "/login" ) { this-> query_type = QUERY_TYPE::LOGIN; }
+    else if ( query == "/register" ) { this->query_type = QUERY_TYPE::REGISTER; }
     else if ( query == "/join" ) {
-		this->query_type = QUERY_TYPE::JOIN_GAME;
-		// verify code
+		if (this->isValidCode()) { this->query_type = QUERY_TYPE::JOIN_GAME; }
 	}
 	else if ( query == "/message" ) {
 		this->query_type = QUERY_TYPE::MESSAGE;
-		// verify jsp quoi
+		// TODO verify something
 	}
 	else if ( query == "/create" ) { this->query_type = QUERY_TYPE::CREATE_GAME; }
 	else if ( query == "/disconnect" ) { this->query_type = QUERY_TYPE::DISCONNECT; }
@@ -38,6 +32,12 @@ void InputParser::split() {
 }
 
 const std::string &InputParser::operator[](int n) const {
-    return input_splited[n];
+    return this->input_splited[n];
 }
 
+bool InputParser::isValidCode() {
+	std::string code = this->input_splited[1];
+	if (code.size() != 4) { return false; }
+	for (auto c : code) { if (not isdigit(c)) return false; }
+	return true;
+}
