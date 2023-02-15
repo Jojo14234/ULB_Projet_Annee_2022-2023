@@ -25,8 +25,8 @@ class Player {
 
     bool online = true;
 
-    //ça fait quoi concrètement?
-    void inPrisonAction();
+
+    void payToExitPrison();
 
     //use a GOOJ card, if available
     bool useGetOutOfJailCard();
@@ -66,7 +66,7 @@ public:
     //exectues exchange agreed to by the 2 players involved (should this be in this class?)
     void exchange(Negociation negociation); //requires modifications to Negociation class compared to what is discribed in srd
 
-    
+
     void getProperties(); //ça fait quoi? c'est quoi le return type??
 
 };
