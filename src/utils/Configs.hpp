@@ -19,7 +19,7 @@ const char banned_character[] = {'-', '+', '*', '$', '&', '@', '?', '!'}; //'§'
 
 // Queries
 enum class QUERY_TYPE {
-	LOGIN = 0,
+	LOGIN,
 	REGISTER,
 	JOIN_GAME,
 	CREATE_GAME,
@@ -28,6 +28,36 @@ enum class QUERY_TYPE {
 	FRIENDS,
 	MESSAGE,
 
+	NONE
+};
+
+enum class CREATE_GAME_QUERY_TYPE {
+	MAX_PLAYER,
+	MONEY,
+	AUCTION,
+	START,
+	
+	LEAVE,
+	NONE
+};
+
+enum class RANKING_QUERY_TYPE {
+	TOP,
+	POSITION,
+	
+	LEAVE,
+	NONE
+};
+
+enum class FRIENDS_QUERY_TYPE {
+	SHOW,
+	REQUESTS,
+	ACCEPT,
+	REFUSE,
+	ADD,
+	REMOVE,
+
+	LEAVE,
 	NONE
 };
 
