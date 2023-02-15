@@ -25,7 +25,7 @@ public:
 	void clientLoop(ClientManager &client);
 
 	// Add a client to the game 
-	void addClient(ClientManager* client) { this->clients.push_back(client); client->setGameServer(this); }
+	void addClient(ClientManager* client);
 
 	// GETTERS
 	int getCode() const { return code.getCode(); }
