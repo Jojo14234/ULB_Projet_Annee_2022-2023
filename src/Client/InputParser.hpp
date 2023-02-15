@@ -11,7 +11,7 @@ class InputParser {
 
 	const std::string input;
 	std::vector<std::string> input_splited;
-	QUERY_TYPE query_type;
+	QUERY_TYPE query_type = QUERY_TYPE::NONE;
 	
 	// Parse the input from the client
 	void parse();

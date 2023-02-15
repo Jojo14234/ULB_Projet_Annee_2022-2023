@@ -6,12 +6,10 @@
 void InputParser::parse() {
 	this->split();	
 	const std::string &query = this->input_splited[0];
-
     if ( query == "/login" ) { this-> query_type = QUERY_TYPE::LOGIN; }
     else if ( query == "/register" ) { this->query_type = QUERY_TYPE::REGISTER; }
     else if ( query == "/join" ) {
-		this->query_type = QUERY_TYPE::JOIN_GAME;
-		if (not this->isValidCode()) { this->query_type = QUERY_TYPE::NONE; }
+		if (this->isValidCode()) { this->query_type = QUERY_TYPE::JOIN_GAME; }
 	}
 	else if ( query == "/message" ) {
 		this->query_type = QUERY_TYPE::MESSAGE;
