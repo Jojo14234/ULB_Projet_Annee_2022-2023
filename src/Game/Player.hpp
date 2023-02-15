@@ -14,13 +14,18 @@
 class Player {
 
     BankAccount bank_account = BankAccount{STARTING_MONEY};
+
     Cell *current_cell;
+
     // cards: vector<JailCard> c'est quoi ce truc
+
     std::vector<*Property> properties;
+
     PLAYER_STATUS status = FREE;
+
     bool online = true;
 
-
+    //ça fait quoi concrètement?
     void inPrisonAction();
 
     //use a GOOJ card, if available
@@ -61,9 +66,8 @@ public:
     //exectues exchange agreed to by the 2 players involved (should this be in this class?)
     void exchange(Negociation negociation); //requires modifications to Negociation class compared to what is discribed in srd
 
-    //wtf? getCurrentProperty maybe?
-    void getProperty(); //ça fait quoi? c'est quoi le return type??
-
+    
+    void getProperties(); //ça fait quoi? c'est quoi le return type??
 
 };
 
