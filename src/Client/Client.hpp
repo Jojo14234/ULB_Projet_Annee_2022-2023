@@ -44,6 +44,9 @@ public:
     // Main Loop of the client
     void mainLoop();
 
+    // special loop if the client is in a game
+    void gameLoop();
+
 };
 
 #endif

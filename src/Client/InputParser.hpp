@@ -19,6 +19,9 @@ class InputParser {
 	// Split the input to a list of string seperate by a ' '
     void split();
 
+	
+	bool isValidCode();
+
 public:
 
 	InputParser(const std::string &input) : input{input} { this->parse(); }
