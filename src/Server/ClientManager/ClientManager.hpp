@@ -15,7 +15,7 @@ class ClientManager {
 	sf::TcpSocket socket;
 
 	// A link to the game server, nullptr if not in game
-	std::shared_ptr<GameServer> game_server;
+	GameServer* game_server;
 
 	// If client is connected
 	bool connected = true;
@@ -44,7 +44,7 @@ public:
 	// Disconnect the client
 	void disconnect() { this->connected = false; }
 	// If the client is connected
-	bool isDisconnected() const { return not connected; }
+	bool isDisconnected() const { return not this->connected; }
 	
 	// If the client is in game
 	bool inGame() const { return bool(game_server); }
@@ -61,8 +61,12 @@ public:
 	
 	// SETTERS
     void setAccount(User *user) { this->account = user; }
+	void setGameServer(GameServer* gs) { this->game_server = gs; }
+
+	void removeGameServer() { this->game_server = nullptr; }
+
+	void enterGameLoop() { this->game_server->clientLoop(*this); }
 
 };
-
 
 #endif

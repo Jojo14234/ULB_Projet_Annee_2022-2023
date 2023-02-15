@@ -30,7 +30,7 @@ void Server::mainLoop() {
 }
 
 void Server::clientLoop(ClientManager &client) {
-    database.print_in_file();
+	database.print_in_file();
 	// Loop to exchange data with the client
 	while (true) {
 		
@@ -41,13 +41,12 @@ void Server::clientLoop(ClientManager &client) {
 		
 		// Execute the query
 		this->clientProcessQuery(client, query);
-        if (query == QUERY_TYPE::DISCONNECT) {
-            if (!client.getAccount()) { break; }
-            std::cout << client.getAccount()->getUsername() << " disconnected from his account !" << std::endl;
-            client.setAccount(nullptr);
-        }
+		if (query == QUERY_TYPE::DISCONNECT) {
+			if (!client.getAccount()) { break; }
+			std::cout << client.getAccount()->getUsername() << " disconnected from his account !" << std::endl;
+			client.setAccount(nullptr);
+		}
 	}
-    //TODO : Gérer la déconnexion proprement du client
 }
 
 
@@ -88,62 +87,62 @@ void Server::clientProcessQuery(ClientManager &client, QUERY_TYPE query) {
 		case QUERY_TYPE::RANKING: this->clientProcessRanking(client); break;
 		case QUERY_TYPE::FRIENDS: this->clientProcessFriends(client); break;
 		case QUERY_TYPE::MESSAGE: this->clientProcessMessage(client); break;
-        case QUERY_TYPE::DISCONNECT: client.send("DISCONNECT"); break;
+		case QUERY_TYPE::DISCONNECT: client.send("DISCONNECT"); break;
 		default : break;
 	}
 }
 
 void Server::clientProcessRegister(ClientManager &client) {
-    if (client.getAccount() != nullptr) {
-        client.send("You are already connected");
-        return;}
-    std::cout << "New register request : " << client.getS1() << " " <<client.getS2() << std::endl;
+	if (client.getAccount() != nullptr) {
+		client.send("You are already connected");
+		return;}
+	std::cout << "New register request : " << client.getS1() << " " <<client.getS2() << std::endl;
 
-    if (!this->database.contains(client.getS1().c_str())) {
-        database.addUser(client.getS1(), client.getS2());
-        database.save();
-        std::cout << "Register approved" << std::endl;
+	if (!this->database.contains(client.getS1().c_str())) {
+		database.addUser(client.getS1(), client.getS2());
+		database.save();
+		std::cout << "Register approved" << std::endl;
 
-        //TODO := verif =: connecter le client à son compte fraichement créer
-        client.setAccount(this->database.getUser(client.getS1().c_str()));
+		//TODO := verif =: connecter le client à son compte fraichement créer
+		client.setAccount(this->database.getUser(client.getS1().c_str()));
 
-        //renvoyer au client comme quoi la création a réussi
-        client.send("TRUE");
-    }
-    else {
-        std::cout << "Register not approved, this Username is already taken" << std::endl;
-        //renvoyer au client comme quoi la création a échoué
-        client.send("FALSE");
-    }
+		//renvoyer au client comme quoi la création a réussi
+		client.send("TRUE");
+	}
+	else {
+		std::cout << "Register not approved, this Username is already taken" << std::endl;
+		//renvoyer au client comme quoi la création a échoué
+		client.send("FALSE");
+	}
 }
 
 void Server::clientProcessLogin(ClientManager &client) {
-    if (client.getAccount() != nullptr) {
-        client.send("You are already connected");
-        return;}
-    std::cout << "New login request : " << client.getS1() << " " << client.getS2() << std::endl;
+	if (client.getAccount() != nullptr) {
+		client.send("You are already connected");
+		return;}
+	std::cout << "New login request : " << client.getS1() << " " << client.getS2() << std::endl;
 
-    if (this->database.contains(client.getS1().c_str()) &&
-        this->database.getUser(client.getS1().c_str())->isPassword(client.getS2().c_str())) {
-        std::cout << "Login approved" << std::endl;
-        //TODO := verif =: Log le client avec son compte
-        client.setAccount(this->database.getUser(client.getS1().c_str()));
+	if (this->database.contains(client.getS1().c_str()) &&
+		this->database.getUser(client.getS1().c_str())->isPassword(client.getS2().c_str())) {
+		std::cout << "Login approved" << std::endl;
+		//TODO := verif =: Log le client avec son compte
+		client.setAccount(this->database.getUser(client.getS1().c_str()));
 
-        //renvoyer au client comme quoi la connexion a réussi
-        client.send("TRUE");
-    }
-    else {
-        std::cout << "Login not approved" << std::endl;
-        //renvoyer au client comme quoi la connexion a échoué
-        client.send("FALSE");
-    }
+		//renvoyer au client comme quoi la connexion a réussi
+		client.send("TRUE");
+	}
+	else {
+		std::cout << "Login not approved" << std::endl;
+		//renvoyer au client comme quoi la connexion a échoué
+		client.send("FALSE");
+	}
 }
 
 void Server::clientProcessJoinGame(ClientManager &client) {
 	std::string output = "you failed to join a game";
 	if (games.joinGame(&client, client.getCode())) output = "you joined a game";
 	client.send(output);
-	// TODO rentrer dans la loop du jeu
+	client.enterGameLoop();
 }
 
 void Server::clientProcessCreateGame(ClientManager &client) {
@@ -151,18 +150,18 @@ void Server::clientProcessCreateGame(ClientManager &client) {
 	int code = games.createGame(&client);
 	output += std::to_string(code);
 	client.send(output);
-	// TODO rentrer dans la loop du jeu
+	client.enterGameLoop();
 }
 
 void Server::clientProcessRanking(ClientManager &client) {
-    std::vector<User*> ranking;
-    database.getRanking(ranking);
-    std::string input = "";
-    for (int i(1); i <= 5; i++) {
-        //std::cout << i << ". " << ranking[i]->getUsername() << " avec " << ranking[i]->getStats().getScore() << " points." << std::endl;
-        input += std::to_string(i) + ". " + ranking[i]->getUsername() + " avec " + std::to_string(ranking[i]->getStats().getScore()) + " point(s).\n";
-    }
-    client.send(input);
+	std::vector<User*> ranking;
+	database.getRanking(ranking);
+	std::string input = "";
+	for (int i(1); i <= 5; i++) {
+		//std::cout << i << ". " << ranking[i]->getUsername() << " avec " << ranking[i]->getStats().getScore() << " points." << std::endl;
+		input += std::to_string(i) + ". " + ranking[i]->getUsername() + " avec " + std::to_string(ranking[i]->getStats().getScore()) + " point(s).\n";
+	}
+	client.send(input);
 }
 
 void Server::clientProcessFriends(ClientManager &client) {
