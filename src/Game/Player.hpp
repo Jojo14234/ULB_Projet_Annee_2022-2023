@@ -9,6 +9,7 @@
 #include "Cell.hpp"
 #include "Property.hpp"
 #include "PLAYER_STATUS.hpp"
+#include "Dice.hpp"
 
 
 class Player {
@@ -17,7 +18,7 @@ class Player {
 
     Cell *current_cell;
 
-    // cards: vector<JailCard> c'est quoi ce truc
+    std::vector<JailCard> GOOJ_cards;
 
     std::vector<*Property> properties;
 
@@ -25,23 +26,22 @@ class Player {
 
     bool online = true;
 
-
     void payToExitPrison();
 
     //use a GOOJ card, if available
     bool useGetOutOfJailCard();
 
     //exectues action based on current cell
-    void propertyAction();
+    void propertyAction(); //nécessaire étant donné la méthode acton dans cell et ses enfants?
 
 
     bool isMine(Property property);
 
 
-    //void partakeInAuction(Auction auction); classe Auction pas encore créée
+    //void partakeInAuction(Auction auction); //classe Auction pas encore créée
 
     //rolls dice
-    void rollDice(*Dice dice); //waiting for dice merge
+    int rollDice(Dice* dice); //waiting for dice merge
 
     //quit game
     void leaveGame();
@@ -55,19 +55,21 @@ public:
     void setPosition(Cell* cell);
 
     //pay for property and add property to properties
-    bool buyProperty(Property property);
+    bool buyProperty();
 
     //pay an amount of money, return false if not capable
     bool pay(int amount);
 
     //moves player depending on result from dice
-    void move();
+    void move(int distance);
 
     //exectues exchange agreed to by the 2 players involved (should this be in this class?)
     void exchange(Negociation negociation); //requires modifications to Negociation class compared to what is discribed in srd
 
 
-    void getProperties(); //ça fait quoi? c'est quoi le return type??
+    std::vector<*Property> getProperties();
+
+    void declareBankruptcy();
 
 };
 

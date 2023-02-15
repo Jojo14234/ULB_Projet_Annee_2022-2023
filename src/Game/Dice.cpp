@@ -2,10 +2,11 @@
 
 Dice::Dice(){}
 
-void Dice::roll(){
+int Dice::roll(){
     dice1.roll();
     dice2.roll();
     double_counter = dice1.getResult() + dice2.getResult();
+    return double_counter;
 }
 
 int Dice::getDice1(){

@@ -9,12 +9,11 @@ class Dice{
     int double_counter;
 public:
     Dice();
-    void roll();
+    int roll();
     int getDice1();
     int getDice2();
     int getDoubleCounter();
     bool isDouble();
-
 
 };
 
