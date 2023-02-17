@@ -62,6 +62,8 @@ User* Database::getUser(const char username[32]) {
 	} this->am.unlockReader(); return nullptr;
 }
 
+std::string Database::getUsername(const int id) { return this->getUser(id)->getUsername(); }
+
 void Database::addUser(std::string username, std::string password) {
 	User user{this->getSize()+1, username.c_str(), password.c_str()};
 	this->am.lockWriter();

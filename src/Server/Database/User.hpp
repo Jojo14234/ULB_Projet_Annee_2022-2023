@@ -6,24 +6,25 @@
 
 #include "GameStats.hpp"
 #include "FriendList.hpp"
+#include "FriendRequestList.hpp"
 
 
 class User {
 
 	int id;
-	char username[32];
-	char password[32];
+	std::string username;
+	std::string password;
 
 	GameStats stats;
 	FriendList friend_list;
+	FriendRequestList friend_request_list;
+
+	void addFriendRequest(const User &other) { this->friend_request_list.addRequest(other.getId()); }
 
 public:
 
     User()=default;
-	User(int id, const char username[32], const char password[64]): id{id} {
-        strcpy(this->username, username);
-        strcpy(this->password, password);
-    }
+	User(int id, const std::string username, const std::string password): id{id}, username{username}, password{password} {}
 
     // To String
 	std::string toString() {
@@ -42,10 +43,11 @@ public:
 
 	// GETTERS
 	int getId() const { return id; }
-	const char* getUsername() const { return username; }
-    const char* getPassword() const { return password; }
+	const std::string& getUsername() const { return username; }
+    const std::string& getPassword() const { return password; }
     const GameStats& getStats() const { return stats; }
 	const FriendList& getFriendList() const { return friend_list; }
+	const FriendRequestList& getFriendRequestList() const { return friend_request_list; }
 
 	// CHECKER
 	bool isId(const int id) const { return this->id == id; }
@@ -61,6 +63,8 @@ public:
 	void addFriend(const User &other) { this->friend_list.addFriend(other.id); }
 	void removeFriend(const int id) { this->friend_list.removeFriend(id); }
 	void removeFriend(const User &other) { this->friend_list.removeFriend(other.id); }
+	void sendFriendRequest(User &other) { other.addFriendRequest(*this); }
+	void removeFriendRequest(User &other) { other.}
 
 };
 
