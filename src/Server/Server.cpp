@@ -80,18 +80,32 @@ void Server::connectClient() {
 
 void Server::clientProcessQuery(ClientManager &client, QUERY_TYPE query) {
 	switch (query) {
+		// For connection
 		case QUERY_TYPE::LOGIN: this->clientProcessLogin(client); break;
 		case QUERY_TYPE::REGISTER: this->clientProcessRegister(client); break;
+		// For game
 		case QUERY_TYPE::JOIN_GAME: this->clientProcessJoinGame(client); break;
 		case QUERY_TYPE::CREATE_GAME: this->clientProcessCreateGame(client); break;
-		case QUERY_TYPE::RANKING: this->clientProcessRanking(client); break;
-		case QUERY_TYPE::FRIENDS: this->clientProcessFriends(client); break;
+		// For ranking
+		case QUERY_TYPE::RANKING_POS: this->clientProcessRankingPos(client); break;
+		case QUERY_TYPE::RANKING_TOP: this->clientProcessRankingTop(client); break;
+		// For friends
+		case QUERY_TYPE::FRIENDS_SHOW: this->clientProcessFriendsShow(client); break;
+		case QUERY_TYPE::FRIENDS_REQUEST: this->clientProcessFriendsRequest(client); break;
+		case QUERY_TYPE::FRIENDS_ACCEPT: this->clientProcessFriendsAccept(client); break;
+		case QUERY_TYPE::FRIENDS_REFUSE: this->clientProcessFriendsRefuse(client); break;
+		case QUERY_TYPE::FRIENDS_ADD: this->clientProcessFriendsAdd(client); break;
+		case QUERY_TYPE::FRIENDS_REMOVE: this->clientProcessFriendsRemove(client); break;
+		// For message
 		case QUERY_TYPE::MESSAGE: this->clientProcessMessage(client); break;
+		// For disconnect
 		case QUERY_TYPE::DISCONNECT: client.send("DISCONNECT"); break;
 		default : break;
 	}
 }
 
+
+// For connection
 void Server::clientProcessRegister(ClientManager &client) {
 	if (client.getAccount() != nullptr) {
 		client.send("You are already connected");
@@ -138,6 +152,7 @@ void Server::clientProcessLogin(ClientManager &client) {
 	}
 }
 
+// For game
 void Server::clientProcessJoinGame(ClientManager &client) {
 	std::string output = "you failed to join a game";
 	if (games.joinGame(&client, client.getCode())) output = "you joined a game";
@@ -153,7 +168,12 @@ void Server::clientProcessCreateGame(ClientManager &client) {
 	client.enterGameLoop();
 }
 
-void Server::clientProcessRanking(ClientManager &client) {
+// For ranking
+void Server::clientProcessRankingPos(ClientManager &client) {
+	client.inGame();	// pour pas avoir le warning unused parameter et empecher la compilation
+}
+
+void Server::clientProcessRankingTop(ClientManager &client) {
 	std::vector<User*> ranking;
 	database.getRanking(ranking);
 	std::string input = "";
@@ -164,11 +184,32 @@ void Server::clientProcessRanking(ClientManager &client) {
 	client.send(input);
 }
 
-void Server::clientProcessFriends(ClientManager &client) {
+// For friends
+void Server::clientProcessFriendsShow(ClientManager &client) {
 	client.inGame();	// pour pas avoir le warning unused parameter et empecher la compilation
 }
 
+void Server::clientProcessFriendsRequest(ClientManager &client) {
+	client.inGame();	// pour pas avoir le warning unused parameter et empecher la compilation
+}
+
+void Server::clientProcessFriendsAccept(ClientManager &client) {
+	client.inGame();	// pour pas avoir le warning unused parameter et empecher la compilation
+}
+
+void Server::clientProcessFriendsRefuse(ClientManager &client) {
+	client.inGame();	// pour pas avoir le warning unused parameter et empecher la compilation
+}
+
+void Server::clientProcessFriendsAdd(ClientManager &client) {
+	client.inGame();	// pour pas avoir le warning unused parameter et empecher la compilation
+}
+
+void Server::clientProcessFriendsRemove(ClientManager &client) {
+	client.inGame();	// pour pas avoir le warning unused parameter et empecher la compilation
+}
+
+// For message
 void Server::clientProcessMessage(ClientManager &client) {
 	client.inGame();	// pour pas avoir le warning unused parameter et empecher la compilation
 }
-

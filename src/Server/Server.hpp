@@ -33,13 +33,24 @@ class Server {
 
 	// To process the client query 
 	void clientProcessQuery(ClientManager &client, QUERY_TYPE query);
-    void clientProcessRegister(ClientManager &client);
-    void clientProcessLogin(ClientManager &client);
-    void clientProcessJoinGame(ClientManager &client);
-    void clientProcessCreateGame(ClientManager &client);
-    void clientProcessRanking(ClientManager &client);
-    void clientProcessFriends(ClientManager &client);
-    void clientProcessMessage(ClientManager &client);
+	// For connection
+	void clientProcessRegister(ClientManager &client);
+	void clientProcessLogin(ClientManager &client);
+	// For the game
+	void clientProcessJoinGame(ClientManager &client);
+	void clientProcessCreateGame(ClientManager &client);
+	// For ranking
+	void clientProcessRankingTop(ClientManager &client);
+	void clientProcessRankingPos(ClientManager &client);
+	// For friends
+	void clientProcessFriendsShow(ClientManager &client);
+	void clientProcessFriendsRequest(ClientManager &client);
+	void clientProcessFriendsAccept(ClientManager &client);
+	void clientProcessFriendsRefuse(ClientManager &client);
+	void clientProcessFriendsAdd(ClientManager &client);
+	void clientProcessFriendsRemove(ClientManager &client);
+	// For message
+	void clientProcessMessage(ClientManager &client);
 
 public:
 
