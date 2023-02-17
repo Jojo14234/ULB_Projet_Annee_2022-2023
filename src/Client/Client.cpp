@@ -30,9 +30,16 @@ void Client::sendToServer(const InputParser &input) {
 	packet << static_cast<int>(input.getQueryType());
 	switch(input.getQueryType()) {
 		case QUERY_TYPE::JOIN_GAME : packet << stoi(input[1]); break;
-		case QUERY_TYPE::MESSAGE :	// same as under
+		
+		case QUERY_TYPE::REGISTER :	// same as under
 		case QUERY_TYPE::LOGIN :    // same as under
-		case QUERY_TYPE::REGISTER : packet << input[1] << input[2]; break;
+		case QUERY_TYPE::MESSAGE : packet << input[1] << input[2]; break;
+		
+		case QUERY_TYPE::FRIENDS_ACCEPT: // same as under
+		case QUERY_TYPE::FRIENDS_REFUSE: // same as under
+		case QUERY_TYPE::FRIENDS_ADD:    // same as under
+		case QUERY_TYPE::FRIENDS_REMOVE: packet << input[1]; break;
+
 		default : break;
 	}
 	if (this->socket.send(packet) !=  sf::Socket::Done) { throw WritePipeClientException(); }
