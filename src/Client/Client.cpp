@@ -12,6 +12,42 @@
 
 // Public
 
+void Client::mainLoop() {
+	while (true) {
+		this->ui.connexionMsg();
+		while (not this->connectedToAnAccount) {
+			// Si l'utilisateur à fait /disconnect dans le menu de connexion, cela ferme l'application
+			if (!this->connectionLoop()) { return; }
+		}
+		while (this->connectedToAnAccount) {
+			InputParser parser = this->controller.getNewParsedInput();
+			if (parser.getQueryType() == QUERY_TYPE::NONE) { continue; }
+			this->sendToServer(parser);
+			std::string output;
+			this->receiveFromServer(output);
+			output = this->analyseServerResponse(output);
+			if (output == "GAME") { this->inGame = true; this->gameLoop(); }
+			else { std::cout << output << std::endl; }
+		}
+	}
+}
+
+void Client::gameLoop() {
+	std::cout << "Vous entrez dans une partie" << std::endl;
+	while(this->inGame) {
+		InputParser parser = this->controller.getNewParsedInput();
+		if (parser.getQueryType() == QUERY_TYPE::NONE) { continue; }
+		this->sendToServer(parser);
+		std::string output;
+		this->receiveFromServer(output);
+		if(output == "ENDGAME") { this->inGame = false; }
+		else { std::cout << output << std::endl; }
+	}
+}
+
+
+// Private
+
 void Client::connectToServer() {
 	if (this->socket.connect(IP, PORT) != sf::Socket::Done) {
 		throw ConnectServerClientException();
@@ -30,9 +66,16 @@ void Client::sendToServer(const InputParser &input) {
 	packet << static_cast<int>(input.getQueryType());
 	switch(input.getQueryType()) {
 		case QUERY_TYPE::JOIN_GAME : packet << stoi(input[1]); break;
-		case QUERY_TYPE::MESSAGE :	// same as under
+		
+		case QUERY_TYPE::REGISTER :	// same as under
 		case QUERY_TYPE::LOGIN :    // same as under
-		case QUERY_TYPE::REGISTER : packet << input[1] << input[2]; break;
+		case QUERY_TYPE::MESSAGE : packet << input[1] << input[2]; break;
+		
+		case QUERY_TYPE::FRIENDS_ACCEPT: // same as under
+		case QUERY_TYPE::FRIENDS_REFUSE: // same as under
+		case QUERY_TYPE::FRIENDS_ADD:    // same as under
+		case QUERY_TYPE::FRIENDS_REMOVE: packet << input[1]; break;
+
 		default : break;
 	}
 	if (this->socket.send(packet) !=  sf::Socket::Done) { throw WritePipeClientException(); }
@@ -44,23 +87,13 @@ void Client::receiveFromServer(std::string &output) {
 	packet >> output;
 }
 
-void Client::mainLoop() {
-	while (true) {
-		this->ui.connexionMsg();
-		while (not connectedToAnAccount) {
-			// Si l'utilisateur à fait /disconnect dans le menu de connexion, cela ferme l'application
-			if (!this->connectionLoop()) { return; }
-		}
-		while (connectedToAnAccount) {
-			InputParser parser = this->controller.getNewParsedInput();
-			if (parser.getQueryType() != QUERY_TYPE::NONE) {this->sendToServer(parser);}
-			std::string output;
-			this->receiveFromServer(output);
-			std::cout << "Réponse du server (avant analyse): " << output << std::endl;
-			output = this->analyseServerResponse(output);
-			std::cout << "Réponse du server (après analyse): " << output << std::endl;
-		}
+bool Client::checkAccountConnection(std::string &output, QUERY_TYPE query) {
+	if (output == "TRUE") {
+		(query == QUERY_TYPE::REGISTER) ? this->ui.acceptRegister() : this->ui.acceptLogin();
+		return true;
 	}
+	(query == QUERY_TYPE::REGISTER) ? this->ui.refuseRegister() : this->ui.refuseLogin();
+	return false;
 }
 
 bool Client::connectionLoop() {
@@ -85,22 +118,6 @@ bool Client::connectionLoop() {
 	return true;
 }
 
-bool Client::checkAccountConnection(std::string &output, QUERY_TYPE query) {
-	if (output == "TRUE") {
-		(query == QUERY_TYPE::REGISTER) ? this->ui.acceptRegister() : this->ui.acceptLogin();
-		return true;
-	}
-	(query == QUERY_TYPE::REGISTER) ? this->ui.refuseRegister() : this->ui.refuseLogin();
-	return false;
-}
-
-
-int isInteger(std::string &s) {
-	char* pEnd;
-	int i = strtol(s.c_str(), &pEnd, 10);
-	return i;
-}
-
 std::string Client::analyseServerResponse(std::string &output) {
 	if (output == "DISCONNECT") {
 		this->connectedToAnAccount = false;
@@ -110,6 +127,6 @@ std::string Client::analyseServerResponse(std::string &output) {
 		return output + "Fin du classement";
 	}
 	else {
-		return "Pas d'analyse !";
+		return output;
 	}
 }
