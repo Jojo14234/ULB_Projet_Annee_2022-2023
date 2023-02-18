@@ -7,7 +7,7 @@
 #include "GameStats.hpp"
 #include "FriendList.hpp"
 #include "FriendRequestList.hpp"
-
+#include "Database.hpp"
 
 class User {
 
@@ -18,8 +18,6 @@ class User {
 	GameStats stats;
 	FriendList friend_list;
 	FriendRequestList friend_request_list;
-
-	void addFriendRequest(const User &other) { this->friend_request_list.addRequest(other.getId()); }
 
 public:
 
@@ -63,8 +61,10 @@ public:
 	void addFriend(const User &other) { this->friend_list.addFriend(other.id); }
 	void removeFriend(const int id) { this->friend_list.removeFriend(id); }
 	void removeFriend(const User &other) { this->friend_list.removeFriend(other.id); }
-	void sendFriendRequest(User &other) { other.addFriendRequest(*this); }
-	void removeFriendRequest(User &other) { other.}
+	void sendRequest(int id, Database& db) { this->friend_request_list.sendRequest(this->getId(), id, db); }
+	void removeRequest(int id, Database& db) { this->friend_request_list.removeRequest(this->getId(), id, db); }
+	void receiveRequest(int id) { this->friend_request_list.receiveRequest(id); }
+	void removeRequest(int id) { this->friend_request_list.removeRequest(id); }
 
 };
 

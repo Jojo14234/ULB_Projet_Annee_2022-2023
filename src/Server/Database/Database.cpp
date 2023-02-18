@@ -113,4 +113,11 @@ void Database::getRanking(std::vector<User*> &ranking) {
     }
 }
 
+void Database::addUser(User user) { this->data.push_back(user); }
 
+void Database::removeUser(User &user) {
+	auto it = std::find(this->data.begin(), this->data.end(), user);
+	this->data.erase(it);
+}
+
+bool Database::contains(const User &user) const { return this->contains(user.getId()); }

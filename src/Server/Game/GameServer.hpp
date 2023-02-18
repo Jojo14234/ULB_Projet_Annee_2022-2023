@@ -13,7 +13,7 @@ class ClientManager;	// forward declaraction
 
 class GameServer {
 
-	Capitalist game;
+	//Capitalist game;
 	GameCode code;
 	std::vector<ClientManager*> clients;
 

@@ -4,38 +4,37 @@
 #include <vector>
 #include <string>
 #include <algorithm>
-#include "Database.hpp"
+#include "../../utils/AccessMonitor.hpp"
+
+class Database;
 
 class FriendRequestList {
 	
-	std::vector<int> sent;
+	AccessMonitor am;
 	std::vector<int> received;
+	std::vector<int> sent;
 
 public:
 
 	FriendRequestList() = default;
 
-	// Add a friend
-	void addRequest(int id) { this->sent.push_back(id); }
+	// Send a friend request
+	void sendRequest(int from, int to, Database& db);
+	// receive a friend resquest
+	void receiveRequest(int id);
+
 	// Remove a friend
-	void removeRequest(int id) { 
-		auto it = std::find(this->sent.begin(), this->sent.end(), id);
-		this->sent.erase(it); 
-	}
+	void removeRequest(int from, int to, Database& db);
+
+	void removeRequest(int id);
 	
 	// If contains
-	bool contains(int id) const { return std::find(this->sent.begin(), this->sent.end(), id) != this->sent.end(); }
+	bool contains(int id) const { return std::find(this->received.begin(), this->received.end(), id) != this->received.end(); }
 	
 	// GETTERS
-	int getFriendsCount() const { return this->sent.size(); }
+	int getPendingFriendRequestsCount() const { return this->received.size(); }
 
-	std::string toString(Database &db) const {
-		std::string str = "Demandes d'ami en attente:\n\n";
-		for (auto id : sent){
-			str += ("• " + db.getUsername(id) + "\n");
-		}
-		return str;
-	}
+	std::string toString(Database &db) const;
 };
 
 
