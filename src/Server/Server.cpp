@@ -154,14 +154,16 @@ void Server::clientProcessLogin(ClientManager &client) {
 
 // For game
 void Server::clientProcessJoinGame(ClientManager &client) {
-	std::string output = "you failed to join a game";
-	if (games.joinGame(&client, client.getCode())) output = "you joined a game";
-	client.send(output);
-	client.enterGameLoop();
+	std::string output = "aucune partie n'existe avec ce code";
+	if (games.joinGame(&client, client.getCode())) { 
+		output = "GAME";
+		client.send(output);
+		client.enterGameLoop();
+	} else { client.send(output); }
 }
 
 void Server::clientProcessCreateGame(ClientManager &client) {
-	std::string output = "you create a game with code : ";
+	std::string output = "vous avez crée une partie avec le code : ";
 	int code = games.createGame(&client);
 	output += std::to_string(code);
 	client.send(output);
