@@ -26,7 +26,7 @@ void Client::mainLoop() {
 			std::string output;
 			this->receiveFromServer(output);
 			output = this->analyseServerResponse(output);
-			if (output == "GAME") { this->inGame = true; this->gameLoop(); }
+			if (output == "GAME" or parser.getQueryType() == QUERY_TYPE::CREATE_GAME) { this->inGame = true; this->gameLoop(); }
 			else { std::cout << output << std::endl; }
 		}
 	}
