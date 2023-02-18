@@ -12,8 +12,8 @@
 class User {
 
 	int id;
-	std::string username;
-	std::string password;
+	char username[32];
+	char password[32];
 
 	GameStats stats;
 	FriendList friend_list;
@@ -22,7 +22,10 @@ class User {
 public:
 
     User()=default;
-	User(int id, const std::string username, const std::string password): id{id}, username{username}, password{password} {}
+	User(int id, const char username[32], const char password[64]): id{id} {
+        strcpy(this->username, username);
+        strcpy(this->password, password);
+    }
 
     // To String
 	std::string toString() {
@@ -41,8 +44,8 @@ public:
 
 	// GETTERS
 	int getId() const { return id; }
-	const std::string& getUsername() const { return username; }
-    const std::string& getPassword() const { return password; }
+	const char* getUsername() const { return username; }
+    const char* getPassword() const { return password; }
     const GameStats& getStats() const { return stats; }
 	const FriendList& getFriendList() const { return friend_list; }
 	const FriendRequestList& getFriendRequestList() const { return friend_request_list; }
