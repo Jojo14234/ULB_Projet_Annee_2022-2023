@@ -2,7 +2,9 @@
 #define _FRIEND_LIST_HPP
 
 #include <vector>
+#include <string>
 #include <algorithm>
+#include "Database.hpp"
 
 
 class FriendList {
@@ -27,6 +29,13 @@ public:
 	// GETTERS
 	int getFriendsCount() const { return this->ids.size(); }
 
+	std::string toString(Database &db) const {
+		std::string str = "Liste d'amis:\n\n";
+		for (auto id : ids){
+			str += ("• " + db.getUsername(id) + "\n");
+		}
+		return str;
+	}
 };
 
 

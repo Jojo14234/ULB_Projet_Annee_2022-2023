@@ -6,9 +6,10 @@
 #include <stdio.h>
 #include <iostream>
 #include <fstream>
-#include "User.hpp"
 #include "../../utils/AccessMonitor.hpp"
 
+
+class User;
 
 class Database {
 	
@@ -30,24 +31,22 @@ public:
     void print_in_file();
 
 	// Add a User
-	void addUser(User user) { this->data.push_back(user); }
+	void addUser(User user);
 	// Create a user and add it
     void addUser(std::string username, std::string password);
 	// Remove a User
-	void removeUser(User &user) {
-		auto it = std::find(this->data.begin(), this->data.end(), user);
-		this->data.erase(it);
-	}
+	void removeUser(User &user);
 	
 	// If the db contains
 	bool contains(const int id) const;
 	bool contains(const char username[32]) const;
-	bool contains(const User &user) const { return this->contains(user.getId()); }
+	bool contains(const User &user) const;
 	
 	// GETTERS
 	User* getUser(const int id);
 	User* getUser(const char username[32]);
 	int getSize() const { return this->data.size(); }
+	std::string getUsername(const int id);
 
     // GetRanking
     void getRanking(std::vector<User*> &ranking);

@@ -186,7 +186,7 @@ void Server::clientProcessRankingTop(ClientManager &client) {
 
 // For friends
 void Server::clientProcessFriendsShow(ClientManager &client) {
-	client.inGame();	// pour pas avoir le warning unused parameter et empecher la compilation
+	client.send(client.getAccount()->getFriendList().toString(this->database));
 }
 
 void Server::clientProcessFriendsRequest(ClientManager &client) {

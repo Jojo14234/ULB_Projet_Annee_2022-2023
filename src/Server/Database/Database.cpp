@@ -62,6 +62,8 @@ User* Database::getUser(const char username[32]) {
 	} this->am.unlockReader(); return nullptr;
 }
 
+std::string Database::getUsername(const int id) { return this->getUser(id)->getUsername(); }
+
 void Database::addUser(std::string username, std::string password) {
 	User user{this->getSize()+1, username.c_str(), password.c_str()};
 	this->am.lockWriter();
@@ -111,4 +113,11 @@ void Database::getRanking(std::vector<User*> &ranking) {
     }
 }
 
+void Database::addUser(User user) { this->data.push_back(user); }
 
+void Database::removeUser(User &user) {
+	auto it = std::find(this->data.begin(), this->data.end(), user);
+	this->data.erase(it);
+}
+
+bool Database::contains(const User &user) const { return this->contains(user.getId()); }
