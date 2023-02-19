@@ -192,7 +192,7 @@ void Server::clientProcessFriendsShow(ClientManager &client) {
 }
 
 void Server::clientProcessFriendsRequest(ClientManager &client) {
-	client.inGame();	// pour pas avoir le warning unused parameter et empecher la compilation
+	client.send(client.getAccount()->getFriendRequestList().toString(this->database));
 }
 
 void Server::clientProcessFriendsAccept(ClientManager &client) {
@@ -204,7 +204,24 @@ void Server::clientProcessFriendsRefuse(ClientManager &client) {
 }
 
 void Server::clientProcessFriendsAdd(ClientManager &client) {
-	client.inGame();	// pour pas avoir le warning unused parameter et empecher la compilation
+	std::cout << client.getS1() << std::endl;
+	User* new_friend = database.getUser(client.getS1().c_str());
+	User* client_account = client.getAccount();
+	if (new_friend == nullptr) { 
+		client.send("Le pseudo entré n'existe pas."); 
+		return; 
+	}
+	if (client_account->isFriendWith(*new_friend)) { 
+		client.send("Vous êtes déjà ami avec ce joueur !"); 
+		return; 
+	}
+	if (client_account->hasSentFriendRequestTo(*new_friend)) { 
+		client.send("Vous avez déjà envoyé une demande d'ami à ce joueur !"); 
+		return; 
+	}
+	// vérifier si pas de demande en retour
+	client.getAccount()->sendRequest(new_friend->getId(), database);
+	client.send("La demande d'ami a bien été envoyée !"); 
 }
 
 void Server::clientProcessFriendsRemove(ClientManager &client) {

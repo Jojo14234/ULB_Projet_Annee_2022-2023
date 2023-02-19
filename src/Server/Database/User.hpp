@@ -13,7 +13,7 @@ class User {
 
 	int id;
 	char username[32];
-	char password[32];
+	char password[64];
 
 	GameStats stats;
 	FriendList friend_list;
@@ -58,16 +58,21 @@ public:
 	bool isFriendWith(const User &other) const { return friend_list.contains(other.id); }
 	bool isFriendWith(const int other_id) const { return friend_list.contains(other_id); }
 
+	bool hasSentFriendRequestTo(const User &other) const { return friend_request_list.sentListContains(other.id); }
+	bool hasSentFriendRequestTo(const int other_id) const { return friend_request_list.sentListContains(other_id); }
+
 	// MODIFIERS
 	void updateStats(const GameStats &stats) { this->stats += stats; }
-	void addFriend(const int id) { this->friend_list.addFriend(id); }
+	/*void addFriend(const int id) { this->friend_list.addFriend(id); }
 	void addFriend(const User &other) { this->friend_list.addFriend(other.id); }
 	void removeFriend(const int id) { this->friend_list.removeFriend(id); }
-	void removeFriend(const User &other) { this->friend_list.removeFriend(other.id); }
+	void removeFriend(const User &other) { this->friend_list.removeFriend(other.id); }*/
 	void sendRequest(int id, Database& db) { this->friend_request_list.sendRequest(this->getId(), id, db); }
 	void removeRequest(int id, Database& db) { this->friend_request_list.removeRequest(this->getId(), id, db); }
-	void receiveRequest(int id) { this->friend_request_list.receiveRequest(id); }
-	void removeRequest(int id) { this->friend_request_list.removeRequest(id); }
+	void receiveRequest(int id) { this->friend_request_list.receiveRequest(id); } //should be private
+	void removeRequest(int id) { this->friend_request_list.removeRequest(id); } //should be private
+
+	//void acceptRequest(int id)
 
 };
 
