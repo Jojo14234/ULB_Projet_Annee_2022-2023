@@ -74,6 +74,8 @@ void Client::sendToServer(const GameInputParser &input) {
 	packet << static_cast<int>(input.getQueryType());
 	switch(input.getQueryType()) {
 		
+		case GAME_QUERY_TYPE::ARG1 : packet << input[1]; break;
+		case GAME_QUERY_TYPE::ARG2 : packet << input[1] << input[2]; break;
 		
 		default : break;
 	}

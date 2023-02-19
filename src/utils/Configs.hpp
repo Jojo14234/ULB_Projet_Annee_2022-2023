@@ -44,6 +44,8 @@ enum class QUERY_TYPE {
 enum class GAME_QUERY_TYPE {
 	ROLL_DICE,
 
+	ARG1, // temp
+	ARG2, // temp
 	// add others
 
 	LEAVE,
