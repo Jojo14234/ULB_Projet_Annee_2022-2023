@@ -9,9 +9,9 @@ void GameServer::clientLoop(ClientManager &client) {
 		GAME_QUERY_TYPE query;
 		client.receive(query);
 		std::cout << "Receive: " << (int)query << " from client: " << client.getSocket().getRemoteAddress() << std::endl;
-		game.send(query);
+		game.receiveQuery(query);
 		std::string output;
-		game.receive(output);
+		game.sendMessage(output);
 		client.send(output);
 		if (query == GAME_QUERY_TYPE::LEAVE) { break; }
 	}

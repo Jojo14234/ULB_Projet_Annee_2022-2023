@@ -10,9 +10,9 @@ public:
 
 	Capitalist()=default;
 
-	void send(GAME_QUERY_TYPE query) { std::cout << "capitalist : " << (int)query << std::endl; }
+	void receiveQuery(GAME_QUERY_TYPE query) { std::cout << "capitalist : " << (int)query << std::endl; }
 
-	void receive(std::string &output) { output = "coucou ici capitalist"; }
+	void sendMessage(std::string &output) { output = "coucou ici capitalist"; }
 
 };
 
