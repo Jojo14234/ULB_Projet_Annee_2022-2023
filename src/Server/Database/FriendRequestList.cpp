@@ -46,9 +46,9 @@ void FriendRequestList::acceptRequest(int id) {
 }
 
 std::string FriendRequestList::toString(Database &db) const {
-	std::string str = "Demandes d'ami en attente (" + std::to_string(this->getPendingFriendRequestsCount()) + "):\n\n";
+	std::string str = "Demandes d'ami en attente (" + std::to_string(this->getPendingFriendRequestsCount()) + "):\n";
 	for (auto id : received){
-		str += ("• " + db.getUsername(id) + "\n");
+		str += ("■ " + db.getUsername(id) + "\n");
 	}
 	return str;
 }

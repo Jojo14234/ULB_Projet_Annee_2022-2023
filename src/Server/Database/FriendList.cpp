@@ -23,9 +23,9 @@ void FriendList::removeFriend(int id) {
 }
 
 std::string FriendList::toString(Database &db) const {
-	std::string str = "Liste d'amis:\n\n";
+	std::string str = "Liste d'amis (" + std::to_string(this->getFriendsCount()) + "):\n";
 	for (auto id : ids){
-		str += ("• " + db.getUsername(id) + "\n");
+		str += ("✿ " + db.getUsername(id) + "\n");
 	}
 	return str;
 }
