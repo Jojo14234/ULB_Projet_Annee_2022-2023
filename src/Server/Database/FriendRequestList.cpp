@@ -31,7 +31,7 @@ void FriendRequestList::removeRequest(int id) {
 }
 
 std::string FriendRequestList::toString(Database &db) const {
-	std::string str = "Demandes d'ami en attente (%d):\n\n",getPendingFriendRequestsCount();
+	std::string str = "Demandes d'ami en attente (" + std::to_string(this->getPendingFriendRequestsCount()) + "):\n\n";
 	for (auto id : received){
 		str += ("• " + db.getUsername(id) + "\n");
 	}

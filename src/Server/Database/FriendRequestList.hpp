@@ -29,8 +29,9 @@ public:
 	void removeRequest(int id);
 	
 	// If contains
-	bool contains(int id) const { return std::find(this->received.begin(), this->received.end(), id) != this->received.end(); }
-	
+	bool sentListContains(int id) const { return std::find(this->sent.begin(), this->sent.end(), id) != this->sent.end(); }
+	bool receivedListContains(int id) const { return std::find(this->received.begin(), this->received.end(), id) != this->received.end(); }
+
 	// GETTERS
 	int getPendingFriendRequestsCount() const { return this->received.size(); }
 
