@@ -5,7 +5,7 @@
 void FriendList::addFriend(int from, int id, Database& db) { 
 	this->am.lockWriter();
 	this->ids.push_back(id);
-	db.getUser(id)->addFriend(from, db);
+	db.getUser(id)->addFriend(from);
 	this->am.unlockWriter();
 }
 
