@@ -33,12 +33,10 @@ void Server::clientLoop(ClientManager &client) {
 	database.print_in_file();
 	// Loop to exchange data with the client
 	while (true) {
-		
 		// Receive a query
 		QUERY_TYPE query; 
 		client.receive(query);
 		std::cout << "Receive: " << (int)query << " from client: " << client.getSocket().getRemoteAddress() << std::endl;
-		
 		// Execute the query
 		this->clientProcessQuery(client, query);
 		if (query == QUERY_TYPE::DISCONNECT) {
@@ -208,18 +206,25 @@ void Server::clientProcessFriendsAdd(ClientManager &client) {
 	User* new_friend = database.getUser(client.getS1().c_str());
 	User* client_account = client.getAccount();
 	if (new_friend == nullptr) { 
-		client.send("Le pseudo entré n'existe pas."); 
-		return; 
+		client.send("Le pseudo entré n'existe pas."); return; 
+	}
+	if (client_account == new_friend){
+		client.send("Vous ne pouvez pas être ami avec vous même."); return;
 	}
 	if (client_account->isFriendWith(*new_friend)) { 
-		client.send("Vous êtes déjà ami avec ce joueur !"); 
-		return; 
+		client.send("Vous êtes déjà ami avec ce joueur !"); return; 
 	}
 	if (client_account->hasSentFriendRequestTo(*new_friend)) { 
-		client.send("Vous avez déjà envoyé une demande d'ami à ce joueur !"); 
-		return; 
+		client.send("Vous avez déjà envoyé une demande d'ami à ce joueur !"); return; 
 	}
-	// vérifier si pas de demande en retour
+	if (client_account->hasReceiveFriendRequestFrom(*new_friend)) {
+		std::string s = "Cet utilisateur vous a déjà demandé en ami.\nVous êtes donc désormais ami avec ";
+		s += new_friend->getUsername();
+		s += " !";
+		client.send(s);
+		client.getAccount()->acceptRequest(new_friend->getId(), database);
+	}
+
 	client.getAccount()->sendRequest(new_friend->getId(), database);
 	client.send("La demande d'ami a bien été envoyée !"); 
 }
