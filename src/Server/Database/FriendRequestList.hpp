@@ -27,6 +27,9 @@ public:
 	void removeRequest(int from, int to, Database& db);
 
 	void removeRequest(int id);
+
+	void acceptRequest(int from, int to, Database& db);
+	void acceptRequest(int id);
 	
 	// If contains
 	bool sentListContains(int id) const { return std::find(this->sent.begin(), this->sent.end(), id) != this->sent.end(); }

@@ -60,19 +60,29 @@ public:
 
 	bool hasSentFriendRequestTo(const User &other) const { return friend_request_list.sentListContains(other.id); }
 	bool hasSentFriendRequestTo(const int other_id) const { return friend_request_list.sentListContains(other_id); }
+	
+	bool hasReceiveFriendRequestFrom(const User &other) const { return friend_request_list.receivedListContains(other.id); }
+	bool hasReceiveFriendRequestFrom(const int other_id) const { return friend_request_list.receivedListContains(other_id); }
 
 	// MODIFIERS
 	void updateStats(const GameStats &stats) { this->stats += stats; }
-	/*void addFriend(const int id) { this->friend_list.addFriend(id); }
-	void addFriend(const User &other) { this->friend_list.addFriend(other.id); }
+	void addFriend(const int id) { this->friend_list.addFriend(id); }
+	/*void addFriend(const User &other) { this->friend_list.addFriend(other.id); }
 	void removeFriend(const int id) { this->friend_list.removeFriend(id); }
 	void removeFriend(const User &other) { this->friend_list.removeFriend(other.id); }*/
 	void sendRequest(int id, Database& db) { this->friend_request_list.sendRequest(this->getId(), id, db); }
 	void removeRequest(int id, Database& db) { this->friend_request_list.removeRequest(this->getId(), id, db); }
 	void receiveRequest(int id) { this->friend_request_list.receiveRequest(id); } //should be private
 	void removeRequest(int id) { this->friend_request_list.removeRequest(id); } //should be private
+	void removeSent(int id) { this->friend_request_list.acceptRequest(id); }
 
-	//void acceptRequest(int id)
+	void acceptRequest(int id, Database& db) { 
+		this->friend_request_list.acceptRequest(this->getId(), id, db);
+		this->friend_list.addFriend(this->getId(), id, db); 
+	}
+	void declineRequest(int id, Database& db) { 
+		this->friend_request_list.removeRequest(id, this->getId(), db); 
+	}
 
 };
 

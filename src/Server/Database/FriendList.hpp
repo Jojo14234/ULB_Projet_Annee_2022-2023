@@ -4,11 +4,13 @@
 #include <vector>
 #include <string>
 #include <algorithm>
-#include "Database.hpp"
+#include "../../utils/AccessMonitor.hpp"
 
+class Database;
 
 class FriendList {
 	
+	AccessMonitor am;
 	std::vector<int> ids;
 
 public:
@@ -16,12 +18,11 @@ public:
 	FriendList()=default;
 
 	// Add a friend
-	void addFriend(int id) { this->ids.push_back(id); }
+	void addFriend(int from, int id, Database& db);
+	void addFriend(int id);
+
 	// Remove a friend
-	void removeFriend(int id) { 
-		auto it = std::find(this->ids.begin(), this->ids.end(), id);
-		this->ids.erase(it); 
-	}
+	void removeFriend(int id);
 	
 	// If contains
 	bool contains(int id) const { return std::find(this->ids.begin(), this->ids.end(), id) != this->ids.end(); }
@@ -29,13 +30,7 @@ public:
 	// GETTERS
 	int getFriendsCount() const { return this->ids.size(); }
 
-	std::string toString(Database &db) const {
-		std::string str = "Liste d'amis:\n\n";
-		for (auto id : ids){
-			str += ("• " + db.getUsername(id) + "\n");
-		}
-		return str;
-	}
+	std::string toString(Database &db) const;
 };
 
 
