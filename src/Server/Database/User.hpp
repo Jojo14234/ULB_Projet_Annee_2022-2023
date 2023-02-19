@@ -66,7 +66,7 @@ public:
 
 	// MODIFIERS
 	void updateStats(const GameStats &stats) { this->stats += stats; }
-	void addFriend(const int id, Database& db) { std::cout << "7" << std::endl; this->friend_list.addFriend(id); }
+	void addFriend(const int id) { this->friend_list.addFriend(id); }
 	/*void addFriend(const User &other) { this->friend_list.addFriend(other.id); }
 	void removeFriend(const int id) { this->friend_list.removeFriend(id); }
 	void removeFriend(const User &other) { this->friend_list.removeFriend(other.id); }*/
