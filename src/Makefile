@@ -6,7 +6,7 @@ OTHERGLAGS = -fanalyzer -Walloc-zero -Wcast-align \
 			-fdelete-null-pointer-checks -Woverloaded-virtual -Wsign-promo -Wstrict-null-sentinel -Wsuggest-attribute=cold \
 			-Wsuggest-attribute=const -Wsuggest-attribute=noreturn -Wsuggest-attribute=pure -Wsuggest-final-methods \
 			-Wsuggest-final-types -Wsuggest-override -Wundef -Wuseless-cast -Wvolatile \
-			-Wformat=2  -Wzero-as-null-pointer-constant #-fsanitize=address,leak #-Wswitch-default -Wswitch-enum
+			-Wformat=2  -Wzero-as-null-pointer-constant -fsanitize=address,leak #-Wswitch-default -Wswitch-enum
 #CXXFLAGS += ${OTHERGLAGS}
 LDLIBS 	 = -lpthread -lsfml-network -lsfml-system
 
@@ -17,6 +17,7 @@ endif
 
 # Create Client objects
 CLIENT_BINS = $(patsubst Client/%.cpp, Client/%.o, $(wildcard Client/*.cpp))
+CLIENT_INPUTPARSER_BINS = $(patsubst Client/InputParser/%.cpp, Client/InputParser/%.o, $(wildcard Client/InputParser/*.cpp))
 
 # Create Server objects
 SERVER_BINS = $(patsubst Server/%.cpp, Server/%.o, $(wildcard Server/*.cpp))
@@ -38,7 +39,7 @@ rm:
 
 main: client server
 
-client: ${CLIENT_BINS}
+client: ${CLIENT_BINS} ${CLIENT_INPUTPARSER_BINS}
 	${CXX} ${CXXFLAGS} -o capitalist $^ ${LDLIBS}
 	make clean
 
