@@ -33,12 +33,10 @@ void Server::clientLoop(ClientManager &client) {
 	database.print_in_file();
 	// Loop to exchange data with the client
 	while (true) {
-		
 		// Receive a query
 		QUERY_TYPE query; 
 		client.receive(query);
 		std::cout << "Receive: " << (int)query << " from client: " << client.getSocket().getRemoteAddress() << std::endl;
-		
 		// Execute the query
 		this->clientProcessQuery(client, query);
 		if (query == QUERY_TYPE::DISCONNECT) {
