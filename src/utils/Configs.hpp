@@ -26,7 +26,7 @@ enum class QUERY_TYPE {
 	CREATE_GAME,
 
 	RANKING_TOP,
-	RANKING_POS,	
+	RANKING_POS,
 
 	FRIENDS_SHOW,
 	FRIENDS_REQUEST,
@@ -41,13 +41,21 @@ enum class QUERY_TYPE {
 	NONE
 };
 
+enum class GAME_QUERY_TYPE {
+	ROLL_DICE,
+
+	// add others
+
+	LEAVE,
+	NONE
+};
+
 enum class CREATE_GAME_QUERY_TYPE {
 	MAX_PLAYER,
 	MONEY,
 	AUCTION,
 	START,
 	
-	LEAVE,
 	NONE
 };
 

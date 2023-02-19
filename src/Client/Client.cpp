@@ -7,7 +7,8 @@
 #include "../utils/Configs.hpp"
 #include "../utils/Exceptions.hpp"
 #include "Client.hpp"
-#include "InputParser.hpp"
+#include "InputParser/MainInputParser.hpp"
+#include "InputParser/GameInputParser.hpp"
 
 
 // Public
@@ -20,7 +21,7 @@ void Client::mainLoop() {
 			if (!this->connectionLoop()) { return; }
 		}
 		while (this->connectedToAnAccount) {
-			InputParser parser = this->controller.getNewParsedInput();
+			MainInputParser parser = this->controller.getNewParsedInput();
 			if (parser.getQueryType() == QUERY_TYPE::NONE) { continue; }
 			this->sendToServer(parser);
 			std::string output;
@@ -29,19 +30,6 @@ void Client::mainLoop() {
 			if (output == "GAME" or parser.getQueryType() == QUERY_TYPE::CREATE_GAME) { this->inGame = true; this->gameLoop(); }
 			else { std::cout << output << std::endl; }
 		}
-	}
-}
-
-void Client::gameLoop() {
-	std::cout << "Vous entrez dans une partie" << std::endl;
-	while(this->inGame) {
-		InputParser parser = this->controller.getNewParsedInput();
-		if (parser.getQueryType() == QUERY_TYPE::NONE) { continue; }
-		this->sendToServer(parser);
-		std::string output;
-		this->receiveFromServer(output);
-		if(output == "ENDGAME") { this->inGame = false; }
-		else { std::cout << output << std::endl; }
 	}
 }
 
@@ -55,13 +43,13 @@ void Client::connectToServer() {
 }
 
 void Client::disconnectFromServer() {
-	this->sendToServer(InputParser{"/disconnect"});
+	this->sendToServer(MainInputParser{"/disconnect"});
 	std::string output;
 	this->receiveFromServer(output);
 	this->ui.disconnect();
 }
 
-void Client::sendToServer(const InputParser &input) {
+void Client::sendToServer(const MainInputParser &input) {
 	sf::Packet packet;
 	packet << static_cast<int>(input.getQueryType());
 	switch(input.getQueryType()) {
@@ -74,16 +62,27 @@ void Client::sendToServer(const InputParser &input) {
 		case QUERY_TYPE::FRIENDS_ACCEPT: // same as under
 		case QUERY_TYPE::FRIENDS_REFUSE: // same as under
 		case QUERY_TYPE::FRIENDS_ADD:    // same as under
-		case QUERY_TYPE::FRIENDS_REMOVE: packet << input[1]; break;
+		case QUERY_TYPE::FRIENDS_REMOVE: packet << input[2]; break;
 
 		default : break;
 	}
-	if (this->socket.send(packet) !=  sf::Socket::Done) { throw WritePipeClientException(); }
+	if (this->socket.send(packet) != sf::Socket::Done) { throw WritePipeClientException(); }
+}
+
+void Client::sendToServer(const GameInputParser &input) {
+	sf::Packet packet;
+	packet << static_cast<int>(input.getQueryType());
+	switch(input.getQueryType()) {
+		
+		
+		default : break;
+	}
+	if (this->socket.send(packet) != sf::Socket::Done) { throw WritePipeClientException(); }
 }
 
 void Client::receiveFromServer(std::string &output) {
 	sf::Packet packet;
-	if (this->socket.receive(packet) !=  sf::Socket::Done) { throw ReadPipeClientException(); }
+	if (this->socket.receive(packet) != sf::Socket::Done) { throw ReadPipeClientException(); }
 	packet >> output;
 }
 
@@ -96,8 +95,21 @@ bool Client::checkAccountConnection(std::string &output, QUERY_TYPE query) {
 	return false;
 }
 
+std::string Client::analyseServerResponse(std::string &output) {
+	if (output == "DISCONNECT") {
+		this->connectedToAnAccount = false;
+		return "Déconnexion de votre compte";
+	}
+	else if (output[0] == '1' && output[1] == '.') {
+		return output + "Fin du classement";
+	}
+	else {
+		return output;
+	}
+}
+
 bool Client::connectionLoop() {
-	InputParser parser = this->controller.getNewParsedInput();
+	MainInputParser parser = this->controller.getNewParsedInput();
 	QUERY_TYPE query = parser.getQueryType();
 
 	if ((query == QUERY_TYPE::REGISTER || query == QUERY_TYPE::LOGIN) && parser.getNbParameters() == 2) {
@@ -118,15 +130,16 @@ bool Client::connectionLoop() {
 	return true;
 }
 
-std::string Client::analyseServerResponse(std::string &output) {
-	if (output == "DISCONNECT") {
-		this->connectedToAnAccount = false;
-		return "Déconnexion de votre compte";
+void Client::gameLoop() {
+	std::cout << "Vous entrez dans une partie" << std::endl;
+	while(this->inGame) {
+		GameInputParser parser = this->controller.getNewGameParsedInput();
+		if (parser.getQueryType() == GAME_QUERY_TYPE::NONE) { continue; }
+		this->sendToServer(parser);
+		std::string output;
+		this->receiveFromServer(output);
+		if(output == "ENDGAME") { this->inGame = false; }
+		else { std::cout << output << std::endl; }
 	}
-	else if (output[0] == '1' && output[1] == '.') {
-		return output + "Fin du classement";
-	}
-	else {
-		return output;
-	}
+	std::cout << "Vous quitez la partie" << std::endl;
 }

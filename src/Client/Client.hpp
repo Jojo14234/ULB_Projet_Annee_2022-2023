@@ -5,7 +5,7 @@
 #include <string>
 #include <SFML/Network.hpp>
 
-#include "InputParser.hpp"
+#include "InputParser/MainInputParser.hpp"
 #include "ClientController.hpp"
 #include "./UI/ConnectionUI.hpp"
 
@@ -25,7 +25,8 @@ class Client {
     void disconnectFromServer();
 
     // Send a message to the server
-    void sendToServer(const InputParser &input);
+    void sendToServer(const MainInputParser &input);
+    void sendToServer(const GameInputParser &input);
 
     // Receive a message from the server
     void receiveFromServer(std::string &output);
@@ -33,10 +34,13 @@ class Client {
     // If the account connection/creation is valid 
     bool checkAccountConnection(std::string &output, QUERY_TYPE query);
 
+    std::string analyseServerResponse(std::string &output);
+
     // Try to connect to an account
     bool connectionLoop();
 
-    std::string analyseServerResponse(std::string &output);
+    // special loop if the client is in a game
+    void gameLoop();
 
 public:
 
@@ -44,9 +48,6 @@ public:
     
     // Main Loop of the client
     void mainLoop();
-
-    // special loop if the client is in a game
-    void gameLoop();
 
 };
 
