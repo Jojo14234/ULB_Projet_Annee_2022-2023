@@ -11,7 +11,7 @@ void MainInputParser::parse() {
 	else if ( query == "/join" ) { 
 		if (this->isValidCode()) { this->query_type = QUERY_TYPE::JOIN_GAME; }
 	}
-	else if ( query == "/message" ) {
+	else if ( query == "/message" or query == "/msg" ) {
 		this->query_type = QUERY_TYPE::MESSAGE;
 		// TODO verify something
 	}
@@ -22,9 +22,9 @@ void MainInputParser::parse() {
 		else if ((*this)[1] == "top") { this->query_type = QUERY_TYPE::RANKING_TOP; }
 		else if ((*this)[1] == "pos") { this->query_type = QUERY_TYPE::RANKING_POS; }
 	}
-	else if ( query == "/friends" ) {
+	else if ( query == "/friends" or query == "/f" ) {
 		if (this->getNbParameters() < 1) { return; }
-		else if ( (*this)[1] == "show" ) { this->query_type = QUERY_TYPE::FRIENDS_SHOW; }
+		else if ( (*this)[1] == "list" ) { this->query_type = QUERY_TYPE::FRIENDS_SHOW; }
 		else if ( (*this)[1] == "request" ) { this->query_type = QUERY_TYPE::FRIENDS_REQUEST; }
 		else if ( (*this)[1] == "accept" ) { this->query_type = QUERY_TYPE::FRIENDS_ACCEPT; }
 		else if ( (*this)[1] == "refuse" ) { this->query_type = QUERY_TYPE::FRIENDS_REFUSE; }
