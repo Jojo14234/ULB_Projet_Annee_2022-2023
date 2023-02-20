@@ -4,20 +4,41 @@
 #include <iostream>
 #include <string>
 
+#include "InputParser/MainInputParser.hpp"
+#include "InputParser/GameInputParser.hpp"
+
 
 class ClientController {
 
-    std::string input;
+	std::string input;
+
+	void setInput() {
+		std::cout << "> ";
+		std::getline(std::cin, this->input);
+	}
 
 public:
 
-    std::string getInput() { return this->input; }
+	// GETTERS
 
-    std::string getNewInput() {
-        std::cout << "> ";
-        std::getline(std::cin, this->input);
-        return input;
-    }
+	std::string getInput() { return this->input; }
+
+	std::string getNewInput() {
+		this->setInput();
+		return input;
+	}
+
+	MainInputParser getNewParsedInput() {
+		this->setInput();
+		std::cout << "Vous venez d'entrer : " << input << std::endl;
+		return MainInputParser{input};
+	}
+
+	GameInputParser getNewGameParsedInput() {
+		this->setInput();
+		std::cout << "Vous venez d'entrer : " << input << std::endl;
+		return GameInputParser{input};
+	}
 
 };
 

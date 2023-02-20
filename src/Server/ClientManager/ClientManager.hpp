@@ -15,7 +15,7 @@ class ClientManager {
 	sf::TcpSocket socket;
 
 	// A link to the game server, nullptr if not in game
-	std::shared_ptr<GameServer> game_server;
+	GameServer* game_server;
 
 	// If client is connected
 	bool connected = true;
@@ -37,6 +37,7 @@ public:
 
 	// Receive infos from the client
 	void receive(QUERY_TYPE &query);
+	void receive(GAME_QUERY_TYPE &query);
 
 	// To compare
 	bool operator==(const ClientManager& other) { return this->tid == other.tid; }
@@ -44,12 +45,13 @@ public:
 	// Disconnect the client
 	void disconnect() { this->connected = false; }
 	// If the client is connected
-	bool isDisconnected() const { return not connected; }
+	bool isDisconnected() const { return not this->connected; }
 	
 	// If the client is in game
 	bool inGame() const { return bool(game_server); }
 
 	// To get args (parsed from the client)
+	const struct args_t* getArgs() const { return &(this->args); }
 	int getCode() const { return this->args.code; }
 	const std::string& getS1() const { return this->args.s1; }
 	const std::string& getS2() const { return this->args.s2; }
@@ -61,8 +63,12 @@ public:
 	
 	// SETTERS
     void setAccount(User *user) { this->account = user; }
+	void setGameServer(GameServer* gs) { this->game_server = gs; }
+
+	void removeGameServer() { this->game_server = nullptr; }
+
+	void enterGameLoop() { this->game_server->clientLoop(*this); }
 
 };
-
 
 #endif

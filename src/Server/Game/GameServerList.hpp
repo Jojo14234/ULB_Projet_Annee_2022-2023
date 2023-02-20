@@ -2,15 +2,21 @@
 #define _GAME_SERVER_LIST_HPP
 
 #include "../../utils/List.hpp"
+#include "../ClientManager/ClientManager.hpp"
 #include "GameServer.hpp"
 
 
 class GameServerList : public List<GameServer> {
 
 public:
+
 	using List<GameServer>::List;
 
-	std::shared_ptr<GameServer> &createNew() { this->emplace_back(); return this->back(); }
+	// To create a game and return its code
+	int createGame(ClientManager* client);
+
+	// To make a client join a game by its code
+	bool joinGame(ClientManager* client, int code);
 
 };
 

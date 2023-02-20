@@ -62,6 +62,8 @@ User* Database::getUser(const char username[32]) {
 	} this->am.unlockReader(); return nullptr;
 }
 
+std::string Database::getUsername(const int id) { return this->getUser(id)->getUsername(); }
+
 void Database::addUser(std::string username, std::string password) {
 	User user{this->getSize()+1, username.c_str(), password.c_str()};
 	this->am.lockWriter();
@@ -78,8 +80,8 @@ void Database::print_in_file() {
 }
 
 void bubble_sort(std::vector<User> &data) {
-    for (int i(0); i < data.size(); i++) {
-        for (int j(0); j < data.size() - i; j++) {
+    for (unsigned i=0; i < data.size(); i++) {
+        for (unsigned j=0; j < data.size() - i; j++) {
             if (data[j].getStats().getScore() > data[j+1].getStats().getScore()) {
                 std::swap(data[j], data[j+1]);
             }
@@ -101,7 +103,7 @@ void Database::getRanking(std::vector<User*> &ranking) {
     // 2. Trié ce nouveau vecteur
     bubble_sort(data_copy);
     // 3. Récupérer les id des 5 premiers dans la db trié
-    int j(0);
+    unsigned j=0;
     while (j <= data_copy.size() || j < 5) {
         // 4. Chercher dans la vraie db les 5 id
         User* user = getUser(data_copy[data_copy.size()-j].getId());
@@ -111,4 +113,11 @@ void Database::getRanking(std::vector<User*> &ranking) {
     }
 }
 
+void Database::addUser(User user) { this->data.push_back(user); }
 
+void Database::removeUser(User &user) {
+	auto it = std::find(this->data.begin(), this->data.end(), user);
+	this->data.erase(it);
+}
+
+bool Database::contains(const User &user) const { return this->contains(user.getId()); }

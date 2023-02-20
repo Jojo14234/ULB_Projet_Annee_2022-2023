@@ -19,17 +19,53 @@ const char banned_character[] = {'-', '+', '*', '$', '&', '@', '?', '!'}; //'§'
 
 // Queries
 enum class QUERY_TYPE {
-	LOGIN = 0,
+	LOGIN,
 	REGISTER,
+
 	JOIN_GAME,
 	CREATE_GAME,
-	DISCONNECT,
-	RANKING,
-	FRIENDS,
+
+	RANKING_TOP,
+	RANKING_POS,
+
+	FRIENDS_SHOW,
+	FRIENDS_REQUEST,
+	FRIENDS_ACCEPT,
+	FRIENDS_REFUSE,
+	FRIENDS_ADD,
+	FRIENDS_REMOVE,
+	
 	MESSAGE,
+	DISCONNECT,
 
 	NONE
 };
+
+enum class GAME_QUERY_TYPE {
+	ROLL_DICE,
+
+	ARG1, // temp
+	ARG2, // temp
+	// add others
+
+	LEAVE,
+	NONE
+};
+
+enum class CREATE_GAME_QUERY_TYPE {
+	MAX_PLAYER,
+	MONEY,
+	AUCTION,
+	START,
+	
+	NONE
+};
+
+
+
+// Game
+const short unsigned int MAX_NB_PLAYER = 6; 
+
 
 void printMenu();
 void printStart();
