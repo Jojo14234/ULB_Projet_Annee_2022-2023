@@ -42,7 +42,9 @@ enum class QUERY_TYPE {
 };
 
 enum class GAME_QUERY_TYPE {
-	ROLL_DICE,
+	ROLL_DICE = 1,
+
+	BUY,
 
 	ARG1, // temp
 	ARG2, // temp

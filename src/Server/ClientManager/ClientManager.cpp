@@ -37,17 +37,9 @@ void ClientManager::receive(QUERY_TYPE &query) {
 	}
 }
 
-void ClientManager::receive(GAME_QUERY_TYPE &query) {
-	sf::Packet packet;
+void ClientManager::receive(GAME_QUERY_TYPE &query, sf::Packet &packet) {
 	if (this->socket.receive(packet) !=  sf::Socket::Done) { throw ReadPipeServerException(); }
 	int tmp;
 	packet >> tmp;
 	query = static_cast<GAME_QUERY_TYPE>(tmp);
-	switch (query) {
-
-		case GAME_QUERY_TYPE::ARG1 : packet >> args.s1; break;
-		case GAME_QUERY_TYPE::ARG2 : packet >> args.s1 >> args.s2; break;
-
-		default : break;
-	}
 }
