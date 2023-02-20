@@ -1,6 +1,6 @@
 CXX = $(shell [ `g++ -v 2>&1 | grep -o 'version [0-9]\+' | cut -d' ' -f2` -le 9 ] && echo g++-10 || echo g++)
 CXXFLAGS = -std=c++20 -Wall -Wextra -Wpedantic -Werror=all -D_GNU_SOURCE 
-OTHERGLAGS = -fanalyzer -Walloc-zero -Wcast-align \
+OTHERFLAGS = -fanalyzer -Walloc-zero -Wcast-align \
 			-Wdeprecated-copy-dtor -Wduplicated-branches -Wduplicated-cond -Wextra-semi -Wfloat-equal \
 			-Wformat-signedness -Winit-self -Wlogical-op -Wmismatched-tags -Wnon-virtual-dtor -Wnull-dereference \
 			-fdelete-null-pointer-checks -Woverloaded-virtual -Wsign-promo -Wstrict-null-sentinel -Wsuggest-attribute=cold \
