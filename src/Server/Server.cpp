@@ -205,7 +205,7 @@ void Server::clientProcessFriendsAccept(ClientManager &client) {
 	if ( ! client_account->hasReceiveFriendRequestFrom(*new_friend)) {
 		client.send("Ce joueur ne vous a pas demandé en ami!"); return;
 	}
-	client.getAccount()->acceptRequest(new_friend->getId(), database);
+	client_account->acceptRequest(new_friend->getId(), database);
 	std::string s = "Vous êtes désormais ami avec ";
 	s += new_friend->getUsername();
 	s += "!";
@@ -213,7 +213,21 @@ void Server::clientProcessFriendsAccept(ClientManager &client) {
 }
 
 void Server::clientProcessFriendsRefuse(ClientManager &client) {
-	client.inGame();	// pour pas avoir le warning unused parameter et empecher la compilation
+	User* new_friend = database.getUser(client.getS1().c_str());
+	std::cout << new_friend->getUsername() << std::endl;
+	User* client_account = client.getAccount();
+	std::cout << client_account->getUsername() << std::endl;
+	if (new_friend == nullptr) { 
+		client.send("Le pseudo entré n'existe pas."); return;
+	}
+	if ( ! client_account->hasReceiveFriendRequestFrom(*new_friend)) {
+		client.send("Ce joueur ne vous a pas demandé en ami!"); return;
+	}
+	client_account->removeRequest(new_friend->getId(), database);
+	std::string s = "Vous avez refusé la demande d'ami de ";
+	s += new_friend->getUsername();
+	s += ".";
+	client.send(s);
 }
 
 void Server::clientProcessFriendsAdd(ClientManager &client) {
@@ -236,15 +250,27 @@ void Server::clientProcessFriendsAdd(ClientManager &client) {
 		s += new_friend->getUsername();
 		s += "!";
 		client.send(s);
-		client.getAccount()->acceptRequest(new_friend->getId(), database); return;
+		client_account->acceptRequest(new_friend->getId(), database); return;
 	}
 
-	client.getAccount()->sendRequest(new_friend->getId(), database);
+	client_account->sendRequest(new_friend->getId(), database);
 	client.send("La demande d'ami a bien été envoyée !"); 
 }
 
 void Server::clientProcessFriendsRemove(ClientManager &client) {
-	client.inGame();	// pour pas avoir le warning unused parameter et empecher la compilation
+	User* new_friend = database.getUser(client.getS1().c_str());
+	User* client_account = client.getAccount();
+	if (new_friend == nullptr) { 
+		client.send("Le pseudo entré n'existe pas."); return;
+	}
+	if ( ! client_account->isFriendWith(*new_friend)) {
+		client.send("Vous n'êtes pas ami avec ce joueur !"); return;
+	}
+	client_account->removeFriend(new_friend->getId(), database);
+	std::string s = "Vous n'êtes désormais plus ami avec ";
+	s += new_friend->getUsername();
+	s += ".";
+	client.send(s);
 }
 
 // For message

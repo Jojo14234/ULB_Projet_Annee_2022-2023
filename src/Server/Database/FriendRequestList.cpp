@@ -17,16 +17,16 @@ void FriendRequestList::receiveRequest(int id) {
 
 void FriendRequestList::removeRequest(int from, int to, Database& db) { 
 	this->am.lockWriter();
-	auto it = std::find(this->sent.begin(), this->sent.end(), to);
-	this->sent.erase(it); 
+	auto it = std::find(this->received.begin(), this->received.end(), to);
+	this->received.erase(it); 
 	db.getUser(to)->removeRequest(from);
 	this->am.unlockWriter();
 }
 
 void FriendRequestList::removeRequest(int id) { 
 	this->am.lockWriter();
-	auto it = std::find(this->received.begin(), this->received.end(), id);
-	this->received.erase(it); 
+	auto it = std::find(this->sent.begin(), this->sent.end(), id);
+	this->sent.erase(it); 
 	this->am.unlockWriter();
 }
 

@@ -67,6 +67,8 @@ public:
 	// MODIFIERS
 	void updateStats(const GameStats &stats) { this->stats += stats; }
 	void addFriend(const int id) { this->friend_list.addFriend(id); }
+	void removeFriend(const int id, Database& db) { this->friend_list.removeFriend(this->getId(), id, db); }
+	void removeFriend(const int id) { this->friend_list.removeFriend(id); }
 	/*void addFriend(const User &other) { this->friend_list.addFriend(other.id); }
 	void removeFriend(const int id) { this->friend_list.removeFriend(id); }
 	void removeFriend(const User &other) { this->friend_list.removeFriend(other.id); }*/

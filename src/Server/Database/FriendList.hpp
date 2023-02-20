@@ -22,6 +22,7 @@ public:
 	void addFriend(int id);
 
 	// Remove a friend
+	void removeFriend(int from, int id, Database& db);
 	void removeFriend(int id);
 	
 	// If contains

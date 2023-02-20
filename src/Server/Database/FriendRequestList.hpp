@@ -20,12 +20,10 @@ public:
 
 	// Send a friend request
 	void sendRequest(int from, int to, Database& db);
-	// receive a friend resquest
 	void receiveRequest(int id);
 
 	// Remove a friend
 	void removeRequest(int from, int to, Database& db);
-
 	void removeRequest(int id);
 
 	void acceptRequest(int from, int to, Database& db);
