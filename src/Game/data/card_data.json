@@ -1,0 +1,217 @@
+{
+  "JailCard" : ["free", "jail"],
+
+  //CELL
+  "CellCard" : {
+//lucky deck
+      "1" : {
+        "descript" : "Rendez-vous à la propriété bleu foncé 2",
+        "dest" : 39,
+        "money" : 0,
+      },
+      "2": { 
+        "descript" : "Avancez jusqu’à la case départ",
+        "dest" : 0,
+        "money" : 0,
+       },
+      "3": { 
+        "descript" : "Rendez-vous à la propriété rouge 3. Si vous passez par la case départ, recevez 200$",
+        "dest" : 24,
+        "money" : 1,
+       },
+      "4": { 
+        "descript" : "Rendez-vous à la propriété rose 1. Si vous passez par la case départ, recevez 200$.",
+        "dest" : 11,
+        "money" : 1,
+       },
+      "5": { 
+        "descript" : "Avancez jusqu’à la Gare 2. Si vous passez par la case départ, recevez 200$.",
+        "dest" : 15,
+        "money" : 1,
+       },
+      "6": { 
+        "descript" : "Reculez de trois cases",
+        "dest" : -3,
+        "money" : 0,
+       },
+
+//community deck
+      "7": { 
+        "descript" : "Placez-vous sur la case départ",
+        "dest" : 0,
+        "money" : 0,
+       },
+      "8": { 
+        "descript" : "Retournez à la propriété brune 1",
+        "dest" : 1,
+        "money" : 0,
+       },
+       "9" : {
+        "descript" : " Rendez-vous à la gare la plus proche. Si vous passez par la case départ, recevez 200$.",
+        "dest" : [5,15,25,35],
+        "money" : 1,        
+       }
+
+  
+  },
+
+  "MoneyCard" : {
+
+//lucky deck
+      "1" : { 
+          "descript" : "Vous êtes imposé pour les réparations de voirie à raison de 40$ par maison et 100$ par hôtel",
+          "amount" : 0,
+          "amount house" : 40,
+          "amount hotel" : 100,
+          "from" : "Self",
+          "to" : "Bank",
+          },
+      "2" : {
+          "descript" : "Vous avez gagné le prix de mots croisés. Recevez 100$.",
+          "amount" : 10,
+          "amount house" : 0,
+          "amount hotel" : 0,
+          "from" : "Bank",
+          "to" : "Self",
+       },
+      "3" : {
+          "descript" : "La banque vous verse un dividende de 50$",
+          "amount" : 50,
+          "amount house" : 0,
+          "amount hotel" : 0,
+          "from" : "Bank",
+          "to" : "Self",
+       },
+      "4" : {
+          "descript" :  "Faites des réparations dans toutes vos maisons. Versez pour chaque maison 25$. Versez pour chaque hôtel 80$.",
+          "amount" : 0,
+          "amount house" : 25,
+          "amount hotel" : 80,
+          "from" : "Self",
+          "to" : "Bank",
+       },
+       "5" : {
+          "descript" :  "Amende pour excès de vitesse 20$.",
+          "amount" : -20,
+          "amount house" : 0,
+          "amount hotel" : 0,
+          "from" : "Self",
+          "to" : "Bank",
+       },
+       "6" : {
+          "descript" : "Payez pour frais de scolarité 150$" ,
+          "amount" : -150,
+          "amount house" : 0,
+          "amount hotel" : 0,
+          "from" : "Self",
+          "to" : "Bank",
+       },
+       "7" : {
+          "descript" :  "Amende pour ivresse 30$.",
+          "amount" : -30,
+          "amount house" : 0,
+          "amount hotel" : 0,
+          "from" : "Self",
+          "to" : "Bank",
+       },
+       "8" : {
+          "descript" :  "Votre immeuble et votre prêt rapportent. Vous touchez 150$",
+          "amount" : 150,
+          "amount house" : 0,
+          "amount hotel" : 0,
+          "from" : "Bank",
+          "to" : "Self",
+       },
+
+  // community deck
+      "9" : {
+          "descript" :  "Erreur de la banque en votre faveur. Recevez 200$",
+          "amount" : 200,
+          "amount house" : 0,
+          "amount hotel" : 0,
+          "from" : "Bank",
+          "to" : "Self",
+      },
+      "10" : {
+          "descript" :  "Payez la note du médecin 50$",
+          "amount" : -50,
+          "amount house" : 0,
+          "amount hotel" : 0,
+          "from" : "Self",
+          "to" : "Bank",
+      },
+      "11" : {
+          "descript" :  "La vente de votre stock vous rapporte 50$.",
+          "amount" : 50,
+          "amount house" : 0,
+          "amount hotel" : 0,
+          "from" : "Bank",
+          "to" : "Self",
+      },
+      "12" : {
+          "descript" :  "Recevez votre revenu annuel 100$",
+          "amount" : 100,
+          "amount house" : 0,
+          "amount hotel" : 0,
+          "from" : "Bank",
+          "to" : "Self",
+      },
+      "14" : {
+          "descript" :  "C’est votre anniversaire. Chaque joueur doit vous donner 15$.",
+          "amount" : 15,
+          "amount house" : 0,
+          "amount hotel" : 0,
+          "from" : "Others",
+          "to" : "Self",
+      },
+      "15" : {
+          "descript" : "Les contributions vous remboursent la somme de 40$." ,
+          "amount" : 40,
+          "amount house" : 0,
+          "amount hotel" : 0,
+          "from" : "Bank",
+          "to" : "Self",        
+      },
+      "16" : {
+          "descript" :  "Recevez votre intérêt sur l’emprunt à 7% 25$.",
+          "amount" : 25,
+          "amount house" : 0,
+          "amount hotel" : 0,
+          "from" : "Bank",
+          "to" : "Self",        
+      },
+      "17" : {
+          "descript" :  "Payez votre Police d’Assurance 50$.",
+          "amount" : -50,
+          "amount house" : 0,
+          "amount hotel" : 0,
+          "from" : "Self",
+          "to" : "Bank",        
+      },
+//!!!!! y'a le truc deg à gérer ici
+      "18" : {
+          "descript" :  "Payez une amende de 15$ ou bien tirez une carte « CHANCE ».",
+          "amount" : -15,
+          "amount house" : 0,
+          "amount hotel" : 0,
+          "from" : "Self",
+          "to" : "Bank",        
+      },
+      "19" : {
+          "descript" : "Vous avez gagné le deuxième Prix de Beauté. Recevez 10$." ,
+          "amount" : 10,
+          "amount house" : 0,
+          "amount hotel" : 0,
+          "from" : "Bank",
+          "to" : "Self",       
+      },
+      "20" : {
+          "descript" :  "Vous héritez 100$.",
+          "amount" : 100,
+          "amount house" : 0,
+          "amount hotel" : 0,
+          "from" : "Bank",
+          "to" : "Self",       
+      },
+  }
+}
