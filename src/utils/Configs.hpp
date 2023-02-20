@@ -17,6 +17,13 @@ const int password_max_length = 64;
 const char banned_character[] = {'-', '+', '*', '$', '&', '@', '?', '!'}; //'§', '£'
 
 
+// User
+constexpr int MAX_FRIENDS = 20;
+constexpr int MAX_REQUESTS = 20;
+
+
+
+
 // Queries
 enum class QUERY_TYPE {
 	LOGIN,
