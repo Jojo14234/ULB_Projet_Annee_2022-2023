@@ -5,6 +5,8 @@
 #include <string>
 #include <algorithm>
 #include "../../utils/AccessMonitor.hpp"
+#include "../../utils/Configs.hpp"
+
 
 class Database;
 
@@ -14,8 +16,6 @@ class FriendList {
 	std::vector<int> ids;
 
 public:
-
-	FriendList()=default;
 
 	// Add a friend
 	void addFriend(int from, int id, Database& db);

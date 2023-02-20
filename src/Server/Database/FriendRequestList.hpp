@@ -5,6 +5,8 @@
 #include <string>
 #include <algorithm>
 #include "../../utils/AccessMonitor.hpp"
+#include "../../utils/Configs.hpp"
+
 
 class Database;
 
@@ -15,8 +17,6 @@ class FriendRequestList {
 	std::vector<int> sent;
 
 public:
-
-	FriendRequestList() = default;
 
 	// Send a friend request
 	void sendRequest(int from, int to, Database& db);
