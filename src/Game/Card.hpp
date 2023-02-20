@@ -1,4 +1,5 @@
 #include <array>
+#include <string>
 
 
 class CardDeck{
@@ -22,24 +23,34 @@ public:
 
 //-----------------------------------------------
 class Card{
+protected:
+	std:string description;
 public:
 	void action();
 }
 
 
-class CardCell{
+class CardCell: public Card {
+private:
+	int dest;
+	bool gain_money;
 public: 
 	void action();
 }
 
 
-class CardMoney{
+class CardMoney: public Card{
+private:
+	int amount;
+	int amount_house;
+	int amount_hotel;
+	
 public: 
 	void action();
 }
 
 
-class JailCard{
+class JailCard: public Card{
 public: 
 	void action();
 }
