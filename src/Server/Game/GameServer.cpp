@@ -7,11 +7,15 @@ void GameServer::clientLoop(ClientManager &client) {
 	std::cout << client.getAccount()->getUsername() << " has join a game with code : " << this->code.getCode() << std::endl;
 	while (this->active) {
 		GAME_QUERY_TYPE query;
-		client.receive(query);
+		sf::Packet packet;
+		// receive from client
+		client.receive(query, packet);
 		std::cout << "Receive: " << (int)query << " from client: " << client.getSocket().getRemoteAddress() << std::endl;
-		game.send(query);
+		// call capitalist methods
+		game.receiveQuery(query, packet);
 		std::string output;
-		game.receive(output);
+		game.sendMessage(output);
+		// send to client
 		client.send(output);
 		if (query == GAME_QUERY_TYPE::LEAVE) { break; }
 	}

@@ -37,7 +37,7 @@ public:
 
 	// Receive infos from the client
 	void receive(QUERY_TYPE &query);
-	void receive(GAME_QUERY_TYPE &query);
+	void receive(GAME_QUERY_TYPE &query, sf::Packet &packet);
 
 	// To compare
 	bool operator==(const ClientManager& other) { return this->tid == other.tid; }
@@ -51,6 +51,7 @@ public:
 	bool inGame() const { return bool(game_server); }
 
 	// To get args (parsed from the client)
+	const struct args_t* getArgs() const { return &(this->args); }
 	int getCode() const { return this->args.code; }
 	const std::string& getS1() const { return this->args.s1; }
 	const std::string& getS2() const { return this->args.s2; }
