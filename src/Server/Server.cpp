@@ -217,15 +217,19 @@ void Server::clientProcessFriendsAccept(ClientManager &client) {
 }
 
 void Server::clientProcessFriendsRefuse(ClientManager &client) {
+	std::cout << "Received 'friend refuse' query from client: " << client.getSocket().getRemoteAddress() << " > " << client.getAccount()->getUsername() << std::endl;
 	User* new_friend = database.getUser(client.getS1().c_str());
 	std::cout << new_friend->getUsername() << std::endl;
 	User* client_account = client.getAccount();
 	std::cout << client_account->getUsername() << std::endl;
-	if (new_friend == nullptr) { 
+	if (new_friend == nullptr) {
+		std::cout << "Refuse failed, the user doesn't exist" << std::endl;
 		client.send("Le pseudo entré n'existe pas.");
 	} else if ( ! client_account->hasReceiveFriendRequestFrom(*new_friend)) {
+		std::cout << "Accept failed, the friend request doesn't exist" << std::endl;
 		client.send("Ce joueur ne vous a pas demandé en ami!");
 	} else {
+		std::cout << "Refuse succeed, " << client.getAccount()->getUsername() << " and " << new_friend->getUsername() << " will not be friends" << std::endl;
 		client_account->removeRequest(new_friend->getId(), database);
 		std::string s = "Vous avez refusé la demande d'ami de ";
 		s += new_friend->getUsername();
@@ -235,36 +239,47 @@ void Server::clientProcessFriendsRefuse(ClientManager &client) {
 }
 
 void Server::clientProcessFriendsAdd(ClientManager &client) {
+	std::cout << "Received 'friend add' query from client: " << client.getSocket().getRemoteAddress() << " > " << client.getAccount()->getUsername() << std::endl;
 	User* new_friend = database.getUser(client.getS1().c_str());
 	User* client_account = client.getAccount();
 	if (new_friend == nullptr) { 
+		std::cout << "Add failed, the user doesn't exist" << std::endl;
 		client.send("Le pseudo entré n'existe pas.");
 	} else if (client_account == new_friend){
+		std::cout << "Add failed, can't be friend with himself" << std::endl;
 		client.send("Vous ne pouvez pas être ami avec vous même.");
-	} else if (client_account->isFriendWith(*new_friend)) { 
+	} else if (client_account->isFriendWith(*new_friend)) {
+		std::cout << "Add failed, already friends" << std::endl;
 		client.send("Vous êtes déjà ami avec ce joueur !");
 	} else if (client_account->hasSentFriendRequestTo(*new_friend)) { 
+		std::cout << "Add failed, friend request already sent" << std::endl;
 		client.send("Vous avez déjà envoyé une demande d'ami à ce joueur !");
 	} else if (client_account->hasReceiveFriendRequestFrom(*new_friend)) {
+		std::cout << "Add succeed but this user already sent him a request so " << client.getAccount()->getUsername() << " and " << new_friend->getUsername() << " are now friends" << std::endl;
 		std::string s = "Cet utilisateur vous a déjà demandé en ami.\nVous êtes donc désormais ami avec ";
 		s += new_friend->getUsername();
 		s += "!";
 		client.send(s);
 		client_account->acceptRequest(new_friend->getId(), database); return;
 	} else {
+		std::cout << "Add succeed, " << client.getAccount()->getUsername() << " sent a request to " << new_friend->getUsername() << std::endl;
 		client_account->sendRequest(new_friend->getId(), database);
 		client.send("La demande d'ami a bien été envoyée !"); 
 	}
 }
 
 void Server::clientProcessFriendsRemove(ClientManager &client) {
+	std::cout << "Received 'friend remove' query from client: " << client.getSocket().getRemoteAddress() << " > " << client.getAccount()->getUsername() << std::endl;
 	User* new_friend = database.getUser(client.getS1().c_str());
 	User* client_account = client.getAccount();
-	if (new_friend == nullptr) { 
+	if (new_friend == nullptr) {
+		std::cout << "Remove failed, the user doesn't exist" << std::endl;
 		client.send("Le pseudo entré n'existe pas.");
 	} else if ( ! client_account->isFriendWith(*new_friend)) {
+		std::cout << "Remove failed, not friend with" << std::endl;
 		client.send("Vous n'êtes pas ami avec ce joueur !");
 	} else {
+		std::cout << "Remove succeed, " << client.getAccount()->getUsername() << " and " << new_friend->getUsername() << " are no longer friends" << std::endl;
 		client_account->removeFriend(new_friend->getId(), database);
 		std::string s = "Vous n'êtes désormais plus ami avec ";
 		s += new_friend->getUsername();
@@ -276,25 +291,33 @@ void Server::clientProcessFriendsRemove(ClientManager &client) {
 // For message
 
 void Server::clientProcessShowMessage(ClientManager &client) {
+	std::cout << "Received 'message show' query from client: " << client.getSocket().getRemoteAddress() << " > " << client.getAccount()->getUsername() << std::endl;
 	User* user = database.getUser(client.getS1().c_str());
 	Conversation* conv = database.getConv(client.getAccount(), user);
 	if (user == nullptr) {
+		std::cout << "Message show failed, the user doesn't exist" << std::endl;
 		client.send("Le pseudo entré n'existe pas.");
 	} else if (conv == nullptr) {
-		client.send("Aucun conversation avec ce joueur na été trouvée !");
+		std::cout << "Message show failed, the conversation doesn't exist" << std::endl;
+		client.send("Aucune conversation avec ce joueur na été trouvée !");
 	} else {
+		std::cout << "Message show succeed" << std::endl;
 		std::string output = std::string{*conv};
 		client.send(output);
 	}
 }
 
 void Server::clientProcessSendMessage(ClientManager &client) {
+	std::cout << "Received 'message send' query from client: " << client.getSocket().getRemoteAddress() << " > " << client.getAccount()->getUsername() << std::endl;
 	User* user = database.getUser(client.getS1().c_str());
 	if (user == nullptr) {
+		std::cout << "Message show failed, the user doesn't exist" << std::endl;
 		client.send("Le pseudo entré n'existe pas.");
 	} else if (!client.getAccount()->isFriendWith(user->getId())) {
+		std::cout << "Message show failed, not friends" << std::endl;
 		client.send("Vous n'êtes pas ami avec ce joueur !");
 	} else {
+		std::cout << "Message show succeed" << std::endl;
 		database.sendMsg(client.getAccount(), user, client.getS2());
 		std::string s = "Vous avez bien envoyé un message à ";
 		s += user->getUsername();

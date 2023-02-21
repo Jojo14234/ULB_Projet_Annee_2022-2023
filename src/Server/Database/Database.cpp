@@ -62,9 +62,9 @@ std::string Database::getUsername(const int id) { return this->getUser(id)->getU
 
 User* Database::addUser(std::string username, std::string password) {
 	this->user_am.lockWriter();
-	User* user = this->data.emplace_back(this->getSize()+1, username.c_str(), password.c_str());
+	User &user = this->data.emplace_back(this->getSize()+1, username.c_str(), password.c_str());
 	this->user_am.unlockWriter();
-	return user;
+	return &user;
 }
 
 void Database::print_in_file() {

@@ -1,5 +1,5 @@
-#ifndef _CLIENT_MANAGER_LIST_HPP
-#define _CLIENT_MANAGER_LIST_HPP
+#ifndef _SERVER_CLIENT_MANAGER_LIST_HPP
+#define _SERVER_CLIENT_MANAGER_LIST_HPP
 
 #include <pthread.h>
 
