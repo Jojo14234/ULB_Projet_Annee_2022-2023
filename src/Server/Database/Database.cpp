@@ -1,5 +1,6 @@
 #include "Database.hpp"
 #include "User.hpp"
+#include "Chat/Conversation.hpp"
 
 
 void Database::load() {
@@ -18,7 +19,7 @@ void Database::load() {
 }
 
 void Database::save() {
-	this->am.lockReader();
+	this->user_am.lockReader();
 	FILE *file = std::fopen(path, "w+");
 	if (!file) exit(0);
 	size_t size = this->data.size();
@@ -26,44 +27,44 @@ void Database::save() {
 	for (size_t i = 0; i < size; i++) this->data[i].write(file);
 	std::fclose(file);
 	std::cout << "Database saved : [" << this->getSize() << " account saved]"<< std::endl;
-	this->am.unlockReader();
+	this->user_am.unlockReader();
 }
 
 bool Database::contains(const int id) const {
-	this->am.lockReader();
+	this->user_am.lockReader();
 	for (const auto &user : this->data) {
 		if (user.isId(id)) { return true; }
-	} this->am.unlockReader(); return false;
+	} this->user_am.unlockReader(); return false;
 }
 
 bool Database::contains(const char username[32]) const {
-	this->am.lockReader();
+	this->user_am.lockReader();
 	for (const auto &user : this->data) {
 		if (user.isUsername(username)) { return true; }
-	} this->am.unlockReader(); return false;
+	} this->user_am.unlockReader(); return false;
 }
 
 User* Database::getUser(const int id) {
-	this->am.lockReader();
+	this->user_am.lockReader();
 	for (auto &user : this->data) {
-		if (user.isId(id)) { this->am.unlockReader(); return &user; }
-	} this->am.unlockReader(); return nullptr;
+		if (user.isId(id)) { this->user_am.unlockReader(); return &user; }
+	} this->user_am.unlockReader(); return nullptr;
 }
 
 User* Database::getUser(const char username[32]) {
-	this->am.lockReader();
+	this->user_am.lockReader();
 	for (auto &user : this->data) {
-		if (user.isUsername(username)) { this->am.unlockReader(); return &user; }
-	} this->am.unlockReader(); return nullptr;
+		if (user.isUsername(username)) { this->user_am.unlockReader(); return &user; }
+	} this->user_am.unlockReader(); return nullptr;
 }
 
 std::string Database::getUsername(const int id) { return this->getUser(id)->getUsername(); }
 
 void Database::addUser(std::string username, std::string password) {
 	User user{this->getSize()+1, username.c_str(), password.c_str()};
-	this->am.lockWriter();
+	this->user_am.lockWriter();
 	this->data.push_back(user);
-	this->am.unlockWriter();
+	this->user_am.unlockWriter();
 }
 
 void Database::print_in_file() {
@@ -77,10 +78,10 @@ void Database::print_in_file() {
 void bubble_sort(std::vector<User> &data) {
     for (unsigned i=0; i < data.size(); i++) {
         for (unsigned j=0; j < data.size() - i; j++) {
-            if (data[j].getStats().getScore() > data[j+1].getStats().getScore()) {
+            if (data[j].getStats() > data[j+1].getStats()) {
                 std::swap(data[j], data[j+1]);
             }
-                // Dans le cas d'une égalité, on prend le score moyen (score/nb_game)
+            // Dans le cas d'une égalité, on prend le score moyen (score/nb_game)
             else if (data[j].getStats().getScore() == data[j+1].getStats().getScore()) {
                 if (data[j].getStats().calculateMiddleScore() > data[j+1].getStats().calculateMiddleScore()) {
                     std::swap(data[j], data[j+1]);
@@ -111,8 +112,34 @@ void Database::getRanking(std::vector<User*> &ranking) {
 void Database::addUser(User user) { this->data.push_back(user); }
 
 void Database::removeUser(User &user) {
+	this->user_am.lockWriter();
 	auto it = std::find(this->data.begin(), this->data.end(), user);
 	this->data.erase(it);
+	this->user_am.unlockWriter();
 }
 
 bool Database::contains(const User &user) const { return this->contains(user.getId()); }
+
+
+Conversation* Database::createConv(User* sender, User* receiver) {
+	this->chat_am.lockWriter();
+	Conversation &conv = this->chat.emplace_back(sender, receiver);
+	this->chat_am.unlockWriter();
+	return &conv;
+}
+
+Conversation* Database::getConv(User* sender, User* receiver) {
+	if (sender == nullptr or receiver == nullptr) { return nullptr; }
+	this->chat_am.lockReader();
+	for (auto &conv : this->chat) {
+		if (conv.isATalker(sender) and conv.isATalker(receiver)) {
+			return &conv;
+		}
+	} this->chat_am.unlockReader(); return nullptr;
+}
+
+void Database::sendMsg(User* sender, User* receiver, const std::string &msg) {
+	Conversation* conv = this->getConv(sender, receiver);
+	if (conv == nullptr) { conv = this->createConv(sender, receiver); }
+	conv->addMsg(sender, msg);
+}

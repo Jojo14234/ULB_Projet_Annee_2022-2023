@@ -50,7 +50,8 @@ class Server {
 	void clientProcessFriendsAdd(ClientManager &client);
 	void clientProcessFriendsRemove(ClientManager &client);
 	// For message
-	void clientProcessMessage(ClientManager &client);
+	void clientProcessShowMessage(ClientManager &client);
+	void clientProcessSendMessage(ClientManager &client);
 
 public:
 
