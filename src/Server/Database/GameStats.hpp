@@ -31,6 +31,19 @@ public:
 	bool operator==(const GameStats &other) const { return score==other.score and played==other.played and wins==other.wins; }
 	auto operator<=>(const GameStats &other) const { return score <=> other.score; }
 
+	// Write Read
+	void write(FILE* file) {
+		fwrite(&(this->score), sizeof(int), 1, file);
+		fwrite(&(this->played), sizeof(int), 1, file);
+		fwrite(&(this->wins), sizeof(int), 1, file);
+	}
+
+	void read(FILE* file) {
+		fread(&(this->score), sizeof(int), 1, file);
+		fread(&(this->played), sizeof(int), 1, file);
+		fread(&(this->wins), sizeof(int), 1, file);
+	}
+
 };
 
 #endif

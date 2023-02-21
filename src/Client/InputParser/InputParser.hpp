@@ -30,6 +30,7 @@ protected:
 public:
 
 	InputParser(const std::string &input) : input{input} { this->parse(); }
+	virtual ~InputParser()=default;
 
 	// The n parameter from the input_splited
 	const std::string &operator[](int n) const { return this->input_splited[n]; }

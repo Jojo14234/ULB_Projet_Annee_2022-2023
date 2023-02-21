@@ -4,24 +4,24 @@
 #include <vector>
 #include <string>
 #include <algorithm>
-#include "Database.hpp"
+#include "../../../utils/AccessMonitor.hpp"
+#include "../../../utils/Configs.hpp"
 
+
+class Database;
 
 class FriendList {
 	
+	AccessMonitor am;
 	std::vector<int> ids;
 
 public:
 
-	FriendList()=default;
-
 	// Add a friend
-	void addFriend(int id) { this->ids.push_back(id); }
+	void addFriend(int current_user, int new_friend, Database& db);
+
 	// Remove a friend
-	void removeFriend(int id) { 
-		auto it = std::find(this->ids.begin(), this->ids.end(), id);
-		this->ids.erase(it); 
-	}
+	void removeFriend(int current_user, int old_friend, Database& db);
 	
 	// If contains
 	bool contains(int id) const { return std::find(this->ids.begin(), this->ids.end(), id) != this->ids.end(); }
@@ -29,13 +29,12 @@ public:
 	// GETTERS
 	int getFriendsCount() const { return this->ids.size(); }
 
-	std::string toString(Database &db) const {
-		std::string str = "Liste d'amis:\n\n";
-		for (auto id : ids){
-			str += ("• " + db.getUsername(id) + "\n");
-		}
-		return str;
-	}
+	std::string toString(Database &db) const;
+
+	// Write Read
+	void write(FILE* file);
+	void read(FILE* file);
+
 };
 
 

@@ -24,7 +24,7 @@ void MainInputParser::parse() {
 	}
 	else if ( query == "/friends" or query == "/f" ) {
 		if (this->getNbParameters() < 1) { return; }
-		else if ( (*this)[1] == "show" ) { this->query_type = QUERY_TYPE::FRIENDS_SHOW; }
+		else if ( (*this)[1] == "list" ) { this->query_type = QUERY_TYPE::FRIENDS_SHOW; }
 		else if ( (*this)[1] == "request" ) { this->query_type = QUERY_TYPE::FRIENDS_REQUEST; }
 		else if ( (*this)[1] == "accept" ) { this->query_type = QUERY_TYPE::FRIENDS_ACCEPT; }
 		else if ( (*this)[1] == "refuse" ) { this->query_type = QUERY_TYPE::FRIENDS_REFUSE; }

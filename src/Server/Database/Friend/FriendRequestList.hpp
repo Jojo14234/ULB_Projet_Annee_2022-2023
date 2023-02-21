@@ -4,7 +4,9 @@
 #include <vector>
 #include <string>
 #include <algorithm>
-#include "../../utils/AccessMonitor.hpp"
+#include "../../../utils/AccessMonitor.hpp"
+#include "../../../utils/Configs.hpp"
+
 
 class Database;
 
@@ -16,17 +18,11 @@ class FriendRequestList {
 
 public:
 
-	FriendRequestList() = default;
-
 	// Send a friend request
-	void sendRequest(int from, int to, Database& db);
-	// receive a friend resquest
-	void receiveRequest(int id);
+	void sendRequest(int current_user, int receiver, Database& db);
 
 	// Remove a friend
-	void removeRequest(int from, int to, Database& db);
-
-	void removeRequest(int id);
+	void removeRequest(int current_user, int sender, Database& db);
 	
 	// If contains
 	bool sentListContains(int id) const { return std::find(this->sent.begin(), this->sent.end(), id) != this->sent.end(); }
@@ -36,6 +32,11 @@ public:
 	int getPendingFriendRequestsCount() const { return this->received.size(); }
 
 	std::string toString(Database &db) const;
+
+	// Write Read
+	void write(FILE* file);
+	void read(FILE* file);
+	
 };
 
 

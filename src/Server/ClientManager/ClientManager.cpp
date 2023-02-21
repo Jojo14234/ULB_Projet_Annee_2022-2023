@@ -36,3 +36,10 @@ void ClientManager::receive(QUERY_TYPE &query) {
 		default : break;
 	}
 }
+
+void ClientManager::receive(GAME_QUERY_TYPE &query, sf::Packet &packet) {
+	if (this->socket.receive(packet) !=  sf::Socket::Done) { throw ReadPipeServerException(); }
+	int tmp;
+	packet >> tmp;
+	query = static_cast<GAME_QUERY_TYPE>(tmp);
+}
