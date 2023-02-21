@@ -13,8 +13,10 @@
 class Client {
 
     sf::TcpSocket socket;
-    bool connectedToAnAccount = false;
-    bool inGame = false;
+    
+    bool connected_to_an_account = false;
+    bool in_game = false;
+    
     ClientController controller;
     ConnectionUI ui;
 
@@ -34,12 +36,13 @@ class Client {
     // If the account connection/creation is valid 
     bool checkAccountConnection(std::string &output, QUERY_TYPE query);
 
+    // Analyse the server response and return what to print
     std::string analyseServerResponse(std::string &output);
 
     // Try to connect to an account
     bool connectionLoop();
 
-    // special loop if the client is in a game
+    // Special loop if the client is in a game
     void gameLoop();
 
 public:

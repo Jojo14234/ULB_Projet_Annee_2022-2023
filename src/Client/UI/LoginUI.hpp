@@ -1,11 +1,8 @@
-//
-// Created by Rémy Ryckeboer on 13/02/2023.
-//
-
-#ifndef SRC_LOGINUI_HPP
-#define SRC_LOGINUI_HPP
+#ifndef _CLIENT_LOGINUI_HPP
+#define _CLIENT_LOGINUI_HPP
 
 #include <iostream>
+
 
 class LoginUi {
 public:
@@ -22,4 +19,4 @@ public:
     }
 };
 
-#endif //SRC_LOGINUI_HPP
+#endif

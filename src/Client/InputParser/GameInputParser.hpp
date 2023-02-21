@@ -1,5 +1,5 @@
-#ifndef _GAME_INPUT_PARSER_HPP
-#define _GAME_INPUT_PARSER_HPP
+#ifndef _CLIENT_GAME_INPUT_PARSER_HPP
+#define _CLIENT_GAME_INPUT_PARSER_HPP
 
 #include <vector>
 #include <string>
