@@ -32,6 +32,11 @@ public:
 	int getFriendsCount() const { return this->ids.size(); }
 
 	std::string toString(Database &db) const;
+
+	// Write Read
+	void write(FILE* file);
+	void read(FILE* file);
+
 };
 
 

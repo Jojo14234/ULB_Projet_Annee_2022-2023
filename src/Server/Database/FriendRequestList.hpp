@@ -37,6 +37,11 @@ public:
 	int getPendingFriendRequestsCount() const { return this->received.size(); }
 
 	std::string toString(Database &db) const;
+
+	// Write Read
+	void write(FILE* file);
+	void read(FILE* file);
+	
 };
 
 

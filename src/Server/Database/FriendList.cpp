@@ -37,3 +37,21 @@ std::string FriendList::toString(Database &db) const {
 	}
 	return str;
 }
+
+void FriendList::write(FILE* file) {
+	size_t size = this->ids.size();
+	fwrite(&size, sizeof(int), 1, file);
+	for (size_t i = 0; i < size; i++) {
+		fwrite(&(this->ids[i]), sizeof(int), 1, file);
+	}
+}
+
+void FriendList::read(FILE* file) {
+	size_t size;
+	fread(&size, sizeof(int), 1, file);
+	for (size_t i = 0; i < size; i++) {
+		int x;
+		fread(&x, sizeof(int), 1, file);
+		this->ids.push_back(x);
+	}
+}

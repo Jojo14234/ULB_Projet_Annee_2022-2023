@@ -52,3 +52,32 @@ std::string FriendRequestList::toString(Database &db) const {
 	}
 	return str;
 }
+
+void FriendRequestList::write(FILE* file) {
+	size_t size = this->received.size();
+	fwrite(&size, sizeof(int), 1, file);
+	for (size_t i = 0; i < size; i++) {
+		fwrite(&(this->received[i]), sizeof(int), 1, file);
+	}
+	size = this->sent.size();
+	fwrite(&size, sizeof(int), 1, file);
+	for (size_t i = 0; i < size; i++) {
+		fwrite(&(this->sent[i]), sizeof(int), 1, file);
+	}
+}
+
+void FriendRequestList::read(FILE* file) {
+	size_t size;
+	fread(&size, sizeof(int), 1, file);
+	for (size_t i = 0; i < size; i++) {
+		int x;
+		fread(&x, sizeof(int), 1, file);
+		this->received.push_back(x);
+	}
+	fread(&size, sizeof(int), 1, file);
+	for (size_t i = 0; i < size; i++) {
+		int x;
+		fread(&x, sizeof(int), 1, file);
+		this->sent.push_back(x);
+	}
+}

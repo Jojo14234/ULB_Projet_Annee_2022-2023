@@ -5,30 +5,25 @@
 void Database::load() {
 	FILE *file = std::fopen(path, "rb");
 	if (!file) { this->data.reserve(10); std::cout << "Database empty !" << std::endl; return; }
-	this->data.reserve(this->fileSize(file)/sizeof(User));
-	User user;
-	while (std::fread(&user, sizeof(User), 1, file)) this->data.push_back(user);
+	size_t size;
+	fread(&size, sizeof(size_t), 1, file);
+	this->data.reserve(size + size/4);
+	for (size_t i = 0; i < size; i++) {
+		User user;
+		user.read(file);
+		this->data.push_back(user);
+	}
 	std::fclose(file);
 	std::cout << "Database loaded : [" << this->getSize() << " account registered]" << std::endl;
-}
-
-size_t Database::fileSize(FILE *file) {
-	// Save the start position of the db file
-	size_t cursor = std::ftell(file);
-	// Place the cursor at the end of the file
-	std::fseek(file, 0, SEEK_END);
-	// Get the file size
-	size_t size = std::ftell(file);
-	// Replace the cursor at the start
-	std::fseek(file, 0, cursor);
-	return size;
 }
 
 void Database::save() {
 	this->am.lockReader();
 	FILE *file = std::fopen(path, "w+");
 	if (!file) exit(0);
-	if (std::fwrite(data.data(), sizeof(User), data.size(), file) != data.size()) std::cout << "Database not saved" << std::endl;
+	size_t size = this->data.size();
+	fwrite(&size, sizeof(size_t), 1, file);
+	for (size_t i = 0; i < size; i++) this->data[i].write(file);
 	std::fclose(file);
 	std::cout << "Database saved : [" << this->getSize() << " account saved]"<< std::endl;
 	this->am.unlockReader();
