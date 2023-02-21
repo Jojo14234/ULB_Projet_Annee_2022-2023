@@ -16,8 +16,8 @@ vector<string> BoardCreator::getCellName(){
 
 void BoardCreator::drawBoard(int n_case){
     //case zero
-    /*if ( n_case == 0){
-        box(board[n_case],0,0);}
+    if ( n_case == 0){
+        wborder(board[n_case], '|', '|', '-', '_', '-', '-', '|', '|');}
     //cases du haut
     else if (n_case >0 and n_case < 11){
         wborder(board[n_case], ' ', '|', '-', '_', '-', '-', '_', '|');}
@@ -29,11 +29,11 @@ void BoardCreator::drawBoard(int n_case){
             wborder(board[n_case], '|', '|', ' ', '_', '|', '|', '|', '|');}
     //bordure de la case du bas
     else if(n_case >=100 and n_case < 109){  
-            wborder(board[n_case], ' ', ' ', ' ', '_', ' ', ' ', '_', '_');}*/
+            wborder(board[n_case], ' ', ' ', ' ', '_', ' ', ' ', '_', '_');}
 
-    if ((n_case >=0 and n_case < 11) or ( n_case % 11 == 0 or (n_case + 1) % 11 == 0 ) or (n_case >=111 and n_case <= 120) ){
+    /*if ((n_case >=0 and n_case < 11) or ( n_case % 11 == 0 or (n_case + 1) % 11 == 0 ) or (n_case >=111 and n_case <= 120) ){
        box(board[n_case],0,0); 
-    }
+    }*/
     
     
     wrefresh(board[n_case]);
@@ -82,7 +82,7 @@ void BoardCreator::unsetPlayer(int cell,int player){
 void BoardCreator::createZone(){
     // Activation du curseur
     curs_set(1);
-    win = newwin(50, 60, 2, 125);
+    win = newwin(50, 60, 2, 150);
     box(win, 0, 0);
     wrefresh(win);
 }
@@ -118,6 +118,9 @@ void BoardCreator::createBoard(){
 }
 
 void BoardCreator::destroyBoard(){
+    for (int i = 0; i < size*size; i++) {
+        delwin(board[i]);
+    }
 }
 
 void BoardCreator::initBoard(){
@@ -131,14 +134,21 @@ void BoardCreator::initBoard(){
         setPlayer(0,i);
     }
     createZone();
-    int key = 0; 
+    /*int key;
     while(key != 'q'){
         writeText();
         key = wgetch(win);
+    }*/
+    int key;
+    bool flag = true;
+    while(flag){
+        writeText();
+        wmove(win, i, 1);
+        key = wgetch(win);  // On attend que l'utilisateur appui sur une touche pour quitter
+        if (key == 65307){
+            flag = false;
+            destroyBoard();
+            endwin();       // Restaure les paramètres par défaut du terminal
+        }
     }
-
-    getch();                // On attend que l'utilisateur appui sur une touche pour quitter
-    endwin();               // Restaure les paramètres par défaut du terminal
-
-
 }

@@ -73,6 +73,7 @@ class BoardCreator{
         void unsetHouse(int cell);
         void setHotel(int cell);
         void unsetHotel(int cell);
+        void removeOldMessages(WINDOW *win, int max_messages);
 
 
 };
