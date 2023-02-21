@@ -16,8 +16,8 @@ vector<string> BoardCreator::getCellName(){
 
 void BoardCreator::drawBoard(int n_case){
     //case zero
-    if ( n_case == 0){
-        wborder(board[n_case], '|', '|', '-', '_', '-', '-', '|', '|');}
+    /*if ( n_case == 0){
+        box(board[n_case],0,0);}
     //cases du haut
     else if (n_case >0 and n_case < 11){
         wborder(board[n_case], ' ', '|', '-', '_', '-', '-', '_', '|');}
@@ -29,7 +29,13 @@ void BoardCreator::drawBoard(int n_case){
             wborder(board[n_case], '|', '|', ' ', '_', '|', '|', '|', '|');}
     //bordure de la case du bas
     else if(n_case >=100 and n_case < 109){  
-            wborder(board[n_case], ' ', ' ', ' ', '_', ' ', ' ', '_', '_');}
+            wborder(board[n_case], ' ', ' ', ' ', '_', ' ', ' ', '_', '_');}*/
+
+    if ((n_case >=0 and n_case < 11) or ( n_case % 11 == 0 or (n_case + 1) % 11 == 0 ) or (n_case >=111 and n_case <= 120) ){
+       box(board[n_case],0,0); 
+    }
+    
+    
     wrefresh(board[n_case]);
 }
 
@@ -67,12 +73,28 @@ void BoardCreator::setPlayer(int cell,int player){
     mvwprintw(board[listofcell[cell]], posplayer,player, to_string(player).c_str());
     wrefresh(board[listofcell[cell]]);  
 }
-
+ 
 void BoardCreator::unsetPlayer(int cell,int player){
     mvwprintw(board[listofcell[cell]], posplayer,player," ");
     wrefresh(board[listofcell[cell]]); 
 }
 
+void BoardCreator::createZone(){
+    // Activation du curseur
+    curs_set(1);
+    win = newwin(50, 60, 2, 125);
+    box(win, 0, 0);
+    wrefresh(win);
+}
+
+void BoardCreator::writeText(){
+    wmove(win, i,1);
+    i++;
+    wgetstr(win,input);
+    mvwprintw(win,i, 1, "Vous avez entré : %s", input);
+    wrefresh(win);
+    i++;
+}
 
 void BoardCreator::unsetHouse(int cell){}
 void BoardCreator::setHouse(int cell){}
@@ -96,7 +118,6 @@ void BoardCreator::createBoard(){
 }
 
 void BoardCreator::destroyBoard(){
-
 }
 
 void BoardCreator::initBoard(){
@@ -109,8 +130,13 @@ void BoardCreator::initBoard(){
     for (int i = 1; i <= n_player; i++){
         setPlayer(0,i);
     }
-    setHouse(0);
-    while(1){}
+    createZone();
+    int key = 0; 
+    while(key != 'q'){
+        writeText();
+        key = wgetch(win);
+    }
+
     getch();                // On attend que l'utilisateur appui sur une touche pour quitter
     endwin();               // Restaure les paramètres par défaut du terminal
 
