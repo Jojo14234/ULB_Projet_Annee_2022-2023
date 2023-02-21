@@ -40,7 +40,7 @@ void BoardCreator::drawBoard(int n_case){
 }
 
 void BoardCreator::text(){
-    for (int i = 0; i< n_cell; i ++){
+    for (int i =  0; i< n_cell; i ++){
        mvwprintw(board[listofcell[i]], pos_text1.y, pos_text1.x,(cellname[i]).c_str());
     wrefresh(board[listofcell[i]]); 
     }}
