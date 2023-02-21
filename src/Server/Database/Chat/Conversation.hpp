@@ -1,13 +1,12 @@
-#ifndef _CHAT_CONVERSATION_HPP
-#define _CHAT_CONVERSATION_HPP
+#ifndef _SERVER_CHAT_CONVERSATION_HPP
+#define _SERVER_CHAT_CONVERSATION_HPP
 
 #include <vector>
 #include <string>
 
-//#include "../User.hpp"
 #include "Message.hpp"
 
-class User;
+class User;		// forward declaration
 
 class Conversation {
 
@@ -19,11 +18,14 @@ public:
 	
 	Conversation(User* user1, User* user2):user1{user1},user2{user2} {}
 	
-	bool isATalker(User* user) { return this->user1 == user or this->user2 == user; }
-
+    // To convert the conversation to a string
 	operator std::string();
 
+	// To add a message to the conversation
 	void addMsg(User* sender, const std::string &msg);
+
+	// if is a talker of the conversation
+	bool isATalker(User* user) { return this->user1 == user or this->user2 == user; }
 
 };
 

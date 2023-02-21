@@ -1,5 +1,5 @@
-#ifndef _GAME_CODE_HPP
-#define _GAME_CODE_HPP
+#ifndef _SERVER_GAME_CODE_HPP
+#define _SERVER_GAME_CODE_HPP
 
 #include <unordered_set>
 #include <cstdlib>

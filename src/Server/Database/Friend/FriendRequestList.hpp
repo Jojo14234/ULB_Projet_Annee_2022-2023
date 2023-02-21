@@ -1,5 +1,5 @@
-#ifndef _FRIEND_REQUEST_LIST_HPP
-#define _FRIEND_REQUEST_LIST_HPP
+#ifndef _SERVER_FRIEND_REQUEST_LIST_HPP
+#define _SERVER_FRIEND_REQUEST_LIST_HPP
 
 #include <vector>
 #include <string>
@@ -33,7 +33,7 @@ public:
 
 	std::string toString(Database &db) const;
 
-	// Write Read
+	// WRITE READ
 	void write(FILE* file);
 	void read(FILE* file);
 	

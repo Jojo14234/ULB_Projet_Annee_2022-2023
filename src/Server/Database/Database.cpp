@@ -70,7 +70,7 @@ User* Database::addUser(std::string username, std::string password) {
 void Database::print_in_file() {
 	std::ofstream file("clear.txt", std::ios::out | std::ios::trunc);
 	if (file) {
-		for (auto &user : this->data) {file << user.toString() << std::endl;}
+		for (auto &user : this->data) file << std::string{user} << std::endl;
 	}
 	file.close();
 }

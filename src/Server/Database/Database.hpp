@@ -1,5 +1,5 @@
-#ifndef _DATABASE_HPP
-#define _DATABASE_HPP
+#ifndef _SERVER_DATABASE_HPP
+#define _SERVER_DATABASE_HPP
 
 #include <vector>
 #include <string>

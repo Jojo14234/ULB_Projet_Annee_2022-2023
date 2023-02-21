@@ -1,5 +1,5 @@
-#ifndef _GAME_STATS_HPP
-#define _GAME_STATS_HPP
+#ifndef _SERVER_GAME_STATS_HPP
+#define _SERVER_GAME_STATS_HPP
 
 
 class GameStats {
@@ -32,7 +32,7 @@ public:
 	auto operator<=>(const GameStats &other) const { return score <=> other.score; }
 
 	// Write Read
-	void write(FILE* file) {
+	void write(FILE* file) const {
 		fwrite(&(this->score), sizeof(int), 1, file);
 		fwrite(&(this->played), sizeof(int), 1, file);
 		fwrite(&(this->wins), sizeof(int), 1, file);
