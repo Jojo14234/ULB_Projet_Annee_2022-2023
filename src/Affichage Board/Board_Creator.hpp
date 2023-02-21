@@ -23,17 +23,17 @@ class BoardCreator{
 
     int size = 11;
     int height = 5;
-    int width = 9;
+    int width = 11;
 
-    const Point legend_pos {15,35};
+    const Point legend_pos {25,35};
     const Point legend_size {16,7};
     Point pos_text1 {1,1};
     Point pos_text2{1,2};
     Point pos_text3 {1,3};
     Point pos_text4 {1,4};
 
-    const Point luckycasepos {15,10};
-    const Point commucasepos {55, 38};
+    const Point luckycasepos {20,10};
+    const Point commucasepos {65, 38};
     Point cardcasesize {30,7};
     Point pos_text5{9,3};
     Point pos_text6{5,3};
