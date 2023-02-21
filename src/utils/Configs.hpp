@@ -78,7 +78,4 @@ enum class CREATE_GAME_QUERY_TYPE {
 const short unsigned int MAX_NB_PLAYER = 6; 
 
 
-void printMenu();
-void printStart();
-
 #endif
