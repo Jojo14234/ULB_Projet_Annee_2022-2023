@@ -6,7 +6,9 @@
 #include <stdio.h>
 #include <iostream>
 #include <fstream>
+
 #include "../../utils/AccessMonitor.hpp"
+#include "Chat/Conversation.hpp"
 
 
 class User;
@@ -14,9 +16,14 @@ class User;
 class Database {
 	
 	std::vector<User> data;
+	std::vector<Conversation> chat;	// not saved in path
 	const char* path;
     size_t fileSize(FILE *file);
-	mutable AccessMonitor am;
+	mutable AccessMonitor user_am;
+	mutable AccessMonitor chat_am;
+
+	Conversation* createConv(User* sender, User* receiver);
+	Conversation* getConv(User* sender, User* receiver);
 
 public:
 
@@ -50,6 +57,9 @@ public:
 
     // GetRanking
     void getRanking(std::vector<User*> &ranking);
+
+	void sendMsg(User* sender, User* receiver, const std::string &msg);
+
 };
 
 #endif

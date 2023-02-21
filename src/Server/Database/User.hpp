@@ -7,7 +7,6 @@
 #include "GameStats.hpp"
 #include "Friend/FriendList.hpp"
 #include "Friend/FriendRequestList.hpp"
-#include "Chat/Chat.hpp"
 #include "Database.hpp"
 
 
@@ -20,7 +19,6 @@ class User {
 	GameStats stats;
 	FriendList friend_list;
 	FriendRequestList friend_request_list;
-	Chat chat;
 
 public:
 
@@ -101,7 +99,7 @@ public:
 		this->friend_list.addFriend(this->getId(), id, db); 
 	}
 	void removeFriend(const int id, Database& db) { this->friend_list.removeFriend(this->getId(), id, db); }
-};
 
+};
 
 #endif
