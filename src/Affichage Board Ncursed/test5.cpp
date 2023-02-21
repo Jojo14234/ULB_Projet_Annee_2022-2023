@@ -39,7 +39,7 @@ void zone(){
     char input[30];
     int i = 1;
     int key = 0; 
-    
+    removeOldMessages(win, 10);
     while(key != 'q'){
         wmove(win, i,1);
         i++;
