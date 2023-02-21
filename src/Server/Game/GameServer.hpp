@@ -1,21 +1,27 @@
-#ifndef _GAME_SERVER_HPP
-#define _GAME_SERVER_HPP
+#ifndef _SERVER_GAME_SERVER_HPP
+#define _SERVER_GAME_SERVER_HPP
 
 #include <vector>
 
 #include "GameCode.hpp"
 #include "../../Game/Capitalist.hpp"
 #include "../../utils/Configs.hpp"
-//#include "../ClientManager/ClientManager.hpp"
 
 
 class ClientManager;	// forward declaraction
 
 class GameServer {
 
+	// The game
 	Capitalist game;
+
+	// Represent the game code
 	GameCode code;
+	
+	// Client manager connected to the game
 	std::vector<ClientManager*> clients;
+
+	// if the game is running
 	bool active = true;
 
 public:
@@ -31,6 +37,7 @@ public:
 	// GETTERS
 	int getCode() const { return code.getCode(); }
 	
+	// VERIFIERS
 	bool isCode(int other) const { return code.getCode() == other; }
 
 };
