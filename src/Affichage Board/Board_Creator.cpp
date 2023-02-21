@@ -97,7 +97,9 @@ void BoardCreator::createBoard(){
 }
 
 void BoardCreator::destroyBoard(){
-
+    for (int i = 0; i < size*size; i++) {
+        delwin(board[i]);
+    }
 }
 
 void BoardCreator::initBoard(){
@@ -111,9 +113,17 @@ void BoardCreator::initBoard(){
         setPlayer(0,i);
     }
     setHouse(0);
-    while(1){}
-    getch();                // On attend que l'utilisateur appui sur une touche pour quitter
-    endwin();               // Restaure les paramètres par défaut du terminal
-
-
+    WINDOW *chat;
+    chat = newwin( 2 , 2, 25 , COLS - 10);
+    //nodelay(stdscr, false);
+    int key;
+    bool flag = true;
+    while(flag){
+        key = wgetch(chat); // On attend que l'utilisateur appui sur une touche pour quitter
+        if (key == 'e'){
+            flag = false;
+            destroyBoard(); 
+            endwin();       // Restaure les paramètres par défaut du terminal
+        }
+    }
 }
