@@ -2,31 +2,20 @@
 #include "Database.hpp"
 #include "User.hpp"
 
-void FriendList::addFriend(int from, int id, Database& db) { 
+void FriendList::addFriend(int current_user, int new_friend, Database& db) { 
 	this->am.lockWriter();
-	this->ids.push_back(id);
-	db.getUser(id)->addFriend(from);
+	this->ids.push_back(new_friend);
+	db.getUser(new_friend)->friend_list.ids.push_back(current_user);
 	this->am.unlockWriter();
 }
 
-void FriendList::addFriend(int id) {
+void FriendList::removeFriend(int current_user, int old_friend, Database& db) {
 	this->am.lockWriter();
-	this->ids.push_back(id);
-	this->am.unlockWriter();
-}
-
-void FriendList::removeFriend(int id) {
-	this->am.lockWriter(); 
-	auto it = std::find(this->ids.begin(), this->ids.end(), id);
-	this->ids.erase(it); 
-	this->am.unlockWriter();
-}
-
-void FriendList::removeFriend(int from, int id, Database& db) {
-	this->am.lockWriter();
-	auto it = std::find(this->ids.begin(), this->ids.end(), id);
+	auto it = std::find(this->ids.begin(), this->ids.end(), old_friend);
 	this->ids.erase(it);
-	db.getUser(id)->removeFriend(from);
+	std::vector<int>& other_friend_list = db.getUser(old_friend)->friend_list.ids;
+	auto it2 = std::find(other_friend_list.begin(), other_friend_list.end(), current_user);
+	other_friend_list.erase(it2); 
 	this->am.unlockWriter();
 }
 
@@ -49,7 +38,6 @@ void FriendList::write(FILE* file) {
 void FriendList::read(FILE* file) {
 	size_t size;
 	fread(&size, sizeof(size_t), 1, file);
-	std::cout << size << std::endl;
 	for (size_t i = 0; i < size; i++) {
 		int x;
 		fread(&x, sizeof(int), 1, file);

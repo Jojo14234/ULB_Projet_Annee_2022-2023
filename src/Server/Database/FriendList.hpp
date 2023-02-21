@@ -18,12 +18,10 @@ class FriendList {
 public:
 
 	// Add a friend
-	void addFriend(int from, int id, Database& db);
-	void addFriend(int id);
+	void addFriend(int current_user, int new_friend, Database& db);
 
 	// Remove a friend
-	void removeFriend(int from, int id, Database& db);
-	void removeFriend(int id);
+	void removeFriend(int current_user, int old_friend, Database& db);
 	
 	// If contains
 	bool contains(int id) const { return std::find(this->ids.begin(), this->ids.end(), id) != this->ids.end(); }

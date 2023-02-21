@@ -19,15 +19,10 @@ class FriendRequestList {
 public:
 
 	// Send a friend request
-	void sendRequest(int from, int to, Database& db);
-	void receiveRequest(int id);
+	void sendRequest(int current_user, int receiver, Database& db);
 
 	// Remove a friend
-	void removeRequest(int from, int to, Database& db);
-	void removeRequest(int id);
-
-	void acceptRequest(int from, int to, Database& db);
-	void acceptRequest(int id);
+	void removeRequest(int current_user, int sender, Database& db);
 	
 	// If contains
 	bool sentListContains(int id) const { return std::find(this->sent.begin(), this->sent.end(), id) != this->sent.end(); }

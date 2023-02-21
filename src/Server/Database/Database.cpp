@@ -9,7 +9,6 @@ void Database::load() {
 	fread(&size, sizeof(size_t), 1, file);
 	this->data.reserve(size + size/4);
 	for (size_t i = 0; i < size; i++) {
-		std::cout << " aa : " << i << std::endl;
 		User user;
 		user.read(file);
 		this->data.push_back(user);

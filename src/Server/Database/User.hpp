@@ -22,6 +22,9 @@ class User {
 
 public:
 
+	friend class FriendList;
+	friend class FriendRequestList;
+
 	User()=default;
 	User(int id, const char username[32], const char password[64]): id{id} {
 		strcpy(this->username, username);
@@ -86,26 +89,16 @@ public:
 
 	// MODIFIERS
 	void updateStats(const GameStats &stats) { this->stats += stats; }
-	void addFriend(const int id) { this->friend_list.addFriend(id); }
-	void removeFriend(const int id, Database& db) { this->friend_list.removeFriend(this->getId(), id, db); }
-	void removeFriend(const int id) { this->friend_list.removeFriend(id); }
-	/*void addFriend(const User &other) { this->friend_list.addFriend(other.id); }
-	void removeFriend(const int id) { this->friend_list.removeFriend(id); }
-	void removeFriend(const User &other) { this->friend_list.removeFriend(other.id); }*/
+	
+	// FRIEND INTERACTIONS
 	void sendRequest(int id, Database& db) { this->friend_request_list.sendRequest(this->getId(), id, db); }
 	void removeRequest(int id, Database& db) { this->friend_request_list.removeRequest(this->getId(), id, db); }
-	void receiveRequest(int id) { this->friend_request_list.receiveRequest(id); } //should be private
-	void removeRequest(int id) { this->friend_request_list.removeRequest(id); } //should be private
-	void removeSent(int id) { this->friend_request_list.acceptRequest(id); }
-
+	
 	void acceptRequest(int id, Database& db) { 
-		this->friend_request_list.acceptRequest(this->getId(), id, db);
+		this->friend_request_list.removeRequest(this->getId(), id, db);
 		this->friend_list.addFriend(this->getId(), id, db); 
 	}
-	void declineRequest(int id, Database& db) { 
-		this->friend_request_list.removeRequest(id, this->getId(), db); 
-	}
-
+	void removeFriend(const int id, Database& db) { this->friend_list.removeFriend(this->getId(), id, db); }
 };
 
 

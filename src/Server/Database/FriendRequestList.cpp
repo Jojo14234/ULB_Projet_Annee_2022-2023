@@ -2,46 +2,20 @@
 #include "Database.hpp"
 #include "User.hpp"
 
-void FriendRequestList::sendRequest(int from, int to, Database& db) {
+void FriendRequestList::sendRequest(int current_user, int receiver, Database& db) {
 	this->am.lockWriter(); 
-	this->sent.push_back(to);
-	db.getUser(to)->receiveRequest(from);
+	this->sent.push_back(receiver);
+	db.getUser(receiver)->friend_request_list.received.push_back(current_user);
 	this->am.unlockWriter();
 }
 
-void FriendRequestList::receiveRequest(int id) { 
+void FriendRequestList::removeRequest(int current_user, int sender, Database& db) { 
 	this->am.lockWriter();
-	this->received.push_back(id); 
-	this->am.unlockWriter();
-}
-
-void FriendRequestList::removeRequest(int from, int to, Database& db) { 
-	this->am.lockWriter();
-	auto it = std::find(this->received.begin(), this->received.end(), to);
+	auto it = std::find(this->received.begin(), this->received.end(), sender);
 	this->received.erase(it); 
-	db.getUser(to)->removeRequest(from);
-	this->am.unlockWriter();
-}
-
-void FriendRequestList::removeRequest(int id) { 
-	this->am.lockWriter();
-	auto it = std::find(this->sent.begin(), this->sent.end(), id);
-	this->sent.erase(it); 
-	this->am.unlockWriter();
-}
-
-void FriendRequestList::acceptRequest(int from, int to, Database& db) {
-	this->am.lockWriter();
-	auto it = std::find(this->received.begin(), this->received.end(), to);
-	this->received.erase(it); 
-	db.getUser(to)->removeSent(from);
-	this->am.unlockWriter();
-}
-
-void FriendRequestList::acceptRequest(int id) {
-	this->am.lockWriter();
-	auto it = std::find(this->sent.begin(), this->sent.end(), id);
-	this->sent.erase(it);
+	std::vector<int>& other_sent = db.getUser(sender)->friend_request_list.sent;
+	auto it2 = std::find(other_sent.begin(), other_sent.end(), current_user);
+	other_sent.erase(it2); 
 	this->am.unlockWriter();
 }
 
