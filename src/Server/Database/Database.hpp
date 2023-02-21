@@ -38,8 +38,8 @@ public:
 
 	// Add a User
 	void addUser(User user);
-	// Create a user and add it
-    void addUser(std::string username, std::string password);
+	// Create a user, add and return it
+    User* addUser(std::string username, std::string password);
 	// Remove a User
 	void removeUser(User &user);
 	

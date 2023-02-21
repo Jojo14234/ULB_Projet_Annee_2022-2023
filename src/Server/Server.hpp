@@ -43,7 +43,7 @@ class Server {
 	void clientProcessRankingTop(ClientManager &client);
 	void clientProcessRankingPos(ClientManager &client);
 	// For friends
-	void clientProcessFriendsShow(ClientManager &client);
+	void clientProcessFriendsList(ClientManager &client);
 	void clientProcessFriendsRequest(ClientManager &client);
 	void clientProcessFriendsAccept(ClientManager &client);
 	void clientProcessFriendsRefuse(ClientManager &client);

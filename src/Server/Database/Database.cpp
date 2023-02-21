@@ -60,11 +60,11 @@ User* Database::getUser(const char username[32]) {
 
 std::string Database::getUsername(const int id) { return this->getUser(id)->getUsername(); }
 
-void Database::addUser(std::string username, std::string password) {
-	User user{this->getSize()+1, username.c_str(), password.c_str()};
+User* Database::addUser(std::string username, std::string password) {
 	this->user_am.lockWriter();
-	this->data.push_back(user);
+	User* user = this->data.emplace_back(this->getSize()+1, username.c_str(), password.c_str());
 	this->user_am.unlockWriter();
+	return user;
 }
 
 void Database::print_in_file() {

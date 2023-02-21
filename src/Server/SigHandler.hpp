@@ -9,7 +9,7 @@
 class SigHandler {
 
 	static inline bool sigint_receipt = false;
-	static inline sigset_t* mask_ptr =  new sigset_t;
+	static inline sigset_t mask_ptr;
 
 public:
 	
