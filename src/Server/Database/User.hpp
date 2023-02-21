@@ -5,8 +5,9 @@
 #include <cstring>
 
 #include "GameStats.hpp"
-#include "FriendList.hpp"
-#include "FriendRequestList.hpp"
+#include "Friend/FriendList.hpp"
+#include "Friend/FriendRequestList.hpp"
+#include "Chat/Chat.hpp"
 #include "Database.hpp"
 
 
@@ -19,6 +20,7 @@ class User {
 	GameStats stats;
 	FriendList friend_list;
 	FriendRequestList friend_request_list;
+	Chat chat;
 
 public:
 

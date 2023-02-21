@@ -1,6 +1,6 @@
 #include "FriendList.hpp"
-#include "Database.hpp"
-#include "User.hpp"
+#include "../Database.hpp"
+#include "../User.hpp"
 
 void FriendList::addFriend(int current_user, int new_friend, Database& db) { 
 	this->am.lockWriter();

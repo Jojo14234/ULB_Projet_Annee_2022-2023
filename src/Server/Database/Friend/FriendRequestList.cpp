@@ -1,6 +1,6 @@
 #include "FriendRequestList.hpp"
-#include "Database.hpp"
-#include "User.hpp"
+#include "../Database.hpp"
+#include "../User.hpp"
 
 void FriendRequestList::sendRequest(int current_user, int receiver, Database& db) {
 	this->am.lockWriter(); 
