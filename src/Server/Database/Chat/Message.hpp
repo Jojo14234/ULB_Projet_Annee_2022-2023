@@ -5,7 +5,6 @@
 #include <string>
 #include <cstring>
 
-//#include "../User.hpp"
 
 class User;
 
@@ -18,7 +17,7 @@ public:
 
 	Message(User* writer, const char msg[1024]):writer{writer} { strcpy(this->msg, msg); }
 
-	operator std::string() { return ""; }
+	operator std::string();
 
 };
 

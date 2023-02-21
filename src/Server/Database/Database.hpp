@@ -23,7 +23,6 @@ class Database {
 	mutable AccessMonitor chat_am;
 
 	Conversation* createConv(User* sender, User* receiver);
-	Conversation* getConv(User* sender, User* receiver);
 
 public:
 
@@ -58,6 +57,8 @@ public:
     // GetRanking
     void getRanking(std::vector<User*> &ranking);
 
+	// Chat
+	Conversation* getConv(User* sender, User* receiver);
 	void sendMsg(User* sender, User* receiver, const std::string &msg);
 
 };

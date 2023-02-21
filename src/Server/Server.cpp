@@ -88,14 +88,15 @@ void Server::clientProcessQuery(ClientManager &client, QUERY_TYPE query) {
 		case QUERY_TYPE::RANKING_POS: this->clientProcessRankingPos(client); break;
 		case QUERY_TYPE::RANKING_TOP: this->clientProcessRankingTop(client); break;
 		// For friends
-		case QUERY_TYPE::FRIENDS_SHOW: this->clientProcessFriendsShow(client); break;
+		case QUERY_TYPE::FRIENDS_LIST: this->clientProcessFriendsShow(client); break;
 		case QUERY_TYPE::FRIENDS_REQUEST: this->clientProcessFriendsRequest(client); break;
 		case QUERY_TYPE::FRIENDS_ACCEPT: this->clientProcessFriendsAccept(client); break;
 		case QUERY_TYPE::FRIENDS_REFUSE: this->clientProcessFriendsRefuse(client); break;
 		case QUERY_TYPE::FRIENDS_ADD: this->clientProcessFriendsAdd(client); break;
 		case QUERY_TYPE::FRIENDS_REMOVE: this->clientProcessFriendsRemove(client); break;
 		// For message
-		case QUERY_TYPE::MESSAGE: this->clientProcessMessage(client); break;
+		case QUERY_TYPE::MESSAGE_SHOW: this->clientProcessShowMessage(client); break;
+		case QUERY_TYPE::MESSAGE_SEND: this->clientProcessSendMessage(client); break;
 		// For disconnect
 		case QUERY_TYPE::DISCONNECT: client.send("DISCONNECT"); break;
 		default : break;
@@ -269,7 +270,21 @@ void Server::clientProcessFriendsRemove(ClientManager &client) {
 }
 
 // For message
-void Server::clientProcessMessage(ClientManager &client) {
+
+void Server::clientProcessShowMessage(ClientManager &client) {
+	User* user = database.getUser(client.getS1().c_str());
+	Conversation* conv = database.getConv(client.getAccount(), user);
+	if (user == nullptr) {
+		client.send("Le pseudo entré n'existe pas.");
+	} else if (conv == nullptr) {
+		client.send("Aucun conversation avec ce joueur na été trouvée !");
+	} else {
+		std::string output = std::string{*conv};
+		client.send(output);
+	}
+}
+
+void Server::clientProcessSendMessage(ClientManager &client) {
 	User* user = database.getUser(client.getS1().c_str());
 	if (user == nullptr) {
 		client.send("Le pseudo entré n'existe pas.");

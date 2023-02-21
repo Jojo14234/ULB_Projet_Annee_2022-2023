@@ -26,8 +26,9 @@ void ClientManager::receive(QUERY_TYPE &query) {
 		
 		case QUERY_TYPE::REGISTER :	// same as under
 		case QUERY_TYPE::LOGIN :    // same as under
-		case QUERY_TYPE::MESSAGE : packet >> args.s1 >> args.s2; break;
+		case QUERY_TYPE::MESSAGE_SEND : packet >> args.s1 >> args.s2; break;
 		
+		case QUERY_TYPE::MESSAGE_SHOW :  // same as under
 		case QUERY_TYPE::FRIENDS_ACCEPT: // same as under
 		case QUERY_TYPE::FRIENDS_REFUSE: // same as under
 		case QUERY_TYPE::FRIENDS_ADD:    // same as under

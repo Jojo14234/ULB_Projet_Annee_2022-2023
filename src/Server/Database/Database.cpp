@@ -122,22 +122,24 @@ bool Database::contains(const User &user) const { return this->contains(user.get
 
 
 Conversation* Database::createConv(User* sender, User* receiver) {
+	this->chat_am.lockWriter();
 	Conversation &conv = this->chat.emplace_back(sender, receiver);
+	this->chat_am.unlockWriter();
 	return &conv;
 }
 
 Conversation* Database::getConv(User* sender, User* receiver) {
+	if (sender == nullptr or receiver == nullptr) { return nullptr; }
+	this->chat_am.lockReader();
 	for (auto &conv : this->chat) {
 		if (conv.isATalker(sender) and conv.isATalker(receiver)) {
 			return &conv;
 		}
-	} return nullptr;
+	} this->chat_am.unlockReader(); return nullptr;
 }
 
 void Database::sendMsg(User* sender, User* receiver, const std::string &msg) {
-	this->chat_am.lockWriter();
 	Conversation* conv = this->getConv(sender, receiver);
 	if (conv == nullptr) { conv = this->createConv(sender, receiver); }
 	conv->addMsg(sender, msg);
-	this->chat_am.unlockWriter();
 }
