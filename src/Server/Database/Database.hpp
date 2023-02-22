@@ -24,6 +24,8 @@ class Database {
 
 	Conversation* createConv(User* sender, User* receiver);
 
+	void emplace(const User* user, std::array<const User*, 5> &bests)
+
 public:
 
 	Database(const char* path): path{path} { this->load(); }
@@ -55,7 +57,8 @@ public:
 	std::string getUsername(const int id);
 
     // GetRanking
-    void getRanking(std::vector<User*> &ranking);
+	int getRankingPos(User* user);
+    std::array<const User*, 5> getRanking();
 
 	// Chat
 	Conversation* getConv(User* sender, User* receiver);

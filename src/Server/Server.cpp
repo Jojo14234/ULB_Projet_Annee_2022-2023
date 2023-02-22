@@ -168,7 +168,9 @@ void Server::clientProcessCreateGame(ClientManager &client) {
 // For ranking
 void Server::clientProcessRankingPos(ClientManager &client) {
 	std::cout << "Received 'ranking pos' query from client: " << client.getSocket().getRemoteAddress() << " > " << client.getAccount()->getUsername() << std::endl;
-	client.send("don't need a position, you're too good!");
+	int pos = database.getRankingPos(client.getAccount());
+	std::string output = "your ranking position is " + std::to_string(pos) + " with a score of " + std::to_string(client.getAccount()->getStats().getScore());
+	client.send(output);
 }
 
 void Server::clientProcessRankingTop(ClientManager &client) {
