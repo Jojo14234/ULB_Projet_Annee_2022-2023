@@ -68,6 +68,7 @@ public:
     void setAccount(User *user) { this->account = user; }
 	void setGameServer(GameServer* gs) { this->game_server = gs; }
 	void removeGameServer() { this->game_server = nullptr; }
+	
 };
 
 #endif

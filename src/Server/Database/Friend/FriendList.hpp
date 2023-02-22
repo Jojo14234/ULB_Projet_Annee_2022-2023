@@ -13,6 +13,8 @@ class Database;
 class FriendList {
 	
 	AccessMonitor am;
+	
+	// List of ids of friends user
 	std::vector<int> ids;
 
 public:

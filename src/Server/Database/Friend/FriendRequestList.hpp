@@ -13,7 +13,11 @@ class Database;
 class FriendRequestList {
 	
 	AccessMonitor am;
+
+	// list of requests received
 	std::vector<int> received;
+
+	// List of requests sent
 	std::vector<int> sent;
 
 public:
