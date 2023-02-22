@@ -169,17 +169,17 @@ void Server::clientProcessCreateGame(ClientManager &client) {
 void Server::clientProcessRankingPos(ClientManager &client) {
 	std::cout << "Received 'ranking pos' query from client: " << client.getSocket().getRemoteAddress() << " > " << client.getAccount()->getUsername() << std::endl;
 	int pos = database.getRankingPos(client.getAccount());
-	std::string output = "your ranking position is " + std::to_string(pos) + " with a score of " + std::to_string(client.getAccount()->getStats().getScore());
+	std::string output = "votre position dans le classement est " + std::to_string(pos) + " avec un score de " + std::to_string(client.getAccount()->getStats().getScore());
 	client.send(output);
 }
 
 void Server::clientProcessRankingTop(ClientManager &client) {
 	std::cout << "Received 'ranking top' query from client: " << client.getSocket().getRemoteAddress() << " > " << client.getAccount()->getUsername()  << std::endl;
-	std::vector<User*> ranking;
-	database.getRanking(ranking);
+	std::array<const User*, 5> top = this->database.getRanking();
 	std::string input = "";
-	for (int i(1); i <= 5; i++) {
-		input += std::to_string(i) + ". " + ranking[i]->getUsername() + " avec " + std::to_string(ranking[i]->getStats().getScore()) + " point(s).\n";
+	for (int i=0; i < 5; i++) {
+		if ( top[i] == nullptr ) break;
+		input += std::to_string(i+1) + ". " + top[i]->getUsername() + " avec " + std::to_string(top[i]->getStats().getScore()) + " point(s).\n";
 	}
 	client.send(input);
 }

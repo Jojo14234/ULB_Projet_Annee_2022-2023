@@ -78,9 +78,9 @@ void Database::print_in_file() {
 }
 
 int Database::getRankingPos(User* user) {
-	int idx;
+	int idx = 0;
 	for (auto &u : this->data) if (u.getStats() > user->getStats()) idx++;
-	return idx;
+	return idx + 1;
 }
 
 void Database::emplace(const User* user, std::array<const User*, 5> &bests) {
@@ -93,10 +93,17 @@ void Database::emplace(const User* user, std::array<const User*, 5> &bests) {
 }
 
 std::array<const User*, 5> Database::getRanking() {
-	std::array<const User*, 5> bests;
+	std::array<const User*, 5> bests{nullptr, nullptr, nullptr, nullptr, nullptr};
 	this->user_am.lockReader();
 	for (short unsigned i = 0; i < 5; i++) bests[i] = &(this->data[i]);
-	std::sort(bests.begin(), bests.end(), [](User* a, User* b) { return a->getStats() > b->getStats(); });
+	std::sort(bests.begin(), bests.end(),
+		[](const User* a, const User* b) { 
+			if (a == nullptr || b == nullptr) return false;
+			if (a == nullptr) return true;
+			if (b == nullptr) return false;
+			return a->getStats() > b->getStats();
+		}
+	);
 	for (const auto &u : this->data) this->emplace(&u, bests);
 	this->user_am.unlockReader();
 	return bests;

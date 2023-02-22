@@ -24,7 +24,7 @@ class Database {
 
 	Conversation* createConv(User* sender, User* receiver);
 
-	void emplace(const User* user, std::array<const User*, 5> &bests)
+	void emplace(const User* user, std::array<const User*, 5> &bests);
 
 public:
 
