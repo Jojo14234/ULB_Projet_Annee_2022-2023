@@ -21,8 +21,10 @@ CLIENT_INPUTPARSER_BINS = $(patsubst Client/InputParser/%.cpp, Client/InputParse
 
 # Create Server objects
 SERVER_BINS = $(patsubst Server/%.cpp, Server/%.o, $(wildcard Server/*.cpp))
-SERVER_CLIENTMANAGER_BINS = $(patsubst Server/ClientManager/%.cpp, Server/ClientManager/%.o, $(wildcard Server/ClientManager/*.cpp))
-SERVER_DATABASE_BINS = $(patsubst Server/Database/%.cpp, Server/Database/%.o, $(wildcard Server/Database/*.cpp))
+SERVER_CM_BINS = $(patsubst Server/ClientManager/%.cpp, Server/ClientManager/%.o, $(wildcard Server/ClientManager/*.cpp))
+SERVER_DB_BINS = $(patsubst Server/Database/%.cpp, Server/Database/%.o, $(wildcard Server/Database/*.cpp))
+SERVER_DB_FRIEND_BINS = $(patsubst Server/Database/Friend/%.cpp, Server/Database/Friend/%.o, $(wildcard Server/Database/Friend/*.cpp))
+SERVER_DB_CHAT_BINS = $(patsubst Server/Database/Chat/%.cpp, Server/Database/Chat/%.o, $(wildcard Server/Database/Chat/*.cpp))
 SERVER_GAME_BINS = $(patsubst Server/Game/%.cpp, Server/Game/%.o, $(wildcard Server/Game/*.cpp))
 
 
@@ -31,7 +33,7 @@ default: main
 
 .PHONY: clean
 clean:
-	-rm *.o */*.o */*/*.o 2> /dev/null
+	-rm *.o */*.o */*/*.o */*/*/*.o 2> /dev/null
 
 rm:
 	-rm capitalist server_capitalist 2> /dev/null
@@ -43,6 +45,6 @@ client: ${CLIENT_BINS} ${CLIENT_INPUTPARSER_BINS}
 	${CXX} ${CXXFLAGS} -o capitalist $^ ${LDLIBS}
 	make clean
 
-server: ${SERVER_BINS} ${SERVER_CLIENTMANAGER_BINS} ${SERVER_DATABASE_BINS} ${SERVER_GAME_BINS}
+server: ${SERVER_BINS} ${SERVER_CM_BINS} ${SERVER_DB_BINS} ${SERVER_DB_FRIEND_BINS} ${SERVER_DB_CHAT_BINS} ${SERVER_GAME_BINS}
 	${CXX} ${CXXFLAGS} -o server_capitalist $^ ${LDLIBS}
 	make clean

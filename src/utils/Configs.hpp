@@ -17,6 +17,13 @@ const int password_max_length = 64;
 const char banned_character[] = {'-', '+', '*', '$', '&', '@', '?', '!'}; //'§', '£'
 
 
+// User
+constexpr int MAX_FRIENDS = 20;
+constexpr int MAX_REQUESTS = 20;
+
+
+
+
 // Queries
 enum class QUERY_TYPE {
 	LOGIN,
@@ -28,21 +35,25 @@ enum class QUERY_TYPE {
 	RANKING_TOP,
 	RANKING_POS,
 
-	FRIENDS_SHOW,
+	FRIENDS_LIST,
 	FRIENDS_REQUEST,
 	FRIENDS_ACCEPT,
 	FRIENDS_REFUSE,
 	FRIENDS_ADD,
 	FRIENDS_REMOVE,
 	
-	MESSAGE,
+	MESSAGE_SEND,
+	MESSAGE_SHOW,
+
 	DISCONNECT,
 
 	NONE
 };
 
 enum class GAME_QUERY_TYPE {
-	ROLL_DICE,
+	ROLL_DICE = 1,
+
+	BUY,
 
 	ARG1, // temp
 	ARG2, // temp

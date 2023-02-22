@@ -4,7 +4,9 @@
 #include <vector>
 #include <string>
 #include <algorithm>
-#include "../../utils/AccessMonitor.hpp"
+#include "../../../utils/AccessMonitor.hpp"
+#include "../../../utils/Configs.hpp"
+
 
 class Database;
 
@@ -15,14 +17,11 @@ class FriendList {
 
 public:
 
-	FriendList()=default;
-
 	// Add a friend
-	void addFriend(int from, int id, Database& db);
-	void addFriend(int id);
+	void addFriend(int current_user, int new_friend, Database& db);
 
 	// Remove a friend
-	void removeFriend(int id);
+	void removeFriend(int current_user, int old_friend, Database& db);
 	
 	// If contains
 	bool contains(int id) const { return std::find(this->ids.begin(), this->ids.end(), id) != this->ids.end(); }
@@ -31,6 +30,11 @@ public:
 	int getFriendsCount() const { return this->ids.size(); }
 
 	std::string toString(Database &db) const;
+
+	// Write Read
+	void write(FILE* file);
+	void read(FILE* file);
+
 };
 
 
