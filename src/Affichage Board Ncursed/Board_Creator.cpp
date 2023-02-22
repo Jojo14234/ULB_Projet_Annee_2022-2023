@@ -15,31 +15,34 @@ vector<string> BoardCreator::getCellName(){
 }
 
 void BoardCreator::drawBoard(int n_case){
+    //wborder : bordure gauche, bordure droite, en haut, en bas, coin haut gauche, coin haut droit, coin bas gauche, coin bas droite
+
     //coin supérieur gauche
     if ( n_case == 0){
         wborder(board[n_case], '|', '|', '-', '_', '+', '-', '|', '|');}
-        //bordure gauche, bordure droite, en haut, en bas, coin haut gauche, coin haut droit, coin bas gauche, coin bas droite
-    //cases du haut
-    else if (n_case > 0 and n_case < col_nb-1){
-        wborder(board[n_case], ' ', '|', '-', '_', '-', '-', '_', '|');}
     // coin supérieur droit
     else if (n_case == col_nb - 1){
         wborder(board[n_case], ' ', '|', '-', '_', '-', '+', '_', '|');}
-    //cases du bas
-    else if (n_case > (line_nb-1) * col_nb and n_case < line_nb * col_nb - 1){
-        wborder(board[n_case], ' ', '|', ' ', '-', ' ', '|', '-', '-');}
-    //case à gauches
-    else if(n_case % line_nb == 0 && n_case != (line_nb-1) * col_nb){
-        wborder(board[n_case], '|', '|', ' ', '_', '|', '|', '|', '|');}
-    // case à droites
-    else if( (n_case+1) % line_nb == 0 and n_case < line_nb * col_nb - 1){
-        wborder(board[n_case], ' ', '|', ' ', '_', ' ', '|', '_', '|');}
     //coin inferieur gauche
     else if( n_case == (line_nb-1) * col_nb){
         wborder(board[n_case], '|', '|', ' ', '-', '|', '|', '+', '-');}
     //coin inferieur droit
     else if( n_case == line_nb * col_nb - 1){
         wborder(board[n_case], ' ', '|', ' ', '-', ' ', '|', '-', '+');}
+
+    //cases du haut
+    else if (n_case / 11 == 0){
+        wborder(board[n_case], ' ', '|', '-', '_', '-', '-', '_', '|');}
+    //cases du bas
+    else if (n_case / ((line_nb-1) * col_nb) == 1){
+        wborder(board[n_case], ' ', '|', ' ', '-', ' ', '|', '-', '-');}
+    //case à gauches
+    else if(n_case % line_nb == 0){
+        wborder(board[n_case], '|', '|', ' ', '_', '|', '|', '|', '|');}
+    // case à droites
+    else if( (n_case+1) % line_nb == 0){
+        wborder(board[n_case], ' ', '|', ' ', '_', ' ', '|', '_', '|');}
+
     //bordures internes coin inferieur droit
     else if(n_case == 108){
         wborder(board[n_case], ' ', '|', ' ', '_', ' ', '|', '_', '|');}
@@ -49,11 +52,6 @@ void BoardCreator::drawBoard(int n_case){
     //bordures internes cases de droites
     else if (n_case % 11 == 9){
         wborder(board[n_case], ' ', '|', ' ', ' ', ' ', '|', ' ', '|');}
-
-    /*if ((n_case >=0 and n_case < 11) or ( n_case % 11 == 0 or (n_case + 1) % 11 == 0 ) or (n_case >=111 and n_case <= 120) ){
-       box(board[n_case],0,0); 
-    }*/
-    
     
     wrefresh(board[n_case]);
 }

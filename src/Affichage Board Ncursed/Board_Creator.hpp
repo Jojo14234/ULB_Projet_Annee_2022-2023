@@ -13,8 +13,9 @@ using namespace std;
 class BoardCreator{
     static const int col_nb = 11;
     static const int line_nb = 11;
+    static const int box_nb = col_nb * line_nb;
 
-    WINDOW *board[col_nb * line_nb];
+    WINDOW *board[box_nb];
     WINDOW *cardcases[2];
     WINDOW* win;
   
