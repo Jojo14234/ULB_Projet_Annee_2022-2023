@@ -17,4 +17,4 @@ second_file_hpp=Board_Creator.hpp common.h
 
 
 affiche: $(second_file_cpp) $(second_file_hpp)                  
-	g++ -std=c++2a $(second_file_cpp) $(second_file_hpp)  -o affiche $(FLAGS) 
+	g++ -std=c++20 $(second_file_cpp) -o affiche $(FLAGS) 

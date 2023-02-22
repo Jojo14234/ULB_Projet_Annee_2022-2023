@@ -11,7 +11,10 @@
 
 using namespace std;
 class BoardCreator{
-    WINDOW *board[121];
+    static const int col_nb = 11;
+    static const int line_nb = 11;
+
+    WINDOW *board[col_nb * line_nb];
     WINDOW *cardcases[2];
     WINDOW* win;
   
@@ -27,7 +30,7 @@ class BoardCreator{
     vector<string> cellname;
 
     int size = 11;
-    int height = 5;
+    int height = 5; // nombre de caracteres a gauche et a droite d'une case
     //int width = 9;
     int width = 11;
 
