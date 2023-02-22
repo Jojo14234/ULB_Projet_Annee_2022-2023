@@ -1,60 +1,6 @@
 {
   "JailCard" : ["free", "jail"],
 
-  //CELL
-  "CellCard" : {
-//lucky deck
-      "1" : {
-        "descript" : "Rendez-vous à la propriété bleu foncé 2",
-        "dest" : 39,
-        "money" : 0,
-      },
-      "2": { 
-        "descript" : "Avancez jusqu’à la case départ",
-        "dest" : 0,
-        "money" : 0,
-       },
-      "3": { 
-        "descript" : "Rendez-vous à la propriété rouge 3. Si vous passez par la case départ, recevez 200$",
-        "dest" : 24,
-        "money" : 1,
-       },
-      "4": { 
-        "descript" : "Rendez-vous à la propriété rose 1. Si vous passez par la case départ, recevez 200$.",
-        "dest" : 11,
-        "money" : 1,
-       },
-      "5": { 
-        "descript" : "Avancez jusqu’à la Gare 2. Si vous passez par la case départ, recevez 200$.",
-        "dest" : 15,
-        "money" : 1,
-       },
-      "6": { 
-        "descript" : "Reculez de trois cases",
-        "dest" : -3,
-        "money" : 0,
-       },
-
-//community deck
-      "7": { 
-        "descript" : "Placez-vous sur la case départ",
-        "dest" : 0,
-        "money" : 0,
-       },
-      "8": { 
-        "descript" : "Retournez à la propriété brune 1",
-        "dest" : 1,
-        "money" : 0,
-       },
-       "9" : {
-        "descript" : " Rendez-vous à la gare la plus proche. Si vous passez par la case départ, recevez 200$.",
-        "dest" : [5,15,25,35],
-        "money" : 1,        
-       }
-
-  
-  },
-
   "MoneyCard" : {
 
 //lucky deck
@@ -213,5 +159,59 @@
           "from" : "Bank",
           "to" : "Self",       
       },
-  }
+  },
+  //CELL
+  "CellCard" : {
+    //lucky deck
+          "21" : {
+            "descript" : "Rendez-vous à la propriété bleu foncé 2",
+            "dest" : 39,
+            "money" : 0,
+          },
+          "22": { 
+            "descript" : "Avancez jusqu’à la case départ",
+            "dest" : 0,
+            "money" : 0,
+           },
+          "23": { 
+            "descript" : "Rendez-vous à la propriété rouge 3. Si vous passez par la case départ, recevez 200$",
+            "dest" : 24,
+            "money" : 1,
+           },
+          "24": { 
+            "descript" : "Rendez-vous à la propriété rose 1. Si vous passez par la case départ, recevez 200$.",
+            "dest" : 11,
+            "money" : 1,
+           },
+          "25": { 
+            "descript" : "Avancez jusqu’à la Gare 2. Si vous passez par la case départ, recevez 200$.",
+            "dest" : 15,
+            "money" : 1,
+           },
+          "26": { 
+            "descript" : "Reculez de trois cases",
+            "dest" : -3,
+            "money" : 0,
+           },
+    
+    //community deck
+          "27": { 
+            "descript" : "Placez-vous sur la case départ",
+            "dest" : 0,
+            "money" : 0,
+           },
+          "28": { 
+            "descript" : "Retournez à la propriété brune 1",
+            "dest" : 1,
+            "money" : 0,
+           },
+           "29" : {
+            "descript" : " Rendez-vous à la gare la plus proche. Si vous passez par la case départ, recevez 200$.",
+            "dest" : [5,15,25,35],
+            "money" : 1,        
+           }
+    
+      
+      },
+
 }
