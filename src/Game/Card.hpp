@@ -1,31 +1,18 @@
 #include <array>
 #include <string>
+#include <memory>
 
 
 class CardDeck{
+//lucky 	std::array<int, 16> money_card_nO = {1,2,3,4,5,6,7,8};	std::array<int, 16> cell_card_nO = {21,22,23,24,25,26};
+// et community 
+//seront des instances avec une liste de n0 carte diff
+// + ajouter carte prison
 protected:
 	std::array<std::shared_ptr<Card>, 16> card_list;
 public:
-	
-
+	CardDeck(std::string deck_name);
 };
-
-//-------------------------------
-class LuckyCardDeck: public CardDeck {
-	std::array<int, 16> money_card_nO = [1,2,3,4,5,6,7,8];
-	std::array<int, 16> cell_card_nO = [21,22,23,24,25,26];
-public:
-	LuckyCardDeck();
-};
-
-//-------------------------------
-class CommunityCardDeck: public CardDeck {
-	std::array<int, 16> money_card_nO = [1,2,3,4,5,6,7,8];
-	std::array<int, 16> cell_card_nO = [21,22,23,24,25,26];
-public:
-	CommunityCardDeck();
-};
-
 
 
 //###################################################
@@ -33,7 +20,7 @@ class Card{
 protected:
 	std:string description;
 public:
-	Card(int card_nO);
+	Card(Json::Value &info);
 	void action(Player player);
 };
 
@@ -43,6 +30,7 @@ private:
 	int dest;
 	bool gain_money;
 public: 
+	CardCell(Json::Value &info_cell_card)
 	void action(Player player);
 };
 
@@ -54,6 +42,7 @@ private:
 	int amount_hotel;
 	
 public: 
+	CardMoney(Json::Value &info)
 	void action(Player player);
 };
 
