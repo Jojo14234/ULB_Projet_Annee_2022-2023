@@ -3,13 +3,13 @@
 
 #include <SFML/Network.hpp>
 
+
 #include "../utils/Configs.hpp"
 #include "Player.hpp"
 
-
 class Capitalist {
     std::vector<Player> players;
-    int current_player = 0;
+    int current_player_index = 0;
     bool running = false;
 
 public:
@@ -36,12 +36,30 @@ public:
 
     void addPlayer(int &id){
         players.push_back(Player(id));
+        if (players.size() == 1) {players[0].setAdmin(); players[0].setCurrentlyPlaying(true);}
     }
     void removePlayer(){
         //TODO : find correspinding id of player to delete
         players.pop_back();
     }
     void startGame(){ running = true; }
+
+    Player* getPlayerByClientId(int id){
+        for (auto &player : players){
+            if (player.getId() == id){
+                return &player;
+            }
+        }
+    }
+    Player* getCurrentPlayer(){ return &players[current_player_index]; }
+
+    bool isRunning() {return running;}
+
+    void endCurrentTurn(){
+        players[current_player_index].setCurrentlyPlaying(false);
+        (current_player_index += 1) %= (players.size());
+        players[current_player_index].setCurrentlyPlaying(true);
+    }
 };
 
 #endif

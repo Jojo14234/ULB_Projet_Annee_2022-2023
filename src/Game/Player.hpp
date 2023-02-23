@@ -20,6 +20,10 @@ class Player {
 
     int id;
 
+    bool admin = false;
+
+    bool currently_playing = false;
+
 /*
     //std::vector<JailCard> GOOJ_cards; waiting for Hawen
 
@@ -78,6 +82,14 @@ public:
     int getIndexOnBoard();
 
     Player(int id) : id{id} {}
+
+    void setAdmin();
+    bool isAdmin();
+
+    int getId();
+
+    bool isCurrentlyPLaying();
+    void setCurrentlyPlaying(bool playing);
 };
 
 

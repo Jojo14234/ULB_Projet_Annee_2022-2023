@@ -15,7 +15,8 @@ void GameInputParser::parse() {
 		if (this->getNbParameters() != 2) { return; }
 		this->query_type = GAME_QUERY_TYPE::ARG2;
 	}
-    else if ( query == "/start"){this->query_type = GAME_QUERY_TYPE::START;}
+    else if ( query == "/start") {this->query_type = GAME_QUERY_TYPE::START;} // starts game
+    else if ( query == "/end") {this->query_type = GAME_QUERY_TYPE::END_TURN;}
     else if (query == "/leave"){
         this->query_type = GAME_QUERY_TYPE::LEAVE;
     }

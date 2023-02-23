@@ -53,6 +53,8 @@ enum class QUERY_TYPE {
 
 enum class GAME_QUERY_TYPE {
     START,
+
+    END_TURN,
 	ROLL_DICE = 1,
 
 	BUY,

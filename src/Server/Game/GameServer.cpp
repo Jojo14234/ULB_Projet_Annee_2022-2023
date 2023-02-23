@@ -16,11 +16,11 @@ void GameServer::clientLoop(ClientManager &client) {
         processGameQuery(client, query);
 
 		game.receiveQuery(query, packet);
-		std::string output;
-		game.sendMessage(output);
-        game.displayGameStatus(); //temporary
+		//std::string output;
+		//game.sendMessage(output);
+        //game.displayGameStatus(); //temporary
 		// send to client
-		client.send(output);
+		//client.send(output);
 		if (query == GAME_QUERY_TYPE::LEAVE) { break; }
 	}
 	std::cout << client.getAccount()->getUsername() << " has left a game with code : " << this->code.getCode() << std::endl;
@@ -31,15 +31,40 @@ void GameServer::addClient(ClientManager* client) {
 	client->setGameServer(this);
 }
 void GameServer::processGameQuery(ClientManager &client, GAME_QUERY_TYPE query){
-    switch (query) {
-        case GAME_QUERY_TYPE::START: processStart(client); break;
+    if (GAME_QUERY_TYPE::START == query) processStart(client);
+    else {
+        if (client.getAccount()->getId() == game.getCurrentPlayer()->getId()){
+            switch(query){
+                case GAME_QUERY_TYPE::END_TURN: processEndTurn(client);
+            }
+        }
+        else {
+            client.send("Vous ne pouvez pas encore jouer étant donné que ça n'est pas votre tour.");
+        }
     }
+
 }
 void GameServer::processStart(ClientManager &client) {
-    this->game.startGame();
-    std::string response = "";
-    response += "La partie est lancée!";
-    client.send(response);
+    if (!game.isRunning()){
+        std::string response = "";
+        if (getLinkedPlayer(client)->isAdmin()){
+            this->game.startGame();
+            client.send("La partie est lancée!");
+        }
+        else {
+            client.send("Vous n'êtes pas administateur, demandez à l'administateur de lancer la partie.");
+        }
+    }
+    else {
+        client.send("La partie est déjà en cours.");
+    }
+}
 
+void GameServer::processEndTurn(ClientManager &client) {
+    game.endCurrentTurn();
+    client.send("Votre tour est maintenant terminé.");
+}
 
+Player* GameServer::getLinkedPlayer(ClientManager &client){
+    return game.getPlayerByClientId(client.getAccount()->getId());
 }

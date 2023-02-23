@@ -70,3 +70,12 @@ void Player::move(int distance) {
 //void Player::declareBankruptcy() {} pas encore possible à implémenter
 */
 int Player::getIndexOnBoard() {return 1;}//current_cell->getPosition();}
+
+void Player::setAdmin() {admin = true;}
+
+bool Player::isAdmin() {return admin;}
+
+int Player::getId() {return id;}
+
+bool Player::isCurrentlyPLaying() {return currently_playing;}
+void Player::setCurrentlyPlaying(bool playing) {currently_playing = playing;}
