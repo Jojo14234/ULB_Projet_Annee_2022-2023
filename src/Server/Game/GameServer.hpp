@@ -37,6 +37,7 @@ public:
 
     void processStart(ClientManager &client);
     void processEndTurn(ClientManager &client);
+    void processDiceRoll(ClientManager &client);
 
     //add Player object to players vector in Capitalist
     void addPlayer(int id) {this->game.addPlayer(id);}

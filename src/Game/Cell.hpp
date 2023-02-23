@@ -7,7 +7,7 @@
 
 
 class Cell {
-    int position;
+    int position = 0;
 
 public:
     int getPosition();

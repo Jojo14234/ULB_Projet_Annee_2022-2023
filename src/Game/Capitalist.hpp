@@ -6,11 +6,15 @@
 
 #include "../utils/Configs.hpp"
 #include "Player.hpp"
+#include "Board.hpp"
+
 
 class Capitalist {
     std::vector<Player> players;
     int current_player_index = 0;
     bool running = false;
+
+    Dice dice;
 
 public:
 
@@ -59,6 +63,9 @@ public:
         players[current_player_index].setCurrentlyPlaying(false);
         (current_player_index += 1) %= (players.size());
         players[current_player_index].setCurrentlyPlaying(true);
+    }
+    Dice* getDice(){
+        return &dice;
     }
 };
 

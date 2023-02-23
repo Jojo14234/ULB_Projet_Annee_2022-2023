@@ -3,3 +3,8 @@
 //
 
 #include "Board.hpp"
+#include "Cell.hpp"
+
+Cell *Board::getCellByIndex(int index) {
+        return &cells.at(index);
+}

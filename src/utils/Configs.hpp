@@ -9,6 +9,7 @@
 const auto IP = "127.0.0.1";
 const auto PORT = 8080;
 const auto STARTING_MONEY = 1500;
+const int BOARD_SIZE = 40;
 
 // AuthentificationManager constante
 const int username_min_length = 1;
@@ -55,7 +56,7 @@ enum class GAME_QUERY_TYPE {
     START,
 
     END_TURN,
-	ROLL_DICE = 1,
+	ROLL_DICE,
 
 	BUY,
 

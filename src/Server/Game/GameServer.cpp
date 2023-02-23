@@ -1,6 +1,7 @@
 #include "GameServer.hpp"
 #include "../ClientManager/ClientManager.hpp"
 #include "../../utils/Configs.hpp"
+#include "string.h"
 
 
 void GameServer::clientLoop(ClientManager &client) {
@@ -36,17 +37,17 @@ void GameServer::processGameQuery(ClientManager &client, GAME_QUERY_TYPE query){
         if (client.getAccount()->getId() == game.getCurrentPlayer()->getId()){
             switch(query){
                 case GAME_QUERY_TYPE::END_TURN: processEndTurn(client);
+                case GAME_QUERY_TYPE::ROLL_DICE: processDiceRoll(client);
             }
         }
         else {
-            client.send("Vous ne pouvez pas encore jouer étant donné que ça n'est pas votre tour.");
+            client.send("Cette action n'est pas permise étant donné que ça n'est pas votre tour.");
         }
     }
 
 }
 void GameServer::processStart(ClientManager &client) {
     if (!game.isRunning()){
-        std::string response = "";
         if (getLinkedPlayer(client)->isAdmin()){
             this->game.startGame();
             client.send("La partie est lancée!");
@@ -63,6 +64,15 @@ void GameServer::processStart(ClientManager &client) {
 void GameServer::processEndTurn(ClientManager &client) {
     game.endCurrentTurn();
     client.send("Votre tour est maintenant terminé.");
+}
+
+void GameServer::processDiceRoll(ClientManager &client) {
+    std::string output = "";
+    output += "You rolled a " + std::to_string(game.getDice()->roll()); //should technically have a method for this in capitalist, but flemme
+    if (game.getDice()->isDouble()){
+        output += " and it's a double!";
+    }
+    client.send(output);
 }
 
 Player* GameServer::getLinkedPlayer(ClientManager &client){
