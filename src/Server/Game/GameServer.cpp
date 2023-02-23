@@ -36,8 +36,8 @@ void GameServer::processGameQuery(ClientManager &client, GAME_QUERY_TYPE query){
     else {
         if (client.getAccount()->getId() == game.getCurrentPlayer()->getId()){
             switch(query){
-                case GAME_QUERY_TYPE::END_TURN: processEndTurn(client);
-                case GAME_QUERY_TYPE::ROLL_DICE: processDiceRoll(client);
+                case GAME_QUERY_TYPE::END_TURN: processEndTurn(client); break;
+                case GAME_QUERY_TYPE::ROLL_DICE: processDiceRoll(client); break;
             }
         }
         else {
