@@ -1,6 +1,6 @@
+#include "Die.hpp"
+#include <random>
 
-
-#include "Die.h"
 
 Die::Die(){
     std::srand(time(0));

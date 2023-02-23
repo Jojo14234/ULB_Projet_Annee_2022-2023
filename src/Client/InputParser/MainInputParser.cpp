@@ -9,7 +9,7 @@ void MainInputParser::parse() {
 	if ( query == "/login" ) { this-> query_type = QUERY_TYPE::LOGIN; }
 	else if ( query == "/register" ) { this->query_type = QUERY_TYPE::REGISTER; }
 	else if ( query == "/join" ) { 
-		if (this->isValidCode()) { this->query_type = QUERY_TYPE::JOIN_GAME; }
+		if (this->isValidCode()) { this->query_type = QUERY_TYPE::JOIN_GAME;}
 	}
 	else if ( query == "/message" or query == "/msg" ) {
 		if (this->getNbParameters() != 2) { return; }

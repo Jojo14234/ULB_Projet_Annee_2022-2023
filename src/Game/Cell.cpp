@@ -3,3 +3,5 @@
 //
 
 #include "Cell.hpp"
+
+int Cell::getPosition() {return position;}

@@ -5,8 +5,10 @@
 #ifndef INFO_F209_GR5_2022_PROPERTY_HPP
 #define INFO_F209_GR5_2022_PROPERTY_HPP
 
+#include "Cell.hpp"
 
-class Property {
+
+class Property : public Cell {
 
 };
 

@@ -1,21 +1,15 @@
-#ifndef DICE_H
-#define DICE_H
+#ifndef DIE_HPP
+#define DIE_HPP
 
-#include "Die.h"
 
-class Dice{
-    Die dice1;
-    Die dice2;
-    int double_counter;
+class Die{
+
+    int result;
+
 public:
-    Dice();
-    void roll();
-    int getDice1();
-    int getDice2();
-    int getDoubleCounter();
-    bool isDouble();
-
-
+    Die();
+    int roll();
+    int getResult();
 };
 
 

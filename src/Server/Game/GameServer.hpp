@@ -33,6 +33,13 @@ public:
 	
 	bool isCode(int other) const { return code.getCode() == other; }
 
+    void processGameQuery(ClientManager &client, GAME_QUERY_TYPE query);
+
+    void processStart(ClientManager &client);
+
+    //add Player object to players vector in Capitalist
+    void addPlayer(int id) {this->game.addPlayer(id);}
+
 };
 
 #endif

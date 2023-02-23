@@ -67,7 +67,7 @@ public:
 
 	void removeGameServer() { this->game_server = nullptr; }
 
-	void enterGameLoop() { this->game_server->clientLoop(*this); }
+	void enterGameLoop() { this->game_server->addPlayer(this->account->getId()); this->game_server->clientLoop(*this); }
 
 };
 

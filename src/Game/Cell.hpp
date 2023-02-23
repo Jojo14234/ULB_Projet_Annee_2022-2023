@@ -7,7 +7,10 @@
 
 
 class Cell {
+    int position;
 
+public:
+    int getPosition();
 };
 
 

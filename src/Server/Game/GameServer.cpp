@@ -11,10 +11,14 @@ void GameServer::clientLoop(ClientManager &client) {
 		// receive from client
 		client.receive(query, packet);
 		std::cout << "Receive: " << (int)query << " from client: " << client.getSocket().getRemoteAddress() << std::endl;
-		// call capitalist methods
+
+        // call capitalist methods
+        processGameQuery(client, query);
+
 		game.receiveQuery(query, packet);
 		std::string output;
 		game.sendMessage(output);
+        game.displayGameStatus(); //temporary
 		// send to client
 		client.send(output);
 		if (query == GAME_QUERY_TYPE::LEAVE) { break; }
@@ -25,4 +29,17 @@ void GameServer::clientLoop(ClientManager &client) {
 void GameServer::addClient(ClientManager* client) {
 	this->clients.push_back(client);
 	client->setGameServer(this);
+}
+void GameServer::processGameQuery(ClientManager &client, GAME_QUERY_TYPE query){
+    switch (query) {
+        case GAME_QUERY_TYPE::START: processStart(client); break;
+    }
+}
+void GameServer::processStart(ClientManager &client) {
+    this->game.startGame();
+    std::string response = "";
+    response += "La partie est lancée!";
+    client.send(response);
+
+
 }

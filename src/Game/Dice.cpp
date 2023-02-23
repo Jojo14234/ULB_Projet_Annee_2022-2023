@@ -1,4 +1,4 @@
-#include "Dice.h"
+#include "Dice.hpp"
 
 Dice::Dice(){}
 
