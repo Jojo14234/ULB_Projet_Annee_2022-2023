@@ -1,7 +1,7 @@
 {
   "JailCard" : {
         "free" : " Vous êtes libéré de prison. Cette carte peut être conservée jusqu’à ce qu’elle soit utilisée ou vendue.",
-        "jail" : "Allez en prison. Rendez-vous directement en prison. Ne franchissez pas par la case départ, ne touchez pas 200$.",
+        "jail" : "Allez en prison. Rendez-vous directement en prison. Ne franchissez pas par la case départ, ne touchez pas 200$."
   },
 
   "LUCKY DECK" : {
