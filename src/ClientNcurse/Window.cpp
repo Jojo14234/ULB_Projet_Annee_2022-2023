@@ -1,10 +1,9 @@
 #include "Window.hpp" 
 
 int main() {
-    Window win(COLS, LINES, 0, 0);
+    Window win(LINES, COLS, 0, 0);
     win.createBox();
-    win.write("Hello, world!", COLS/20, LINES);
-    win.write(to_string(LINES).c_str(), 10, 5);
+    win.write("CAPITALIST", (LINES-1)/10, (COLS-1)/2 - 4);
     win.cgetch();
     return 0;
 }
