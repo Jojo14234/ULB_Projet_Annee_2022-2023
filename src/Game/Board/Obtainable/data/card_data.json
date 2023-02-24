@@ -1,22 +1,23 @@
 {
-  "JailCard" : {
-        "free" : " Vous êtes libéré de prison. Cette carte peut être conservée jusqu’à ce qu’elle soit utilisée ou vendue.",
-        "jail" : "Allez en prison. Rendez-vous directement en prison. Ne franchissez pas par la case départ, ne touchez pas 200$."
-  },
+	"JailCard" : {
+		"free" : " Vous êtes libéré de prison. Cette carte peut être conservée jusqu’à ce qu’elle soit utilisée ou vendue.",
+		"jail" : "Allez en prison. Rendez-vous directement en prison. Ne franchissez pas par la case départ, ne touchez pas 200$."
+	},
 
-  "LUCKY DECK" : {
+	"LUCKY DECK" : {
+		
+		"MoneyCard" : [
 
-        "MoneyCard" : [
-                {
+			{
                 "descript" : "Vous êtes imposé pour les réparations de voirie à raison de 40$ par maison et 100$ par hôtel",
                 "amount" : 0,
                 "amount house" : 40,
                 "amount hotel" : 100,
                 "from" : "Self",
                 "to" : "Bank"
-                },
+            },
             
-                {
+			{
                 "descript" : "Vous avez gagné le prix de mots croisés. Recevez 100$.",
                 "amount" : 10,
                 "amount house" : 0,
@@ -80,43 +81,49 @@
             }
             ],
 
-        "CellCard" : [
-            {
+		"CellCard" : [
+        
+			{
                 "descript" : "Rendez-vous à la propriété bleu foncé 2",
                 "dest" : 39,
                 "money" : 0
-              },
-            { 
+			},
+            
+			{ 
                 "descript" : "Avancez jusqu’à la case départ",
                 "dest" : 0,
                 "money" : 0
-               },
-            { 
+            },
+            
+			{ 
                 "descript" : "Rendez-vous à la propriété rouge 3. Si vous passez par la case départ, recevez 200$",
                 "dest" : 24,
                 "money" : 1
-               },
-            { 
+			},
+            
+			{ 
                 "descript" : "Rendez-vous à la propriété rose 1. Si vous passez par la case départ, recevez 200$.",
                 "dest" : 11,
                 "money" : 1
-               },
-            { 
+            },
+            
+			{ 
                 "descript" : "Avancez jusqu’à la Gare 2. Si vous passez par la case départ, recevez 200$.",
                 "dest" : 15,
                 "money" : 1
-               },
-              { 
+            },
+            
+			{ 
                 "descript" : "Reculez de trois cases",
                 "dest" : -3,
                 "money" : 0
-               }
-
+            }
         ]
     },
 
     "COMMUNITY DECK" : { 
-        "MoneyCard" : [
+       
+		"MoneyCard" : [
         
             {
                 "descript" :  "Erreur de la banque en votre faveur. Recevez 200$",
@@ -189,9 +196,8 @@
                 "from" : "Self",
                 "to" : "Bank"        
             },
-      //!!!!! y'a le truc deg à gérer ici
             
-      {
+			{
                 "descript" :  "Payez une amende de 15$ ou bien tirez une carte « CHANCE ».",
                 "amount" : -15,
                 "amount house" : 0,
@@ -219,26 +225,25 @@
             }
         ],
 
-        "CellCard" : [
+		"CellCard" : [
         
             { 
                 "descript" : "Placez-vous sur la case départ",
                 "dest" : 0,
                 "money" : 0
-               },
+            },
             
-               { 
+            { 
                 "descript" : "Retournez à la propriété brune 1",
                 "dest" : 1,
                 "money" : 0
-               },
+            },
                
-               {
+            {
                 "descript" : " Rendez-vous à la gare la plus proche. Si vous passez par la case départ, recevez 200$.",
                 "dest" : [5,15,25,35],
                 "money" : 1        
-               }
-
+            }
         ]
 
     }

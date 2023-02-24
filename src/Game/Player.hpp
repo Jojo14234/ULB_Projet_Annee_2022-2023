@@ -5,8 +5,11 @@
 #ifndef INFO_F209_GR5_2022_PLAYER_HPP
 #define INFO_F209_GR5_2022_PLAYER_HPP
 
+#include <vector>
+
 #include "BankAccount.hpp"
-#include "Cell.hpp"
+#include "Board/Obtainable/Cells/Cell.hpp"
+#include "Board/Obtainable/Cards/JailCard.hpp"
 #include "Property.hpp"
 #include "PLAYER_STATUS.hpp"
 #include "Dice.hpp"
