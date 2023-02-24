@@ -27,7 +27,7 @@ private:
 	int dest;
 	bool gain_money;
 public: 
-	CardCell(Json::Value &info_cell_card)
+	CardCell(Json::Value &info)
 	void action(Player* player);
 };
 

@@ -8,6 +8,9 @@
 #include "Card.hpp"
 #include "Cell.hpp"
 
+#include <array>
+#include <memory>
+
 
 class Board {
 private:

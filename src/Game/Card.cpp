@@ -11,7 +11,7 @@ CardDeck::CardDeck(std::string deck_name){
     Json::Value money_card_set = root[deck_name]["MoneyCard"]
     Json::Value cell_card_set = root[deck_name]["CellCard"]
 
-    int idx=0;
+    int idx=0;  //de la liste de carte
     for (unsigned int i=0; i<money_card_set.size(); i++){
         this->card_list[idx] = std::make_shared<CardMoney>(money_card_set[i]);
         idx++;
@@ -20,7 +20,7 @@ CardDeck::CardDeck(std::string deck_name){
         this->card_list[idx] = std::make_shared<CellMoney>(cell_card_set[i]);
         idx++;
     }
-    //ajout 2 cartes prison
+    //ajout 2 cartes prison !!!
 }
 
 
@@ -31,16 +31,17 @@ Card::Card(Json::Value &info){
 }
 
 //-------------------------------
-CardCell::CardCell(Json::Value &info_cell_card){
-    this->dest = info_cell_card["dest"];
-    this->gain_money = info_cell_card["dest"];
+CardCell::CardCell(Json::Value &info){
+    this->dest = info["dest"];
+    this->gain_money = info["dest"];
 }
 
 //-------------------------------
-Cardmoney::CardMoney(Json::Value &info_money_card){
-    this->amount = info_money_card["amount"];
-    this->amount_house = info_money_card["amount_house"];
-    this->amount_hotel = info_money_card["amount_hotel"]
+Cardmoney::CardMoney(Json::Value &info){
+    this->amount = info["amount"];
+    this->amount_house = info["amount_house"];
+    this->amount_hotel = info["amount_hotel"]
+    //gere destination de l'argent (si amount est négatif ou zero ?)
 }
 
 //-------------------------------
