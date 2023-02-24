@@ -4,9 +4,8 @@
 
 #include "Property.hpp"
 
-Property::Property(){
-    Json::Value root;
-	Json::Reader reader;
-	std::ifstream file("data/card_data.json");
-	if (not reader.parse(file, root)) { perror("Error parsing file"); return; }
+Property::Property(Json:Value prop_info){
+	this->name = prop_info["name"];
+	this->purchase_price = prop_info["purchase price"];
+	this->construct_price = prop_info["construct price"];
 }

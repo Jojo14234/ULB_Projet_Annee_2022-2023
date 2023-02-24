@@ -12,8 +12,10 @@ enum PROPERTY_LEVEL{EMPTY, ONE, TWO, THREE, FOUR, HOTEL};
 class Property {
 private: 
     COLOR color;
+    std::string name;
     int purchase_price;
     int rent_price;
+    int construct_price;
     CELL_STATUS status;
     PROPERTY_LEVEL level;
     Player* owner;
@@ -23,7 +25,7 @@ private:
     void setLevel();
 
 public:
-    Property();
+    Property(Json:Value prop_info);
     void action(Player* player);
 
 };

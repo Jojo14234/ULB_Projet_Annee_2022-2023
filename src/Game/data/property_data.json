@@ -1,4 +1,6 @@
 {
+	"No property" : 32,
+	
 	"Rent prices" : [[2, 10, 30, 90, 160, 250],
 					[4, 20, 60, 180, 320, 450],
 					[6, 30, 90, 270, 400, 550],
@@ -21,111 +23,113 @@
 					[28, 150, 450, 1000, 1200, 1400],
 					[35, 175, 500, 1100, 1300, 1500],
 					[50, 200, 600, 1400, 1700, 2000],
-					]
-}
+					],
 
-{
-	"brune 1" : {
-		"buy price" : 60,
-		"construct price" : 50,
-	},
-	"brune 2" : {
-		"buy price" : 60,
-		"construct price" : 50,
-	},
+	"PROPERTY" : [
 
-
-	"bleu clair" : {
-		"buy price" : 100,
-		"construct price" : 50,
-	},
-	"bleu clair" : {
-		"buy price" : 100,
-		"construct price" : 50,
-	},
-	"bleu clair" : {
-		"buy price" : 120,
-		"construct price" : 50,
-	},
+		 {
+			"name" : "brune 1",
+			"pos" : 1,
+			"purchase price" : 60,
+			"construct price" : 50,
+		},
+		"brune 2" : {
+			"purchase price" : 60,
+			"construct price" : 50,
+		},
 
 
-	"rose 1" : {
-		"buy price" : 140,
-		"construct price" : 100,
-	},
-	"rose 2" : {
-		"buy price" : 140,
-		"construct price" :100 ,
-	},
-	"rose 3" : {
-		"buy price" : 160,
-		"construct price" : 100,
-	},
+		"bleu clair" : {
+			"purchase price" : 100,
+			"construct price" : 50,
+		},
+		"bleu clair" : {
+			"purchase price" : 100,
+			"construct price" : 50,
+		},
+		"bleu clair" : {
+			"purchase price" : 120,
+			"construct price" : 50,
+		},
 
 
-	"orange 1" : {
-		"buy price" : 180,
-		"construct price" : 100,
-	},
-	"orange 2" : {
-		"buy price" : 180,
-		"construct price" : 100,
-	},
-	"orange 3" : {
-		"buy price" : 200,
-		"construct price" : 100,
-	},
+		"rose 1" : {
+			"purchase price" : 140,
+			"construct price" : 100,
+		},
+		"rose 2" : {
+			"purchase price" : 140,
+			"construct price" :100 ,
+		},
+		"rose 3" : {
+			"purchase price" : 160,
+			"construct price" : 100,
+		},
 
 
-	"rouge 1" : {
-		"buy price" : 220,
-		"construct price" : 150,
-	},
-	"rouge 2" : {
-		"buy price" : 220,
-		"construct price" : 150,
-	},
-	"rouge 3" : {
-		"buy price" : 240,
-		"construct price" : 150,
-	},
+		"orange 1" : {
+			"purchase price" : 180,
+			"construct price" : 100,
+		},
+		"orange 2" : {
+			"purchase price" : 180,
+			"construct price" : 100,
+		},
+		"orange 3" : {
+			"purchase price" : 200,
+			"construct price" : 100,
+		},
 
 
-	"jaune 1" : {
-		"buy price" : 260,
-		"construct price" : 150,
-	},
-	"jaune 2" : {
-		"buy price" : 260,
-		"construct price" : 150,
-	},
-	"jaune 3" : {
-		"buy price" : 280,
-		"construct price" : 150,
-	},
+		"rouge 1" : {
+			"purchase price" : 220,
+			"construct price" : 150,
+		},
+		"rouge 2" : {
+			"purchase price" : 220,
+			"construct price" : 150,
+		},
+		"rouge 3" : {
+			"purchase price" : 240,
+			"construct price" : 150,
+		},
 
 
-	"verte 1" : {
-		"buy price" : 300,
-		"construct price" : 200,
-	},
-	"verte 2" : {
-		"buy price" : 300,
-		"construct price" : 200,
-	},
-	"verte 3" : {
-		"buy price" : 320,
-		"construct price" : 200,
-	},
+		"jaune 1" : {
+			"purchase price" : 260,
+			"construct price" : 150,
+		},
+		"jaune 2" : {
+			"purchase price" : 260,
+			"construct price" : 150,
+		},
+		"jaune 3" : {
+			"purchase price" : 280,
+			"construct price" : 150,
+		},
 
 
-	"bleu foncé 1" : {
-		"buy price" : 350,
-		"construct price" : 200,
-	},
-	"bleu foncé 2" : {
-		"buy price" : 400,
-		"construct price" : 200,
-	},
+		"verte 1" : {
+			"purchase price" : 300,
+			"construct price" : 200,
+		},
+		"verte 2" : {
+			"purchase price" : 300,
+			"construct price" : 200,
+		},
+		"verte 3" : {
+			"purchase price" : 320,
+			"construct price" : 200,
+		},
 
+
+		"bleu foncé 1" : {
+			"purchase price" : 350,
+			"construct price" : 200,
+		},
+		"bleu foncé 2" : {
+			"purchase price" : 400,
+			"construct price" : 200,
+		},
+	]
 }
