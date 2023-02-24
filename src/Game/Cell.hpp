@@ -4,7 +4,7 @@
 
 #ifndef INFO_F209_GR5_2022_CELL_HPP
 #define INFO_F209_GR5_2022_CELL_HPP
-
+#include <json/json.h>
 
 class Cell {
 private:

@@ -1,6 +1,7 @@
 #include <array>
 #include <string>
 #include <memory>
+#include <json/json.h>
 
 
 class CardDeck{

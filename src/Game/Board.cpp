@@ -12,6 +12,7 @@ Board::initAllDecks(){
 
 
 Board::initAllCells(){
+	//init property
     Json::Value root;
 	Json::Reader reader;
 	std::ifstream file("data/property_data.json");
@@ -21,7 +22,7 @@ Board::initAllCells(){
 	for (int i=0; i<nbr_property; i++){
 		int pos = root["PROPERTY"][i]["pos"]
 		Property prop = Property(root["PROPERTY"][i])	//ieme propriété dans json
-		this->cell[pos] = std::make_shared<PropertyCell>(pos, prop);
+		this->cells[pos] = std::make_shared<PropertyCell>(pos, prop);
 	}
 }
 
