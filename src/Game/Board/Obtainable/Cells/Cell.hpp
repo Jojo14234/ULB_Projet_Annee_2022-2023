@@ -1,11 +1,12 @@
 #ifndef _GAME_CELL_HPP
 #define _GAME_CELL_HPP
 
+#include "../Obtainable.hpp"
 #include "../../../Player.hpp"
 #include "Property.hpp"
 
 
-class Cell {
+class Cell: public Obtainable {
 
     int position;
 
