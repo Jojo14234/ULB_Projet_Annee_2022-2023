@@ -21,7 +21,7 @@ private:
 public: 
     PropertyCell()
     void action(Player* player)=0;
-}
+};
 
 //-------------------------------
 class TaxCell: public Cell{
@@ -31,7 +31,7 @@ private:
 public:
     TaxCell();
     void action(Player* player);
-}
+};
 
 //-------------------------------
 class JailCell: public Cell{
@@ -43,7 +43,7 @@ private:
 public:
     JailCell();
     void action(Player* player);
-}
+};
 
 //-------------------------------
 class GoJailCell: public Cell{
@@ -53,7 +53,7 @@ private:
 public: 
     GoJailCell();
     void action(Player* player);
-}
+};
 
 //-------------------------------
 class DrawableCardCell: public{
@@ -63,7 +63,7 @@ private:
 public:
     DrawableCardCell()
     void action(Player* player);
-}
+};
 
 
 
