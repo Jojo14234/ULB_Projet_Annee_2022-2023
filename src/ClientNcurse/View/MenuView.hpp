@@ -7,6 +7,12 @@ class MenuView : public AbstractView {
 
 public:
 
+	using AbstractView::AbstractView;
+	
+	void draw() override {
+		// TODO: implement
+	}
+
 };
 
 #endif

@@ -13,13 +13,13 @@ class MainController {
 
 	Client *model;
 
-	ConnectionController connection;
-	MenuController menu;
-	GameController game;
+	ConnectionController connection{model};
+	MenuController menu{model};
+	GameController game{model};
 
 public:
 
-	MainController(Client *model) : model(model) {}
+	explicit MainController(Client *model) : model(model) {}
 
 	void handleInput(STATE &state, int ch) {
 		switch (state) {

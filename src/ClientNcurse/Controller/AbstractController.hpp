@@ -12,7 +12,7 @@ protected:
 
 public:
 	
-	AbstractController(Client *model) : model(model) {}
+	explicit AbstractController(Client *model) : model(model) {}
 
 	virtual void handleInput(int ch) = 0;
 

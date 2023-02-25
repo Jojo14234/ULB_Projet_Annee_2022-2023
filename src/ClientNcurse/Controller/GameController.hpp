@@ -7,6 +7,13 @@ class GameController : public AbstractController {
 
 public:
 
+	using AbstractController::AbstractController;
+	
+	void handleInput(int ch) override {
+		// TODO: implement
+	}
+
+
 };
 
 #endif
