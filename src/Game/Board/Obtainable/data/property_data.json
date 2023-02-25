@@ -1,4 +1,38 @@
 {
+	"TRAIN STATION" : [
+			{
+				"name" : "gare 1,
+				"pos" : 5,
+			},
+		
+			{
+				"name" : "gare 2",
+				"pos" : 15,
+			},
+		
+			{
+				"name" : "gare 3",
+				"pos" : 25,
+			},
+		
+			{
+				"name" : "gare 4",
+				"pos" : 35,
+			}
+		],
+	
+	"COMPANIES" : [
+			{
+				"name" : "compagnie électrique",
+				"pos" : 12,
+			},
+			
+			{
+				"name" : "compagnie des eaux",
+				"pos" : 28,
+			}
+		],
+	
 	"No property" : 32,
 
 	"PROPERTY" : [
