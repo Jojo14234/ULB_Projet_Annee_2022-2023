@@ -6,9 +6,17 @@ int main() {
     win.createBox("CAPITALI$T");
     win.cgetch();
     return 0;
-}*/
+}
+
 int main() {
     Connection connection(LINES, COLS, 0, 0);
     connection.login();
     return 0;
+}
+*/
+
+int main() {
+	MainWindow win;	// Create a window
+	win.loop();	// Start the main loop
+	return 0;
 }
