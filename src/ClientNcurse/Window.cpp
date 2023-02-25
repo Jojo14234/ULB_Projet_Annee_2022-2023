@@ -15,7 +15,7 @@ Window::Window(int height, int width, int starty, int startx) {
     noecho();
 
     // Hide the cursor
-    curs_set(1);
+    curs_set(0);
 
     // Refresh the window
     refresh();
