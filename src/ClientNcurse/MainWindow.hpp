@@ -3,6 +3,7 @@
 
 #include <ncurses.h>
 
+#include "View/Object/Window.hpp"
 #include "Client.hpp"
 #include "Controller/MainController.hpp"
 #include "View/MainView.hpp"
@@ -10,7 +11,9 @@
 
 
 class MainWindow {
-	
+
+	Window window{ObjectInfo{10, 10, 10, 10}, "CAPITALI$T"};
+
 	Client model{};
 	MainController controller{&model};
 	MainView view{&model};
@@ -25,7 +28,9 @@ public:
 		cbreak();	// Line buffering disabled, Pass on everything to me
 		noecho();	// Don't echo() while we do getch
 		keypad(stdscr, TRUE);	// I need that nifty F
-		view.draw(state);
+		window.draw();
+		//view.draw(state);
+		//refresh();
 	}
 
 	~MainWindow() {

@@ -35,7 +35,7 @@ class ObjectInfo {
 public:
 
 	ObjectInfo(Position pos, Size size) : pos(pos), size(size) {}
-	ObjectInfo(int x, int y, int width, int height) : pos(x, y), size(width, height) {}
+	ObjectInfo(int x, int y, int height, int width) : pos(x, y), size(height, width) {}
 
 	// GETTERS
 	Position getPos() const { return pos; }
@@ -43,8 +43,8 @@ public:
 	
 	int getX() const { return pos.getX(); }
 	int getY() const { return pos.getY(); }
-	int getWidth() const { return size.getX(); }
-	int getHeight() const { return size.getY(); }
+	int getWidth() const { return size.getY(); }
+	int getHeight() const { return size.getX(); }
 
 };
 
