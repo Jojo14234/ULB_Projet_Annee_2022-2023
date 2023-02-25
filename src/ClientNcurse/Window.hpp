@@ -18,8 +18,10 @@ public:
     // Write a string to the window
     void write(const char* str, int x, int y);
 
-    // Clear the window
+    // Clear all the window
     void clear();
+
+    void clearBox(int startLine, int startCol, int endLine, int endCol);
 
     // Move the cursor to a specific position in the window
     void move(int y, int x);
@@ -27,7 +29,8 @@ public:
     // Wait for a key press and return the key code
     int cgetch() { return wgetch(m_window); }
 
-    void createBox();
+    void createBox(const char* text);
+
 };
 
 #endif // _WINDOW_HPP_

@@ -12,7 +12,7 @@ private:
     string password;
 
 public:
-    Connection(int height, int width, int starty, int startx, string username, string password);
+    Connection(int height, int width, int starty, int startx);
 
     void login();
 
