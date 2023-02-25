@@ -12,12 +12,12 @@
 
 
 class CardDeck {
-
-	// + ajouter carte prison
 	
-	std::array<std::shared_ptr<Card>, 16> card_list;
+	std::array<std::shared_ptr<Card>, 16> card_list; // + ajouter carte prison
 
 public:
+
+	CardDeck()=default;
 
 	CardDeck(std::string name) {
 		Json::Value root;
@@ -36,7 +36,7 @@ public:
 			idx++;
 		}
 		for (unsigned int i=0; i<cell_card_set.size(); i++){
-			this->card_list[idx] = std::make_shared<MoneyCell>(cell_card_set[i]);
+			this->card_list[idx] = std::make_shared<CellCard>(cell_card_set[i]);
 			idx++;
 		}
 		//ajout 2 cartes prison !!!
