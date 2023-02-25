@@ -3,18 +3,17 @@
 
 #include <string>
 
-#include "utils.hpp"
 #include "Box.hpp"
+#include "ObjectInfo.hpp"
 
 
 class Button : public Box {
 
-	Point pos;
-	Point size;
+	std::string label;
 
 public:
 
-	Button(Point pos, Point size, std::string label): pos(pos), size(size) {}
+	Button(ObjectInfo info, std::string label): Box(info), label(label) {}
 
 	bool isClicked(Point point) const {
 		return pos.x <= point.x && point.x <= pos.x + size.x &&

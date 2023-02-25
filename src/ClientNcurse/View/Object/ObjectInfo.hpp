@@ -2,13 +2,18 @@
 #define _OBJECT_INFO_HPP
 
 
-
 class Point {
+
 	int x, y;
+
 public:
+
 	Point(int x, int y) : x(x), y(y) {}
+	
+	// GETTERS
 	int getX() const { return x; }
 	int getY() const { return y; }
+
 };
 
 class Size : public Point {
@@ -32,6 +37,7 @@ public:
 	ObjectInfo(Position pos, Size size) : pos(pos), size(size) {}
 	ObjectInfo(int x, int y, int width, int height) : pos(x, y), size(width, height) {}
 
+	// GETTERS
 	Position getPos() const { return pos; }
 	Size getSize() const { return size; }
 	

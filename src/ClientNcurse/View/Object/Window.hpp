@@ -7,6 +7,8 @@ class Window : public Box {
 
 public:
 
+	using Box::Box;
+
 };
 
 #endif
