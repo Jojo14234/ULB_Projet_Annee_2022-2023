@@ -7,17 +7,15 @@
 #include "ObjectInfo.hpp"
 
 
-class Button : public Box {
-
-	std::string label;
+class Button : public virtual Box {
 
 public:
 
-	Button(ObjectInfo info, std::string label): Box(info), label(label) {}
+	using Box::Box;
 
-	bool isClicked(Point point) const {
-		return pos.x <= point.x && point.x <= pos.x + size.x &&
-			pos.y <= point.y && point.y <= pos.y + size.y;
+	bool isClicked(Position pos) const {
+		return info.getX() <= pos.getX() && pos.getX() <= info.getX() + info.getHeight() &&
+			info.getY() <= pos.getY() && pos.getY() <= info.getY() + info.getWidth();
 	}
 
 };
