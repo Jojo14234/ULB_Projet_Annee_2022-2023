@@ -5,9 +5,10 @@
 #include <json/json.h>
 
 #include "Card.hpp"
+#include "../../../Player.hpp"
 
 
-class CardCell: public Card {
+class CellCard: public Card {
 
 private:
 
@@ -16,7 +17,7 @@ private:
 
 public:
 
-	explicit CardCell(Json::Value &info):Card{info}, dest{info["dest"].asInt()}, gain_money{info["dest"].asBool()} {}
+	explicit CellCard(Json::Value &info):Card{info}, dest{info["dest"].asInt()}, gain_money{info["dest"].asBool()} {}
 
 	virtual void action(Player* player);
 

@@ -1,7 +1,7 @@
 #ifndef DICE_H
 #define DICE_H
 
-#include "Die.h"
+#include "Die.hpp"
 
 class Dice{
     Die dice1;

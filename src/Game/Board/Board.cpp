@@ -1,4 +1,5 @@
 #include "Board.hpp"
+#include "Obtainable/Cells/PropertyCell.hpp"
 
 
 void Board::initAllDecks(){

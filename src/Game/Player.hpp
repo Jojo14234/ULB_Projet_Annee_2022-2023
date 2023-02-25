@@ -10,7 +10,7 @@
 #include "BankAccount.hpp"
 #include "Board/Obtainable/Cells/Cell.hpp"
 #include "Board/Obtainable/Cards/JailCard.hpp"
-#include "Property.hpp"
+#include "Board/Obtainable/Cells/Property.hpp"
 #include "PLAYER_STATUS.hpp"
 #include "Dice.hpp"
 
