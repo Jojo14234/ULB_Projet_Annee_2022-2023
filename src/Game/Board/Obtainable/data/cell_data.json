@@ -1,0 +1,53 @@
+{
+	"Go to jail" : {"pos" : 30},
+	"Jail" : {"pos" : 10},
+	"Parking" : {"pos : 20"},
+
+	"DRAW CARD" : [
+			{
+				"pos" : 2,
+				"type" : "COMMUNITY DECK",
+			},
+			
+			{
+				"pos" : 7,
+				"type" : "LUCKY DECK",
+			},
+
+			{
+				"pos" : 17,
+				"type" : "COMMUNITY DECK",
+			},
+
+			{
+				"pos" : 22,
+				"type" : "LUCKY DECK",
+			},
+
+			{
+				"pos" : 33,
+				"type" : "COMMUNITY DECK",
+			},
+
+			{
+				"pos" : 36,
+				"type" : "LUCKY DECK",
+			}
+		],
+
+	"TAX" : [
+			{
+				"pos" : 4,
+				"type" : "impot",
+				"amount" : 200 
+			},
+
+			{
+				"pos" : 38,
+				"type" : "lux tax", 
+				"amount" : 100
+			}
+
+		]
+
+}
