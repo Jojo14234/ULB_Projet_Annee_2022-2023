@@ -1,7 +1,10 @@
 #ifndef _CONNECTION_CONTROLLER_HPP
 #define _CONNECTION_CONTROLLER_HPP
 
+#include <ncurses.h>
+
 #include "AbstractController.hpp"
+
 
 class ConnectionController : public AbstractController {
 
@@ -11,8 +14,11 @@ public:
 	
 	void handleInput(int ch) override {
 		// TODO: implement
+		switch (ch) {
+			case KEY_ENTER:
+				break;
+		}
 	}
-
 
 };
 

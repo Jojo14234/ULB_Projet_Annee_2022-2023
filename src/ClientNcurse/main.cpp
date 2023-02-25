@@ -1,6 +1,7 @@
+/*
 #include "Window.hpp"
 #include "Connection.hpp"
-/*
+
 int main() {
 	Window win(LINES, COLS, 0, 0);
     win.createBox("CAPITALI$T");
@@ -14,6 +15,8 @@ int main() {
     return 0;
 }
 */
+
+#include "MainWindow.hpp"
 
 int main() {
 	MainWindow win;	// Create a window
