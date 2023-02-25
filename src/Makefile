@@ -52,6 +52,6 @@ server: ${SERVER_BINS} ${SERVER_CM_BINS} ${SERVER_DB_BINS} ${SERVER_DB_FRIEND_BI
 	make clean
 
 ncurse: ${NCURSE_BINS}
-	${CXX} ${CXXFLAGS} -o ncurse $^ ${LDLIB}
+	${CXX} ${CXXFLAGS} -o ncurse $^ ${LDLIBS}
 	make clean
 
