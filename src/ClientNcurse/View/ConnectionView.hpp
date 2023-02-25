@@ -1,10 +1,10 @@
-#ifndef _GAME_VIEW_HPP
-#define _GAME_VIEW_HPP
+#ifndef _CONNECTION_VIEW_HPP
+#define _CONNECTION_VIEW_HPP
 
 #include "AbstractView.hpp"
 
 
-class GameView : public AbstractView {
+class ConnectionView : public AbstractView {
 
 public:
 

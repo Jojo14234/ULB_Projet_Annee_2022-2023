@@ -3,6 +3,7 @@
 
 #include "AbstractView.hpp"
 
+
 class MenuView : public AbstractView {
 
 public:
