@@ -47,10 +47,3 @@ void Window::createBox() {
     write("CAPITALIST", (LINES-1)/10, (COLS-1)/2 - 4);
     wrefresh(m_window);
 }
-
-int main() {
-    Window win(LINES, COLS, 0, 0);
-    win.createBox();
-    win.cgetch();
-    return 0;
-}

@@ -1,6 +1,8 @@
+#include "Window.hpp"
 
 int main() {
-	
-	
-	return 0;
+	Window win(LINES, COLS, 0, 0);
+    win.createBox();
+    win.cgetch();
+    return 0;
 }

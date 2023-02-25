@@ -5,16 +5,17 @@
 #include <string>
 
 #include "utils.hpp"
+#include "Window.hpp"
 
 
-class Button : puclic Window {
+class Button : public Window {
 
 	Point pos;
 	Point size;
 
 public:
 
-	Button( Point pos, Point size, std::string label):pos(pos), size(size) {}
+	Button(Point pos, Point size, std::string label): Window(size.y, size.x, pos.y, pos.x), pos(pos), size(size) {}
 
 	bool isClicked(Point point) const {
 		return pos.x <= point.x && point.x <= pos.x + size.x &&
