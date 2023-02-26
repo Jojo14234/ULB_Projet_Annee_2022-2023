@@ -21,11 +21,11 @@ public:
 		// TODO: implement
 		switch (STATE) {
 		case USERNAME:
-			if(ch == KEY_ENTER) { STATE = PASSWORD; }
+			if(ch == '\n') { STATE = PASSWORD; }
 			else { view->getUsername()->handleInput(ch); }
 			break;
 		case PASSWORD:
-			if(ch == KEY_ENTER) { STATE = DONE; }
+			if(ch == '\n') { STATE = DONE; }
 			else { view->getPassword()->handleInput(ch); }
 			break;
 		case DONE:

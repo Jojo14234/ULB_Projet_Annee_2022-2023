@@ -13,7 +13,7 @@ public:
 		// dessiner la boîte parent
 		Box::draw();
 		// dessiner le texte
-		mvwprintw(win, info.getY()+1, info.getX()+1, "%s", std::string(text.length(), '*').c_str());
+		mvwprintw(win, 1, this->getTextPos(), "%s", std::string(text.length(), '*').c_str());
 		this->refresh();
 	}
 

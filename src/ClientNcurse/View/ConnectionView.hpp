@@ -8,8 +8,8 @@
 
 class ConnectionView : public AbstractView {
 
-	InputBox username{ObjectInfo{5, 20, 4, (COLS-20)/2}};
-	HiddenInputBox password{ObjectInfo{5, 20, 14, (COLS -20)/2}};
+	InputBox username{ObjectInfo{3, 20, 4, (COLS-20)/2}};
+	HiddenInputBox password{ObjectInfo{3, 20, 9, (COLS -20)/2}};
 
 public:
 

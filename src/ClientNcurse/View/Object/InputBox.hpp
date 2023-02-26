@@ -14,9 +14,31 @@ protected:
 	std::string text="";
 	int cursor=0;
 
+	int getTextPos() { return info.getWidth()/2 - text.length()/2; }
+	int getCursorPos() { return info.getWidth()/2 + cursor; }
+
 public:
 
 	using Box::Box;
+
+	virtual void draw() override {
+		this->clear();
+		// dessiner la boîte parent
+		Box::draw();
+		// dessiner le texte
+		mvwprintw(win, 1, this->getTextPos()+1, "%s", text.c_str());
+		this->refresh();
+	}
+
+	void move() {
+		// dessiner le curseur
+		wmove(win, 1, this->getCursorPos());
+		this->refresh();
+	}
+
+	std::string getText() {
+		return text;
+	}
 
 	void handleInput(int ch) {
 		if (ch == KEY_BACKSPACE) {
@@ -43,24 +65,6 @@ public:
 				cursor++;
 			}
 		}
-	}
-
-	virtual void draw() {
-		// dessiner la boîte parent
-		Box::draw();
-		// dessiner le texte
-		mvwprintw(win, info.getY()+1, info.getX()+1, "%s", text.c_str());
-		this->refresh();
-	}
-
-	void move() {
-		// dessiner le curseur
-		wmove(win, info.getY()+2, info.getX()+2+cursor+1);
-		this->refresh();
-	}
-
-	std::string getText() {
-		return text;
 	}
 
 };
