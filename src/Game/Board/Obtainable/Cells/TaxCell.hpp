@@ -10,12 +10,13 @@
 class TaxCell: public Cell{
     
 	int tax_price;
+	std::string name;
 
 	void takeMoney();
 
 public:
     
-	TaxCell(int pos, int amount): Cell{pos}, tax_price{amount} {}
+	TaxCell(Json::Value info): Cell{info["pos"].asInt()}, tax_price{info["amount"].asInt()}, name{info["type"].asString()} {}
     
 	void action(Player* player);
 

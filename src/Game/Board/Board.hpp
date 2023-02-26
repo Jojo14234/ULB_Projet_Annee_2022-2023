@@ -19,15 +19,18 @@ class Board {
 	// cells
 	std::array<std::shared_ptr<Cell>, 40> cells;
 
-	// init all cells
-	void initAllCells();
-	
 	// init all decks
 	void initAllDecks();
 
+	// init all cells
+	void initAllCells();
+	void initAllLand();
+	void initOtherCells();
+	
+	
 public:
 
-	Board() { this->initAllCells(); this->initAllDecks(); }
+	Board() { this->initAllDecks(); this->initAllCells(); }
 
 };
 
