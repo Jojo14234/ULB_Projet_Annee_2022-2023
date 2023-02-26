@@ -8,14 +8,13 @@ int main() {
     win.cgetch();
     return 0;
 }
-
 int main() {
     Connection connection(LINES, COLS, 0, 0);
     connection.login();
     return 0;
 }
-*/
 
+*/
 #include "MainWindow.hpp"
 
 int main() {
@@ -23,3 +22,5 @@ int main() {
 	win.loop();	// Start the main loop
 	return 0;
 }
+//*/
+

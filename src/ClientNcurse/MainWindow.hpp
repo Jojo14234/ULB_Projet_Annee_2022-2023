@@ -13,7 +13,7 @@
 
 class MainWindow {
 
-	Window window{ObjectInfo{10, 10, 10, 10}, "CAPITALI$T"};
+	Window window{ObjectInfo{LINES/4, COLS/4, LINES/2, COLS/2}, "CAPITALI$T"};
 
 	Client model{};
 	MainController controller{&model};
@@ -29,6 +29,8 @@ public:
 		cbreak();	// Line buffering disabled, Pass on everything to me
 		noecho();	// Don't echo() while we do getch
 		keypad(stdscr, TRUE);	// I need that nifty F
+		refresh();	// Print it on to the real screen
+		this->draw();
 	}
 
 	~MainWindow() {
@@ -37,17 +39,16 @@ public:
 
 	void draw() {
 		window.draw();
-		view.draw(state);
+		//view.draw(state);
+		refresh();
 	}
 
 	void loop() {
 		int ch;
-		while (true) {
-			this->draw();
-			ch = getch();
-			std::cout << "Key pressed: " << ch << std::endl;	// DEBUG
+		while ( (ch=getch()) ) {
 			if ( ch == 27 ) break;	// ESC
-			controller.handleInput(state, ch);
+			//controller.handleInput(state, ch);
+			this->draw();
 		}
 	}
 

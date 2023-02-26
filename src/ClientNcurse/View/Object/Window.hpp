@@ -22,7 +22,7 @@ public:
 	void draw() {
 		Box::draw();
 		std::cout << "Drawing window" << std::endl;	// DEBUG
-		mvwprintw(win, 1, 1, title.c_str());
+		mvwprintw(win, (LINES-1)/12, (COLS-3)/2, title.c_str());
 		this->refresh();
 	}
 

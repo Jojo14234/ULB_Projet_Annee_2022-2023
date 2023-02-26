@@ -29,22 +29,23 @@ public:
 
 class ObjectInfo {
 
-	Position pos;
 	Size size;
+	Position pos;
 
 public:
 
-	ObjectInfo(Position pos, Size size) : pos(pos), size(size) {}
-	ObjectInfo(int x, int y, int height, int width) : pos(x, y), size(height, width) {}
+	ObjectInfo(Size size, Position pos) : size(size), pos(pos) {}
+	ObjectInfo(int height, int width, int y, int x) : size(height, width), pos(x, y) {}
 
 	// GETTERS
 	Position getPos() const { return pos; }
 	Size getSize() const { return size; }
+
+	int getWidth() const { return size.getX(); }
+	int getHeight() const { return size.getY(); }
 	
 	int getX() const { return pos.getX(); }
 	int getY() const { return pos.getY(); }
-	int getWidth() const { return size.getY(); }
-	int getHeight() const { return size.getX(); }
 
 };
 
