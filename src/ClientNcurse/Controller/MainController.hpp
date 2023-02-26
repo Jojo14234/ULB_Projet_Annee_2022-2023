@@ -6,12 +6,14 @@
 #include "ConnectionController.hpp"
 #include "MenuController.hpp"
 #include "GameController.hpp"
+#include "../View/MainView.hpp"
 #include "../utils.hpp"
 
 
 class MainController {
 
 	Client *model;
+	MainView *view;
 
 	ConnectionController connection{model};
 	MenuController menu{model};
@@ -19,7 +21,7 @@ class MainController {
 
 public:
 
-	explicit MainController(Client *model) : model(model) {}
+	MainController(Client *model, MainView* view) : model{model}, view{view} {}
 
 	void handleInput(STATE &state, int ch) {
 		switch (state) {

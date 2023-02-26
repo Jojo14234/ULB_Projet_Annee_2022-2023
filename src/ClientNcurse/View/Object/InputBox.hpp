@@ -36,12 +36,12 @@ public:
             }
         } else if (ch == KEY_RIGHT) {
             // l'utilisateur a appuyé sur la touche "Droite", on déplace le curseur à droite
-            if (cursor < text.length()) {
+            if (cursor < static_cast<int>(text.length())) {
                 cursor++;
             }
         } else if (isprint(ch)) {
             // l'utilisateur a entré un caractère imprimable, on l'ajoute au texte
-            if (text.length() < info.getWidth() - 2) {
+            if (static_cast<int>(text.length()) < info.getWidth() - 2) {
                 text.insert(cursor, 1, ch);
                 cursor++;
             }

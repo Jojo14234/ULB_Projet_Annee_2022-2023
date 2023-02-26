@@ -15,7 +15,7 @@ protected:
 
 public:
 
-    Box(ObjectInfo info) : AbstractViewObject(info) {
+    explicit Box(ObjectInfo info) : AbstractViewObject(info) {
         this->win = newwin(info.getHeight(), info.getWidth(), info.getY(), info.getX());
 		this->draw();
 	}

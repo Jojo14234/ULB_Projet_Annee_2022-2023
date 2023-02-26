@@ -16,9 +16,9 @@ class MainWindow {
 	Window win{ObjectInfo{COLS, LINES, 0, 0}, "CAPITALI$T"};
 
 	Client model{};
-	MainController controller{&model};
 	MainView view{&model};
-	
+	MainController controller{&model, &view};
+
 	// Initial state
 	STATE state=STATE::CONNECTION;
 
@@ -38,7 +38,7 @@ public:
 
 	void draw() {
 		this->win.draw();
-		//view.draw(state);
+		this->view.draw(state);
 		refresh();
 	}
 
@@ -46,7 +46,7 @@ public:
 		int ch;
 		while ( (ch=getch()) ) {
 			if ( ch == 27 ) break;	// ESC
-			//controller.handleInput(state, ch);
+			controller.handleInput(state, ch);
 			this->draw();
 		}
 	}
