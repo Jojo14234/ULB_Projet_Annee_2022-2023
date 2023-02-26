@@ -22,11 +22,11 @@ public:
 		// TODO: implement
 		switch (STATE) {
 		case USERNAME:
-			if(ch == '\n') { STATE = PASSWORD; }
+			if(ch == '\n') { this->STATE = PASSWORD; }
 			else { this->view->getUsernameInputBox()->handleInput(ch); }
 			break;
 		case PASSWORD:
-			if(ch == '\n') { STATE = DONE; }
+			if(ch == '\n') { this->STATE = DONE; }
 			else { this->view->getPasswordInputBox()->handleInput(ch); }
 			break;
 		case DONE:
@@ -35,8 +35,10 @@ public:
 				if (getmouse(&event) != OK) { break; }
 				if (event.bstate && BUTTON1_CLICKED) {
 					if ( this->view->getLoginButton()->isClicked(Position{event.x, event.y}) ) {
+						std::cout << "Entered login" << std::endl;
 						this->model->sendLogin(this->view->getUsernameInputBox()->getText(), this->view->getPasswordInputBox()->getText());
 					} else if ( this->view->getRegisterButton()->isClicked(Position{event.x, event.y}) ) {
+						std::cout << "Entered register" << std::endl;
 						this->model->sendRegister(this->view->getUsernameInputBox()->getText(), this->view->getPasswordInputBox()->getText());
 					}
 					// TODO: implement reception

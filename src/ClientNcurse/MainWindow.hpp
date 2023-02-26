@@ -28,6 +28,7 @@ public:
 		cbreak();	// Line buffering disabled, Pass on everything to me
 		noecho();	// Don't echo() while we do getch
 		keypad(stdscr, TRUE);	// I need that nifty F
+		mousemask(ALL_MOUSE_EVENTS, NULL);	// To get all mouse events
 		refresh();	// Print it on to the real screen
 		this->draw();
 		this->controller.move(state);
