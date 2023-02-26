@@ -5,9 +5,10 @@
 #include <cstring>
 
 #include "GameStats.hpp"
-#include "FriendList.hpp"
-#include "FriendRequestList.hpp"
+#include "Friend/FriendList.hpp"
+#include "Friend/FriendRequestList.hpp"
 #include "Database.hpp"
+
 
 class User {
 
@@ -21,23 +22,45 @@ class User {
 
 public:
 
-    User()=default;
-	User(int id, const char username[32], const char password[64]): id{id} {
-        strcpy(this->username, username);
-        strcpy(this->password, password);
-    }
+	friend class FriendList;
+	friend class FriendRequestList;
 
-    // To String
+	User()=default;
+	User(int id, const char username[32], const char password[64]): id{id} {
+		strcpy(this->username, username);
+		strcpy(this->password, password);
+	}
+
+	// Write Read
+	void write(FILE* file) {
+		fwrite(&(this->id), sizeof(int), 1, file);
+		fwrite(this->username, sizeof(char), 32, file);
+		fwrite(this->password, sizeof(char), 64, file);
+		this->stats.write(file);
+		this->friend_list.write(file);
+		this->friend_request_list.write(file);
+	}
+
+	void read(FILE* file) {
+		fread(&(this->id), sizeof(int), 1, file);
+		fread(this->username, sizeof(char), 32, file);
+		fread(this->password, sizeof(char), 64, file);
+		this->stats.read(file);
+		this->friend_list.read(file);
+		this->friend_request_list.read(file);
+	}
+
+	// To String
 	std::string toString() {
-        std::string user;
-        user += "Username : ";
-        user += this->getUsername();
-        user += " | Password : ";
-        user += this->getPassword();
-        user += " | Id : ";
-        user += std::to_string(this->getId());
-        return user;
-    }
+		std::string user;
+		user += "Username : ";
+		user += this->getUsername();
+		user += " | Password : ";
+		user += this->getPassword();
+		user += " | Id : ";
+		user += std::to_string(this->getId());
+		return user;
+	}
 	
 	// To compare
 	bool operator==(const User &other) const { return id == other.id; }
@@ -45,8 +68,8 @@ public:
 	// GETTERS
 	int getId() const { return id; }
 	const char* getUsername() const { return username; }
-    const char* getPassword() const { return password; }
-    const GameStats& getStats() const { return stats; }
+	const char* getPassword() const { return password; }
+	const GameStats& getStats() const { return stats; }
 	const FriendList& getFriendList() const { return friend_list; }
 	const FriendRequestList& getFriendRequestList() const { return friend_request_list; }
 
@@ -66,25 +89,17 @@ public:
 
 	// MODIFIERS
 	void updateStats(const GameStats &stats) { this->stats += stats; }
-	void addFriend(const int id) { this->friend_list.addFriend(id); }
-	/*void addFriend(const User &other) { this->friend_list.addFriend(other.id); }
-	void removeFriend(const int id) { this->friend_list.removeFriend(id); }
-	void removeFriend(const User &other) { this->friend_list.removeFriend(other.id); }*/
+	
+	// FRIEND INTERACTIONS
 	void sendRequest(int id, Database& db) { this->friend_request_list.sendRequest(this->getId(), id, db); }
 	void removeRequest(int id, Database& db) { this->friend_request_list.removeRequest(this->getId(), id, db); }
-	void receiveRequest(int id) { this->friend_request_list.receiveRequest(id); } //should be private
-	void removeRequest(int id) { this->friend_request_list.removeRequest(id); } //should be private
-	void removeSent(int id) { this->friend_request_list.acceptRequest(id); }
-
+	
 	void acceptRequest(int id, Database& db) { 
-		this->friend_request_list.acceptRequest(this->getId(), id, db);
+		this->friend_request_list.removeRequest(this->getId(), id, db);
 		this->friend_list.addFriend(this->getId(), id, db); 
 	}
-	void declineRequest(int id, Database& db) { 
-		this->friend_request_list.removeRequest(id, this->getId(), db); 
-	}
+	void removeFriend(const int id, Database& db) { this->friend_list.removeFriend(this->getId(), id, db); }
 
 };
-
 
 #endif

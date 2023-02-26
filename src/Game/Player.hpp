@@ -13,7 +13,7 @@
 #include "Board/Obtainable/Cells/Property.hpp"
 #include "PLAYER_STATUS.hpp"
 #include "Dice.hpp"
-
+#include "../utils/Configs.hpp"
 
 class Player {
 
@@ -21,9 +21,16 @@ class Player {
 
     Cell *current_cell;
 
-    std::vector<JailCard> GOOJ_cards;
+    int id;
 
-    std::vector<*Property> properties;
+    bool admin = false;
+
+    bool currently_playing = false;
+
+/*
+    //std::vector<JailCard> GOOJ_cards; waiting for Hawen
+
+    //std::vector<*Property> properties; waiting for Hawen
 
     PLAYER_STATUS status = FREE;
 
@@ -67,13 +74,27 @@ public:
     void move(int distance);
 
     //exectues exchange agreed to by the 2 players involved (should this be in this class?)
-    void exchange(Negociation negociation); //requires modifications to Negociation class compared to what is discribed in srd
+    //void exchange(Negociation negociation); //requires modifications to Negociation class compared to what is discribed in srd
 
 
-    std::vector<*Property> getProperties();
+    //std::vector<*Property> getProperties(); waiting for Hawen
 
     void declareBankruptcy();
+*/
+public:
+    int getIndexOnBoard();
 
+    Player(int id) : id{id} {}
+
+    void setAdmin();
+    bool isAdmin();
+
+    int getId();
+
+    bool isCurrentlyPLaying();
+    void setCurrentlyPlaying(bool playing);
+
+    bool pay(int amount);
 };
 
 

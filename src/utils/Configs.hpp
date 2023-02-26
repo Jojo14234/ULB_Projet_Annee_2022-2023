@@ -8,6 +8,8 @@
 // Server
 const auto IP = "127.0.0.1";
 const auto PORT = 8080;
+const auto STARTING_MONEY = 1500;
+const int BOARD_SIZE = 40;
 
 // AuthentificationManager constante
 const int username_min_length = 1;
@@ -15,6 +17,13 @@ const int username_max_length = 32;
 const int password_min_length = 4;
 const int password_max_length = 64;
 const char banned_character[] = {'-', '+', '*', '$', '&', '@', '?', '!'}; //'§', '£'
+
+
+// User
+constexpr int MAX_FRIENDS = 20;
+constexpr int MAX_REQUESTS = 20;
+
+
 
 
 // Queries
@@ -28,21 +37,28 @@ enum class QUERY_TYPE {
 	RANKING_TOP,
 	RANKING_POS,
 
-	FRIENDS_SHOW,
+	FRIENDS_LIST,
 	FRIENDS_REQUEST,
 	FRIENDS_ACCEPT,
 	FRIENDS_REFUSE,
 	FRIENDS_ADD,
 	FRIENDS_REMOVE,
 	
-	MESSAGE,
+	MESSAGE_SEND,
+	MESSAGE_SHOW,
+
 	DISCONNECT,
 
 	NONE
 };
 
 enum class GAME_QUERY_TYPE {
+    START,
+
+    END_TURN,
 	ROLL_DICE,
+
+	BUY,
 
 	ARG1, // temp
 	ARG2, // temp

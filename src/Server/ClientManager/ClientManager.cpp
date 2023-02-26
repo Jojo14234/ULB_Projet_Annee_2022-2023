@@ -26,8 +26,9 @@ void ClientManager::receive(QUERY_TYPE &query) {
 		
 		case QUERY_TYPE::REGISTER :	// same as under
 		case QUERY_TYPE::LOGIN :    // same as under
-		case QUERY_TYPE::MESSAGE : packet >> args.s1 >> args.s2; break;
+		case QUERY_TYPE::MESSAGE_SEND : packet >> args.s1 >> args.s2; break;
 		
+		case QUERY_TYPE::MESSAGE_SHOW :  // same as under
 		case QUERY_TYPE::FRIENDS_ACCEPT: // same as under
 		case QUERY_TYPE::FRIENDS_REFUSE: // same as under
 		case QUERY_TYPE::FRIENDS_ADD:    // same as under
@@ -37,17 +38,9 @@ void ClientManager::receive(QUERY_TYPE &query) {
 	}
 }
 
-void ClientManager::receive(GAME_QUERY_TYPE &query) {
-	sf::Packet packet;
+void ClientManager::receive(GAME_QUERY_TYPE &query, sf::Packet &packet) {
 	if (this->socket.receive(packet) !=  sf::Socket::Done) { throw ReadPipeServerException(); }
 	int tmp;
 	packet >> tmp;
 	query = static_cast<GAME_QUERY_TYPE>(tmp);
-	switch (query) {
-
-		case GAME_QUERY_TYPE::ARG1 : packet >> args.s1; break;
-		case GAME_QUERY_TYPE::ARG2 : packet >> args.s1 >> args.s2; break;
-
-		default : break;
-	}
 }

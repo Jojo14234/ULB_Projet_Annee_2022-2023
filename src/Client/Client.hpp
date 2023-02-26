@@ -15,6 +15,8 @@ class Client {
     sf::TcpSocket socket;
     bool connectedToAnAccount = false;
     bool inGame = false;
+    int account_id;
+
     ClientController controller;
     ConnectionUI ui;
 

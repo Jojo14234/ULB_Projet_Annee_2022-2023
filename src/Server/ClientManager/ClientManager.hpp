@@ -37,7 +37,7 @@ public:
 
 	// Receive infos from the client
 	void receive(QUERY_TYPE &query);
-	void receive(GAME_QUERY_TYPE &query);
+	void receive(GAME_QUERY_TYPE &query, sf::Packet &packet);
 
 	// To compare
 	bool operator==(const ClientManager& other) { return this->tid == other.tid; }
@@ -67,7 +67,7 @@ public:
 
 	void removeGameServer() { this->game_server = nullptr; }
 
-	void enterGameLoop() { this->game_server->clientLoop(*this); }
+	void enterGameLoop() { this->game_server->addPlayer(this->account->getId()); this->game_server->clientLoop(*this); }
 
 };
 

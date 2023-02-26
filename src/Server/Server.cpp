@@ -88,14 +88,15 @@ void Server::clientProcessQuery(ClientManager &client, QUERY_TYPE query) {
 		case QUERY_TYPE::RANKING_POS: this->clientProcessRankingPos(client); break;
 		case QUERY_TYPE::RANKING_TOP: this->clientProcessRankingTop(client); break;
 		// For friends
-		case QUERY_TYPE::FRIENDS_SHOW: this->clientProcessFriendsShow(client); break;
+		case QUERY_TYPE::FRIENDS_LIST: this->clientProcessFriendsShow(client); break;
 		case QUERY_TYPE::FRIENDS_REQUEST: this->clientProcessFriendsRequest(client); break;
 		case QUERY_TYPE::FRIENDS_ACCEPT: this->clientProcessFriendsAccept(client); break;
 		case QUERY_TYPE::FRIENDS_REFUSE: this->clientProcessFriendsRefuse(client); break;
 		case QUERY_TYPE::FRIENDS_ADD: this->clientProcessFriendsAdd(client); break;
 		case QUERY_TYPE::FRIENDS_REMOVE: this->clientProcessFriendsRemove(client); break;
 		// For message
-		case QUERY_TYPE::MESSAGE: this->clientProcessMessage(client); break;
+		case QUERY_TYPE::MESSAGE_SHOW: this->clientProcessShowMessage(client); break;
+		case QUERY_TYPE::MESSAGE_SEND: this->clientProcessSendMessage(client); break;
 		// For disconnect
 		case QUERY_TYPE::DISCONNECT: client.send("DISCONNECT"); break;
 		default : break;
@@ -194,46 +195,106 @@ void Server::clientProcessFriendsRequest(ClientManager &client) {
 }
 
 void Server::clientProcessFriendsAccept(ClientManager &client) {
-	client.inGame();	// pour pas avoir le warning unused parameter et empecher la compilation
-}
-
-void Server::clientProcessFriendsRefuse(ClientManager &client) {
-	client.inGame();	// pour pas avoir le warning unused parameter et empecher la compilation
-}
-
-void Server::clientProcessFriendsAdd(ClientManager &client) {
-	std::cout << client.getS1() << std::endl;
 	User* new_friend = database.getUser(client.getS1().c_str());
 	User* client_account = client.getAccount();
 	if (new_friend == nullptr) { 
-		client.send("Le pseudo entré n'existe pas."); return; 
+		client.send("Le pseudo entré n'existe pas.");
+	} else if (client_account->isFriendWith(*new_friend)) { 
+		client.send("Vous êtes déjà ami avec ce joueur !"); 
+	} else if ( ! client_account->hasReceiveFriendRequestFrom(*new_friend)) {
+		client.send("Ce joueur ne vous a pas demandé en ami!");
+	} else {
+		client_account->acceptRequest(new_friend->getId(), database);
+		std::string s = "Vous êtes désormais ami avec ";
+		s += new_friend->getUsername();
+		s += "!";
+		client.send(s);
 	}
-	if (client_account == new_friend){
-		client.send("Vous ne pouvez pas être ami avec vous même."); return;
+}
+
+void Server::clientProcessFriendsRefuse(ClientManager &client) {
+	User* new_friend = database.getUser(client.getS1().c_str());
+	std::cout << new_friend->getUsername() << std::endl;
+	User* client_account = client.getAccount();
+	std::cout << client_account->getUsername() << std::endl;
+	if (new_friend == nullptr) { 
+		client.send("Le pseudo entré n'existe pas.");
+	} else if ( ! client_account->hasReceiveFriendRequestFrom(*new_friend)) {
+		client.send("Ce joueur ne vous a pas demandé en ami!");
+	} else {
+		client_account->removeRequest(new_friend->getId(), database);
+		std::string s = "Vous avez refusé la demande d'ami de ";
+		s += new_friend->getUsername();
+		s += ".";
+		client.send(s);
 	}
-	if (client_account->isFriendWith(*new_friend)) { 
-		client.send("Vous êtes déjà ami avec ce joueur !"); return; 
-	}
-	if (client_account->hasSentFriendRequestTo(*new_friend)) { 
-		client.send("Vous avez déjà envoyé une demande d'ami à ce joueur !"); return; 
-	}
-	if (client_account->hasReceiveFriendRequestFrom(*new_friend)) {
+}
+
+void Server::clientProcessFriendsAdd(ClientManager &client) {
+	User* new_friend = database.getUser(client.getS1().c_str());
+	User* client_account = client.getAccount();
+	if (new_friend == nullptr) { 
+		client.send("Le pseudo entré n'existe pas.");
+	} else if (client_account == new_friend){
+		client.send("Vous ne pouvez pas être ami avec vous même.");
+	} else if (client_account->isFriendWith(*new_friend)) { 
+		client.send("Vous êtes déjà ami avec ce joueur !");
+	} else if (client_account->hasSentFriendRequestTo(*new_friend)) { 
+		client.send("Vous avez déjà envoyé une demande d'ami à ce joueur !");
+	} else if (client_account->hasReceiveFriendRequestFrom(*new_friend)) {
 		std::string s = "Cet utilisateur vous a déjà demandé en ami.\nVous êtes donc désormais ami avec ";
 		s += new_friend->getUsername();
-		s += " !";
+		s += "!";
 		client.send(s);
-		client.getAccount()->acceptRequest(new_friend->getId(), database);
+		client_account->acceptRequest(new_friend->getId(), database); return;
+	} else {
+		client_account->sendRequest(new_friend->getId(), database);
+		client.send("La demande d'ami a bien été envoyée !"); 
 	}
-
-	client.getAccount()->sendRequest(new_friend->getId(), database);
-	client.send("La demande d'ami a bien été envoyée !"); 
 }
 
 void Server::clientProcessFriendsRemove(ClientManager &client) {
-	client.inGame();	// pour pas avoir le warning unused parameter et empecher la compilation
+	User* new_friend = database.getUser(client.getS1().c_str());
+	User* client_account = client.getAccount();
+	if (new_friend == nullptr) { 
+		client.send("Le pseudo entré n'existe pas.");
+	} else if ( ! client_account->isFriendWith(*new_friend)) {
+		client.send("Vous n'êtes pas ami avec ce joueur !");
+	} else {
+		client_account->removeFriend(new_friend->getId(), database);
+		std::string s = "Vous n'êtes désormais plus ami avec ";
+		s += new_friend->getUsername();
+		s += ".";
+		client.send(s);
+	}
 }
 
 // For message
-void Server::clientProcessMessage(ClientManager &client) {
-	client.inGame();	// pour pas avoir le warning unused parameter et empecher la compilation
+
+void Server::clientProcessShowMessage(ClientManager &client) {
+	User* user = database.getUser(client.getS1().c_str());
+	Conversation* conv = database.getConv(client.getAccount(), user);
+	if (user == nullptr) {
+		client.send("Le pseudo entré n'existe pas.");
+	} else if (conv == nullptr) {
+		client.send("Aucun conversation avec ce joueur na été trouvée !");
+	} else {
+		std::string output = std::string{*conv};
+		client.send(output);
+	}
+}
+
+void Server::clientProcessSendMessage(ClientManager &client) {
+	User* user = database.getUser(client.getS1().c_str());
+	if (user == nullptr) {
+		client.send("Le pseudo entré n'existe pas.");
+	} else if (!client.getAccount()->isFriendWith(user->getId())) {
+		client.send("Vous n'êtes pas ami avec ce joueur !");
+	} else {
+		database.sendMsg(client.getAccount(), user, client.getS2());
+		std::string s = "Vous avez bien envoyé un message à ";
+		s += user->getUsername();
+		s += ".";
+		client.send(s);
+	}
 }
