@@ -13,9 +13,7 @@ public:
 		// dessiner la boîte parent
 		Box::draw();
 		// dessiner le texte
-		mvwprintw(win, 1, 1, "%s", std::string(text.length(), '*').c_str());
-		// dessiner le curseur
-		wmove(win, 1, cursor + 1);
+		mvwprintw(win, info.getY()+1, info.getX()+1, "%s", std::string(text.length(), '*').c_str());
 		this->refresh();
 	}
 

@@ -1,6 +1,6 @@
 #include "Connection.hpp"
 
-Connection::Connection(int height, int width, int starty, int startx) : Window{height, width, starty, startx} {};
+Connection::Connection(int height, int width, int starty, int startx) : Window{height, width, starty, startx} {}
 
 
 /*void Connection::login() {

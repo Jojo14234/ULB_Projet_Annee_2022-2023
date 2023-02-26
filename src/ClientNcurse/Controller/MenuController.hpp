@@ -23,6 +23,9 @@ public:
 		}
 	}
 
+	void move() {
+
+	}
 
 };
 

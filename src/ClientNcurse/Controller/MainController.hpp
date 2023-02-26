@@ -37,6 +37,20 @@ public:
 		}
 	}
 
+	void move(STATE &state) {
+		switch (state) {
+		case STATE::CONNECTION:
+			connection.move();
+			break;
+		case STATE::MENU:
+			menu.move();
+			break;
+		case STATE::GAME:
+			game.move();
+			break;
+		}
+	}
+
 };
 
 #endif

@@ -30,6 +30,7 @@ public:
 		keypad(stdscr, TRUE);	// I need that nifty F
 		refresh();	// Print it on to the real screen
 		this->draw();
+		this->controller.move(state);
 	}
 
 	~MainWindow() {
@@ -46,8 +47,9 @@ public:
 		int ch;
 		while ( (ch=getch()) ) {
 			if ( ch == 27 ) break;	// ESC
-			controller.handleInput(state, ch);
+			this->controller.handleInput(state, ch);
 			this->draw();
+			this->controller.move(state);
 		}
 	}
 
