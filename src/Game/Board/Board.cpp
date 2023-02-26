@@ -1,5 +1,5 @@
 #include "Board.hpp"
-#include "Obtainable/Cells/PropertyCell.hpp"
+#include "Obtainable/Cells/LandCell.hpp"
 
 
 void Board::initAllDecks(){
@@ -19,7 +19,21 @@ void Board::initAllLand(){
 	for (unsigned int i=0; i<property_list.size(); i++){
 		int pos = prop_list[i]["pos"].asInt();
 		Property prop = Property(prop_list[i]);	//ieme propriété dans json
-		this->cells[pos] = std::make_shared<PropertyCell>(pos, prop); 	//alt pour pos, Property.getPos() ?
+		this->cells[pos] = std::make_shared<LandCell>(pos, prop); 	//alt pour pos, Property.getPos() ?
+	}
+
+	Json::Value station_list = root["STATION"];
+	for (unsigned int=0; station_list.size(); i++) {
+		int pos = station_list[i]["pos"].asInt();
+		Station stat = Station(station_list[i]);
+		this->cells[pos] = std::make_shared<LandCell>(pos, stat);
+	}
+
+	Json::Value company_list = root["COMPANY"];
+	for (unsigned int=0; station_list.size(); i++) {
+		int pos = station_list[i]["pos"].asInt();
+		Company comp = Station(company_list[i]);
+		this->cells[pos] = std::make_shared<LandCell>(pos, comp);
 	}
 }
 
