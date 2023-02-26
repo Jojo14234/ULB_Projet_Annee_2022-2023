@@ -14,8 +14,8 @@ protected:
 	std::string text="";
 	int cursor=0;
 
-	int getTextPos() { return info.getWidth()/2 - text.length()/2; }
-	int getCursorPos() { return info.getWidth()/2 + cursor; }
+	int getTextPos() { return info.getWidth()/2 - text.length()/2 -1; }
+	int getCursorPos() { return this->getTextPos() + cursor +1; }
 
 public:
 
@@ -61,7 +61,6 @@ public:
 			// l'utilisateur a entré un caractère imprimable, on l'ajoute au texte
 			if (static_cast<int>(text.length()) < info.getWidth() - 2) {
 				text.insert(cursor, 1, ch);
-				std::cout << text << std::endl;
 				cursor++;
 			}
 		}
