@@ -17,8 +17,7 @@ public:
 
     Box(ObjectInfo info) : AbstractViewObject(info) {
         win = newwin(info.getHeight(), info.getWidth(), info.getY(), info.getX());
-		box(win, 0, 0);
-		this->refresh();
+		this->draw();
 	}
 
 	~Box() { delwin(win); }

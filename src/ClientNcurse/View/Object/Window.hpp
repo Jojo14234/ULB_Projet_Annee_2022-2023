@@ -1,6 +1,7 @@
 #ifndef _WINDOW_HPP
 #define _WINDOW_HPP
 
+#include <iostream>
 #include <ncurses.h>
 #include <string>
 
@@ -16,9 +17,12 @@ public:
 
 	Window(ObjectInfo info, std::string title): Box(info), title(title) {}
 
+	WINDOW* getWin() { return win; }
+
 	void draw() {
 		Box::draw();
-		mvwprintw(win, 0, 1, title.c_str());
+		std::cout << "Drawing window" << std::endl;	// DEBUG
+		mvwprintw(win, 1, 1, title.c_str());
 		this->refresh();
 	}
 

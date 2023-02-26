@@ -1,3 +1,4 @@
+/*
 #include "ConnectionView.hpp"
 
 ConnectionView::ConnectionView(int height, int width, int starty, int startx) : AbstractView(height, width, starty, startx) {}
@@ -112,3 +113,4 @@ void ConnectionView::registerUser() {
     }
     password = password_buffer;
 }
+*/

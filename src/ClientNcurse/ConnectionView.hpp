@@ -1,9 +1,10 @@
 #ifndef _CONNECTION_VIEW_HPP
 #define _CONNECTION_VIEW_HPP
 
-#include "AbstractView.hpp"
+#include <string>
 
-class ConnectionView : public AbstractView {
+
+class ConnectionView  {
 
 private:
 
@@ -14,13 +15,8 @@ private:
 
 public:
 
-	using AbstractView::AbstractView;
     ConnectionView(int height, int width, int starty, int startx);
     ~ConnectionView();
-
-	void draw() override {
-		// TODO: implement
-	}
 
     void loginUser();
     void registerUser();

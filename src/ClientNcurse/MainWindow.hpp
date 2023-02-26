@@ -1,6 +1,7 @@
 #ifndef _MAIN_WINDOW_HPP
 #define _MAIN_WINDOW_HPP
 
+#include <iostream>
 #include <ncurses.h>
 
 #include "View/Object/Window.hpp"
@@ -28,21 +29,25 @@ public:
 		cbreak();	// Line buffering disabled, Pass on everything to me
 		noecho();	// Don't echo() while we do getch
 		keypad(stdscr, TRUE);	// I need that nifty F
-		window.draw();
-		//view.draw(state);
-		//refresh();
 	}
 
 	~MainWindow() {
 		endwin();	// End curses mode
 	}
 
+	void draw() {
+		window.draw();
+		view.draw(state);
+	}
+
 	void loop() {
 		int ch;
-		while ( (ch = getch()) ) {
+		while (true) {
+			this->draw();
+			ch = getch();
+			std::cout << "Key pressed: " << ch << std::endl;	// DEBUG
 			if ( ch == 27 ) break;	// ESC
 			controller.handleInput(state, ch);
-			view.draw(state);
 		}
 	}
 
