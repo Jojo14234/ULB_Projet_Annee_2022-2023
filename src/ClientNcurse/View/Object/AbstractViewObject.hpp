@@ -13,9 +13,9 @@ protected:
 public:
 
 	AbstractViewObject(ObjectInfo info) : info(info) {}
-	AbstractViewObject(int x, int y, int width, int height) : info(x, y, width, height) {}
+	AbstractViewObject(int height, int width, int y, int x) : info(height, width, y, x) {}
 
-	ObjectInfo getInfo() const { return info; }
+	ObjectInfo getInfo() const { return this->info; }
 
 	virtual void draw() = 0;
 

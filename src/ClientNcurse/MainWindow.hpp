@@ -13,7 +13,7 @@
 
 class MainWindow {
 
-	Window window{ObjectInfo{LINES/4, COLS/4, LINES/2, COLS/2}, "CAPITALI$T"};
+	Window win{ObjectInfo{COLS, LINES, 0, 0}, "CAPITALI$T"};
 
 	Client model{};
 	MainController controller{&model};
@@ -25,7 +25,6 @@ class MainWindow {
 public: 
 
 	MainWindow() {
-		initscr();	// Start curses mode
 		cbreak();	// Line buffering disabled, Pass on everything to me
 		noecho();	// Don't echo() while we do getch
 		keypad(stdscr, TRUE);	// I need that nifty F
@@ -38,7 +37,7 @@ public:
 	}
 
 	void draw() {
-		window.draw();
+		this->win.draw();
 		//view.draw(state);
 		refresh();
 	}

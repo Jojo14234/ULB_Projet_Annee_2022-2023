@@ -16,18 +16,18 @@ protected:
 public:
 
     Box(ObjectInfo info) : AbstractViewObject(info) {
-        win = newwin(info.getHeight(), info.getWidth(), info.getY(), info.getX());
+        this->win = newwin(info.getHeight(), info.getWidth(), info.getY(), info.getX());
 		this->draw();
 	}
 
-	~Box() { delwin(win); }
+	~Box() { delwin(this->win); }
 
-    void refresh() { wrefresh(win); }
+    void refresh() { wrefresh(this->win); }
 	
-	void clear() { werase(win); wrefresh(win); }
+	void clear() { werase(this->win); wrefresh(this->win); }
 
 	virtual void draw() {
-		box(win, 0, 0);
+		box(this->win, 0, 0);
 		this->refresh();
 	}
 
