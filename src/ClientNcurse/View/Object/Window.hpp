@@ -15,7 +15,7 @@ class Window : public Box {
 
 public:
 
-	Window(ObjectInfo info, std::string title): Box(info), title(title) {}
+	Window(ObjectInfo info, std::string title): AbstractViewObject(info), Box(info), title(title) {}
 
 	void draw() {
 		Box::draw();

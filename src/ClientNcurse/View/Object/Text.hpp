@@ -10,11 +10,10 @@
 #include "ObjectInfo.hpp"
 
 
-class Text : public AbstractViewObject {
+class Text : public virtual AbstractViewObject {
 
 protected:
 
-    WINDOW* win;
 	std::vector<std::string> texts;
 
 public:
@@ -24,12 +23,7 @@ public:
 		this->draw();
 	}
 
-	~Text() { delwin(this->win); }
-
-    void refresh() { wrefresh(this->win); }
 	
-	void clear() { werase(this->win); wrefresh(this->win); }
-
 	virtual void draw() {
 		int i = 0;
 		for (auto txt : texts) i++, mvwprintw(win, i, 1, txt.c_str());

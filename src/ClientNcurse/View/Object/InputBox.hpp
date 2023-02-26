@@ -23,15 +23,12 @@ public:
 
 	virtual void draw() override {
 		this->clear();
-		// dessiner la boîte parent
 		Box::draw();
-		// dessiner le texte
 		mvwprintw(win, 1, this->getTextPos()+1, "%s", text.c_str());
 		this->refresh();
 	}
 
 	void move() {
-		// dessiner le curseur
 		wmove(win, 1, this->getCursorPos());
 		this->refresh();
 	}
