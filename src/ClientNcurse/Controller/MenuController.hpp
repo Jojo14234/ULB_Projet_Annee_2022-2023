@@ -23,7 +23,7 @@ public:
 		}
 	}
 
-	void move() {
+	void move() override {
 
 	}
 

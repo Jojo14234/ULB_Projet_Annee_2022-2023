@@ -33,7 +33,7 @@ public:
 		}
 	}
 
-	void move() {
+	void move() override {
 		switch (STATE) {
 		case USERNAME:
 			view->getUsername()->move();
