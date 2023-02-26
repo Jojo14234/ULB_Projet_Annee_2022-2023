@@ -15,9 +15,9 @@ class MainController {
 	Client *model;
 	MainView *view;
 
-	ConnectionController connection{model};
-	MenuController menu{model};
-	GameController game{model};
+	ConnectionController connection{model, view->getConnection()};
+	MenuController menu{model, view->getMenu()};
+	GameController game{model, view->getGame()};
 
 public:
 

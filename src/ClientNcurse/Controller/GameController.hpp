@@ -4,13 +4,16 @@
 #include <ncurses.h>
 
 #include "AbstractController.hpp"
+#include "../View/GameView.hpp"
 
 
 class GameController : public AbstractController {
 
+	GameView* view;
+
 public:
 
-	using AbstractController::AbstractController;
+	GameController(Client* model, GameView* view) : AbstractController(model), view(view) {}
 	
 	void handleInput(int ch) override {
 		// TODO: implement

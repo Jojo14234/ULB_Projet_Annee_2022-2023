@@ -52,9 +52,9 @@ public:
         // dessiner la boîte parent
         Box::draw();
         // dessiner le texte
-        mvwprintw(win, 1, 1, "%s", text.c_str());
+        mvwprintw(win, info.getY(), info.getX(), "%s", text.c_str());
         // dessiner le curseur
-        wmove(win, 1, cursor + 1);
+        wmove(win, info.getY(), info.getX() + cursor + 1);
 		this->refresh();
 	}
 

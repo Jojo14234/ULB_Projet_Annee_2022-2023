@@ -34,6 +34,12 @@ public:
 		}
 	}
 
+	// GETTERS
+	ConnectionView* getConnection() { return &connection; }
+	MenuView* getMenu() { return &menu; }
+	GameView* getGame() { return &game; }
+
+
 };
 
 #endif

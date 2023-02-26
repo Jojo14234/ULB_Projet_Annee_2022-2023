@@ -4,13 +4,16 @@
 #include <ncurses.h>
 
 #include "AbstractController.hpp"
+#include "../View/ConnectionView.hpp"
 
 
 class ConnectionController : public AbstractController {
 
+	ConnectionView* view;
+
 public:
 
-	using AbstractController::AbstractController;
+	ConnectionController(Client *model, ConnectionView *view) : AbstractController(model), view(view) {}
 	
 	void handleInput(int ch) override {
 		// TODO: implement
