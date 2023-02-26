@@ -5,6 +5,7 @@
 
 #include "AbstractController.hpp"
 #include "../View/ConnectionView.hpp"
+#include "../Client.hpp"
 
 
 class ConnectionController : public AbstractController {
@@ -22,24 +23,35 @@ public:
 		switch (STATE) {
 		case USERNAME:
 			if(ch == '\n') { STATE = PASSWORD; }
-			else { view->getUsername()->handleInput(ch); }
+			else { this->view->getUsernameInputBox()->handleInput(ch); }
 			break;
 		case PASSWORD:
 			if(ch == '\n') { STATE = DONE; }
-			else { view->getPassword()->handleInput(ch); }
+			else { this->view->getPasswordInputBox()->handleInput(ch); }
 			break;
 		case DONE:
-			break;
+			if (ch == KEY_MOUSE) {
+				MEVENT event;
+				if (getmouse(&event) != OK) { break; }
+				if (event.bstate && BUTTON1_CLICKED) {
+					if ( this->view->getLoginButton()->isClicked(Position{event.x, event.y}) ) {
+						this->model->sendLogin(this->view->getUsernameInputBox()->getText(), this->view->getPasswordInputBox()->getText());
+					} else if ( this->view->getRegisterButton()->isClicked(Position{event.x, event.y}) ) {
+						this->model->sendRegister(this->view->getUsernameInputBox()->getText(), this->view->getPasswordInputBox()->getText());
+					}
+					// TODO: implement reception
+				}
+			}
 		}
 	}
 
 	void move() override {
 		switch (STATE) {
 		case USERNAME:
-			view->getUsername()->move();
+			view->getUsernameInputBox()->move();
 			break;
 		case PASSWORD:
-			view->getPassword()->move();
+			view->getPasswordInputBox()->move();
 			break;
 		case DONE:
 			break;

@@ -14,6 +14,8 @@ public:
 
 	TextButton(ObjectInfo info, std::string text) : Box(info), TextBox(info, text), Button(info) {}
 
+	void draw() override { TextBox::draw(); }
+
 };
 
 #endif
