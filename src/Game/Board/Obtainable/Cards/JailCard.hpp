@@ -17,6 +17,7 @@ private:
 public:
 
 	void action(Player* player);	//le player qui tire cette carte devient le owner
+									//si elle est re tiré mais qu'elle a deja un owner, re tiré une autre carte
 									//il peut utiliser la carte (sortir prison ou vente) et perds cette carte
 
 };

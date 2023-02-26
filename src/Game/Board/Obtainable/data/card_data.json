@@ -14,8 +14,7 @@
                 "amount" : 0,
                 "amount house" : 40,
                 "amount hotel" : 100,
-                "from" : "Self",
-                "to" : "Bank"
+                "receive" : 0,
             },
             
 			{
@@ -23,8 +22,7 @@
                 "amount" : 10,
                 "amount house" : 0,
                 "amount hotel" : 0,
-                "from" : "Bank",
-                "to" : "Self"
+                "receive" : 1,
             },
             
             {
@@ -32,8 +30,7 @@
                 "amount" : 50,
                 "amount house" : 0,
                 "amount hotel" : 0,
-                "from" : "Bank",
-                "to" : "Self"
+                "receive" : 1,
             },
             
             {
@@ -41,35 +38,31 @@
                 "amount" : 0,
                 "amount house" : 25,
                 "amount hotel" : 80,
-                "from" : "Self",
-                "to" : "Bank"
+                "receive" : 0,
             },
             
             {
                 "descript" :  "Amende pour excès de vitesse 20$.",
-                "amount" : -20,
+                "amount" : 20,
                 "amount house" : 0,
                 "amount hotel" : 0,
-                "from" : "Self",
-                "to" : "Bank"
+                "receive" : 0,
             },
             
             {
                 "descript" : "Payez pour frais de scolarité 150$" ,
-                "amount" : -150,
+                "amount" : 150,
                 "amount house" : 0,
                 "amount hotel" : 0,
-                "from" : "Self",
-                "to" : "Bank"
+                "receive" : 0,
             },
             
             {
                 "descript" :  "Amende pour ivresse 30$.",
-                "amount" : -30,
+                "amount" : 30,
                 "amount house" : 0,
                 "amount hotel" : 0,
-                "from" : "Self",
-                "to" : "Bank"
+                "receive" : 0,
             },
             
             {
@@ -77,8 +70,7 @@
                 "amount" : 150,
                 "amount house" : 0,
                 "amount hotel" : 0,
-                "from" : "Bank",
-                "to" : "Self"
+                "receive" : 1,
             }
             ],
 
@@ -143,17 +135,15 @@
                 "amount" : 200,
                 "amount house" : 0,
                 "amount hotel" : 0,
-                "from" : "Bank",
-                "to" : "Self"
+                "receive" : 1,
             },
             
             {
                 "descript" :  "Payez la note du médecin 50$",
-                "amount" : -50,
+                "amount" : 50,
                 "amount house" : 0,
                 "amount hotel" : 0,
-                "from" : "Self",
-                "to" : "Bank"
+                "receive" : 0,
             },
             
             {
@@ -161,8 +151,7 @@
                 "amount" : 50,
                 "amount house" : 0,
                 "amount hotel" : 0,
-                "from" : "Bank",
-                "to" : "Self"
+                "receive" : 1,
             },
             
             {
@@ -170,8 +159,7 @@
                 "amount" : 100,
                 "amount house" : 0,
                 "amount hotel" : 0,
-                "from" : "Bank",
-                "to" : "Self"
+                "receive" : 1,
             },
             
             {
@@ -179,8 +167,7 @@
                 "amount" : 15,
                 "amount house" : 0,
                 "amount hotel" : 0,
-                "from" : "Others",
-                "to" : "Self"
+                "frreceive" : 1,
             },
             
             {
@@ -188,8 +175,7 @@
                 "amount" : 40,
                 "amount house" : 0,
                 "amount hotel" : 0,
-                "from" : "Bank",
-                "to" : "Self"       
+                "receive" : 1,       
             },
             
             {
@@ -197,26 +183,23 @@
                 "amount" : 25,
                 "amount house" : 0,
                 "amount hotel" : 0,
-                "from" : "Bank",
-                "to" : "Self"        
+                "receive" : 1,        
             },
             
             {
                 "descript" :  "Payez votre Police d’Assurance 50$.",
-                "amount" : -50,
+                "amount" : 50,
                 "amount house" : 0,
                 "amount hotel" : 0,
-                "from" : "Self",
-                "to" : "Bank"        
+                "receive" : 0,       
             },
             
 			{
                 "descript" :  "Payez une amende de 15$ ou bien tirez une carte « CHANCE ».",
-                "amount" : -15,
+                "amount" : 15,
                 "amount house" : 0,
                 "amount hotel" : 0,
-                "from" : "Self",
-                "to" : "Bank"        
+                "receive" : 0,        
             },
             
             {
@@ -224,8 +207,7 @@
                 "amount" : 10,
                 "amount house" : 0,
                 "amount hotel" : 0,
-                "from" : "Bank",
-                "to" : "Self"       
+                "receive" : 1,       
             },
             
             {
@@ -233,8 +215,7 @@
                 "amount" : 100,
                 "amount house" : 0,
                 "amount hotel" : 0,
-                "from" : "Bank",
-                "to" : "Self"       
+                "receive" : 1,       
             }
         ],
 
