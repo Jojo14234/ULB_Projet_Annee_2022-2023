@@ -1,22 +1,22 @@
-#ifndef _GAME_PROPERTY_CELL_HPP
-#define _GAME_PROPERTY_CELL_HPP
+#ifndef _GAME_LAND_CELL_HPP
+#define _GAME_LAND_CELL_HPP
 
 #include <string>
 
 #include "Cell.hpp"
 #include "../../../Player.hpp"
-#include "Property.hpp"
+#include "Land.hpp"
 
 
-class PropertyCell : public Cell {
+class LandCell : public Cell {
 
-    Property property;
+    Land land;
     
 	bool isOwner();
 
 public: 
 
-	PropertyCell(int pos, Property prop): Cell{pos}, property{prop} {}
+	LandCell(int pos, Land land): Cell{pos}, Land{land} {}
     
 	void action(Player* player);
 
