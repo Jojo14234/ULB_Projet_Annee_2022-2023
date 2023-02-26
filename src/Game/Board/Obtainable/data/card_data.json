@@ -1,10 +1,11 @@
 {
-	"JailCard" : {
-		"free" : " Vous êtes libéré de prison. Cette carte peut être conservée jusqu’à ce qu’elle soit utilisée ou vendue.",
-		"jail" : "Allez en prison. Rendez-vous directement en prison. Ne franchissez pas par la case départ, ne touchez pas 200$."
-	},
 
 	"LUCKY DECK" : {
+
+        "Jail Card" : {
+
+                "descript" : "Vous êtes libéré de prison. Cette carte peut être conservée jusqu’à ce qu’elle soit utilisée ou vendue."
+            },
 		
 		"MoneyCard" : [
 
@@ -82,6 +83,13 @@
             ],
 
 		"CellCard" : [
+
+            {
+                "descript" : "Allez en prison. Rendez-vous directement en prison. Ne franchissez pas par la case départ, ne touchez pas 200$.",
+                "dest" : "10",
+                "money" : 0
+
+            },
         
 			{
                 "descript" : "Rendez-vous à la propriété bleu foncé 2",
@@ -122,6 +130,11 @@
     },
 
     "COMMUNITY DECK" : { 
+
+        "Jail Card" : {
+
+                "descript" : "Vous êtes libéré de prison. Cette carte peut être conservée jusqu’à ce qu’elle soit utilisée ou vendue.",
+            },
        
 		"MoneyCard" : [
         
@@ -226,6 +239,13 @@
         ],
 
 		"CellCard" : [
+
+            {
+                "descript" : "Allez en prison. Rendez-vous directement en prison. Ne franchissez pas par la case départ, ne touchez pas 200$.",
+                "dest" : "10",
+                "money" : 0
+
+            },
         
             { 
                 "descript" : "Placez-vous sur la case départ",

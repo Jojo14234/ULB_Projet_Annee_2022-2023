@@ -9,7 +9,8 @@
 
 
 class MoneyCard: public Card {
-
+	
+private:
 	int amount;
 	int amount_house;
 	int amount_hotel;
