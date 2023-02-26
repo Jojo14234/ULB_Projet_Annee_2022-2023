@@ -5,7 +5,7 @@
 #include "Player.hpp"
 #include "Dice.hpp"
 #include "BankAccount.hpp"
-#include "Board.hpp"
+#include "Board/Board.hpp"
 
 
 /*

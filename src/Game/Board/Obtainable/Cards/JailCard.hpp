@@ -5,8 +5,9 @@
 #include <json/json.h>
 
 #include "Card.hpp"
-#include "../../../Player.hpp"
 
+
+class Player;
 
 class JailCard: public Card {
 

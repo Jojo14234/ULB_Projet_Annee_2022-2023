@@ -6,7 +6,7 @@
 
 #include "../utils/Configs.hpp"
 #include "Player.hpp"
-#include "Board.hpp"
+#include "Board/Board.hpp"
 
 
 class Capitalist {

@@ -5,8 +5,9 @@
 
 #include "Cell.hpp"
 #include "JailCell.hpp"
-#include "../../../Player.hpp"
 
+
+class Player;
 
 class GoJailCell: public Cell{
 

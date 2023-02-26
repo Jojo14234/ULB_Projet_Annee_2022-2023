@@ -4,7 +4,9 @@
 #include <string>
 
 #include "Cell.hpp"
-#include "../../Player.hpp"
+
+
+class Player;
 
 
 class TaxCell: public Cell{

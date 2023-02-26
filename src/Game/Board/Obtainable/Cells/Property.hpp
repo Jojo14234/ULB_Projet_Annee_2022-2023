@@ -3,9 +3,10 @@
 
 #include <string>
 #include <array>
+#include <json/json.h>
 
-#include "../../../Player.hpp"
 
+class Player;
 
 enum class COLOR {BROWN=1, LIGHT_BLUE=2, PINK=3, ORANGE=4, RED=5, YELLOW=6, GREEN=7, DARK_BLUE=8};
 enum class CELL_STATUS {PAID, FREE, HYPOTEK};

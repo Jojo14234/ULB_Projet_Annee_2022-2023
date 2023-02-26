@@ -2,9 +2,10 @@
 #define _GAME_CELL_HPP
 
 #include "../Obtainable.hpp"
-#include "../../../Player.hpp"
 #include "Property.hpp"
 
+
+class Player;
 
 class Cell: public Obtainable {
 

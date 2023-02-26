@@ -4,9 +4,9 @@
 #include <string>
 
 #include "Cell.hpp"
-#include "../../../Player.hpp"
 #include "../Cards/CardDeck.hpp"
 
+class Player;
 
 class DrawableCardCell: public Cell {
 

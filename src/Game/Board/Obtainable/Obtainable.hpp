@@ -3,8 +3,8 @@
 
 #include <string>
 
-#include "../../Player.hpp"
 
+class Player;
 
 class Obtainable {
 

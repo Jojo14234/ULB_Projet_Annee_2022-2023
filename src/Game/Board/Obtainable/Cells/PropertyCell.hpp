@@ -4,9 +4,10 @@
 #include <string>
 
 #include "Cell.hpp"
-#include "../../../Player.hpp"
 #include "Property.hpp"
 
+
+class Player;
 
 class PropertyCell : public Cell {
 

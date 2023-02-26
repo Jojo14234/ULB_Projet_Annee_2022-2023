@@ -5,8 +5,9 @@
 #include <json/json.h>
 
 #include "../Obtainable.hpp"
-#include "../../../Player.hpp"
 
+
+class Player;
 
 class Card: public Obtainable {
 

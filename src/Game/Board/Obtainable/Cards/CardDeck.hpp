@@ -5,6 +5,7 @@
 #include <json/json.h>
 #include <array>
 #include <memory>
+#include <fstream>
 
 #include "Card.hpp"
 #include "MoneyCard.hpp"
