@@ -5,6 +5,8 @@
 #include "DrawChat.hpp"
 #include "DrawDice.hpp"
 #include "DrawMoney.hpp"
+#include "DrawInfo.hpp"
+#include "DrawChoice.hpp"
 
 int drawGame(int nplayer){
     int n_player = nplayer;
@@ -41,11 +43,40 @@ int drawGame(int nplayer){
     zone.changeMoney(4,980);
 
 
-    //creater chat
+
+    //create zone text
+    DrawChat chat;
+
+
+
+    //create zone for action + tester afficher des texte
+    vector<string> a {"j2 va sur jaune2","jaune2 est possédé par j3","j2 doit 300e à j3","j2 perd 300e","j3 reçoit 300e",
+                "j2 est dégouté", "c la hess", "j2 pense à mettre fin à sa vie", "j2 hésite", "que doit faire j2","aider le",
+                "voici les actions disponibles" };
+    DrawInfo info;
+
+    //exemple comment imprimer du texte ds la zone
+    for ( auto i : a){
+        info.printText(i);
+    }
+
+    //create zone for choice action
+    vector<string> b {"Finir le tour", "Placer des bâtiments","Négocier"};
+    DrawChoice choice(3,b);  //parametre: nombre de choix + liste de choix
+
+    //le choix est ensuite imprimé dans le zone de texte (info)
+    string res = "j2 décide de " + choice.getChoice();
+    info.printText(res);
+    //on supprime les choix à la fin
+    choice.delChoice();
+
+
+
+    //permettre d'ecrire dans un chat
     int key;
     bool flag = true;
 
-    DrawChat chat;
+    
     while(flag){
         chat.writeText();
         wmove(chat.getWin(), chat.getLine(), 1);

@@ -3,4 +3,3 @@ g++ DrawGame.cpp DrawBoard.cpp  DrawChat.cpp DrawDice.cpp  DrawMoney.cpp -o test
 
 Board_creator c'est l'ancien code
 
-DrawG est une tentative (echec) de faire de drawgame.cpp une classe, ne prend ps en compte
