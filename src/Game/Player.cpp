@@ -41,7 +41,7 @@ void Player::leaveGame() {
 }
 
 void Player::play() {
-    //tj pas compris à quoi ça servait
+    //tj pas compris à quoi ça servait, ça sert d'ailleurs à rien je pense après réflexion
     //je ne sais pas comment envoyer des possibilités en client, mais c'est probablement ce qu'il faut faire ici
 }
 
@@ -54,9 +54,6 @@ bool Player::buyProperty() {
     return true;
 }
 
-bool Player::pay(int amount) {
-    return bank_account.pay(amount);
-}
 
 void Player::move(int distance) {
     //current_cell->getPosition(); //n'existe pas dans le SRD!
@@ -79,3 +76,7 @@ int Player::getId() {return id;}
 
 bool Player::isCurrentlyPLaying() {return currently_playing;}
 void Player::setCurrentlyPlaying(bool playing) {currently_playing = playing;}
+
+bool Player::pay(int amount) {
+    return bank_account.pay(amount);
+}

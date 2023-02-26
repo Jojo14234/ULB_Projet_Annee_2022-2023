@@ -64,8 +64,13 @@ public:
         (current_player_index += 1) %= (players.size());
         players[current_player_index].setCurrentlyPlaying(true);
     }
-    Dice* getDice(){
-        return &dice;
+
+    int rollDice(){
+        return dice.roll();
+    }
+
+    bool rolledADouble(){
+        return dice.isDouble();
     }
 };
 

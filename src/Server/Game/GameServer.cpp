@@ -44,7 +44,6 @@ void GameServer::processGameQuery(ClientManager &client, GAME_QUERY_TYPE query){
             client.send("Cette action n'est pas permise étant donné que ça n'est pas votre tour.");
         }
     }
-
 }
 void GameServer::processStart(ClientManager &client) {
     if (!game.isRunning()){
@@ -68,8 +67,8 @@ void GameServer::processEndTurn(ClientManager &client) {
 
 void GameServer::processDiceRoll(ClientManager &client) {
     std::string output = "";
-    output += "You rolled a " + std::to_string(game.getDice()->roll()); //should technically have a method for this in capitalist, but flemme
-    if (game.getDice()->isDouble()){
+    output += "You rolled a " + std::to_string(game.rollDice()); //should technically have a method for this in capitalist, but flemme
+    if (game.rolledADouble()){
         output += " and it's a double!";
     }
     client.send(output);

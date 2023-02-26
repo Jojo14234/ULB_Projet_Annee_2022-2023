@@ -90,6 +90,8 @@ public:
 
     bool isCurrentlyPLaying();
     void setCurrentlyPlaying(bool playing);
+
+    bool pay(int amount);
 };
 
 
