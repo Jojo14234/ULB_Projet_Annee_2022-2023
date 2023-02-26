@@ -12,6 +12,8 @@ class TextBox : public virtual Box {
 
 	std::string text;
 
+	int getCenteredPos() { return (info.getWidth() - text.length()) / 2; }
+
 public:
 
     TextBox(ObjectInfo info, std::string text) : Box(info), text(text) {
@@ -20,7 +22,7 @@ public:
 
 	virtual void draw() override {
 		Box::draw();
-		mvwprintw(win, 1, 1, text.c_str());
+		mvwprintw(win, 1, this->getCenteredPos(), text.c_str());
 		this->refresh();
 	}
 

@@ -60,6 +60,11 @@ public:
 		}
 	}
 
+	void clear() {
+		STATE = USERNAME;
+		view->clear();
+	}
+
 };
 
 #endif

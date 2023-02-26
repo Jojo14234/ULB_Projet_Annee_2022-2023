@@ -15,7 +15,7 @@ class MainWindow {
 
 	Window win{ObjectInfo{LINES, COLS, 0, 0}, "CAPITALI$T"};
 
-	Client model{};
+	Client model;
 	MainView view{&model};
 	MainController controller{&model, &view};
 

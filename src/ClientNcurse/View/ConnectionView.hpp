@@ -11,26 +11,30 @@
 class ConnectionView : public AbstractView {
 
 	InputBox username_input_box{ObjectInfo{3, 20, 4, (COLS-20)/2}};
-	HiddenInputBox password_input_box{ObjectInfo{3, 20, 9, (COLS -20)/2}};
+	HiddenInputBox password_input_box{ObjectInfo{3, 20, 9, (COLS-20)/2}};
 
 	Text enter_username{ObjectInfo{3, 20, 2, (COLS-20)/2}, {"Nom d'utilisateur:"}};
 	Text enter_password{ObjectInfo{3, 20, 7, (COLS-20)/2}, {"   Mot de passe:"}};
 
-	TextButton login_button{ObjectInfo{3, 20, 13, (COLS-20)/2}, {"Se connecter"}};
-	TextButton register_button{ObjectInfo{3, 20, 18, (COLS-20)/2}, {"Créer un compte"}};
+	TextButton login_button{ObjectInfo{3, 20, 13, COLS/2 - 20 -2 }, {"Se connecter"}};
+	TextButton register_button{ObjectInfo{3, 20, 13, COLS/2 + 2}, {"Créer un compte"}};
 
 public:
 
 	using AbstractView::AbstractView;
 	
 	void draw() override {
-		// TODO: implement
 		username_input_box.draw();
 		password_input_box.draw();
         enter_username.draw();
         enter_password.draw();
 		login_button.draw();
 		register_button.draw();
+	}
+	
+	void clear() {
+		username_input_box.clear();
+		password_input_box.clear();
 	}
 
 	InputBox *getUsernameInputBox() { return &username_input_box; }
