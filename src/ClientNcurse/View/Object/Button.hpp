@@ -14,8 +14,8 @@ public:
 	using Box::Box;
 
 	bool isClicked(Position pos) const {
-		return info.getX() <= pos.getX() && pos.getX() <= info.getX() + info.getHeight() &&
-			info.getY() <= pos.getY() && pos.getY() <= info.getY() + info.getWidth();
+		return info.getX() <= pos.getX() && pos.getX() <= info.getX() + info.getWidth() &&
+			info.getY() <= pos.getY() && pos.getY() <= info.getY() + info.getHeight();
 	}
 
 };

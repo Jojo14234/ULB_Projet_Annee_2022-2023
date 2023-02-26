@@ -21,6 +21,7 @@ public:
 			case KEY_ENTER:
 				break;
 		}
+		if (view != nullptr) { view->draw(); }
 	}
 
 	void move() override {

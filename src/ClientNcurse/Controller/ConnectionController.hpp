@@ -33,10 +33,10 @@ public:
 			if (ch == KEY_MOUSE) {
 				MEVENT event;
 				if (getmouse(&event) != OK) { break; }
-				if (event.bstate && BUTTON1_CLICKED) {
+				if (event.bstate & BUTTON1_CLICKED) {
 					if ( this->view->getLoginButton()->isClicked(Position{event.x, event.y}) ) {
 						std::cout << "Entered login" << std::endl;
-						this->model->sendLogin(this->view->getUsernameInputBox()->getText(), this->view->getPasswordInputBox()->getText());
+						//this->model->sendLogin(this->view->getUsernameInputBox()->getText(), this->view->getPasswordInputBox()->getText());
 					} else if ( this->view->getRegisterButton()->isClicked(Position{event.x, event.y}) ) {
 						std::cout << "Entered register" << std::endl;
 						this->model->sendRegister(this->view->getUsernameInputBox()->getText(), this->view->getPasswordInputBox()->getText());
