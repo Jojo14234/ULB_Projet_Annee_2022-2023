@@ -13,7 +13,7 @@
 
 class MainWindow {
 
-	Window win{ObjectInfo{COLS, LINES, 0, 0}, "CAPITALI$T"};
+	Window win{ObjectInfo{LINES, COLS, 0, 0}, "CAPITALI$T"};
 
 	Client model{};
 	MainView view{&model};

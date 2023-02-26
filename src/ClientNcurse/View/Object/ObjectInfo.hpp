@@ -41,8 +41,8 @@ public:
 	Position getPos() const { return pos; }
 	Size getSize() const { return size; }
 
-	int getWidth() const { return size.getX(); }
-	int getHeight() const { return size.getY(); }
+	int getHeight() const { return size.getX(); }
+	int getWidth() const { return size.getY(); }
 	
 	int getX() const { return pos.getX(); }
 	int getY() const { return pos.getY(); }
