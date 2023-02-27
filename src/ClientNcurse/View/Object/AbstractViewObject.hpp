@@ -35,10 +35,11 @@ public:
 	ObjectInfo getInfo() const { return this->info; }
 
 	bool isVisible() const { return this->visible; }
-	
+	bool isHidden() const { return !this->visible; }
+
 	// SETTERS
 	void setVisible() { this->visible = true; }
-	void setInvisible() { this->visible = false; }
+	void setHidden() { this->visible = false; }
 
 };
 
