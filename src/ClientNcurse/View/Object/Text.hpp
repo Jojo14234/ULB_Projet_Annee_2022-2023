@@ -18,6 +18,8 @@ protected:
 	bool centered;
 	int getTextPos(int x) { return centered ? info.getWidth()/2 - texts[x].length()/2 -1 : 1; }
 
+	int startIdx() { return static_cast<int>(this->texts.size()) > info.getHeight() - 2 ? this->texts.size() - info.getHeight() + 2 : 0; }
+
 public:
 
     explicit Text(ObjectInfo info, std::initializer_list<std::string> sentences, bool centered=true) : AbstractViewObject(info), texts{sentences} , centered{centered} {
@@ -28,8 +30,10 @@ public:
 	
 	virtual void draw() {
 		if ( !this->isVisible() ) return;
-		int i = 0;
-		for (auto txt : texts) i++, mvwprintw(win, i, this->getTextPos(i-1), "%s", txt.c_str());
+		int line=0;
+		for (unsigned int i=this->startIdx(); i<this->texts.size(); i++) {
+			mvwprintw(win, ++line, this->getTextPos(i), "%s", this->texts[i].c_str());
+		}
 		this->refresh();
 	}
 

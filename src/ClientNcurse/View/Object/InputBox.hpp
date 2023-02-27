@@ -39,7 +39,7 @@ public:
 		this->refresh();
 	}
 
-	void move() {
+	virtual void move() {
 		wmove(win, 1, this->getCursorPos());
 		this->refresh();
 	}
@@ -47,6 +47,8 @@ public:
 	std::string getText() {
 		return text;
 	}
+
+	void resetInput() { this->text = ""; this->cursor = 0; }
 
 	void handleInput(int ch) {
 		if (ch == KEY_BACKSPACE || ch == KEY_DC || ch == 127) {

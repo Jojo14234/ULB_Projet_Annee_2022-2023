@@ -28,14 +28,14 @@ public:
 				else if ( this->view->getJoinInputBox()->isClicked(Position{event.x, event.y}) ) { this->STATE = JOIN; }
 				else { this->STATE = IDLE; }
 			} break;
-/*
-		case KEY_ENTER:
+
+		case '\n':
 			switch(this->STATE) {
-			case CONSOLE: break;
+			case CONSOLE: this->view->getConsoleInputBox()->addInput(); this->view->getConsoleInputBox()->addText("envoie au server"); break;
 			case JOIN: break;
 			case IDLE: break;
 			}
-*/		
+		
 		default:
 			switch (this->STATE) {
 				case CONSOLE: this->view->getConsoleInputBox()->handleInput(ch); break;
