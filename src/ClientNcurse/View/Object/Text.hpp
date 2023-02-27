@@ -20,7 +20,7 @@ protected:
 
 public:
 
-    explicit Text(ObjectInfo info, std::initializer_list<std::string> sentences, bool centered=true) : AbstractViewObject(info), texts{sentences} {
+    explicit Text(ObjectInfo info, std::initializer_list<std::string> sentences, bool centered=true) : AbstractViewObject(info), texts{sentences} , centered{centered} {
         this->win = newwin(info.getHeight(), info.getWidth(), info.getY(), info.getX());
 		this->draw();
 	}
