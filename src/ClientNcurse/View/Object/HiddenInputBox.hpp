@@ -7,7 +7,7 @@ class HiddenInputBox : public InputBox {
 
 public:
 	
-	using InputBox::InputBox;
+	explicit HiddenInputBox(ObjectInfo info) : AbstractViewObject(info), Box(info), InputBox(info) {}
 
 	void draw() override {
 		Box::draw();

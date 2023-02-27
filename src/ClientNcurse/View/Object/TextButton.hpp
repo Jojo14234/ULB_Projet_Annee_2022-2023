@@ -8,11 +8,11 @@
 #include "ObjectInfo.hpp"
 
 
-class TextButton : public TextBox, public Button {
+class TextButton : public Button, public TextBox {
 
 public:
 
-	TextButton(ObjectInfo info, std::string text) : AbstractViewObject(info), Box(info), Button(info), TextBox(info, text) {}
+	TextButton(ObjectInfo info, std::string text) : AbstractViewObject(info), Box(info), Text(info, {text}), Button(info), TextBox(info, text) {}
 
 	void draw() override { TextBox::draw(); }
 

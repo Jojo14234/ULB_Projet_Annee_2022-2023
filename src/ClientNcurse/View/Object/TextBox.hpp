@@ -10,7 +10,7 @@
 #include "ObjectInfo.hpp"
 
 
-class TextBox : public virtual Box, public Text {
+class TextBox : public virtual Box, public virtual Text {
 
 	int getCenteredPos() { return (info.getWidth() - texts[0].length()) / 2; }
 

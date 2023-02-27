@@ -7,7 +7,7 @@
 #include "ObjectInfo.hpp"
 
 
-class InputBox : public Box {
+class InputBox : public virtual Box {
 
 protected:
 	
@@ -19,7 +19,7 @@ protected:
 
 public:
 
-	using Box::Box;
+	explicit InputBox(ObjectInfo info) : AbstractViewObject(info), Box(info) {}
 
 	virtual void draw() override {
 		this->clear();
