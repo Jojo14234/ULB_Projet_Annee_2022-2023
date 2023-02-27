@@ -11,33 +11,33 @@
 class MenuView : public AbstractView {
 
 	InputButtonBox console{ObjectInfo{LINES-6, COLS/2-14, 3, COLS/2+6}};
-	InputButtonBox gameCode{ObjectInfo{3, 7, LINES/2 + 2, COLS/4 - 3}};
+	InputButtonBox join{ObjectInfo{3, 7, LINES/2 + 2, COLS/4 - 3}};
 	
 	TextButton disconnect{ObjectInfo{3, 20, LINES - 7, COLS/4 - 10}, "Deconnexion"};
 	
-	Text join{ObjectInfo{3, 22, LINES/2, COLS/4 - 11}, {"Rejoindre une partie:"} };
-	Text error{ObjectInfo{3, 25, LINES/2 + 4, COLS/4 - 12}, {"Aucune partie trouvée !"} };
-	TextBox informations{ObjectInfo{10, 30, 3, COLS/4 - 15}, "Liste des commandes:"};
-	Text commands{ObjectInfo{10, 30, 5, COLS/4 - 15}, {"/create", "/friends -> list, add, accept, decline, remove", "/rank -> top, pos", "/msg -> list, send"}};
+	Text join_txt{ObjectInfo{3, 22, LINES/2, COLS/4 - 11}, {"Rejoindre une partie:"} };
+	Text error_txt{ObjectInfo{3, 25, LINES/2 + 4, COLS/4 - 12}, {"Aucune partie trouvée !"} };
+	TextBox infos_txt{ObjectInfo{10, 30, 3, COLS/4 - 15}, "Liste des commandes:"};
+	Text commands_txt{ObjectInfo{10, 30, 5, COLS/4 - 15}, {"/create", "/friends -> list, add, accept, decline, remove", "/rank -> top, pos", "/msg -> list, send"}};
 
 public:
 
 	MenuView(Client* client) : AbstractView(client) {
-		this->error.setHidden();
+		this->error_txt.setHidden();
 	}
 	
 	void draw() override {
-		informations.draw();
-		commands.draw();
+		infos_txt.draw();
+		commands_txt.draw();
+		join_txt.draw();
 		join.draw();
-		gameCode.draw();
-		error.draw();
+		error_txt.draw();
 		disconnect.draw();
 		console.draw();
 	}
 
-	InputBox* getConsoleInputBox() { return &console; }	
-	InputBox* getGameCodeInputBox() { return &gameCode; }
+	InputButtonBox* getConsoleInputBox() { return &console; }	
+	InputButtonBox* getJoinInputBox() { return &join; }
 
 	TextButton* getDisconnectButton() { return &disconnect; }
 

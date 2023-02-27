@@ -9,8 +9,8 @@
 
 class MenuController : public AbstractController {
 
-	enum CONNECTION_STATE { USERNAME=0, PASSWORD=1, DONE=2 };
-	CONNECTION_STATE STATE = USERNAME;
+	enum MENU_STATE { CONSOLE=0, JOIN=1, IDLE=2 };
+	MENU_STATE STATE = IDLE;
 	MenuView* view;
 
 public:
@@ -19,11 +19,16 @@ public:
 	
 	void handleInput(int ch) override {
 		// TODO: implement
-		switch (ch) {
-			case KEY_ENTER:
-				break;
+		if ( ch == KEY_MOUSE ) {
+			MEVENT event;
+			if (getmouse(&event) != OK) { return; }
+			if (event.bstate & BUTTON1_CLICKED) {
+				if ( this->view->getConsoleInputBox()->isClicked(Position{event.x, event.y}) ) { this->STATE = CONSOLE; }
+				else if ( this->view->getJoinInputBox()->isClicked(Position{event.x, event.y}) ) { this->STATE = JOIN; }
+			}
+		} else {
+			
 		}
-		if (view != nullptr) { view->draw(); }
 	}
 
 	void move() override {
