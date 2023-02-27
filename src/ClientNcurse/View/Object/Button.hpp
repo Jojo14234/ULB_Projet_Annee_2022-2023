@@ -11,7 +11,7 @@ class Button : public virtual Box {
 
 public:
 
-	using Box::Box;
+	explicit Button(ObjectInfo info) : AbstractViewObject(info), Box(info) {}
 
 	bool isClicked(Position pos) const {
 		return info.getX() <= pos.getX() && pos.getX() <= info.getX() + info.getWidth() &&

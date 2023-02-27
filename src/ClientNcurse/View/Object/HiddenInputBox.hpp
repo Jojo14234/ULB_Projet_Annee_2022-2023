@@ -7,12 +7,10 @@ class HiddenInputBox : public InputBox {
 
 public:
 	
-	using InputBox::InputBox;
+	explicit HiddenInputBox(ObjectInfo info) : AbstractViewObject(info), Box(info), InputBox(info) {}
 
 	void draw() override {
-		// dessiner la boîte parent
 		Box::draw();
-		// dessiner le texte
 		mvwprintw(win, 1, this->getTextPos(), "%s", std::string(text.length(), '*').c_str());
 		this->refresh();
 	}

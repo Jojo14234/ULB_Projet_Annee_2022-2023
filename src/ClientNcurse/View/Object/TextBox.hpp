@@ -5,25 +5,22 @@
 #include <string>
 
 #include "Box.hpp"
+#include "Text.hpp"
+#include "AbstractViewObject.hpp"
 #include "ObjectInfo.hpp"
 
 
-class TextBox : public virtual Box {
+class TextBox : public virtual Box, public virtual Text {
 
-	std::string text;
-
-	int getCenteredPos() { return (info.getWidth() - text.length()) / 2; }
+	int getCenteredPos() { return (info.getWidth() - texts[0].length()) / 2; }
 
 public:
 
-    TextBox(ObjectInfo info, std::string text) : Box(info), text(text) {
-        win = newwin(info.getHeight(), info.getWidth(), info.getY(), info.getX());
-	}
+    TextBox(ObjectInfo info, std::string text) : AbstractViewObject(info), Box(info), Text(info, {text}) {}
 
 	virtual void draw() override {
 		Box::draw();
-		mvwprintw(win, 1, this->getCenteredPos(), text.c_str());
-		this->refresh();
+		Text::draw();
 	}
 
 };
