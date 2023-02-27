@@ -29,7 +29,8 @@ class DrawBoard{
     //size of a cell
     int height = 5; 
     int width = 11;
-    int posplayer = 2; //line in a box for players
+    int posplayer = 2; //line on the window for players
+    int posbuilding = 3; //line on the window for buildings
 
     const Point legend_pos {25,35};
     const Point legend_size {16,7};
@@ -60,10 +61,11 @@ class DrawBoard{
 
         void setPlayer(int cell, int player);
         void unsetPlayer(int cell,int player);
-        void setHouse(int cell);
-        void unsetHouse(int cell);
+        void clearBuilding(int cell);
+        void setPurchased(int cell);
+        void setHouse(int cell,int n_house);
         void setHotel(int cell);
-        void unsetHotel(int cell);
+        
 
 
         

@@ -120,7 +120,7 @@ void DrawBoard::createLegend(){
 
 }
 ////////////////////////////////////////////////////////////////
-//method for setting and unsetting player, house and hotel
+//method for setting and unsetting player
 void DrawBoard::setPlayer(int cell,int player){
     mvwprintw(board[listofcell[cell]], posplayer,player, to_string(player).c_str());
     wrefresh(board[listofcell[cell]]);  
@@ -128,6 +128,37 @@ void DrawBoard::setPlayer(int cell,int player){
  
 void DrawBoard::unsetPlayer(int cell,int player){
     mvwprintw(board[listofcell[cell]], posplayer,player," ");
+    wrefresh(board[listofcell[cell]]); 
+}
+
+//method to clear all buildings a cell
+void DrawBoard::clearBuilding(int cell){
+    for (int i = 1; i < width-1; i++){
+        mvwprintw(board[listofcell[cell]], posbuilding,i," ");
+    }
+    wrefresh(board[listofcell[cell]]); 
+}
+
+void DrawBoard::setPurchased(int cell){
+    clearBuilding(cell);
+    mvwprintw(board[listofcell[cell]], posbuilding,1,"POSSEDEE");
+    wrefresh(board[listofcell[cell]]); 
+    
+}
+
+void DrawBoard::setHouse(int cell,int n_house){
+    //n_house is the number of house on a cell after setting a house
+    clearBuilding(cell);
+    for (int i = 1; i <= n_house; i++){
+        mvwprintw(board[listofcell[cell]], posbuilding,i,"*");
+    }
+    wrefresh(board[listofcell[cell]]); 
+}
+     
+
+void DrawBoard::setHotel(int cell){
+    clearBuilding(cell);
+    mvwprintw(board[listofcell[cell]], posbuilding,1,"$");
     wrefresh(board[listofcell[cell]]); 
 }
 

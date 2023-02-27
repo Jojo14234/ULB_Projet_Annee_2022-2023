@@ -11,7 +11,7 @@
 //class to create a window with different choice and user can choose between the choices
 class DrawChoice{
     WINDOW* choicewin;
-    Point choice_size{62,10};
+    Point choice_size{62,5};
     Point choice_pos{125,41};
     int n_choice;
     int highlight = 0;

@@ -7,6 +7,7 @@
 #include "DrawMoney.hpp"
 #include "DrawInfo.hpp"
 #include "DrawChoice.hpp"
+#include "DrawBag.hpp"
 
 int drawGame(int nplayer){
     int n_player = nplayer;
@@ -22,8 +23,14 @@ int drawGame(int nplayer){
 
     //test - initialiser les joueurs
     for (int i = 1; i <= n_player; i++){
-        board.setPlayer(0,i); //(0,i) => 0 = n° box and i = player 
+        board.setPlayer(25,i); //(0,i) => 0 = n° box and i = player 
     }
+
+    //test - initialiser hotel, loyer à nu, maison
+    board.setPurchased(16);
+    board.setHouse(8,4);
+    board.setHotel(39);
+
 
     //create 2 dice + print them
     DrawDice dice1({50,25});
@@ -41,6 +48,11 @@ int drawGame(int nplayer){
 
     DrawMoney zone(n_player, 1000);
     zone.changeMoney(4,980);
+
+    //create zone for putting jail card
+    DrawBag bag;
+    bag.setJCardNumber(1);
+
 
 
 
@@ -85,12 +97,7 @@ int drawGame(int nplayer){
             flag = false;
             board.destroyBoard();
             endwin();       //restore default settings
-        }
-    }
-
-    
-
-}
+        }}}
 
 int main(){
     drawGame(6);
