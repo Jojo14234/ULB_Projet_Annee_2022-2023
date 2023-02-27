@@ -19,7 +19,7 @@ public:
 
 	explicit Card(Json::Value &info):description{info["descript"].asString()} {}
 
-	virtual ~Card();
+	virtual ~Card()=default;
 
 	virtual void action(Player* player)=0;
 

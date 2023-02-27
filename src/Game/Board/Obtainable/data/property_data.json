@@ -1,5 +1,5 @@
 {
-	"TRAIN STATION" : [
+	"STATION" : [
 			{
 				"name" : "gare 1",
 				"pos" : 5,
@@ -21,7 +21,7 @@
 			}
 		],
 	
-	"COMPANIES" : [
+	"COMPANY" : [
 			{
 				"name" : "compagnie électrique",
 				"pos" : 12,
@@ -33,7 +33,6 @@
 			}
 		],
 	
-	"No property" : 32,
 
 	"PROPERTY" : [
 

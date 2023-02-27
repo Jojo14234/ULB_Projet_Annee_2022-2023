@@ -1,10 +1,11 @@
 {
-	"JailCard" : {
-		"free" : " Vous êtes libéré de prison. Cette carte peut être conservée jusqu’à ce qu’elle soit utilisée ou vendue.",
-		"jail" : "Allez en prison. Rendez-vous directement en prison. Ne franchissez pas par la case départ, ne touchez pas 200$."
-	},
 
 	"LUCKY DECK" : {
+
+        "Jail Card" : {
+
+                "descript" : "Vous êtes libéré de prison. Cette carte peut être conservée jusqu’à ce qu’elle soit utilisée ou vendue."
+            },
 		
 		"MoneyCard" : [
 
@@ -13,8 +14,7 @@
                 "amount" : 0,
                 "amount house" : 40,
                 "amount hotel" : 100,
-                "from" : "Self",
-                "to" : "Bank"
+                "receive" : 0,
             },
             
 			{
@@ -22,8 +22,7 @@
                 "amount" : 10,
                 "amount house" : 0,
                 "amount hotel" : 0,
-                "from" : "Bank",
-                "to" : "Self"
+                "receive" : 1,
             },
             
             {
@@ -31,8 +30,7 @@
                 "amount" : 50,
                 "amount house" : 0,
                 "amount hotel" : 0,
-                "from" : "Bank",
-                "to" : "Self"
+                "receive" : 1,
             },
             
             {
@@ -40,35 +38,31 @@
                 "amount" : 0,
                 "amount house" : 25,
                 "amount hotel" : 80,
-                "from" : "Self",
-                "to" : "Bank"
+                "receive" : 0,
             },
             
             {
                 "descript" :  "Amende pour excès de vitesse 20$.",
-                "amount" : -20,
+                "amount" : 20,
                 "amount house" : 0,
                 "amount hotel" : 0,
-                "from" : "Self",
-                "to" : "Bank"
+                "receive" : 0,
             },
             
             {
                 "descript" : "Payez pour frais de scolarité 150$" ,
-                "amount" : -150,
+                "amount" : 150,
                 "amount house" : 0,
                 "amount hotel" : 0,
-                "from" : "Self",
-                "to" : "Bank"
+                "receive" : 0,
             },
             
             {
                 "descript" :  "Amende pour ivresse 30$.",
-                "amount" : -30,
+                "amount" : 30,
                 "amount house" : 0,
                 "amount hotel" : 0,
-                "from" : "Self",
-                "to" : "Bank"
+                "receive" : 0,
             },
             
             {
@@ -76,12 +70,18 @@
                 "amount" : 150,
                 "amount house" : 0,
                 "amount hotel" : 0,
-                "from" : "Bank",
-                "to" : "Self"
+                "receive" : 1,
             }
             ],
 
 		"CellCard" : [
+
+            {
+                "descript" : "Allez en prison. Rendez-vous directement en prison. Ne franchissez pas par la case départ, ne touchez pas 200$.",
+                "dest" : "10",
+                "money" : 0
+
+            },
         
 			{
                 "descript" : "Rendez-vous à la propriété bleu foncé 2",
@@ -122,6 +122,11 @@
     },
 
     "COMMUNITY DECK" : { 
+
+        "Jail Card" : {
+
+                "descript" : "Vous êtes libéré de prison. Cette carte peut être conservée jusqu’à ce qu’elle soit utilisée ou vendue.",
+            },
        
 		"MoneyCard" : [
         
@@ -130,17 +135,15 @@
                 "amount" : 200,
                 "amount house" : 0,
                 "amount hotel" : 0,
-                "from" : "Bank",
-                "to" : "Self"
+                "receive" : 1,
             },
             
             {
                 "descript" :  "Payez la note du médecin 50$",
-                "amount" : -50,
+                "amount" : 50,
                 "amount house" : 0,
                 "amount hotel" : 0,
-                "from" : "Self",
-                "to" : "Bank"
+                "receive" : 0,
             },
             
             {
@@ -148,8 +151,7 @@
                 "amount" : 50,
                 "amount house" : 0,
                 "amount hotel" : 0,
-                "from" : "Bank",
-                "to" : "Self"
+                "receive" : 1,
             },
             
             {
@@ -157,8 +159,7 @@
                 "amount" : 100,
                 "amount house" : 0,
                 "amount hotel" : 0,
-                "from" : "Bank",
-                "to" : "Self"
+                "receive" : 1,
             },
             
             {
@@ -166,8 +167,7 @@
                 "amount" : 15,
                 "amount house" : 0,
                 "amount hotel" : 0,
-                "from" : "Others",
-                "to" : "Self"
+                "frreceive" : 1,
             },
             
             {
@@ -175,8 +175,7 @@
                 "amount" : 40,
                 "amount house" : 0,
                 "amount hotel" : 0,
-                "from" : "Bank",
-                "to" : "Self"       
+                "receive" : 1,       
             },
             
             {
@@ -184,26 +183,23 @@
                 "amount" : 25,
                 "amount house" : 0,
                 "amount hotel" : 0,
-                "from" : "Bank",
-                "to" : "Self"        
+                "receive" : 1,        
             },
             
             {
                 "descript" :  "Payez votre Police d’Assurance 50$.",
-                "amount" : -50,
+                "amount" : 50,
                 "amount house" : 0,
                 "amount hotel" : 0,
-                "from" : "Self",
-                "to" : "Bank"        
+                "receive" : 0,       
             },
             
 			{
                 "descript" :  "Payez une amende de 15$ ou bien tirez une carte « CHANCE ».",
-                "amount" : -15,
+                "amount" : 15,
                 "amount house" : 0,
                 "amount hotel" : 0,
-                "from" : "Self",
-                "to" : "Bank"        
+                "receive" : 0,        
             },
             
             {
@@ -211,8 +207,7 @@
                 "amount" : 10,
                 "amount house" : 0,
                 "amount hotel" : 0,
-                "from" : "Bank",
-                "to" : "Self"       
+                "receive" : 1,       
             },
             
             {
@@ -220,12 +215,18 @@
                 "amount" : 100,
                 "amount house" : 0,
                 "amount hotel" : 0,
-                "from" : "Bank",
-                "to" : "Self"       
+                "receive" : 1,       
             }
         ],
 
 		"CellCard" : [
+
+            {
+                "descript" : "Allez en prison. Rendez-vous directement en prison. Ne franchissez pas par la case départ, ne touchez pas 200$.",
+                "dest" : "10",
+                "money" : 0
+
+            },
         
             { 
                 "descript" : "Placez-vous sur la case départ",

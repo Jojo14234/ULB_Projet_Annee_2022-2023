@@ -40,7 +40,7 @@ public:
 			this->card_list[idx] = std::make_shared<CellCard>(cell_card_set[i]);
 			idx++;
 		}
-		//ajout 2 cartes prison !!!
+		this->card_list[idx] = std::make_shared<JailCard>(root[name]["JailCard"]);
 	}
 
 };

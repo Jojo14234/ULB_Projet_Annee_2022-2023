@@ -6,6 +6,7 @@
 #include "Cell.hpp"
 #include "../Cards/CardDeck.hpp"
 
+
 class Player;
 
 class DrawableCardCell: public Cell {

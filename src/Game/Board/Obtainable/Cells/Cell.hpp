@@ -15,6 +15,8 @@ public:
 
 	Cell(int pos): position{pos} {};
     
+	virtual ~Cell()=default;
+
 	virtual void action(Player* player)=0;
 
 };
