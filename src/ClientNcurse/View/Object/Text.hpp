@@ -27,7 +27,7 @@ public:
 	virtual void draw() {
 		if ( !this->isVisible() ) return;
 		int i = 0;
-		for (auto txt : texts) i++, mvwprintw(win, i, 1, txt.c_str());
+		for (auto txt : texts) i++, mvwprintw(win, i, 1, "%s", txt.c_str());
 		this->refresh();
 	}
 

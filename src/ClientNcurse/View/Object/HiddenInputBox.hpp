@@ -11,6 +11,7 @@ public:
 
 	void draw() override {
 		if ( !this->isVisible() ) return;
+		this->clear();
 		Box::draw();
 		mvwprintw(win, 1, this->getTextPos(), "%s", std::string(text.length(), '*').c_str());
 		this->refresh();

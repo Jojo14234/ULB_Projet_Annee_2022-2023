@@ -20,7 +20,7 @@ public:
 	void draw() {
 		if ( !this->isVisible() ) return;
 		Box::draw();
-		mvwprintw(this->win, 1, (COLS - this->title.length())/2, this->title.c_str());
+		mvwprintw(this->win, 1, (COLS - this->title.length())/2, "%s", this->title.c_str());
 		this->refresh();
 	}
 

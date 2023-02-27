@@ -23,6 +23,7 @@ public:
 
 	virtual void draw() override {
 		if ( !this->isVisible() ) return;
+		this->clear();
 		Box::draw();
 		mvwprintw(win, 1, this->getTextPos()+1, "%s", text.c_str());
 		this->refresh();
@@ -38,18 +39,18 @@ public:
 	}
 
 	void handleInput(int ch) {
-		if (ch == KEY_BACKSPACE) {
-			// l'utilisateur a appuyé sur la touche "Retour", on supprime le caractère précédent
+		if (ch == KEY_BACKSPACE || ch == KEY_DC || ch == 127) {
+			// l'utilisateur a appuyé sur la touche "Supprimer/delete", on supprime le caractère précédent
 			if (cursor > 0) {
 				text.erase(cursor - 1, 1);
 				cursor--;
 			}
-		} else if (ch == KEY_LEFT) {
+		} else if (ch == KEY_LEFT || ch == 65361) {
 			// l'utilisateur a appuyé sur la touche "Gauche", on déplace le curseur à gauche
 			if (cursor > 0) {
 				cursor--;
 			}
-		} else if (ch == KEY_RIGHT) {
+		} else if (ch == KEY_RIGHT || ch == 65363) {
 			// l'utilisateur a appuyé sur la touche "Droite", on déplace le curseur à droite
 			if (cursor < static_cast<int>(text.length())) {
 				cursor++;
