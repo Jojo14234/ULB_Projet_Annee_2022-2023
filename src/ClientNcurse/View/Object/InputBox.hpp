@@ -22,7 +22,7 @@ public:
 	explicit InputBox(ObjectInfo info) : AbstractViewObject(info), Box(info) {}
 
 	virtual void draw() override {
-		this->clear();
+		if ( !this->isVisible() ) return;
 		Box::draw();
 		mvwprintw(win, 1, this->getTextPos()+1, "%s", text.c_str());
 		this->refresh();

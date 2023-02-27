@@ -12,6 +12,7 @@ public:
 	explicit InputButtonBox(ObjectInfo info) : AbstractViewObject(info), Box(info), InputBox(info), Button(info) {}
 
 	void draw() override {
+		if ( !this->isVisible() ) return;
 		InputBox::draw();
 	}
 

@@ -14,6 +14,7 @@ public:
     explicit Box(ObjectInfo info) : AbstractViewObject(info) {}
 
 	virtual void draw() {
+		if ( !this->isVisible() ) return;
 		box(this->win, 0, 0);
 		this->refresh();
 	}
