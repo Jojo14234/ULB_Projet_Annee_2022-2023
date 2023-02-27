@@ -19,20 +19,38 @@ public:
 	
 	void handleInput(int ch) override {
 		// TODO: implement
-		if ( ch == KEY_MOUSE ) {
+		switch(ch) {
+		case KEY_MOUSE:
 			MEVENT event;
-			if (getmouse(&event) != OK) { return; }
+			if (getmouse(&event) != OK) { break; }
 			if (event.bstate & BUTTON1_CLICKED) {
 				if ( this->view->getConsoleInputBox()->isClicked(Position{event.x, event.y}) ) { this->STATE = CONSOLE; }
 				else if ( this->view->getJoinInputBox()->isClicked(Position{event.x, event.y}) ) { this->STATE = JOIN; }
+				else { this->STATE = IDLE; }
+			} break;
+/*
+		case KEY_ENTER:
+			switch(this->STATE) {
+			case CONSOLE: break;
+			case JOIN: break;
+			case IDLE: break;
 			}
-		} else {
-			
+*/		
+		default:
+			switch (this->STATE) {
+				case CONSOLE: this->view->getConsoleInputBox()->handleInput(ch); break;
+				case JOIN: this->view->getJoinInputBox()->handleInput(ch); break;
+				case IDLE: break;
+			}
 		}
 	}
 
 	void move() override {
-
+		switch (this->STATE) {
+		case CONSOLE: this->view->getConsoleInputBox()->move(); break;
+		case JOIN: this->view->getJoinInputBox()->move(); break;
+		case IDLE: break;
+		}
 	}
 
 };

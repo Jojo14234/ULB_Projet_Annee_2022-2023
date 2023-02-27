@@ -17,6 +17,16 @@ protected:
 	int getTextPos() { return info.getWidth()/2 - text.length()/2 -1; }
 	int getCursorPos() { return this->getTextPos() + cursor +1; }
 
+
+
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wunused-parameter"
+	virtual bool inputChecker(char c) { return true; }
+#pragma GCC diagnostic pop
+
+
+	virtual void addChar(char c) { text.insert(cursor, 1, c); }
+
 public:
 
 	explicit InputBox(ObjectInfo info) : AbstractViewObject(info), Box(info) {}
@@ -58,7 +68,8 @@ public:
 		} else if (isprint(ch)) {
 			// l'utilisateur a entré un caractère imprimable, on l'ajoute au texte
 			if (static_cast<int>(text.length()) < info.getWidth() - 2) {
-				text.insert(cursor, 1, ch);
+				if (!this->inputChecker(ch)) { return; }
+				this->addChar(ch);
 				cursor++;
 			}
 		}

@@ -4,6 +4,7 @@
 #include "AbstractView.hpp"
 #include "Object/TextButton.hpp"
 #include "Object/InputButtonBox.hpp"
+#include "Object/IntInputButtonBox.hpp"
 #include "Object/TextBox.hpp"
 #include "Object/Text.hpp"
 
@@ -11,7 +12,7 @@
 class MenuView : public AbstractView {
 
 	InputButtonBox console{ObjectInfo{LINES-6, COLS/2-14, 3, COLS/2+6}};
-	InputButtonBox join{ObjectInfo{3, 7, LINES/2 + 2, COLS/4 - 3}};
+	IntInputButtonBox join{ObjectInfo{3, 7, LINES/2 + 2, COLS/4 - 3}};
 	
 	TextButton disconnect{ObjectInfo{3, 20, LINES - 7, COLS/4 - 10}, "Deconnexion"};
 	
@@ -37,7 +38,7 @@ public:
 	}
 
 	InputButtonBox* getConsoleInputBox() { return &console; }	
-	InputButtonBox* getJoinInputBox() { return &join; }
+	IntInputButtonBox* getJoinInputBox() { return &join; }
 
 	TextButton* getDisconnectButton() { return &disconnect; }
 
