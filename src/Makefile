@@ -8,11 +8,11 @@ OTHERFLAGS = -fanalyzer -Walloc-zero -Wcast-align \
 			-Wsuggest-final-types -Wsuggest-override -Wundef -Wuseless-cast -Wvolatile \
 			-Wformat=2  -Wzero-as-null-pointer-constant -fsanitize=address,leak #-Wswitch-default -Wswitch-enum
 #CXXFLAGS += ${OTHERGLAGS}
-LDLIBS 	 = -lpthread -lsfml-network -lsfml-system
+LDLIBS 	 = -lpthread -lsfml-network -lsfml-system -ljsoncpp
 
 ifneq ($(shell uname -s), Linux)
-	CXXFLAGS += -I/opt/homebrew/Cellar/sfml/2.5.1_2/include
-	LDLIBS   += -L/opt/homebrew/Cellar/sfml/2.5.1_2/lib
+	CXXFLAGS += -I/opt/homebrew/Cellar/sfml/2.5.1_2/include -I/opt/homebrew/Cellar/jsoncpp/1.9.5/include
+	LDLIBS   += -L/opt/homebrew/Cellar/sfml/2.5.1_2/lib -L/opt/homebrew/Cellar/jsoncpp/1.9.5/lib
 endif
 
 # Create Client objects
