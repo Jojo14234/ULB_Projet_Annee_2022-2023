@@ -17,7 +17,7 @@ class ConnectionView : public AbstractView {
 	Text enter_password{ObjectInfo{3, 20, 7, (COLS-20)/2}, {"   Mot de passe:"}};
 
 	TextButton login_button{ObjectInfo{3, 20, 13, COLS/2 - 20 -2 }, {"Se connecter"}};
-	TextButton register_button{ObjectInfo{3, 20, 13, COLS/2 + 2}, {"Créer un compte"}};
+	TextButton register_button{ObjectInfo{3, 20, 13, COLS/2 + 2}, {"Creer un compte"}};
 
 public:
 

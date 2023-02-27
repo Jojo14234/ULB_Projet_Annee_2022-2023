@@ -16,6 +16,8 @@ protected:
 
 	std::vector<std::string> texts;
 
+	int getTextPos(int x) { return info.getWidth()/2 - texts[x].length()/2 -1; }
+
 public:
 
     explicit Text(ObjectInfo info, std::initializer_list<std::string> sentences) : AbstractViewObject(info), texts{sentences} {
@@ -27,7 +29,7 @@ public:
 	virtual void draw() {
 		if ( !this->isVisible() ) return;
 		int i = 0;
-		for (auto txt : texts) i++, mvwprintw(win, i, 1, "%s", txt.c_str());
+		for (auto txt : texts) i++, mvwprintw(win, i, this->getTextPos(i-1), "%s", txt.c_str());
 		this->refresh();
 	}
 

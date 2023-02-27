@@ -9,6 +9,8 @@
 
 class MenuController : public AbstractController {
 
+	enum CONNECTION_STATE { USERNAME=0, PASSWORD=1, DONE=2 };
+	CONNECTION_STATE STATE = USERNAME;
 	MenuView* view;
 
 public:
