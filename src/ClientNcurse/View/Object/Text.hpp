@@ -15,12 +15,12 @@ class Text : public virtual AbstractViewObject {
 protected:
 
 	std::vector<std::string> texts;
-
-	int getTextPos(int x) { return info.getWidth()/2 - texts[x].length()/2 -1; }
+	bool centered;
+	int getTextPos(int x) { return centered ? info.getWidth()/2 - texts[x].length()/2 -1 : 1; }
 
 public:
 
-    explicit Text(ObjectInfo info, std::initializer_list<std::string> sentences) : AbstractViewObject(info), texts{sentences} {
+    explicit Text(ObjectInfo info, std::initializer_list<std::string> sentences, bool centered=true) : AbstractViewObject(info), texts{sentences} {
         this->win = newwin(info.getHeight(), info.getWidth(), info.getY(), info.getX());
 		this->draw();
 	}
