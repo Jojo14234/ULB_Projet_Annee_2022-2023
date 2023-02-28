@@ -22,7 +22,18 @@ public:
 
 	void addInput() { this->texts.push_back(this->getText()); this->resetInput();  }
 
-	void addText(const std::string &text) { this->texts.push_back(text); }
+	std::string getInput() { return this->texts.back(); }
+
+	void addText(const std::string &text) {
+		this->texts.push_back("");
+		for (auto c : text) {
+			if ( static_cast<int>(this->texts.back().length()) >= this->info.getWidth()-2 ) {
+				this->texts.push_back("");
+			}
+			if (c == '\n') { this->texts.push_back(""); }
+			else { this->texts.back() += c; }
+		} if (this->texts.back() == "") { this->texts.pop_back(); }
+	}
 
 	void move() override {
 		wmove(win, this->texts.size()+1, this->getText().length()+1);
