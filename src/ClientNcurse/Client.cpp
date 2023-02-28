@@ -55,83 +55,15 @@ void Client::sendJoinGame(int code) {
 	this->sendPacket(packet);
 }
 
-void Client::sendCreateGame() {
+
+bool Client::sendCommand(InputParser &parser) {
+	if (parser.getQueryType() == QUERY_TYPE::NONE) return false;
 	sf::Packet packet;
-	packet << static_cast<int>(QUERY_TYPE::CREATE_GAME);
+	packet << static_cast<int>(parser.getQueryType());
+	packet << parser.getNbParameters();
+	for (int i = 1; i < parser.getNbParameters(); i++) packet << parser[i];
 	this->sendPacket(packet);
-}
-
-// Rank
-
-void Client::sendRankTop() {
-	sf::Packet packet;
-	packet << static_cast<int>(QUERY_TYPE::RANKING_TOP);
-	this->sendPacket(packet);
-}
-
-void Client::sendRankPos() {
-	sf::Packet packet;
-	packet << static_cast<int>(QUERY_TYPE::RANKING_POS);
-	this->sendPacket(packet);
-}
-
-// Friends
-
-void Client::sendFriendsList() {
-	sf::Packet packet;
-	packet << static_cast<int>(QUERY_TYPE::FRIENDS_LIST);
-	this->sendPacket(packet);
-}
-
-void Client::sendFriendsRequest() {
-	sf::Packet packet;
-	packet << static_cast<int>(QUERY_TYPE::FRIENDS_REQUEST);
-	this->sendPacket(packet);
-}
-
-void Client::sendFriendsAccept(const std::string &username) {
-	sf::Packet packet;
-	packet << static_cast<int>(QUERY_TYPE::FRIENDS_ACCEPT);
-	packet << username;
-	this->sendPacket(packet);
-}
-
-void Client::sendFriendsDecline(const std::string &username) {
-	sf::Packet packet;
-	packet << static_cast<int>(QUERY_TYPE::FRIENDS_REFUSE);
-	packet << username;
-	this->sendPacket(packet);
-}
-
-void Client::sendFriendsAdd(const std::string &username) {
-	sf::Packet packet;
-	packet << static_cast<int>(QUERY_TYPE::FRIENDS_ADD);
-	packet << username;
-	this->sendPacket(packet);
-}
-
-void Client::sendFriendsRemove(const std::string &username) {
-	sf::Packet packet;
-	packet << static_cast<int>(QUERY_TYPE::FRIENDS_REMOVE);
-	packet << username;
-	this->sendPacket(packet);
-}
-
-// Messages
-
-void Client::sendMessageSend(const std::string &username, const std::string &message) {
-	sf::Packet packet;
-	packet << static_cast<int>(QUERY_TYPE::MESSAGE_SEND);
-	packet << username;
-	packet << message;
-	this->sendPacket(packet);
-}
-
-void Client::sendMessageRead(const std::string &username) {
-	sf::Packet packet;
-	packet << static_cast<int>(QUERY_TYPE::MESSAGE_SHOW);
-	packet << username;
-	this->sendPacket(packet);
+	return true;
 }
 
 

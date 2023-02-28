@@ -5,11 +5,12 @@
 
 #include "AbstractController.hpp"
 #include "../View/MenuView.hpp"
+#include "InputParser.hpp"
 
 
 class MenuController : public AbstractController {
 
-	enum MENU_STATE { CONSOLE=0, JOIN=1, IDLE=2 };
+	enum MENU_STATE { CONSOLE, JOIN, IDLE };
 	MENU_STATE STATE = IDLE;
 	MenuView* view;
 
@@ -31,17 +32,29 @@ public:
 
 		case '\n':
 			switch(this->STATE) {
-			case CONSOLE: this->view->getConsoleInputBox()->addInput(); this->view->getConsoleInputBox()->addText("envoie au server"); break;
-			case JOIN: break;
+			case CONSOLE: {
+				this->view->getConsoleInputBox()->addInput();
+				InputParser parser(this->view->getConsoleInputBox()->getInput());
+				std::string response;
+				if (this->model->sendCommand(parser)) { this->model->receive(response); }
+				else { response = "La commande n'existe pas"; }
+				this->view->getConsoleInputBox()->addText(response);
+				break; }
+			case JOIN: {
+				this->model->sendJoinGame(this->view->getJoinInputBox()->getValue());
+				std::string response;
+				this->model->receive(response);
+				break; }
+			
 			case IDLE: break;
-			}
+			} break;
 		
 		default:
 			switch (this->STATE) {
-				case CONSOLE: this->view->getConsoleInputBox()->handleInput(ch); break;
-				case JOIN: this->view->getJoinInputBox()->handleInput(ch); break;
-				case IDLE: break;
-			}
+			case CONSOLE: this->view->getConsoleInputBox()->handleInput(ch); break;
+			case JOIN: this->view->getJoinInputBox()->handleInput(ch); break;
+			case IDLE: break;
+			} break;
 		}
 	}
 
