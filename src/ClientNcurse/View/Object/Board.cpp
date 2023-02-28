@@ -77,7 +77,7 @@ void Board::createBoard(){
 //method to put name on each box
 void Board::setBoxName(){
 	for (int i =  0; i < gamebox_nb; i ++){
-		mvwprintw(board[listofcell[i]], pos_text1.getY(), pos_text1.getX(), (cellname[i]).c_str());
+		mvwprintw(board[listofcell[i]], pos_text1.getY(), pos_text1.getX(), "%s", (cellname[i]).c_str());
 		wrefresh(board[listofcell[i]]); 
 	}
 }
@@ -121,7 +121,7 @@ void Board::createLegend(){
 ////////////////////////////////////////////////////////////////
 //method for setting and unsetting player
 void Board::setPlayer(int cell,int player){
-	mvwprintw(board[listofcell[cell]], posplayer,player, std::to_string(player).c_str());
+	mvwprintw(board[listofcell[cell]], posplayer,player, "%s",std::to_string(player).c_str());
 	wrefresh(board[listofcell[cell]]);  
 }
  
