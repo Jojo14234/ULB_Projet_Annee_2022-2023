@@ -23,6 +23,7 @@ CLIENT_INPUTPARSER_BINS = $(patsubst Client/InputParser/%.cpp, Client/InputParse
 NCURSE_BINS = $(patsubst ClientNcurse/%.cpp, ClientNcurse/%.o, $(wildcard ClientNcurse/*.cpp))
 NCURSE_CONTROLLER_BINS = $(patsubst ClientNcurse/Controller/%.cpp, ClientNcurse/Controller/%.o, $(wildcard ClientNcurse/Controller/*.cpp))
 NCURSE_VIEW_BINS = $(patsubst ClientNcurse/View/%.cpp, ClientNcurse/View/%.o, $(wildcard ClientNcurse/View/*.cpp))
+NCURSE_VIEW_OBJECT_BINS = $(patsubst ClientNcurse/View/Object/%.cpp, ClientNcurse/View/Object/%.o, $(wildcard ClientNcurse/View/Object/*.cpp))
 
 # Create Server objects
 SERVER_BINS = $(patsubst Server/%.cpp, Server/%.o, $(wildcard Server/*.cpp))
@@ -53,7 +54,7 @@ server: ${SERVER_BINS} ${SERVER_CM_BINS} ${SERVER_DB_BINS} ${SERVER_DB_FRIEND_BI
 	${CXX} ${CXXFLAGS} -o server_capitalist $^ ${LDLIBS}
 	make clean
 
-ncurse: ${NCURSE_BINS} ${NCURSE_CONTROLLER_BINS} ${NCURSE_VIEW_BINS}
+ncurse: ${NCURSE_BINS} ${NCURSE_CONTROLLER_BINS} ${NCURSE_VIEW_BINS} ${NCURSE_VIEW_OBJECT_BINS}
 	${CXX} ${CXXFLAGS} -o ncurse $^ ${LDLIBS}
 	make clean
 

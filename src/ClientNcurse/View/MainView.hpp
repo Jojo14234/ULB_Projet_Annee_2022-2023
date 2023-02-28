@@ -14,7 +14,7 @@ class MainView {
 
 	ConnectionView connection{model};
 	MenuView menu{model};
-	GameView game{model};
+	GameView game{model, 6};
 
 public:
 
