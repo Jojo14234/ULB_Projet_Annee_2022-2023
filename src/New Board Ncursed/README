@@ -1,0 +1,5 @@
+J SAIS PS PK MON MAKEFILE NE MARCHE PS ALORS POUR COMPILER METTEZ ÇA
+g++ -std=c++20 DrawGame.cpp DrawBoard.cpp DrawChat.cpp DrawDice.cpp DrawMoney.cpp DrawInfo.cpp DrawChoice.cpp DrawBag.cpp -o test -lncurses
+
+Board_creator c'est l'ancien code
+
