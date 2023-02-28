@@ -27,6 +27,7 @@ public:
 		switch (state) {
 		case STATE::CONNECTION:
 			connection.handleInput(ch);
+			state = connection.getNewState();
 			break;
 		case STATE::MENU:
 			menu.handleInput(ch);

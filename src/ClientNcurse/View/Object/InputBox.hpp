@@ -17,8 +17,6 @@ protected:
 	int getTextPos() { return info.getWidth()/2 - text.length()/2 -1; }
 	int getCursorPos() { return this->getTextPos() + cursor +1; }
 
-
-
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Wunused-parameter"
 	virtual bool inputChecker(char c) { return true; }
@@ -44,6 +42,8 @@ public:
 		this->refresh();
 	}
 
+	virtual void reset() { this->text = ""; this->cursor = 0; }
+
 	std::string getText() {
 		return text;
 	}
@@ -51,7 +51,7 @@ public:
 	void resetInput() { this->text = ""; this->cursor = 0; }
 
 	void handleInput(int ch) {
-		if (ch == KEY_BACKSPACE || ch == KEY_DC || ch == 127) {
+		if (ch == KEY_BACKSPACE || ch == KEY_DC || ch == 127 || ch == 65288) {
 			// l'utilisateur a appuyé sur la touche "Supprimer/delete", on supprime le caractère précédent
 			if (cursor > 0) {
 				text.erase(cursor - 1, 1);

@@ -33,8 +33,10 @@ public:
 	}
 	
 	void clear() {
-		username_input_box.clear();
-		password_input_box.clear();
+		this->username_input_box.clear();
+		this->password_input_box.clear();
+		this->username_input_box.reset();
+		this->password_input_box.reset();
 	}
 
 	InputBox *getUsernameInputBox() { return &username_input_box; }

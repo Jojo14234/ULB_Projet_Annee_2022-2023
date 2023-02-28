@@ -32,6 +32,7 @@ public:
 		refresh();	// Print it on to the real screen
 		this->draw();
 		this->controller.move(state);
+		//state = STATE::MENU;
 	}
 
 	~MainWindow() {
