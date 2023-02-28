@@ -31,11 +31,11 @@ void SigHandler::handler(int sig) {
 }
 
 void SigHandler::mask() {
-	sigemptyset(mask_ptr);
-	sigaddset(mask_ptr, SIGINT);
-	sigprocmask(SIG_BLOCK, mask_ptr, NULL);
+	sigemptyset(&mask_ptr);
+	sigaddset(&mask_ptr, SIGINT);
+	sigprocmask(SIG_BLOCK, &mask_ptr, NULL);
 }
 
 void SigHandler::unmask() {
-	sigprocmask(SIG_UNBLOCK, mask_ptr, NULL);
+	sigprocmask(SIG_UNBLOCK, &mask_ptr, NULL);
 }

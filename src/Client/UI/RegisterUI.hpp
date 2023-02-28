@@ -1,11 +1,8 @@
-//
-// Created by Rémy Ryckeboer on 13/02/2023.
-//
-
-#ifndef SRC_REGISTERUI_HPP
-#define SRC_REGISTERUI_HPP
+#ifndef _CLIENT_REGISTERUI_HPP
+#define _CLIENT_REGISTERUI_HPP
 
 #include <iostream>
+
 
 class RegisterUI {
 public:
@@ -24,4 +21,4 @@ public:
 };
 
 
-#endif //SRC_REGISTERUI_HPP
+#endif

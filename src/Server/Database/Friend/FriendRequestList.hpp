@@ -1,5 +1,5 @@
-#ifndef _FRIEND_REQUEST_LIST_HPP
-#define _FRIEND_REQUEST_LIST_HPP
+#ifndef _SERVER_FRIEND_REQUEST_LIST_HPP
+#define _SERVER_FRIEND_REQUEST_LIST_HPP
 
 #include <vector>
 #include <string>
@@ -13,7 +13,11 @@ class Database;
 class FriendRequestList {
 	
 	AccessMonitor am;
+
+	// list of requests received
 	std::vector<int> received;
+
+	// List of requests sent
 	std::vector<int> sent;
 
 public:
@@ -33,7 +37,7 @@ public:
 
 	std::string toString(Database &db) const;
 
-	// Write Read
+	// WRITE READ
 	void write(FILE* file);
 	void read(FILE* file);
 	

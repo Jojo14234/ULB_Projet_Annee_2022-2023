@@ -1,13 +1,11 @@
-//
-// Created by Rémy Ryckeboer on 13/02/2023.
-//
-
-#ifndef SRC_CONNECTIONUI_HPP
-#define SRC_CONNECTIONUI_HPP
+#ifndef _CLIENT_CONNECTION_UI_HPP
+#define _CLIENT_CONNECTION_UI_HPP
 
 #include <iostream>
+
 #include "RegisterUI.hpp"
 #include "LoginUI.hpp"
+
 
 class ConnectionUI : public RegisterUI, public LoginUi {
 
@@ -60,4 +58,4 @@ public:
     }
 };
 
-#endif //SRC_CONNECTIONUI_HPP
+#endif

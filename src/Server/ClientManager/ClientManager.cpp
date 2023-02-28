@@ -7,12 +7,9 @@
 void ClientManager::send(std::string &input) {
 	sf::Packet packet;
 	packet << input;
-	if (this->socket.send(packet) !=  sf::Socket::Done) { throw WritePipeServerException(); }
-}
-
-void ClientManager::send(std::string &&input) {
-    std::string n_input = input;
-    send(n_input);
+	if (this->socket.send(packet) !=  sf::Socket::Done) {
+		throw WritePipeServerException();	// failed to write on the sokcet
+	}
 }
 
 void ClientManager::receive(QUERY_TYPE &query) {

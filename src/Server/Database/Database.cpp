@@ -1,3 +1,5 @@
+#include <algorithm>
+
 #include "Database.hpp"
 #include "User.hpp"
 #include "Chat/Conversation.hpp"
@@ -60,53 +62,51 @@ User* Database::getUser(const char username[32]) {
 
 std::string Database::getUsername(const int id) { return this->getUser(id)->getUsername(); }
 
-void Database::addUser(std::string username, std::string password) {
-	User user{this->getSize()+1, username.c_str(), password.c_str()};
+User* Database::addUser(std::string username, std::string password) {
 	this->user_am.lockWriter();
-	this->data.push_back(user);
+	User &user = this->data.emplace_back(this->getSize()+1, username.c_str(), password.c_str());
 	this->user_am.unlockWriter();
+	return &user;
 }
 
 void Database::print_in_file() {
 	std::ofstream file("clear.txt", std::ios::out | std::ios::trunc);
 	if (file) {
-		for (auto &user : this->data) {file << user.toString() << std::endl;}
+		for (auto &user : this->data) file << std::string{user} << std::endl;
 	}
 	file.close();
 }
 
-void bubble_sort(std::vector<User> &data) {
-    for (unsigned i=0; i < data.size(); i++) {
-        for (unsigned j=0; j < data.size() - i; j++) {
-            if (data[j].getStats() > data[j+1].getStats()) {
-                std::swap(data[j], data[j+1]);
-            }
-            // Dans le cas d'une égalité, on prend le score moyen (score/nb_game)
-            else if (data[j].getStats().getScore() == data[j+1].getStats().getScore()) {
-                if (data[j].getStats().calculateMiddleScore() > data[j+1].getStats().calculateMiddleScore()) {
-                    std::swap(data[j], data[j+1]);
-                }
-            }
-        }
-    }
+int Database::getRankingPos(User* user) {
+	int idx = 0;
+	for (auto &u : this->data) if (u.getStats() > user->getStats()) idx++;
+	return idx + 1;
 }
 
-void Database::getRanking(std::vector<User*> &ranking) {
-    // 1. Créer une copie de la db
-    std::vector<User> data_copy;
-    for (auto user : data) {data_copy.push_back(user);}
+void Database::emplace(const User* user, std::array<const User*, 5> &bests) {
+	for (short unsigned int i = 0; i < 5; i++) {
+		if (user->getStats() > bests[i]->getStats()) {
+			for (short unsigned int j = 5; j < i; j--) bests[j] = bests[j-1];
+			bests[i] = user;
+		}
+	}
+}
 
-    // 2. Trié ce nouveau vecteur
-    bubble_sort(data_copy);
-    // 3. Récupérer les id des 5 premiers dans la db trié
-    unsigned j=0;
-    while (j <= data_copy.size() || j < 5) {
-        // 4. Chercher dans la vraie db les 5 id
-        User* user = getUser(data_copy[data_copy.size()-j].getId());
-        // 5. Ajouter leur adresse à un vecteur
-        ranking.push_back(user);
-        j++;
-    }
+std::array<const User*, 5> Database::getRanking() {
+	std::array<const User*, 5> bests{nullptr, nullptr, nullptr, nullptr, nullptr};
+	this->user_am.lockReader();
+	for (short unsigned i = 0; i < 5; i++) bests[i] = &(this->data[i]);
+	std::sort(bests.begin(), bests.end(),
+		[](const User* a, const User* b) { 
+			if (a == nullptr || b == nullptr) return false;
+			if (a == nullptr) return true;
+			if (b == nullptr) return false;
+			return a->getStats() > b->getStats();
+		}
+	);
+	for (const auto &u : this->data) this->emplace(&u, bests);
+	this->user_am.unlockReader();
+	return bests;
 }
 
 void Database::addUser(User user) { this->data.push_back(user); }

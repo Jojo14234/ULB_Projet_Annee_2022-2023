@@ -1,5 +1,5 @@
-#ifndef SENTENCES_HPP
-#define SENTENCES_HPP
+#ifndef _SERVER_SENTENCES_HPP
+#define _SERVER_SENTENCES_HPP
 
 #include <SFML/Network.hpp>
 #include <string>

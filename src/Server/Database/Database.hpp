@@ -1,5 +1,5 @@
-#ifndef _DATABASE_HPP
-#define _DATABASE_HPP
+#ifndef _SERVER_DATABASE_HPP
+#define _SERVER_DATABASE_HPP
 
 #include <vector>
 #include <string>
@@ -24,6 +24,8 @@ class Database {
 
 	Conversation* createConv(User* sender, User* receiver);
 
+	void emplace(const User* user, std::array<const User*, 5> &bests);
+
 public:
 
 	Database(const char* path): path{path} { this->load(); }
@@ -38,8 +40,8 @@ public:
 
 	// Add a User
 	void addUser(User user);
-	// Create a user and add it
-    void addUser(std::string username, std::string password);
+	// Create a user, add and return it
+    User* addUser(std::string username, std::string password);
 	// Remove a User
 	void removeUser(User &user);
 	
@@ -55,7 +57,8 @@ public:
 	std::string getUsername(const int id);
 
     // GetRanking
-    void getRanking(std::vector<User*> &ranking);
+	int getRankingPos(User* user);
+    std::array<const User*, 5> getRanking();
 
 	// Chat
 	Conversation* getConv(User* sender, User* receiver);

@@ -11,10 +11,11 @@ void GameServer::clientLoop(ClientManager &client) {
 		sf::Packet packet;
 		// receive from client
 		client.receive(query, packet);
+
 		std::cout << "Receive: " << (int)query << " from client: " << client.getSocket().getRemoteAddress() << std::endl;
 
-        // call capitalist methods
-        processGameQuery(client, query);
+    // call capitalist methods
+    processGameQuery(client, query);
 
 		game.receiveQuery(query, packet);
 		//std::string output;

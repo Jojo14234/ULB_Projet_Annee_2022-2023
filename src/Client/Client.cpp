@@ -1,6 +1,5 @@
 #include <iostream>
 #include <string>
-#include <stdlib.h>     /* strtol */
 #include <SFML/Network.hpp>
 
 #include "AuthentificationManager.hpp"
@@ -16,18 +15,22 @@
 void Client::mainLoop() {
 	while (true) {
 		this->ui.connexionMsg();
-		while (not this->connectedToAnAccount) {
-			// Si l'utilisateur à fait /disconnect dans le menu de connexion, cela ferme l'application
+		while (not this->connected_to_an_account) {
+			// If the user want to quit
 			if (!this->connectionLoop()) { return; }
 		}
-		while (this->connectedToAnAccount) {
+		while (this->connected_to_an_account) {
 			MainInputParser parser = this->controller.getNewParsedInput();
+			// if bad input format
 			if (parser.getQueryType() == QUERY_TYPE::NONE) { continue; }
+			// send the input to the server
 			this->sendToServer(parser);
 			std::string output;
+			// wait the response from the server
 			this->receiveFromServer(output);
 			output = this->analyseServerResponse(output);
-			if (output == "GAME" or parser.getQueryType() == QUERY_TYPE::CREATE_GAME) { this->inGame = true; this->gameLoop(); }
+			// If need to enter the game loop
+			if (output == "GAME" or parser.getQueryType() == QUERY_TYPE::CREATE_GAME) { this->in_game = true; this->gameLoop(); }
 			else { std::cout << output << std::endl; }
 		}
 	}
@@ -38,7 +41,7 @@ void Client::mainLoop() {
 
 void Client::connectToServer() {
 	if (this->socket.connect(IP, PORT) != sf::Socket::Done) {
-		throw ConnectServerClientException();
+		throw ConnectServerClientException();	// can't connect to the server
 	}
 }
 
@@ -67,7 +70,9 @@ void Client::sendToServer(const MainInputParser &input) {
 
 		default : break;
 	}
-	if (this->socket.send(packet) != sf::Socket::Done) { throw WritePipeClientException(); }
+	if (this->socket.send(packet) != sf::Socket::Done) {
+		throw WritePipeClientException(); // can't write on the socket
+	}
 }
 
 void Client::sendToServer(const GameInputParser &input) {
@@ -80,13 +85,16 @@ void Client::sendToServer(const GameInputParser &input) {
 		
 		default : break;
 	}
-	if (this->socket.send(packet) != sf::Socket::Done) { throw WritePipeClientException(); }
+	if (this->socket.send(packet) != sf::Socket::Done) {
+		throw WritePipeClientException();  // can't write on the socket
+	}
 }
 
 void Client::receiveFromServer(std::string &output) {
 	sf::Packet packet;
-	if (this->socket.receive(packet) != sf::Socket::Done) { throw ReadPipeClientException(); }
-	packet >> output;
+	if (this->socket.receive(packet) != sf::Socket::Done) {
+		throw ReadPipeClientException();  // can't read on the socket
+	} packet >> output;
 }
 
 bool Client::checkAccountConnection(std::string &output, QUERY_TYPE query) {
@@ -100,48 +108,47 @@ bool Client::checkAccountConnection(std::string &output, QUERY_TYPE query) {
 
 std::string Client::analyseServerResponse(std::string &output) {
 	if (output == "DISCONNECT") {
-		this->connectedToAnAccount = false;
+		this->connected_to_an_account = false;	// disconnect from the account
 		return "Déconnexion de votre compte";
-	}
-	else if (output[0] == '1' && output[1] == '.') {
+	} else if (output[0] == '1' && output[1] == '.') {
 		return output + "Fin du classement";
-	}
-	else {
-		return output;
-	}
+	} else { return output; }
 }
 
 bool Client::connectionLoop() {
 	MainInputParser parser = this->controller.getNewParsedInput();
 	QUERY_TYPE query = parser.getQueryType();
-
 	if ((query == QUERY_TYPE::REGISTER || query == QUERY_TYPE::LOGIN) && parser.getNbParameters() == 2) {
-		//check la taille du pseudo et du mdp
+		// check the validity of the input
 		AuthentificationManager authentication{parser[1], parser[2]};
 		authentication.showErrorMessage(ui);
 		if (!authentication.isValid()) { return true; }
-		//envoyer au serveur pour check dans la db
+		// send the input to the server
 		this->sendToServer(parser);
 		std::string output;
+		// wait for response from the server
 		this->receiveFromServer(output);
-		connectedToAnAccount = this->checkAccountConnection(output, query);
+		this->connected_to_an_account = this->checkAccountConnection(output, query);
 	}
-	//L'utilisateur souhaite quitter l'application
+	// if the user want to quit
 	else if (query == QUERY_TYPE::DISCONNECT) {this->disconnectFromServer(); return false;}
-	//L'utilisateur a rentré une mauvaise commande
+	// if bad input
 	else { this->ui.badConnexionInput(); }
 	return true;
 }
 
 void Client::gameLoop() {
 	std::cout << "Vous entrez dans une partie" << std::endl;
-	while(this->inGame) {
+	while(this->in_game) {
 		GameInputParser parser = this->controller.getNewGameParsedInput();
 		if (parser.getQueryType() == GAME_QUERY_TYPE::NONE) { continue; }
+		// send the input to the server
 		this->sendToServer(parser);
 		std::string output;
+		// wait the response from the server
 		this->receiveFromServer(output);
-		if(output == "ENDGAME") { this->inGame = false; }
+		// if the game is finished
+		if(output == "ENDGAME") { this->in_game = false; }
 		else { std::cout << output << std::endl; }
 	}
 	std::cout << "Vous quitez la partie" << std::endl;
