@@ -38,8 +38,8 @@ public:
 
 	void sendMessage(std::string &output) { output = "coucou ici capitalist"; }
 
-    void addPlayer(int &id){
-        players.push_back(Player(id));
+    void addPlayer(ClientManager &client){
+        players.push_back(Player(client));
         if (players.size() == 1) {players[0].setAdmin(); players[0].setCurrentlyPlaying(true);}
     }
     void removePlayer(){

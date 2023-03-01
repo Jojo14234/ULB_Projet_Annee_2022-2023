@@ -74,7 +74,3 @@ void GameServer::processDiceRoll(ClientManager &client) {
     }
     client.send(output);
 }
-
-Player* GameServer::getLinkedPlayer(ClientManager &client){
-    return game.getPlayerByClientId(client.getAccount()->getId());
-}

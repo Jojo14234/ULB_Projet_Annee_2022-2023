@@ -4,7 +4,6 @@
 #include <vector>
 
 #include "GameCode.hpp"
-#include "../../Game/Player.hpp"
 #include "../../Game/Capitalist.hpp"
 #include "../../utils/Configs.hpp"
 
@@ -48,9 +47,7 @@ public:
     void processDiceRoll(ClientManager &client);
 
     //add Player object to players vector in Capitalist
-    void addPlayer(int id) {this->game.addPlayer(id);}
-    Player* getLinkedPlayer(ClientManager &client);
-
+    void addPlayer(ClientManager &client) {this->game.addPlayer(client);}
 
     };
 

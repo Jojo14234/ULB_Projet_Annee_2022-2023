@@ -7,6 +7,7 @@
 
 #include <vector>
 
+#include "../Server/ClientManager/ClientManager.hpp"
 #include "BankAccount.hpp"
 #include "Board/Obtainable/Cells/Cell.hpp"
 #include "Board/Obtainable/Cards/JailCard.hpp"
@@ -15,13 +16,14 @@
 #include "Dice.hpp"
 #include "../utils/Configs.hpp"
 
+
 class Player {
 
     BankAccount bank_account = BankAccount{STARTING_MONEY};
 
     Cell *current_cell;
 
-    int id;
+    ClientManager *client;
 
     bool admin = false;
 
@@ -84,7 +86,7 @@ public:
 public:
     int getIndexOnBoard();
 
-    Player(int id) : id{id} {}
+    Player(ClientManager &client) : client{client} {}
 
     void setAdmin();
     bool isAdmin();
