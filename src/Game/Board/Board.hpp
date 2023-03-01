@@ -3,6 +3,7 @@
 
 #include "Obtainable/Cards/CardDeck.hpp"
 #include "Obtainable/Cells/Cell.hpp"
+#include "../../utils/Configs.hpp"
 
 #include <array>
 #include <memory>
@@ -17,7 +18,7 @@ class Board {
 	CardDeck lucky_deck;
 	
 	// cells
-	std::array<std::shared_ptr<Cell>, 40> cells;
+	std::array<std::shared_ptr<Cell>, BOARD_SIZE> cells;
 
 	// init all decks
 	void initAllDecks();
@@ -31,6 +32,8 @@ class Board {
 public:
 
 	Board() { this->initAllDecks(); this->initAllCells(); }
+
+    Cell* getCellByIndex();
 
 };
 

@@ -26,11 +26,13 @@ class Player {
 
     ClientManager *client;
 
-    int id = 0;
+    int rolls_in_prison = 0;
 
     bool admin = false;
 
     bool currently_playing = false;
+
+    PLAYER_STATUS status = FREE;
 
 /*
     //std::vector<JailCard> GOOJ_cards; waiting for Hawen
@@ -94,8 +96,6 @@ public:
     void setAdmin();
     bool isAdmin();
 
-    int getId();
-
     ClientManager* getClient();
 
     bool isCurrentlyPLaying();
@@ -107,6 +107,16 @@ public:
     void move(Cell& cell);
 
     bool passedByStart(Cell &cell);
+
+    Cell* getCurrentCell();
+
+    void exitJail();
+    void goToJail(Cell &cell);
+    bool isInJail();
+
+    int getRollsInPrison();
+    void addRollInPrison();
+
 };
 
 

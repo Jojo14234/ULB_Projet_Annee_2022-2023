@@ -3,6 +3,8 @@
 
 #include "../Obtainable.hpp"
 #include "Property.hpp"
+#include "../../../Player.hpp"
+#include "../../../../Server/ClientManager/ClientManager.hpp"
 
 
 class Player;

@@ -6,8 +6,7 @@
 #include "Cell.hpp"
 #include "Property.hpp"
 
-
-class Player;
+// enfaite c'est plutot LANDCELL
 
 class PropertyCell : public Cell {
 

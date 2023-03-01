@@ -5,10 +5,14 @@ Dice::Dice(){}
 int Dice::roll(){
     dice1.roll();
     dice2.roll();
-    double_counter = dice1.getResult() + dice2.getResult();
-    return double_counter;
+    result = dice1.getResult() + dice2.getResult();
+    double_counter++;
+    return result;
 }
 
+int Dice::getResults(){
+    return result;
+}
 int Dice::getDice1(){
     return dice1.getResult();
 }

@@ -15,6 +15,7 @@ class Capitalist {
     int current_player_index = 0;
     bool running = false;
 
+    Board board;
     Dice dice;
 
 public:
@@ -82,6 +83,12 @@ public:
                 return &player;
             }
         }
+    }
+    Dice* getDice(){
+        return &dice;
+    }
+    Board* getBoard(){
+        return &board;
     }
 };
 

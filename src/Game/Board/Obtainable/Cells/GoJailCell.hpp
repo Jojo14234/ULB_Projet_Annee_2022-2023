@@ -13,13 +13,11 @@ class GoJailCell: public Cell{
 
 	JailCell* jail;
 
-	void goToJail();
-
 public: 
     
 	GoJailCell(int pos);
     
-	void action(Player* player);
+	void action(Player* player){ player->goToJail(jail);};
 
 };
 

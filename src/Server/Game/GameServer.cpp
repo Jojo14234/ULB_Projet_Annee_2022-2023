@@ -12,9 +12,15 @@ void GameServer::clientLoop(ClientManager &client) {
 		// receive from client
 		client.receive(query, packet);
 
-		std::cout << "Receive: " << (int)query << " from client: " << client.getSocket().getRemoteAddress() << std::endl;
-
     // call capitalist methods
+    if (game.getCurrentPlayer().isInJail()){
+        game.getCurrentPlayer()->getCurrentCell()->action(game.getCurrentPlayer());
+    }
+    else {
+        //before roll loop
+        //after roll loop
+    }
+        //bankrupcy loop
     processGameQuery(client, query);
 
 		game.receiveQuery(query, packet);
@@ -67,11 +73,22 @@ void GameServer::processEndTurn(ClientManager &client) {
 }
 
 void GameServer::processDiceRoll(ClientManager &client) {
-    std::string output = "";
-    output += std::string(client.getAccount()->getUsername()) + " rolled a " + std::to_string(game.rollDice()); //should technically have a method for this in capitalist, but flemme
-    if (game.rolledADouble()){
-        output += " and it's a double, he/she will play again!";
+    while (game.getDice()->getDoubleCounter() != 2){
+        std::string output = "";
+        output += std::string(client.getAccount()->getUsername()) + " rolled a " + std::to_string(game.rollDice()); //should technically have a method for this in capitalist, but flemme
+        if (game.rolledADouble()){
+            output += " and it's a double, he/she will play again!";
+        }
+        updateAllClients(output);
+
+        game.getCurrentPlayer()->getClient()->send(output);
+        game.getCurrentPlayer()->move(game.getBoard().getCellByIndex((game.getCurrentPlayer()->getCurrentCell()->getPosition() + game.getDice()->getResults()) % BOARD_SIZE));
+
+        game.getCurrentPlayer()->getCurrentCell()->action(game.getCurrentPlayer());
+
+        if (!game.getDice()->isDouble()) { break; }
     }
-    game.getCurrentPlayer().getCell().action();
-    updateAllClients(output);
+    if (game.getDice()->getDoubleCounter() == 2) {
+        game.getCurrentPlayer()->goToJail(game.getBoard()->getCellByIndex(PRISON_INDEX));
+    }
 }

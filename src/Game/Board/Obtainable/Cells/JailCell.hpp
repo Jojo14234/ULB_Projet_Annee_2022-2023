@@ -10,11 +10,11 @@ class Player;
 
 class JailCell: public Cell{
     
-	void outWithMoney();
+	void outWithMoney(Player* player) {player->pay(50); player->exitJail();};    //laisse le choix
     
-	void outWIthCard();
+	void outWithCard();
     
-	void outWithDice();
+	void outWithDice(); //force à payer -> potentiel faillite
     
 	void out();
 
@@ -22,8 +22,9 @@ public:
 
 	JailCell(int pos);
     
-	void action(Player* player);
+	void action(Player* player){
+        player->getClient()->send(""); //TODO
+    };    //envoyer demande de choix au client (reception, receive)
 
 };
-
 #endif

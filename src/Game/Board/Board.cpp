@@ -86,3 +86,7 @@ void Board::initAllCells(){
 
 }
 
+Cell* Board::getCellByIndex(int index){
+    return cells.at(index);
+}
+

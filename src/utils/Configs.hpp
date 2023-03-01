@@ -11,6 +11,8 @@ const auto PORT = 8080;
 const auto STARTING_MONEY = 1500;
 const int BOARD_SIZE = 40;
 
+const int PRISON_INDEX = 10;
+
 // AuthentificationManager constante
 const int username_min_length = 1;
 const int username_max_length = 32;

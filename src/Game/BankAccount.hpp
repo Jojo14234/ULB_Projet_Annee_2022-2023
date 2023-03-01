@@ -13,7 +13,7 @@ public:
     BankAccount(int money);
 
     //remove money from account, return false if player cannot pay
-    bool pay(int amount);
+    void pay(int amount);
 
     //add money to account
     int gain(int amount);

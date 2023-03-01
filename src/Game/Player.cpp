@@ -73,32 +73,67 @@ void Player::setAdmin() {admin = true;}
 
 bool Player::isAdmin() {return admin;}
 
-int Player::getId() {return id;}
-
 ClientManager *Player::getClient() { return client; }
 
 bool Player::isCurrentlyPLaying() {return currently_playing;}
 void Player::setCurrentlyPlaying(bool playing) {currently_playing = playing;}
 
-bool Player::pay(int amount) {
+bool Player::pay(int amount, bool forced = false) {
+    if (forced){
+        bank_account.pay(amount);
+        //TODO checkBankrupt();
+    }
+    else {
+        if (bank_account.getMoney() < amount){
+            getClient()->send("Vous n'avez pas assez d'argent.");
+        }
+        else {
+            bank_account.pay(amount);
+        }
+    }
     return bank_account.pay(amount);
 }
 
-void Player::receive(int amount, std::string source) {
+std::string Player::receive(int amount, std::string source) {
     bank_account.gain(amount); //TODO
+    return source;
 }
 
-
-
-void Player::move(Cell &cell) {
-    if (passedByStart(cell)) {
-        //TODO
+void Player::move(Cell &cell, bool pass_by_start = true) {
+    if (passedByStart(cell, pass_by_start)) {
+        getClient()->send("Recieved " + std::to_string(200) + "e from" + receive(200, "Banque"));
     }
+    current_cell = cell;
 }
 
-bool Player::passedByStart(Cell &cell) {
-    if (cell.getPosition() - current_cell->getPosition() < 0) {
+bool Player::passedByStart(Cell &cell, bool pass_by_start) {
+    if (cell.getPosition() - current_cell->getPosition() < 0 and pass_by_start) {
         return true;
     }
     return false;
 }
+Cell *Player::getCurrentCell() {
+    return current_cell;
+}
+
+void Player::goToJail(Cell &cell) {
+    move(cell, false);
+    this->status = JAILED;
+    getClient()->send("Vous allez en prison.");
+}
+
+void Player::exitJail() {
+    this->status = FREE;
+}
+
+bool Player::isInJail() {
+    return (status == JAILED);
+}
+
+int Player::getRollsInPrison() {
+    return rolls_in_prison;
+}
+
+void Player::addRollInPrison(){
+    rolls_in_prison++;
+};
