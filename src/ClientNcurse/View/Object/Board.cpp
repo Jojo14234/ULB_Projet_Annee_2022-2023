@@ -10,13 +10,13 @@ void Board::draw() {
 //method to have a list of name for the cells
 void Board::loadCellNames(){
 	std::string cell;
-	std::ifstream cell_names_file("ClientNcurse/cardname.txt", 'r');
+	std::ifstream cell_names_file("ClientNcurse/cardname.txt");
 	
 	if (cell_names_file.is_open()){
 		int i=0;
 		while (std::getline(cell_names_file , cell)) {cellname[i] = cell; i++;}
 		cell_names_file.close();
-	} else std::ofstream("ClientNcurse/cardname.txt");
+	} else exit(1);
 }
 
 //method to create the gameboard
@@ -24,15 +24,14 @@ void Board::createBoard(){
 	//define positions for each box 
 	int n=0;
 	for (int i=0; i < col_nb; i++) {
-		std::cout << cellname[n] << std::endl;
-		board[n] = std::make_shared<TextBox>(ObjectInfo{height, width, 0 + info.getY(), i*width-i + info.getX() }, cellname[n]); n++;
+		board[n] = std::make_shared<TextBox>(ObjectInfo{height, width, 0 + info.getY(), i*width-i + info.getX() }, cellname[n], false); n++;
 	}
 	for (int i=1; i < line_nb-1; i++) {
-		board[n] = std::make_shared<TextBox>(ObjectInfo{height, width, i*height-i + info.getY(), 0 + info.getX()}, cellname[n]); n++;
-		board[n] = std::make_shared<TextBox>(ObjectInfo{height, width, i*height-i + info.getY(), (col_nb-2)*width+1 + info.getX()}, cellname[n]); n++;
+		board[n] = std::make_shared<TextBox>(ObjectInfo{height, width, i*height-i + info.getY(), 0 + info.getX()}, cellname[n], false); n++;
+		board[n] = std::make_shared<TextBox>(ObjectInfo{height, width, i*height-i + info.getY(), (col_nb-2)*width+1 + info.getX()}, cellname[n], false); n++;
 	}
 	for (int i=0; i < col_nb; i++){
-		board[n] = std::make_shared<TextBox>(ObjectInfo{height, width, (line_nb-3)*height + info.getY(), i*width-i + info.getX()}, cellname[n]); n++;
+		board[n] = std::make_shared<TextBox>(ObjectInfo{height, width, (line_nb-3)*height + info.getY(), i*width-i + info.getX()}, cellname[n], false); n++;
 	}
 }
 
