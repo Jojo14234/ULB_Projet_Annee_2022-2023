@@ -57,11 +57,19 @@ void Client::sendJoinGame(int code) {
 
 
 bool Client::sendCommand(InputParser &parser) {
-	if (parser.getQueryType() == QUERY_TYPE::NONE) return false;
+	QUERY_TYPE query = parser.getQueryType();
+	if (query == QUERY_TYPE::NONE) return false;
 	sf::Packet packet;
-	packet << static_cast<int>(parser.getQueryType());
-	packet << parser.getNbParameters();
-	for (int i = 1; i < parser.getNbParameters(); i++) packet << parser[i];
+	packet << static_cast<int>(query);
+	switch(query) {
+	case QUERY_TYPE::FRIENDS_ACCEPT:
+	case QUERY_TYPE::FRIENDS_REFUSE:
+	case QUERY_TYPE::FRIENDS_ADD:
+	case QUERY_TYPE::FRIENDS_REMOVE:
+	case QUERY_TYPE::MESSAGE_SHOW: packet << parser[2]; break;
+	case QUERY_TYPE::MESSAGE_SEND: packet << parser[1] << parser[2]; break;
+	default: break;
+	}
 	this->sendPacket(packet);
 	return true;
 }
