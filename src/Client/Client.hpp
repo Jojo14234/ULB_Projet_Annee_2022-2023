@@ -54,6 +54,12 @@ public:
     // Main Loop of the client
     void mainLoop();
 
+	// Send messages to the server
+	void sendToServerLoop();
+
+	// Receive messages from the server
+	void receiveFromServerLoop();
+
 };
 
 #endif

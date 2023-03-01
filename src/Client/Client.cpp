@@ -37,6 +37,29 @@ void Client::mainLoop() {
 }
 
 
+void Client::sendToServerLoop() {
+	while (true) {
+		MainInputParser parser = this->controller.getNewParsedInput();
+		// if bad input format
+		if (parser.getQueryType() == QUERY_TYPE::NONE) { continue; }
+		// send the input to the server
+		this->sendToServer(parser);
+	}
+}
+
+void Client::receiveFromServerLoop() {
+	while (true) {
+		std::string output;
+		// wait the response from the server
+		this->receiveFromServer(output);
+		output = this->analyseServerResponse(output);
+		// If need to enter the game loop
+		if (output == "GAME") { this->in_game = true; this->gameLoop(); }
+		else { std::cout << output << std::endl; }
+	}
+}
+
+
 // Private
 
 void Client::connectToServer() {
