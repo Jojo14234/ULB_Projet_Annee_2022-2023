@@ -5,6 +5,7 @@
 
 
 #include "../utils/Configs.hpp"
+#include "../Server/ClientManager/ClientManager.hpp"
 #include "Player.hpp"
 #include "Board/Board.hpp"
 
@@ -39,7 +40,7 @@ public:
 	void sendMessage(std::string &output) { output = "coucou ici capitalist"; }
 
     void addPlayer(ClientManager &client){
-        players.push_back(Player(client));
+        players.push_back(Player(&client));
         if (players.size() == 1) {players[0].setAdmin(); players[0].setCurrentlyPlaying(true);}
     }
     void removePlayer(){

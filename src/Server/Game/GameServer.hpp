@@ -49,6 +49,6 @@ public:
     //add Player object to players vector in Capitalist
     void addPlayer(ClientManager &client) {this->game.addPlayer(client);}
 
-    };
+};
 
 #endif

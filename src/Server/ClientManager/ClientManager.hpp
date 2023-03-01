@@ -6,10 +6,11 @@
 #include <memory>
 #include <string>
 
-#include "../Game/GameServer.hpp"
 #include "../../utils/Configs.hpp"
 #include "../Database/User.hpp"
 
+
+class GameServer;	// forward declaraction
 
 class ClientManager {
 
@@ -44,7 +45,7 @@ public:
 	bool operator==(const ClientManager& other) { return this->tid == other.tid; }
 
 	// To enter the game
-    void enterGameLoop() { this->game_server->addPlayer(*this); this->game_server->clientLoop(*this); }
+	void enterGameLoop();
 	// Disconnect the client
 	void disconnect() { this->connected = false; }
 	// If the client is connected

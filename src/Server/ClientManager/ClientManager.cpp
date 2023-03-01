@@ -1,6 +1,7 @@
 #include <SFML/Network.hpp>
 
 #include "ClientManager.hpp"
+#include "../Game/GameServer.hpp"
 #include "../../utils/Exceptions.hpp"
 
 
@@ -41,3 +42,5 @@ void ClientManager::receive(GAME_QUERY_TYPE &query, sf::Packet &packet) {
 	packet >> tmp;
 	query = static_cast<GAME_QUERY_TYPE>(tmp);
 }
+
+void ClientManager::enterGameLoop() { this->game_server->addPlayer(*this); this->game_server->clientLoop(*this); }
