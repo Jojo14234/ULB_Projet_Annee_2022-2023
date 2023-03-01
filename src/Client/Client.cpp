@@ -1,6 +1,7 @@
 #include <iostream>
 #include <string>
 #include <SFML/Network.hpp>
+#include <thread>
 
 #include "AuthentificationManager.hpp"
 #include "../utils/Configs.hpp"
@@ -33,29 +34,6 @@ void Client::mainLoop() {
 			if (output == "GAME" or parser.getQueryType() == QUERY_TYPE::CREATE_GAME) { this->in_game = true; this->gameLoop(); }
 			else { std::cout << output << std::endl; }
 		}
-	}
-}
-
-
-void Client::sendToServerLoop() {
-	while (true) {
-		MainInputParser parser = this->controller.getNewParsedInput();
-		// if bad input format
-		if (parser.getQueryType() == QUERY_TYPE::NONE) { continue; }
-		// send the input to the server
-		this->sendToServer(parser);
-	}
-}
-
-void Client::receiveFromServerLoop() {
-	while (true) {
-		std::string output;
-		// wait the response from the server
-		this->receiveFromServer(output);
-		output = this->analyseServerResponse(output);
-		// If need to enter the game loop
-		if (output == "GAME") { this->in_game = true; this->gameLoop(); }
-		else { std::cout << output << std::endl; }
 	}
 }
 
@@ -162,11 +140,22 @@ bool Client::connectionLoop() {
 
 void Client::gameLoop() {
 	std::cout << "Vous entrez dans une partie" << std::endl;
-	while(this->in_game) {
+	std::thread send_thread(&Client::receiveFromServerLoop, this);
+	this->sendToServerLoop();
+	std::cout << "Vous quitez la partie" << std::endl;
+}
+
+void Client::sendToServerLoop() {
+	while (this->in_game) {
 		GameInputParser parser = this->controller.getNewGameParsedInput();
 		if (parser.getQueryType() == GAME_QUERY_TYPE::NONE) { continue; }
 		// send the input to the server
 		this->sendToServer(parser);
+	}
+}
+
+void Client::receiveFromServerLoop() {
+	while (this->in_game) {
 		std::string output;
 		// wait the response from the server
 		this->receiveFromServer(output);
@@ -174,5 +163,4 @@ void Client::gameLoop() {
 		if(output == "ENDGAME") { this->in_game = false; }
 		else { std::cout << output << std::endl; }
 	}
-	std::cout << "Vous quitez la partie" << std::endl;
 }

@@ -47,18 +47,18 @@ class Client {
     // Special loop if the client is in a game
     void gameLoop();
 
+	// Send messages to the server
+	void sendToServerLoop();
+
+	// Receive messages from the server
+	void receiveFromServerLoop();
+    
 public:
 
     Client() { this->connectToServer(); }
     
     // Main Loop of the client
     void mainLoop();
-
-	// Send messages to the server
-	void sendToServerLoop();
-
-	// Receive messages from the server
-	void receiveFromServerLoop();
 
 };
 

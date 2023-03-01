@@ -53,8 +53,9 @@ public:
             if (player.getId() == id){
                 return &player;
             }
-        }
+        } return nullptr;
     }
+
     Player* getCurrentPlayer(){ return &players[current_player_index]; }
 
     bool isRunning() {return running;}

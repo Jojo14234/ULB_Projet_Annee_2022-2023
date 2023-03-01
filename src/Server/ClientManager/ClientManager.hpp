@@ -44,7 +44,7 @@ public:
 	bool operator==(const ClientManager& other) { return this->tid == other.tid; }
 
 	// To enter the game
-	void enterGameLoop() { this->game_server->clientLoop(*this); }
+	void enterGameLoop() { this->game_server->addPlayer(this->account->getId()); this->game_server->clientLoop(*this); }
 
 	// Disconnect the client
 	void disconnect() { this->connected = false; }
@@ -68,8 +68,6 @@ public:
     void setAccount(User *user) { this->account = user; }
 	void setGameServer(GameServer* gs) { this->game_server = gs; }
 	void removeGameServer() { this->game_server = nullptr; }	
-
-	void enterGameLoop() { this->game_server->addPlayer(this->account->getId()); this->game_server->clientLoop(*this); }
 
 };
 
