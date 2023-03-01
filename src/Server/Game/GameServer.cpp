@@ -35,7 +35,7 @@ void GameServer::addClient(ClientManager* client) {
 void GameServer::processGameQuery(ClientManager &client, GAME_QUERY_TYPE query){
     if (GAME_QUERY_TYPE::START == query) processStart(client);
     else {
-        if (client.getAccount()->getId() == game.getCurrentPlayer()->getId()){
+        if (&client == game.getCurrentPlayer()->getClient()){
             switch(query){
                 case GAME_QUERY_TYPE::END_TURN: processEndTurn(client); break;
                 case GAME_QUERY_TYPE::ROLL_DICE: processDiceRoll(client); break;
@@ -48,7 +48,7 @@ void GameServer::processGameQuery(ClientManager &client, GAME_QUERY_TYPE query){
 }
 void GameServer::processStart(ClientManager &client) {
     if (!game.isRunning()){
-        if (getLinkedPlayer(client)->isAdmin()){
+        if (isClientAdmin(client)){
             this->game.startGame();
             client.send("La partie est lancée!");
         }

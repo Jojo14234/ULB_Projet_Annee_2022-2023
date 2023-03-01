@@ -49,6 +49,7 @@ public:
     }
     void startGame(){ running = true; }
 
+    /*
     Player* getPlayerByClientId(int id){
         for (auto &player : players){
             if (player.getId() == id){
@@ -56,7 +57,7 @@ public:
             }
         } return nullptr;
     }
-
+*/
     Player* getCurrentPlayer(){ return &players[current_player_index]; }
 
     bool isRunning() {return running;}
@@ -73,6 +74,14 @@ public:
 
     bool rolledADouble(){
         return dice.isDouble();
+    }
+
+    Player* getPlayerByClient(ClientManager &client){
+        for (auto &player : players){
+            if (player.getClient() == &client){
+                return &player;
+            }
+        }
     }
 };
 

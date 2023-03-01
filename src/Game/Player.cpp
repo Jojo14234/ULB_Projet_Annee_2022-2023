@@ -74,6 +74,8 @@ bool Player::isAdmin() {return admin;}
 
 int Player::getId() {return id;}
 
+ClientManager *Player::getClient() { return client; }
+
 bool Player::isCurrentlyPLaying() {return currently_playing;}
 void Player::setCurrentlyPlaying(bool playing) {currently_playing = playing;}
 

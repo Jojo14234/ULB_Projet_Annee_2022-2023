@@ -96,6 +96,8 @@ public:
 
     int getId();
 
+    ClientManager* getClient();
+
     bool isCurrentlyPLaying();
     void setCurrentlyPlaying(bool playing);
 
