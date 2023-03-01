@@ -21,16 +21,16 @@ void Board::loadCellNames(){
 void Board::createBoard(){
 	int n=0;
 	for (int i=line_nb-1; i >= 0; i--) {
-		board[n] = std::make_shared<TextBox>(ObjectInfo{height, width, i*height-(i) + info.getY(), 0 + info.getX()}, cellname[n], false); n++;
+		board[n] = std::make_shared<Cell>(ObjectInfo{height, width, i*height-(i) + info.getY(), 0 + info.getX()}, cellname[n]); n++;
 	}
 	for (int i=1; i < col_nb; i++) {
-		board[n] = std::make_shared<TextBox>(ObjectInfo{height, width, 0 + info.getY(), i*width-i + info.getX() }, cellname[n], false); n++;
+		board[n] = std::make_shared<Cell>(ObjectInfo{height, width, 0 + info.getY(), i*width-i + info.getX() }, cellname[n]); n++;
 	}
 	for (int i=1; i < line_nb-1; i++) {
-		board[n] = std::make_shared<TextBox>(ObjectInfo{height, width, i*height-i + info.getY(), (col_nb-2)*width+1 + info.getX()}, cellname[n], false); n++;
+		board[n] = std::make_shared<Cell>(ObjectInfo{height, width, i*height-i + info.getY(), (col_nb-2)*width+1 + info.getX()}, cellname[n]); n++;
 	}
 	for (int i=col_nb-1; i > 0; i--){
-		board[n] = std::make_shared<TextBox>(ObjectInfo{height, width, (line_nb-3)*height + info.getY(), i*width-i + info.getX()}, cellname[n], false); n++;
+		board[n] = std::make_shared<Cell>(ObjectInfo{height, width, (line_nb-3)*height + info.getY(), i*width-i + info.getX()}, cellname[n]); n++;
 	}
 }
 
@@ -68,13 +68,11 @@ void Board::createLegend(){
 ////////////////////////////////////////////////////////////////
 //method for setting and unsetting player
 void Board::setPlayer(int cell,int player){
-	//mvwprintw(board[listofcell[cell]], posplayer,player, "%s",std::to_string(player).c_str());
-	//wrefresh(board[listofcell[cell]]);  
+	board[cell]->setPlayer(player);
 }
  
 void Board::unsetPlayer(int cell,int player){
-	//mvwprintw(board[listofcell[cell]], posplayer,player," ");
-	//wrefresh(board[listofcell[cell]]); 
+	board[cell]->removePlayer(player);
 }
 
 //method to clear all buildings a cell
@@ -85,20 +83,12 @@ void Board::clearBuilding(int cell){
 	//wrefresh(board[listofcell[cell]]); 
 }
 
-void Board::setPurchased(int cell){
-	clearBuilding(cell);
-	//mvwprintw(board[listofcell[cell]], posbuilding,1,"POSSEDEE");
-	//wrefresh(board[listofcell[cell]]); 
-	
+void Board::setPurchased(int cell, int player){
+	board[cell]->setOwner(player);	
 }
 
-void Board::setHouse(int cell,int n_house){
-	//n_house is the number of house on a cell after setting a house
-	clearBuilding(cell);
-	for (int i = 1; i <= n_house; i++){
-		//mvwprintw(board[listofcell[cell]], posbuilding,i,"*");
-	}
-	//wrefresh(board[listofcell[cell]]); 
+void Board::addHouse(int cell,int house_nb){
+	board[cell]->addBuilding(house_nb);
 }
 	 
 

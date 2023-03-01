@@ -12,7 +12,7 @@
 
 #include "AbstractViewObject.hpp"
 #include "ObjectInfo.hpp"
-#include "TextBox.hpp"
+#include "Cell.hpp"
 
  
 
@@ -27,13 +27,10 @@ class Board : public AbstractViewObject {
 	int n_player; //number of players in game
 
 	//WINDOW *board[board_box_nb];  //box_nb number of windows for gameboxes
-	std::array<std::shared_ptr<TextBox>, gamebox_nb> board;
+	std::array<std::shared_ptr<Cell>, gamebox_nb> board;
 	std::array<std::string, gamebox_nb> cellname; //vector of names of each cells
 	WINDOW *cardcases[2];  //box for cards (luck and community)
 	WINDOW *legend; //window for the legend's box
-
-	const std::vector<int> listofcell {0,1,2,3,4,5,6,7,8,9,10,21,32,43,54,65,76,87,98,109,120,
-	119,118,117,116,115,114,113,112,111,110,99,88,77,66,55,44,33,22,11};  //vector to convert a gamebox into a board box
 
 	//size of a cell
 	int height = 5; 
@@ -70,10 +67,10 @@ public:
 	void createLegend();
 
 	void setPlayer(int cell, int player);
-	void unsetPlayer(int cell,int player);
+	void unsetPlayer(int cell, int player);
 	void clearBuilding(int cell);
-	void setPurchased(int cell);
-	void setHouse(int cell,int n_house);
+	void setPurchased(int cell, int player);
+	void addHouse(int cell, int house_nb);
 	void setHotel(int cell);
 
 };
