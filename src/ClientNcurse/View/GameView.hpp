@@ -11,7 +11,7 @@ class GameView : public AbstractView {
 
 public:
 
-	GameView(Client *model, int player_nb) : AbstractView(model), board{{1,1,150,150}, player_nb} {}
+	GameView(Client *model, int player_nb) : AbstractView(model), board{{11, 11, 5, 8}, player_nb} {}
 	
 	void draw() override {
 		board.draw();

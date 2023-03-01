@@ -7,9 +7,12 @@
 #include <fstream>
 #include <string>
 #include <iostream>
+#include <array>
+#include "utility"
 
 #include "AbstractViewObject.hpp"
 #include "ObjectInfo.hpp"
+#include "TextBox.hpp"
 
  
 
@@ -23,13 +26,14 @@ class Board : public AbstractViewObject {
 
 	int n_player; //number of players in game
 
-	WINDOW *board[board_box_nb];  //box_nb number of windows for gameboxes
+	//WINDOW *board[board_box_nb];  //box_nb number of windows for gameboxes
+	std::array<std::shared_ptr<TextBox>, gamebox_nb> board;
+	std::array<std::string, gamebox_nb> cellname; //vector of names of each cells
 	WINDOW *cardcases[2];  //box for cards (luck and community)
 	WINDOW *legend; //window for the legend's box
 
 	const std::vector<int> listofcell {0,1,2,3,4,5,6,7,8,9,10,21,32,43,54,65,76,87,98,109,120,
 	119,118,117,116,115,114,113,112,111,110,99,88,77,66,55,44,33,22,11};  //vector to convert a gamebox into a board box
-	std::vector<std::string> cellname; //vector of names of each cells
 
 	//size of a cell
 	int height = 5; 
@@ -50,6 +54,10 @@ class Board : public AbstractViewObject {
 	Point pos_text5{9,3};
 	Point pos_text6{5,3};
 
+	void loadCellNames(); 
+	void initBoard();
+	void createBoard();
+
 public: 
 
 	void draw() override;
@@ -62,11 +70,6 @@ public:
 		destroyBoard();
 		if(n_player > 10) std::cout << "miaou" << std::endl;
 	}
-
-	std::vector<std::string> getCellName(); 
-	void initBoard();
-	void drawBox(int n_case);
-	void createBoard();
 	void setBoxName();
 	void destroyBoard();
 
