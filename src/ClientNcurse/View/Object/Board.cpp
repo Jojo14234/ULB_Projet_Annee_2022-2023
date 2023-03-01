@@ -19,16 +19,17 @@ void Board::loadCellNames(){
 
 //method to create the gameboard
 void Board::createBoard(){
-	//define positions for each box 
 	int n=0;
-	for (int i=0; i < col_nb; i++) {
+	for (int i=line_nb-1; i >= 0; i--) {
+		board[n] = std::make_shared<TextBox>(ObjectInfo{height, width, i*height-(i) + info.getY(), 0 + info.getX()}, cellname[n], false); n++;
+	}
+	for (int i=1; i < col_nb; i++) {
 		board[n] = std::make_shared<TextBox>(ObjectInfo{height, width, 0 + info.getY(), i*width-i + info.getX() }, cellname[n], false); n++;
 	}
 	for (int i=1; i < line_nb-1; i++) {
-		board[n] = std::make_shared<TextBox>(ObjectInfo{height, width, i*height-i + info.getY(), 0 + info.getX()}, cellname[n], false); n++;
 		board[n] = std::make_shared<TextBox>(ObjectInfo{height, width, i*height-i + info.getY(), (col_nb-2)*width+1 + info.getX()}, cellname[n], false); n++;
 	}
-	for (int i=0; i < col_nb; i++){
+	for (int i=col_nb-1; i > 0; i--){
 		board[n] = std::make_shared<TextBox>(ObjectInfo{height, width, (line_nb-3)*height + info.getY(), i*width-i + info.getX()}, cellname[n], false); n++;
 	}
 }
