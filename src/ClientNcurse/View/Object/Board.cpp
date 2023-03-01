@@ -2,15 +2,13 @@
 
 
 void Board::draw() { 
-	for (auto& box : board) {
-		box->draw();
-	}
+	for (auto& box : board) box->draw();
 }
 
 //method to have a list of name for the cells
 void Board::loadCellNames(){
 	std::string cell;
-	std::ifstream cell_names_file("ClientNcurse/cardname.txt");
+	std::ifstream cell_names_file("ClientNcurse/cellNames.txt");
 	
 	if (cell_names_file.is_open()){
 		int i=0;
@@ -33,19 +31,6 @@ void Board::createBoard(){
 	for (int i=0; i < col_nb; i++){
 		board[n] = std::make_shared<TextBox>(ObjectInfo{height, width, (line_nb-3)*height + info.getY(), i*width-i + info.getX()}, cellname[n], false); n++;
 	}
-}
-
-//method to put name on each box
-void Board::setBoxName(){
-	for (int i =  0; i < gamebox_nb; i ++){
-		//mvwprintw(board[listofcell[i]], pos_text1.getY(), pos_text1.getX(), "%s", (cellname[i]).c_str());
-		//wrefresh(board[listofcell[i]]); 
-	}
-}
-
-//method to destroy the gameboard
-void Board::destroyBoard(){
-	//for (int i = 0; i <  board_box_nb ; i++) delwin(board[i]);
 }
 
 
@@ -120,13 +105,4 @@ void Board::setHotel(int cell){
 	clearBuilding(cell);
 	//mvwprintw(board[listofcell[cell]], posbuilding,1,"$");
 	//wrefresh(board[listofcell[cell]]); 
-}
-
-//method to make the board
-void Board::initBoard(){
-	this->loadCellNames();    
-	this->createBoard();
-	//setBoxName();
-	//createCardCase();
-	//createLegend();
 }

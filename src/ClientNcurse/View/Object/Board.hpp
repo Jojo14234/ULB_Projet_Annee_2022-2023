@@ -54,8 +54,7 @@ class Board : public AbstractViewObject {
 	Point pos_text5{9,3};
 	Point pos_text6{5,3};
 
-	void loadCellNames(); 
-	void initBoard();
+	void loadCellNames();
 	void createBoard();
 
 public: 
@@ -63,15 +62,9 @@ public:
 	void draw() override;
 
 	Board(ObjectInfo info, int n_player): AbstractViewObject{info}, n_player{n_player} {
-		this->initBoard();
+		this->loadCellNames();    
+		this->createBoard();
 	}
-	~Board() override {
-		AbstractViewObject::~AbstractViewObject();
-		destroyBoard();
-		if(n_player > 10) std::cout << "miaou" << std::endl;
-	}
-	void setBoxName();
-	void destroyBoard();
 
 	void createCardCase();
 	void createLegend();
