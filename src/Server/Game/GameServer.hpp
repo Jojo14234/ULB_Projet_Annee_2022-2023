@@ -51,6 +51,12 @@ public:
 
     bool isClientAdmin(ClientManager &client) {return (game.getPlayerByClient(client)->isAdmin());}
 
+    void updateAllClients(std::string& update) {
+        for (auto client : clients){
+            client->send(update);
+        }
+    }
+
 };
 
 #endif

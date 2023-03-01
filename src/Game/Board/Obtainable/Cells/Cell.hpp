@@ -19,6 +19,8 @@ public:
 
 	virtual void action(Player* player)=0;
 
+    int getPosition() { return position; }
+
 };
 
 #endif

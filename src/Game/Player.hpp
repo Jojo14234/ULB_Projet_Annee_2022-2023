@@ -102,6 +102,11 @@ public:
     void setCurrentlyPlaying(bool playing);
 
     bool pay(int amount);
+    void receive(int amount, std::string source);
+
+    void move(Cell& cell);
+
+    bool passedByStart(Cell &cell);
 };
 
 

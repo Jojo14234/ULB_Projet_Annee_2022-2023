@@ -16,7 +16,7 @@ public:
     bool pay(int amount);
 
     //add money to account
-    void gain(int amount);
+    int gain(int amount);
 
     ///retrieve amount of money in account
     int getMoney();

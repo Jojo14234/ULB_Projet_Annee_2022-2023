@@ -6,6 +6,7 @@
 #include "Dice.hpp"
 #include "BankAccount.hpp"
 #include "Board/Board.hpp"
+#include "../Server/ClientManager/ClientManager.hpp"
 
 
 /*
@@ -81,4 +82,23 @@ void Player::setCurrentlyPlaying(bool playing) {currently_playing = playing;}
 
 bool Player::pay(int amount) {
     return bank_account.pay(amount);
+}
+
+void Player::receive(int amount, std::string source) {
+    bank_account.gain(amount); //TODO
+}
+
+
+
+void Player::move(Cell &cell) {
+    if (passedByStart(cell)) {
+        //TODO
+    }
+}
+
+bool Player::passedByStart(Cell &cell) {
+    if (cell.getPosition() - current_cell->getPosition() < 0) {
+        return true;
+    }
+    return false;
 }

@@ -68,9 +68,10 @@ void GameServer::processEndTurn(ClientManager &client) {
 
 void GameServer::processDiceRoll(ClientManager &client) {
     std::string output = "";
-    output += "You rolled a " + std::to_string(game.rollDice()); //should technically have a method for this in capitalist, but flemme
+    output += std::string(client.getAccount()->getUsername()) + " rolled a " + std::to_string(game.rollDice()); //should technically have a method for this in capitalist, but flemme
     if (game.rolledADouble()){
-        output += " and it's a double!";
+        output += " and it's a double, he/she will play again!";
     }
-    client.send(output);
+    game.getCurrentPlayer().getCell().action();
+    updateAllClients(output);
 }

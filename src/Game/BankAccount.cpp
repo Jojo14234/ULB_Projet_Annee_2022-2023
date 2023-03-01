@@ -14,6 +14,6 @@ bool BankAccount::pay(int amount) {
 
 }
 
-void BankAccount::gain(int amount) {money += amount;}
+int BankAccount::gain(int amount) {money += amount; return amount;}
 
 int BankAccount::getMoney() {return money;}
