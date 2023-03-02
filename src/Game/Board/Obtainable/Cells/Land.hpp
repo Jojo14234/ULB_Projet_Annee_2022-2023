@@ -22,6 +22,8 @@ protected:
 public: 
 
 	Land(Json::Value info) : name{info["name"].asString()}, purchase_price{info["purchase price"].asInt()} {}
+	Player* getOwner() {return this->owner;}
+	std::string getName() {return name;}
 
 };
 

@@ -7,7 +7,19 @@ class Player;
 
 class Company : public Land {
 
-	int getRentPrice(); //dé  jeter les dés x5 ou x12 selon le owner possession
+	int getRentPrice(){
+		unsigned int nbr_of_company = this->owner.getNumberOfStations();
+		int dice_res = lancer de dés
+		switch (nbr_of_company) {
+			case 1:
+				return dice_res*5;
+				break;
+			case 2:
+				return dice_res*12;
+				break;
+		}
+	}; 
+	//dé  jeter les dés x5 ou x12 selon le owner possession
 	
 public:
 

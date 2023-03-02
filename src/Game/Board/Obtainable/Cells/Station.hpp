@@ -7,7 +7,8 @@ class PLayer;
 
 class Station : public Land {
 
-	int getRentPrice(); // dépend de owner et le nombre de gare qu'il a
+	int getRentPrice(); 
+	// dépend de owner et le nombre de gare qu'il a
 
 public:
 
