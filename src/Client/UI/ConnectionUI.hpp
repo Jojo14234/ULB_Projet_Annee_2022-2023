@@ -30,7 +30,7 @@ public:
     }
     void too_short() {
         std::cout << "+———————————————————————————————CAPITALI$T———————————————————————————————+" << std::endl;
-        std::cout << "|      Vous avez entré un paramètre trop cours !                         |" << std::endl;
+        std::cout << "|      Vous avez entré un paramètre trop court !                         |" << std::endl;
         std::cout << "|      Taille minimal d'un pseudo       -> 1 caractère                   |" << std::endl;
         std::cout << "|      Taille minimal d'un mot de passe -> 4 caractères                  |" << std::endl;
         std::cout << "+————————————————————————————————————————————————————————————————————————+" << std::endl;

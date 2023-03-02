@@ -36,7 +36,7 @@ public:
 
 	GameInputParser getNewGameParsedInput() {
 		this->setInput();
-		std::cout << "Vous venez d'entrer : " << input << std::endl;
+		std::cout << "Vous venez d'entrer : " << input << " parsed by GameInputParser" << std::endl;
 		return GameInputParser{input};
 	}
 

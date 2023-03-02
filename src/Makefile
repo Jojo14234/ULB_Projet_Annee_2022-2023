@@ -8,11 +8,11 @@ OTHERFLAGS = -fanalyzer -Walloc-zero -Wcast-align \
 			-Wsuggest-final-types -Wsuggest-override -Wundef -Wuseless-cast -Wvolatile \
 			-Wformat=2  -Wzero-as-null-pointer-constant -fsanitize=address,leak #-Wswitch-default -Wswitch-enum
 #CXXFLAGS += ${OTHERFLAGS}
-LDLIBS 	 = -lpthread -lsfml-network -lsfml-system -lncurses
+LDLIBS 	 = -lpthread -lsfml-network -lsfml-system -lncurses -ljsoncpp
 
 ifneq ($(shell uname -s), Linux)
-	CXXFLAGS += -I/opt/homebrew/Cellar/sfml/2.5.1_2/include
-	LDLIBS   += -L/opt/homebrew/Cellar/sfml/2.5.1_2/lib
+	CXXFLAGS += -I/opt/homebrew/Cellar/sfml/2.5.1_2/include -I/opt/homebrew/Cellar/jsoncpp/1.9.5/include
+	LDLIBS   += -L/opt/homebrew/Cellar/sfml/2.5.1_2/lib -L/opt/homebrew/Cellar/jsoncpp/1.9.5/lib
 endif
 
 # Create Client objects
@@ -32,6 +32,8 @@ SERVER_DB_BINS = $(patsubst Server/Database/%.cpp, Server/Database/%.o, $(wildca
 SERVER_DB_FRIEND_BINS = $(patsubst Server/Database/Friend/%.cpp, Server/Database/Friend/%.o, $(wildcard Server/Database/Friend/*.cpp))
 SERVER_DB_CHAT_BINS = $(patsubst Server/Database/Chat/%.cpp, Server/Database/Chat/%.o, $(wildcard Server/Database/Chat/*.cpp))
 SERVER_GAME_BINS = $(patsubst Server/Game/%.cpp, Server/Game/%.o, $(wildcard Server/Game/*.cpp))
+GAME_BINS = $(patsubst Game/%.cpp, Game/%.o, $(wildcard Game/*.cpp))
+
 
 .PHONY: default
 default: main
@@ -50,7 +52,7 @@ client: ${CLIENT_BINS} ${CLIENT_INPUTPARSER_BINS}
 	${CXX} ${CXXFLAGS} -o capitalist $^ ${LDLIBS}
 	make clean
 
-server: ${SERVER_BINS} ${SERVER_CM_BINS} ${SERVER_DB_BINS} ${SERVER_DB_FRIEND_BINS} ${SERVER_DB_CHAT_BINS} ${SERVER_GAME_BINS}
+server: ${SERVER_BINS} ${SERVER_CM_BINS} ${SERVER_DB_BINS} ${GAME_BINS} ${SERVER_DB_FRIEND_BINS} ${SERVER_DB_CHAT_BINS} ${SERVER_GAME_BINS}
 	${CXX} ${CXXFLAGS} -o server_capitalist $^ ${LDLIBS}
 	make clean
 
