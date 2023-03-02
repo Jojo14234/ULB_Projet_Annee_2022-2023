@@ -11,6 +11,10 @@
 #include "Board/Obtainable/Cells/Cell.hpp"
 #include "Board/Obtainable/Cards/JailCard.hpp"
 #include "Board/Obtainable/Cells/Property.hpp"
+#include "Board/Obtainable/Cells/Company.hpp"
+#include "Board/Obtainable/Cells/Station.hpp"
+
+
 #include "PLAYER_STATUS.hpp"
 #include "Dice.hpp"
 #include "../utils/Configs.hpp"
@@ -37,6 +41,8 @@ class Player {
     std::vector<JailCard> GOOJ_cards;   //get out of jail
 
     std::vector<Property*> properties;
+    std::vector<Company*> companies;
+    std::vector<Station*> stations;
 
 /*
     //std::vector<*Property> properties; waiting for Hawen
@@ -123,8 +129,13 @@ public:
         return GOOJ_cards.size();
     }
 
-    bool hasRolled() {return has_rolled;}
-    void rolled(bool rolled) {has_rolled = rolled;}
+    bool hasRolled();
+    void rolled(bool rolled);
+
+    std::vector<Property*> getAllProperties();
+
+    int getNumberOfStations();
+    int getNumberOfCompanies();
 
 };
 

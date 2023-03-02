@@ -16,15 +16,9 @@ void GameServer::clientLoop(ClientManager &client) {
         }
         else {
             clientBeforeRollLoop(client);
-        //after roll loop
+            // TODO after roll loop
     }
-        //bankrupcy loop
 		game.receiveQuery(query, packet);
-		//std::string output;
-		//game.sendMessage(output);
-        //game.displayGameStatus(); //temporary
-		// send to client
-		//client.send(output);
 		if (query == GAME_QUERY_TYPE::LEAVE) { break; }
 	}
 	std::cout << client.getAccount()->getUsername() << " has left a game with code : " << this->code.getCode() << std::endl;
@@ -39,7 +33,9 @@ void GameServer::clientBeforeRollLoop(ClientManager &client) {
             if (GAME_QUERY_TYPE::START == query) processStart(client);
             else if (game.isRunning()){
                 if (&client == game.getCurrentPlayer()->getClient()){
-                    processGameQueryBeforeRoll(client, query);
+                    if (processGameQueryBeforeRoll(client, query)){
+                        break ;
+                    }
                 }
                 else {
                     client.send("Ce n'est pas encore votre tour.");
@@ -77,11 +73,11 @@ void GameServer::processGameQuery(ClientManager &client, GAME_QUERY_TYPE query){
 }
 */
 
-void GameServer::processGameQueryBeforeRoll(ClientManager &client, GAME_QUERY_TYPE query) {
+bool GameServer::processGameQueryBeforeRoll(ClientManager &client, GAME_QUERY_TYPE query) {
     switch (query) {
-        case GAME_QUERY_TYPE::END_TURN: processEndTurn(client); break;
-        case GAME_QUERY_TYPE::ROLL_DICE: processDiceRoll(client); break;
-        default: client.send("Cette commande n'est pas disponible.");
+        case GAME_QUERY_TYPE::END_TURN: processEndTurn(client); return false;
+        case GAME_QUERY_TYPE::ROLL_DICE: processDiceRoll(client); return true;
+        default: client.send("Cette commande n'est pas disponible."); return false;
     }
 }
 

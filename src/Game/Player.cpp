@@ -137,3 +137,15 @@ int Player::getRollsInPrison() {
 void Player::addRollInPrison(){
     rolls_in_prison++;
 };
+
+bool Player::hasRolled() {return has_rolled;}
+
+void Player::rolled(bool rolled) {has_rolled = rolled;}
+
+std::vector<Property *> Player::getAllProperties() {
+    return properties;
+}
+
+int Player::getNumberOfStations() { return stations.size(); }
+
+int Player::getNumberOfCompanies() {return companies.size(); }
