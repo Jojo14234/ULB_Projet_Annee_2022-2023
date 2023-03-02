@@ -4,6 +4,7 @@
 #include <vector>
 
 #include "GameCode.hpp"
+#include "../../Game/Player.hpp"
 #include "../../Game/Capitalist.hpp"
 #include "../../utils/Configs.hpp"
 
@@ -40,6 +41,17 @@ public:
 	// VERIFIERS
 	bool isCode(int other) const { return code.getCode() == other; }
 
-};
+    void processGameQuery(ClientManager &client, GAME_QUERY_TYPE query);
+
+    void processStart(ClientManager &client);
+    void processEndTurn(ClientManager &client);
+    void processDiceRoll(ClientManager &client);
+
+    //add Player object to players vector in Capitalist
+    void addPlayer(int id) {this->game.addPlayer(id);}
+    Player* getLinkedPlayer(ClientManager &client);
+
+
+    };
 
 #endif
