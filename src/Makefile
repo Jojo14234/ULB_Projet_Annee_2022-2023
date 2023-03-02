@@ -1,6 +1,6 @@
 CXX = $(shell [ `g++ -v 2>&1 | grep -o 'version [0-9]\+' | cut -d' ' -f2` -le 9 ] && echo g++-10 || echo g++)
-CXXFLAGS = -std=c++20 -Wall -Wextra -Wpedantic -Werror=all -D_GNU_SOURCE 
-OTHERGLAGS = -fanalyzer -Walloc-zero -Wcast-align \
+CXXFLAGS = -std=c++20 -Wall -Wpedantic  -D_GNU_SOURCE
+OTHERFLAGS = -fanalyzer -Walloc-zero -Wcast-align \
 			-Wdeprecated-copy-dtor -Wduplicated-branches -Wduplicated-cond -Wextra-semi -Wfloat-equal \
 			-Wformat-signedness -Winit-self -Wlogical-op -Wmismatched-tags -Wnon-virtual-dtor -Wnull-dereference \
 			-fdelete-null-pointer-checks -Woverloaded-virtual -Wsign-promo -Wstrict-null-sentinel -Wsuggest-attribute=cold \
@@ -8,11 +8,11 @@ OTHERGLAGS = -fanalyzer -Walloc-zero -Wcast-align \
 			-Wsuggest-final-types -Wsuggest-override -Wundef -Wuseless-cast -Wvolatile \
 			-Wformat=2  -Wzero-as-null-pointer-constant -fsanitize=address,leak #-Wswitch-default -Wswitch-enum
 #CXXFLAGS += ${OTHERGLAGS}
-LDLIBS 	 = -lpthread -lsfml-network -lsfml-system
+LDLIBS 	 = -lpthread -lsfml-network -lsfml-system -ljsoncpp
 
 ifneq ($(shell uname -s), Linux)
-	CXXFLAGS += -I/opt/homebrew/Cellar/sfml/2.5.1_2/include
-	LDLIBS   += -L/opt/homebrew/Cellar/sfml/2.5.1_2/lib
+	CXXFLAGS += -I/opt/homebrew/Cellar/sfml/2.5.1_2/include -I/opt/homebrew/Cellar/jsoncpp/1.9.5/include
+	LDLIBS   += -L/opt/homebrew/Cellar/sfml/2.5.1_2/lib -L/opt/homebrew/Cellar/jsoncpp/1.9.5/lib
 endif
 
 # Create Client objects
@@ -26,6 +26,8 @@ SERVER_DB_BINS = $(patsubst Server/Database/%.cpp, Server/Database/%.o, $(wildca
 SERVER_DB_FRIEND_BINS = $(patsubst Server/Database/Friend/%.cpp, Server/Database/Friend/%.o, $(wildcard Server/Database/Friend/*.cpp))
 SERVER_DB_CHAT_BINS = $(patsubst Server/Database/Chat/%.cpp, Server/Database/Chat/%.o, $(wildcard Server/Database/Chat/*.cpp))
 SERVER_GAME_BINS = $(patsubst Server/Game/%.cpp, Server/Game/%.o, $(wildcard Server/Game/*.cpp))
+GAME_BINS = $(patsubst Game/%.cpp, Game/%.o, $(wildcard Game/*.cpp))
+
 
 
 .PHONY: default
@@ -45,6 +47,6 @@ client: ${CLIENT_BINS} ${CLIENT_INPUTPARSER_BINS}
 	${CXX} ${CXXFLAGS} -o capitalist $^ ${LDLIBS}
 	make clean
 
-server: ${SERVER_BINS} ${SERVER_CM_BINS} ${SERVER_DB_BINS} ${SERVER_DB_FRIEND_BINS} ${SERVER_DB_CHAT_BINS} ${SERVER_GAME_BINS}
+server: ${SERVER_BINS} ${SERVER_CM_BINS} ${SERVER_DB_BINS} ${GAME_BINS} ${SERVER_DB_FRIEND_BINS} ${SERVER_DB_CHAT_BINS} ${SERVER_GAME_BINS}
 	${CXX} ${CXXFLAGS} -o server_capitalist $^ ${LDLIBS}
 	make clean

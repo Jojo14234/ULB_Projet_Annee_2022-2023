@@ -17,6 +17,8 @@ class Client {
     bool connected_to_an_account = false;
     bool in_game = false;
     
+    int account_id;
+
     ClientController controller;
     ConnectionUI ui;
 
