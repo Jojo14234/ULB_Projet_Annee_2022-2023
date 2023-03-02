@@ -4,7 +4,7 @@
 #include <string>
 
 
-class PLayer;
+class Player;
 
 enum class CELL_STATUS {PAID, FREE, HYPOTEK};
 
@@ -12,7 +12,7 @@ class Land {
 
 protected:
 	
-	Player* owner;
+	Player* owner = nullptr;
 	std::string name;
 	int purchase_price;
 

@@ -148,4 +148,4 @@ std::vector<Property *> Player::getAllProperties() {
 
 int Player::getNumberOfStations() { return stations.size(); }
 
-int Player::getNumberOfCompanies() {return companies.size(); }
+int Player::getNumberOfCompanies() { return companies.size(); }

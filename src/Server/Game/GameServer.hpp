@@ -6,6 +6,7 @@
 #include "GameCode.hpp"
 #include "../../Game/Capitalist.hpp"
 #include "../../utils/Configs.hpp"
+#include "../../Game/Board/Obtainable/Cells/Land.hpp"
 
 
 class ClientManager;	// forward declaraction
@@ -32,6 +33,7 @@ public:
 	void clientLoop(ClientManager &client);
     void clientBeforeRollLoop(ClientManager &client);
     void clientBankruptLoop(ClientManager &client);
+    void clientAuctionLoop(ClientManager &client, Land* land);
 
 	// Add a client to the game 
 	void addClient(ClientManager* client);

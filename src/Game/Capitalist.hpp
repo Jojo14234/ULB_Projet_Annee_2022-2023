@@ -95,6 +95,8 @@ public:
     int getNumberOfPlayers() {
         return players.size();
     }
-};
+    void runAuction(Cell &cell){
+    }
+}
 
 #endif

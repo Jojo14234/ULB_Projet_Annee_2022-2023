@@ -1,7 +1,12 @@
 #include "GameServer.hpp"
 #include "../ClientManager/ClientManager.hpp"
 #include "../../utils/Configs.hpp"
+#include "../../Game/Board/Obtainable/Cells/Land.hpp"
 #include "string.h"
+
+#include<cstdio>
+#include<iostream>
+#include<ctime>
 
 
 void GameServer::clientLoop(ClientManager &client) {
@@ -34,7 +39,7 @@ void GameServer::clientBeforeRollLoop(ClientManager &client) {
             else if (game.isRunning()){
                 if (&client == game.getCurrentPlayer()->getClient()){
                     if (processGameQueryBeforeRoll(client, query)){
-                        break ;
+                        break;
                     }
                 }
                 else {
@@ -85,6 +90,18 @@ void GameServer::clientBankruptLoop(ClientManager &client) {
     //TODO
 }
 
+void GameServer::clientAuctionLoop(ClientManager &client, Land* land) {
+    updateAllClients("Une enchère de 30 secondes à débutée! Elle concerne la proriétée concernée est la suivante: \n" +
+                             game.runAuction(land->getName()) + ". L'enchère débute à 10 euros!\nPour surenchérir, tapez /bid [montant].");
+    int timer = 30;
+    timer *= std::CLOCKS_PER_SEC;
+    std::clock_t now = std::clock();
+    while(clock() - now < timer){
+        client.receive() //TODO
+    }
+
+
+}
 void GameServer::processStart(ClientManager &client) {
     if (!game.isRunning()){
         if (isClientAdmin(client)){
@@ -126,6 +143,15 @@ void GameServer::processDiceRoll(ClientManager &client) {
 
         game.getCurrentPlayer()->getCurrentCell()->action(game.getCurrentPlayer());
 
+        Land *l = dynamic_cast<Land*>(&game.getCurrentPlayer()->getCurrentCell());
+        if (l != nullptr) {
+            if (l->getOwner() == nullptr){
+                clientAuctionLoop(client);
+            }
+        }
+
+        game.getCurrentPlayer()->getCurrentCell().get
+
         if (!game.getDice()->isDouble()) { break; }
     }
     game.getCurrentPlayer()->rolled(true);
@@ -133,4 +159,6 @@ void GameServer::processDiceRoll(ClientManager &client) {
         game.getCurrentPlayer()->goToJail(game.getBoard()->getCellByIndex(PRISON_INDEX));
     }
 }
+
+
 

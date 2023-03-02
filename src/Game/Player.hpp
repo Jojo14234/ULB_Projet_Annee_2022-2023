@@ -36,6 +36,8 @@ class Player {
     bool has_rolled = false;
     bool currently_playing = false;
 
+    bool currently_in_auction;
+
     PLAYER_STATUS status = FREE;
 
     std::vector<JailCard> GOOJ_cards;   //get out of jail
