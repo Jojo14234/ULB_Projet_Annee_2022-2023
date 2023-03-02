@@ -23,8 +23,25 @@ public:
 	JailCell(int pos);
     
 	void action(Player* player){
-        player->getClient()->send(""); //TODO
-    };    //envoyer demande de choix au client (reception, receive)
+        if (!player->isInJail()){
+            player->getClient().send("Vous êtes en prison, tapez /roll, /usecard ou /pay pour essayer de sortir.");
+            player->getClient()->send("Vous possédez " + std::to_string(player->hasGOOJCards()) + " cartes pour sortir de prison.");
 
+            GAME_QUERY_TYPE query;
+            sf::Packet packet;
+
+            // receive from client
+            player.getClient().receive(query, packet);
+
+            switch (query) {
+                case GAME_QUERY_TYPE::ROLL_DICE: fuihgih;
+                case GAME_QUERY_TYPE::PAY: fffuhiufh;
+                case GAME_QUERY_TYPE::USEGOOJCARD
+            }
+        }
+        else {
+            player->getClient().send("Vous visitez la prison, il ne vous arrive rien.");
+        }
+    };    //envoyer demande de choix au client (reception, receive)
 };
 #endif

@@ -30,6 +30,8 @@ public:
 
 	// Loop for the client
 	void clientLoop(ClientManager &client);
+    void clientBeforeRollLoop(ClientManager &client);
+    void clientBankruptLoop(ClientManager &client);
 
 	// Add a client to the game 
 	void addClient(ClientManager* client);
@@ -41,6 +43,7 @@ public:
 	bool isCode(int other) const { return code.getCode() == other; }
 
     void processGameQuery(ClientManager &client, GAME_QUERY_TYPE query);
+    void processGameQueryBeforeRoll(ClientManager &client, GAME_QUERY_TYPE query);
 
     void processStart(ClientManager &client);
     void processEndTurn(ClientManager &client);

@@ -67,6 +67,7 @@ public:
         players[current_player_index].setCurrentlyPlaying(false);
         (current_player_index += 1) %= (players.size());
         players[current_player_index].setCurrentlyPlaying(true);
+        players[current_player_index].getClient()->send("C'est à votre tour.");
     }
 
     int rollDice(){
@@ -89,6 +90,10 @@ public:
     }
     Board* getBoard(){
         return &board;
+    }
+
+    int getNumberOfPlayers() {
+        return players.size();
     }
 };
 

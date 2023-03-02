@@ -19,8 +19,8 @@ public:
 
 	DrawableCardCell(int pos, CardDeck* one_deck): Cell{pos}, deck{one_deck} {};
     
-	void action(Player* player);
-
+	void action(Player* player);    //card = deck.drawCard() prendre une random dans cet array
+                                    // card.action(player)
 };
 
 #endif

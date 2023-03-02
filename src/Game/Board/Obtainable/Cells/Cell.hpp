@@ -5,6 +5,7 @@
 #include "Property.hpp"
 #include "../../../Player.hpp"
 #include "../../../../Server/ClientManager/ClientManager.hpp"
+#include "../../../../utils/Configs.hpp"
 
 
 class Player;

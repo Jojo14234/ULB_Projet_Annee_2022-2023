@@ -59,8 +59,9 @@ enum class GAME_QUERY_TYPE {
 
     END_TURN,
 	ROLL_DICE,
-
+    PAY,
 	BUY,
+    USEGOOJCARD,
 
 	ARG1, // temp
 	ARG2, // temp
@@ -79,6 +80,16 @@ enum class CREATE_GAME_QUERY_TYPE {
 	NONE
 };
 
+enum class PROPERTY_COLOR {
+    BROWN=1,
+    LIGHT_BLUE=2,
+    PINK=3,
+    ORANGE=4,
+    RED=5,
+    YELLOW=6,
+    GREEN=7,
+    DARK_BLUE=8
+};
 
 
 // Game
