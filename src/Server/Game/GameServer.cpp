@@ -3,10 +3,9 @@
 #include "../../utils/Configs.hpp"
 #include "../../Game/Board/Obtainable/Cells/Land.hpp"
 #include "string.h"
+#include "Timer.hpp"
 
-#include<cstdio>
-#include<iostream>
-#include<ctime>
+#include <SFML/Network>
 
 
 void GameServer::clientLoop(ClientManager &client) {
@@ -91,13 +90,20 @@ void GameServer::clientBankruptLoop(ClientManager &client) {
 }
 
 void GameServer::clientAuctionLoop(ClientManager &client, Land* land) {
+    int bid = 10;
+    GAME_QUERY_TYPE query;
+    sf::Packet packet;
     updateAllClients("Une enchère de 30 secondes à débutée! Elle concerne la proriétée concernée est la suivante: \n" +
                              game.runAuction(land->getName()) + ". L'enchère débute à 10 euros!\nPour surenchérir, tapez /bid [montant].");
-    int timer = 30;
-    timer *= std::CLOCKS_PER_SEC;
-    std::clock_t now = std::clock();
-    while(clock() - now < timer){
-        client.receive() //TODO
+
+    for (auto client : clients){
+        client->send("La plus haute enchère est actuellement à " + std::to_string(bid) + "tapez /bid [montant] pour "
+                                                                                         "enchérir et /out pour quitter l'enchère.");
+        Timer t;
+        t.Start(11);
+        client->receive(query, packet);
+        //TODO TESTER QUE LE TIMER MARCHE
+        string arg = packet.???;
     }
 
 
