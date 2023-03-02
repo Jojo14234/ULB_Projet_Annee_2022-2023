@@ -95,7 +95,9 @@ public:
     int getNumberOfPlayers() {
         return players.size();
     }
-    void runAuction(Cell &cell){
+
+    std::vector<Player>* getPlayers(){
+        return &players; //ça marche ceci?
     }
 }
 
