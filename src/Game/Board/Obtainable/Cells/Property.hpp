@@ -39,6 +39,13 @@ public:
     
 	void action(Player* player);
 
+	void playerPurchase(Player* player) {
+		super->playerPurchase();
+		//update dans les vecteurs de player
+	}
+
+	int getLevel() { return static_cast<int>(level);}
+
 };
 
 #endif

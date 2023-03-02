@@ -12,7 +12,7 @@ class JailCell: public Cell{
     
 	void outWithMoney(Player* player) {player->pay(50); player->exitJail();};    //laisse le choix
     
-	void outWithCard();
+	void outWithCard() {};
     
 	void outWithDice(); //force à payer -> potentiel faillite
     
@@ -24,7 +24,7 @@ public:
     
 	void action(Player* player){
         if (!player->isInJail()){
-            player->getClient().send("Vous êtes en prison, tapez /roll, /usecard ou /pay pour essayer de sortir.");
+            player->getClient()->send("Vous êtes en prison, tapez /roll, /usecard ou /pay pour essayer de sortir.");
             player->getClient()->send("Vous possédez " + std::to_string(player->hasGOOJCards()) + " cartes pour sortir de prison.");
 
             GAME_QUERY_TYPE query;
@@ -34,9 +34,10 @@ public:
             player.getClient().receive(query, packet);
 
             switch (query) {
-                case GAME_QUERY_TYPE::ROLL_DICE: fuihgih;
-                case GAME_QUERY_TYPE::PAY: fffuhiufh;
+                case GAME_QUERY_TYPE::PAY: outWithMoney(player);
                 case GAME_QUERY_TYPE::USEGOOJCARD
+                case GAME_QUERY_TYPE::ROLL_DICE: fuihgih;
+                
             }
         }
         else {

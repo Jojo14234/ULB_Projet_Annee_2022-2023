@@ -9,15 +9,14 @@ class Player;
 class Company : public Land {
 
 	int getRentPrice(){
-		unsigned int nbr_of_company = this->owner.getNumberOfStations();
+		unsigned int nbr_of_company = this->owner.getNumberOfCompanies();
 		int dice_res = Dice().roll();
 		switch (nbr_of_company) {
 			case 1:
 				return dice_res*5;
-				break;
 			case 2:
 				return dice_res*12;
-				break;
+
 		}
 	}; 
 	//dé  jeter les dés x5 ou x12 selon le owner possession
@@ -25,6 +24,11 @@ class Company : public Land {
 public:
 
 	void action(Player* player);
+
+	void playerPurchase(Player* player) {
+		super->playerPurchase();
+		//update dans les vecteurs de player
+	}
 
 };
 

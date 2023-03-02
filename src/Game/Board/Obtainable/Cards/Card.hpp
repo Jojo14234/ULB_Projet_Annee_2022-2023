@@ -23,6 +23,8 @@ public:
 
 	virtual void action(Player* player)=0;
 
+	std::string getDesciption() { return description;};
+
 };
 
 #endif

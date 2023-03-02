@@ -6,6 +6,7 @@
 #include <array>
 #include <memory>
 #include <fstream>
+#include <random>
 
 #include "Card.hpp"
 #include "MoneyCard.hpp"
@@ -42,6 +43,21 @@ public:
 		}
 		this->card_list[idx] = std::make_shared<JailCard>(root[name]["JailCard"]);
 	}
+
+	Card* drawACard() {
+		std::srand(time(0));
+		while(){
+			result = std::rand()% 16;
+			Card* drawed_card = card_list.at(result);
+			if (result!=15) {
+				return drawed_card;
+			}
+			else {
+				if (drawed_card.getOwner() == nullptr;) {return drawed_card;}
+			}
+		}
+		
+	 }
 
 };
 

@@ -12,7 +12,7 @@ class Player;
 class JailCard: public Card {
 
 private:
-	Player* owner;	//est à nullptr si est dans le deck
+	Player* owner=nullptr;	//est à nullptr si est dans le deck
 
 
 public:
@@ -20,6 +20,8 @@ public:
 	using Card::Card;
 
 	void action(Player* player);
+
+	Player* getowner() {return owner;};
 
                                     //le player qui tire cette carte devient le owner
 									//si elle est re tiré mais qu'elle a deja un owner, re tiré une autre carte

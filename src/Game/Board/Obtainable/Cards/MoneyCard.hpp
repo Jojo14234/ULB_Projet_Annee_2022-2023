@@ -23,7 +23,22 @@ public:
 	
 	explicit MoneyCard(Json::Value &info):Card{info}, amount{info["amount"].asInt()}, amount_house{info["amount_house"].asInt()}, amount_hotel{info["amount_hotel"].asInt()}, receive(info["receive"].asBool()) {}
 
-	void action(Player* player);	//modif argent du joueur selon receive et amount
+	void action(Player* player) {
+		if (receive) {
+			player->receive(amount, "Bank");
+			player->getClient()->send("Vous recevez "+std::toString(amount)+"$");
+		}
+		else {
+			if (amount != 0) { playe->pay(amount, true); player->getClient()->send("Vous payez "+std::toString(amount));}
+			else {
+				std::vector<Property*> properties = player->getAllProperties();
+				for ( auto &elem : properties ){
+					if (elem.getLevel() <= 4) { player->pay(amount_house, true); }
+					else if (elem.getLevel() == 5) { player->pay(amount_hotel, true); }
+				}
+			}
+		}
+	};								//modif argent du joueur selon receive et amount
 									//si carte spécial annif, prendre argent des autres joueurs
 
 };
