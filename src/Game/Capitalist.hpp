@@ -104,6 +104,7 @@ public:
             player.auctionStart();
         }
     }
+
     Player* identifyAuctionWinner(){
         Player* winner = nullptr;
         for (auto player : players){
@@ -117,6 +118,10 @@ public:
             }
         }
         return winner;
+    }
+
+    Land* getCellByName(string& name){
+        return board.getCellByName(name);
     }
 }
 

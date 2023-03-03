@@ -35,6 +35,10 @@ public:
 
     Cell* getCellByIndex();
 
+    Cell* getCellByName(string &name);
+
+
+
 };
 
 #endif 

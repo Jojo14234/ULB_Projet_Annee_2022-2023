@@ -81,7 +81,8 @@ void GameServer::processGameQuery(ClientManager &client, GAME_QUERY_TYPE query){
 bool GameServer::processGameQueryBeforeRoll(ClientManager &client, GAME_QUERY_TYPE query) {
     switch (query) {
         case GAME_QUERY_TYPE::END_TURN: processEndTurn(client); return false;
-        case GAME_QUERY_TYPE::ROLL_DICE: processDiceRoll(client); return true;
+        case GAME_QUERY_TYPE::ROLL_DICE: processDiceRoll(client); return true; //only this line should return true, no other
+        case GAME_QUERY_TYPE::MORTGAGE: processMortgageProperty(client); return false;
         default: client.send("Cette commande n'est pas disponible."); return false;
     }
 }
@@ -130,6 +131,7 @@ void GameServer::clientAuctionLoop(ClientManager &client, Land* land) {
         }
     }
 }
+
 void GameServer::processStart(ClientManager &client) {
     if (!game.isRunning()){
         if (isClientAdmin(client)){
@@ -187,6 +189,31 @@ void GameServer::processDiceRoll(ClientManager &client) {
         game.getCurrentPlayer()->goToJail(game.getBoard()->getCellByIndex(PRISON_INDEX));
     }
 }
+
+void GameServer::processMortgageProperty(ClientManager &client) { //for now, only works if bankrupt player is the player whose turn it is.
+    GAME_QUERY_TYPE query;
+    sf::Packet packet;
+    client.send("Veuillez selectionner la propriété à hypothéquer en utilisant /select [nom de la propriété].\nTapez /leave pour quitter le mode de selection des batiments.\n");
+    while (query != GAME_QUERY_TYPE::LEAVE_SELECTION_MODE){
+        client.receive(query, packet);
+        if (query == GAME_QUERY_TYPE::SELECT){
+            Land* land = game.getCellByName();
+            if (land != nullptr and land->getOwner() == game.getCurrentPlayer()){
+                land.mortgage();     //TODO waiting for @hawen
+            }
+            else {
+                client.send("Cette propriété n'existe pas ou elle ne vous appartient pas.")
+            }
+        }
+        else {
+            client.send("Veuillez selectionner la propriété à hypothéquer en utilisant /select [nom de la propriété].\nTapez /leave pour quitter le mode de selection des batiments.\n");
+        }
+    }
+}
+
+
+
+
 
 
 

@@ -13,6 +13,16 @@ void GameInputParser::parse() {
     else if (query == "/out") {
         this->query_type = GAME_QUERY_TYPE::LEAVE_BID;
     }
+    else if (query == "/mortgage"){
+        this->query_type = GAME_QUERY_TYPE::MORTGAGE;
+    }
+    else if (query == "/select"){
+        this->query_type = GAME_QUERY_TYPE::SELECT;
+        if (this->getNbParameters() != 1) { std::cout << "Le format de la requète doit être /select [name]" << std::endl; return; }
+    }
+    else if (query == "/leave"){
+        this->query_type = GAME_QUERY_TYPE::LEAVE_SELECTION_MODE;
+    }
 	else if ( query == "/arg1" ) {
 		if (this->getNbParameters() != 1) { std::cout << this->getNbParameters() << std::endl; return; }
 		this->query_type = GAME_QUERY_TYPE::ARG1;

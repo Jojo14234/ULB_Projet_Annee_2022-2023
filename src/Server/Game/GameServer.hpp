@@ -50,6 +50,7 @@ public:
     void processStart(ClientManager &client);
     void processEndTurn(ClientManager &client);
     void processDiceRoll(ClientManager &client);
+    void processMortgageProperty(ClientManager &client);
 
     //add Player object to players vector in Capitalist
     void addPlayer(ClientManager &client) {this->game.addPlayer(client);}
@@ -61,6 +62,7 @@ public:
             client->send(update);
         }
     }
+
 
 };
 

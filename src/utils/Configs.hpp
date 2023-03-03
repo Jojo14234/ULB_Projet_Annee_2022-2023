@@ -64,6 +64,9 @@ enum class GAME_QUERY_TYPE {
     USEGOOJCARD,
     BID,
     LEAVE_BID,
+    SELECT,
+    MORTGAGE,
+    LEAVE_SELECTION_MODE,
 
 	ARG1, // temp
 	ARG2, // temp
