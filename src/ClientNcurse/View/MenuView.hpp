@@ -18,7 +18,7 @@ class MenuView : public AbstractView {
 	
 	Text join_txt{ObjectInfo{3, 22, LINES/2, COLS/4 - 11}, {"Rejoindre une partie:"} };
 	Text error_txt{ObjectInfo{3, 25, LINES/2 + 4, COLS/4 - 12}, {"Aucune partie trouvée !"} };
-	TextBox infos_txt{ObjectInfo{10, 30, 3, COLS/4 - 15}, "Liste des commandes:"};
+	TextBox infos_txt{ObjectInfo{10, 30, 3, COLS/4 - 15}, {"Liste des commandes:"}};
 	Text commands_txt{ObjectInfo{10, 30, 5, COLS/4 - 15}, {"/create", "/friends -> list, add, accept, decline, remove", "/rank -> top, pos", "/msg -> list, send"}};
 
 public:

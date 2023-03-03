@@ -13,6 +13,7 @@
 #include "AbstractViewObject.hpp"
 #include "ObjectInfo.hpp"
 #include "Cell.hpp"
+#include "TextBox.hpp"
 
  
 
@@ -21,35 +22,21 @@ class Board : public AbstractViewObject {
 	
 	static const int col_nb = 11; 
 	static const int line_nb = 11; 
-	static const int board_box_nb = col_nb * line_nb; 
 	static const int gamebox_nb = 40;
 
 	int n_player; //number of players in game
 
-	//WINDOW *board[board_box_nb];  //box_nb number of windows for gameboxes
 	std::array<std::shared_ptr<Cell>, gamebox_nb> board;
 	std::array<std::string, gamebox_nb> cellname; //vector of names of each cells
-	WINDOW *cardcases[2];  //box for cards (luck and community)
-	WINDOW *legend; //window for the legend's box
 
 	//size of a cell
 	int height = 5; 
 	int width = 11;
-	int posplayer = 2; //line on the window for players
-	int posbuilding = 3; //line on the window for buildings
 
-	const Point legend_pos {25,35};
-	const Point legend_size {16,7};
-	Point pos_text1 {1,1};
-	Point pos_text2{1,2};
-	Point pos_text3 {1,3};
-	Point pos_text4 {1,4};
-
-	const Point luckycasepos {20,10};
-	const Point commucasepos {65, 38};
-	Point cardcasesize {30,7};
-	Point pos_text5{9,3};
-	Point pos_text6{5,3};
+	TextBox legend{ObjectInfo{6, 18, ((height-1)*(line_nb-1))/2 + info.getY(), 3 + width + info.getX() },{"Legende", "* : maison", "$ : hotel", "1-6 : Joueur"}};
+	TextBox lucky_cart{ObjectInfo{6, 30, 1 + height + info.getY(), 3 + width + info.getX() }, {"", "Cartes Chances"}};
+	TextBox commu_cart{ObjectInfo{6, 30, ((line_nb-1) * (height-1)) - 6 - 1 + info.getY(), 
+								  ((col_nb-1) * (width-1)) - 30 - 3 + info.getX()}, {"","Caisse de communaute"}};
 
 	void loadCellNames();
 	void createBoard();
@@ -63,15 +50,12 @@ public:
 		this->createBoard();
 	}
 
-	void createCardCase();
-	void createLegend();
-
 	void setPlayer(int cell, int player);
 	void unsetPlayer(int cell, int player);
-	void clearBuilding(int cell);
+	void setIdle(int cell);
 	void setPurchased(int cell, int player);
 	void addHouse(int cell, int house_nb);
-	void setHotel(int cell);
+	void removeHouse(int cell, int house_nb);
 
 };
 

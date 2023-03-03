@@ -3,6 +3,9 @@
 
 void Board::draw() { 
 	for (auto& box : board) box->draw();
+	this->legend.draw();
+	this->lucky_cart.draw();
+	this->commu_cart.draw();
 }
 
 //method to have a list of name for the cells
@@ -34,37 +37,6 @@ void Board::createBoard(){
 	}
 }
 
-
-////////////////////////////////////////////////////////////////////////
-//define + create cards zones and legends
-//method to create zones for game's cards
-void Board::createCardCase(){
-
-	//zone for luck cards
-	cardcases[0] = newwin(cardcasesize.getY(), cardcasesize.getX(), luckycasepos.getY() , luckycasepos.getX() );
-	wborder(cardcases[0], '|', '|', '-', '-', '+', '+', '+', '+');
-	mvwprintw(cardcases[0], pos_text5.getY(),pos_text5.getX(), "CARTE CHANCE");
-	wrefresh(cardcases[0]);
-
-	//zone for communitgetY() cards
-	cardcases[1] = newwin(cardcasesize.getY(), cardcasesize.getX(), commucasepos.getY()  , commucasepos.getX() );
-	wborder(cardcases[1], '|', '|', '-', '-', '+', '+', '+', '+');
-	mvwprintw(cardcases[1],pos_text6.getY(),pos_text6.getX(), "CAISSE DE COMMUNAUTE");
-	wrefresh(cardcases[1]);
-}
-
-
-//method to create a box for legend
-void Board::createLegend(){
-	legend = newwin( legend_size.getY() , legend_size.getX() , legend_pos.getY() , legend_pos.getX());
-	wborder(legend, '|', '|', '-', '-', '+', '+', '+', '+');
-	mvwprintw(legend, pos_text1.getY(), pos_text1.getX(), "Légende");
-	mvwprintw(legend, pos_text2.getY(), pos_text2.getX(), "* : maison");
-	mvwprintw(legend, pos_text3.getY(), pos_text3.getX(), "$ : hotel");
-	mvwprintw(legend, pos_text4.getY(), pos_text4.getX(), "1-6 : Joueur");
-	wrefresh(legend);  
-}
-
 ////////////////////////////////////////////////////////////////
 //method for setting and unsetting player
 void Board::setPlayer(int cell,int player){
@@ -76,24 +48,18 @@ void Board::unsetPlayer(int cell,int player){
 }
 
 //method to clear all buildings a cell
-void Board::clearBuilding(int cell){
-	for (int i = 1; i < width-1; i++){
-		//mvwprintw(board[listofcell[cell]], posbuilding,i," ");
-	}
-	//wrefresh(board[listofcell[cell]]); 
+void Board::setIdle(int cell){
+	board[cell]->setIdle();
 }
 
 void Board::setPurchased(int cell, int player){
 	board[cell]->setOwner(player);	
 }
 
-void Board::addHouse(int cell,int house_nb){
+void Board::addHouse(int cell, int house_nb){
 	board[cell]->addBuilding(house_nb);
 }
-	 
 
-void Board::setHotel(int cell){
-	clearBuilding(cell);
-	//mvwprintw(board[listofcell[cell]], posbuilding,1,"$");
-	//wrefresh(board[listofcell[cell]]); 
+void Board::removeHouse(int cell, int house_nb){
+	board[cell]->removeBuilding(house_nb);
 }

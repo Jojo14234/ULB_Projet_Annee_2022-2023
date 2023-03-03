@@ -9,14 +9,6 @@ class Cell : public TextBox {
 	int building_nb=0;
 	int owner=0;
 
-protected:
-
-	void clearBuilding(){
-		building_nb = 0;
-		texts.at(2).clear();
-		this->setOwner(owner);
-	}
-
 public : 
 
 	explicit Cell(ObjectInfo info, std::string name) : AbstractViewObject(info), TextBox{info, {name}, false}, Box(info), Text(info, {name}, false) {
@@ -64,7 +56,7 @@ public :
 		if (building_nb == 0){
 			this->setOwner(owner);
 		} else {
-			this->clearBuilding();
+			texts.at(2) = std::to_string(owner) + ": ";
 			this->addBuilding(building_nb);
 		}	
 	}
