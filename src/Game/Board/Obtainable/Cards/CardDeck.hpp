@@ -46,14 +46,14 @@ public:
 
 	Card* drawACard() {
 		std::srand(time(0));
-		while(){
-			result = std::rand()% 16;
+		while(true){
+			int result = std::rand()% 16;
 			Card* drawed_card = card_list.at(result);
 			if (result!=15) {
 				return drawed_card;
 			}
 			else {
-				if (drawed_card.getOwner() == nullptr;) {return drawed_card;}
+				if (dynamic_cast<JailCard*>(drawed_card)->getOwner() == nullptr) {return drawed_card;}
 			}
 		}
 		

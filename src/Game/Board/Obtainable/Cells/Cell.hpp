@@ -2,7 +2,7 @@
 #define _GAME_CELL_HPP
 
 #include "../Obtainable.hpp"
-#include "Property.hpp"
+#include "Land/Land.hpp"
 #include "../../../Player.hpp"
 #include "../../../../Server/ClientManager/ClientManager.hpp"
 #include "../../../../utils/Configs.hpp"

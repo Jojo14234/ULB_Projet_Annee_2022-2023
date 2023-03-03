@@ -5,6 +5,10 @@
 #include <json/json.h>
 
 #include "../Obtainable.hpp"
+#include "../Cells/Land/Land.hpp"
+#include "../Cells/Land/Property.hpp"
+#include "../Cells/Land/Company.hpp"
+#include "../Cells/Land/Station.hpp"
 
 
 class Player;

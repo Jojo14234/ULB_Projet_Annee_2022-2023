@@ -4,7 +4,7 @@
 #include <string>
 #include <array>
 #include <json/json.h>
-#include "../../../../utils/Configs.hpp"
+#include "../../../../../utils/Configs.hpp"
 
 #include "Land.hpp"
 
@@ -40,8 +40,8 @@ public:
 	void action(Player* player);
 
 	void playerPurchase(Player* player) {
-		super->playerPurchase();
-		//update dans les vecteurs de player
+		Land::playerPurchase(player);
+		player->acquireProperty(this);
 	}
 
 	int getLevel() { return static_cast<int>(level);}

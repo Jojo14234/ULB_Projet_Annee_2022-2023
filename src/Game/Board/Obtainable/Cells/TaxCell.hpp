@@ -20,7 +20,7 @@ public:
     
 	TaxCell(Json::Value info): Cell{info["pos"].asInt()}, tax_price{info["amount"].asInt()}, name{info["type"].asString()} {}
     
-	void action(Player* player) {player->pay(tax_price, true); player->getClient()->send("Tu dois payer la taxe "+name+" et tu as payé "+std::to_string(tax_price)+" euro"}
+	void action(Player* player) {player->pay(tax_price, true); player->getClient()->send("Tu dois payer la taxe "+name+" et tu as payé "+std::to_string(tax_price)+" euro");
 
 
 };

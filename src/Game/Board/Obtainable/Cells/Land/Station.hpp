@@ -8,7 +8,7 @@ class PLayer;
 class Station : public Land {
 
 	int getRentPrice() {
-		unsigned int nbr_of_station = this->owner.getNumberOfStations();
+		unsigned int nbr_of_station = this->owner->getNumberOfStations();
 		switch (nbr_of_station) {
 			case 1:
 				return 25;
@@ -20,15 +20,13 @@ class Station : public Land {
 				return 200;
 		}
 	}; 
-	}
 	// dépend de owner et le nombre de gare qu'il a
 
-public:
-
+public: 
 	void action(Player* player);
 
 	void playerPurchase(Player* player) {
-		super->playerPurchase();
+		Land::acquireStation(player);
 		//update dans les vecteurs de player
 	}
 

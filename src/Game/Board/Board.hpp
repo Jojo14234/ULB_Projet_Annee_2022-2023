@@ -7,6 +7,7 @@
 
 #include <array>
 #include <memory>
+#include <string>
 
 
 class Board {
@@ -35,7 +36,7 @@ public:
 
     Cell* getCellByIndex();
 
-    Cell* getCellByName(string &name);
+    Cell* getCellByName(std::string &name);
 
 
 

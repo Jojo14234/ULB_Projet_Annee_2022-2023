@@ -10,9 +10,10 @@
 #include "BankAccount.hpp"
 #include "Board/Obtainable/Cells/Cell.hpp"
 #include "Board/Obtainable/Cards/JailCard.hpp"
-#include "Board/Obtainable/Cells/Property.hpp"
-#include "Board/Obtainable/Cells/Company.hpp"
-#include "Board/Obtainable/Cells/Station.hpp"
+#include "Board/Obtainable/Cells/Land/Land.hpp"
+#include "Board/Obtainable/Cells/Land/Property.hpp"
+#include "Board/Obtainable/Cells/Land/Company.hpp"
+#include "Board/Obtainable/Cells/Land/Station.hpp"
 
 
 #include "PLAYER_STATUS.hpp"
@@ -40,7 +41,7 @@ class Player {
 
     PLAYER_STATUS status = FREE;
 
-    std::vector<JailCard> GOOJ_cards;   //get out of jail cards
+    std::vector<JailCard*> GOOJ_cards;   //get out of jail cards
     std::vector<Property*> properties;
     std::vector<Company*> companies;
     std::vector<Station*> stations;
@@ -126,9 +127,8 @@ public:
     int getRollsInPrison();
     void addRollInPrison();
 
-    int hasGOOJCards(){
-        return GOOJ_cards.size();
-    }
+    int hasGOOJCards();
+    void looseGOOJCard();
 
     bool hasRolled();
     void rolled(bool rolled);

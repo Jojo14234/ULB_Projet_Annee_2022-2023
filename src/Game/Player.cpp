@@ -86,6 +86,7 @@ bool Player::pay(int amount, bool forced = false) {
     else {
         if (bank_account.getMoney() < amount){
             getClient()->send("Vous n'avez pas assez d'argent.");
+            return false;
         }
         else {
             bank_account.pay(amount);
@@ -119,6 +120,7 @@ Cell *Player::getCurrentCell() {
 void Player::goToJail(Cell &cell) {
     move(cell, false);
     this->status = JAILED;
+    this->rolls_in_prison =0;
     getClient()->send("Vous allez en prison.");
 }
 
@@ -138,6 +140,15 @@ void Player::addRollInPrison(){
     rolls_in_prison++;
 };
 
+int Player::hasGOOJCards(){ return GOOJ_cards.size>0();}
+
+void Player::looseGOOJCard(){
+    JailCard* card = GOOJ_cards.back();
+    this->GOOJ_cards().pop_back();
+    card.setOwner(nullptr);
+    client->send("Vous perdez votre carte prison")
+}
+
 bool Player::hasRolled() {return has_rolled;}
 
 void Player::rolled(bool rolled) {has_rolled = rolled;}
@@ -156,12 +167,14 @@ void Player::auctionStart() {currently_in_auction = true;}
 
 void Player::leaveAuction() {current_cell = false;}
 
-void Player::acquireLand(Land *land) {
+/*void Player::acquireLand(Land *land) {
     //todo rendre cette méthode moins moche
     land->playerPurchase(this);
     Property* p = dynamic_cast<Property*>(land);
     Station* s = dynamic_cast<Station*>(land);
     Company* c = dynamic_cast<Company*>(land);
+
+    
 
     if (p != nullptr){
         properties.push_back(p);
@@ -175,4 +188,16 @@ void Player::acquireLand(Land *land) {
     else {
         std::cout << "Could not purchase property" << std::endl;
     }
+}*/
+
+void Player::acquireProperty(Property prop) {
+    properties.push_back(prop);
+}
+
+void Player::acquireCompany(Company comp) {
+    companies.push_back(comp);
+}
+
+void Player::acquireStation(Station station) {
+    stationsS.push_back(station);
 }

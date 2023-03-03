@@ -1,12 +1,13 @@
 #ifndef _GAME_LAND_HPP
 #define _GAME_LAND_HPP
 
+#include "../../../../Player.hpp"
+#include <json/json.h>
 #include <string>
 
-
+enum class CELL_STATUS {PAID, FREE, HYPOTEK};
 class Player;
 
-enum class CELL_STATUS {PAID, FREE, HYPOTEK};
 
 class Land {
 

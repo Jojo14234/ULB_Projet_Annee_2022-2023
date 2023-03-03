@@ -10,11 +10,49 @@ class Player;
 
 class JailCell: public Cell{
     
-	void outWithMoney(Player* player) {player->pay(50); player->exitJail();};    //laisse le choix
+	bool outWithMoney(Player* player, bool forced) {
+        if (player->pay(50, forced)){
+            player->exitJail(); 
+            player->getClient()->send("Vous êtes sorti de prison !");
+            return true;
+        }
+        else{
+            return false;   //true fin du tour ou bien continue avec autre choix ?
+        }
+        
+    }    //laisse le choix
     
-	void outWithCard() {};
+	void outWithCard(Player* player) {
+        bool free = false;
+        if (player->hasGOOJCards()){
+            free = true;
+        }
+        else{   //enchere
+            //boucle sur tout les joueurs ? jusqu'a free ou check tous les joueurs
+            //demande si achat
+            //si concluant, free
+        }
+
+        if (free) {
+            player->exitJail();
+            player->looseGOOJCard();
+            player->getClient()->send("Vous êtes sorti de prison !");
+        }
+    }
     
-	void outWithDice(); //force à payer -> potentiel faillite
+	void outWithDice(Player* player, Dice dice) {}
+        player->addRollInPrison();
+        if (dice.isDouble()){
+            player->getClient()->send("Vous êtes sorti de prison !");
+            return true;
+        }
+        else if (player->getRollsInPrison() == 3;) {
+            return this->outWithMoney(player, true);
+        }
+        else { return true;}
+        
+    }; 
+                //force à payer -> potentiel faillite
     
 	void out();
 
@@ -23,7 +61,7 @@ public:
 	JailCell(int pos);
     
 	void action(Player* player){
-        if (!player->isInJail()){
+        if (player->isInJail()){    // y'avais un !
             player->getClient()->send("Vous êtes en prison, tapez /roll, /usecard ou /pay pour essayer de sortir.");
             player->getClient()->send("Vous possédez " + std::to_string(player->hasGOOJCards()) + " cartes pour sortir de prison.");
 
@@ -33,10 +71,24 @@ public:
             // receive from client
             player.getClient().receive(query, packet);
 
-            switch (query) {
-                case GAME_QUERY_TYPE::PAY: outWithMoney(player);
-                case GAME_QUERY_TYPE::USEGOOJCARD
-                case GAME_QUERY_TYPE::ROLL_DICE: fuihgih;
+            bool end_round = false;
+
+            while (not end_round) {
+                switch (query) {
+                case GAME_QUERY_TYPE::PAY:{
+                    end_round = outWithMoney(player, false);
+                    break;
+                }
+                case GAME_QUERY_TYPE::USEGOOJCARD: {
+                    end_round = outWithCard(player);
+                    break;
+                }
+                case GAME_QUERY_TYPE::ROLL_DICE: {
+                    Dice dice = Dice();
+                    end_round = outWithDice(player, dice);
+                    // if (free) dice.getResult play
+                    break;
+                } 
                 
             }
         }

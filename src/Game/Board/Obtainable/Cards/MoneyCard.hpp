@@ -26,15 +26,15 @@ public:
 	void action(Player* player) {
 		if (receive) {
 			player->receive(amount, "Bank");
-			player->getClient()->send("Vous recevez "+std::toString(amount)+"$");
+			player->getClient()->send("Vous recevez "+std::to_string(amount)+"$");
 		}
 		else {
-			if (amount != 0) { playe->pay(amount, true); player->getClient()->send("Vous payez "+std::toString(amount));}
+			if (amount != 0) { player->pay(amount, true); player->getClient()->send("Vous payez "+std::to_string(amount));}
 			else {
 				std::vector<Property*> properties = player->getAllProperties();
 				for ( auto &elem : properties ){
-					if (elem.getLevel() <= 4) { player->pay(amount_house, true); }
-					else if (elem.getLevel() == 5) { player->pay(amount_hotel, true); }
+					if (elem->getLevel() <= 4) { player->pay(amount_house, true); }
+					else if (elem->getLevel() == 5) { player->pay(amount_hotel, true); }
 				}
 			}
 		}

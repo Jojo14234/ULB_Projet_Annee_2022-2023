@@ -21,7 +21,9 @@ public:
 
 	void action(Player* player);
 
-	Player* getowner() {return owner;};
+	Player* getOwner() {return owner;};
+
+	void setOwner(Player* new_player) { this->owner = new_player;}
 
                                     //le player qui tire cette carte devient le owner
 									//si elle est re tiré mais qu'elle a deja un owner, re tiré une autre carte

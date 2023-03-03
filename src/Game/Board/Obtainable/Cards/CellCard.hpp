@@ -21,7 +21,7 @@ public:
 	explicit CellCard(Json::Value &info):Card{info}, dest{info["dest"].asInt()}, gain_money{info["dest"].asBool()} {}
 
 	virtual void action(Player* player) {
-		player->getClient()->send("Vous vous déplacez à la case "+ std::toString(dest));
+		player->getClient()->send("Vous vous déplacez à la case "+ std::to_string(dest));
 		player->move( ,gain_money);	//get cell by index
 	};	
 

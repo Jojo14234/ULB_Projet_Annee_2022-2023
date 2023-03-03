@@ -109,7 +109,7 @@ public:
         Player* winner = nullptr;
         for (auto player : players){
             if (player.isInAuction()){
-                if (winner == nullptrl){
+                if (winner == nullptr){
                     winner = &player;
                 }
                 else {
@@ -120,9 +120,9 @@ public:
         return winner;
     }
 
-    Land* getCellByName(string& name){
+    Land* getCellByName(std::string& name){
         return board.getCellByName(name);
     }
-}
+};
 
 #endif
