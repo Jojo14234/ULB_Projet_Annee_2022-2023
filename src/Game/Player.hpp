@@ -40,8 +40,7 @@ class Player {
 
     PLAYER_STATUS status = FREE;
 
-    std::vector<JailCard> GOOJ_cards;   //get out of jail
-
+    std::vector<JailCard> GOOJ_cards;   //get out of jail cards
     std::vector<Property*> properties;
     std::vector<Company*> companies;
     std::vector<Station*> stations;
@@ -138,6 +137,12 @@ public:
 
     int getNumberOfStations();
     int getNumberOfCompanies();
+
+    void leaveAuction();
+    bool isInAuction();
+    void auctionStart();
+
+    void acquireLand(Land* land);
 
 };
 

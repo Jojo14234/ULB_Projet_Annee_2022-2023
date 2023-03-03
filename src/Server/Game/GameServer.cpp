@@ -4,6 +4,7 @@
 #include "../../Game/Board/Obtainable/Cells/Land.hpp"
 #include "string.h"
 #include "Timer.hpp"
+#include <string>
 
 #include <SFML/Network>
 
@@ -96,17 +97,38 @@ void GameServer::clientAuctionLoop(ClientManager &client, Land* land) {
     updateAllClients("Une enchère de 30 secondes à débutée! Elle concerne la proriétée concernée est la suivante: \n" +
                              game.runAuction(land->getName()) + ". L'enchère débute à 10 euros!\nPour surenchérir, tapez /bid [montant].");
 
-    for (auto client : clients){
-        client->send("La plus haute enchère est actuellement à " + std::to_string(bid) + "tapez /bid [montant] pour "
-                                                                                         "enchérir et /out pour quitter l'enchère.");
-        Timer t;
-        t.Start(11);
-        client->receive(query, packet);
-        //TODO TESTER QUE LE TIMER MARCHE
-        string arg = packet.???;
+    for (auto player : game.getPlayers()){
+        Player* winner = game.identifyAuctionWinner();
+        if (winner != nullptr)
+        {
+            updateAllClients("Le joueur " + updateAllClients(player.getClient()->getAccount()->getUsername()) + " a remporté l'enchère!");
+            player.acquireLand(land);
+        }
+        else if (player.isInAuction()){
+            player.getClient()->send("C'est à votre tour d'enchérir! \nLa plus haute enchère est actuellement à " + std::to_string(bid) + "tapez /bid [montant] pour "
+                                                                                                                                          "enchérir et /out pour quitter l'enchère.\nVous avez 10 secondes ou vous serez automoatiquement exclu de l'enchère\nToute commande invalide résultera en une exclusion de l'enchère.");
+            //Timer t;
+            //t.Start(11); //TODO implement timer
+            client->receive(query, packet);
+            if (query == GAME_QUERY_TYPE::BID) {
+                string new_bid;
+                packet >> new_bid;
+                if (std::stoi(new_bid) <= bid){
+                    player.leaveAuction();
+                    updateAllClients(player.getClient()->getAccount()->getUsername() + "est sorti(e) de l'enchère.");
+                }
+                else {
+                    updateAllClients(player.getClient()->getAccount()->getUsername() + " a surenchéri!")
+                }
+            }
+            else {
+                player.leaveAuction();
+                updateAllClients(player.getClient()->getAccount()->getUsername() + "est sorti(e) de l'enchère.");
+            }
+
+            string arg = packet.???;
+        }
     }
-
-
 }
 void GameServer::processStart(ClientManager &client) {
     if (!game.isRunning()){

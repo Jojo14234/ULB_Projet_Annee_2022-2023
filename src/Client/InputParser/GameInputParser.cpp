@@ -6,6 +6,13 @@ void GameInputParser::parse() {
 
 	if ( query == "/roll" ) { this->query_type = GAME_QUERY_TYPE::ROLL_DICE; }
 
+    else if (query == "/bid") {
+        if (this->getNbParameters() != 1) { std::cout << "Le format de la requète doit être /bid [montant]" << std::endl; return; }
+        this->query_type = GAME_QUERY_TYPE::BID;
+    }
+    else if (query == "/out") {
+        this->query_type = GAME_QUERY_TYPE::LEAVE_BID;
+    }
 	else if ( query == "/arg1" ) {
 		if (this->getNbParameters() != 1) { std::cout << this->getNbParameters() << std::endl; return; }
 		this->query_type = GAME_QUERY_TYPE::ARG1;

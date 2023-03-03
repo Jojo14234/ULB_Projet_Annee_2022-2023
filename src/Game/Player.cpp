@@ -149,3 +149,30 @@ std::vector<Property *> Player::getAllProperties() {
 int Player::getNumberOfStations() { return stations.size(); }
 
 int Player::getNumberOfCompanies() { return companies.size(); }
+
+bool Player::isInAuction() {return currently_in_auction;}
+
+void Player::auctionStart() {currently_in_auction = true;}
+
+void Player::leaveAuction() {current_cell = false;}
+
+void Player::acquireLand(Land *land) {
+    //todo rendre cette méthode moins moche
+    land->playerPurchase(this);
+    Property* p = dynamic_cast<Property*>(land);
+    Station* s = dynamic_cast<Station*>(land);
+    Company* c = dynamic_cast<Company*>(land);
+
+    if (p != nullptr){
+        properties.push_back(p);
+    }
+    else if (s != nullptr) {
+        stations.push_back(s);
+    }
+    else if (c != nullptr){
+        companies.push_back(c);
+    }
+    else {
+        std::cout << "Could not purchase property" << std::endl;
+    }
+}

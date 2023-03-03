@@ -63,6 +63,7 @@ enum class GAME_QUERY_TYPE {
 	BUY,
     USEGOOJCARD,
     BID,
+    LEAVE_BID,
 
 	ARG1, // temp
 	ARG2, // temp

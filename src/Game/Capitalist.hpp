@@ -99,6 +99,25 @@ public:
     std::vector<Player>* getPlayers(){
         return &players; //ça marche ceci?
     }
+    void startAuction(){
+        for (auto player : players){
+            player.auctionStart();
+        }
+    }
+    Player* identifyAuctionWinner(){
+        Player* winner = nullptr;
+        for (auto player : players){
+            if (player.isInAuction()){
+                if (winner == nullptrl){
+                    winner = &player;
+                }
+                else {
+                    return nullptr;
+                }
+            }
+        }
+        return winner;
+    }
 }
 
 #endif
