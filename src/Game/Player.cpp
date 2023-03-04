@@ -78,10 +78,10 @@ ClientManager *Player::getClient() { return client; }
 bool Player::isCurrentlyPLaying() {return currently_playing;}
 void Player::setCurrentlyPlaying(bool playing) {currently_playing = playing;}
 
-bool Player::pay(int amount, bool forced = false) {
+bool Player::pay(int amount, bool forced) {
     if (forced){
         bank_account.pay(amount);
-        if (bank_account.getMoney() < O){
+        if (bank_account.getMoney() < 0){
             status = PLAYER_STATUS::BANKRUPT;
         }
         return true;
@@ -99,19 +99,15 @@ bool Player::pay(int amount, bool forced = false) {
     //return bank_account.pay(amount);
 }
 
-bool Player:://TODO
-
-std::string Player::receive(int amount, std::string source) {
-    bank_account.gain(amount); //TODO
+void Player::receive(int amount, std::string source) {
+    bank_account.gain(amount); //TODO?
     getClient()->send("Vous avez recu " + std::to_string(amount) + "e de " + source);
-    return source;
 }
 
-void Player::move(Cell &cell, bool pass_by_start = true) {
+void Player::move(Cell &cell, bool pass_by_start) {
     if (passedByStart(cell, pass_by_start)) {
-        receive(200, "Banque"));
+        receive(200, "Banque");
     }
-    current_cell = cell;
 }
 
 bool Player::passedByStart(Cell &cell, bool pass_by_start) {
@@ -147,13 +143,13 @@ void Player::addRollInPrison(){
     rolls_in_prison++;
 };
 
-int Player::hasGOOJCards(){ return GOOJ_cards.size>0();}
+int Player::hasGOOJCards(){ return (GOOJ_cards.size() > 0);}
 
 void Player::looseGOOJCard(){
     JailCard* card = GOOJ_cards.back();
-    this->GOOJ_cards().pop_back();
-    card.setOwner(nullptr);
-    client->send("Vous perdez votre carte prison")
+    this->GOOJ_cards.pop_back();
+    card->setOwner(nullptr);
+    client->send("Vous perdez votre carte prison suite à son utilisation.\n");
 }
 
 bool Player::hasRolled() {return has_rolled;}
@@ -183,7 +179,7 @@ bool Player::isInAuction() {return currently_in_auction;}
 
 void Player::auctionStart() {currently_in_auction = true;}
 
-void Player::leaveAuction() {current_cell = false;}
+void Player::leaveAuction() {currently_in_auction = false;}
 
 
 
@@ -211,15 +207,15 @@ void Player::leaveAuction() {current_cell = false;}
 }*/
 
 void Player::acquireProperty(Property &prop) { //ne pas ajouter de méthodes pour payer dans ces méthodes, elles sont aussi utilisées pour les échanges
-    properties.push_back(prop);
+    properties.push_back(&prop);
 }
 
 void Player::acquireCompany(Company &comp) {
-    companies.push_back(comp);
+    companies.push_back(&comp);
 }
 
 void Player::acquireStation(Station &station) {
-    stations.push_back(station);
+    stations.push_back(&station);
 }
 
 void Player::acquireGOOJCard(JailCard *jail_card) {

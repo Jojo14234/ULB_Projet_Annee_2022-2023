@@ -118,9 +118,9 @@ public:
     bool pay(int amount, bool forced = false);
     void receive(int amount, std::string source);
 
-    void move(Cell& cell);
+    void move(Cell& cell, bool pass_by_start = true);
 
-    bool passedByStart(Cell &cell);
+    bool passedByStart(Cell &cell, bool passed_by_start);
 
     Cell* getCurrentCell();
 
@@ -149,13 +149,14 @@ public:
     bool isInAuction();
     void auctionStart();
 
-    void acquireProperty(Property* prop);
 
-    void acquireCompany(Company* comp);
+    void acquireProperty(Property &prop);
 
-    void acquireStation(Station* station);
+    void acquireCompany(Company &comp);
 
-    void acquireGOOJCard(JailCard* jail_card);
+    void acquireStation(Station &station);
+
+    void acquireGOOJCard(JailCard *jail_card);
 
     void acquireLand(Land* land);
 

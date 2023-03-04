@@ -2,7 +2,7 @@
 #include "../../Game/Board/Obtainable/Cells/LandCell.hpp"
 #include "../ClientManager/ClientManager.hpp"
 #include "../../utils/Configs.hpp"
-#include "../../Game/Board/Obtainable/Cells/Land.hpp"
+#include "../../Game/Board/Obtainable/Cells/Land/Land.hpp"
 #include "string.h"
 #include "Timer.hpp"
 #include <string>
