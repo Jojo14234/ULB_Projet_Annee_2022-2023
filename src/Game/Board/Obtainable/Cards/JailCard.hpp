@@ -2,7 +2,7 @@
 #define _GAME_CARD_JAIL_HPP
 
 #include <string>
-#include <json/json.h>
+#include <jsoncpp/json/json.h>
 
 #include "Card.hpp"
 

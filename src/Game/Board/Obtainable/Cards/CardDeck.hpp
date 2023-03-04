@@ -2,7 +2,7 @@
 #define _GAME_CARD_DECK_HPP
 
 #include <string>
-#include <json/json.h>
+#include <jsoncpp/json/json.h>
 #include <array>
 #include <memory>
 #include <fstream>

@@ -2,7 +2,7 @@
 #define _GAME_CARD_CELL_HPP
 
 #include <string>
-#include <json/json.h>
+#include <jsoncpp/json/json.h>
 
 #include "Card.hpp"
 

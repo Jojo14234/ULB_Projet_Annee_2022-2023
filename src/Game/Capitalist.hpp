@@ -50,11 +50,11 @@ public:
 
     Player* getPlayerByClientId(int id){
         for (auto &player : players){
-            if (player.getId() == id){
+            if (player.getId() == id)
                 return &player;
-            }
         }
     }
+    
     Player* getCurrentPlayer(){ return &players[current_player_index]; }
 
     bool isRunning() {return running;}

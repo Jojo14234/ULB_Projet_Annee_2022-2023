@@ -2,7 +2,7 @@
 #define _GAME_CARD_HPP
 
 #include <string>
-#include <json/json.h>
+#include <jsoncpp/json/json.h>
 
 #include "../Obtainable.hpp"
 
