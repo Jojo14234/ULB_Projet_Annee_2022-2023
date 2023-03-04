@@ -172,6 +172,7 @@ void GameServer::processDiceRoll(ClientManager &client) {
         game.getCurrentPlayer()->move(game.getBoard().getCellByIndex((game.getCurrentPlayer()->getCurrentCell()->getPosition() + game.getDice()->getResults()) % BOARD_SIZE));
 
         game.getCurrentPlayer()->getCurrentCell()->action(game.getCurrentPlayer());
+        game.getCurrentPlayer()->getCurrentCell()
 
         Land *l = dynamic_cast<Land*>(&game.getCurrentPlayer()->getCurrentCell());
         if (l != nullptr) {

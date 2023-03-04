@@ -38,6 +38,7 @@ class Player {
     bool currently_playing = false;
 
     bool currently_in_auction;
+    bool auction_must_start;
 
     PLAYER_STATUS status = FREE;
 
@@ -143,6 +144,10 @@ public:
     void auctionStart();
 
     void acquireLand(Land* land);
+
+    void auctionMustStart() {
+        auction_must_start = true;
+    }
 
 };
 

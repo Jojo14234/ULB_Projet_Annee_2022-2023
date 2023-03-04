@@ -82,6 +82,7 @@ bool Player::pay(int amount, bool forced = false) {
     if (forced){
         bank_account.pay(amount);
         //TODO checkBankrupt();
+        return true;
     }
     else {
         if (bank_account.getMoney() < amount){
@@ -190,14 +191,14 @@ void Player::leaveAuction() {current_cell = false;}
     }
 }*/
 
-void Player::acquireProperty(Property prop) {
+void Player::acquireProperty(Property &prop) {
     properties.push_back(prop);
 }
 
-void Player::acquireCompany(Company comp) {
+void Player::acquireCompany(Company &comp) {
     companies.push_back(comp);
 }
 
-void Player::acquireStation(Station station) {
-    stationsS.push_back(station);
+void Player::acquireStation(Station &station) {
+    stations.push_back(station);
 }
