@@ -44,9 +44,12 @@ public:
 			player->pay(rent, true);
 			player->getClient()->send("Qui appartient à un autre joueur, vous lui payer "+ std::toString(rent) + "$ de loyer");
 			land->getOwner()->receive(rent);
+            if (player->getPlayerStatus() == PLAYER_STATUS::BANKRUPT){
+                player->setBankruptingPlayer(land->getOwner());
+            }
 		}
 
-		else if (land->getStatus()== LAND_STATUS::HYPOTEK) {
+		else if (land->getStatus() == LAND_STATUS::HYPOTEK) {
 
 		}
 		else{

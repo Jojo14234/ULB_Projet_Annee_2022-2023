@@ -43,6 +43,7 @@ class Player {
     bool exchange_from_jail = false;
 
     PLAYER_STATUS status = FREE;
+    Player* bankrupting_player = nullptr;
 
     std::vector<JailCard*> GOOJ_cards;   //get out of jail cards
     std::vector<Property*> properties;
@@ -137,6 +138,9 @@ public:
     void rolled(bool rolled);
 
     std::vector<Property*> getAllProperties();
+    std::vector<Company*> getAllCompanies();
+    std::vector<Station*> getAllStations();
+    std::vector<JailCard*> getAllGOOJCards();
 
     int getNumberOfStations();
     int getNumberOfCompanies();
@@ -151,6 +155,8 @@ public:
 
     void acquireStation(Station* station);
 
+    void acquireGOOJCard(JailCard* jail_card);
+
     void acquireLand(Land* land);
 
     void auctionMustStart() {
@@ -163,6 +169,9 @@ public:
 
     PLAYER_STATUS getPlayerStatus(){
         return status;
+    }
+    void setPlayerStatus(PLAYER_STATUS new_status){
+        status = new_status;
     }
 
     std::string getStringOfAllProperties(){
@@ -183,6 +192,12 @@ public:
     }
     BankAccount* getBankAccount(){
         return &bank_account;
+    }
+    void setBankruptingPlayer(Player* player){
+        bankrupting_player = player;
+    }
+    Player* getBankruptingPlayer(){
+        return bankrupting_player;
     }
 };
 

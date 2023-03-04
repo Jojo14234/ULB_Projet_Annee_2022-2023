@@ -83,16 +83,30 @@ void GameServer::processGameQuery(ClientManager &client, GAME_QUERY_TYPE query){
 
 bool GameServer::processGameQueryBeforeRoll(ClientManager &client, GAME_QUERY_TYPE query) {
     switch (query) {
-        case GAME_QUERY_TYPE::END_TURN: processEndTurn(client); return false;
-        case GAME_QUERY_TYPE::ROLL_DICE: processDiceRoll(client); return true; //only this line should return true, no other
-        case GAME_QUERY_TYPE::MORTGAGE: processMortgageProperty(client); return false;
+        case GAME_QUERY_TYPE::END_TURN : processEndTurn(client); return false;
+        case GAME_QUERY_TYPE::ROLL_DICE : processDiceRoll(client); return true; //only this line should return true, no other
+        case GAME_QUERY_TYPE::MORTGAGE : processMortgageProperty(client); return false;
         case GAME_QUERY_TYPE::EXCHANGE : processExchange(client); return false;
+        case GAME_QUERY_TYPE::BUILD : processBuildBuildings(client); return false;
+        case GAME_QUERY_TYPE::SELL_BUILDINGS : processSellBuildings(client); return false;
         default: client.send("Cette commande n'est pas disponible."); return false;
     }
 }
 
 void GameServer::clientBankruptLoop(ClientManager &client) {
-    //TODO
+    GAME_QUERY_TYPE query;
+    client.send("Vous avez fait faillite!\n");
+    while (game.getCurrentPlayer()->getBankAccount()->getMoney() < 0){
+        client.send("Seul trois optons s'offrent à vous: \n- /mortgage \n- /sell\n- /give-up.\n");
+        client.receive(query);
+        switch (query) {
+            case GAME_QUERY_TYPE::MORTGAGE case GAME_QUERY_TYPE::SELL_BUILDINGS : processGameQueryBeforeRoll(client, query); break;
+            case GAME_QUERY_TYPE::GIVE_UP : processBankruptcyToPlayer(client); break;
+            default: client.send("Cette commande n'est pas disponible.\n"); break;
+        }
+    }
+    client.send("Vous n'êtes plus en faillite! Continuez votre tour normalement.\n");
+    game.getCurrentPlayer()->setPlayerStatus(PLAYER_STATUS::FREE);
 }
 
 void GameServer::clientAuctionLoop(ClientManager &client, Land* land) {
@@ -176,8 +190,10 @@ void GameServer::processDiceRoll(ClientManager &client) {
         game.getCurrentPlayer()->move(game.getBoard().getCellByIndex((game.getCurrentPlayer()->getCurrentCell()->getPosition() + game.getDice()->getResults()) % BOARD_SIZE));
 
         game.getCurrentPlayer()->getCurrentCell()->action(game.getCurrentPlayer());
-        game.getCurrentPlayer()->getCurrentCell()
-
+        if (game.getCurrentPlayer()->getPlayerStatus() == PLAYER_STATUS::BANKRUPT and game.getCurrentPlayer()->getBankruptingPlayer() !=
+                                                                                              nullptr){
+            clientBankruptLoop(client);
+        }
         Land *l = dynamic_cast<Land*>(&game.getCurrentPlayer()->getCurrentCell());
         if (l != nullptr) {
             if (l->getOwner() == nullptr){
@@ -252,11 +268,11 @@ void GameServer::processExchange(ClientManager &client) {
         client.send(exchange_player->getStringOfAllProperties());
         client.send("Pour sélectionner la proriété ou carte que vous souhaitez aquérir, tapez /select nom de la propriété.");
         query = GAME_QUERY_TYPE::NONE;
-        while (GAME_QUERY_TYPE::SELECT != query){
+        while (GAME_QUERY_TYPE::SELECT != query) {
             client.receive(query, packet);
             packet >> name;
             LandCell* land_cell = game.getBoard()->getCellByName(name);
-            if (land_cell->getLand()->getOwner() == exchange_player){
+            if (land_cell->getLand()->getOwner() == exchange_player) {
                 client.send("Propriété sélectionée!");
                 client.send("Quel montant proposez-vous pour le rachat de cette propriété?\n Utilisez /select montant (ça doit être plus que 0).");
                 client.receive(GAME_QUERY_TYPE::SELECT, packet);
@@ -292,18 +308,64 @@ void GameServer::processExchange(ClientManager &client) {
     }
 }
 
-int GameServer::proposeExchange(Player &proposing_player, Player proposed_to_player, Land &land, int amount) {
+void GameServer::processBuildBuildings(ClientManager &client) {
+    GAME_QUERY_TYPE query = GAME_QUERY_TYPE::NONE;
+    sf::Packet packet;
+    std::string name;
+    client.send("Où voulez-vous construire? Selectionnez la propriété avec /select nom de la propriété.\n");
+    while (true){
+        client.send("Pour quitter le mode de sélection de propriétés. Tapez /leave.\n");
+        client.receive(query, packet);
+        if (query == GAME_QUERY_TYPE::LEAVE_SELECTION_MODE){
+            break;
+        }
+        packet >> name;
+        Land* land = getLandByName(name);
+        Property* p = dynamic_cast<Property*>(land);
+        if (p != nullptr and p->build(game.getCurrentPlayer())){
+            client.send("Vous avez construit un batiment.\n");
+        }
+        else {
+            client.send("Building failed.\n");
+        }
+    }
+}
+
+void GameServer::processSellBuildings(ClientManager &client) {
+    GAME_QUERY_TYPE query = GAME_QUERY_TYPE::NONE;
+    sf::Packet packet;
+    std::string name;
+    client.send(
+            "Selectionnez une propriété sur laquelle vendre un batiment avec la commande /select nom de la propriété.\n");
+    while (true) {
+        client.send("Pour quitter le mode de sélection de propriétés. Tapez /leave.\n");
+        client.receive(query, packet);
+        if (query == GAME_QUERY_TYPE::LEAVE_SELECTION_MODE) {
+            break;
+        }
+        packet >> name;
+        Land *land = getLandByName(name);
+        Property *p = dynamic_cast<Property *>(land);
+        if (p != nullptr and p->sellBuilding(game.getCurrentPlayer())) {
+            client.send("Vous avez construit un batiment.\n");
+        } else {
+            client.send("Building failed.\n");
+        }
+    }
+}
+
+bool GameServer::proposeExchange(Player &proposing_player, Player proposed_to_player, Land &land, int amount) {
     GAME_QUERY_TYPE query = GAME_QUERY_TYPE::NONE;
     sf::Packet packet;
     std::string response;
     std::string comm_string = "";
     comm_string += std::string(proposing_player.getClient()->getAccount()->getUsername() + "vous propose " + std::to_string(amount) + " pour votre possesion nommée " + land.getName());
     proposed_to_player.getClient().send(comm_string);
-    proposed_to_player.getClient().send("Pour accepter, tapez /select yes, sinon tapez /select no.")
     while (true) {
+        proposed_to_player.getClient().send("Pour accepter, tapez /select yes, sinon tapez /select no.")
         proposed_to_player.getClient()->receive(query, packet);
         packet >> response;
-        if (query == GAME_QUERY_TYPE::SELECT and (response == "yes" or response == "no")){
+        if (query == GAME_QUERY_TYPE::SELECT){
             if (response == "yes"){
                 return true;
             }
@@ -312,10 +374,32 @@ int GameServer::proposeExchange(Player &proposing_player, Player proposed_to_pla
             }
         }
     }
-
-
 }
 
+void GameServer::processBankruptcyToPlayer(ClientManager &client){
+    for (auto property : game.getCurrentPlayer()->getAllProperties()){
+        property->setOwner(game.getCurrentPlayer()->getBankruptingPlayer());
+        game.getCurrentPlayer()->getBankruptingPlayer()->acquireProperty(property);
+    }
+    for (auto company : game.getCurrentPlayer()->getAllCompanies()){
+        company->setOwner(game.getCurrentPlayer()->getBankruptingPlayer());
+        game.getCurrentPlayer()->getBankruptingPlayer()->acquireCompany(company);
+    }
+    for (auto station : game.getCurrentPlayer()->getAllStations()){
+        station->setOwner(game.getCurrentPlayer()->getBankruptingPlayer());
+        game.getCurrentPlayer()->getBankruptingPlayer()->acquireStation(station);
+    }
+    for (auto GOOJ_cards : game.getCurrentPlayer()->getAllGOOJCards()){
+        GOOJ_cards->setOwner(game.getCurrentPlayer()->getBankruptingPlayer());
+        game.getCurrentPlayer()->getBankruptingPlayer()->acquireGOOJCard(GOOJ_cards);
+    }
+}
+
+Land *GameServer::getLandByName(std::string &name) {
+    LandCell* land_cell = game.getBoard()->getCellByName(name);
+    Land* land = land_cell->getLand();
+    return land;
+}
 
 
 

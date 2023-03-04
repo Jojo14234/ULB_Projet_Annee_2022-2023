@@ -26,6 +26,15 @@ void GameInputParser::parse() {
     else if (query == "/exchange"){
         this->query_type = GAME_QUERY_TYPE::EXCHANGE;
     }
+    else if (query == "/build"){
+        this->query_type = GAME_QUERY_TYPE::BUILD;
+    }
+    else if (query == "/sell"){
+        this->query_type = GAME_QUERY_TYPE::SELL_BUILDINGS;
+    }
+    else if (query == "/give-up"){
+        this->query_type = GAME_QUERY_TYPE::GIVE_UP;
+    }
 	else if ( query == "/arg1" ) {
 		if (this->getNbParameters() != 1) { std::cout << this->getNbParameters() << std::endl; return; }
 		this->query_type = GAME_QUERY_TYPE::ARG1;

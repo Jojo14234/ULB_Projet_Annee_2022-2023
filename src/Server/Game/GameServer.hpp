@@ -51,6 +51,9 @@ public:
         }
         return ret_player;
     }
+    Capitalist* getGame(){
+        return &game;
+    }
 	
 	// VERIFIERS
 	bool isCode(int other) const { return code.getCode() == other; }
@@ -63,6 +66,8 @@ public:
     void processDiceRoll(ClientManager &client);
     void processMortgageProperty(ClientManager &client);
     void processExchange(ClientManager &client);
+    void processBuildBuildings(ClientManager &client);
+    void processSellBuildings(ClientManager &client);
 
     //add Player object to players vector in Capitalist
     void addPlayer(ClientManager &client) {this->game.addPlayer(client);}
@@ -74,8 +79,9 @@ public:
             client->send(update);
         }
     }
-
     bool proposeExchange(Player& proposing_player, Player proposed_to_player, Land& land, int amount);
+    Land* getLandByName(std::string &name);
+    void processBankruptcyToPlayer(ClientManager &client);
 };
 
 #endif

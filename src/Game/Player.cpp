@@ -81,7 +81,9 @@ void Player::setCurrentlyPlaying(bool playing) {currently_playing = playing;}
 bool Player::pay(int amount, bool forced = false) {
     if (forced){
         bank_account.pay(amount);
-        //TODO checkBankrupt();
+        if (bank_account.getMoney() < O){
+            status = PLAYER_STATUS::BANKRUPT;
+        }
         return true;
     }
     else {
@@ -91,10 +93,13 @@ bool Player::pay(int amount, bool forced = false) {
         }
         else {
             bank_account.pay(amount);
+            return true;
         }
     }
-    return bank_account.pay(amount);
+    //return bank_account.pay(amount);
 }
+
+bool Player:://TODO
 
 std::string Player::receive(int amount, std::string source) {
     bank_account.gain(amount); //TODO
@@ -155,8 +160,19 @@ bool Player::hasRolled() {return has_rolled;}
 
 void Player::rolled(bool rolled) {has_rolled = rolled;}
 
-std::vector<Property *> Player::getAllProperties() {
+std::vector<Property*> Player::getAllProperties() {
     return properties;
+}
+
+std::vector<Company*> Player::getAllCompanies(){
+    return companies;
+}
+std::vector<Station*> Player::getAllStations(){
+    return stations;
+}
+
+std::vector<JailCard*> Player::getAllGOOJCards() {
+    return GOOJ_cards;
 }
 
 int Player::getNumberOfStations() { return stations.size(); }
@@ -204,6 +220,10 @@ void Player::acquireCompany(Company &comp) {
 
 void Player::acquireStation(Station &station) {
     stations.push_back(station);
+}
+
+void Player::acquireGOOJCard(JailCard *jail_card) {
+    GOOJ_cards.push_back(jail_card);
 }
 
 void Player::acquireLand(Land *land) {
