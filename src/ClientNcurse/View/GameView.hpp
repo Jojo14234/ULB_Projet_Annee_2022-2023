@@ -13,10 +13,10 @@ class GameView : public AbstractView {
 	int left_margin = 8;
 
 	Board board;
-	Text chat_text{ObjectInfo{3,16, up_margin+5+(4*4), 125+40-8}, {"chat"}};
-	Text console_text{ObjectInfo{3,8, up_margin-2, 125+40-4}, {"console"}};
-	InputButtonFrame console{{5+(4*4), 80, up_margin, 125}};
-	InputButtonFrame chat{{5+(4*4), 80, up_margin+5+(4*4)+2, 125}};
+	Text chat_text{ObjectInfo{3,16, up_margin+ 14, 125+26}, {"chat"}};
+	Text console_text{ObjectInfo{3,8, up_margin-2, 125+30}, {"console"}};
+	InputButtonFrame console{{5+(4*2), 65, up_margin, 125}}; 
+	InputButtonFrame chat{{5+(4*2),65, up_margin + (4*4), 125}};
 
 public:
 
