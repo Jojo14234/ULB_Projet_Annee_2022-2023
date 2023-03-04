@@ -13,7 +13,7 @@ class LandCell : public Cell {
 
     Land* land;
     
-	bool isOwner(Player* player) {return land->getOwner()==player;};
+	bool isOwner(Player* player) {return land->getOwner()==player;}
 
 public: 
 
@@ -52,7 +52,11 @@ public:
 		else{
 			player->getClient()->send("Vous êtes sur votre propriété "+land->getName())
 		}
-	};
+	}
+    Land* getLand(){
+        return land;
+    }
+
 };
 
 #endif

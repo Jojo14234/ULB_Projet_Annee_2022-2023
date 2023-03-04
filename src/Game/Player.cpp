@@ -98,12 +98,13 @@ bool Player::pay(int amount, bool forced = false) {
 
 std::string Player::receive(int amount, std::string source) {
     bank_account.gain(amount); //TODO
+    getClient()->send("Vous avez recu " + std::to_string(amount) + "e de " + source);
     return source;
 }
 
 void Player::move(Cell &cell, bool pass_by_start = true) {
     if (passedByStart(cell, pass_by_start)) {
-        getClient()->send("Recieved " + std::to_string(200) + "e from" + receive(200, "Banque"));
+        receive(200, "Banque"));
     }
     current_cell = cell;
 }
@@ -193,7 +194,7 @@ void Player::leaveAuction() {current_cell = false;}
     }
 }*/
 
-void Player::acquireProperty(Property &prop) {
+void Player::acquireProperty(Property &prop) { //ne pas ajouter de méthodes pour payer dans ces méthodes, elles sont aussi utilisées pour les échanges
     properties.push_back(prop);
 }
 
@@ -203,4 +204,8 @@ void Player::acquireCompany(Company &comp) {
 
 void Player::acquireStation(Station &station) {
     stations.push_back(station);
+}
+
+void Player::acquireLand(Land *land) {
+    //TODO check what type of land it is (used for exchanges)
 }

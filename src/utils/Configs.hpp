@@ -67,6 +67,7 @@ enum class GAME_QUERY_TYPE {
     SELECT,
     MORTGAGE,
     LEAVE_SELECTION_MODE,
+    EXCHANGE,
     ACCEPT,
     DECLINE,
 

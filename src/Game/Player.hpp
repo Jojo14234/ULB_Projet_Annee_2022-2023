@@ -6,6 +6,7 @@
 #define INFO_F209_GR5_2022_PLAYER_HPP
 
 #include <vector>
+#include <string.h>
 
 #include "BankAccount.hpp"
 #include "Board/Obtainable/Cells/Cell.hpp"
@@ -150,7 +151,7 @@ public:
 
     void acquireStation(Station* station);
 
-
+    void acquireLand(Land* land);
 
     void auctionMustStart() {
         auction_must_start = true;
@@ -160,6 +161,29 @@ public:
         exchange_from_jail = true;
     }
 
+    PLAYER_STATUS getPlayerStatus(){
+        return status;
+    }
+
+    std::string getStringOfAllProperties(){
+        std::string ret_string = "";
+        ret_string += "Propriétés";
+        for (auto property : properties){
+            ret_string += property->getName(); //TODO pq l'IDE boude?
+            ret_string += ".\n";
+        }
+        for (auto company : companies){
+            ret_string += company->getName();
+            ret_string += ".\n";
+        }
+        for (auto station : stations){
+            ret_string += station->getName();
+            ret_string += ".\n";
+        }
+    }
+    BankAccount* getBankAccount(){
+        return &bank_account;
+    }
 };
 
 

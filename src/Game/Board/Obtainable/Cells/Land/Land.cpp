@@ -4,10 +4,15 @@
 #include "Company.hpp"
 #include "Station.hpp"
 
-void Land::mortgage(){
-	this->status = HYPOTEK;
+void Land::mortgage(Player* player){
+	this->status = LAND_STATUS::HYPOTEK;
+    player->receive(purchase_price/2, "hypothèque");
+}
 
-
+void Land::liftMortgage(Player *player) {
+    if (player->pay(purchase_price/2)){
+        this->status = LAND_STATUS::PAID;
+    }
 }
 
 virtual void Land::playerPurchase(Player* player) {

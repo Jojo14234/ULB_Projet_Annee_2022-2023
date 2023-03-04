@@ -1,4 +1,5 @@
 #include "GameServer.hpp"
+#include "../../Game/Board/Obtainable/Cells/LandCell.hpp"
 #include "../ClientManager/ClientManager.hpp"
 #include "../../utils/Configs.hpp"
 #include "../../Game/Board/Obtainable/Cells/Land.hpp"
@@ -7,6 +8,8 @@
 #include <string>
 
 #include <SFML/Network>
+#include <string>
+#include <stdexcept>
 
 
 void GameServer::clientLoop(ClientManager &client) {
@@ -83,6 +86,7 @@ bool GameServer::processGameQueryBeforeRoll(ClientManager &client, GAME_QUERY_TY
         case GAME_QUERY_TYPE::END_TURN: processEndTurn(client); return false;
         case GAME_QUERY_TYPE::ROLL_DICE: processDiceRoll(client); return true; //only this line should return true, no other
         case GAME_QUERY_TYPE::MORTGAGE: processMortgageProperty(client); return false;
+        case GAME_QUERY_TYPE::EXCHANGE : processExchange(client); return false;
         default: client.send("Cette commande n'est pas disponible."); return false;
     }
 }
@@ -191,26 +195,128 @@ void GameServer::processDiceRoll(ClientManager &client) {
     }
 }
 
-void GameServer::processMortgageProperty(ClientManager &client) { //for now, only works if bankrupt player is the player whose turn it is.
+void GameServer::processMortgageProperty(ClientManager &client) { //for now, only works for bankruptcy if bankrupt player is the player whose turn it is.
     GAME_QUERY_TYPE query;
     sf::Packet packet;
+    std::string name;
     client.send("Veuillez selectionner la propriété à hypothéquer en utilisant /select [nom de la propriété].\nTapez /leave pour quitter le mode de selection des batiments.\n");
-    while (query != GAME_QUERY_TYPE::LEAVE_SELECTION_MODE){
-        client.receive(query, packet);
+    while (query != GAME_QUERY_TYPE::LEAVE_SELECTION_MODE){ //TODO check if no problem with undefined definition with while loop condition
+        client.receive(query, packet); //todo check if problem if no package sent problem
+        packet >> name;
         if (query == GAME_QUERY_TYPE::SELECT){
-            Land* land = game.getCellByName();
-            if (land != nullptr and land->getOwner() == game.getCurrentPlayer()){
-                land.mortgage();     //TODO waiting for @hawen
+            LandCell* land_cell = game.getCellByName(name);
+            if (land_cell != nullptr and land_cell->getLand()->getOwner() == game.getCurrentPlayer()){
+                land_cell->getLand()->mortgage(game.getCurrentPlayer());
             }
             else {
-                client.send("Cette propriété n'existe pas ou elle ne vous appartient pas.")
+                client.send("Cette propriété n'existe pas ou elle ne vous appartient pas.\n");
             }
         }
         else {
-            client.send("Veuillez selectionner la propriété à hypothéquer en utilisant /select [nom de la propriété].\nTapez /leave pour quitter le mode de selection des batiments.\n");
+            client.send("Veuillez selectionner la propriété à hypothéquer en utilisant /select [nom de la propriété].\nTapez /leave pour quitter le mode de selection des propriétés.\n");
         }
     }
 }
+
+void GameServer::processExchange(ClientManager &client) {
+    GAME_QUERY_TYPE query = GAME_QUERY_TYPE::NONE;
+    sf::Packet packet;
+    std::string name;
+    Player* exchange_player;
+    int proposed_amount;
+    client.send("La liste des joueurs disponibles pour un échange est la suivante: \n");
+    std::string response = "";
+    for (auto player : game.getPlayers()){
+        if (player.getPlayerStatus() != PLAYER_STATUS::BANKRUPT and player != game.getCurrentPlayer()){
+            response += string(player.getClient()->getAccount()->getUsername());        //TODO ça marche?
+        }
+    }
+    client.send(response);
+    while (query != GAME_QUERY_TYPE::SELECT){ //TODO check if no problem with undefined definition with while loop condition
+        client.send("Pour choisir un joueur, utilisez /select nom d'utilisateur, pour annuler, tapez /leave.");
+        client.receive(query, packet);
+        packet >> name;
+        exchange_player = getPlayerByUsername(name);
+        if (exchange_player != nullptr or query == GAME_QUERY_TYPE::LEAVE_SELECTION_MODE){
+            break;
+        }
+        else {
+            client.send("Nom de joueur invalide, veuillez réessayer.\n");
+        }
+    }
+    if (GAME_QUERY_TYPE::LEAVE_SELECTION_MODE == query){
+        client.send("Vous quittez à présent l'interface d'échange.\n");
+    }
+    else if (GAME_QUERY_TYPE::SELECT == query){
+        client.send("Voici les propriétés disponibles pour l'échange:\n");
+        client.send(exchange_player->getStringOfAllProperties());
+        client.send("Pour sélectionner la proriété ou carte que vous souhaitez aquérir, tapez /select nom de la propriété.");
+        query = GAME_QUERY_TYPE::NONE;
+        while (GAME_QUERY_TYPE::SELECT != query){
+            client.receive(query, packet);
+            packet >> name;
+            LandCell* land_cell = game.getBoard()->getCellByName(name);
+            if (land_cell->getLand()->getOwner() == exchange_player){
+                client.send("Propriété sélectionée!");
+                client.send("Quel montant proposez-vous pour le rachat de cette propriété?\n Utilisez /select montant (ça doit être plus que 0).");
+                client.receive(GAME_QUERY_TYPE::SELECT, packet);
+                packet >> name;
+                while (true){
+                    try {
+                        proposed_amount = std::stoi(name);
+                        if (proposed_amount <= game.getCurrentPlayer()->getBankAccount()->getMoney()){
+                            break;
+                        }
+                        else {
+                            client.send("Vous n'avez pas assez d'argent pour proposer ce montant.\n");
+                        }
+                    } catch (const std::invalid_argument& e) {
+                        client.send("Invalid amount.\n");
+                    }
+                }
+                if (proposeExchange(game.getCurrentPlayer(), exchange_player, land_cell->getLand(), proposed_amount)){
+                    game.getCurrentPlayer()->acquireLand(land_cell->getLand());
+                    game.getCurrentPlayer()->pay(proposed_amount);
+                    exchange_player->receive(proposed_amount, game.getCurrentPlayer()->getClient()->getAccount());
+                    land_cell->getLand()->setOwner(game.getCurrentPlayer());
+                    client.send("Votre proposition a été acceptée!.\n");
+                }
+                else{
+                    client.send("Votre proposition a été refusée.\n");
+                }
+            }
+        }
+    }
+    else {
+        client.send("Error 1.")
+    }
+}
+
+int GameServer::proposeExchange(Player &proposing_player, Player proposed_to_player, Land &land, int amount) {
+    GAME_QUERY_TYPE query = GAME_QUERY_TYPE::NONE;
+    sf::Packet packet;
+    std::string response;
+    std::string comm_string = "";
+    comm_string += std::string(proposing_player.getClient()->getAccount()->getUsername() + "vous propose " + std::to_string(amount) + " pour votre possesion nommée " + land.getName());
+    proposed_to_player.getClient().send(comm_string);
+    proposed_to_player.getClient().send("Pour accepter, tapez /select yes, sinon tapez /select no.")
+    while (true) {
+        proposed_to_player.getClient()->receive(query, packet);
+        packet >> response;
+        if (query == GAME_QUERY_TYPE::SELECT and (response == "yes" or response == "no")){
+            if (response == "yes"){
+                return true;
+            }
+            else if (response == "no"){
+                return false;
+            }
+        }
+    }
+
+
+}
+
+
 
 
 

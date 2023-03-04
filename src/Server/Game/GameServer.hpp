@@ -7,6 +7,7 @@
 #include "../../Game/Capitalist.hpp"
 #include "../../utils/Configs.hpp"
 #include "../../Game/Board/Obtainable/Cells/Land/Land.hpp"
+#include "../../Game/Player.hpp"
 
 
 class ClientManager;	// forward declaraction
@@ -40,6 +41,16 @@ public:
 
 	// GETTERS
 	int getCode() const { return code.getCode(); }
+    Player* getPlayerByUsername(string &name) {
+        Player* ret_player = nullptr;
+        for (auto player : game.getPlayers()){
+            if (player.getClient()->getAccount()->getUsername() == name){
+                ret_player = player;
+                return ret_player;
+            }
+        }
+        return ret_player;
+    }
 	
 	// VERIFIERS
 	bool isCode(int other) const { return code.getCode() == other; }
@@ -51,6 +62,7 @@ public:
     void processEndTurn(ClientManager &client);
     void processDiceRoll(ClientManager &client);
     void processMortgageProperty(ClientManager &client);
+    void processExchange(ClientManager &client);
 
     //add Player object to players vector in Capitalist
     void addPlayer(ClientManager &client) {this->game.addPlayer(client);}
@@ -63,7 +75,7 @@ public:
         }
     }
 
-
+    bool proposeExchange(Player& proposing_player, Player proposed_to_player, Land& land, int amount);
 };
 
 #endif

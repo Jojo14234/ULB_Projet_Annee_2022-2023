@@ -24,13 +24,15 @@ public:
 
 	Land(Json::Value info) : name{info["name"].asString()}, purchase_price{info["purchase price"].asInt()} {}
 	Player* getOwner() {return this->owner;}
+    void setOwner(Player* player) {owner = player;}
 	std::string getName() {return name;}
 	int getPurchasePrice() { return this->purchase_price;}
 	LAND_STATUS getStatus() {return status;}
 
 	virtual void playerPurchase(Player* player);
 
-	void mortgage();
+	void mortgage(Player* player);
+    void liftMortgage(Player* player);
 
 };
 

@@ -39,7 +39,7 @@ public:
 
 	void playerPurchase(Player* player);
 
-	int getLevel() { return static_cast<int>(level);}
+	int getLevel() { return static_cast<int>(level); }
 
 };
 

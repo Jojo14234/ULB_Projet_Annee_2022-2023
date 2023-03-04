@@ -23,6 +23,9 @@ void GameInputParser::parse() {
     else if (query == "/leave"){
         this->query_type = GAME_QUERY_TYPE::LEAVE_SELECTION_MODE;
     }
+    else if (query == "/exchange"){
+        this->query_type = GAME_QUERY_TYPE::EXCHANGE;
+    }
 	else if ( query == "/arg1" ) {
 		if (this->getNbParameters() != 1) { std::cout << this->getNbParameters() << std::endl; return; }
 		this->query_type = GAME_QUERY_TYPE::ARG1;

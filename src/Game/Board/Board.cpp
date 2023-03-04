@@ -90,12 +90,12 @@ Cell* Board::getCellByIndex(int index){
     return cells.at(index).get();
 }
 
-Land* Board::getCellByName(string &name){ //TODO temp soltion, ask Hugo si ça lui semble logique
+LandCell* Board::getCellByName(string &name){ //TODO temp soltion, ask Hugo si ça lui semble logique
     for (auto cell : cells){
-        Land* land = dynamic_cast<Land*>(cell.get());
-        if (land != nullptr){
-            if (land->getName() == name){
-                return land;
+        LandCell* land_cell = dynamic_cast<LandCell*>(cell.get());
+        if (land_cell != nullptr){
+            if (land_cell->getLand()->getName() == name){
+                return land_cell;
             }
         }
     }
