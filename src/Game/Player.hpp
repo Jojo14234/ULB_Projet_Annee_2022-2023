@@ -115,7 +115,7 @@ public:
     bool isCurrentlyPLaying();
     void setCurrentlyPlaying(bool playing);
 
-    bool pay(int amount);
+    bool pay(int amount, bool forced = false);
     void receive(int amount, std::string source);
 
     void move(Cell& cell);

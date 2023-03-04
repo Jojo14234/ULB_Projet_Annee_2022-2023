@@ -41,11 +41,11 @@ public:
 
 	// GETTERS
 	int getCode() const { return code.getCode(); }
-    Player* getPlayerByUsername(string &name) {
+    Player* getPlayerByUsername(std::string &name) {
         Player* ret_player = nullptr;
-        for (auto player : game.getPlayers()){
+        for (auto &player : *game.getPlayers()){
             if (player.getClient()->getAccount()->getUsername() == name){
-                ret_player = player;
+                ret_player = &player;
                 return ret_player;
             }
         }

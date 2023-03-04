@@ -4,6 +4,8 @@
 #include "Obtainable/Cards/CardDeck.hpp"
 #include "Obtainable/Cells/Cell.hpp"
 #include "../../utils/Configs.hpp"
+#include "Obtainable/Cells/LandCell.hpp"
+
 
 #include <array>
 #include <memory>
@@ -36,7 +38,7 @@ public:
 
     Cell* getCellByIndex();
 
-    Cell* getCellByName(std::string &name);
+    LandCell* getCellByName(std::string &name);
 
 
 

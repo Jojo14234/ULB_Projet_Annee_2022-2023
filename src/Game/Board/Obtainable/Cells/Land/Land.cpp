@@ -23,10 +23,7 @@ virtual void Land::playerPurchase(Player* player) {
 
 
 
-void Property::playerPurchase(Player* player) {
-		Land::playerPurchase(player);
-		player->acquireProperty(this);
-	}
+
 
 void Company::playerPurchase(Player* player) {
 		Land::playerPurchase(player);

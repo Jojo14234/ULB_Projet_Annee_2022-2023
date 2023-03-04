@@ -8,6 +8,7 @@
 #include "../Server/ClientManager/ClientManager.hpp"
 #include "Player.hpp"
 #include "Board/Board.hpp"
+#include "../Game/Board/Obtainable/Cells/LandCell.hpp"
 
 
 class Capitalist {
@@ -120,7 +121,7 @@ public:
         return winner;
     }
 
-    Land* getCellByName(std::string& name){
+    LandCell* getCellByName(std::string& name){
         return board.getCellByName(name);
     }
 };

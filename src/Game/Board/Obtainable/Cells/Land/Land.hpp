@@ -18,11 +18,12 @@ protected:
 	int purchase_price;
 
 	LAND_STATUS status = LAND_STATUS::FREE;
-	int virtual getRentPrice()=0;
+
 
 public: 
 
 	Land(Json::Value info) : name{info["name"].asString()}, purchase_price{info["purchase price"].asInt()} {}
+    int virtual getRentPrice()=0;
 	Player* getOwner() {return this->owner;}
     void setOwner(Player* player) {owner = player;}
 	std::string getName() {return name;}

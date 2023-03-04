@@ -116,7 +116,7 @@ void GameServer::clientAuctionLoop(ClientManager &client, Land* land) {
     updateAllClients("Une enchère de 30 secondes à débutée! Elle concerne la proriétée concernée est la suivante: \n" +
                              game.runAuction(land->getName()) + ". L'enchère débute à 10 euros!\nPour surenchérir, tapez /bid [montant].");
 
-    for (auto player : game.getPlayers()){
+    for (auto &player : game.getPlayers()){
         Player* winner = game.identifyAuctionWinner();
         if (winner != nullptr)
         {
@@ -242,7 +242,7 @@ void GameServer::processExchange(ClientManager &client) {
     int proposed_amount;
     client.send("La liste des joueurs disponibles pour un échange est la suivante: \n");
     std::string response = "";
-    for (auto player : game.getPlayers()){
+    for (auto &player : game.getPlayers()) {
         if (player.getPlayerStatus() != PLAYER_STATUS::BANKRUPT and player != game.getCurrentPlayer()){
             response += string(player.getClient()->getAccount()->getUsername());        //TODO ça marche?
         }
