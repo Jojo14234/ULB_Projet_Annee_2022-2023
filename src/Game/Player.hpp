@@ -39,6 +39,7 @@ class Player {
 
     bool currently_in_auction;
     bool auction_must_start;
+    bool exchange_from_jail = false;
 
     PLAYER_STATUS status = FREE;
 
@@ -143,10 +144,20 @@ public:
     bool isInAuction();
     void auctionStart();
 
-    void acquireLand(Land* land);
+    void acquireProperty(Property* prop);
+
+    void acquireCompany(Company* comp);
+
+    void acquireStation(Station* station);
+
+
 
     void auctionMustStart() {
         auction_must_start = true;
+    }
+
+    void exchangeFromJail() {
+        exchange_from_jail = true;
     }
 
 };

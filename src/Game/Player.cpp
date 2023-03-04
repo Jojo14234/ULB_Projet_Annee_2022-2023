@@ -168,6 +168,8 @@ void Player::auctionStart() {currently_in_auction = true;}
 
 void Player::leaveAuction() {current_cell = false;}
 
+
+
 /*void Player::acquireLand(Land *land) {
     //todo rendre cette méthode moins moche
     land->playerPurchase(this);

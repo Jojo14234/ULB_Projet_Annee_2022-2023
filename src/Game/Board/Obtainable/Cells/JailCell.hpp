@@ -11,45 +11,45 @@ class Player;
 class JailCell: public Cell{
     
 	bool outWithMoney(Player* player, bool forced) {
-        if (player->pay(50, forced)){
+        if (player->pay(50, forced)){   //si n'arrive pas a payer
             player->exitJail(); 
             player->getClient()->send("Vous êtes sorti de prison !");
             return true;
         }
-        else{
-            return false;   //true fin du tour ou bien continue avec autre choix ?
+        else if(forced==false){
+            return false;   //s'il a fait le choix de payer mais pas assez d'argent
+                            //continue à choisir un moyen de sortir de prison
+                            //(otherwise c'est bankrupt)
         }
         
-    }    //laisse le choix
+    }   
     
 	void outWithCard(Player* player) {
-        bool free = false;
         if (player->hasGOOJCards()){
-            free = true;
-        }
-        else{   //enchere
-            //boucle sur tout les joueurs ? jusqu'a free ou check tous les joueurs
-            //demande si achat
-            //si concluant, free
-        }
-
-        if (free) {
             player->exitJail();
             player->looseGOOJCard();
             player->getClient()->send("Vous êtes sorti de prison !");
+            return true;
         }
+        else{   //echange demandé depuis prison, mettre à jour le player et sortie de boucle (boucle echange lancé dans game server)
+            player->exchangeFromJail()  //achete ou non une carte 
+            return false;   //retour à la boucle de choix, si le joueur a acheter une carte, peut l'utiliser en choississant l'option GOOJ
+        }
+
     }
     
-	void outWithDice(Player* player, Dice dice) {}
+	void outWithDice(Player* player, Dice dice) {} //test les dés et apres fin du tour
         player->addRollInPrison();
         if (dice.isDouble()){
+            player->exitJail();
             player->getClient()->send("Vous êtes sorti de prison !");
+            //penser à une méthode pour que le joueur joue (si pas le temps, juste freed et tour du joueur suivantS)
             return true;
         }
         else if (player->getRollsInPrison() == 3;) {
             return this->outWithMoney(player, true);
         }
-        else { return true;}
+        else { return true;}    //si pas de double mais que pas le 3e lancée, fin du tour du joueur
         
     }; 
                 //force à payer -> potentiel faillite
