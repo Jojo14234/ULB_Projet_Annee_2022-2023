@@ -8,7 +8,7 @@
 #include <string>
 #include <iostream>
 #include <array>
-#include "utility"
+#include <memory>
 
 #include "AbstractViewObject.hpp"
 #include "ObjectInfo.hpp"
