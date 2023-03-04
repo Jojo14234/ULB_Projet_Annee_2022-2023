@@ -8,28 +8,11 @@ class Player;
 
 class Company : public Land {
 
-	int getRentPrice(){
-		unsigned int nbr_of_company = this->owner->getNumberOfCompanies();
-		int dice_res = Dice().roll();
-		switch (nbr_of_company) {
-			case 1:
-				return dice_res*5;
-			case 2:
-				return dice_res*12;
-
-		}
-	}; 
-	//dé  jeter les dés x5 ou x12 selon le owner possession
+	int getRentPrice();
 	
 public:
 
-	void action(Player* player);
-
-	void playerPurchase(Player* player) {
-		Land::playerPurchase(player);
-		player->acquireCompany(this);
-		//update dans les vecteurs de player
-	}
+	void playerPurchase(Player* player);
 
 };
 

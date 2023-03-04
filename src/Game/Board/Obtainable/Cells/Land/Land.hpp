@@ -1,7 +1,7 @@
 #ifndef _GAME_LAND_HPP
 #define _GAME_LAND_HPP
 
-#include "../../../../Player.hpp"
+
 #include <json/json.h>
 #include <string>
 
@@ -24,14 +24,10 @@ public:
 
 	Land(Json::Value info) : name{info["name"].asString()}, purchase_price{info["purchase price"].asInt()} {}
 	Player* getOwner() {return this->owner;}
-	//void setOwner(Player* new_owner) {this->owner = new_owner;}
 	std::string getName() {return name;}
 	int getPurchasePrice() { return this->purchase_price;}
 
-	virtual void playerPurchase(Player* player) {
-		player->pay(purchase_price);
-		this->owner = player;
-	}
+	virtual void playerPurchase(Player* player);
 
 };
 

@@ -36,13 +36,8 @@ public:
 	Property(Json::Value prop_info):  Land{prop_info}, color{static_cast<PROPERTY_COLOR>(prop_info["color"].asInt())},  construct_price{prop_info["construct price"].asInt()}{
 		for (int i = 0; i<6; i++) this->rent_prices[i] = prop_info["rent prices"][i].asInt();
 	}
-    
-	void action(Player* player);
 
-	void playerPurchase(Player* player) {
-		Land::playerPurchase(player);
-		player->acquireProperty(this);
-	}
+	void playerPurchase(Player* player);
 
 	int getLevel() { return static_cast<int>(level);}
 
