@@ -35,7 +35,7 @@ public:
 
 	// Send infos to the client
 	void send(std::string &input);
-    void send(std::string &&input) { this->send(input); }
+    void send(std::string &&input);
 
 	// Receive infos from the client
 	void receive(QUERY_TYPE &query);
@@ -43,36 +43,34 @@ public:
     void receive(GAME_QUERY_TYPE &query);
 
 	// To compare
-	bool operator==(const ClientManager& other) { return this->tid == other.tid; }
+	bool operator==(const ClientManager& other);
 
 	// To enter the game
 	void enterGameLoop();
 	// Disconnect the client
-	void disconnect() { this->connected = false; }
+	void disconnect();
 	// If the client is connected
-	bool isDisconnected() const { return not this->connected; }
+	bool isDisconnected() const;
 
 	// If the client is in game
-	bool inGame() const { return bool(game_server); }
+	bool inGame() const;
 
 	// GETTERS
-	sf::TcpSocket &getSocket() { return this->socket; }
-	pthread_t* getTidPtr() { return &(this->tid); }
-    User* getAccount() { return this->account; }
+	sf::TcpSocket &getSocket();
+	pthread_t* getTidPtr();
+    User* getAccount();
 	// To get args (parsed from the client)
 	const struct args_t* getArgs() const { return &(this->args); }
-	int getCode() const { return this->args.code; }
-	const std::string& getS1() const { return this->args.s1; }
-	const std::string& getS2() const { return this->args.s2; }
+	int getCode() const;
+	const std::string& getS1() const ;
+	const std::string& getS2() const;
 
 	// SETTERS
-    void setAccount(User *user) { this->account = user; }
-	void setGameServer(GameServer* gs) { this->game_server = gs; }
-	void removeGameServer() { this->game_server = nullptr; }
+    void setAccount(User *user);
+	void setGameServer(GameServer* gs);
+	void removeGameServer();
 
-    GameServer* getGameServer(){
-        return game_server;
-    }
+    GameServer* getGameServer();
 
 };
 

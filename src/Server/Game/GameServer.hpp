@@ -40,23 +40,13 @@ public:
 	void addClient(ClientManager* client);
 
 	// GETTERS
-	int getCode() const { return code.getCode(); }
-    Player* getPlayerByUsername(std::string &name) {
-        Player* ret_player = nullptr;
-        for (auto &player : *game.getPlayers()){
-            if (player.getClient()->getAccount()->getUsername() == name){
-                ret_player = &player;
-                return ret_player;
-            }
-        }
-        return ret_player;
-    }
-    Capitalist* getGame(){
-        return &game;
-    }
+	int getCode() const;
+    Player* getPlayerByUsername(std::string &name);
+
+    Capitalist* getGame();
 	
 	// VERIFIERS
-	bool isCode(int other) const { return code.getCode() == other; }
+	bool isCode(int other) const;
 
     void processGameQuery(ClientManager &client, GAME_QUERY_TYPE query);
     bool processGameQueryBeforeRoll(ClientManager &client, GAME_QUERY_TYPE query);
@@ -70,15 +60,11 @@ public:
     void processSellBuildings(ClientManager &client);
 
     //add Player object to players vector in Capitalist
-    void addPlayer(ClientManager &client) {this->game.addPlayer(client);}
+    void addPlayer(ClientManager &client);
 
-    bool isClientAdmin(ClientManager &client) {return (game.getPlayerByClient(client)->isAdmin());}
+    bool isClientAdmin(ClientManager &client);
 
-    void updateAllClients(std::string update) {
-        for (auto client : clients){
-            client->send(update);
-        }
-    }
+    void updateAllClients(std::string update);
     bool proposeExchange(Player& proposing_player, Player &proposed_to_player, Land *land, int amount);
     Land* getLandByName(std::string &name);
     void processBankruptcyToPlayer(ClientManager &client);

@@ -9,13 +9,12 @@
 #include <string.h>
 
 #include "BankAccount.hpp"
-#include "Board/Obtainable/Cells/Cell.hpp"
+//#include "Board/Obtainable/Cells/Cell.hpp"
 #include "Board/Obtainable/Cards/JailCard.hpp"
 #include "Board/Obtainable/Cells/Land/Land.hpp"
 #include "Board/Obtainable/Cells/Land/Property.hpp"
 #include "Board/Obtainable/Cells/Land/Company.hpp"
 #include "Board/Obtainable/Cells/Land/Station.hpp"
-#include "Board/Obtainable/Cells/Cell.hpp"
 
 
 #include "PLAYER_STATUS.hpp"
@@ -23,6 +22,7 @@
 #include "../utils/Configs.hpp"
 
 class ClientManager;
+class Cell;
 
 class Player {
 
@@ -161,47 +161,21 @@ public:
 
     void acquireLand(Land* land);
 
-    void auctionMustStart() {
-        auction_must_start = true;
-    }
+    void auctionMustStart();
 
-    void exchangeFromJail() {
-        exchange_from_jail = true;
-    }
+    void exchangeFromJail();
 
-    PLAYER_STATUS getPlayerStatus(){
-        return status;
-    }
-    void setPlayerStatus(PLAYER_STATUS new_status){
-        status = new_status;
-    }
+    PLAYER_STATUS getPlayerStatus();
 
-    std::string getStringOfAllProperties(){
-        std::string ret_string = "";
-        ret_string += "Propriétés";
-        for (auto property : properties){
-            ret_string += property->getName(); //TODO pq l'IDE boude?
-            ret_string += ".\n";
-        }
-        for (auto company : companies){
-            ret_string += company->getName();
-            ret_string += ".\n";
-        }
-        for (auto station : stations){
-            ret_string += station->getName();
-            ret_string += ".\n";
-        }
-        return ret_string;
-    }
-    BankAccount* getBankAccount(){
-        return &bank_account;
-    }
-    void setBankruptingPlayer(Player* player){
-        bankrupting_player = player;
-    }
-    Player* getBankruptingPlayer(){
-        return bankrupting_player;
-    }
+    void setPlayerStatus(PLAYER_STATUS new_status);
+
+    std::string getStringOfAllProperties();
+
+    BankAccount* getBankAccount();
+
+    void setBankruptingPlayer(Player* player);
+
+    Player* getBankruptingPlayer();
 };
 
 

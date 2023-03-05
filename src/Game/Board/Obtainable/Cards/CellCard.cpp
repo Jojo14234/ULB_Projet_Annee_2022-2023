@@ -1,4 +1,6 @@
 #include "CellCard.hpp"
+#include "../../../../Server/Game/GameServer.hpp"
+
 #include "../../../Player.hpp"
 
 void CellCard::action(Player* player) {

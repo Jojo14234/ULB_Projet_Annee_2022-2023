@@ -1,16 +1,17 @@
 #ifndef _GAME_BOARD_HPP
 #define _GAME_BOARD_HPP
 
-#include "Obtainable/Cards/CardDeck.hpp"
-#include "Obtainable/Cells/Cell.hpp"
+//#include "Obtainable/Cells/Cell.hpp"
 #include "../../utils/Configs.hpp"
 #include "Obtainable/Cells/LandCell.hpp"
+#include "Obtainable/Cards/CardDeck.hpp"
 
 
 #include <array>
 #include <memory>
 #include <string>
 
+class Cell;
 
 class Board {
 
@@ -30,7 +31,7 @@ class Board {
 	void initAllCells();
 	void initAllLand();
 	void initOtherCells();
-	
+
 	
 public:
 
@@ -39,8 +40,6 @@ public:
     Cell* getCellByIndex(int index);
 
     LandCell* getCellByName(std::string &name);
-
-
 
 };
 

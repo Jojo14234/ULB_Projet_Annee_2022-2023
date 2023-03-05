@@ -5,6 +5,7 @@
 #include "../../Game/Board/Obtainable/Cells/Land/Land.hpp"
 #include "string.h"
 #include "Timer.hpp"
+#include "../../Game/Capitalist.hpp"
 #include <string>
 
 #include <SFML/Network.hpp>
@@ -395,7 +396,34 @@ Land *GameServer::getLandByName(std::string &name) {
     return land;
 }
 
+void GameServer::updateAllClients(std::string update) {
+    for (auto client : clients){
+        client->send(update);
+    }
+}
 
+int GameServer::getCode() const { return code.getCode(); }
+
+Player* GameServer::getPlayerByUsername(std::string &name) {
+    Player* ret_player = nullptr;
+    for (auto &player : *game.getPlayers()){
+        if (player.getClient()->getAccount()->getUsername() == name){
+            ret_player = &player;
+            return ret_player;
+        }
+    }
+    return ret_player;
+}
+
+Capitalist* GameServer::getGame(){
+    return &game;
+}
+
+void GameServer::addPlayer(ClientManager &client) {this->game.addPlayer(client);}
+
+bool GameServer::isClientAdmin(ClientManager &client) {return (game.getPlayerByClient(client)->isAdmin());}
+
+bool GameServer::isCode(int other) const { return code.getCode() == other; }
 
 
 

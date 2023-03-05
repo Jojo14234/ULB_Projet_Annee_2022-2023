@@ -30,7 +30,7 @@ public:
 	//void sendMessage(std::string &output) { output = "coucou ici capitalist"; }
 
     void addPlayer(ClientManager &client);
-    void removePlayer(){;
+    void removePlayer();
     void startGame();
 
     /*

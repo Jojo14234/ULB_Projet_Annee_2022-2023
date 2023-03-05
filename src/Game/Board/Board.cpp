@@ -2,7 +2,6 @@
 #include "Obtainable/Cells/LandCell.hpp"
 #include "Obtainable/Cells/JailCell.hpp"
 #include "Obtainable/Cells/ParkingCell.hpp"
-#include "Obtainable/Cells/CompanyCell.hpp"
 #include "Obtainable/Cells/GoJailCell.hpp"
 #include "Obtainable/Cells/DrawableCardCell.hpp"
 #include "Obtainable/Cells/TaxCell.hpp"
@@ -77,7 +76,6 @@ void Board::initOtherCells(){
 		this->cells[pos] = std::make_shared<TaxCell>(tax_list)
 	}
 
-
 }
 
 void Board::initAllCells(){
@@ -90,7 +88,7 @@ Cell* Board::getCellByIndex(int index){
     return cells.at(index).get();
 }
 
-LandCell* Board::getCellByName(string &name){
+LandCell* Board::getCellByName(std::string &name){
     LandCell* land_cell = nullptr; //TODO temp soltion, ask Hugo si ça lui semble logique
     for (auto cell : cells){
         land_cell = dynamic_cast<LandCell*>(cell.get());

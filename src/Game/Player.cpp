@@ -181,31 +181,6 @@ void Player::auctionStart() {currently_in_auction = true;}
 
 void Player::leaveAuction() {currently_in_auction = false;}
 
-
-
-/*void Player::acquireLand(Land *land) {
-    //todo rendre cette méthode moins moche
-    land->playerPurchase(this);
-    Property* p = dynamic_cast<Property*>(land);
-    Station* s = dynamic_cast<Station*>(land);
-    Company* c = dynamic_cast<Company*>(land);
-
-    
-
-    if (p != nullptr){
-        properties.push_back(p);
-    }
-    else if (s != nullptr) {
-        stations.push_back(s);
-    }
-    else if (c != nullptr){
-        companies.push_back(c);
-    }
-    else {
-        std::cout << "Could not purchase property" << std::endl;
-    }
-}*/
-
 void Player::acquireProperty(Property &prop) { //ne pas ajouter de méthodes pour payer dans ces méthodes, elles sont aussi utilisées pour les échanges
     properties.push_back(&prop);
 }
@@ -224,4 +199,47 @@ void Player::acquireGOOJCard(JailCard *jail_card) {
 
 void Player::acquireLand(Land *land) {
     //TODO check what type of land it is (used for exchanges)
+}
+
+void Player::auctionMustStart() {
+    auction_must_start = true;
+}
+
+void Player::exchangeFromJail() {
+    exchange_from_jail = true;
+}
+
+PLAYER_STATUS Player::getPlayerStatus(){
+    return status;
+}
+void Player::setPlayerStatus(PLAYER_STATUS new_status){
+    status = new_status;
+}
+
+std::string Player::getStringOfAllProperties(){
+    std::string ret_string = "";
+    ret_string += "Propriétés";
+    for (auto property : properties){
+        ret_string += property->getName(); //TODO pq l'IDE boude?
+        ret_string += ".\n";
+    }
+    for (auto company : companies){
+        ret_string += company->getName();
+        ret_string += ".\n";
+    }
+    for (auto station : stations){
+        ret_string += station->getName();
+        ret_string += ".\n";
+    }
+    return ret_string;
+}
+
+BankAccount* Player::getBankAccount(){
+    return &bank_account;
+}
+void Player::setBankruptingPlayer(Player* player){
+    bankrupting_player = player;
+}
+Player* Player::getBankruptingPlayer(){
+    return bankrupting_player;
 }
