@@ -49,6 +49,12 @@ public:
 				this->model->sendJoinGame(this->view->getJoinInputBox()->getValue());
 				std::string response;
 				this->model->receive(response);
+				this->view->getConsoleInputBox()->addText(response);
+
+				if (response != "aucune partie n'existe avec ce code"){
+					this->new_state = STATE::GAME;
+				}
+
 				break; }
 			
 			case IDLE: break;
