@@ -17,7 +17,7 @@ class GameView : public AbstractView {
 	Dice dice1{{3,5,25,60}};
 	Dice dice2{{3,5,25,65}};
 	Text storage_text{ObjectInfo{3, 12, up_margin + 28, 125+((65-12)/2)}, {"information"}};
-	InformationBox storage{{7+(4*2),65,35,125}};
+	InformationBox storage{{7+(4*2),65,35,125}, 4, {"player1", "player2", "player3", "player4"}};
 
 	Text chat_text{ObjectInfo{3, 4, up_margin + 13, 125+((65-4)/2)}, {"chat"}};
 	Text console_text{ObjectInfo{3, 8, up_margin - 2, 125+((65-8)/2)}, {"console"}};
@@ -47,7 +47,6 @@ public:
 
 		players_waiting.draw();
 		owner_waiting.draw();
-		storage.setMoney(1, 10);
 	}
 
 	Board* getBoard() { return &board; }
