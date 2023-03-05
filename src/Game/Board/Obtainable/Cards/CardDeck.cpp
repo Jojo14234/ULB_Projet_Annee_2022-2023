@@ -6,29 +6,6 @@
 #include "CellCard.hpp"
 
 
-
-virtual void CellCard::action(Player* player) {
-    player->getClient()->send("Vous vous déplacez à la case "+ std::to_string(dest));
-    player->move(player->getClient()->getGameServer()->getGame()->getBoard()->getCellByIndex(dest), gain_money);	//get cell by index
-};
-
-/*void MoneyCard::action(Player* player) {
-		if (receive) {
-			player->receive(amount, "Bank");
-			player->getClient()->send("Vous recevez "+std::to_string(amount)+"$");
-		}
-		else {
-			if (amount != 0) { player->pay(amount, true); player->getClient()->send("Vous payez "+std::to_string(amount));}
-			else {
-				std::vector<Property*> properties = player->getAllProperties();
-				for ( auto &elem : properties ){
-					if (elem->getLevel() <= 4) { player->pay(amount_house, true); }
-					else if (elem->getLevel() == 5) { player->pay(amount_hotel, true); }
-				}
-			}
-		}
-	};*/	
-
 CardDeck::CardDeck(std::string name) {
 		Json::Value root;
 		Json::Reader reader;

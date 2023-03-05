@@ -17,7 +17,7 @@ public:
     
 	GoJailCell(int pos);
     
-	void action(Player* player){ player->goToJail(jail);};
+	void action(Player* player);
 
 };
 
