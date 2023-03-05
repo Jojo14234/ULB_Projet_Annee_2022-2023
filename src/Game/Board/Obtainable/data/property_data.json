@@ -3,21 +3,25 @@
 			{
 				"name" : "gare 1",
 				"pos" : 5,
+				"purchase_price" : 200
 			},
 		
 			{
 				"name" : "gare 2",
 				"pos" : 15,
+				"purchase_price" : 200
 			},
 		
 			{
 				"name" : "gare 3",
 				"pos" : 25,
+				"purchase_price" : 200
 			},
 		
 			{
 				"name" : "gare 4",
 				"pos" : 35,
+				"purchase_price" : 200
 			}
 		],
 	
@@ -25,11 +29,13 @@
 			{
 				"name" : "compagnie électrique",
 				"pos" : 12,
+				"purchase_price" : 150
 			},
 			
 			{
 				"name" : "compagnie des eaux",
 				"pos" : 28,
+				"purchase_price" : 150
 			}
 		],
 	

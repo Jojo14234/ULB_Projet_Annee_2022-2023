@@ -7,9 +7,9 @@ class PLayer;
 
 class Station : public Land {
 
-	int getRentPrice();
-
-public: 
+public:
+    int getRentPrice();
+    using Land::Land;
 	void playerPurchase(Player* player);
 
 };

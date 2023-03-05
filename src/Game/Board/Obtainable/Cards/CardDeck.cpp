@@ -4,6 +4,7 @@
 #include "Card.hpp"
 #include "MoneyCard.hpp"
 #include "CellCard.hpp"
+#include "JailCard.hpp"
 
 
 CardDeck::CardDeck(std::string name) {
@@ -29,16 +30,18 @@ CardDeck::CardDeck(std::string name) {
 		this->card_list[idx] = std::make_shared<JailCard>(root[name]["JailCard"]);
 	}
 
-CardDeck::Card* drawACard() {
+Card* CardDeck::drawACard() {
 		std::srand(time(0));
 		while(true){
 			int result = std::rand()% 16;
-			Card* drawed_card = card_list.at(result);
+			Card* drawed_card = this->card_list.at(result).get();
 			if (result!=15) {
 				return drawed_card;
 			}
 			else {
-				if (dynamic_cast<JailCard*>(drawed_card)->getOwner() == nullptr) {return drawed_card;}
+				if (dynamic_cast<JailCard*>(drawed_card)->getOwner() == nullptr) {
+                    return drawed_card;
+                }
 			}
 		}
 		

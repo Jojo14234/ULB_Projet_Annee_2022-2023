@@ -104,14 +104,14 @@ void Player::receive(int amount, std::string source) {
     getClient()->send("Vous avez recu " + std::to_string(amount) + "e de " + source);
 }
 
-void Player::move(Cell &cell, bool pass_by_start) {
+void Player::move(Cell *cell, bool pass_by_start) {
     if (passedByStart(cell, pass_by_start)) {
         receive(200, "Banque");
     }
 }
 
-bool Player::passedByStart(Cell &cell, bool pass_by_start) {
-    if (cell.getPosition() - current_cell->getPosition() < 0 and pass_by_start) {
+bool Player::passedByStart(Cell* cell, bool pass_by_start) {
+    if (cell->getPosition() - current_cell->getPosition() < 0 and pass_by_start) {
         return true;
     }
     return false;
@@ -121,7 +121,7 @@ Cell *Player::getCurrentCell() {
 }
 
 void Player::goToJail(Cell *cell) {
-    move(*cell, false);
+    move(cell, false);
     this->status = JAILED;
     this->rolls_in_prison =0;
     getClient()->send("Vous allez en prison.");
@@ -141,7 +141,7 @@ int Player::getRollsInPrison() {
 
 void Player::addRollInPrison(){
     rolls_in_prison++;
-};
+}
 
 int Player::hasGOOJCards(){ return (GOOJ_cards.size() > 0);}
 

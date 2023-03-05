@@ -26,7 +26,7 @@ namespace ServerSentences {
 	}
 	std::string clientLogOut(std::string username) { return " disconnected from his account !"; } // client loop
 
-};
+}
 
 namespace ClientSentence {
 

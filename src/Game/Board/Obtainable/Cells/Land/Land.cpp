@@ -40,7 +40,7 @@ int Company::getRentPrice(){
 				return dice_res*12;
 
 		}
-	}; 
+	}
 	//dé  jeter les dés x5 ou x12 selon le owner possession
 
 void Station::playerPurchase(Player* player) {
@@ -60,5 +60,5 @@ int Station::getRentPrice() {
 			case 4:
 				return 200;
 		}
-	}; 
+	}
 	// dépend de owner et le nombre de gare qu'il a

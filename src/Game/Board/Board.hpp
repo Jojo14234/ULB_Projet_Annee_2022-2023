@@ -6,6 +6,7 @@
 #include "Obtainable/Cells/LandCell.hpp"
 #include "Obtainable/Cards/CardDeck.hpp"
 
+#include "json/json.h"
 
 #include <array>
 #include <memory>
@@ -16,10 +17,10 @@ class Cell;
 class Board {
 
 	// community card deck
-	CardDeck community_deck;
+	CardDeck* community_deck;
 	
 	// lucky card deck
-	CardDeck lucky_deck;
+	CardDeck* lucky_deck;
 	
 	// cells
 	std::array<std::shared_ptr<Cell>, BOARD_SIZE> cells;
@@ -35,7 +36,7 @@ class Board {
 	
 public:
 
-	Board() { this->initAllDecks(); this->initAllCells(); }
+	Board() { initAllDecks(); initAllCells(); }
 
     Cell* getCellByIndex(int index);
 

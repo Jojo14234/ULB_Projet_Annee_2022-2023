@@ -119,9 +119,9 @@ public:
     bool pay(int amount, bool forced = false);
     void receive(int amount, std::string source);
 
-    void move(Cell& cell, bool pass_by_start = true);
+    void move(Cell* cell, bool pass_by_start = true);
 
-    bool passedByStart(Cell &cell, bool passed_by_start);
+    bool passedByStart(Cell* cell, bool passed_by_start);
 
     Cell* getCurrentCell();
 

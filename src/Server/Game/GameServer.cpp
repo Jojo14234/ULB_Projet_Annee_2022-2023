@@ -185,7 +185,7 @@ void GameServer::processDiceRoll(ClientManager &client) {
         }
         updateAllClients(output);
         game.getCurrentPlayer()->getClient()->send(output);
-        game.getCurrentPlayer()->move(*game.getBoard()->getCellByIndex((game.getCurrentPlayer()->getCurrentCell()->getPosition() + game.getDice()->getResults()) % BOARD_SIZE));
+        game.getCurrentPlayer()->move(game.getBoard()->getCellByIndex((game.getCurrentPlayer()->getCurrentCell()->getPosition() + game.getDice()->getResults()) % BOARD_SIZE));
 
         game.getCurrentPlayer()->getCurrentCell()->action(game.getCurrentPlayer());
         if (game.getCurrentPlayer()->getPlayerStatus() == PLAYER_STATUS::BANKRUPT and game.getCurrentPlayer()->getBankruptingPlayer() !=

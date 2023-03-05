@@ -8,8 +8,10 @@
 
 
 void Board::initAllDecks(){
-	this->community_deck = CardDeck("COMMUNITY DECK");
-	this->lucky_deck = CardDeck("LUCKY DECK");
+    CardDeck deck = CardDeck("COMMUNITY DECK");
+	this->community_deck = &deck;
+    deck = CardDeck("LUCKY DECK");
+	this->lucky_deck = &deck;
 }
 
 void Board::initAllLand(){
@@ -35,9 +37,9 @@ void Board::initAllLand(){
 	}
 
 	Json::Value company_list = root["COMPANY"];
-	for (unsigned int i=0; i<station_list.size(); i++) {
+	for (unsigned int i=0; i<company_list.size(); i++) {
 		int pos = station_list[i]["pos"].asInt();
-		Company comp = Station(company_list[i]);
+		Company comp = Company{company_list[i]};
 		this->cells[pos] = std::make_shared<LandCell>(pos, &comp);
 	}
 }
@@ -50,21 +52,21 @@ void Board::initOtherCells(){
 
 	//go to jail
 	int pos = root["Go to jail"]["pos"].asInt();
-	this->cells[pos] = make_shared<GoJailCell>(pos);
+	this->cells[pos] = std::make_shared<GoJailCell>(pos);
 
 	//jail
-	int pos = root["Jail"]["pos"].asInt();
-	this->cells[pos] = make_shared<JailCell>(pos);
+	pos = root["Jail"]["pos"].asInt();
+	this->cells[pos] = std::make_shared<JailCell>(pos);
 
 	//parking
 	Json::Value parking = root["Parking"];
-	int pos = parking["pos"].asInt();
-	this->cells[pos] = make_shared<ParkingCell>(pos);
+	pos = parking["pos"].asInt();
+	this->cells[pos] = std::make_shared<ParkingCell>(pos);
 
 	//draw card
 	Json::Value draw_list = root["DRAW CARD"];
 	for (unsigned int i=0; draw_list.size(); i++){
-		int pos = draw_list[i]["pos"].asInt();
+		pos = draw_list[i]["pos"].asInt();
 		CardDeck* deck = (draw_list[i]["type"].asString()=="LUCKY DECK") ? this->lucky_deck : this->community_deck;
 		this->cells[pos] = std::make_shared<DrawableCardCell>(pos, deck);
 	}
@@ -72,15 +74,14 @@ void Board::initOtherCells(){
 	//tax
 	Json::Value tax_list = root["TAX"];
 	for (unsigned i=0; i<tax_list.size(); i++){
-		int pos tax_list[i]["pos"].asInt();
-		this->cells[pos] = std::make_shared<TaxCell>(tax_list)
+		pos = tax_list[i]["pos"].asInt();
+		this->cells[pos] = std::make_shared<TaxCell>(tax_list);
 	}
-
 }
 
 void Board::initAllCells(){
 	this->initAllLand();
-	this->initOtherCells()
+	this->initOtherCells();
 
 }
 

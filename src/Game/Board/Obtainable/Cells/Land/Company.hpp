@@ -7,11 +7,9 @@
 class Player;
 
 class Company : public Land {
-
-	int getRentPrice();
-	
 public:
-
+    int getRentPrice();
+    using Land::Land;
 	void playerPurchase(Player* player);
 
 };

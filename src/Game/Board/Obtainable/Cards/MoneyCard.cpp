@@ -1,5 +1,6 @@
 #include "MoneyCard.hpp"
 #include "../../../Player.hpp"
+#include "../../../../Server/ClientManager/ClientManager.hpp"
 
 void MoneyCard::action(Player* player) {
     if (receive) {
@@ -16,5 +17,5 @@ void MoneyCard::action(Player* player) {
             }
         }
     }
-};								//modif argent du joueur selon receive et amount
+}								//modif argent du joueur selon receive et amount
                                 //si carte spécial annif, prendre argent des autres joueurs
