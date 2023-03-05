@@ -10,10 +10,10 @@
 #include <array>
 #include <memory>
 
-#include "AbstractViewObject.hpp"
-#include "ObjectInfo.hpp"
 #include "Cell.hpp"
-#include "TextBox.hpp"
+#include "../Object/AbstractViewObject.hpp"
+#include "../Object/ObjectInfo.hpp"
+#include "../Object/TextBox.hpp"
 
  
 

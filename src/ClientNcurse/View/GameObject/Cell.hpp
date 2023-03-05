@@ -2,7 +2,7 @@
 #define _CELL_HPP
 
 #include <string>
-#include "TextBox.hpp"
+#include "../Object/TextBox.hpp"
 
 class Cell : public TextBox {
 
@@ -11,7 +11,7 @@ class Cell : public TextBox {
 
 public : 
 
-	explicit Cell(ObjectInfo info, std::string name) : AbstractViewObject(info), TextBox{info, {name}, false}, Box(info), Text(info, {name}, false) {
+	explicit Cell(ObjectInfo info, std::string name) : AbstractViewObject(info), TextBox{info, {name}, true}, Box(info), Text(info, {name}, true) {
 		this->win = newwin(info.getHeight(), info.getWidth(), info.getY(), info.getX());
 		this->draw();
 		texts.resize(3);

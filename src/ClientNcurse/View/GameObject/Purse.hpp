@@ -10,7 +10,7 @@
 #include <array>
 #include <memory>
 
-#include "Box.hpp"
+#include "../Object/Box.hpp"
 
 class Purse: public TextBox{
     int n_player;
