@@ -27,7 +27,9 @@ public:
 		this->draw();
 	}
 
-	
+	void setText(std::string new_text, int line){texts[line] = new_text;}
+	void addText(std::string new_text){texts.push_back(new_text);}
+
 	virtual void draw() {
 		if ( !this->isVisible() ) return;
 		int line=0;
