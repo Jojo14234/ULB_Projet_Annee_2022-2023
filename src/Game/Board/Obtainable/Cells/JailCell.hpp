@@ -57,7 +57,7 @@ class JailCell: public Cell {
 
 public:
 
-    JailCell(int pos);
+    using Cell::Cell;
 
     void action(Player *player) {
         if (player->isInJail()) {    // y'avais un !

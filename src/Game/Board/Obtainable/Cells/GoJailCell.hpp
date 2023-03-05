@@ -15,7 +15,7 @@ class GoJailCell: public Cell{
 
 public: 
     
-	GoJailCell(int pos);
+	using Cell::Cell;
     
 	void action(Player* player);
 

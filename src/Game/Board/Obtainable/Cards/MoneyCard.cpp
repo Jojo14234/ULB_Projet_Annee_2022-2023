@@ -1,6 +1,8 @@
 #include "MoneyCard.hpp"
 #include "../../../Player.hpp"
 #include "../../../../Server/ClientManager/ClientManager.hpp"
+#include "../Cells/Land/Property.hpp"
+
 
 void MoneyCard::action(Player* player) {
     if (receive) {

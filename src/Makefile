@@ -32,6 +32,7 @@ BOARD_BINS = $(patsubst Game/Board/%.cpp, Game/Board/%.o, $(wildcard Game/Board/
 OBTAINABLE_BINS = $(patsubst Game/Board/Obtainable/%.cpp, Game/Board/Obtainable/%.o, $(wildcard Game/Board/Obtainable/*.cpp))
 CARDS_BINS = $(patsubst Game/Board/Obtainable/Cards/%.cpp, Game/Board/Obtainable/Cards/%.o, $(wildcard Game/Board/Obtainable/Cards/*.cpp))
 CELLS_BINS = $(patsubst Game/Board/Obtainable/Cells/%.cpp, Game/Board/Obtainable/Cells/%.o, $(wildcard Game/Board/Obtainable/Cells/*.cpp))
+LAND_BINS = $(patsubst Game/Board/Obtainable/Cells/Land/%.cpp, Game/Board/Obtainable/Cells/Land/%.o, $(wildcard Game/Board/Obtainable/Cells/Land/*.cpp))
 
 
 
@@ -40,7 +41,7 @@ default: main
 
 .PHONY: clean
 clean:
-	-rm *.o */*.o */*/*.o */*/*/*.o 2> /dev/null
+	-rm *.o */*.o */*/*.o */*/*/*.o */*/*/*/*.o 2> /dev/null
 
 rm:
 	-rm capitalist server_capitalist 2> /dev/null
@@ -52,6 +53,6 @@ client: ${CLIENT_BINS} ${CLIENT_INPUTPARSER_BINS}
 	${CXX} ${CXXFLAGS} -o capitalist $^ ${LDLIBS}
 	make clean
 
-server: ${SERVER_BINS} ${SERVER_CM_BINS} ${SERVER_DB_BINS} ${GAME_BINS} ${BOARD_BINS} ${OBTAINABLE_BINS} ${CARDS_BINS} ${CELLS_BINS} ${SERVER_DB_FRIEND_BINS} ${SERVER_DB_CHAT_BINS} ${SERVER_GAME_BINS}
+server: ${SERVER_BINS} ${SERVER_CM_BINS} ${SERVER_DB_BINS} ${GAME_BINS} ${BOARD_BINS} ${OBTAINABLE_BINS} ${CARDS_BINS} ${CELLS_BINS} ${LAND_BINS} ${SERVER_DB_FRIEND_BINS} ${SERVER_DB_CHAT_BINS} ${SERVER_GAME_BINS} 
 	${CXX} ${CXXFLAGS} -o server_capitalist $^ ${LDLIBS}
 	make clean

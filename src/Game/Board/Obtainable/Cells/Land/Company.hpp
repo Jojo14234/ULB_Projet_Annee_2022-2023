@@ -8,8 +8,11 @@ class Player;
 
 class Company : public Land {
 public:
-    int getRentPrice();
+
     using Land::Land;
+
+    int getRentPrice();
+
 	void playerPurchase(Player* player);
 
 };

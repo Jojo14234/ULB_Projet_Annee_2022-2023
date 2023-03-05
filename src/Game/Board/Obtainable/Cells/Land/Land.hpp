@@ -24,7 +24,10 @@ protected:
 public: 
 
 	Land(Json::Value info) : name{info["name"].asString()}, purchase_price{info["purchase price"].asInt()}, pos{info["pos"].asInt()} {}
-    int virtual getRentPrice()=0;
+    
+	virtual ~Land()=default;
+
+	int virtual getRentPrice()=0;
 	Player* getOwner() {return this->owner;}
     void setOwner(Player* player) {owner = player;}
 	std::string getName() {return name;}

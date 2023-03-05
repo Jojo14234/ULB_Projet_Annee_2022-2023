@@ -11,9 +11,7 @@ class Player;
 
 class JailCard: public Card {
 
-private:
 	Player* owner=nullptr;	//est à nullptr si est dans le deck
-
 
 public:
 
@@ -21,9 +19,9 @@ public:
 
 	void action(Player* player);
 
-	Player* getOwner() {return owner;};
+	Player* getOwner() {return owner; }
 
-	void setOwner(Player* new_player) { this->owner = new_player;}
+	void setOwner(Player* new_player) { this->owner = new_player; }
 
                                     //le player qui tire cette carte devient le owner
 									//si elle est re tiré mais qu'elle a deja un owner, re tiré une autre carte
