@@ -36,7 +36,7 @@ public:
 
 	Board() { this->initAllDecks(); this->initAllCells(); }
 
-    Cell* getCellByIndex();
+    Cell* getCellByIndex(int index);
 
     LandCell* getCellByName(std::string &name);
 

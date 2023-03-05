@@ -101,8 +101,13 @@ public:
         return &players; //ça marche ceci?
     }
     void startAuction(){
-        for (auto player : players){
-            player.auctionStart();
+        for (auto &player : players){
+            if (player.getPlayerStatus() != PLAYER_STATUS::BANKRUPT){
+                player.auctionStart();
+            }
+            else {
+                player.leaveAuction();
+            }
         }
     }
 

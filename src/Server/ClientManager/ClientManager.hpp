@@ -40,6 +40,7 @@ public:
 	// Receive infos from the client
 	void receive(QUERY_TYPE &query);
 	void receive(GAME_QUERY_TYPE &query, sf::Packet &packet);
+    void receive(GAME_QUERY_TYPE &query);
 
 	// To compare
 	bool operator==(const ClientManager& other) { return this->tid == other.tid; }

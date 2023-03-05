@@ -23,13 +23,24 @@ class Property : public Land {
     
 	PROPERTY_LEVEL level = PROPERTY_LEVEL::EMPTY;
 
-	int getRentPrice() { return this->rent_prices[static_cast<int>(this->level)];}
+	int getRentPrice() {
+        //hasAllColor
+        return this->rent_prices[static_cast<int>(this->level)];
+    }
     
 	void levelUp() { int actual=static_cast<int>(this->level); this->level = static_cast<PROPERTY_LEVEL>(actual+1);}
 
+    void levelDown() { int actual=static_cast<int>(this->level); this->level = static_cast<PROPERTY_LEVEL>(actual-1);}
+
     PROPERTY_COLOR getColor() { return this->color; }
 
-    bool checkBuild(Player* player);
+    bool checkTransaction(Player* player, bool is_building);
+
+    std::vector<Property*> getSameColorBuilding(std::vector<Property*> player_props);
+
+    bool hasGoodLevel(int potential_level, std::vector<Property*> same_color);
+
+
 
 public:
     
@@ -44,6 +55,8 @@ public:
     PROPERTY_LEVEL getLevel() {return this->level;};
 
     bool build(Player* player);
+
+    bool sellBuilding(Player* player);
 
 };
 

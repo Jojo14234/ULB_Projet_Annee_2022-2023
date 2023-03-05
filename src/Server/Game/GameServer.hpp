@@ -74,12 +74,12 @@ public:
 
     bool isClientAdmin(ClientManager &client) {return (game.getPlayerByClient(client)->isAdmin());}
 
-    void updateAllClients(std::string& update) {
+    void updateAllClients(std::string update) {
         for (auto client : clients){
             client->send(update);
         }
     }
-    bool proposeExchange(Player& proposing_player, Player proposed_to_player, Land& land, int amount);
+    bool proposeExchange(Player& proposing_player, Player &proposed_to_player, Land *land, int amount);
     Land* getLandByName(std::string &name);
     void processBankruptcyToPlayer(ClientManager &client);
 };

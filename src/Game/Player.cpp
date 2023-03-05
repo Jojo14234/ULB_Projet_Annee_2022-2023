@@ -120,8 +120,8 @@ Cell *Player::getCurrentCell() {
     return current_cell;
 }
 
-void Player::goToJail(Cell &cell) {
-    move(cell, false);
+void Player::goToJail(Cell *cell) {
+    move(*cell, false);
     this->status = JAILED;
     this->rolls_in_prison =0;
     getClient()->send("Vous allez en prison.");

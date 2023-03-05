@@ -43,4 +43,12 @@ void ClientManager::receive(GAME_QUERY_TYPE &query, sf::Packet &packet) {
 	query = static_cast<GAME_QUERY_TYPE>(tmp);
 }
 
+void ClientManager::receive(GAME_QUERY_TYPE &query) {
+    sf::Packet packet;
+    int tmp;
+    packet >> tmp;
+    query = static_cast<GAME_QUERY_TYPE>(tmp); //TODO je comprends pas le fonctionnement...
+}
+
+
 void ClientManager::enterGameLoop() { this->game_server->addPlayer(*this); this->game_server->clientLoop(*this); }

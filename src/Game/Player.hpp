@@ -125,7 +125,7 @@ public:
     Cell* getCurrentCell();
 
     void exitJail();
-    void goToJail(Cell &cell);
+    void goToJail(Cell *cell);
     bool isInJail();
 
     int getRollsInPrison();
