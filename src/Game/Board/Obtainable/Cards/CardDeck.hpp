@@ -8,9 +8,9 @@
 #include <fstream>
 
 
-/*#include "Card.hpp"
+#include "Card.hpp"
 #include "MoneyCard.hpp"
-#include "CellCard.hpp"*/
+#include "CellCard.hpp"
 
 
 class CardDeck {

@@ -80,11 +80,14 @@ public:
     }
 
     Player* getPlayerByClient(ClientManager &client){
+        Player* ret = nullptr;
         for (auto &player : players){
             if (player.getClient() == &client){
-                return &player;
+                ret = &player;
+                break;
             }
         }
+        return ret;
     }
     Dice* getDice(){
         return &dice;

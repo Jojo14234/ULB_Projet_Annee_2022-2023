@@ -35,6 +35,8 @@ public:
             switch (query) {
                 case GAME_QUERY_TYPE::ACCEPT: land->playerPurchase(player);	//si ne peut pas ou n'achete pas -> enchere
                 case GAME_QUERY_TYPE::DECLINE: player->auctionMustStart();
+                default:
+                    break;
                 
             }
 

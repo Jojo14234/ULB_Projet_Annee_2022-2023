@@ -24,7 +24,7 @@ class JailCell: public Cell{
         
     }   
     
-	void outWithCard(Player* player) {
+	bool outWithCard(Player* player) {
         if (player->hasGOOJCards()){
             player->exitJail();
             player->looseGOOJCard();
@@ -38,7 +38,7 @@ class JailCell: public Cell{
 
     }
     
-	void outWithDice(Player* player, Dice dice) {} //test les dés et apres fin du tour
+	bool outWithDice(Player* player, Dice dice){ //test les dés et apres fin du tour
         player->addRollInPrison();
         if (dice.isDouble()){
             player->exitJail();
@@ -69,7 +69,7 @@ public:
             sf::Packet packet;
 
             // receive from client
-            player.getClient().receive(query, packet);
+            player.getClient()->receive(query, packet);
 
             bool end_round = false;
 

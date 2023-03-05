@@ -15,6 +15,7 @@
 #include "Board/Obtainable/Cells/Land/Property.hpp"
 #include "Board/Obtainable/Cells/Land/Company.hpp"
 #include "Board/Obtainable/Cells/Land/Station.hpp"
+#include "Board/Obtainable/Cells/Cell.hpp"
 
 
 #include "PLAYER_STATUS.hpp"
@@ -190,6 +191,7 @@ public:
             ret_string += station->getName();
             ret_string += ".\n";
         }
+        return ret_string;
     }
     BankAccount* getBankAccount(){
         return &bank_account;
