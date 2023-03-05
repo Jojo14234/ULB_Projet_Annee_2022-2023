@@ -3,12 +3,14 @@
 
 #include <SFML/Network.hpp>
 
-
 #include "../utils/Configs.hpp"
-#include "../Server/ClientManager/ClientManager.hpp"
+
 #include "Player.hpp"
 #include "Board/Board.hpp"
 #include "../Game/Board/Obtainable/Cells/LandCell.hpp"
+
+
+class ClientManager;
 
 
 class Capitalist {
@@ -23,33 +25,13 @@ public:
 
 	Capitalist()=default;
 
-	void receiveQuery(GAME_QUERY_TYPE query, sf::Packet &packet) {
-		std::string s1="", s2="";
-		switch (query) {
-			case GAME_QUERY_TYPE::ARG1 : packet >> s1; break;
-			case GAME_QUERY_TYPE::ARG2 : packet >> s1 >> s2; break;
-            case GAME_QUERY_TYPE::LEAVE : removePlayer(); break;
-			default : break;
-		}
-		std::cout << "in capitalist : " << (int)query << " " << s1 << " " << s2 << std::endl;
-	}
+	void receiveQuery(GAME_QUERY_TYPE query, sf::Packet &packet);
 
-    void displayGameStatus(){
-        std::cout << players.size() << "are present in this game." << std::endl;
-        std::cout << "Player 1 is on tile number " << players.at(0).getIndexOnBoard() << std::endl;
-    };
+	//void sendMessage(std::string &output) { output = "coucou ici capitalist"; }
 
-	void sendMessage(std::string &output) { output = "coucou ici capitalist"; }
-
-    void addPlayer(ClientManager &client){
-        players.push_back(Player(&client));
-        if (players.size() == 1) {players[0].setAdmin(); players[0].setCurrentlyPlaying(true);}
-    }
-    void removePlayer(){
-        //TODO : find correspinding id of player to delete
-        players.pop_back();
-    }
-    void startGame(){ running = true; }
+    void addPlayer(ClientManager &client);
+    void removePlayer(){;
+    void startGame();
 
     /*
     Player* getPlayerByClientId(int id){
@@ -60,78 +42,28 @@ public:
         } return nullptr;
     }
 */
-    Player* getCurrentPlayer(){ return &players[current_player_index]; }
+    Player* getCurrentPlayer();
 
-    bool isRunning() {return running;}
+    bool isRunning();
 
-    void endCurrentTurn(){
-        players[current_player_index].setCurrentlyPlaying(false);
-        (current_player_index += 1) %= (players.size());
-        players[current_player_index].setCurrentlyPlaying(true);
-        players[current_player_index].getClient()->send("C'est à votre tour.");
-    }
+    void endCurrentTurn();
 
-    int rollDice(){
-        return dice.roll();
-    }
+    int rollDice();
 
-    bool rolledADouble(){
-        return dice.isDouble();
-    }
+    bool rolledADouble();
 
-    Player* getPlayerByClient(ClientManager &client){
-        Player* ret = nullptr;
-        for (auto &player : players){
-            if (player.getClient() == &client){
-                ret = &player;
-                break;
-            }
-        }
-        return ret;
-    }
-    Dice* getDice(){
-        return &dice;
-    }
-    Board* getBoard(){
-        return &board;
-    }
+    Player* getPlayerByClient(ClientManager &client);
+    Dice* getDice();
+    Board* getBoard();
 
-    int getNumberOfPlayers() {
-        return players.size();
-    }
+    int getNumberOfPlayers();
 
-    std::vector<Player>* getPlayers(){
-        return &players; //ça marche ceci?
-    }
-    void startAuction(){
-        for (auto &player : players){
-            if (player.getPlayerStatus() != PLAYER_STATUS::BANKRUPT){
-                player.auctionStart();
-            }
-            else {
-                player.leaveAuction();
-            }
-        }
-    }
+    std::vector<Player>* getPlayers();
+    void startAuction();
 
-    Player* identifyAuctionWinner(){
-        Player* winner = nullptr;
-        for (auto player : players){
-            if (player.isInAuction()){
-                if (winner == nullptr){
-                    winner = &player;
-                }
-                else {
-                    return nullptr;
-                }
-            }
-        }
-        return winner;
-    }
+    Player* identifyAuctionWinner();
 
-    LandCell* getCellByName(std::string& name){
-        return board.getCellByName(name);
-    }
+    LandCell* getCellByName(std::string& name);
 };
 
 #endif
