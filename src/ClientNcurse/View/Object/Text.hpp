@@ -30,11 +30,16 @@ public:
 	void setText(std::string new_text, int line){texts[line] = new_text;}
 	void addText(std::string new_text){texts.push_back(new_text);}
 
+	void clearText(int line){
+		for (int i = 1; i < info.getWidth() - 1; i++){mvwprintw(win,line,i," ");}}
+
 	virtual void draw() {
 		if ( !this->isVisible() ) return;
 		int line=0;
 		for (unsigned int i=this->startIdx(); i<this->texts.size(); i++) {
-			mvwprintw(win, ++line, this->getTextPos(i), "%s", this->texts[i].c_str());
+			line++;
+			clearText(line);
+			mvwprintw(win, line, this->getTextPos(i), "%s", this->texts[i].c_str());
 		}
 		this->refresh();
 	}
