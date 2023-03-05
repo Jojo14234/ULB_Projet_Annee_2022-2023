@@ -31,6 +31,7 @@ public:
 			break;
 		case STATE::MENU:
 			menu.handleInput(ch);
+			state = menu.getNewState();
 			break;
 		case STATE::GAME:
 			game.handleInput(ch);

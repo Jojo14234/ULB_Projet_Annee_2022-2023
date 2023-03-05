@@ -2,7 +2,13 @@
 #define _GAME_CARD_DECK_HPP
 
 #include <string>
+#ifdef __linux__
 #include <jsoncpp/json/json.h>
+#endif
+
+#ifdef __APPLE__
+#include <json/json.h>
+#endif
 #include <array>
 #include <memory>
 #include <fstream>
