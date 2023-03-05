@@ -3,7 +3,14 @@
 
 #include <string>
 #include <array>
+
+#ifdef __linux__
 #include <jsoncpp/json/json.h>
+#endif
+
+#ifdef __APPLE__
+#include <json/json.h>
+#endif
 
 #include "Land.hpp"
 

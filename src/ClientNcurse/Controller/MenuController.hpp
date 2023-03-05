@@ -16,7 +16,7 @@ class MenuController : public AbstractController {
 
 public:
 
-	MenuController(Client* model, MenuView* view) : AbstractController(model), view(view) {}
+	MenuController(Client* model, MenuView* view) : AbstractController(model), view(view) { this->new_state = STATE::MENU; }
 	
 	void handleInput(int ch) override {
 		// TODO: implement
@@ -39,6 +39,11 @@ public:
 				if (this->model->sendCommand(parser)) { this->model->receive(response); }
 				else { response = "La commande n'existe pas"; }
 				this->view->getConsoleInputBox()->addText(response);
+
+				if (parser.getQueryType() == QUERY_TYPE::CREATE_GAME){
+					this->new_state = STATE::GAME;
+				}
+
 				break; }
 			case JOIN: {
 				this->model->sendJoinGame(this->view->getJoinInputBox()->getValue());

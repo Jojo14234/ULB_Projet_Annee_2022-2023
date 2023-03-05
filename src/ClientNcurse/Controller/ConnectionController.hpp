@@ -41,7 +41,7 @@ public:
 					} else { break; }
 					std::string response;
 					this->model->receive(response);
-					if (response == "TRUE") { this->new_state = STATE::GAME; }
+					if (response == "TRUE") { this->new_state = STATE::MENU; }
 					this->clear();
 				}
 			}
