@@ -19,7 +19,7 @@ void MainInputParser::parse() {
 			this->query_type = QUERY_TYPE::MESSAGE_SEND;
 		}
 	}
-	else if ( query == "/create" ) { this->query_type = QUERY_TYPE::CREATE_GAME; }
+	else if ( query == "/create" ) { this->query_type = QUERY_TYPE::CREATE_GAME;}
 	else if ( query == "/disconnect" or query == "/d" ) { this->query_type = QUERY_TYPE::DISCONNECT; }
 	else if ( query == "/ranking" or query == "/r") {
 		if (this->getNbParameters() != 1) { return; }

@@ -6,7 +6,9 @@ int Dice::roll(){
     dice1.roll();
     dice2.roll();
     result = dice1.getResult() + dice2.getResult();
-    double_counter++;
+    if (dice1.getResult() == dice2.getResult()){
+        double_counter++;
+    }
     return result;
 }
 
@@ -23,6 +25,10 @@ int Dice::getDice2(){
 
 int Dice::getDoubleCounter(){
     return double_counter;
+}
+
+void Dice::resetDoubleCounter() {
+    double_counter = 0;
 }
 
 bool Dice::isDouble(){

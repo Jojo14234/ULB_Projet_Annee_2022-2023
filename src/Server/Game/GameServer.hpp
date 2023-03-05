@@ -49,7 +49,7 @@ public:
 	bool isCode(int other) const;
 
     void processGameQuery(ClientManager &client, GAME_QUERY_TYPE query);
-    bool processGameQueryBeforeRoll(ClientManager &client, GAME_QUERY_TYPE query);
+    void processGameQueryBeforeRoll(ClientManager &client, GAME_QUERY_TYPE query);
 
     void processStart(ClientManager &client);
     void processEndTurn(ClientManager &client);

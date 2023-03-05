@@ -16,6 +16,7 @@ public:
     int getDice1();
     int getDice2();
     int getDoubleCounter();
+    void resetDoubleCounter();
     bool isDouble();
 
 };

@@ -8,7 +8,6 @@
 #include "Board/Board.hpp"
 #include "../Server/ClientManager/ClientManager.hpp"
 
-
 /*
 void Player::payToExitPrison() {
 

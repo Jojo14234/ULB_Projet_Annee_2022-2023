@@ -52,7 +52,5 @@ void GameInputParser::parse() {
 	else if ( query == "/buy" ) {
 		this->query_type = GAME_QUERY_TYPE::BUY;
 	}
-
 	else if ( query == "/disconnect" ) { this->query_type = GAME_QUERY_TYPE::LEAVE; }
-
 }

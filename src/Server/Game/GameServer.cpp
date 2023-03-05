@@ -27,22 +27,28 @@ void GameServer::clientLoop(ClientManager &client) {
             clientBeforeRollLoop(client);
             // TODO after roll loop
     }
+        /*
 		game.receiveQuery(query, packet);
 		if (query == GAME_QUERY_TYPE::LEAVE) { break; }
+         TODO manage leave game
+         */
 	}
 	std::cout << client.getAccount()->getUsername() << " has left a game with code : " << this->code.getCode() << std::endl;
 }
 
 void GameServer::clientBeforeRollLoop(ClientManager &client) {
     while (true) {
-        GAME_QUERY_TYPE query;
+        GAME_QUERY_TYPE query = GAME_QUERY_TYPE::NONE;
         sf::Packet packet;
         client.receive(query);
-        if (&client == game.getCurrentPlayer()->getClient()){
-            if (GAME_QUERY_TYPE::START == query) processStart(client);
-            else if (game.isRunning()){
+        if (GAME_QUERY_TYPE::START == query) {processStart(client);}
+        else if (&client == game.getCurrentPlayer()->getClient()){
+            if (game.isRunning()){
                 if (&client == game.getCurrentPlayer()->getClient()){
-                    if (processGameQueryBeforeRoll(client, query)){
+                    processGameQueryBeforeRoll(client, query);
+                    if (game.getCurrentPlayer()->hasRolled()){
+                        client.send("Plus aucune commande ne vous est disponible ce tour ci. Votre tour s'est donc automatiquement terminé.");
+                        processEndTurn(client);
                         break;
                     }
                 }
@@ -57,6 +63,7 @@ void GameServer::clientBeforeRollLoop(ClientManager &client) {
         else {
             client.send("Cette action n'est pas permise étant donné que ça n'est pas votre tour.");
         }
+        query = GAME_QUERY_TYPE::NONE;
     }
 }
 
@@ -82,15 +89,15 @@ void GameServer::processGameQuery(ClientManager &client, GAME_QUERY_TYPE query){
 }
 */
 
-bool GameServer::processGameQueryBeforeRoll(ClientManager &client, GAME_QUERY_TYPE query) {
+void GameServer::processGameQueryBeforeRoll(ClientManager &client, GAME_QUERY_TYPE query) {
     switch (query) {
-        case GAME_QUERY_TYPE::END_TURN : processEndTurn(client); return false;
-        case GAME_QUERY_TYPE::ROLL_DICE : processDiceRoll(client); return true; //only this line should return true, no other
-        case GAME_QUERY_TYPE::MORTGAGE : processMortgageProperty(client); return false;
-        case GAME_QUERY_TYPE::EXCHANGE : processExchange(client); return false;
-        case GAME_QUERY_TYPE::BUILD : processBuildBuildings(client); return false;
-        case GAME_QUERY_TYPE::SELL_BUILDINGS : processSellBuildings(client); return false;
-        default: client.send("Cette commande n'est pas disponible."); return false;
+        case GAME_QUERY_TYPE::END_TURN : processEndTurn(client); break;
+        case GAME_QUERY_TYPE::ROLL_DICE : processDiceRoll(client); break;
+        case GAME_QUERY_TYPE::MORTGAGE : processMortgageProperty(client); break;
+        case GAME_QUERY_TYPE::EXCHANGE : processExchange(client); break;
+        case GAME_QUERY_TYPE::BUILD : processBuildBuildings(client); break;
+        case GAME_QUERY_TYPE::SELL_BUILDINGS : processSellBuildings(client); break;
+        default: client.send("Cette commande n'est pas disponible."); break;
     }
 }
 
@@ -153,7 +160,7 @@ void GameServer::processStart(ClientManager &client) {
         if (isClientAdmin(client)){
             if (game.getNumberOfPlayers() > 1){
                 this->game.startGame();
-                client.send("La partie est lancée!");
+                updateAllClients("La partie est lancée!");
             }
             else {
                 client.send("Vous êtes seul dans la partie, invitiez un autre joueur pour lancer la partie.");
@@ -170,38 +177,48 @@ void GameServer::processStart(ClientManager &client) {
 
 void GameServer::processEndTurn(ClientManager &client) {
     if (game.getCurrentPlayer()->hasRolled() and !game.getCurrentPlayer()->isInJail()){
+        game.getDice()->resetDoubleCounter();
         game.endCurrentTurn();
-        client.send("Votre tour est maintenant terminé.");
     }
-    client.send("Vous devez jeter les dés avant de finir votre tour.");
+    else {
+        client.send("Vous devez jeter les dés avant de finir votre tour.");
+    }
 }
 
 void GameServer::processDiceRoll(ClientManager &client) {
-    while (game.getDice()->getDoubleCounter() != 2){
-        std::string output = "";
-        output += std::string(client.getAccount()->getUsername()) + " rolled a " + std::to_string(game.rollDice()); //should technically have a method for this in capitalist, but flemme
-        if (game.rolledADouble()){
-            output += " and it's a double, he/she will play again!";
-        }
-        updateAllClients(output);
-        game.getCurrentPlayer()->getClient()->send(output);
-        game.getCurrentPlayer()->move(game.getBoard()->getCellByIndex((game.getCurrentPlayer()->getCurrentCell()->getPosition() + game.getDice()->getResults()) % BOARD_SIZE));
-
-        game.getCurrentPlayer()->getCurrentCell()->action(game.getCurrentPlayer());
-        if (game.getCurrentPlayer()->getPlayerStatus() == PLAYER_STATUS::BANKRUPT and game.getCurrentPlayer()->getBankruptingPlayer() !=
-                                                                                              nullptr){
-            clientBankruptLoop(client);
-        }
-        Land *l = dynamic_cast<Land*>(game.getCurrentPlayer()->getCurrentCell());
-        if (l != nullptr) {
-            if (l->getOwner() == nullptr){
-                clientAuctionLoop(client, l);
-            }
-        }
-        if (!game.getDice()->isDouble()) { break; }
-    }
     game.getCurrentPlayer()->rolled(true);
+    std::string output = "";
+    output += std::string(client.getAccount()->getUsername()) + " a jeté les dés et obtenu un " + std::to_string(game.rollDice()) + ".";
+    if (game.rolledADouble()){
+        output += "\nC'est un double! Iel pourra rejouer!";
+    }
+    updateAllClients(output);
+    client.send("got here 0");
+    Cell* moving_to_cell = game.getBoard()->getCellByIndex(2);//((game.getCurrentPlayer()->getCurrentCell()->getPosition() + game.getDice()->getResults()) % BOARD_SIZE);
+    client.send("got here 1");
+    game.getCurrentPlayer()->move(moving_to_cell);
+    client.send("got here 2");
+    updateAllClients(std::string(client.getAccount()->getUsername()) + " est arrivé sur la case " + std::to_string(moving_to_cell->getPosition())); //todo delete when affichage works
+    client.send("got here 3");
+
+
+    /*
+    if (game.getCurrentPlayer()->getPlayerStatus() == PLAYER_STATUS::BANKRUPT and game.getCurrentPlayer()->getBankruptingPlayer() !=
+                                                                                          nullptr){
+        clientBankruptLoop(client);
+    }
+     */
+    /*
+    Land *l = dynamic_cast<Land*>(game.getCurrentPlayer()->getCurrentCell());
+    if (l != nullptr) {
+        if (l->getOwner() == nullptr){
+            clientAuctionLoop(client, l);
+        }
+    }
+     */
+    if (game.getDice()->isDouble()) { game.getCurrentPlayer()->rolled(false);}
     if (game.getDice()->getDoubleCounter() == 2) {
+        client.send("Vous allez en prison.");
         game.getCurrentPlayer()->goToJail(game.getBoard()->getCellByIndex(PRISON_INDEX));
     }
 }
