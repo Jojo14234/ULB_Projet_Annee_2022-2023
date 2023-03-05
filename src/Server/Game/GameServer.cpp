@@ -7,7 +7,7 @@
 #include "Timer.hpp"
 #include <string>
 
-#include <SFML/Network>
+#include <SFML/Network.hpp>
 #include <string>
 #include <stdexcept>
 
@@ -130,7 +130,7 @@ void GameServer::clientAuctionLoop(ClientManager &client, Land* land) {
             //t.Start(11); //TODO implement timer
             client->receive(query, packet);
             if (query == GAME_QUERY_TYPE::BID) {
-                string new_bid;
+                std::string new_bid;
                 packet >> new_bid;
                 if (std::stoi(new_bid) <= bid){
                     player.leaveAuction();
