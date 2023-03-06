@@ -106,7 +106,7 @@ public:
 public:
     int getIndexOnBoard();
 
-    Player(ClientManager* client) : client{client} {}
+    Player(ClientManager* client, Cell* start_cell) : client{client} {current_cell = start_cell;}
 
     void setAdmin();
     bool isAdmin();

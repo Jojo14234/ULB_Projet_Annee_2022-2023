@@ -18,7 +18,7 @@ void Capitalist::sendMessage(std::string &output) {
 }
 */
 void Capitalist::addPlayer(ClientManager &client) {
-    players.push_back(Player(&client));
+    players.push_back(Player(&client, board.getCellByIndex(0)));
     if (players.size() == 1) {players.at(0).setAdmin(); players[0].setCurrentlyPlaying(true);}
 }
 
@@ -32,7 +32,7 @@ void Capitalist::startGame() {
 }
 
 Player* Capitalist::getCurrentPlayer() {
-    return &players[current_player_index];
+    return &players.at(current_player_index);
 }
 
 bool Capitalist::isRunning() {

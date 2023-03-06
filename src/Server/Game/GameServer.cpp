@@ -194,7 +194,13 @@ void GameServer::processDiceRoll(ClientManager &client) {
     }
     updateAllClients(output);
     client.send("got here 0");
-    Cell* moving_to_cell = game.getBoard()->getCellByIndex(2);//((game.getCurrentPlayer()->getCurrentCell()->getPosition() + game.getDice()->getResults()) % BOARD_SIZE);
+    client.send(std::to_string(game.getCurrentPlayer()->getCurrentCell()->getPosition()));
+    client.send("got here 0.5");
+    client.send(std::to_string(game.getDice()->getResults()));
+    client.send("got here 0.8");
+    int new_index = (game.getCurrentPlayer()->getCurrentCell()->getPosition() + game.getDice()->getResults()); //% BOARD_SIZE;
+    client.send(std::to_string(new_index));
+    Cell* moving_to_cell = game.getBoard()->getCellByIndex(new_index);
     client.send("got here 1");
     game.getCurrentPlayer()->move(moving_to_cell);
     client.send("got here 2");
