@@ -6,32 +6,32 @@
 	"DRAW CARD" : [
 			{
 				"pos" : 2,
-				"type" : "COMMUNITY DECK",
+				"type" : "COMMUNITY DECK"
 			},
 			
 			{
 				"pos" : 7,
-				"type" : "LUCKY DECK",
+				"type" : "LUCKY DECK"
 			},
 
 			{
 				"pos" : 17,
-				"type" : "COMMUNITY DECK",
+				"type" : "COMMUNITY DECK"
 			},
 
 			{
 				"pos" : 22,
-				"type" : "LUCKY DECK",
+				"type" : "LUCKY DECK"
 			},
 
 			{
 				"pos" : 33,
-				"type" : "COMMUNITY DECK",
+				"type" : "COMMUNITY DECK"
 			},
 
 			{
 				"pos" : 36,
-				"type" : "LUCKY DECK",
+				"type" : "LUCKY DECK"
 			}
 		],
 
@@ -44,10 +44,9 @@
 
 			{
 				"pos" : 38,
-				"type" : "lux tax", 
+				"type" : "luxe taxe",
 				"amount" : 100
 			}
 
 		]
-
 }

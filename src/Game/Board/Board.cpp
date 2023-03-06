@@ -8,6 +8,7 @@
 
 
 void Board::initAllDecks(){
+    //TODO : ca c'est pas vrai, à changer (rémy)
     CardDeck deck = CardDeck("COMMUNITY DECK");
 	this->community_deck = &deck;
     deck = CardDeck("LUCKY DECK");
@@ -17,77 +18,99 @@ void Board::initAllDecks(){
 void Board::initAllLand(){
 	//init property
     Json::Value root;
-	Json::Reader reader;
-	std::ifstream file("Obtainable/data/property_data.json");
-	if (not reader.parse(file, root)) { perror("Error parsing file"); return; }
+	std::ifstream file("/Users/remy.ryckeboer/Documents/GitHub/info-f209-gr5-2022/src/Game/Board/Obtainable/data/property_data.json");
+    file >> root;
 
-	Json::Value prop_list = root["PROPERTY"];
+	Json::Value prop_list;
+    prop_list = root["PROPERTY"];
 
-	for (unsigned int i=0; i<prop_list.size(); i++){
+	for (unsigned int i=0; i < prop_list.size(); i++) {
 		int pos = prop_list[i]["pos"].asInt();
 		Property prop = Property(prop_list[i]);	//ieme propriété dans json
 		this->cells.at(pos) = std::make_shared<LandCell>(pos, &prop); 	//alt pour pos, Property.getPos() ?
 	}
 
-	Json::Value station_list = root["STATION"];
+	Json::Value station_list;
+    station_list = root["STATION"];
+
 	for (unsigned int i=0; i<station_list.size(); i++) {
         int pos = station_list[i]["pos"].asInt();
 		Station stat = Station(station_list[i]);
 		this->cells.at(pos) = std::make_shared<LandCell>(pos, &stat);
 	}
 
-	Json::Value company_list = root["COMPANY"];
+	Json::Value company_list;
+    company_list = root["COMPANY"];
+
 	for (unsigned int i=0; i<company_list.size(); i++) {
 		int pos = station_list[i]["pos"].asInt();
 		Company comp = Company{company_list[i]};
 		this->cells.at(pos) = std::make_shared<LandCell>(pos, &comp);
 	}
+    std::cout << "InitAllLand done" << std::endl;
 }
 
 void Board::initOtherCells(){
 	Json::Value root;
-	Json::Reader reader;
-	std::ifstream file("Obtainable/data/cell_data.json");
-	if (not reader.parse(file, root)) { perror("Error parsing file"); return; }
+	std::ifstream file("/Users/remy.ryckeboer/Documents/GitHub/info-f209-gr5-2022/src/Game/Board/Obtainable/data/cell_data.json");
+    file >> root;
 
 	//go to jail
 	int pos = root["Go to jail"]["pos"].asInt();
 	this->cells.at(pos) = std::make_shared<GoJailCell>(pos);
-	std::cout << pos<<std::endl;
-	std::cout << std::to_string(this->cells.at(pos)->getPosition())<< std::endl;
+    //pos = 30
 
 	//jail
 	pos = root["Jail"]["pos"].asInt();
 	this->cells.at(pos) = std::make_shared<JailCell>(pos);
+    //pos = 10
 
 	//parking
-	Json::Value parking = root["Parking"];
+	Json::Value parking;
+    parking = root["Parking"];
 	pos = parking["pos"].asInt();
 	this->cells.at(pos) = std::make_shared<ParkingCell>(pos);
+    //pos = 20
 
 	//case départ
 	pos = 0;
 	this->cells.at(pos) = std::make_shared<ParkingCell>(pos);
+    //pos = 0
 
 	//draw card
-	Json::Value draw_list = root["DRAW CARD"];
-	for (unsigned int i=0; draw_list.size(); i++){
+	Json::Value draw_list;
+    draw_list = root["DRAW CARD"];
+
+    std::cout << "Draw list size : " << draw_list.size() << std::endl;
+
+	for (unsigned int i = 0; i < draw_list.size(); i++) {
 		pos = draw_list[i]["pos"].asInt();
-		CardDeck* deck = (draw_list[i]["type"].asString()=="LUCKY DECK") ? this->lucky_deck : this->community_deck;
+		CardDeck* deck = (draw_list[i]["type"].asString() == "LUCKY DECK") ? this->lucky_deck : this->community_deck;
 		this->cells.at(pos) = std::make_shared<DrawableCardCell>(pos, deck);
 	}
 
 	//tax
-	Json::Value tax_list = root["TAX"];
-	for (unsigned i=0; i<tax_list.size(); i++){
-		pos = tax_list[i]["pos"].asInt();
-		this->cells.at(pos) = std::make_shared<TaxCell>(tax_list);
+	Json::Value tax_list;
+    tax_list = root["TAX"];
+
+    std::cout << "Tax list size : " << tax_list.size() << std::endl;
+    std::cout << tax_list << std::endl;
+
+	for (unsigned i = 0; i < tax_list.size(); i++){
+		int pos = tax_list[i]["pos"].asInt();
+        int amount = tax_list[i]["amount"].asInt();
+        std::string type = tax_list[i]["type"].asString();
+
+		this->cells.at(pos) = std::make_shared<TaxCell>(pos, amount, type);
 	}
+
+    std::cout << "InitOtherCells done" << std::endl;
 }
 
 void Board::initAllCells(){
 	this->initAllLand();
 	this->initOtherCells();
+    std::cout << "Done" << std::endl;
 
 }
 

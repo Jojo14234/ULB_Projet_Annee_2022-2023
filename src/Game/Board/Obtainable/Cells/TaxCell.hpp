@@ -9,7 +9,6 @@
 
 class Player;
 
-
 class TaxCell: public Cell {
     
 	int tax_price;
@@ -18,7 +17,7 @@ class TaxCell: public Cell {
 
 public:
     
-	TaxCell(Json::Value info): Cell{info["pos"].asInt()}, tax_price{info["amount"].asInt()}, name{info["type"].asString()} {}
+	TaxCell(int pos, int tax_price, std::string &name) : Cell{pos}, tax_price{tax_price}, name{name} {}
     
 	void action(Player* player);
 
