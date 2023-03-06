@@ -10,7 +10,7 @@
 
 CardDeck::CardDeck(std::string name) {
 	Json::Value root;
-	std::ifstream file("/Users/joachim/Desktop/info-f209-gr5-2022/src/Game/Board/Obtainable/data/card_data.json", std::ifstream::binary);
+	std::ifstream file("Game/Board/Obtainable/data/card_data.json", std::ifstream::binary);
     file >> root;
 
 	Json::Value deck;

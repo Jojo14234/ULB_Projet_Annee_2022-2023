@@ -13,9 +13,10 @@ class Player;
 
 class Land {
 
-    Player* owner = nullptr;
 
 protected:
+
+    Player* owner = nullptr;
 
 	std::string name;
 	int purchase_price;
@@ -31,7 +32,7 @@ public:
 	virtual ~Land()=default;
 
 	int virtual getRentPrice()=0;
-	Player* getOwner() const {std::cout << "Pointer to owner : " << owner << std::endl; return owner;} //TODO change
+	Player* getOwner() {std::cout << "Pointer to owner : " << owner << std::endl; return owner;} //TODO change
     void setOwner(Player* player) {owner = player; std::cout << "Owner was changed" << std::endl;}
 	std::string getName() {return name;}
 	int getPurchasePrice() { return this->purchase_price;}

@@ -18,16 +18,15 @@ void Board::initAllDecks(){
 void Board::initAllLand(){
 	//init property
     Json::Value root;
-	std::ifstream file("/Users/joachim/Desktop/info-f209-gr5-2022/src/Game/Board/Obtainable/data/property_data.json");
+	std::ifstream file("Game/Board/Obtainable/data/property_data.json");
     file >> root;
 
 	Json::Value prop_list;
     prop_list = root["PROPERTY"];
 
 	for (unsigned int i=0; i < prop_list.size(); i++) {
-		int pos = prop_list[i]["pos"].asInt();
-		Property prop = Property(prop_list[i]);	//ieme propriété dans json
-		this->cells.at(pos) = std::make_shared<LandCell>(pos, &prop); 	//alt pour pos, Property.getPos() ?
+		int pos = prop_list[i]["pos"].asInt();	//ieme propriété dans json
+		this->cells.at(pos) = std::make_shared<LandCell>(pos, std::make_shared<Property>(prop_list[i])); 	//alt pour pos, Property.getPos() ?
 	}
 
 	Json::Value station_list;
@@ -35,8 +34,7 @@ void Board::initAllLand(){
 
 	for (unsigned int i=0; i<station_list.size(); i++) {
         int pos = station_list[i]["pos"].asInt();
-		Station stat = Station(station_list[i]);
-		this->cells.at(pos) = std::make_shared<LandCell>(pos, &stat);
+		this->cells.at(pos) = std::make_shared<LandCell>(pos, std::make_shared<Station>(station_list[i]));
 	}
 
 	Json::Value company_list;
@@ -44,15 +42,14 @@ void Board::initAllLand(){
 
 	for (unsigned int i=0; i<company_list.size(); i++) {
 		int pos = station_list[i]["pos"].asInt();
-		Company comp = Company{company_list[i]};
-		this->cells.at(pos) = std::make_shared<LandCell>(pos, &comp);
+		this->cells.at(pos) = std::make_shared<LandCell>(pos, std::make_shared<Company>(company_list[i]));
 	}
     std::cout << "InitAllLand done" << std::endl;
 }
 
 void Board::initOtherCells(){
 	Json::Value root;
-	std::ifstream file("/Users/joachim/Desktop/info-f209-gr5-2022/src/Game/Board/Obtainable/data/cell_data.json");
+	std::ifstream file("Game/Board/Obtainable/data/cell_data.json");
     file >> root;
 
 	//go to jail

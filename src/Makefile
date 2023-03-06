@@ -41,7 +41,7 @@ default: main
 
 .PHONY: clean
 clean:
-	-rm *.o */*.o */*/*.o */*/*/*.o */*/*/*/*.o 2> /dev/null
+	-rm *.o */*.o */*/*.o */*/*/*.o */*/*/*/*.o */*/*/*/*/*.o 2> /dev/null
 
 rm:
 	-rm capitalist server_capitalist 2> /dev/null
