@@ -10,7 +10,7 @@
 CardDeck::CardDeck(std::string name) {
 	Json::Value root;
 	Json::Reader reader;
-	std::ifstream file("data/card_data.json");
+	std::ifstream file("Obtainable/data/card_data.json");
 	if (not reader.parse(file, root)) { perror("Error parsing file"); return; }
 
 	Json::Value deck = root[name];

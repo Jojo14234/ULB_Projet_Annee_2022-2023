@@ -18,7 +18,7 @@ void Board::initAllLand(){
 	//init property
     Json::Value root;
 	Json::Reader reader;
-	std::ifstream file("data/property_data.json");
+	std::ifstream file("Obtainable/data/property_data.json");
 	if (not reader.parse(file, root)) { perror("Error parsing file"); return; }
 
 	Json::Value prop_list = root["PROPERTY"];
@@ -47,12 +47,14 @@ void Board::initAllLand(){
 void Board::initOtherCells(){
 	Json::Value root;
 	Json::Reader reader;
-	std::ifstream file("data/cell_data.json");
+	std::ifstream file("Obtainable/data/cell_data.json");
 	if (not reader.parse(file, root)) { perror("Error parsing file"); return; }
 
 	//go to jail
 	int pos = root["Go to jail"]["pos"].asInt();
 	this->cells.at(pos) = std::make_shared<GoJailCell>(pos);
+	std::cout << pos<<std::endl;
+	std::cout << std::to_string(this->cells.at(pos)->getPosition())<< std::endl;
 
 	//jail
 	pos = root["Jail"]["pos"].asInt();
@@ -61,6 +63,10 @@ void Board::initOtherCells(){
 	//parking
 	Json::Value parking = root["Parking"];
 	pos = parking["pos"].asInt();
+	this->cells.at(pos) = std::make_shared<ParkingCell>(pos);
+
+	//case départ
+	pos = 0;
 	this->cells.at(pos) = std::make_shared<ParkingCell>(pos);
 
 	//draw card

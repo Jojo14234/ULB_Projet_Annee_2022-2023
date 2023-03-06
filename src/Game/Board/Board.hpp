@@ -36,7 +36,7 @@ class Board {
 	
 public:
 
-	Board() { initAllDecks(); initAllCells(); }
+	Board() { std::cout<<"in board constructor"<<std::endl; initAllDecks(); initAllCells(); std::cout<<"finish board constructor"<<std::endl;}
 
     Cell* getCellByIndex(int index);
 
