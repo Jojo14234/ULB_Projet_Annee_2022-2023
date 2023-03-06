@@ -42,7 +42,7 @@ void GameServer::clientBeforeRollLoop(ClientManager &client) {
         sf::Packet packet;
         client.receive(query);
         if (GAME_QUERY_TYPE::START == query) {processStart(client);}
-        else if (&client == game.getCurrentPlayer()->getClient()){
+        else if (&client == game.getCurrentPlayer()->getClient() and !game.getCurrentPlayer()->isInAuction()){
             if (game.isRunning()){
                 if (&client == game.getCurrentPlayer()->getClient()){
                     processGameQueryBeforeRoll(client, query);
@@ -117,39 +117,41 @@ void GameServer::clientBankruptLoop(ClientManager &client) {
     game.getCurrentPlayer()->setPlayerStatus(PLAYER_STATUS::FREE);
 }
 
-void GameServer::clientAuctionLoop(ClientManager &client, Land* land) {
+void GameServer::clientAuctionLoop(ClientManager &client, LandCell* land_cell) {
     int bid = 10;
     GAME_QUERY_TYPE query;
     sf::Packet packet;
-    updateAllClients("Une enchère de 30 secondes à débutée! La propriété concernée est la suivante: \n" + land->getName() + ". L'enchère débute à 10 euros!\nPour surenchérir, tapez /bid [montant].\n");
+    Player* winner = nullptr;
+    updateAllClients("Une enchère de 30 secondes à débutée! La propriété concernée est la suivante: \n" + land_cell->getLand()->getName() + ". L'enchère débute à 10 euros!\nPour surenchérir, tapez /bid [montant].\n");
 
     game.startAuction();
-    for (auto &player : *game.getPlayers()){
-        Player* winner = game.identifyAuctionWinner();
-        if (winner != nullptr)
-        {
-            updateAllClients("Le joueur " + std::string(player.getClient()->getAccount()->getUsername()) + " a remporté l'enchère!");
-            player.acquireLand(land);
-        }
-        else if (player.isInAuction()){
-            player.getClient()->send("C'est à votre tour d'enchérir! \nLa plus haute enchère est actuellement à " + std::to_string(bid) + "tapez /bid [montant] pour enchérir et /out pour quitter l'enchère.\nVous avez 10 secondes ou vous serez automoatiquement exclu de l'enchère\nToute commande invalide résultera en une exclusion de l'enchère.");
-            //Timer t;
-            //t.Start(11); //TODO implement timer
-            client.receive(query, packet);
-            if (query == GAME_QUERY_TYPE::BID) {
-                std::string new_bid;
-                packet >> new_bid;
-                if (std::stoi(new_bid) <= bid){
+    while (winner == nullptr){
+        for (auto &player : *game.getPlayers()){
+            winner = game.identifyAuctionWinner();
+            if (winner != nullptr)
+            {
+                updateAllClients("Le joueur " + std::string(player.getClient()->getAccount()->getUsername()) + " a remporté l'enchère!");
+                player.acquireLand(land_cell->getLand());
+                break;
+            }
+            else if (player.isInAuction()){
+                player.getClient()->send("C'est à votre tour d'enchérir! \nLa plus haute enchère est actuellement à " + std::to_string(bid) + "tapez /bid [montant] pour enchérir et /out pour quitter l'enchère.\nVous avez 10 secondes ou vous serez automatiquement exclu de l'enchère\nToute commande invalide résultera en une exclusion de l'enchère.");
+                player.getClient()->receive(query, packet);
+                if (query == GAME_QUERY_TYPE::BID) {
+                    std::string new_bid;
+                    packet >> new_bid;
+                    if (std::stoi(new_bid) <= bid){
+                        player.leaveAuction();
+                        updateAllClients(std::string(player.getClient()->getAccount()->getUsername()) + "est sorti(e) de l'enchère.");
+                    }
+                    else {
+                        updateAllClients(std::string(player.getClient()->getAccount()->getUsername()) + " a surenchéri!");
+                    }
+                }
+                else {
                     player.leaveAuction();
                     updateAllClients(std::string(player.getClient()->getAccount()->getUsername()) + "est sorti(e) de l'enchère.");
                 }
-                else {
-                    updateAllClients(std::string(player.getClient()->getAccount()->getUsername()) + " a surenchéri!");
-                }
-            }
-            else {
-                player.leaveAuction();
-                updateAllClients(std::string(player.getClient()->getAccount()->getUsername()) + "est sorti(e) de l'enchère.");
             }
         }
     }
@@ -167,7 +169,7 @@ void GameServer::processStart(ClientManager &client) {
             }
         }
         else {
-            client.send("Vous n'êtes pas administateur.");
+            client.send("Vous n'êtes pas administrateur.");
         }
     }
     else {
@@ -196,20 +198,31 @@ void GameServer::processDiceRoll(ClientManager &client) {
     game.getCurrentPlayer()->move(game.getBoard()->getCellByIndex((game.getCurrentPlayer()->getCurrentCell()->getPosition() + game.getDice()->getResults()) % BOARD_SIZE));
     updateAllClients(std::string(client.getAccount()->getUsername()) + " est arrivé sur la case " + std::to_string(game.getCurrentPlayer()->getCurrentCell()->getPosition())); //todo delete when affichage works
 
+    /*
     if (game.getCurrentPlayer()->getPlayerStatus() == PLAYER_STATUS::BANKRUPT and game.getCurrentPlayer()->getBankruptingPlayer() !=
                                                                                           nullptr){
         clientBankruptLoop(client);
     }
-
-    game.getCurrentPlayer()->getCurrentCell()->action(game.getCurrentPlayer());
-    /*
-    Land *l = dynamic_cast<Land*>(game.getCurrentPlayer()->getCurrentCell());
+*/
+    //game.getCurrentPlayer()->getCurrentCell()->action(game.getCurrentPlayer());
+    LandCell *l;
+    l = dynamic_cast<LandCell*>(game.getCurrentPlayer()->getCurrentCell());
     if (l != nullptr) {
-        if (l->getOwner() == nullptr){
+        std::cout << "Pointer to owner: " << l->getLand()->getOwner() << std::endl;
+
+        if (l->getLand()->getOwner() == nullptr){
+            updateAllClients("AUCTION STARTING");
             clientAuctionLoop(client, l);
         }
+        else{
+            std::cout << "Was already owned." << std::endl;
+            std::cout << "Owner is: " << std::string(l->getLand()->getOwner()->getClient()->getAccount()->getUsername()) << std::endl;
+        }
     }
-     */
+    else{
+        std::cout << "Could not convert to LandCell" << std::endl;
+    }
+
     if (game.getDice()->isDouble()) { game.getCurrentPlayer()->rolled(false);}
     if (game.getDice()->getDoubleCounter() == 2) {
         client.send("Vous allez en prison.");
@@ -221,7 +234,7 @@ void GameServer::processMortgageProperty(ClientManager &client) { //for now, onl
     GAME_QUERY_TYPE query;
     sf::Packet packet;
     std::string name;
-    client.send("Veuillez selectionner la propriété à hypothéquer en utilisant /select [nom de la propriété].\nTapez /leave pour quitter le mode de selection des batiments.\n");
+    client.send("Veuillez sélectionner la propriété à hypothéquer en utilisant /select [nom de la propriété].\nTapez /leave pour quitter le mode de selection des batiments.\n");
     while (query != GAME_QUERY_TYPE::LEAVE_SELECTION_MODE){ //TODO check if no problem with undefined definition with while loop condition
         client.receive(query, packet); //todo check if problem if no package sent problem
         packet >> name;
@@ -235,7 +248,7 @@ void GameServer::processMortgageProperty(ClientManager &client) { //for now, onl
             }
         }
         else {
-            client.send("Veuillez selectionner la propriété à hypothéquer en utilisant /select [nom de la propriété].\nTapez /leave pour quitter le mode de selection des propriétés.\n");
+            client.send("Veuillez sélectionner la propriété à hypothéquer en utilisant /select [nom de la propriété].\nTapez /leave pour quitter le mode de selection des propriétés.\n");
         }
     }
 }
@@ -342,7 +355,7 @@ void GameServer::processSellBuildings(ClientManager &client) {
     sf::Packet packet;
     std::string name;
     client.send(
-            "Selectionnez une propriété sur laquelle vendre un batiment avec la commande /select nom de la propriété.\n");
+            "Sélectionnez une propriété sur laquelle vendre un bâtiment avec la commande /select nom de la propriété.\n");
     while (true) {
         client.send("Pour quitter le mode de sélection de propriétés. Tapez /leave.\n");
         client.receive(query, packet);
@@ -353,7 +366,7 @@ void GameServer::processSellBuildings(ClientManager &client) {
         Land *land = getLandByName(name);
         Property *p = dynamic_cast<Property *>(land);
         if (p != nullptr and p->sellBuilding(game.getCurrentPlayer())) {
-            client.send("Vous avez construit un batiment.\n");
+            client.send("Vous avez construit un bâtiment.\n");
         } else {
             client.send("Building failed.\n");
         }
@@ -365,7 +378,7 @@ bool GameServer::proposeExchange(Player &proposing_player, Player &proposed_to_p
     sf::Packet packet;
     std::string response;
     std::string comm_string = "";
-    comm_string += (std::string(proposing_player.getClient()->getAccount()->getUsername()) + "vous propose " + std::to_string(amount) + " pour votre possesion nommée " + land->getName());
+    comm_string += (std::string(proposing_player.getClient()->getAccount()->getUsername()) + "vous propose " + std::to_string(amount) + " pour votre possession nommée " + land->getName());
     proposed_to_player.getClient()->send(comm_string);
     while (true) {
         proposed_to_player.getClient()->send("Pour accepter, tapez /select yes, sinon tapez /select no.");
@@ -408,8 +421,10 @@ Land *GameServer::getLandByName(std::string &name) {
 }
 
 void GameServer::updateAllClients(std::string update) {
+    std::string start = "GENERAL:";
+    std::string new_update = start + update;
     for (auto client : clients){
-        client->send(update);
+        client->send(new_update);
     }
 }
 

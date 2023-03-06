@@ -34,7 +34,7 @@ public:
 	void clientLoop(ClientManager &client);
     void clientBeforeRollLoop(ClientManager &client);
     void clientBankruptLoop(ClientManager &client);
-    void clientAuctionLoop(ClientManager &client, Land* land);
+    void clientAuctionLoop(ClientManager &client, LandCell* land_cell);
 
 	// Add a client to the game 
 	void addClient(ClientManager* client);
