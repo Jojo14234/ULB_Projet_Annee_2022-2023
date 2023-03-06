@@ -40,8 +40,11 @@ public:
 				else { response = "La commande n'existe pas"; }
 				this->view->getConsoleInputBox()->addText(response);
 
+
 				if (parser.getQueryType() == QUERY_TYPE::CREATE_GAME){
 					this->new_state = STATE::GAME;
+					int gamecode = atoi(&response[response.length()-4]);
+					this->model->setGameCode(gamecode);
 				}
 
 				break; }

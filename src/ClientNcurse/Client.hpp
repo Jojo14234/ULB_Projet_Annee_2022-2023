@@ -17,6 +17,8 @@ class Client {
 
 	void sendPacket(sf::Packet &packet);
 
+	int game_code = 0;
+
 public:
 
 	Client() { this->connectToServer(); }
@@ -28,6 +30,9 @@ public:
 	bool sendCommand(InputParser &parser);
 
 	void receive(std::string &output);
+
+	void setGameCode(int gc) { game_code = gc; }
+	int getGameCode() { return game_code; }
 
 };
 
