@@ -57,7 +57,7 @@ bool Property::sellBuilding(Player* player){
 bool Property::checkTransaction(Player* player, bool is_building){
     std::vector<Property*> player_props =  player->getAllProperties();
     int other_props;
-    if (this->color == PROPERTY_COLOR::BROWN or this->color == PROPERTY_COLOR::DARK_BLUE) { other_props = 1;}
+    if (this->color == PROPERTY_COLOR::BROWN or this->color == PROPERTY_COLOR::DARK_BLUE) { other_props = 1; }
     else { other_props = 2;}
 
     std::vector<Property*> same_color = this->getSameColorBuilding(player_props);

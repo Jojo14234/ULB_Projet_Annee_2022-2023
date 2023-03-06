@@ -9,6 +9,7 @@ int Dice::roll(){
     if (dice1.getResult() == dice2.getResult()){
         double_counter++;
     }
+    result = 8; //TODO SUPPRIMER
     return result;
 }
 

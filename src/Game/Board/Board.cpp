@@ -18,7 +18,7 @@ void Board::initAllDecks(){
 void Board::initAllLand(){
 	//init property
     Json::Value root;
-	std::ifstream file("/Users/remy.ryckeboer/Documents/GitHub/info-f209-gr5-2022/src/Game/Board/Obtainable/data/property_data.json");
+	std::ifstream file("/Users/joachim/Desktop/info-f209-gr5-2022/src/Game/Board/Obtainable/data/property_data.json");
     file >> root;
 
 	Json::Value prop_list;
@@ -52,7 +52,7 @@ void Board::initAllLand(){
 
 void Board::initOtherCells(){
 	Json::Value root;
-	std::ifstream file("/Users/remy.ryckeboer/Documents/GitHub/info-f209-gr5-2022/src/Game/Board/Obtainable/data/cell_data.json");
+	std::ifstream file("/Users/joachim/Desktop/info-f209-gr5-2022/src/Game/Board/Obtainable/data/cell_data.json");
     file >> root;
 
 	//go to jail

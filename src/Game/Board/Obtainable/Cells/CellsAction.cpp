@@ -8,7 +8,7 @@
 
 void DrawableCardCell::action(Player* player) {
     Card* drawed_card = deck->drawACard();
-    player->getClient()->send("Vous avez piocher cette carte: ");
+    player->getClient()->send("Vous avez pioché cette carte: ");
     player->getClient()->send(drawed_card->getDesciption());
     drawed_card->action(player);
 } 
@@ -18,26 +18,19 @@ void GoJailCell::action(Player* player){
 }
 
 void LandCell::action(Player* player) {
-		player->getClient()->send("Vous êtes tomber sur la propriéte"+land->getName());
+		player->getClient()->send("Vous êtes tomber sur la propriéte" + land->getName());
 
 		if (land->getStatus()==LAND_STATUS::FREE) {
-			player->getClient()->send("La propriété est libre, voulez-vous l'acheter pour "+std::to_string(land->getPurchasePrice())+"$");
-			//TO DO reception paquet
-			//si achete: 
+			player->getClient()->send("La propriété est libre, voulez-vous l'acheter pour "+std::to_string(land->getPurchasePrice())+"e ?");
+
 			GAME_QUERY_TYPE query;
             sf::Packet packet;
-
-            // receive from client
-            player->getClient()->receive(query, packet);
-
-            switch (query) {
-                case GAME_QUERY_TYPE::ACCEPT: land->playerPurchase(player);	//si ne peut pas ou n'achete pas -> enchere
-                case GAME_QUERY_TYPE::DECLINE: player->auctionMustStart();
-                default:
-                    break;
-                
+            std::string response = "";
+            while (response != "yes" and response != "no") {
+                player->getClient()->send("Tapez /select yes pour acheter, sinon tapez /select no.");
+                player->getClient()->receive(query, packet);
+                packet >> response;
             }
-
 		}
 		else if (not this->isOwner(player) && land->getStatus()==LAND_STATUS::PAID) {
 			int rent = land->getRentPrice();
@@ -50,10 +43,10 @@ void LandCell::action(Player* player) {
 		}
 
 		else if (land->getStatus() == LAND_STATUS::HYPOTEK) {
-
+            player->getClient()->send("Cette propriété est hypothéquée. Vous ne devez donc pas payer de loyer.");
 		}
 		else{
-			player->getClient()->send("Vous êtes sur votre propriété "+land->getName());
+			player->getClient()->send("La propriété "+ land->getName() + "vous appartient! Bienvenu chez vous ;)");
 		}
 }
 

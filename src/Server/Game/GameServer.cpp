@@ -193,27 +193,15 @@ void GameServer::processDiceRoll(ClientManager &client) {
         output += "\nC'est un double! Iel pourra rejouer!";
     }
     updateAllClients(output);
-    client.send("got here 0");
-    client.send(std::to_string(game.getCurrentPlayer()->getCurrentCell()->getPosition()));
-    client.send("got here 0.5");
-    client.send(std::to_string(game.getDice()->getResults()));
-    client.send("got here 0.8");
-    int new_index = (game.getCurrentPlayer()->getCurrentCell()->getPosition() + game.getDice()->getResults()); //% BOARD_SIZE;
-    client.send(std::to_string(new_index));
-    Cell* moving_to_cell = game.getBoard()->getCellByIndex(new_index);
-    client.send("got here 1");
-    game.getCurrentPlayer()->move(moving_to_cell);
-    client.send("got here 2");
-    updateAllClients(std::string(client.getAccount()->getUsername()) + " est arrivé sur la case " + std::to_string(moving_to_cell->getPosition())); //todo delete when affichage works
-    client.send("got here 3");
+    game.getCurrentPlayer()->move(game.getBoard()->getCellByIndex((game.getCurrentPlayer()->getCurrentCell()->getPosition() + game.getDice()->getResults()) % BOARD_SIZE));
+    updateAllClients(std::string(client.getAccount()->getUsername()) + " est arrivé sur la case " + std::to_string(game.getCurrentPlayer()->getCurrentCell()->getPosition())); //todo delete when affichage works
 
-
-    /*
     if (game.getCurrentPlayer()->getPlayerStatus() == PLAYER_STATUS::BANKRUPT and game.getCurrentPlayer()->getBankruptingPlayer() !=
                                                                                           nullptr){
         clientBankruptLoop(client);
     }
-     */
+
+    game.getCurrentPlayer()->getCurrentCell()->action(game.getCurrentPlayer());
     /*
     Land *l = dynamic_cast<Land*>(game.getCurrentPlayer()->getCurrentCell());
     if (l != nullptr) {

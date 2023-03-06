@@ -107,6 +107,7 @@ void Player::move(Cell *cell, bool pass_by_start) {
     if (passedByStart(cell, pass_by_start)) {
         receive(200, "Banque");
     }
+    current_cell = cell;
 }
 
 bool Player::passedByStart(Cell* cell, bool pass_by_start) {
