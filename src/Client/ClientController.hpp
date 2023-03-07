@@ -25,12 +25,13 @@ public:
 
 	std::string getNewInput() {
 		this->setInput();
+        std::cout << "Vous venez d'entrer : " << input << " none parsed" << std::endl;
 		return input;
 	}
 
 	MainInputParser getNewParsedInput() {
 		this->setInput();
-		std::cout << "Vous venez d'entrer : " << input << std::endl;
+		std::cout << "Vous venez d'entrer : " << input << " parsed by MainInputParser" << std::endl;
 		return MainInputParser{input};
 	}
 
