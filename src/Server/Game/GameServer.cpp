@@ -19,7 +19,7 @@ void GameServer::sendAllGameData(){
     std::string ret = "GAMESTATE:\n";
     int counter = 0;
     for (auto &player : *game.getPlayers()){
-        ret += ("P" + std::to_string(counter) + ": pos-" + std::to_string(player.getCurrentCell()->getPosition()) + "ba-" + std::to_string(player.getBankAccount())->getMoney()";");
+        ret += ("P" + std::to_string(counter) + ": pos-" + std::to_string(player.getCurrentCell()->getPosition()) + ",ba-" + std::to_string(player.getBankAccount()->getMoney()) + ";");
         counter++;
     }
     counter = 0;
@@ -286,27 +286,26 @@ void GameServer::processDiceRoll(ClientManager &client) {
     }
     else {
         if (game.getCurrentPlayer()->getPlayerStatus() == PLAYER_STATUS::BANKRUPT and game.getCurrentPlayer()->getBankruptingPlayer() !=
-                                                                                      nullptr){
+                                                                                      nullptr) {
             clientBankruptLoop(client);
+        }
+        game.getCurrentPlayer()->getCurrentCell()->action(game.getCurrentPlayer());
+        LandCell *l;
+        l = dynamic_cast<LandCell*>(game.getCurrentPlayer()->getCurrentCell());
+        if (l != nullptr) {
+            std::cout << "Pointer to owner: " << l->getLand()->getOwner() << std::endl;
 
-            game.getCurrentPlayer()->getCurrentCell()->action(game.getCurrentPlayer());
-            LandCell *l;
-            l = dynamic_cast<LandCell*>(game.getCurrentPlayer()->getCurrentCell());
-            if (l != nullptr) {
-                std::cout << "Pointer to owner: " << l->getLand()->getOwner() << std::endl;
-
-                if (l->getLand()->getOwner() == nullptr){
-                    updateAllClients("AUCTION STARTING");
-                    clientAuctionLoop(client, l);
-                }
-                else{
-                    std::cout << "Was already owned." << std::endl;
-                    std::cout << "Owner is: " << std::string(l->getLand()->getOwner()->getClient()->getAccount()->getUsername()) << std::endl;
-                }
+            if (l->getLand()->getOwner() == nullptr){
+                updateAllClients("AUCTION STARTING");
+                clientAuctionLoop(client, l);
             }
             else{
-                std::cout << "Could not convert to LandCell" << std::endl;
+                std::cout << "Was already owned." << std::endl;
+                std::cout << "Owner is: " << std::string(l->getLand()->getOwner()->getClient()->getAccount()->getUsername()) << std::endl;
             }
+        }
+        else {
+            std::cout << "Could not convert to LandCell" << std::endl;
         }
     }
 }
