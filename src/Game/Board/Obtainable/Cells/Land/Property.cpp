@@ -34,6 +34,7 @@ bool Property::build(Player* player) {    //renvoie false si n'arrive pas à con
         player->getClient()->send("Vous buildez comme Bob the builder, bravo");
         return true;
     }
+    return false;
 }
 
 bool Property::sellBuilding(Player* player){
@@ -63,7 +64,7 @@ bool Property::checkTransaction(Player* player, bool is_building){
     std::vector<Property*> same_color = this->getSameColorBuilding(player_props);
 
     if (is_building) {
-        if (same_color.size() == other_props) {
+        if (static_cast<int>(same_color.size()) == other_props) {
             player->getClient()->send("Vous avez toutes les propriétés de cette couleur");
 
             int potential_level = static_cast<int>(this->level)+1;

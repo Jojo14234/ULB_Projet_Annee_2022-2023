@@ -33,11 +33,9 @@ int Company::getRentPrice(){
 		unsigned int nbr_of_company = this->owner->getNumberOfCompanies();
 		int dice_res = Dice().roll();
 		switch (nbr_of_company) {
-			case 1:
-				return dice_res*5;
-			case 2:
-				return dice_res*12;
-
+			case 1 : return dice_res*5;
+			case 2 : return dice_res*12;
+			default: return 0;
 		}
 	}
 	//dé  jeter les dés x5 ou x12 selon le owner possession
@@ -50,14 +48,11 @@ void Station::playerPurchase(Player* player) {
 int Station::getRentPrice() {
 	unsigned int nbr_of_station = this->owner->getNumberOfStations();
 	switch (nbr_of_station) {
-		case 1:
-			return 25;
-		case 2:
-			return 50;
-		case 3:
-			return 100;
-		case 4:
-			return 200;
+		case 1: return 25;
+		case 2: return 50;
+		case 3: return 100;
+		case 4: return 200;
+		default: return 0;
 	}
 }
 // dépend de owner et le nombre de gare qu'il a
