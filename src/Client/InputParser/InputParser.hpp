@@ -10,33 +10,51 @@ class InputParser {
 private:
 
 	const std::string input;
-	std::vector<std::string> input_splited;
-	
-	// Split the input to a list of string seperate by a ' '
+	std::vector<std::string> input_separated;
+
+   /*
+	* Belong to InputParser classe.
+    * This function splits the input string by space (' ') character and stores the resulting substrings in a vector of strings called `input_separated`.
+    * It clears the `input_separated` vector before splitting the input string.
+    */
     void split() {
-		input_splited.clear();
+        input_separated.clear();
 		std::string str;	
 		for ( char e : this->input ) { 
-			if ( e == ' ' ) { this->input_splited.push_back(str); str=""; }
+			if ( e == ' ' ) { this->input_separated.push_back(str); str=""; }
 			else { str += e; }
-		} this->input_splited.push_back(str);
+		} this->input_separated.push_back(str);
 	}
 
 protected:
 
-	// Parse the input from the client
+	/*
+	 * Belongs to InputParser
+	 * Called in the constructor.
+	 * Actually does not parse but, split the Input with InputParser::split();
+	 */
 	virtual void parse() { this->split(); }
 
 public:
 
+    /*
+    * Constructor of InputParser, take a string `Input` as parameters.
+    * It stores it in variable `input`. Splits and stores it vector `input_separated`
+    */
 	InputParser(const std::string &input) : input{input} { this->parse(); }
 	virtual ~InputParser()=default;
 
-	// The n parameter from the input_splited
-	const std::string &operator[](int n) const { return this->input_splited[n]; }
+    /*
+     * This code defines a method that provides a convenient way to access elements of the parsed input string vector by overloading the `[]` operator.
+     * The method takes an integer as a parameter and returns a constant reference to the corresponding element of the `input_separated` vector.
+     */
+	const std::string &operator[](int n) const { return this->input_separated[n]; }
 
-	// The nb of parameters (does not count the query type ex : /login remy rkb -> 2, not 3)
-	int getNbParameters() const { return input_splited.size() - 1; }
+    /*
+     * This function return the number of parameters in the input.
+     * It doesn't count the query field. (e.g. : /login [username] [password] have 2 parameters)
+     */
+	int getNbParameters() const { return input_separated.size() - 1; }
 
 };
 
