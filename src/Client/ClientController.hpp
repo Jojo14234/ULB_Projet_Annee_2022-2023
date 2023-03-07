@@ -26,7 +26,7 @@ public:
 	std::string getNewInput() {
 		this->setInput();
         std::cout << "Vous venez d'entrer : " << input << " none parsed" << std::endl;
-        return input;
+		return input;
 	}
 
 	MainInputParser getNewParsedInput() {

@@ -13,10 +13,10 @@
 class Client {
 
     sf::TcpSocket socket;
-    
+
     bool connected_to_an_account = false;
     bool in_game = false;
-    
+
     //int account_id;  //unused
 
     ClientController controller;
@@ -88,17 +88,17 @@ class Client {
      */
     void gameLoop();
 
-	/*
-	 * Loop used during a game to always send message to the server
-	 */
-	void sendToServerLoop();
+    /*
+     * Loop used during a game to always send message to the server
+     */
+    void sendToServerLoop();
 
-	/*
-	 * Loop used during a game to always receive message from the server
-	 * And performed action based on the message.
-	 */
-	void receiveFromServerLoop();
-    
+    /*
+     * Loop used during a game to always receive message from the server
+     * And performed action based on the message.
+     */
+    void receiveFromServerLoop();
+
 public:
 
     /*
@@ -107,13 +107,13 @@ public:
      */
     Client() { this->connectToServer(); }
 
-    /*
-     * MainLoop of the Client object.
-     * It does 3 things :
-     * 1. Try to connect the Client to one user account
-     * 2. Send message to the server and get response
-     * 3. If the response correspond to "GAME" then it launch the gameLoop
-     */
+   /*
+    * MainLoop of the Client object.
+    * It does 3 things :
+    * 1. Try to connect the Client to one user account
+    * 2. Send message to the server and get response
+    * 3. If the response correspond to "GAME" then it launch the gameLoop
+    */
     void mainLoop();
 
 };

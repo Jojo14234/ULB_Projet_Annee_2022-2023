@@ -37,38 +37,39 @@ class AuthentificationManager {
 	PARAMS_STATUS status = PARAMS_STATUS::SUCCESSFUL;
 
 public:
-	/*
-	 * Constructor of AuthentificationManager, it takes 2 strings `username` and `password` as parameters.
-	 * It stores the value and check if they are valid, it stores the validity status in a variable called status.
-	 */
+    /*
+     * Constructor of AuthentificationManager, it takes 2 strings `username` and `password` as parameters.
+     * It stores the value and check if they are valid, it stores the validity status in a variable called status.
+     */
 	AuthentificationManager(std::string username, std::string password): username{username}, password{password} { this->checkValidity(); }
-	
 
-    /*
-     * Set the `status` to SUCCESSFUL and then check if `username` and `password` are valid
-     */
+   /*
+    * Set the `status` to SUCCESSFUL and then check if `username` and `password` are valid
+    */
 	void checkValidity();
-    /*
-     * Return whether or not the `username` is valid in terms of length and authorized characters.
-     * If it's not valid it set the `status` to the corresponding value
-     */
+
+   /*
+    * Return whether or not the `username` is valid in terms of length and authorized characters.
+    * If it's not valid it set the `status` to the corresponding value
+    */
 	bool checkUsernameValidity();
-    /*
-     * Return whether or not the `password` is valid in terms of length and authorized characters.
-     * If it's not valid it set the `status` to the corresponding value
-     */
+
+   /*
+    * Return whether or not the `password` is valid in terms of length and authorized characters.
+    * If it's not valid it set the `status` to the corresponding value
+    */
 	bool checkPasswordValidity();
 
-    /*
-     * Return whether or not teh `status` is successful
-     */
-	bool isValid() { return this->status == PARAMS_STATUS::SUCCESSFUL; }
+   /*
+    * Return whether or not teh `status` is successful
+    */
+    bool isValid() { return this->status == PARAMS_STATUS::SUCCESSFUL; }
 
-	/*
-	 * Show the correct error message in the UI
-	 * The message depends on the `status` attributs
-	 */
-	void showErrorMessage(ConnectionUI &ui);
+   /*
+    * Show the correct error message in the UI
+    * The message depends on the `status` attributs
+    */
+    void showErrorMessage(ConnectionUI &ui);
 };
 
 #endif
