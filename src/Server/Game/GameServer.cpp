@@ -47,8 +47,6 @@ void GameServer::clientLoop(ClientManager &client) {
 	std::cout << client.getAccount()->getUsername() << " has join a game with code : " << this->code.getCode() << std::endl;
     client.send("Le code de cette partie est " + std::to_string(this->code.getCode()) + ". Partagez-le avec tous vos amis!");
 	while (this->active) {
-		GAME_QUERY_TYPE query;
-		sf::Packet packet;
 
         // if player is in jail
         if (game.getCurrentPlayer()->isInJail()){
@@ -59,6 +57,8 @@ void GameServer::clientLoop(ClientManager &client) {
         }
             // TODO after roll loop
         /*
+		GAME_QUERY_TYPE query;
+		sf::Packet packet;
 		game.receiveQuery(query, packet);
 		if (query == GAME_QUERY_TYPE::LEAVE) { break; }
          TODO manage leave game
@@ -144,7 +144,7 @@ void GameServer::clientBankruptLoop(ClientManager &client) {
         client.receive(query);
         switch (query) {
             case GAME_QUERY_TYPE::MORTGAGE : case GAME_QUERY_TYPE::SELL_BUILDINGS : processGameQueryBeforeRoll(client, query); break;
-            case GAME_QUERY_TYPE::GIVE_UP : processBankruptcyToPlayer(client); break;
+            case GAME_QUERY_TYPE::GIVE_UP : processBankruptcyToPlayer(); break;
             default: client.send("Cette commande n'est pas disponible.\n"); break;
         }
     }
@@ -476,7 +476,7 @@ bool GameServer::proposeExchange(Player &proposing_player, Player &proposed_to_p
     }
 }
 
-void GameServer::processBankruptcyToPlayer(ClientManager &client){
+void GameServer::processBankruptcyToPlayer(){
     for (auto property : game.getCurrentPlayer()->getAllProperties()){
         property->setOwner(game.getCurrentPlayer()->getBankruptingPlayer());
         game.getCurrentPlayer()->getBankruptingPlayer()->acquireProperty(*property);

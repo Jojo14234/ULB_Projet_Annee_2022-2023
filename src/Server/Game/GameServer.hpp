@@ -69,7 +69,7 @@ public:
     void updateAllClients(std::string update);
     bool proposeExchange(Player& proposing_player, Player &proposed_to_player, Land *land, int amount);
     Land* getLandByName(std::string &name);
-    void processBankruptcyToPlayer(ClientManager &client);
+    void processBankruptcyToPlayer();
 };
 
 #endif
