@@ -286,11 +286,11 @@ void GameServer::processDiceRoll(ClientManager &client) {
         game.getCurrentPlayer()->goToJail(game.getBoard()->getCellByIndex(PRISON_INDEX));
     }
     else {
+        game.getCurrentPlayer()->getCurrentCell()->action(game.getCurrentPlayer());
         if (game.getCurrentPlayer()->getPlayerStatus() == PLAYER_STATUS::BANKRUPT and game.getCurrentPlayer()->getBankruptingPlayer() !=
                                                                                       nullptr) {
             clientBankruptLoop(client);
         }
-        game.getCurrentPlayer()->getCurrentCell()->action(game.getCurrentPlayer());
         LandCell *l;
         l = dynamic_cast<LandCell*>(game.getCurrentPlayer()->getCurrentCell());
         if (l != nullptr) {

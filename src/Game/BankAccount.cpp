@@ -7,7 +7,7 @@
 BankAccount::BankAccount(int money) : money{money} {}
 
 void BankAccount::pay(int amount) {
-    money -= amount;
+    money = money - amount;
 }
 
 int BankAccount::gain(int amount) {money += amount; return amount;}

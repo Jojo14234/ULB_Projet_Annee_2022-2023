@@ -45,7 +45,7 @@ void LandCell::action(Player* player) {
 		else if (not this->isOwner(player) && land->getStatus()==LAND_STATUS::PAID) {
 			int rent = land->getRentPrice();
 			player->pay(rent, true);
-			player->getClient()->send("Qui appartient à un autre joueur, vous lui payer "+ std::to_string(rent) + "$ de loyer");
+			player->getClient()->send("Qui appartient à un autre joueur, vous lui payer "+ std::to_string(rent) + "e de loyer");
 			land->getOwner()->receive(rent, "autre joueur");
             if (player->getPlayerStatus() == PLAYER_STATUS::BANKRUPT){
                 player->setBankruptingPlayer(land->getOwner());
