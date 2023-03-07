@@ -1,3 +1,4 @@
+#include <iostream>
 #include "Board.hpp"
 #include "Obtainable/Cells/LandCell.hpp"
 #include "Obtainable/Cells/JailCell.hpp"
@@ -5,101 +6,82 @@
 #include "Obtainable/Cells/GoJailCell.hpp"
 #include "Obtainable/Cells/DrawableCardCell.hpp"
 #include "Obtainable/Cells/TaxCell.hpp"
+#include "../../utils/Configs.hpp"
 
+
+Board::Board() {
+    std::cout << "-----Start Board constructor-----" << std::endl;
+    initAllDecks();
+    initAllCells();
+    std::cout<<"-----Finish board constructor-----"<<std::endl;
+}
 
 void Board::initAllDecks(){
-    //TODO : ca c'est pas vrai, à changer (rémy)
-    CardDeck* deck = new CardDeck("COMMUNITY DECK");
-	this->community_deck = deck;
-    deck = new CardDeck("LUCKY DECK");
-	this->lucky_deck = deck;
+    this->community_deck = std::make_shared<CardDeck>("COMMUNITY DECK");
+    this->lucky_deck = std::make_shared<CardDeck>("LUCKY DECK");
 }
 
 void Board::initAllLand(){
 	//init property
     Json::Value root;
-	std::ifstream file("Game/Board/Obtainable/data/property_data.json");
+	std::ifstream file(PROPERTY_DATA);
     file >> root;
 
-	Json::Value prop_list;
-    prop_list = root["PROPERTY"];
+	Json::Value property_list = root["PROPERTY"];
+    this->extractProperty(property_list);
+    Json::Value station_list = root["STATION"];
+    this->extractProperty(station_list);
+    Json::Value company_list = root["COMPANY"];
+    this->extractProperty(company_list);
 
-	for (unsigned int i=0; i < prop_list.size(); i++) {
-		int pos = prop_list[i]["pos"].asInt();	//ieme propriété dans json
-		this->cells.at(pos) = std::make_shared<LandCell>(pos, std::make_shared<Property>(prop_list[i])); 	//alt pour pos, Property.getPos() ?
-	}
-
-	Json::Value station_list;
-    station_list = root["STATION"];
-
-	for (unsigned int i=0; i<station_list.size(); i++) {
-        int pos = station_list[i]["pos"].asInt();
-		this->cells.at(pos) = std::make_shared<LandCell>(pos, std::make_shared<Station>(station_list[i]));
-	}
-
-	Json::Value company_list;
-    company_list = root["COMPANY"];
-
-	for (unsigned int i=0; i<company_list.size(); i++) {
-		int pos = station_list[i]["pos"].asInt();
-		this->cells.at(pos) = std::make_shared<LandCell>(pos, std::make_shared<Company>(company_list[i]));
-	}
     std::cout << "InitAllLand done" << std::endl;
 }
 
+void Board::extractProperty(Json::Value &list) {
+    // Pas de couleur, mais pas de panic ça fonctionne
+    for (auto property : list) {
+        int position = property["pos"].asInt();
+        this->cells.at(position) = std::make_shared<LandCell>(position, std::make_shared<Property>(property));
+    }
+}
+
+
 void Board::initOtherCells(){
 	Json::Value root;
-	std::ifstream file("Game/Board/Obtainable/data/cell_data.json");
+	std::ifstream file(CELL_DATA);
     file >> root;
 
-	//go to jail
-	int pos = root["Go to jail"]["pos"].asInt();
-	this->cells.at(pos) = std::make_shared<GoJailCell>(pos);
-    //pos = 30
+    int start_position = root["Start"]["pos"].asInt();
+	int position_go_jail = root["Go to jail"]["pos"].asInt();
+    int position_jail = root["Jail"]["pos"].asInt();
+    int position_parking = root["Parking"]["pos"].asInt();
+    this->cells.at(start_position) = std::make_shared<ParkingCell>(start_position);
+	this->cells.at(position_go_jail) = std::make_shared<GoJailCell>(position_go_jail);
+	this->cells.at(position_jail) = std::make_shared<JailCell>(position_jail);
+    this->cells.at(position_parking) = std::make_shared<ParkingCell>(position_parking);
+    std::cout << "All special cells done" << std::endl;
 
-	//jail
-	pos = root["Jail"]["pos"].asInt();
-	this->cells.at(pos) = std::make_shared<JailCell>(pos);
-    //pos = 10
+	//draw card & tax
+	Json::Value community_card_list = root["DRAW CARD"]["COMMUNITY"];
+	Json::Value lucky_card_list = root["DRAW CARD"]["LUCKY"];
+    Json::Value tax_list = root["TAX"];
 
-	//parking
-	Json::Value parking;
-    parking = root["Parking"];
-	pos = parking["pos"].asInt();
-	this->cells.at(pos) = std::make_shared<ParkingCell>(pos);
-    //pos = 20
+    for (auto card : community_card_list) {
+        int position = card["pos"].asInt();
+        this->cells.at(position) = std::make_shared<DrawableCardCell>(position, this->community_deck);
+    }
 
-	//case départ
-	pos = 0;
-	this->cells.at(pos) = std::make_shared<ParkingCell>(pos);
-    //pos = 0
+    for (auto card : lucky_card_list) {
+        int position = card["pos"].asInt();
+        this->cells.at(position) = std::make_shared<DrawableCardCell>(position, this->lucky_deck);
+    }
 
-	//draw card
-	Json::Value draw_list;
-    draw_list = root["DRAW CARD"];
-
-    std::cout << "Draw list size : " << draw_list.size() << std::endl;
-
-	for (unsigned int i = 0; i < draw_list.size(); i++) {
-		pos = draw_list[i]["pos"].asInt();
-		CardDeck* deck = (draw_list[i]["type"].asString() == "LUCKY DECK") ? this->lucky_deck : this->community_deck;
-		this->cells.at(pos) = std::make_shared<DrawableCardCell>(pos, deck);
-	}
-
-	//tax
-	Json::Value tax_list;
-    tax_list = root["TAX"];
-
-    std::cout << "Tax list size : " << tax_list.size() << std::endl;
-    std::cout << tax_list << std::endl;
-
-	for (unsigned i = 0; i < tax_list.size(); i++){
-		int pos = tax_list[i]["pos"].asInt();
-        int amount = tax_list[i]["amount"].asInt();
-        std::string type = tax_list[i]["type"].asString();
-
-		this->cells.at(pos) = std::make_shared<TaxCell>(pos, amount, type);
-	}
+    for (auto tax : tax_list) {
+        int position = tax["pos"].asInt();
+        int amount = tax["amount"].asInt();
+        std::string type = tax["type"].asString();
+        this->cells.at(position) = std::make_shared<TaxCell>(position, amount, type);
+    }
 
     std::cout << "InitOtherCells done" << std::endl;
 }

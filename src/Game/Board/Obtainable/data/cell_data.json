@@ -1,9 +1,27 @@
 {
+	"Start" : {"pos" :  0},
 	"Go to jail" : {"pos" : 30},
 	"Jail" : {"pos" : 10},
 	"Parking" : {"pos" : 20},
 
-	"DRAW CARD" : [
+	"DRAW CARD" :
+		{
+			"COMMUNITY" :
+				[
+					{"pos" :  2},
+					{"pos" :  17},
+					{"pos" :  33}
+				],
+			"LUCKY" :
+				[
+					{"pos" :  7},
+					{"pos" :  22},
+					{"pos" :  36}
+				]
+		}
+	,
+
+	"DRAW CARD1" : [
 			{
 				"pos" : 2,
 				"type" : "COMMUNITY DECK"

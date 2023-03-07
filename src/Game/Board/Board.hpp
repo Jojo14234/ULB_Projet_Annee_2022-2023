@@ -22,11 +22,14 @@ class Cell;
 
 class Board {
 
+    //TODO test (rémy)
+    std::shared_ptr<CardDeck> community_deck;
+    std::shared_ptr<CardDeck> lucky_deck;
+
 	// community card deck
-	CardDeck* community_deck;
-	
+	//CardDeck* community_deck;
 	// lucky card deck
-	CardDeck* lucky_deck;
+	//CardDeck* lucky_deck;
 	
 	// cells
 	std::array<std::shared_ptr<Cell>, BOARD_SIZE> cells;
@@ -37,20 +40,25 @@ class Board {
 	// init all cells
 	void initAllCells();
 	void initAllLand();
+
+    void extractProperty(Json::Value &list);
 	void initOtherCells();
 
 	
 public:
 
-	Board() { std::cout<<"in board constructor"<<std::endl; initAllDecks(); initAllCells(); std::cout<<"finish board constructor"<<std::endl;}
+	Board();
 
-	~Board() { delete community_deck; delete lucky_deck; }
+    //TODO change into smartPointer
+	//~Board() { delete community_deck; delete lucky_deck; }
+
 
     Cell* getCellByIndex(int index);
 
     LandCell* getCellByName(std::string &name);
 
-    std::array<std::shared_ptr<Cell>, BOARD_SIZE> getAllCells() {return cells;}
+    //TODO ici on renvoie une copie, on pourrait renvoyer un pointeur vers le vecteur ?
+    std::array<std::shared_ptr<Cell>, BOARD_SIZE> getAllCells() { return cells; }
 
 };
 

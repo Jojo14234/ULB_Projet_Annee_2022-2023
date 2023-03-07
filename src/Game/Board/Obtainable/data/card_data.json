@@ -3,12 +3,9 @@
 	"LUCKY DECK" : {
 
         "Jail Card" : {
-
                 "descript" : "Vous êtes libéré de prison. Cette carte peut être conservée jusqu’à ce qu’elle soit utilisée ou vendue."
             },
-		
 		"MoneyCard" : [
-
 			{
                 "descript" : "Vous êtes imposé pour les réparations de voirie à raison de 40$ par maison et 100$ par hôtel",
                 "amount" : 0,
