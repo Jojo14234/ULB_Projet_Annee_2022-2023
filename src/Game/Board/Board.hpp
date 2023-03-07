@@ -22,36 +22,26 @@ class Cell;
 
 class Board {
 
-    //TODO test (rémy)
     std::shared_ptr<CardDeck> community_deck;
     std::shared_ptr<CardDeck> lucky_deck;
 
-	// community card deck
-	//CardDeck* community_deck;
-	// lucky card deck
-	//CardDeck* lucky_deck;
-	
 	// cells
 	std::array<std::shared_ptr<Cell>, BOARD_SIZE> cells;
 
-	// init all decks
-	void initAllDecks();
+	// init decks cells
+	void initDecksCardLand();
 
-	// init all cells
-	void initAllCells();
-	void initAllLand();
+	// init property cells
+	void initPropertyLand();
+    void initNonPropertyLand();
 
     void extractProperty(Json::Value &list);
-	void initOtherCells();
-
+    void extractDeckCard(Json::Value &list, std::shared_ptr<CardDeck> deck);
 	
 public:
 
 	Board();
-
-    //TODO change into smartPointer
-	//~Board() { delete community_deck; delete lucky_deck; }
-
+    ~Board()=default;
 
     Cell* getCellByIndex(int index);
 

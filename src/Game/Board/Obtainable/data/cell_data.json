@@ -21,38 +21,6 @@
 		}
 	,
 
-	"DRAW CARD1" : [
-			{
-				"pos" : 2,
-				"type" : "COMMUNITY DECK"
-			},
-			
-			{
-				"pos" : 7,
-				"type" : "LUCKY DECK"
-			},
-
-			{
-				"pos" : 17,
-				"type" : "COMMUNITY DECK"
-			},
-
-			{
-				"pos" : 22,
-				"type" : "LUCKY DECK"
-			},
-
-			{
-				"pos" : 33,
-				"type" : "COMMUNITY DECK"
-			},
-
-			{
-				"pos" : 36,
-				"type" : "LUCKY DECK"
-			}
-		],
-
 	"TAX" : [
 			{
 				"pos" : 4,
