@@ -45,7 +45,7 @@ public:
     }
 */
 
-    Player* getCurrentPlayer() { return &players[current_player_index]; }
+    Player* getCurrentPlayer();
 
     bool isRunning();
 
