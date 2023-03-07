@@ -36,19 +36,25 @@ public:
 			case CONSOLE: {
 				this->view->getConsole()->addInput();
 				GameInputParser parser(this->view->getConsole()->getInput());
+				/*
 				std::string response;
 				if (this->model->sendCommand(parser)) { this->model->receive(response); }
 				else { response = "La commande n'existe pas"; }
 				this->view->getConsole()->addText(response);
+				*/
+				if (this->model->sendCommand(parser)) this->view->getChat()->addText("La commande n'existe pas");
 				break; }
 				
 			case CHAT: {
 				this->view->getChat()->addInput();
 				MainInputParser parser(this->view->getChat()->getInput());
+				/*
 				std::string response;
 				if (this->model->sendCommand(parser)) { this->model->receive(response); }
 				else { response = "La commande n'existe pas"; }
 				this->view->getChat()->addText(response);
+				*/
+				if (this->model->sendCommand(parser)) this->view->getChat()->addText("La commande n'existe pas");
 				break; }
 			
 			case IDLE: break;
@@ -71,10 +77,22 @@ public:
 		}
 	}
 
+	void receiveMessagesLoop() {
+		//std::cout << "dans thread" << std::endl;
+		while (true) {
+			std::string response;
+			this->model->receive(response);
+			this->view->getConsole()->addText(response);
+		}
+	}
+	
 	void init() {
 		this->initScreen();
 		// create a thread to receive messages
-		std::thread t(&GameController::receiveMessages, this);
+		//std::cout << "avant thread" << std::endl;
+		std::thread send_thread(&GameController::receiveMessagesLoop, this);
+		send_thread.detach();
+		//std::cout << "après thread" << std::endl;
 	}
 
 	void initScreen() {
@@ -93,15 +111,6 @@ public:
 	void startGame() {
 		this->view->getPlayersWaitingText()->setHidden();
 		this->view->getOwnerWaitingText()->setHidden();
-	}
-
-	void receiveMessages() {
-		std::string response;
-		while (this->new_state == STATE::GAME) {
-			this->model->receive(response);
-			this->model->receive(response);
-			this->view->getConsole()->addText(response);
-		}
 	}
 
 };
