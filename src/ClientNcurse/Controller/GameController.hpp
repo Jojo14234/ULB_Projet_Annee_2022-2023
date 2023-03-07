@@ -2,6 +2,7 @@
 #define _GAME_CONTROLLER_HPP
 
 #include <ncurses.h>
+#include <thread>
 
 #include "AbstractController.hpp"
 #include "../View/GameView.hpp"
@@ -70,6 +71,12 @@ public:
 		}
 	}
 
+	void init() {
+		this->initScreen();
+		// create a thread to receive messages
+		std::thread t(&GameController::receiveMessages, this);
+	}
+
 	void initScreen() {
 		this->view->getDice1()->setHidden();
 		this->view->getDice2()->setHidden();
@@ -81,15 +88,20 @@ public:
 			this->view->getPlayersWaitingText()->addText("Gamecode : " + std::to_string(this->model->getGameCode()));
 			this->view->getOwnerWaitingText()->setHidden();
 		}
-
-		std::string response;
-		this->model->receive(response);
-		this->view->getConsole()->addText(response);
 	}
 
 	void startGame() {
 		this->view->getPlayersWaitingText()->setHidden();
 		this->view->getOwnerWaitingText()->setHidden();
+	}
+
+	void receiveMessages() {
+		std::string response;
+		while (this->new_state == STATE::GAME) {
+			this->model->receive(response);
+			this->model->receive(response);
+			this->view->getConsole()->addText(response);
+		}
 	}
 
 };

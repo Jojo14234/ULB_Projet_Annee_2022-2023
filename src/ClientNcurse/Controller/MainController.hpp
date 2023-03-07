@@ -32,7 +32,7 @@ public:
 		case STATE::MENU:
 			menu.handleInput(ch);
 			state = menu.getNewState();
-			if (state == STATE::GAME) game.initScreen();
+			if (state == STATE::GAME) game.init();
 			break;
 		case STATE::GAME:
 			game.handleInput(ch);
