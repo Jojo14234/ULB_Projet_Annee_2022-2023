@@ -31,19 +31,28 @@ void Server::mainLoop() {
 
 void Server::clientLoop(ClientManager &client) {
 	database.print_in_file();
-	// Loop to exchange data with the client
-	while (true) {
-		// Receive a query from the client
-		QUERY_TYPE query; 
-		client.receive(query);
-		// Execute the query
-		this->clientProcessQuery(client, query);
-		if (query == QUERY_TYPE::DISCONNECT) {
-			if (!client.getAccount()) { break; }
-			std::cout << client.getAccount()->getUsername() << " disconnected from his account !" << std::endl;
-			client.setAccount(nullptr);
+	try {
+		// Loop to exchange data with the client
+		while (true) {
+			// Receive a query from the client
+			QUERY_TYPE query; 
+			client.receive(query);
+			// Execute the query
+			this->clientProcessQuery(client, query);
+			if (query == QUERY_TYPE::DISCONNECT) {
+				if (!client.getAccount()) { break; }
+				std::cout << client.getAccount()->getUsername() << " disconnected from his account !" << std::endl;
+				client.setAccount(nullptr);
+			}
 		}
 	}
+	catch (const WritePipeServerException &exception) {
+		std::cout << exception.what() << std::endl;
+	}
+	catch (const ReadPipeServerException &exception) {
+		std::cout << exception.what() << std::endl;
+	}
+	client.disconnect();
 }
 
 

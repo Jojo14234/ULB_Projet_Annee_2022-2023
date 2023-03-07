@@ -1,5 +1,5 @@
 CXX = $(shell [ `g++ -v 2>&1 | grep -o 'version [0-9]\+' | cut -d' ' -f2` -le 9 ] && echo g++-10 || echo g++)
-CXXFLAGS = -std=c++20 -Wall -Wpedantic  -D_GNU_SOURCE
+CXXFLAGS = -std=c++20
 OTHERFLAGS = -fanalyzer -Walloc-zero -Wcast-align \
 			-Wdeprecated-copy-dtor -Wduplicated-branches -Wduplicated-cond -Wextra-semi -Wfloat-equal \
 			-Wformat-signedness -Winit-self -Wlogical-op -Wmismatched-tags -Wnon-virtual-dtor -Wnull-dereference \
@@ -7,8 +7,8 @@ OTHERFLAGS = -fanalyzer -Walloc-zero -Wcast-align \
 			-Wsuggest-attribute=const -Wsuggest-attribute=noreturn -Wsuggest-attribute=pure -Wsuggest-final-methods \
 			-Wsuggest-final-types -Wsuggest-override -Wundef -Wuseless-cast -Wvolatile \
 			-Wformat=2  -Wzero-as-null-pointer-constant -fsanitize=address,leak #-Wswitch-default -Wswitch-enum
-#CXXFLAGS += ${OTHERGLAGS}
-LDLIBS 	 = -lpthread -lsfml-network -lsfml-system -ljsoncpp
+#CXXFLAGS += ${OTHERFLAGS}
+LDLIBS 	 = -lpthread -lsfml-network -lsfml-system -lncurses -ljsoncpp
 
 ifneq ($(shell uname -s), Linux)
 	CXXFLAGS += -I/opt/homebrew/Cellar/sfml/2.5.1_2/include -I/opt/homebrew/Cellar/jsoncpp/1.9.5/include
@@ -18,6 +18,12 @@ endif
 # Create Client objects
 CLIENT_BINS = $(patsubst Client/%.cpp, Client/%.o, $(wildcard Client/*.cpp))
 CLIENT_INPUTPARSER_BINS = $(patsubst Client/InputParser/%.cpp, Client/InputParser/%.o, $(wildcard Client/InputParser/*.cpp))
+
+# Create Ncurses objects
+NCURSE_BINS = $(patsubst ClientNcurse/%.cpp, ClientNcurse/%.o, $(wildcard ClientNcurse/*.cpp))
+NCURSE_CONTROLLER_BINS = $(patsubst ClientNcurse/Controller/%.cpp, ClientNcurse/Controller/%.o, $(wildcard ClientNcurse/Controller/*.cpp))
+NCURSE_VIEW_BINS = $(patsubst ClientNcurse/View/%.cpp, ClientNcurse/View/%.o, $(wildcard ClientNcurse/View/*.cpp))
+NCURSE_VIEW_GAME_OBJECT_BINS = $(patsubst ClientNcurse/View/GameObject/%.cpp, ClientNcurse/View/GameObject/%.o, $(wildcard ClientNcurse/View/GameObject/*.cpp))
 
 # Create Server objects
 SERVER_BINS = $(patsubst Server/%.cpp, Server/%.o, $(wildcard Server/*.cpp))
@@ -35,7 +41,6 @@ CELLS_BINS = $(patsubst Game/Board/Obtainable/Cells/%.cpp, Game/Board/Obtainable
 LAND_BINS = $(patsubst Game/Board/Obtainable/Cells/Land/%.cpp, Game/Board/Obtainable/Cells/Land/%.o, $(wildcard Game/Board/Obtainable/Cells/Land/*.cpp))
 
 
-
 .PHONY: default
 default: main
 
@@ -44,7 +49,7 @@ clean:
 	-rm *.o */*.o */*/*.o */*/*/*.o */*/*/*/*.o */*/*/*/*/*.o 2> /dev/null
 
 rm:
-	-rm capitalist server_capitalist 2> /dev/null
+	-rm capitalist server_capitalist ncurse 2> /dev/null
 
 
 main: client server
@@ -56,3 +61,8 @@ client: ${CLIENT_BINS} ${CLIENT_INPUTPARSER_BINS}
 server: ${SERVER_BINS} ${SERVER_CM_BINS} ${SERVER_DB_BINS} ${GAME_BINS} ${BOARD_BINS} ${OBTAINABLE_BINS} ${CARDS_BINS} ${CELLS_BINS} ${LAND_BINS} ${SERVER_DB_FRIEND_BINS} ${SERVER_DB_CHAT_BINS} ${SERVER_GAME_BINS} 
 	${CXX} ${CXXFLAGS} -o server_capitalist $^ ${LDLIBS}
 	make clean
+
+ncurse: ${NCURSE_BINS} ${NCURSE_CONTROLLER_BINS} ${NCURSE_VIEW_BINS} ${NCURSE_VIEW_GAME_OBJECT_BINS}
+	${CXX} ${CXXFLAGS} -o ncurse $^ ${LDLIBS}
+	make clean
+

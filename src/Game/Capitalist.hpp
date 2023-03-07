@@ -38,13 +38,14 @@ public:
     /*
     Player* getPlayerByClientId(int id){
         for (auto &player : players){
-            if (player.getId() == id){
+            if (player.getId() == id)
                 return &player;
             }
         } return nullptr;
     }
 */
-    Player* getCurrentPlayer();
+
+    Player* getCurrentPlayer() { return &players[current_player_index]; }
 
     bool isRunning();
 

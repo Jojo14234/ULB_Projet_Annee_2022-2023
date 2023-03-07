@@ -2,7 +2,13 @@
 #define _GAME_MONEY_CARD_HPP
 
 #include <string>
+#ifdef __linux__
+#include <jsoncpp/json/json.h>
+#endif
+
+#ifdef __APPLE__
 #include <json/json.h>
+#endif
 
 #include "Card.hpp"
 
