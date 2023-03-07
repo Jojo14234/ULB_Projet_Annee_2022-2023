@@ -9,10 +9,10 @@
 
 void Board::initAllDecks(){
     //TODO : ca c'est pas vrai, à changer (rémy)
-    CardDeck deck = CardDeck("COMMUNITY DECK");
-	this->community_deck = &deck;
-    deck = CardDeck("LUCKY DECK");
-	this->lucky_deck = &deck;
+    CardDeck* deck = new CardDeck("COMMUNITY DECK");
+	this->community_deck = deck;
+    deck = new CardDeck("LUCKY DECK");
+	this->lucky_deck = deck;
 }
 
 void Board::initAllLand(){

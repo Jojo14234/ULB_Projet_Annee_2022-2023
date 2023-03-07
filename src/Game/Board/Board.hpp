@@ -38,6 +38,8 @@ public:
 
 	Board() { std::cout<<"in board constructor"<<std::endl; initAllDecks(); initAllCells(); std::cout<<"finish board constructor"<<std::endl;}
 
+	~Board() { delete community_deck; delete lucky_deck; }
+
     Cell* getCellByIndex(int index);
 
     LandCell* getCellByName(std::string &name);
