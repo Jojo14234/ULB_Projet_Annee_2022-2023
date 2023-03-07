@@ -1,6 +1,6 @@
 #include "MainInputParser.hpp"
 
-
+/*
 // Private
 void MainInputParser::parse() {
 	InputParser::parse();
@@ -20,6 +20,25 @@ void MainInputParser::parse() {
         case "/f":          this->friendsInput();                       break;
         default:            break;
     }
+}
+*/
+void MainInputParser::parse() {
+    InputParser::parse();
+    const std::string &query = (*this)[0];
+    if      (query == "/login")         { this->query_type = QUERY_TYPE::LOGIN; }
+    else if (query == "/register")      { this->query_type = QUERY_TYPE::REGISTER; }
+    else if (query == "/create")        { this->query_type = QUERY_TYPE::CREATE_GAME; }
+    else if (query == "/disconnect")    { this->query_type = QUERY_TYPE::DISCONNECT; }
+    else if (query == "/d")             { this->query_type = QUERY_TYPE::DISCONNECT; }
+    else if (query == "/join")          { this->joinInput(); }
+    else if (query == "/message")       { this->messageInput(); }
+    else if (query == "/msg")           { this->messageInput(); }
+    else if (query == "/ranking")       { this->rankingInput(); }
+    else if (query == "/r")             { this->rankingInput(); }
+    else if (query == "/friends")       { this->friendsInput(); }
+    else if (query == "/f")             { this->friendsInput(); }
+    else                                { this->query_type = QUERY_TYPE::NONE;}
+
 }
 
 bool MainInputParser::isValidCode(std::string code) {
