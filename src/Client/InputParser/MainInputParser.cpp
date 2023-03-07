@@ -1,27 +1,7 @@
 #include "MainInputParser.hpp"
 
-/*
 // Private
-void MainInputParser::parse() {
-	InputParser::parse();
-	const std::string &query = (*this)[0];
-    switch (query) {
-        case "/login":      this->query_type = QUERY_TYPE::LOGIN;       break;
-        case "/register":   this->query_type = QUERY_TYPE::REGISTER;    break;
-        case "/create":     this->query_type = QUERY_TYPE::CREATE_GAME; break;
-        case "/disconnect":
-        case "/d":          this->query_type = QUERY_TYPE::DISCONNECT;  break;
-        case "/join":       this->joinInput();                          break;
-        case "/message":
-        case "/msg":        this->messageInput();                       break;
-        case "/ranking":
-        case "/r":          this->rankingInput();                       break;
-        case "/friends":
-        case "/f":          this->friendsInput();                       break;
-        default:            break;
-    }
-}
-*/
+
 void MainInputParser::parse() {
     InputParser::parse();
     const std::string &query = (*this)[0];
