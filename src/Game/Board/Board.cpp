@@ -123,8 +123,11 @@ LandCell* Board::getCellByName(std::string &name){
             if (land_cell->getLand()->getName() == name){
                 return land_cell;
             }
+            else{
+                land_cell = nullptr;
+            }
         }
     }
-    return nullptr;
+    return land_cell;
 }
 

@@ -417,16 +417,22 @@ void GameServer::processBuildBuildings(ClientManager &client) {
         client.send("Pour quitter le mode de sélection de propriétés. Tapez /leave.\n");
         client.receive(query, packet);
         if (query == GAME_QUERY_TYPE::LEAVE_SELECTION_MODE){
+            client.send("Vous quittez l'interface de sélection de propriétés.");
             break;
         }
         packet >> name;
         Land* land = getLandByName(name);
-        Property* p = dynamic_cast<Property*>(land);
-        if (p != nullptr and p->build(game.getCurrentPlayer())){
-            client.send("Vous avez construit un batiment.\n");
+        if (land == nullptr){
+            client.send("Cette propriété n'existe pas");
         }
-        else {
-            client.send("Building failed.\n");
+        else{
+            Property* p = dynamic_cast<Property*>(land);
+            if (p != nullptr and p->build(game.getCurrentPlayer())){
+                client.send("Vous avez construit un batiment.\n");
+            }
+            else {
+                client.send("Building failed.\n");
+            }
         }
     }
 }
@@ -445,11 +451,16 @@ void GameServer::processSellBuildings(ClientManager &client) {
         }
         packet >> name;
         Land *land = getLandByName(name);
-        Property *p = dynamic_cast<Property *>(land);
-        if (p != nullptr and p->sellBuilding(game.getCurrentPlayer())) {
-            client.send("Vous avez construit un bâtiment.\n");
-        } else {
-            client.send("Building failed.\n");
+        if (land == nullptr){
+            client.send("Cette propriété n'existe pas");
+        }
+        else{
+            Property *p = dynamic_cast<Property *>(land);
+            if (p != nullptr and p->sellBuilding(game.getCurrentPlayer())) {
+                client.send("Vous avez construit un bâtiment.\n");
+            } else {
+                client.send("Building failed.\n");
+            }
         }
     }
 }
@@ -497,6 +508,9 @@ void GameServer::processBankruptcyToPlayer(ClientManager &client){
 
 Land *GameServer::getLandByName(std::string &name) {
     LandCell* land_cell = game.getBoard()->getCellByName(name);
+    if (land_cell == nullptr){
+        return nullptr;
+    }
     Land* land = land_cell->getLand();
     return land;
 }
