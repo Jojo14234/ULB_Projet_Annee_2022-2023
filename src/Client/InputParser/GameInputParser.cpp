@@ -24,8 +24,8 @@ void GameInputParser::parse() {
         else { std::cout << "Le format de la requête doit être /bid [amount]" << std::endl; }
     }
     else if ( query == "/select" ) {
-        if ( this->getNbParameters() == 1 ) { this->query_type = GAME_QUERY_TYPE::SELECT; } // Pass en mode sélection
-        else { std::cout << "Le format de la requête doit être /select [name]" << std::endl; }
+        if ( this->getNbParameters() >= 1 ) {this->query_type = GAME_QUERY_TYPE::SELECT; regroupParameters(); }
+        else { std::cout << "Le format de la requête doit être /select [données]" << std::endl; }
     }
     else if ( query == "/arg1" ) {
         if ( this->getNbParameters() == 1 ) { this->query_type = GAME_QUERY_TYPE::ARG1; }   // Arguments numéro 1
