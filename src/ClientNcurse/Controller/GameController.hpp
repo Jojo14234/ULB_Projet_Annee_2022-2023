@@ -5,6 +5,7 @@
 
 #include "AbstractController.hpp"
 #include "../View/GameView.hpp"
+#include "../InputParser/GameInputParser.hpp"
 
 
 class GameController : public AbstractController {
@@ -18,6 +19,7 @@ public:
 	GameController(Client* model, GameView* view) : AbstractController(model), view(view) {}
 	
 	void handleInput(int ch) override {
+		
 		switch(ch) {
 		case KEY_MOUSE:
 			MEVENT event;
@@ -32,12 +34,13 @@ public:
 			switch(this->STATE) {
 			case CONSOLE: {
 				this->view->getConsole()->addInput();
-				MainInputParser parser(this->view->getConsole()->getInput());
+				GameInputParser parser(this->view->getConsole()->getInput());
 				std::string response;
 				if (this->model->sendCommand(parser)) { this->model->receive(response); }
 				else { response = "La commande n'existe pas"; }
 				this->view->getConsole()->addText(response);
 				break; }
+				
 			case CHAT: {
 				this->view->getChat()->addInput();
 				MainInputParser parser(this->view->getChat()->getInput());

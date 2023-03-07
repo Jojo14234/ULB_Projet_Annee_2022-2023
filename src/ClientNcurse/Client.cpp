@@ -74,6 +74,16 @@ bool Client::sendCommand(MainInputParser &parser) {
 	return true;
 }
 
+bool Client::sendCommand(GameInputParser &parser) {
+	GAME_QUERY_TYPE query = parser.getQueryType();
+	if (query == GAME_QUERY_TYPE::NONE) return false;
+	sf::Packet packet;
+	packet << static_cast<int>(query);
+	
+	this->sendPacket(packet);
+	return true;
+}
+
 
 // Receive Query from the server
 

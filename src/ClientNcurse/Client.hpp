@@ -6,6 +6,7 @@
 #include <SFML/Network.hpp>
 
 #include "InputParser/MainInputParser.hpp"
+#include "InputParser/GameInputParser.hpp"
 
 
 class Client {
@@ -29,6 +30,7 @@ public:
 	void sendRegister(const std::string &username, const std::string &password);
 	void sendJoinGame(int code);
 	bool sendCommand(MainInputParser &parser);
+	bool sendCommand(GameInputParser &parser);
 
 	void receive(std::string &output);
 
