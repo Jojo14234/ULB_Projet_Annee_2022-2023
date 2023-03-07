@@ -32,7 +32,7 @@ public:
 
 	virtual ~Card()=default;
 
-	virtual void action(Player* player)=0;
+	virtual void action(Player* player) override =0;
 
 	std::string getDesciption() { return description; }
 

@@ -17,7 +17,7 @@ public:
     
 	using Cell::Cell;
     
-	void action(Player* player);
+	void action(Player* player) override ;
 
 };
 

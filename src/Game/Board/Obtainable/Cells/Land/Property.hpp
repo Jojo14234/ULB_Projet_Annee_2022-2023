@@ -29,7 +29,7 @@ class Property : public Land {
     
 	PROPERTY_LEVEL level = PROPERTY_LEVEL::EMPTY;
 
-	int getRentPrice() {
+	int getRentPrice() override {
         //hasAllColor
         return this->rent_prices[static_cast<int>(this->level)];
     }
@@ -54,11 +54,11 @@ public:
 		for (int i = 0; i<6; i++) this->rent_prices[i] = prop_info["rent prices"][i].asInt();
 	}
 
-	void playerPurchase(Player* player);
+	void playerPurchase(Player* player) override ;
 
 	int getIntLevel() { return static_cast<int>(level); }
 
-    PROPERTY_LEVEL getLevel() {return this->level;};
+    PROPERTY_LEVEL getLevel() {return this->level;}
 
     bool build(Player* player);
 

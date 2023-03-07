@@ -16,11 +16,11 @@ class Cell: public Obtainable {
 
 public:
 
-	Cell(int pos): position{pos} {};
+	Cell(int pos): position{pos} {}
     
 	virtual ~Cell()=default;
 
-	virtual void action(Player* player)=0;
+	virtual void action(Player* player) override =0;
 
     int getPosition() { return position; }
 

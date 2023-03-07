@@ -19,9 +19,9 @@ class DrawableCardCell: public Cell {
 public:
 
 	//DrawableCardCell(int pos, CardDeck* one_deck): Cell{pos}, deck{one_deck} {};
-	DrawableCardCell(int pos, std::shared_ptr<CardDeck> one_deck): Cell{pos}, deck{one_deck} {};
+	DrawableCardCell(int pos, std::shared_ptr<CardDeck> one_deck): Cell{pos}, deck{one_deck} {}
 
-	void action(Player* player); 
+	void action(Player* player) override ; 
 	
 	
 									//card = deck.drawCard() prendre une random dans cet array

@@ -22,7 +22,7 @@ public:
     
 	//~LandCell() { delete land; }
 
-	void action(Player* player);
+	void action(Player* player) override ;
 
     Land* getLand(){return land.get(); }
 

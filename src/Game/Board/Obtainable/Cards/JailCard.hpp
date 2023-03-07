@@ -23,7 +23,7 @@ public:
 
 	using Card::Card;
 
-	void action(Player* player);
+	void action(Player* player) override;
 
 	Player* getOwner() {return owner; }
 

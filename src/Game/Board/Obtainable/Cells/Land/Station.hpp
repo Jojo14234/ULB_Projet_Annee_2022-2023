@@ -8,9 +8,9 @@ class PLayer;
 class Station : public Land {
 
 public:
-    int getRentPrice();
+    int getRentPrice() override ;
     using Land::Land;
-	void playerPurchase(Player* player);
+	void playerPurchase(Player* player) override ;
 
 };
 

@@ -29,7 +29,7 @@ public:
 	
 	explicit MoneyCard(Json::Value &info):Card{info}, amount{info["amount"].asInt()}, amount_house{info["amount_house"].asInt()}, amount_hotel{info["amount_hotel"].asInt()}, receive(info["receive"].asBool()) {}
 
-	void action(Player* player);
+	void action(Player* player) override ;
 
 };
 
