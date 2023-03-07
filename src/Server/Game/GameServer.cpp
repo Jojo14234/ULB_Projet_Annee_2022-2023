@@ -19,7 +19,7 @@ void GameServer::sendAllGameData(){
     std::string ret = "GAMESTATE:\n";
     int counter = 0;
     for (auto &player : *game.getPlayers()){
-        ret += ("P" + std::to_string(counter) + ": pos-" + std::to_string(player.getCurrentCell()->getPosition()) + "ba-" + std::to_string(player.getBankAccount())->getMoney()";");
+        ret += ("P" + std::to_string(counter) + ": pos-" + std::to_string(player.getCurrentCell()->getPosition()) + "ba-" + std::to_string(player.getBankAccount()->getMoney()) + ";");
         counter++;
     }
     counter = 0;

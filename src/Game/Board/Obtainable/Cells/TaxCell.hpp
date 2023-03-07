@@ -2,7 +2,7 @@
 #define _GAME_TAX_CELL_HPP
 
 #include <string>
-#include <jsoncpp/json/json.h>
+#include <json/json.h>
 
 #include "Cell.hpp"
 
