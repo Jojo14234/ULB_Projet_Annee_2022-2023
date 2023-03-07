@@ -6,7 +6,13 @@
 #include "Obtainable/Cells/LandCell.hpp"
 #include "Obtainable/Cards/CardDeck.hpp"
 
-#include "json/json.h"
+#ifdef __linux__
+#include <jsoncpp/json/json.h>
+#endif
+
+#ifdef __APPLE__
+#include <json/json.h>
+#endif
 
 #include <array>
 #include <memory>

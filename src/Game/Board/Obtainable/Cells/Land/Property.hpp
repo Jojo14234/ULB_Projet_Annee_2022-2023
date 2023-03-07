@@ -1,11 +1,17 @@
 #ifndef _GAME_PROPERTY_HPP
 #define _GAME_PROPERTY_HPP
 
+#ifdef __linux__
+#include <jsoncpp/json/json.h>
+#endif
+
+#ifdef __APPLE__
+#include <json/json.h>
+#endif
+
 #include <string>
 #include <array>
-#include <json/json.h>
 #include "../../../../../utils/Configs.hpp"
-
 #include "Land.hpp"
 
 

@@ -2,7 +2,14 @@
 #define _GAME_LAND_HPP
 
 
+#ifdef __linux__
+#include <jsoncpp/json/json.h>
+#endif
+
+#ifdef __APPLE__
 #include <json/json.h>
+#endif
+
 #include <string>
 #include <iostream>
 
