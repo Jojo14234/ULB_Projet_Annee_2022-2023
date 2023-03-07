@@ -18,6 +18,8 @@ class Capitalist {
     int current_player_index = 0;
     bool running = false;
 
+    int auction_in_progress = 0;
+
     Board board;
     Dice dice;
 
@@ -60,10 +62,14 @@ public:
 
     std::vector<Player>* getPlayers();
     void startAuction();
+    void stopAuction();
 
     Player* identifyAuctionWinner();
 
     LandCell* getCellByName(std::string& name);
+
+    int auctionInProgress() { return auction_in_progress;}
+    void setAuctionProgress(int progress) {auction_in_progress = progress;}
 };
 
 #endif

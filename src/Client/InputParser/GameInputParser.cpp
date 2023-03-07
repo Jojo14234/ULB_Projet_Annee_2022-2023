@@ -35,6 +35,9 @@ void GameInputParser::parse() {
     else if (query == "/give-up"){
         this->query_type = GAME_QUERY_TYPE::GIVE_UP;
     }
+    else if(query == "/participate"){
+        this->query_type = GAME_QUERY_TYPE::PARTICIPATE;
+    }
 	else if ( query == "/arg1" ) {
 		if (this->getNbParameters() != 1) { std::cout << this->getNbParameters() << std::endl; return; }
 		this->query_type = GAME_QUERY_TYPE::ARG1;

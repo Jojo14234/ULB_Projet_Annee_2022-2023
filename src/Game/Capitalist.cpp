@@ -41,6 +41,7 @@ bool Capitalist::isRunning() {
 
 void Capitalist::endCurrentTurn() {
     players[current_player_index].setCurrentlyPlaying(false);
+    players[current_player_index].rolled(false);
     (current_player_index += 1) %= (players.size());
     players[current_player_index].setCurrentlyPlaying(true);
     players[current_player_index].getClient()->send("C'est à votre tour.");
@@ -82,6 +83,7 @@ std::vector<Player>* Capitalist::getPlayers(){
 }
 
 void Capitalist::startAuction() {
+    auction_in_progress = 1;
     for (auto &player : players){
         if (player.getPlayerStatus() != PLAYER_STATUS::BANKRUPT){
             player.auctionStart();
@@ -91,6 +93,7 @@ void Capitalist::startAuction() {
         }
     }
 }
+void Capitalist::stopAuction() {auction_in_progress = 0;}
 
 Player *Capitalist::identifyAuctionWinner() {
     Player* winner = nullptr;

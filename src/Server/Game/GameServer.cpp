@@ -8,11 +8,18 @@
 #include "../../Game/Capitalist.hpp"
 #include <string>
 
+#include <stdlib.h>
+#include <iostream>
 #include <SFML/Network.hpp>
 #include <string>
 #include <stdexcept>
 
+/*
+std::string sendAllGameData(){
+    string ret = "";
 
+}
+*/
 void GameServer::clientLoop(ClientManager &client) {
 	std::cout << client.getAccount()->getUsername() << " has join a game with code : " << this->code.getCode() << std::endl;
 	while (this->active) {
@@ -24,9 +31,9 @@ void GameServer::clientLoop(ClientManager &client) {
             game.getCurrentPlayer()->getCurrentCell()->action(game.getCurrentPlayer());
         }
         else {
-            clientBeforeRollLoop(client);
+                clientBeforeRollLoop(client);
+        }
             // TODO after roll loop
-    }
         /*
 		game.receiveQuery(query, packet);
 		if (query == GAME_QUERY_TYPE::LEAVE) { break; }
@@ -42,18 +49,13 @@ void GameServer::clientBeforeRollLoop(ClientManager &client) {
         sf::Packet packet;
         client.receive(query);
         if (GAME_QUERY_TYPE::START == query) {processStart(client);}
-        else if (&client == game.getCurrentPlayer()->getClient() and !game.getCurrentPlayer()->isInAuction()){
+        else if (&client == game.getCurrentPlayer()->getClient() or game.auctionInProgress() == 1){
             if (game.isRunning()){
-                if (&client == game.getCurrentPlayer()->getClient()){
-                    processGameQueryBeforeRoll(client, query);
-                    if (game.getCurrentPlayer()->hasRolled()){
-                        client.send("Plus aucune commande ne vous est disponible ce tour ci. Votre tour s'est donc automatiquement terminé.");
-                        processEndTurn(client);
-                        break;
-                    }
-                }
-                else {
-                    client.send("Ce n'est pas encore votre tour.");
+                processGameQueryBeforeRoll(client, query);
+                if (game.getCurrentPlayer()->hasRolled() and game.getCurrentPlayer()->getClient() == &client){
+                    client.send("Plus aucune commande ne vous est disponible ce tour ci. Votre tour s'est donc automatiquement terminé.");
+                    processEndTurn(client);
+                    break;
                 }
             }
             else {
@@ -90,14 +92,23 @@ void GameServer::processGameQuery(ClientManager &client, GAME_QUERY_TYPE query){
 */
 
 void GameServer::processGameQueryBeforeRoll(ClientManager &client, GAME_QUERY_TYPE query) {
-    switch (query) {
-        case GAME_QUERY_TYPE::END_TURN : processEndTurn(client); break;
-        case GAME_QUERY_TYPE::ROLL_DICE : processDiceRoll(client); break;
-        case GAME_QUERY_TYPE::MORTGAGE : processMortgageProperty(client); break;
-        case GAME_QUERY_TYPE::EXCHANGE : processExchange(client); break;
-        case GAME_QUERY_TYPE::BUILD : processBuildBuildings(client); break;
-        case GAME_QUERY_TYPE::SELL_BUILDINGS : processSellBuildings(client); break;
-        default: client.send("Cette commande n'est pas disponible."); break;
+    if (!game.auctionInProgress()){
+        switch (query) {
+            case GAME_QUERY_TYPE::END_TURN : processEndTurn(client); break;
+            case GAME_QUERY_TYPE::ROLL_DICE : processDiceRoll(client); break;
+            case GAME_QUERY_TYPE::MORTGAGE : processMortgageProperty(client); break;
+            case GAME_QUERY_TYPE::EXCHANGE : processExchange(client); break;
+            case GAME_QUERY_TYPE::BUILD : processBuildBuildings(client); break;
+            case GAME_QUERY_TYPE::SELL_BUILDINGS : processSellBuildings(client); break;
+            default: client.send("Cette commande n'est pas disponible."); break;
+        }
+    }
+    else{
+        switch (query) {
+            case GAME_QUERY_TYPE::PARTICIPATE : if (game.auctionInProgress() == 1) { participateInAuction(client); } else {client.send("Cette commande n'est pas disponible.");} break;
+            case GAME_QUERY_TYPE::LEAVE_BID : if (game.auctionInProgress() == 1) { for (auto &player : *game.getPlayers()) { if (player.getClient() == &client) { player.leaveAuction(); } } } break;
+            default: client.send("Cette commande n'est plus disponible, vous avez trop tardé."); break;
+        }
     }
 }
 
@@ -117,35 +128,81 @@ void GameServer::clientBankruptLoop(ClientManager &client) {
     game.getCurrentPlayer()->setPlayerStatus(PLAYER_STATUS::FREE);
 }
 
+void GameServer::participateInAuction(ClientManager &client){
+    client.send("Vous participez à l'enchère!");
+    while (game.auctionInProgress() != 0) {}
+}
+
 void GameServer::clientAuctionLoop(ClientManager &client, LandCell* land_cell) {
-    int bid = 10;
     GAME_QUERY_TYPE query;
     sf::Packet packet;
-    Player* winner = nullptr;
-    updateAllClients("Une enchère de 30 secondes à débutée! La propriété concernée est la suivante: \n" + land_cell->getLand()->getName() + ". L'enchère débute à 10 euros!\nPour surenchérir, tapez /bid [montant].\n");
+    if (&client == game.getCurrentPlayer()->getClient()) {
+        Player *winner = nullptr;
+        int bid = 10;
+        updateAllClients(
+                "Une enchère a débuté! La propriété concernée est la suivante: " + land_cell->getLand()->getName() +
+                "\nPour participer, tapez /participate. Pour ne pas participer, tapez /out.");
+        client.send("Attention! Comme vous êtes à l'origine de cette enchère, vous participez par défaut. \nVeuillez attendre 15 secondes que les autres joueurs rejoignent.");
+        game.startAuction();
+        sleep(15);
+        client.send("L'attente est terminée!");
+        game.setAuctionProgress(2);
+        while (winner == nullptr) {
+            for (auto &player: *game.getPlayers()) {
+                winner = game.identifyAuctionWinner();
+                if (winner != nullptr) {
+                    updateAllClients("Le joueur " + std::string(player.getClient()->getAccount()->getUsername()) +
+                                     " a remporté l'enchère!");
+                    player.acquireLand(land_cell->getLand());
+                    game.stopAuction();
+                    break;
+                }
+                if (player.isInAuction()) {
+                    player.getClient()->send(
+                            "C'est à votre tour d'enchérir! \nLa plus haute enchère est actuellement à " +
+                            std::to_string(bid) +
+                            "e.\nTapez /bid [montant] pour enchérir et /out pour quitter l'enchère.\nToute commande invalide résultera en une exclusion de l'enchère.");
 
-    game.startAuction();
-    while (winner == nullptr){
-        for (auto &player : *game.getPlayers()){
-            winner = game.identifyAuctionWinner();
-            if (winner != nullptr)
-            {
-                updateAllClients("Le joueur " + std::string(player.getClient()->getAccount()->getUsername()) + " a remporté l'enchère!");
-                player.acquireLand(land_cell->getLand());
-                break;
+                    //TEST
+                    player.getClient()->receive(query, packet);
+                    if (query == GAME_QUERY_TYPE::BID) {
+                        std::string new_bid;
+                        packet >> new_bid;
+                        std::cout << "Recu " << new_bid << std::endl;
+                        if (std::stoi(new_bid) <= bid) {
+                            player.leaveAuction();
+                            updateAllClients(std::string(player.getClient()->getAccount()->getUsername()) +
+                                             " est sorti(e) de l'enchère étant donné que sa proposition de prix était en dessous du minimum.");
+                        } else {
+                            updateAllClients(
+                                    std::string(player.getClient()->getAccount()->getUsername()) + " a surenchéri!");
+                            bid = std::stoi(new_bid);
+                        }
+                    } else {
+                        player.leaveAuction();
+                        updateAllClients(std::string(player.getClient()->getAccount()->getUsername()) +
+                                         " est sorti(e) de l'enchère.");
+                    }
+                }
             }
-            else if (player.isInAuction()){
-                player.getClient()->send("C'est à votre tour d'enchérir! \nLa plus haute enchère est actuellement à " + std::to_string(bid) + "tapez /bid [montant] pour enchérir et /out pour quitter l'enchère.\nVous avez 10 secondes ou vous serez automatiquement exclu de l'enchère\nToute commande invalide résultera en une exclusion de l'enchère.");
+        }
+    }
+}
+        /*
+        while()
+                player.getClient()->send("C'est à votre tour d'enchérir! \nLa plus haute enchère est actuellement à " + std::to_string(bid) + "e.\nTapez /bid [montant] pour enchérir et /out pour quitter l'enchère.\nVous avez 10 secondes ou vous serez automatiquement exclu de l'enchère\nToute commande invalide résultera en une exclusion de l'enchère.");
                 player.getClient()->receive(query, packet);
                 if (query == GAME_QUERY_TYPE::BID) {
                     std::string new_bid;
                     packet >> new_bid;
+                    std::cout << "Recu " << new_bid << std::endl;
                     if (std::stoi(new_bid) <= bid){
                         player.leaveAuction();
-                        updateAllClients(std::string(player.getClient()->getAccount()->getUsername()) + "est sorti(e) de l'enchère.");
+                        updateAllClients(std::string(player.getClient()->getAccount()->getUsername()) + " est sorti(e) de l'enchère étant donné que sa proposition de prix était en dessous du minimum.");
                     }
                     else {
                         updateAllClients(std::string(player.getClient()->getAccount()->getUsername()) + " a surenchéri!");
+                        bid = std::stoi(new_bid);
                     }
                 }
                 else {
@@ -155,7 +212,7 @@ void GameServer::clientAuctionLoop(ClientManager &client, LandCell* land_cell) {
             }
         }
     }
-}
+         */
 
 void GameServer::processStart(ClientManager &client) {
     if (!game.isRunning()){

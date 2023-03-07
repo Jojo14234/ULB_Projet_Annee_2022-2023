@@ -73,6 +73,7 @@ enum class GAME_QUERY_TYPE {
     GIVE_UP,
     ACCEPT,
     DECLINE,
+    PARTICIPATE,
 
 	ARG1, // temp
 	ARG2, // temp

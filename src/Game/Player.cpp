@@ -179,7 +179,10 @@ bool Player::isInAuction() {return currently_in_auction;}
 
 void Player::auctionStart() {currently_in_auction = true;}
 
-void Player::leaveAuction() {currently_in_auction = false;}
+void Player::leaveAuction() {
+    getClient()->send("Vous quittez l'enchère.");
+    currently_in_auction = false;
+}
 
 void Player::acquireProperty(Property &prop) { //ne pas ajouter de méthodes pour payer dans ces méthodes, elles sont aussi utilisées pour les échanges
     properties.push_back(&prop);

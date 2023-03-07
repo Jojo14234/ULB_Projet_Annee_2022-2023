@@ -28,14 +28,14 @@ class GameServer {
 
 public:
 	
-	GameServer() { clients.reserve(MAX_NB_PLAYER); }
+	GameServer() { clients.reserve(MAX_NB_PLAYER);}
 
 	// Loop for the client
 	void clientLoop(ClientManager &client);
     void clientBeforeRollLoop(ClientManager &client);
     void clientBankruptLoop(ClientManager &client);
     void clientAuctionLoop(ClientManager &client, LandCell* land_cell);
-
+    void participateInAuction(ClientManager &client);
 	// Add a client to the game 
 	void addClient(ClientManager* client);
 
