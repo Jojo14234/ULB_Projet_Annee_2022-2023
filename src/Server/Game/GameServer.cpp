@@ -16,7 +16,7 @@
 
 
 void GameServer::sendAllGameData(){
-    std::string ret = "GAMESTATE:";
+    std::string ret = "GAMESTATE:\n";
     int counter = 0;
     for (auto &player : *game.getPlayers()){
         ret += ("P" + std::to_string(counter) + ": pos-" + std::to_string(player.getCurrentCell()->getPosition()) + ";");
@@ -44,6 +44,7 @@ void GameServer::sendAllGameData(){
 
 void GameServer::clientLoop(ClientManager &client) {
 	std::cout << client.getAccount()->getUsername() << " has join a game with code : " << this->code.getCode() << std::endl;
+    client.send("Le code de cette partie est " + std::to_string(this->code.getCode()) + ". Partagez-le avec tous vos amis!");
 	while (this->active) {
 		GAME_QUERY_TYPE query;
 		sf::Packet packet;
@@ -260,6 +261,7 @@ void GameServer::processEndTurn(ClientManager &client) {
     if (game.getCurrentPlayer()->hasRolled() and !game.getCurrentPlayer()->isInJail()){
         game.getDice()->resetDoubleCounter();
         game.endCurrentTurn();
+        sendAllGameData();
     }
     else {
         client.send("Vous devez jeter les dés avant de finir votre tour.");
