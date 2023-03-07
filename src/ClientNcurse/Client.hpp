@@ -18,6 +18,7 @@ class Client {
 	void sendPacket(sf::Packet &packet);
 
 	int game_code = 0;
+	bool is_creator = false;
 
 public:
 
@@ -33,6 +34,10 @@ public:
 
 	void setGameCode(int gc) { game_code = gc; }
 	int getGameCode() { return game_code; }
+
+	void createGame() { is_creator = true; }
+	void leaveGame() { is_creator = false; } 
+	bool isCreator() { return is_creator; }
 
 };
 

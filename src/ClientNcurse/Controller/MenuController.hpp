@@ -45,6 +45,7 @@ public:
 					this->new_state = STATE::GAME;
 					int gamecode = atoi(&response[response.length()-4]);
 					this->model->setGameCode(gamecode);
+					this->model->createGame();
 				}
 
 				break; }
@@ -56,6 +57,7 @@ public:
 
 				if (response != "aucune partie n'existe avec ce code"){
 					this->new_state = STATE::GAME;
+					this->model->setGameCode(this->view->getJoinInputBox()->getValue());
 				}
 
 				break; }
@@ -79,6 +81,7 @@ public:
 		case IDLE: break;
 		}
 	}
+
 
 };
 

@@ -67,6 +67,19 @@ public:
 		}
 	}
 
+	void initScreen() {
+		this->view->getDice1()->setHidden();
+		this->view->getDice2()->setHidden();
+
+		if (this->model->isCreator()){
+			this->view->getOwnerWaitingText()->addText("Gamecode : " + std::to_string(this->model->getGameCode()));
+			this->view->getPlayersWaitingText()->setHidden();
+		} else {
+			this->view->getPlayersWaitingText()->addText("Gamecode : " + std::to_string(this->model->getGameCode()));
+			this->view->getOwnerWaitingText()->setHidden();
+		}
+	}
+
 };
 
 #endif

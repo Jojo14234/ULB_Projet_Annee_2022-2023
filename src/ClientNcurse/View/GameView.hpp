@@ -25,9 +25,9 @@ class GameView : public AbstractView {
 	InputButtonFrame chat{{5+(4*2), 65, up_margin + 15, 125}};
 
 	Text owner_waiting{{5, 44, up_margin + ((5-1)*(11-1))/2, left_margin + ((11-1)*(11-1)+10-44)/2},
-					   {"Vous êtes le propriétaire de cette partie", "Utilisez /start pour lancer la partie", "Gamecode : "}};
+					   {"Vous êtes le propriétaire de cette partie", "Utilisez /start pour lancer la partie"}};
 	Text players_waiting{{5, 40, up_margin + ((5-1)*(11-1))/2, left_margin + ((11-1)*(11-1)+10-40)/2},
-						 {"En attente du lancement de la partie...", "Gamecode : "}};		   
+						 {"En attente du lancement de la partie..."}};		   
 
 public:
 
@@ -55,6 +55,8 @@ public:
 	InformationBox* getStorage(){return &storage;}
 	InputButtonFrame* getChat() { return &chat; }
 	InputButtonFrame* getConsole() { return &console; }
+	Text* getOwnerWaitingText() { return &owner_waiting; }
+	Text* getPlayersWaitingText() { return &players_waiting; }
 };
 
 #endif
