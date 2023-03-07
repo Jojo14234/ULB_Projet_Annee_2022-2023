@@ -35,6 +35,7 @@ void GameServer::sendAllGameData(){
         for (auto company : player.getAllCompanies()){
             ret += company->getName() + ",";
         }
+        counter++;
         ret += ";";
     }
 
