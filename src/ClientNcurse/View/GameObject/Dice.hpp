@@ -16,12 +16,12 @@
 
 
 
-class Dice: public TextBox{
+class Dice: public TextBox {
     public:
-        Dice(ObjectInfo info): TextBox{info,{""}},AbstractViewObject(info),Box(info),Text(info,{""}){}
-        void setDice(int new_number){
-            setText(std::to_string(new_number),0);
-        }};
+        Dice(ObjectInfo info): AbstractViewObject(info), TextBox{info,{""}}, Box(info), Text(info,{""}) {}
+
+        void setDice(int new_number){ setText(std::to_string(new_number),0); }
+};
 
 
 

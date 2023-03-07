@@ -24,7 +24,7 @@ class Board : public AbstractViewObject {
 	static const int line_nb = 11; 
 	static const int gamebox_nb = 40;
 
-	int n_player; //number of players in game
+    int n_player; //number of players in game
 
 	std::array<std::shared_ptr<Cell>, gamebox_nb> board;
 	std::array<std::string, gamebox_nb> cellname; //vector of names of each cells
@@ -48,6 +48,9 @@ public:
 	Board(ObjectInfo info, int n_player): AbstractViewObject{info}, n_player{n_player} {
 		this->loadCellNames();    
 		this->createBoard();
+        // to avoir useless flags
+        this->n_player++;
+        this->n_player--;
 	}
 
 	void setPlayer(int cell, int player);

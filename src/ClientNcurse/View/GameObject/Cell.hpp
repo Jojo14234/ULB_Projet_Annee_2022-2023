@@ -6,12 +6,12 @@
 
 class Cell : public TextBox {
 
-	int building_nb=0;
+	int building_nb=0; // For now, it's useless
 	int owner=0;
 
-public : 
+public :
 
-	explicit Cell(ObjectInfo info, std::string name) : AbstractViewObject(info), TextBox{info, {name}, true}, Box(info), Text(info, {name}, true) {
+    explicit Cell(ObjectInfo info, std::string name) : AbstractViewObject(info), TextBox{info, {name}, true}, Box(info), Text(info, {name}, true) {
 		this->win = newwin(info.getHeight(), info.getWidth(), info.getY(), info.getX());
 		this->draw();
 		texts.resize(3);
