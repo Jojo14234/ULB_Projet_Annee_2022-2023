@@ -79,7 +79,15 @@ bool Client::sendCommand(GameInputParser &parser) {
 	if (query == GAME_QUERY_TYPE::NONE) return false;
 	sf::Packet packet;
 	packet << static_cast<int>(query);
-	
+	switch(query) {
+        // Add only the first argument to the packet
+		case GAME_QUERY_TYPE::ARG1   :
+        case GAME_QUERY_TYPE::BID    :
+        case GAME_QUERY_TYPE::SELECT : packet << parser[1]; break;
+        // Add both of the first and second arguments to the packet
+        case GAME_QUERY_TYPE::ARG2   : packet << parser[1] << parser[2]; break;
+		default : break;
+	}
 	this->sendPacket(packet);
 	return true;
 }
