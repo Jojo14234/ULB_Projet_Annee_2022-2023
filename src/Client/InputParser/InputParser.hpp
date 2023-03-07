@@ -2,6 +2,7 @@
 #define _CLIENT_INPUT_PARSER_HPP
 
 #include <vector>
+#include <iostream>
 #include <string>
 
 
@@ -40,19 +41,14 @@ public:
 
     void regroupParameters() {
         std::string merged_params = "";
-        int count = 0;
-        for (auto str : input_splited){
-            if (count != 0){
-                merged_params += str;
-                merged_params += " ";
-            }
-            count++;
+        // Loop over the params of the loop (but not the last)
+        for (unsigned int i = 1; i < input_splited.size() - 1; i++) {
+            merged_params += input_splited[i]; // add the params to the `regroup_params` variable
+            merged_params += " "; // Add a space between each params
         }
-        merged_params[merged_params.size() - 1] = '\0';
-        std::cout << "Merged input" << merged_params << std::endl;
-        input_splited[1] = merged_params;
+        merged_params += input_splited[input_splited.size()-1]; // Add the last params but without the space at the end.
+        input_splited[1] = merged_params; // Place the `regroup_params` variable at the place of the first params.
     }
-
 };
 
 #endif
