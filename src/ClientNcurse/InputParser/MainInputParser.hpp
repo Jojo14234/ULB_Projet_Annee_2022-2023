@@ -9,7 +9,8 @@
 
 class MainInputParser : public InputParser {
 
-protected:
+private:
+
 
 	QUERY_TYPE query_type = QUERY_TYPE::NONE;
 	
@@ -41,7 +42,7 @@ protected:
 
 public:
 
-	using InputParser::InputParser;
+	MainInputParser(const std::string &input) : InputParser{input} { this->parse(); }
 
 	// The n parameter from the input_splited
 	const std::string &operator[](int n) const { return this->input_splited[n]; }
