@@ -33,7 +33,7 @@ public:
 
 	int virtual getRentPrice()=0;
 	Player* getOwner() {std::cout << "Pointer to owner : " << owner << std::endl; return owner;} //TODO change
-    void setOwner(Player* player) {owner = player; std::cout << "Owner was changed" << std::endl;}
+    void setOwner(Player* player) {owner = player; status = LAND_STATUS::PAID;}
 	std::string getName() {return name;}
 	int getPurchasePrice() { return this->purchase_price;}
 	LAND_STATUS getStatus() {return status;}
