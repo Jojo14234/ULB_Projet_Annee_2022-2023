@@ -19,7 +19,7 @@ void GameServer::sendAllGameData(){
     std::string ret = "GAMESTATE:\n";
     int counter = 0;
     for (auto &player : *game.getPlayers()){
-        ret += ("P" + std::to_string(counter) + ": pos-" + std::to_string(player.getCurrentCell()->getPosition()) + ";");
+        ret += ("P" + std::to_string(counter) + ": pos-" + std::to_string(player.getCurrentCell()->getPosition()) + "ba-" + std::to_string(player.getBankAccount())->getMoney()";");
         counter++;
     }
     counter = 0;
@@ -37,6 +37,7 @@ void GameServer::sendAllGameData(){
         }
         ret += ";";
     }
+
     for (auto client : clients){
         client->send(ret);
     }
