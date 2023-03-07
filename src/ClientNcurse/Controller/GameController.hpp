@@ -17,7 +17,7 @@ class GameController : public AbstractController {
 
 public:
 
-	GameController(Client* model, GameView* view) : AbstractController(model), view(view) {}
+	GameController(Client* model, GameView* view) : AbstractController(model), view(view) { this->new_state = STATE::GAME; }
 	
 	void handleInput(int ch) override {
 		
@@ -42,7 +42,7 @@ public:
 				else { response = "La commande n'existe pas"; }
 				this->view->getConsole()->addText(response);
 				*/
-				if (this->model->sendCommand(parser)) this->view->getChat()->addText("La commande n'existe pas");
+				if ( not this->model->sendCommand(parser)) this->view->getConsole()->addText("La commande n'existe pas");
 				break; }
 				
 			case CHAT: {
@@ -54,7 +54,7 @@ public:
 				else { response = "La commande n'existe pas"; }
 				this->view->getChat()->addText(response);
 				*/
-				if (this->model->sendCommand(parser)) this->view->getChat()->addText("La commande n'existe pas");
+				if (not this->model->sendCommand(parser)) this->view->getChat()->addText("La commande n'existe pas");
 				break; }
 			
 			case IDLE: break;
@@ -79,7 +79,7 @@ public:
 
 	void receiveMessagesLoop() {
 		//std::cout << "dans thread" << std::endl;
-		while (true) {
+		while (this->new_state == STATE::GAME) {
 			std::string response;
 			this->model->receive(response);
 			this->view->getConsole()->addText(response);
