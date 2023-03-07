@@ -81,6 +81,10 @@ public:
 			this->view->getPlayersWaitingText()->addText("Gamecode : " + std::to_string(this->model->getGameCode()));
 			this->view->getOwnerWaitingText()->setHidden();
 		}
+
+		std::string response;
+		this->model->receive(response);
+		this->view->getConsole()->addText(response);
 	}
 
 	void startGame() {
