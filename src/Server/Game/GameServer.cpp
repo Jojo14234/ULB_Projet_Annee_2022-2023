@@ -14,12 +14,34 @@
 #include <string>
 #include <stdexcept>
 
-/*
-std::string sendAllGameData(){
-    string ret = "";
 
+void GameServer::sendAllGameData(){
+    std::string ret = "GAMESTATE:";
+    int counter = 0;
+    for (auto &player : *game.getPlayers()){
+        ret += ("P" + std::to_string(counter) + ": pos-" + std::to_string(player.getCurrentCell()->getPosition()) + ";");
+        counter++;
+    }
+    counter = 0;
+    ret += "\n";
+    for (auto &player : *game.getPlayers()){
+        ret += ("P" + std::to_string(counter) + " : properties-");
+        for (auto property : player.getAllProperties()){
+            ret += property->getName() + ",";
+        }
+        for (auto station : player.getAllStations()){
+            ret += station->getName() + ",";
+        }
+        for (auto company : player.getAllCompanies()){
+            ret += company->getName() + ",";
+        }
+        ret += ";";
+    }
+    for (auto client : clients){
+        client->send(ret);
+    }
 }
-*/
+
 void GameServer::clientLoop(ClientManager &client) {
 	std::cout << client.getAccount()->getUsername() << " has join a game with code : " << this->code.getCode() << std::endl;
 	while (this->active) {
@@ -261,7 +283,7 @@ void GameServer::processDiceRoll(ClientManager &client) {
         clientBankruptLoop(client);
     }
 */
-    //game.getCurrentPlayer()->getCurrentCell()->action(game.getCurrentPlayer());
+    game.getCurrentPlayer()->getCurrentCell()->action(game.getCurrentPlayer());
     LandCell *l;
     l = dynamic_cast<LandCell*>(game.getCurrentPlayer()->getCurrentCell());
     if (l != nullptr) {

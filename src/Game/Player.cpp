@@ -185,22 +185,33 @@ void Player::leaveAuction() {
 }
 
 void Player::acquireProperty(Property &prop) { //ne pas ajouter de méthodes pour payer dans ces méthodes, elles sont aussi utilisées pour les échanges
+    prop.setOwner(this);
     properties.push_back(&prop);
 }
 
 void Player::acquireCompany(Company &comp) {
+    comp.setOwner(this);
     companies.push_back(&comp);
 }
 
 void Player::acquireStation(Station &station) {
+    station.setOwner(this);
     stations.push_back(&station);
 }
 
 void Player::acquireGOOJCard(JailCard *jail_card) {
+    jail_card->setOwner(this);
     GOOJ_cards.push_back(jail_card);
 }
 
 void Player::acquireLand(Land *land) {
+    Property* p = dynamic_cast<Property*>(land);
+    if (p != nullptr) { acquireProperty(*p); return;}
+    Company* c = dynamic_cast<Company*>(land);
+    if (c != nullptr) { acquireCompany(*c); return;}
+    Station* s = dynamic_cast<Station*>(land);
+    if (s != nullptr) { acquireStation(*s); return;}
+
     //TODO check what type of land it is (used for exchanges)
 }
 

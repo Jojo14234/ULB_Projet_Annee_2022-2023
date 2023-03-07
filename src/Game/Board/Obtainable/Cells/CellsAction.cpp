@@ -25,11 +25,20 @@ void LandCell::action(Player* player) {
 
 			GAME_QUERY_TYPE query;
             sf::Packet packet;
-            std::string response = "";
+            std::string response;
             while (response != "yes" and response != "no") {
                 player->getClient()->send("Tapez /select yes pour acheter, sinon tapez /select no.");
                 player->getClient()->receive(query, packet);
                 packet >> response;
+            }
+            if (response == "yes"){
+                if (player->pay(getLand()->getPurchasePrice())){
+                    player->acquireLand(getLand());
+                    player->getClient()->send("Vous avez acheté cette propriété!");
+                }
+                else{
+                    player->getClient()->send("Vous n'avez pas assez d'argent.");
+                }
             }
 		}
 		else if (not this->isOwner(player) && land->getStatus()==LAND_STATUS::PAID) {

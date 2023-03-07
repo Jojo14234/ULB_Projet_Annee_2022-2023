@@ -42,6 +42,8 @@ public:
 
     LandCell* getCellByName(std::string &name);
 
+    std::array<std::shared_ptr<Cell>, BOARD_SIZE> getAllCells() {return cells;}
+
 };
 
 #endif 
