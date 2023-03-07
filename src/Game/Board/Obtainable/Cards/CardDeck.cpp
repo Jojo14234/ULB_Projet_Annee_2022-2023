@@ -6,11 +6,12 @@
 #include "MoneyCard.hpp"
 #include "CellCard.hpp"
 #include "JailCard.hpp"
+#include "../../../../utils/Configs.hpp"
 
 
 CardDeck::CardDeck(std::string name) {
 	Json::Value root;
-	std::ifstream file("Game/Board/Obtainable/data/card_data.json", std::ifstream::binary);
+	std::ifstream file(CARD_DATA, std::ifstream::binary);
     file >> root;
 
 	Json::Value deck;
