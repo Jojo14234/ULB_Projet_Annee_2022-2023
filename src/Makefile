@@ -1,5 +1,5 @@
 CXX = $(shell [ `g++ -v 2>&1 | grep -o 'version [0-9]\+' | cut -d' ' -f2` -le 9 ] && echo g++-10 || echo g++)
-CXXFLAGS = -std=c++20 -Wall -Wextra -Wpedantic -Werror=all -D_GNU_SOURCE 
+CXXFLAGS = -std=c++20 -Wall -Wpedantic  -D_GNU_SOURCE
 OTHERFLAGS = -fanalyzer -Walloc-zero -Wcast-align \
 			-Wdeprecated-copy-dtor -Wduplicated-branches -Wduplicated-cond -Wextra-semi -Wfloat-equal \
 			-Wformat-signedness -Winit-self -Wlogical-op -Wmismatched-tags -Wnon-virtual-dtor -Wnull-dereference \
@@ -22,7 +22,9 @@ CLIENT_INPUTPARSER_BINS = $(patsubst Client/InputParser/%.cpp, Client/InputParse
 # Create Ncurses objects
 NCURSE_BINS = $(patsubst ClientNcurse/%.cpp, ClientNcurse/%.o, $(wildcard ClientNcurse/*.cpp))
 NCURSE_CONTROLLER_BINS = $(patsubst ClientNcurse/Controller/%.cpp, ClientNcurse/Controller/%.o, $(wildcard ClientNcurse/Controller/*.cpp))
+NCURSE_INPUT_PARSER_BINS = $(patsubst ClientNcurse/InputParser/%.cpp, ClientNcurse/InputParser/%.o, $(wildcard ClientNcurse/InputParser/*.cpp))
 NCURSE_VIEW_BINS = $(patsubst ClientNcurse/View/%.cpp, ClientNcurse/View/%.o, $(wildcard ClientNcurse/View/*.cpp))
+NCURSE_VIEW_GAME_OBJECT_BINS = $(patsubst ClientNcurse/View/GameObject/%.cpp, ClientNcurse/View/GameObject/%.o, $(wildcard ClientNcurse/View/GameObject/*.cpp))
 
 # Create Server objects
 SERVER_BINS = $(patsubst Server/%.cpp, Server/%.o, $(wildcard Server/*.cpp))
@@ -33,13 +35,19 @@ SERVER_DB_CHAT_BINS = $(patsubst Server/Database/Chat/%.cpp, Server/Database/Cha
 SERVER_GAME_BINS = $(patsubst Server/Game/%.cpp, Server/Game/%.o, $(wildcard Server/Game/*.cpp))
 GAME_BINS = $(patsubst Game/%.cpp, Game/%.o, $(wildcard Game/*.cpp))
 
+BOARD_BINS = $(patsubst Game/Board/%.cpp, Game/Board/%.o, $(wildcard Game/Board/*.cpp))
+OBTAINABLE_BINS = $(patsubst Game/Board/Obtainable/%.cpp, Game/Board/Obtainable/%.o, $(wildcard Game/Board/Obtainable/*.cpp))
+CARDS_BINS = $(patsubst Game/Board/Obtainable/Cards/%.cpp, Game/Board/Obtainable/Cards/%.o, $(wildcard Game/Board/Obtainable/Cards/*.cpp))
+CELLS_BINS = $(patsubst Game/Board/Obtainable/Cells/%.cpp, Game/Board/Obtainable/Cells/%.o, $(wildcard Game/Board/Obtainable/Cells/*.cpp))
+LAND_BINS = $(patsubst Game/Board/Obtainable/Cells/Land/%.cpp, Game/Board/Obtainable/Cells/Land/%.o, $(wildcard Game/Board/Obtainable/Cells/Land/*.cpp))
+
 
 .PHONY: default
 default: main
 
 .PHONY: clean
 clean:
-	-rm *.o */*.o */*/*.o */*/*/*.o 2> /dev/null
+	-rm *.o */*.o */*/*.o */*/*/*.o */*/*/*/*.o */*/*/*/*/*.o 2> /dev/null
 
 rm:
 	-rm capitalist server_capitalist ncurse 2> /dev/null
@@ -51,11 +59,11 @@ client: ${CLIENT_BINS} ${CLIENT_INPUTPARSER_BINS}
 	${CXX} ${CXXFLAGS} -o capitalist $^ ${LDLIBS}
 	make clean
 
-server: ${SERVER_BINS} ${SERVER_CM_BINS} ${SERVER_DB_BINS} ${GAME_BINS} ${SERVER_DB_FRIEND_BINS} ${SERVER_DB_CHAT_BINS} ${SERVER_GAME_BINS}
+server: ${SERVER_BINS} ${SERVER_CM_BINS} ${SERVER_DB_BINS} ${GAME_BINS} ${BOARD_BINS} ${OBTAINABLE_BINS} ${CARDS_BINS} ${CELLS_BINS} ${LAND_BINS} ${SERVER_DB_FRIEND_BINS} ${SERVER_DB_CHAT_BINS} ${SERVER_GAME_BINS} 
 	${CXX} ${CXXFLAGS} -o server_capitalist $^ ${LDLIBS}
 	make clean
 
-ncurse: ${NCURSE_BINS} ${NCURSE_CONTROLLER_BINS} ${NCURSE_VIEW_BINS}
+ncurse: ${NCURSE_BINS} ${NCURSE_CONTROLLER_BINS} ${NCURSE_INPUT_PARSER_BINS} ${NCURSE_VIEW_BINS} ${NCURSE_VIEW_GAME_OBJECT_BINS}
 	${CXX} ${CXXFLAGS} -o ncurse $^ ${LDLIBS}
 	make clean
 

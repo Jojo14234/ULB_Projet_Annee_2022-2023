@@ -7,11 +7,10 @@ class PLayer;
 
 class Station : public Land {
 
-	int getRentPrice(); // dépend de owner et le nombre de gare qu'il a
-
 public:
-
-	void action(Player* player);
+    int getRentPrice();
+    using Land::Land;
+	void playerPurchase(Player* player);
 
 };
 

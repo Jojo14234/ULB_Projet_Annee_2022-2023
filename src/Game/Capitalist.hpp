@@ -3,10 +3,14 @@
 
 #include <SFML/Network.hpp>
 
-
 #include "../utils/Configs.hpp"
+
 #include "Player.hpp"
 #include "Board/Board.hpp"
+#include "../Game/Board/Obtainable/Cells/LandCell.hpp"
+
+
+class ClientManager;
 
 
 class Capitalist {
@@ -14,64 +18,59 @@ class Capitalist {
     int current_player_index = 0;
     bool running = false;
 
+    int auction_in_progress = 0;
+
+    Board board;
     Dice dice;
 
 public:
 
 	Capitalist()=default;
 
-	void receiveQuery(GAME_QUERY_TYPE query, sf::Packet &packet) {
-		std::string s1="", s2="";
-		switch (query) {
-			case GAME_QUERY_TYPE::ARG1 : packet >> s1; break;
-			case GAME_QUERY_TYPE::ARG2 : packet >> s1 >> s2; break;
-            case GAME_QUERY_TYPE::LEAVE : removePlayer(); break;
-			default : break;
-		}
-		std::cout << "in capitalist : " << (int)query << " " << s1 << " " << s2 << std::endl;
-	}
+	void receiveQuery(GAME_QUERY_TYPE query, sf::Packet &packet);
 
-    void displayGameStatus(){
-        std::cout << players.size() << "are present in this game." << std::endl;
-        std::cout << "Player 1 is on tile number " << players.at(0).getIndexOnBoard() << std::endl;
-    };
+	//void sendMessage(std::string &output) { output = "coucou ici capitalist"; }
 
-	void sendMessage(std::string &output) { output = "coucou ici capitalist"; }
+    void addPlayer(ClientManager &client);
+    void removePlayer();
+    void startGame();
 
-    void addPlayer(int &id){
-        players.push_back(Player(id));
-        if (players.size() == 1) {players[0].setAdmin(); players[0].setCurrentlyPlaying(true);}
-    }
-    void removePlayer(){
-        //TODO : find correspinding id of player to delete
-        players.pop_back();
-    }
-    void startGame(){ running = true; }
-
+    /*
     Player* getPlayerByClientId(int id){
         for (auto &player : players){
-            if (player.getId() == id){
+            if (player.getId() == id)
                 return &player;
             }
-        }
+        } return nullptr;
     }
-    Player* getCurrentPlayer(){ return &players[current_player_index]; }
+*/
 
-    bool isRunning() {return running;}
+    Player* getCurrentPlayer();
 
-    void endCurrentTurn(){
-        players[current_player_index].setCurrentlyPlaying(false);
-        (current_player_index += 1) %= (players.size());
-        players[current_player_index].setCurrentlyPlaying(true);
-    }
+    bool isRunning();
 
-    int rollDice(){
-        return dice.roll();
-    }
+    void endCurrentTurn();
 
-    bool rolledADouble(){
-        return dice.isDouble();
-    }
+    int rollDice();
+
+    bool rolledADouble();
+
+    Player* getPlayerByClient(ClientManager &client);
+    Dice* getDice();
+    Board* getBoard();
+
+    int getNumberOfPlayers();
+
+    std::vector<Player>* getPlayers();
+    void startAuction();
+    void stopAuction();
+
+    Player* identifyAuctionWinner();
+
+    LandCell* getCellByName(std::string& name);
+
+    int auctionInProgress() { return auction_in_progress;}
+    void setAuctionProgress(int progress) {auction_in_progress = progress;}
 };
 
 #endif

@@ -1,39 +1,25 @@
 {
+	"Start" : {"pos" :  0},
 	"Go to jail" : {"pos" : 30},
 	"Jail" : {"pos" : 10},
 	"Parking" : {"pos" : 20},
 
-	"DRAW CARD" : [
-			{
-				"pos" : 2,
-				"type" : "COMMUNITY DECK",
-			},
-			
-			{
-				"pos" : 7,
-				"type" : "LUCKY DECK",
-			},
-
-			{
-				"pos" : 17,
-				"type" : "COMMUNITY DECK",
-			},
-
-			{
-				"pos" : 22,
-				"type" : "LUCKY DECK",
-			},
-
-			{
-				"pos" : 33,
-				"type" : "COMMUNITY DECK",
-			},
-
-			{
-				"pos" : 36,
-				"type" : "LUCKY DECK",
-			}
-		],
+	"DRAW CARD" :
+		{
+			"COMMUNITY" :
+				[
+					{"pos" :  2},
+					{"pos" :  17},
+					{"pos" :  33}
+				],
+			"LUCKY" :
+				[
+					{"pos" :  7},
+					{"pos" :  22},
+					{"pos" :  36}
+				]
+		}
+	,
 
 	"TAX" : [
 			{
@@ -44,10 +30,9 @@
 
 			{
 				"pos" : 38,
-				"type" : "lux tax", 
+				"type" : "luxe taxe",
 				"amount" : 100
 			}
 
 		]
-
 }

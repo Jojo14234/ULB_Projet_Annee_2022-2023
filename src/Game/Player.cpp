@@ -6,7 +6,7 @@
 #include "Dice.hpp"
 #include "BankAccount.hpp"
 #include "Board/Board.hpp"
-
+#include "../Server/ClientManager/ClientManager.hpp"
 
 /*
 void Player::payToExitPrison() {
@@ -72,11 +72,188 @@ void Player::setAdmin() {admin = true;}
 
 bool Player::isAdmin() {return admin;}
 
-int Player::getId() {return id;}
+ClientManager *Player::getClient() { return client; }
 
 bool Player::isCurrentlyPLaying() {return currently_playing;}
 void Player::setCurrentlyPlaying(bool playing) {currently_playing = playing;}
 
-bool Player::pay(int amount) {
-    return bank_account.pay(amount);
+bool Player::pay(int amount, bool forced) {
+    if (forced){
+        bank_account.pay(amount);
+        if (bank_account.getMoney() < 0){
+            status = PLAYER_STATUS::BANKRUPT;
+        }
+        return true;
+    }
+    else {
+        if (bank_account.getMoney() < amount){
+            getClient()->send("Vous n'avez pas assez d'argent.");
+            return false;
+        }
+        else {
+            bank_account.pay(amount);
+            return true;
+        }
+    }
+    //return bank_account.pay(amount);
+}
+
+void Player::receive(int amount, std::string source) {
+    bank_account.gain(amount); //TODO?
+    getClient()->send("Vous avez recu " + std::to_string(amount) + "e de " + source);
+}
+
+void Player::move(Cell *cell, bool pass_by_start) {
+    if (passedByStart(cell, pass_by_start)) {
+        receive(200, "Banque");
+    }
+    current_cell = cell;
+}
+
+bool Player::passedByStart(Cell* cell, bool pass_by_start) {
+    if (cell->getPosition() - current_cell->getPosition() < 0 and pass_by_start) {
+        return true;
+    }
+    return false;
+}
+Cell *Player::getCurrentCell() {
+    return current_cell;
+}
+
+void Player::goToJail(Cell *cell) {
+    move(cell, false);
+    this->status = JAILED;
+    this->rolls_in_prison =0;
+    getClient()->send("Vous allez en prison.");
+}
+
+void Player::exitJail() {
+    this->status = FREE;
+}
+
+bool Player::isInJail() {
+    return (status == JAILED);
+}
+
+int Player::getRollsInPrison() {
+    return rolls_in_prison;
+}
+
+void Player::addRollInPrison(){
+    rolls_in_prison++;
+}
+
+int Player::hasGOOJCards(){ return (GOOJ_cards.size() > 0);}
+
+void Player::looseGOOJCard(){
+    JailCard* card = GOOJ_cards.back();
+    this->GOOJ_cards.pop_back();
+    card->setOwner(nullptr);
+    client->send("Vous perdez votre carte prison suite à son utilisation.\n");
+}
+
+bool Player::hasRolled() {return has_rolled;}
+
+void Player::rolled(bool rolled) {has_rolled = rolled;}
+
+std::vector<Property*> Player::getAllProperties() {
+    return properties;
+}
+
+std::vector<Company*> Player::getAllCompanies(){
+    return companies;
+}
+std::vector<Station*> Player::getAllStations(){
+    return stations;
+}
+
+std::vector<JailCard*> Player::getAllGOOJCards() {
+    return GOOJ_cards;
+}
+
+int Player::getNumberOfStations() { return stations.size(); }
+
+int Player::getNumberOfCompanies() { return companies.size(); }
+
+bool Player::isInAuction() {return currently_in_auction;}
+
+void Player::auctionStart() {currently_in_auction = true;}
+
+void Player::leaveAuction() {
+    getClient()->send("Vous quittez l'enchère.");
+    currently_in_auction = false;
+}
+
+void Player::acquireProperty(Property &prop) { //ne pas ajouter de méthodes pour payer dans ces méthodes, elles sont aussi utilisées pour les échanges
+    prop.setOwner(this);
+    properties.push_back(&prop);
+}
+
+void Player::acquireCompany(Company &comp) {
+    comp.setOwner(this);
+    companies.push_back(&comp);
+}
+
+void Player::acquireStation(Station &station) {
+    station.setOwner(this);
+    stations.push_back(&station);
+}
+
+void Player::acquireGOOJCard(JailCard *jail_card) {
+    jail_card->setOwner(this);
+    GOOJ_cards.push_back(jail_card);
+}
+
+void Player::acquireLand(Land *land) {
+    Property* p = dynamic_cast<Property*>(land);
+    if (p != nullptr) { acquireProperty(*p); return;}
+    Company* c = dynamic_cast<Company*>(land);
+    if (c != nullptr) { acquireCompany(*c); return;}
+    Station* s = dynamic_cast<Station*>(land);
+    if (s != nullptr) { acquireStation(*s); return;}
+
+    //TODO check what type of land it is (used for exchanges)
+}
+
+void Player::auctionMustStart() {
+    auction_must_start = true;
+}
+
+void Player::exchangeFromJail() {
+    exchange_from_jail = true;
+}
+
+PLAYER_STATUS Player::getPlayerStatus(){
+    return status;
+}
+void Player::setPlayerStatus(PLAYER_STATUS new_status){
+    status = new_status;
+}
+
+std::string Player::getStringOfAllProperties(){
+    std::string ret_string = "";
+    ret_string += "Propriétés";
+    for (auto property : properties){
+        ret_string += property->getName(); //TODO pq l'IDE boude?
+        ret_string += ".\n";
+    }
+    for (auto company : companies){
+        ret_string += company->getName();
+        ret_string += ".\n";
+    }
+    for (auto station : stations){
+        ret_string += station->getName();
+        ret_string += ".\n";
+    }
+    return ret_string;
+}
+
+BankAccount* Player::getBankAccount(){
+    return &bank_account;
+}
+void Player::setBankruptingPlayer(Player* player){
+    bankrupting_player = player;
+}
+Player* Player::getBankruptingPlayer(){
+    return bankrupting_player;
 }

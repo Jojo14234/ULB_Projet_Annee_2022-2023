@@ -1,6 +1,7 @@
 #include <SFML/Network.hpp>
 
 #include "ClientManager.hpp"
+#include "../Game/GameServer.hpp"
 #include "../../utils/Exceptions.hpp"
 
 
@@ -11,6 +12,8 @@ void ClientManager::send(std::string &input) {
 		throw WritePipeServerException();	// failed to write on the sokcet
 	}
 }
+
+void ClientManager::send(std::string &&input) { this->send(input); }
 
 void ClientManager::receive(QUERY_TYPE &query) {
 	sf::Packet packet;
@@ -40,4 +43,40 @@ void ClientManager::receive(GAME_QUERY_TYPE &query, sf::Packet &packet) {
 	int tmp;
 	packet >> tmp;
 	query = static_cast<GAME_QUERY_TYPE>(tmp);
+}
+
+void ClientManager::receive(GAME_QUERY_TYPE &query) {
+    sf::Packet packet;
+    if (this->socket.receive(packet) !=  sf::Socket::Done) { throw ReadPipeServerException(); }
+    int tmp;
+    packet >> tmp;
+    query = static_cast<GAME_QUERY_TYPE>(tmp); //TODO je comprends pas le fonctionnement...
+}
+
+bool ClientManager::operator==(const ClientManager& other) { return this->tid == other.tid; }
+
+void ClientManager::enterGameLoop() { this->game_server->addPlayer(*this); this->game_server->clientLoop(*this); }
+
+void ClientManager::disconnect() { this->connected = false; }
+// If the client is connected
+bool ClientManager::isDisconnected() const { return not this->connected; }
+
+bool ClientManager::inGame() const { return bool(game_server); }
+
+sf::TcpSocket &ClientManager::getSocket() { return this->socket; }
+pthread_t* ClientManager::getTidPtr() { return &(this->tid); }
+User* ClientManager::getAccount() { return this->account; }
+
+//const struct args_t *ClientManager::getArgs() const { return &(this->args); }
+
+int ClientManager::getCode() const { return this->args.code; }
+const std::string& ClientManager::getS1() const { return this->args.s1; }
+const std::string& ClientManager::getS2() const { return this->args.s2; }
+
+void ClientManager::setAccount(User *user) { this->account = user; }
+void ClientManager::setGameServer(GameServer* gs) { this->game_server = gs; }
+void ClientManager::removeGameServer() { this->game_server = nullptr; }
+
+GameServer* ClientManager::getGameServer(){
+    return game_server;
 }

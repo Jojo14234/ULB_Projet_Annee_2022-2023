@@ -1,36 +1,54 @@
 #ifndef _GAME_BOARD_HPP
 #define _GAME_BOARD_HPP
 
+//#include "Obtainable/Cells/Cell.hpp"
+#include "../../utils/Configs.hpp"
+#include "Obtainable/Cells/LandCell.hpp"
 #include "Obtainable/Cards/CardDeck.hpp"
-#include "Obtainable/Cells/Cell.hpp"
+
+#ifdef __linux__
+#include <jsoncpp/json/json.h>
+#endif
+
+#ifdef __APPLE__
+#include <json/json.h>
+#endif
 
 #include <array>
 #include <memory>
+#include <string>
 
+class Cell;
 
 class Board {
 
-	// community card deck
-	CardDeck community_deck;
-	
-	// lucky card deck
-	CardDeck lucky_deck;
-	
+    std::shared_ptr<CardDeck> community_deck;
+    std::shared_ptr<CardDeck> lucky_deck;
+
 	// cells
-	std::array<std::shared_ptr<Cell>, 40> cells;
+	std::array<std::shared_ptr<Cell>, BOARD_SIZE> cells;
 
-	// init all decks
-	void initAllDecks();
+	// init decks cells
+	void initDecksCardLand();
 
-	// init all cells
-	void initAllCells();
-	void initAllLand();
-	void initOtherCells();
-	
+	// init property cells
+	void initPropertyLand();
+    void initNonPropertyLand();
+
+    void extractProperty(Json::Value &list);
+    void extractDeckCard(Json::Value &list, std::shared_ptr<CardDeck> deck);
 	
 public:
 
-	Board() { this->initAllDecks(); this->initAllCells(); }
+	Board();
+    ~Board()=default;
+
+    Cell* getCellByIndex(int index);
+
+    LandCell* getCellByName(std::string &name);
+
+    //TODO ici on renvoie une copie, on pourrait renvoyer un pointeur vers le vecteur ?
+    std::array<std::shared_ptr<Cell>, BOARD_SIZE> getAllCells() { return cells; }
 
 };
 

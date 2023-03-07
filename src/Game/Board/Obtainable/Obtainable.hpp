@@ -13,8 +13,8 @@ protected:
 	Player* actual_player;
 
 public:
-	
-	virtual ~Obtainable();
+
+	virtual ~Obtainable()=default;
 
 	virtual void action(Player* player)=0;
 

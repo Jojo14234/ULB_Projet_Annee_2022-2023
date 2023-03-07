@@ -11,6 +11,8 @@ const auto PORT = 8080;
 const auto STARTING_MONEY = 1500;
 const int BOARD_SIZE = 40;
 
+const int PRISON_INDEX = 10;
+
 // AuthentificationManager constante
 const int username_min_length = 1;
 const int username_max_length = 32;
@@ -23,6 +25,10 @@ const char banned_character[] = {'-', '+', '*', '$', '&', '@', '?', '!'}; //'§'
 constexpr int MAX_FRIENDS = 20;
 constexpr int MAX_REQUESTS = 20;
 
+// Chemin fichier JSON
+const std::string CARD_DATA = "Game/Board/Obtainable/data/card_data.json";
+const std::string CELL_DATA = "Game/Board/Obtainable/data/cell_data.json";
+const std::string PROPERTY_DATA = "Game/Board/Obtainable/data/property_data.json";
 
 
 
@@ -57,8 +63,21 @@ enum class GAME_QUERY_TYPE {
 
     END_TURN,
 	ROLL_DICE,
-
+    PAY,
 	BUY,
+    USEGOOJCARD,
+    BID,
+    LEAVE_BID,
+    SELECT,
+    MORTGAGE,
+    LEAVE_SELECTION_MODE,
+    EXCHANGE,
+    BUILD,
+    SELL_BUILDINGS,
+    GIVE_UP,
+    ACCEPT,
+    DECLINE,
+    PARTICIPATE,
 
 	ARG1, // temp
 	ARG2, // temp
@@ -77,6 +96,16 @@ enum class CREATE_GAME_QUERY_TYPE {
 	NONE
 };
 
+enum class PROPERTY_COLOR {
+    BROWN=1,
+    LIGHT_BLUE=2,
+    PINK=3,
+    ORANGE=4,
+    RED=5,
+    YELLOW=6,
+    GREEN=7,
+    DARK_BLUE=8
+};
 
 
 // Game

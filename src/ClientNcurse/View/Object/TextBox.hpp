@@ -16,7 +16,7 @@ class TextBox : public virtual Box, public virtual Text {
 
 public:
 
-    TextBox(ObjectInfo info, std::string text, bool centered=true) : AbstractViewObject(info), Box(info), Text(info, {text}, centered) {}
+    TextBox(ObjectInfo info, std::initializer_list<std::string> text, bool centered=true) : AbstractViewObject(info), Box(info), Text(info, text, centered) {}
 
 	virtual void draw() override {
 		Box::draw();

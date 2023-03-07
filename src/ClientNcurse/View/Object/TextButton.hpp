@@ -12,7 +12,7 @@ class TextButton : public Button, public TextBox {
 
 public:
 
-	TextButton(ObjectInfo info, std::string text, bool centered=true) : AbstractViewObject(info), Box(info), Text(info, {text}, centered), Button(info), TextBox(info, text, centered) {}
+	TextButton(ObjectInfo info, std::string text, bool centered=true) : AbstractViewObject(info), Box(info), Text(info, {text}, centered), Button(info), TextBox(info, {text}, centered) {}
 
 	void draw() override { TextBox::draw(); }
 

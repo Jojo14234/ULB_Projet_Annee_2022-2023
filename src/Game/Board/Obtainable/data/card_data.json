@@ -3,18 +3,15 @@
 	"LUCKY DECK" : {
 
         "Jail Card" : {
-
                 "descript" : "Vous êtes libéré de prison. Cette carte peut être conservée jusqu’à ce qu’elle soit utilisée ou vendue."
             },
-		
 		"MoneyCard" : [
-
 			{
                 "descript" : "Vous êtes imposé pour les réparations de voirie à raison de 40$ par maison et 100$ par hôtel",
                 "amount" : 0,
                 "amount house" : 40,
                 "amount hotel" : 100,
-                "receive" : 0,
+                "receive" : 0
             },
             
 			{
@@ -22,7 +19,7 @@
                 "amount" : 10,
                 "amount house" : 0,
                 "amount hotel" : 0,
-                "receive" : 1,
+                "receive" : 1
             },
             
             {
@@ -30,7 +27,7 @@
                 "amount" : 50,
                 "amount house" : 0,
                 "amount hotel" : 0,
-                "receive" : 1,
+                "receive" : 1
             },
             
             {
@@ -38,7 +35,7 @@
                 "amount" : 0,
                 "amount house" : 25,
                 "amount hotel" : 80,
-                "receive" : 0,
+                "receive" : 0
             },
             
             {
@@ -46,7 +43,7 @@
                 "amount" : 20,
                 "amount house" : 0,
                 "amount hotel" : 0,
-                "receive" : 0,
+                "receive" : 0
             },
             
             {
@@ -54,7 +51,7 @@
                 "amount" : 150,
                 "amount house" : 0,
                 "amount hotel" : 0,
-                "receive" : 0,
+                "receive" : 0
             },
             
             {
@@ -62,7 +59,7 @@
                 "amount" : 30,
                 "amount house" : 0,
                 "amount hotel" : 0,
-                "receive" : 0,
+                "receive" : 0
             },
             
             {
@@ -70,7 +67,7 @@
                 "amount" : 150,
                 "amount house" : 0,
                 "amount hotel" : 0,
-                "receive" : 1,
+                "receive" : 1
             }
             ],
 
@@ -78,7 +75,7 @@
 
             {
                 "descript" : "Allez en prison. Rendez-vous directement en prison. Ne franchissez pas par la case départ, ne touchez pas 200$.",
-                "dest" : "10",
+                "dest" : 10,
                 "money" : 0
 
             },
@@ -125,7 +122,7 @@
 
         "Jail Card" : {
 
-                "descript" : "Vous êtes libéré de prison. Cette carte peut être conservée jusqu’à ce qu’elle soit utilisée ou vendue.",
+                "descript" : "Vous êtes libéré de prison. Cette carte peut être conservée jusqu’à ce qu’elle soit utilisée ou vendue."
             },
        
 		"MoneyCard" : [
@@ -135,7 +132,7 @@
                 "amount" : 200,
                 "amount house" : 0,
                 "amount hotel" : 0,
-                "receive" : 1,
+                "receive" : 1
             },
             
             {
@@ -143,7 +140,7 @@
                 "amount" : 50,
                 "amount house" : 0,
                 "amount hotel" : 0,
-                "receive" : 0,
+                "receive" : 0
             },
             
             {
@@ -151,7 +148,7 @@
                 "amount" : 50,
                 "amount house" : 0,
                 "amount hotel" : 0,
-                "receive" : 1,
+                "receive" : 1
             },
             
             {
@@ -159,7 +156,7 @@
                 "amount" : 100,
                 "amount house" : 0,
                 "amount hotel" : 0,
-                "receive" : 1,
+                "receive" : 1
             },
             
             {
@@ -167,7 +164,7 @@
                 "amount" : 15,
                 "amount house" : 0,
                 "amount hotel" : 0,
-                "frreceive" : 1,
+                "receive" : 1
             },
             
             {
@@ -175,7 +172,7 @@
                 "amount" : 40,
                 "amount house" : 0,
                 "amount hotel" : 0,
-                "receive" : 1,       
+                "receive" : 1
             },
             
             {
@@ -183,7 +180,7 @@
                 "amount" : 25,
                 "amount house" : 0,
                 "amount hotel" : 0,
-                "receive" : 1,        
+                "receive" : 1
             },
             
             {
@@ -191,7 +188,7 @@
                 "amount" : 50,
                 "amount house" : 0,
                 "amount hotel" : 0,
-                "receive" : 0,       
+                "receive" : 0
             },
             
 			{
@@ -199,7 +196,7 @@
                 "amount" : 15,
                 "amount house" : 0,
                 "amount hotel" : 0,
-                "receive" : 0,        
+                "receive" : 0
             },
             
             {
@@ -207,7 +204,7 @@
                 "amount" : 10,
                 "amount house" : 0,
                 "amount hotel" : 0,
-                "receive" : 1,       
+                "receive" : 1
             },
             
             {
@@ -215,7 +212,7 @@
                 "amount" : 100,
                 "amount house" : 0,
                 "amount hotel" : 0,
-                "receive" : 1,       
+                "receive" : 1
             }
         ],
 
@@ -223,7 +220,7 @@
 
             {
                 "descript" : "Allez en prison. Rendez-vous directement en prison. Ne franchissez pas par la case départ, ne touchez pas 200$.",
-                "dest" : "10",
+                "dest" : 10,
                 "money" : 0
 
             },
@@ -241,8 +238,8 @@
             },
                
             {
-                "descript" : " Rendez-vous à la gare la plus proche. Si vous passez par la case départ, recevez 200$.",
-                "dest" : [5,15,25,35],
+                "descript" : "Rendez-vous à la gare la plus proche. Si vous passez par la case départ, recevez 200$.",
+                "dest" : 5,
                 "money" : 1        
             }
         ]

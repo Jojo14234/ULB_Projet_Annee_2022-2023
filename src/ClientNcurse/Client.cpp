@@ -56,7 +56,7 @@ void Client::sendJoinGame(int code) {
 }
 
 
-bool Client::sendCommand(InputParser &parser) {
+bool Client::sendCommand(MainInputParser &parser) {
 	QUERY_TYPE query = parser.getQueryType();
 	if (query == QUERY_TYPE::NONE) return false;
 	sf::Packet packet;
@@ -70,6 +70,16 @@ bool Client::sendCommand(InputParser &parser) {
 	case QUERY_TYPE::MESSAGE_SEND: packet << parser[1] << parser[2]; break;
 	default: break;
 	}
+	this->sendPacket(packet);
+	return true;
+}
+
+bool Client::sendCommand(GameInputParser &parser) {
+	GAME_QUERY_TYPE query = parser.getQueryType();
+	if (query == GAME_QUERY_TYPE::NONE) return false;
+	sf::Packet packet;
+	packet << static_cast<int>(query);
+	
 	this->sendPacket(packet);
 	return true;
 }

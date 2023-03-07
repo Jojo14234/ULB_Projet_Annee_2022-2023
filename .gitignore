@@ -1,3 +1,9 @@
 
 src/.idea/vcs.xml
 src/.idea/misc.xml
+*.xml
+*.iml
+src/server_capitalist
+src/capitalist
+src/capitalist
+*.o

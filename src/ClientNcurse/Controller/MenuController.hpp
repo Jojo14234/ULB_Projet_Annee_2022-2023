@@ -5,7 +5,7 @@
 
 #include "AbstractController.hpp"
 #include "../View/MenuView.hpp"
-#include "InputParser.hpp"
+#include "../InputParser/MainInputParser.hpp"
 
 
 class MenuController : public AbstractController {
@@ -16,7 +16,7 @@ class MenuController : public AbstractController {
 
 public:
 
-	MenuController(Client* model, MenuView* view) : AbstractController(model), view(view) {}
+	MenuController(Client* model, MenuView* view) : AbstractController(model), view(view) { this->new_state = STATE::MENU; }
 	
 	void handleInput(int ch) override {
 		// TODO: implement
@@ -34,16 +34,32 @@ public:
 			switch(this->STATE) {
 			case CONSOLE: {
 				this->view->getConsoleInputBox()->addInput();
-				InputParser parser(this->view->getConsoleInputBox()->getInput());
+				MainInputParser parser(this->view->getConsoleInputBox()->getInput());
 				std::string response;
 				if (this->model->sendCommand(parser)) { this->model->receive(response); }
 				else { response = "La commande n'existe pas"; }
 				this->view->getConsoleInputBox()->addText(response);
+
+
+				if (parser.getQueryType() == QUERY_TYPE::CREATE_GAME){
+					this->new_state = STATE::GAME;
+					int gamecode = atoi(&response[response.length()-4]);
+					this->model->setGameCode(gamecode);
+					this->model->createGame();
+				}
+
 				break; }
 			case JOIN: {
 				this->model->sendJoinGame(this->view->getJoinInputBox()->getValue());
 				std::string response;
 				this->model->receive(response);
+				this->view->getConsoleInputBox()->addText(response);
+
+				if (response != "aucune partie n'existe avec ce code"){
+					this->new_state = STATE::GAME;
+					this->model->setGameCode(this->view->getJoinInputBox()->getValue());
+				}
+
 				break; }
 			
 			case IDLE: break;
@@ -65,6 +81,7 @@ public:
 		case IDLE: break;
 		}
 	}
+
 
 };
 

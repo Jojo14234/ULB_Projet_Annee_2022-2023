@@ -1,33 +1,21 @@
-#ifndef _CLIENT_INPUT_PARSER_HPP
-#define _CLIENT_INPUT_PARSER_HPP
+#ifndef _CLIENT_MAIN_INPUT_PARSER_HPP
+#define _CLIENT_MAIN_INPUT_PARSER_HPP
 
 #include <vector>
 #include <string>
 
 #include "../../utils/Configs.hpp"
+#include "InputParser.hpp"
 
-
-class InputParser {
+class MainInputParser : public InputParser {
 
 private:
 
-	const std::string input;
-	std::vector<std::string> input_splited;
 
 	QUERY_TYPE query_type = QUERY_TYPE::NONE;
 	
-	// Split the input to a list of string seperate by a ' '
-    void split() {
-		input_splited.clear();
-		std::string str;	
-		for ( char e : this->input ) { 
-			if ( e == ' ' ) { this->input_splited.push_back(str); str=""; }
-			else { str += e; }
-		} this->input_splited.push_back(str);
-	}
-
 	// Parse the input from the client
-	void parse() {
+	void parse() override {
 		this->split();
 		std::string query = this->input_splited[0];
 		if ( query == "/create" ) { this->query_type = QUERY_TYPE::CREATE_GAME; }
@@ -54,7 +42,7 @@ private:
 
 public:
 
-	InputParser(const std::string &input) : input{input} { this->parse(); }
+	MainInputParser(const std::string &input) : InputParser{input} { this->parse(); }
 
 	// The n parameter from the input_splited
 	const std::string &operator[](int n) const { return this->input_splited[n]; }
@@ -64,6 +52,12 @@ public:
 	
 	// The query type
 	QUERY_TYPE getQueryType() const { return this->query_type; }
+
+    bool isValidCode(std::string code) {
+	if  (code.size() != 4)    { return false; }
+	for (auto c : code) { if (not isdigit(c)) return false; }
+	return true;
+}
 
 };
 
