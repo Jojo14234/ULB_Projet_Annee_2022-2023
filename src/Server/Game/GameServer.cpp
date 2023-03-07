@@ -186,7 +186,6 @@ void GameServer::clientAuctionLoop(ClientManager &client, LandCell* land_cell) {
                             std::to_string(bid) +
                             "e.\nTapez /bid [montant] pour enchérir et /out pour quitter l'enchère.\nToute commande invalide résultera en une exclusion de l'enchère.");
 
-                    //TEST
                     player.getClient()->receive(query, packet);
                     if (query == GAME_QUERY_TYPE::BID) {
                         std::string new_bid;

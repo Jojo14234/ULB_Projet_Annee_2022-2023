@@ -17,8 +17,8 @@ void GameInputParser::parse() {
         this->query_type = GAME_QUERY_TYPE::MORTGAGE;
     }
     else if (query == "/select"){
-        this->query_type = GAME_QUERY_TYPE::SELECT;
-        if (this->getNbParameters() != 1) { std::cout << "Le format de la requète doit être /select [name]" << std::endl; return; }
+        if (this->getNbParameters() < 1) { std::cout << "Le format de la requète doit être /select [données]" << std::endl; return; }
+        else {this->query_type = GAME_QUERY_TYPE::SELECT; regroupParameters();}
     }
     else if (query == "/leave"){
         this->query_type = GAME_QUERY_TYPE::LEAVE_SELECTION_MODE;
