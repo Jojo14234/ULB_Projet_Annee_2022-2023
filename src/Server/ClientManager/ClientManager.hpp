@@ -71,8 +71,8 @@ public:
 	void setGameServer(GameServer* gs);
 	void removeGameServer();
 
-    GameServer* getGameServer();
-
+  GameServer* getGameServer();
+  
 };
 
 #endif

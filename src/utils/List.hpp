@@ -26,8 +26,8 @@ public:
 		this->am.unlockWriter();
 	}
 	// Remove an element
-	void remove(const T &elem) {
-		this->am.lockWriter();
+	void remove(const T &elem, bool locked = false) {
+		if (not locked) this->am.lockWriter();
 		for ( auto &it : *this ) { 
 			if ( *it == elem ) {	
 				auto tmp = this->back();
@@ -35,7 +35,7 @@ public:
 				it = tmp;
 				break;
 			}
-		} this->am.unlockWriter();
+		} if (not locked) this->am.unlockWriter();
 	}
 
 };
