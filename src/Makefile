@@ -1,5 +1,5 @@
 CXX = $(shell [ `g++ -v 2>&1 | grep -o 'version [0-9]\+' | cut -d' ' -f2` -le 9 ] && echo g++-10 || echo g++)
-CXXFLAGS = -std=c++20
+CXXFLAGS = -std=c++20 -Wall -Wpedantic  -D_GNU_SOURCE
 OTHERFLAGS = -fanalyzer -Walloc-zero -Wcast-align \
 			-Wdeprecated-copy-dtor -Wduplicated-branches -Wduplicated-cond -Wextra-semi -Wfloat-equal \
 			-Wformat-signedness -Winit-self -Wlogical-op -Wmismatched-tags -Wnon-virtual-dtor -Wnull-dereference \
@@ -22,6 +22,7 @@ CLIENT_INPUTPARSER_BINS = $(patsubst Client/InputParser/%.cpp, Client/InputParse
 # Create Ncurses objects
 NCURSE_BINS = $(patsubst ClientNcurse/%.cpp, ClientNcurse/%.o, $(wildcard ClientNcurse/*.cpp))
 NCURSE_CONTROLLER_BINS = $(patsubst ClientNcurse/Controller/%.cpp, ClientNcurse/Controller/%.o, $(wildcard ClientNcurse/Controller/*.cpp))
+NCURSE_INPUT_PARSER_BINS = $(patsubst ClientNcurse/InputParser/%.cpp, ClientNcurse/InputParser/%.o, $(wildcard ClientNcurse/InputParser/*.cpp))
 NCURSE_VIEW_BINS = $(patsubst ClientNcurse/View/%.cpp, ClientNcurse/View/%.o, $(wildcard ClientNcurse/View/*.cpp))
 NCURSE_VIEW_GAME_OBJECT_BINS = $(patsubst ClientNcurse/View/GameObject/%.cpp, ClientNcurse/View/GameObject/%.o, $(wildcard ClientNcurse/View/GameObject/*.cpp))
 
@@ -62,7 +63,7 @@ server: ${SERVER_BINS} ${SERVER_CM_BINS} ${SERVER_DB_BINS} ${GAME_BINS} ${BOARD_
 	${CXX} ${CXXFLAGS} -o server_capitalist $^ ${LDLIBS}
 	make clean
 
-ncurse: ${NCURSE_BINS} ${NCURSE_CONTROLLER_BINS} ${NCURSE_VIEW_BINS} ${NCURSE_VIEW_GAME_OBJECT_BINS}
+ncurse: ${NCURSE_BINS} ${NCURSE_CONTROLLER_BINS} ${NCURSE_INPUT_PARSER_BINS} ${NCURSE_VIEW_BINS} ${NCURSE_VIEW_GAME_OBJECT_BINS}
 	${CXX} ${CXXFLAGS} -o ncurse $^ ${LDLIBS}
 	make clean
 

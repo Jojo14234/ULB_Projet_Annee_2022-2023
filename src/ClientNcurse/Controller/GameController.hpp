@@ -32,7 +32,7 @@ public:
 			switch(this->STATE) {
 			case CONSOLE: {
 				this->view->getConsole()->addInput();
-				InputParser parser(this->view->getConsole()->getInput());
+				MainInputParser parser(this->view->getConsole()->getInput());
 				std::string response;
 				if (this->model->sendCommand(parser)) { this->model->receive(response); }
 				else { response = "La commande n'existe pas"; }
@@ -40,7 +40,7 @@ public:
 				break; }
 			case CHAT: {
 				this->view->getChat()->addInput();
-				InputParser parser(this->view->getChat()->getInput());
+				MainInputParser parser(this->view->getChat()->getInput());
 				std::string response;
 				if (this->model->sendCommand(parser)) { this->model->receive(response); }
 				else { response = "La commande n'existe pas"; }
@@ -78,6 +78,11 @@ public:
 			this->view->getPlayersWaitingText()->addText("Gamecode : " + std::to_string(this->model->getGameCode()));
 			this->view->getOwnerWaitingText()->setHidden();
 		}
+	}
+
+	void startGame() {
+		this->view->getPlayersWaitingText()->setHidden();
+		this->view->getOwnerWaitingText()->setHidden();
 	}
 
 };

@@ -5,7 +5,7 @@
 
 #include "AbstractController.hpp"
 #include "../View/MenuView.hpp"
-#include "InputParser.hpp"
+#include "../InputParser/MainInputParser.hpp"
 
 
 class MenuController : public AbstractController {
@@ -34,7 +34,7 @@ public:
 			switch(this->STATE) {
 			case CONSOLE: {
 				this->view->getConsoleInputBox()->addInput();
-				InputParser parser(this->view->getConsoleInputBox()->getInput());
+				MainInputParser parser(this->view->getConsoleInputBox()->getInput());
 				std::string response;
 				if (this->model->sendCommand(parser)) { this->model->receive(response); }
 				else { response = "La commande n'existe pas"; }
