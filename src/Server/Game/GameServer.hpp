@@ -31,6 +31,7 @@ public:
 	GameServer() { clients.reserve(MAX_NB_PLAYER);}
 
     void sendAllGameData();
+    void sendStartInfo();
 
 	// Loop for the client
 	void clientLoop(ClientManager &client);
