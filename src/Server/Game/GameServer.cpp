@@ -129,6 +129,7 @@ void GameServer::processGameQueryBeforeRoll(ClientManager &client, GAME_QUERY_TY
             case GAME_QUERY_TYPE::END_TURN : processEndTurn(client); break;
             case GAME_QUERY_TYPE::ROLL_DICE : processDiceRoll(client); break;
             case GAME_QUERY_TYPE::MORTGAGE : processMortgageProperty(client); break;
+            case GAME_QUERY_TYPE::DEMORTGAGE : processMortgageProperty(client); break;
             case GAME_QUERY_TYPE::EXCHANGE : processExchange(client); break;
             case GAME_QUERY_TYPE::BUILD : processBuildBuildings(client); break;
             case GAME_QUERY_TYPE::SELL_BUILDINGS : processSellBuildings(client); break;
@@ -317,6 +318,29 @@ void GameServer::processDiceRoll(ClientManager &client) {
     }
 }
 
+void GameServer::processDemortgageProperty(ClientManager &client) {
+    GAME_QUERY_TYPE query;
+    sf::Packet packet;
+    std::string name;
+    client.send("Veuillez sélectionner la propriété à déhypothéquer en utilisant /select [nom de la propriété].\nTapez /leave pour quitter le mode de selection des batiments.\n");
+    while (query != GAME_QUERY_TYPE::LEAVE_SELECTION_MODE){
+        client.receive(query, packet);
+        packet >> name;
+        if (query == GAME_QUERY_TYPE::SELECT){
+            LandCell* land_cell = game.getCellByName(name);
+            if (land_cell != nullptr and land_cell->getLand()->getOwner() == game.getCurrentPlayer() and land_cell->getLand()->isMortgaged()){
+                land_cell->getLand()->liftMortgage(game.getCurrentPlayer());
+            }
+            else {
+                client.send("Cette propriété n'existe pas ou elle ne vous appartient pas ou n'est pas hypothéquée.\n");
+            }
+        }
+        else {
+            client.send("Veuillez sélectionner la propriété à hypothéquer en utilisant /select [nom de la propriété].\nTapez /leave pour quitter le mode de selection des propriétés.\n");
+        }
+    }
+}
+
 void GameServer::processMortgageProperty(ClientManager &client) { //for now, only works for bankruptcy if bankrupt player is the player whose turn it is.
     GAME_QUERY_TYPE query;
     sf::Packet packet;
@@ -327,11 +351,11 @@ void GameServer::processMortgageProperty(ClientManager &client) { //for now, onl
         packet >> name;
         if (query == GAME_QUERY_TYPE::SELECT){
             LandCell* land_cell = game.getCellByName(name);
-            if (land_cell != nullptr and land_cell->getLand()->getOwner() == game.getCurrentPlayer()){
+            if (land_cell != nullptr and land_cell->getLand()->getOwner() == game.getCurrentPlayer() and !land_cell->getLand()->isMortgaged()){
                 land_cell->getLand()->mortgage(game.getCurrentPlayer());
             }
             else {
-                client.send("Cette propriété n'existe pas ou elle ne vous appartient pas.\n");
+                client.send("Cette propriété n'existe pas ou elle ne vous appartient pas ou elle est déjà hypothéquée.\n");
             }
         }
         else {
