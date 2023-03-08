@@ -7,6 +7,7 @@
 #include "AbstractController.hpp"
 #include "../View/GameView.hpp"
 #include "../InputParser/GameInputParser.hpp"
+#include "../InputParser/GameStateParser.hpp"
 
 
 class GameController : public AbstractController {
@@ -84,20 +85,29 @@ public:
 
 	void receiveMessagesLoop() {
 		//std::cout << "dans thread" << std::endl;
+		int n_player = 2;
 		while (this->new_state == STATE::GAME) {
 			std::string response;
 			this->model->receive(response);
-			this->view->getConsole()->addText(response);
+			if (response[0] == 'P' && response[1] == '0') {
+				GameStateParser parser(response, n_player);
+				Informations info = parser.getBufferSplit();
+				for (int i = 0; i < n_player; i++)
+					this->view->getBoard()->setPlayer(info.state.at(i).at(0), i);
+
+			} else {
+				this->view->getConsole()->addText(response);
+			} 
+
+			
 		}
 	}
 	
 	void init() {
 		this->initScreen();
 		// create a thread to receive messages
-		//std::cout << "avant thread" << std::endl;
 		std::thread send_thread(&GameController::receiveMessagesLoop, this);
 		send_thread.detach();
-		//std::cout << "après thread" << std::endl;
 	}
 
 	void initScreen() {
