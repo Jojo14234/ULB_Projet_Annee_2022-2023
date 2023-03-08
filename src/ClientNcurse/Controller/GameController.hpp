@@ -43,7 +43,7 @@ public:
 				this->view->getConsole()->addText(response);
 				*/
 				if ( not this->model->sendCommand(parser)) this->view->getConsole()->addText("La commande n'existe pas");
-				if (parser.getQueryType() == GAME_QUERY_TYPE::START){
+				if (parser.getQueryType() == GAME_QUERY_TYPE::START && this->model->isCreator()){
 					this->view->getDice1()->setVisible();
 					this->view->getDice2()->setVisible();
 					if (this->model->isCreator()){this->view->getOwnerWaitingText()->setHidden();} 

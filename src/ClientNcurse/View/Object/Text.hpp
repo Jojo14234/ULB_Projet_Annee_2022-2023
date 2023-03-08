@@ -27,7 +27,7 @@ public:
 		this->draw();
 	}
 
-	void setText(std::string new_text, int line){texts[line] = new_text;}
+	void setText(std::string new_text, int line){texts.resize(line); texts[line] = new_text;}
 	void addText(std::string new_text){texts.push_back(new_text);}
 
 	void clearText(int line){

@@ -31,6 +31,7 @@ void Client::sendPacket(sf::Packet &packet) {
 
 // Authentification
 void Client::sendLogin(const std::string &username, const std::string &password) {
+	this->user_name = username;
 	sf::Packet packet;
 	packet << static_cast<int>(QUERY_TYPE::LOGIN);
 	packet << username;
@@ -39,6 +40,7 @@ void Client::sendLogin(const std::string &username, const std::string &password)
 }
 
 void Client::sendRegister(const std::string &username, const std::string &password) {
+	this->user_name = username;
 	sf::Packet packet;
 	packet << static_cast<int>(QUERY_TYPE::REGISTER);
 	packet << username;

@@ -20,6 +20,7 @@ class Client {
 
 	int game_code = 0;
 	bool is_creator = false;
+	std::string user_name;
 
 public:
 
@@ -40,7 +41,8 @@ public:
 	void createGame() { is_creator = true; }
 	void leaveGame() { is_creator = false; } 
 	bool isCreator() { return is_creator; }
-
+	
+	std::string getUsername() { return user_name; }
 };
 
 #endif

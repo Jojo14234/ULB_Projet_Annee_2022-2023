@@ -21,12 +21,12 @@ class GameView : public AbstractView {
 	Dice dice2{{3,5,25,65}};
 	
 	//Creation of the information box
-	Text storage_text{ObjectInfo{3, 12, up_margin + 28, 125+((65-12)/2)}, {"information"}};
-	InformationBox storage{{7+(4*2),65,35,125}, 4, {"player1", "player2", "player3", "player4"}};
+	Text info_text{ObjectInfo{3, 12, up_margin + 28, 125+((65-12)/2)}, {"information"}};
+	InformationBox info{{7+(4*2),65,35,125}, 4, {"player1", "player2", "player3", "player4"}};
 
 	//Creation of the chat and console
-	Text chat_text{ObjectInfo{3, 4, up_margin + 13, 125+((65-4)/2)}, {"chat"}};
-	Text console_text{ObjectInfo{3, 8, up_margin - 2, 125+((65-8)/2)}, {"console"}};
+	Text chat_text{ObjectInfo{3, 4, up_margin + 13, 125+((65-4)/2)}, {"Chat"}};
+	Text console_text{ObjectInfo{3, 8, up_margin - 2, 125+((65-8)/2)}, {"Console"}};
 	InputButtonFrame console{{5+(4*2), 65, up_margin, 125}}; 
 	InputButtonFrame chat{{5+(4*2), 65, up_margin + 15, 125}};
 
@@ -42,7 +42,7 @@ public:
 	
 	void draw() override {
 		board.draw();
-		storage.draw();
+		info.draw();
 		dice1.draw();
 		dice2.draw();
 
@@ -50,7 +50,7 @@ public:
 		console.draw();
 		chat_text.draw();
 		console_text.draw();
-		storage_text.draw();
+		info_text.draw();
 
 		players_waiting.draw();
 		owner_waiting.draw();
@@ -59,7 +59,7 @@ public:
 	Board* getBoard() { return &board; }
 	Dice* getDice1() { return &dice1;}
 	Dice* getDice2() { return &dice2;}
-	InformationBox* getStorage(){return &storage;}
+	InformationBox* getInfo(){return &info;}
 	InputButtonFrame* getChat() { return &chat; }
 	InputButtonFrame* getConsole() { return &console; }
 	Text* getOwnerWaitingText() { return &owner_waiting; }
