@@ -1,6 +1,6 @@
 #include "Dice.hpp"
 
-Dice::Dice(){}
+Dice::Dice() {}
 
 int Dice::roll(){
     dice1.roll();

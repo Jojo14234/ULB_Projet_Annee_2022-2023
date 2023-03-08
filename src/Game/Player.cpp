@@ -77,25 +77,16 @@ ClientManager *Player::getClient() { return client; }
 bool Player::isCurrentlyPLaying() {return currently_playing;}
 void Player::setCurrentlyPlaying(bool playing) {currently_playing = playing;}
 
+
+void Player::forcedPay(int amount) {
+    bank_account.pay(amount);
+    if ( bank_account.getMoney() < 0 ) { this->status = PLAYER_STATUS::BANKRUPT; }
+}
+
 bool Player::pay(int amount, bool forced) {
-    if (forced){
-        bank_account.pay(amount);
-        if (bank_account.getMoney() < 0){
-            status = PLAYER_STATUS::BANKRUPT;
-        }
-        return true;
-    }
-    else {
-        if (bank_account.getMoney() < amount){
-            getClient()->send("Vous n'avez pas assez d'argent.");
-            return false;
-        }
-        else {
-            bank_account.pay(amount);
-            return true;
-        }
-    }
-    //return bank_account.pay(amount);
+    if ( forced || bank_account.getMoney() >= amount ) { this->forcedPay(amount); return true; }
+    getClient()->send("Vous n'avez pas assez d'argent ! (Achat refusé)");
+    return false;
 }
 
 void Player::receive(int amount, std::string source) {
