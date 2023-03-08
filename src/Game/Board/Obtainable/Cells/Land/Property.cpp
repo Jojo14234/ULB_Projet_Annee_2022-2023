@@ -89,3 +89,22 @@ bool Property::sellBuilding(Player *player) {
     return true;
 }
 
+/*
+ * Renvoie le cout de location de la propriété en fonction du nombre de bâtiments
+ * S'il n'y a pas de bâtiment et que le propriétaire possède toutes les propriétés
+ * de la même couleur le loyer est doublé.
+ */
+int Property::getRentPrice() {
+    int price = this->rent_prices[static_cast<int>(this->level)];
+    return (this->getIntLevel() == 0 && hasAllSameColorProperties(this->owner)) ? price * 2 : price;
+}
+
+/*
+ * Level down la propriété autrement dit, retire un bâtiment
+ */
+void Property::levelDown() { this->level = static_cast<PROPERTY_LEVEL>(this->getIntLevel()-1); }
+
+/*
+ * Level up la propriété autrement dit, ajoute un bâtiment
+ */
+void Property::levelUp() { this->level = static_cast<PROPERTY_LEVEL>(this->getIntLevel()+1); }
