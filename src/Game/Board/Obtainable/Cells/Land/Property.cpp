@@ -25,7 +25,7 @@ bool Property::build(Player* player) {    //renvoie false si n'arrive pas à con
     }
 
     else if (not this->checkTransaction(player, true)) {
-        player->getClient()->send("Pas toute couleur ou pas bon niveau");
+        player->getClient()->send("Vous ne possédez pas toutes les cases de cette couleur ou la différence de niveau entre vios propriétés est trop élevé.");
         return false;
     }
 
