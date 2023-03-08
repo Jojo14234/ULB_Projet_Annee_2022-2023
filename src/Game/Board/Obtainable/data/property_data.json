@@ -1,25 +1,25 @@
 {
 	"STATION" : [
 			{
-				"name" : "gare 1",
+				"name" : "Gare1",
 				"pos" : 5,
 				"purchase_price" : 200
 			},
 		
 			{
-				"name" : "gare 2",
+				"name" : "Gare2",
 				"pos" : 15,
 				"purchase_price" : 200
 			},
 		
 			{
-				"name" : "gare 3",
+				"name" : "Gare3",
 				"pos" : 25,
 				"purchase_price" : 200
 			},
 		
 			{
-				"name" : "gare 4",
+				"name" : "Gare4",
 				"pos" : 35,
 				"purchase_price" : 200
 			}
@@ -27,13 +27,13 @@
 	
 	"COMPANY" : [
 			{
-				"name" : "compagnie électrique",
+				"name" : "Elec",
 				"pos" : 12,
 				"purchase_price" : 150
 			},
 			
 			{
-				"name" : "compagnie des eaux",
+				"name" : "Eau",
 				"pos" : 28,
 				"purchase_price" : 150
 			}
@@ -42,8 +42,8 @@
 
 	"PROPERTY" : [
 
-		 {
-			"name" : "brune 1",
+		{
+			"name" : "Brun1",
 			"pos" : 1,
 			"color" : 1,
 			"rent prices" : [2, 10, 30, 90, 160, 250],
@@ -52,7 +52,7 @@
 		},
 		
 		{
-			"name" : "brune 2",
+			"name" : "Brun2",
 			"pos" : 3,
 			"color" :1,
 			"rent prices" : [4, 20, 60, 180, 320, 450],
@@ -62,7 +62,7 @@
 
 
 		{
-			"name" : "bleu clair 1",
+			"name" : "Cyan1",
 			"pos" : 6,
 			"color" : 2,
 			"rent prices" : [6, 30, 90, 270, 400, 550],
@@ -71,7 +71,7 @@
 		},
 
 		{
-			"name" : "bleu clair 2",
+			"name" : "Cyan2",
 			"pos" : 8,
 			"color" : 2,
 			"rent prices" : [6, 30, 90, 270, 400, 550],
@@ -80,7 +80,7 @@
 		},
 
 		{
-			"name" : "bleu clair 3",
+			"name" : "Cyan3",
 			"pos" : 9,
 			"color" : 2,
 			"rent prices" : [8, 40, 100, 300, 450, 600],
@@ -90,7 +90,7 @@
 
 
 		{
-			"name" : "rose 1",
+			"name" : "Rose1",
 			"pos" : 11,
 			"color" : 3,
 			"rent prices" : [10, 50, 150, 450, 625, 750],
@@ -99,7 +99,7 @@
 		},
 
 		{
-			"name" : "rose 2",
+			"name" : "Rose2",
 			"pos" : 13,
 			"color" : 3,
 			"rent prices" : [10, 50, 150, 450, 625, 750],
@@ -108,7 +108,7 @@
 		},
 
 		{
-			"name" : "rose 3",
+			"name" : "Rose3",
 			"pos" : 14,
 			"color" : 3,
 			"rent prices" : [12, 60, 180, 500, 700, 900],
@@ -118,7 +118,7 @@
 
 
 		{
-			"name" : "orange 1",
+			"name" : "Orange1",
 			"pos" : 16,
 			"color" : 4,
 			"rent prices" : [14, 70, 200, 550, 750, 950],
@@ -127,7 +127,7 @@
 		},
 
 		{
-			"name" : "orange 2",
+			"name" : "Orange2",
 			"pos" : 18,
 			"color" : 4,
 			"rent prices" : [14, 70, 200, 550, 750, 950],
@@ -136,7 +136,7 @@
 		},
 
 		{
-			"name" : "orange 3",
+			"name" : "Orange3",
 			"pos" : 19,
 			"color" : 4,
 			"rent prices" : [16, 80, 220, 600, 800, 1000],
@@ -146,7 +146,7 @@
 
 
 		{
-			"name" : "rouge 1",
+			"name" : "Rouge1",
 			"pos" : 21,
 			"color" : 5,
 			"rent prices" : [18, 90, 250, 700, 875, 1050],
@@ -155,7 +155,7 @@
 		},
 
 		{
-			"name" : "rouge 2",
+			"name" : "Rouge2",
 			"pos" : 23,
 			"color" : 5,
 			"rent prices" : [18, 90, 250, 700, 875, 1050],
@@ -164,7 +164,7 @@
 		},
 
 		{
-			"name" : "rouge 3",
+			"name" : "Rouge3",
 			"pos" : 24,
 			"color" : 5,
 			"rent prices" : [20, 100, 300, 750, 925, 1100],
@@ -174,7 +174,7 @@
 
 
 		{
-			"name" : "jaune 1",
+			"name" : "Jaune1",
 			"pos" : 26,
 			"color" : 6,
 			"rent prices" : [22, 110, 330, 800, 975, 1150],
@@ -183,7 +183,7 @@
 		},
 
 		{
-			"name" : "jaune 2",
+			"name" : "Jaune2",
 			"pos" : 27,
 			"color" : 6,
 			"rent prices" : [22, 110, 330, 800, 975, 1150],
@@ -192,7 +192,7 @@
 		},
 
 		{
-			"name" : "jaune 3",
+			"name" : "Jaune3",
 			"pos" : 29,
 			"color" : 6,
 			"rent prices" : [24, 120, 360, 850, 1025, 1200],
@@ -202,7 +202,7 @@
 
 
 		{
-			"name" : "vert 1",
+			"name" : "Vert1",
 			"pos" : 31,
 			"color" : 7,
 			"rent prices" : [26, 130, 390, 900, 1100, 1275],
@@ -211,7 +211,7 @@
 		},
 
 		{
-			"name" : "vert 2",
+			"name" : "Vert2",
 			"pos" : 32,
 			"color" : 7,
 			"rent prices" : [26, 130, 390, 900, 1100, 1275],
@@ -220,7 +220,7 @@
 		},
 
 		{
-			"name" : "vert 3",
+			"name" : "Vert3",
 			"pos" : 34,
 			"color" : 7,
 			"rent prices" : [28, 150, 450, 1000, 1200, 1400],
@@ -230,7 +230,7 @@
 
 
 		{
-			"name" : "bleu foncé",
+			"name" : "Bleu1",
 			"pos" : 37,
 			"color" : 8,
 			"rent prices" : [35, 175, 500, 1100, 1300, 1500],
@@ -239,7 +239,7 @@
 		},
 
 		{
-			"name" : "bleu foncé",
+			"name" : "Bleu2",
 			"pos" : 39,
 			"color" : 8,
 			"rent prices" : [50, 200, 600, 1400, 1700, 2000],

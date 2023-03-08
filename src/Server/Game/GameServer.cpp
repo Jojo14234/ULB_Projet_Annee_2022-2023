@@ -17,7 +17,7 @@
 
 
 void GameServer::sendAllGameData(){
-    std::string ret = "GAMESTATE:\n";
+    std::string ret;
     int counter = 0;
     for (auto &player : *game.getPlayers()){
         ret += ("P" + std::to_string(counter) + ": pos-" + std::to_string(player.getCurrentCell()->getPosition()) + ",ba-" + std::to_string(player.getBankAccount()->getMoney()));
@@ -34,10 +34,10 @@ void GameServer::sendAllGameData(){
             else {ret += "y,";}
         }
         for (auto station : player.getAllStations()){
-            ret += station->getName() + ",";
+            ret += station->getName() + ".";
         }
         for (auto company : player.getAllCompanies()){
-            ret += company->getName() + ",";
+            ret += company->getName() + ".";
         }
         counter++;
         ret += ";";

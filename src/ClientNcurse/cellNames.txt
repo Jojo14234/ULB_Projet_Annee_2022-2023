@@ -3,7 +3,7 @@ Brun1
 Caisse
 Brun2
 Impots
-Ouest
+Gare1
 Cyan1
 Chance
 Cyan2
@@ -13,7 +13,7 @@ Rose1
 Elec
 Rose2
 Rose3
-Nord
+Gare2
 Orange1
 Caisse
 Orange2
@@ -23,7 +23,7 @@ Rouge1
 Chance
 Rouge2
 Rouge3
-Est
+Gare3
 Jaune1
 Jaune2
 Eau
@@ -33,7 +33,7 @@ Vert1
 Vert2
 Caisse
 Vert3
-Sud
+Gare4
 Chance
 Bleu1
 Taxe
