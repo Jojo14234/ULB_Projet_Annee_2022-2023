@@ -31,6 +31,7 @@ public:
 	GameServer() { clients.reserve(MAX_NB_PLAYER);}
 
     void sendAllGameData();
+    void sendStartInfo();
 
 	// Loop for the client
 	void clientLoop(ClientManager &client);
@@ -57,6 +58,7 @@ public:
     void processEndTurn(ClientManager &client);
     void processDiceRoll(ClientManager &client);
     void processMortgageProperty(ClientManager &client);
+    void processDemortgageProperty(ClientManager &client);
     void processExchange(ClientManager &client);
     void processBuildBuildings(ClientManager &client);
     void processSellBuildings(ClientManager &client);

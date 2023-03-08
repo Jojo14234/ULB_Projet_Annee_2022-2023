@@ -34,6 +34,8 @@ class Player {
 
     int rolls_in_prison = 0;
 
+    int index = -1;
+
     bool admin = false;
 
     bool has_rolled = false;
@@ -177,6 +179,10 @@ public:
     void setBankruptingPlayer(Player* player);
 
     Player* getBankruptingPlayer();
+
+    void setIndex(int new_index) {index = new_index;}
+
+    int getIndex() const {return index;}
 };
 
 
