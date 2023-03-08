@@ -167,7 +167,7 @@ void GameServer::clientAuctionLoop(ClientManager &client, LandCell* land_cell) {
         updateAllClients(
                 "Une enchère a débuté! La propriété concernée est la suivante: " + land_cell->getLand()->getName() +
                 "\nPour participer, tapez /participate. Pour ne pas participer, tapez /out.");
-        if (game.getCurrentPlayer()->getPlayerStatus() != PLAYER_STATUS::LOST or game.getCurrentPlayer()->getBankruptingPlayer() != PLAYER_STATUS::LOST) {
+        if (game.getCurrentPlayer()->getPlayerStatus() != PLAYER_STATUS::LOST or game.getCurrentPlayer()->getBankruptingPlayer()->getPlayerStatus() != PLAYER_STATUS::LOST) {
             client.send(
                     "Attention! Comme vous êtes à l'origine de cette enchère, vous participez par défaut. \nVeuillez attendre 15 secondes que les autres joueurs rejoignent.");
         }
@@ -456,9 +456,9 @@ void GameServer::processSellBuildings(ClientManager &client) {
         else{
             Property *p = dynamic_cast<Property *>(land);
             if (p != nullptr and p->sellBuilding(game.getCurrentPlayer())) {
-                client.send("Vous avez construit un bâtiment.\n");
+                client.send("Vous avez vendu un bâtiment.\n");
             } else {
-                client.send("Building failed.\n");
+                client.send("Selling failed.\n");
             }
         }
     }

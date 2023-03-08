@@ -40,8 +40,6 @@ class Property : public Land {
 
     PROPERTY_COLOR getColor() { return this->color; }
 
-    bool checkTransaction(Player* player, bool is_building);
-
     std::vector<Property*> getSameColorBuilding(std::vector<Property*> player_props);
 
     bool hasGoodLevel(int potential_level, std::vector<Property*> same_color);
@@ -60,10 +58,20 @@ public:
 
     PROPERTY_LEVEL getLevel() {return this->level;}
 
+
+
+
+
+
+    /*
+     * R2MY FAIT DES TRUCS
+     */
+
+    std::vector<Property*> getOtherSameColorPropFromPlayer(Player* player);
+    bool hasAllSameColorProperties(Player* player);
+    bool AllSameColorPropertiesHaveGoodLevel(Player* player, bool sell = false);
     bool build(Player* player);
-
     bool sellBuilding(Player* player);
-
 };
 
 #endif
