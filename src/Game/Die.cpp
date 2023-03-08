@@ -11,7 +11,4 @@ int Die::roll(){
     result = std::rand()% 6 + 1;
     return result;
 }
-
-int Die::getResult(){
-    return result;
-}
+int Die::getResult() { return result; }

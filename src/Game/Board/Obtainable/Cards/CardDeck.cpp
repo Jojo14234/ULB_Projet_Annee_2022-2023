@@ -14,27 +14,21 @@ CardDeck::CardDeck(std::string name) {
 	std::ifstream file(CARD_DATA, std::ifstream::binary);
     file >> root;
 
-	Json::Value deck;
-    deck = root[name];
-	//itérer dans money puis cell rajouter shr ptr dans list
-	Json::Value money_card_set = root[name]["MoneyCard"];
-	Json::Value cell_card_set = root[name]["CellCard"];
-
-
-	int idx=0;  //de la liste de carte
-	for (unsigned int i=0; i < money_card_set.size(); i++) {
-		this->card_list[idx] = std::make_shared<MoneyCard>(money_card_set[i]);
+	int idx=0;  //indexe de la liste de carte
+    // Add all the card that leads to pay money
+	for (unsigned int i=0; i < root[name]["MoneyCard"].size(); i++) {
+		this->card_list[idx] = std::make_shared<MoneyCard>(root[name]["MoneyCard"][i]);
 		idx++;
 	}
-
-    for (unsigned int i=0; i < cell_card_set.size(); i++) {
-		this->card_list[idx] = std::make_shared<CellCard>(cell_card_set[i]);
+    // Add all the card that lead to a cells
+    for (unsigned int i=0; i < root[name]["CellCard"].size(); i++) {
+		this->card_list[idx] = std::make_shared<CellCard>(root[name]["CellCard"][i]);
 		idx++;
 	}
-
+    // Add Jail card to the deck
     this->card_list[idx] = std::make_shared<JailCard>(root[name]["JailCard"]);
 
-    std::cout << "CardDeck " << name << " done" << std::endl;
+    std::cout << "[init all     " << name << " : 100%]" << std::endl;
 }
 
 Card* CardDeck::drawACard() {
