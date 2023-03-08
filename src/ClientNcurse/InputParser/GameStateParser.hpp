@@ -12,10 +12,9 @@ struct PropertyInformation {
 };
 
 struct Informations {
-	std::vector<std::array<int, 3>> state;
+	std::vector<std::array<int, 3>> state; // position, argent, nombre j carte
 	std::vector<std::vector<PropertyInformation>> info;
 };
-// position, argent, nombre j carte
 
 class GameStateParser {
 

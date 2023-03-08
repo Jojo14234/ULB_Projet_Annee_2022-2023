@@ -88,12 +88,11 @@ public:
 		while (this->new_state == STATE::GAME) {
 			std::string response;
 			this->model->receive(response);
-			if (response[0] == 'P' && response[1] == '0') {
+			if (response[0] == 'G' && response[1] == 'M') {
 				GameStateParser parser(response, n_player);
 				Informations info = parser.getBufferSplit();
 				for (int i = 0; i < n_player; i++)
 					this->view->getBoard()->setPlayer(info.state.at(i).at(0), i);
-				
 			} else {
 				this->view->getConsole()->addText(response);
 			} 

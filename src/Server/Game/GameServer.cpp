@@ -29,7 +29,7 @@ void GameServer::sendStartInfo() {
 }
 void GameServer::sendAllGameData(){
     int counter = 0;
-    std::string ret = "GAMESTATE:\n";
+    std::string ret = "GM-";
     for (auto &player : *game.getPlayers()){
         ret += ("P" + std::to_string(player.getIndex()) + ": pos-" + std::to_string(player.getCurrentCell()->getPosition()) + ",ba-" + std::to_string(player.getBankAccount()->getMoney()));
         ret += ",j-" + std::to_string(player.getAllGOOJCards().size()) + ";";
