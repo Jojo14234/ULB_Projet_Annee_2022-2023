@@ -25,8 +25,8 @@ void GameServer::sendStartInfo() {
     for (auto client : clients){
         client->send(ret);
     }
-
 }
+
 void GameServer::sendAllGameData(){
     std::string ret = "GAMESTATE:\n";
     for (auto &player : *game.getPlayers()){
@@ -79,7 +79,7 @@ void GameServer::clientLoop(ClientManager &client) {
                     }
                     break;
                 }
-                if (game.getPlayers()->size() == 1){
+                if (game.getPlayers()->size() == 1 and game.isRunning()){
                     client.send("Vous avez gagné!");
                 }
                 clientBeforeRollLoop(client);
