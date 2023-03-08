@@ -84,7 +84,6 @@ public:
 	}
 
 	void receiveMessagesLoop() {
-		//std::cout << "dans thread" << std::endl;
 		int n_player = 2;
 		while (this->new_state == STATE::GAME) {
 			std::string response;
@@ -94,12 +93,10 @@ public:
 				Informations info = parser.getBufferSplit();
 				for (int i = 0; i < n_player; i++)
 					this->view->getBoard()->setPlayer(info.state.at(i).at(0), i);
-
+				
 			} else {
 				this->view->getConsole()->addText(response);
 			} 
-
-			
 		}
 	}
 	
