@@ -50,6 +50,7 @@ public:
 
 	void mortgage(Player* player);
     void liftMortgage(Player* player);
+    bool isMortgaged() {return (status != LAND_STATUS::HYPOTEK);}
 
 };
 

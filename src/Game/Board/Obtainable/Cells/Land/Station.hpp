@@ -3,7 +3,7 @@
 
 #include "Land.hpp"
 
-class PLayer;
+class Player;
 
 class Station : public Land {
 
