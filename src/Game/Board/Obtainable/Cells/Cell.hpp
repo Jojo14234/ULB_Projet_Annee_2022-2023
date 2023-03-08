@@ -8,8 +8,6 @@
 #include "../../../../utils/Configs.hpp"
 
 
-class Player;
-
 class Cell: public Obtainable {
 
     int position;

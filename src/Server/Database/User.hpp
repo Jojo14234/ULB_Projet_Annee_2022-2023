@@ -40,6 +40,7 @@ public:
 	// GETTERS
 	int getId() const { return id; }
 	const char* getUsername() const { return username; }
+    std::string getUsernameString() const {return std::string{username};}
 	const char* getPassword() const { return password; }
 	const GameStats& getStats() const { return stats; }
 	const FriendList& getFriendList() const { return friend_list; }

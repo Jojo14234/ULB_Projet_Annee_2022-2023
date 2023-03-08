@@ -179,7 +179,7 @@ void Client::receiveFromServerLoop() {
     while (this->in_game) {
         std::string output;
         this->receiveFromServer(output); // get the output from the server
-        std::cout << "receiveFromServerLoop" << std::endl;
+        //std::cout << "receiveFromServerLoop" << std::endl;
         if( output == "ENDGAME" ) { this->in_game = false; } // If output is "ENDGAME" it should stop the loop.
         else { std::cout << output << std::endl; }
     }

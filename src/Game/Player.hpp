@@ -117,6 +117,7 @@ public:
     void setCurrentlyPlaying(bool playing);
 
     bool pay(int amount, bool forced = false);
+    void forcedPay(int amount);
     void receive(int amount, std::string source);
 
     void move(Cell* cell, bool pass_by_start = true);

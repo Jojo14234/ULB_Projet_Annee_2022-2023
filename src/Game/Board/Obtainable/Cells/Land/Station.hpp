@@ -3,7 +3,7 @@
 
 #include "Land.hpp"
 
-class PLayer;
+class Player;
 
 class Station : public Land {
 
@@ -11,7 +11,6 @@ public:
     int getRentPrice() override ;
     using Land::Land;
 	void playerPurchase(Player* player) override ;
-
 };
 
 #endif

@@ -15,19 +15,23 @@
 #include <stdexcept>
 
 
+
 void GameServer::sendAllGameData(){
     std::string ret = "GAMESTATE:\n";
     int counter = 0;
     for (auto &player : *game.getPlayers()){
-        ret += ("P" + std::to_string(counter) + ": pos-" + std::to_string(player.getCurrentCell()->getPosition()) + "ba-" + std::to_string(player.getBankAccount()->getMoney()) + ";");
+        ret += ("P" + std::to_string(counter) + ": pos-" + std::to_string(player.getCurrentCell()->getPosition()) + ",ba-" + std::to_string(player.getBankAccount()->getMoney()));
+        ret += ",j-" + std::to_string(player.getAllGOOJCards().size()) + ";";
         counter++;
     }
     counter = 0;
     ret += "\n";
     for (auto &player : *game.getPlayers()){
-        ret += ("P" + std::to_string(counter) + " : properties-");
+        ret += ("P" + std::to_string(counter) + ": properties-");
         for (auto property : player.getAllProperties()){
-            ret += property->getName() + ",";
+            ret += property->getName() + ",level-" + std::to_string((int) property->getLevel()) + ",h-";
+            if (property->isMortgaged()){ret += "n,";}
+            else {ret += "y,";}
         }
         for (auto station : player.getAllStations()){
             ret += station->getName() + ",";
@@ -35,6 +39,7 @@ void GameServer::sendAllGameData(){
         for (auto company : player.getAllCompanies()){
             ret += company->getName() + ",";
         }
+        counter++;
         ret += ";";
     }
 
@@ -49,12 +54,15 @@ void GameServer::clientLoop(ClientManager &client) {
 	while (this->active) {
 
         // if player is in jail
+        /*
         if (game.getCurrentPlayer()->isInJail()){
             game.getCurrentPlayer()->getCurrentCell()->action(game.getCurrentPlayer());
         }
-        else {
+         */
+
+        //else {
                 clientBeforeRollLoop(client);
-        }
+        //}
             // TODO after roll loop
         /*
 		GAME_QUERY_TYPE query;
@@ -139,12 +147,12 @@ void GameServer::processGameQueryBeforeRoll(ClientManager &client, GAME_QUERY_TY
 void GameServer::clientBankruptLoop(ClientManager &client) {
     GAME_QUERY_TYPE query;
     client.send("Vous avez fait faillite!\n");
-    while (game.getCurrentPlayer()->getBankAccount()->getMoney() < 0){
+    while (game.getCurrentPlayer()->getBankAccount()->getMoney() < 0 and game.getCurrentPlayer()->getPlayerStatus() != PLAYER_STATUS::LOST){
         client.send("Seul trois optons s'offrent à vous: \n- /mortgage \n- /sell\n- /give-up.\n");
         client.receive(query);
         switch (query) {
             case GAME_QUERY_TYPE::MORTGAGE : case GAME_QUERY_TYPE::SELL_BUILDINGS : processGameQueryBeforeRoll(client, query); break;
-            case GAME_QUERY_TYPE::GIVE_UP : processBankruptcyToPlayer(); break;
+            case GAME_QUERY_TYPE::GIVE_UP : processBankruptcyToPlayer(); game.getCurrentPlayer()->setPlayerStatus(PLAYER_STATUS::LOST); break;
             default: client.send("Cette commande n'est pas disponible.\n"); break;
         }
     }
@@ -166,7 +174,10 @@ void GameServer::clientAuctionLoop(ClientManager &client, LandCell* land_cell) {
         updateAllClients(
                 "Une enchère a débuté! La propriété concernée est la suivante: " + land_cell->getLand()->getName() +
                 "\nPour participer, tapez /participate. Pour ne pas participer, tapez /out.");
-        client.send("Attention! Comme vous êtes à l'origine de cette enchère, vous participez par défaut. \nVeuillez attendre 15 secondes que les autres joueurs rejoignent.");
+        if (game.getCurrentPlayer()->getPlayerStatus() != PLAYER_STATUS::LOST or game.getCurrentPlayer()->getBankruptingPlayer()->getPlayerStatus() != PLAYER_STATUS::LOST) {
+            client.send(
+                    "Attention! Comme vous êtes à l'origine de cette enchère, vous participez par défaut. \nVeuillez attendre 15 secondes que les autres joueurs rejoignent.");
+        }
         game.startAuction();
         sleep(15);
         client.send("L'attente est terminée!");
@@ -178,10 +189,11 @@ void GameServer::clientAuctionLoop(ClientManager &client, LandCell* land_cell) {
                     updateAllClients("Le joueur " + std::string(player.getClient()->getAccount()->getUsername()) +
                                      " a remporté l'enchère!");
                     player.acquireLand(land_cell->getLand());
+                    player.pay(bid);
                     game.stopAuction();
                     break;
                 }
-                if (player.isInAuction()) {
+                if (player.isInAuction() and (player.getPlayerStatus() != PLAYER_STATUS::LOST or player.getPlayerStatus() != PLAYER_STATUS::BANKRUPT)) {
                     player.getClient()->send(
                             "C'est à votre tour d'enchérir! \nLa plus haute enchère est actuellement à " +
                             std::to_string(bid) +
@@ -192,10 +204,10 @@ void GameServer::clientAuctionLoop(ClientManager &client, LandCell* land_cell) {
                         std::string new_bid;
                         packet >> new_bid;
                         std::cout << "Recu " << new_bid << std::endl;
-                        if (std::stoi(new_bid) <= bid) {
+                        if (std::stoi(new_bid) <= bid or std::stoi(new_bid) > player.getBankAccount()->getMoney()) {
                             player.leaveAuction();
                             updateAllClients(std::string(player.getClient()->getAccount()->getUsername()) +
-                                             " est sorti(e) de l'enchère étant donné que sa proposition de prix était en dessous du minimum.");
+                                             " est sorti(e) de l'enchère étant donné que sa proposition de prix était en dessous du minimum ou parce qu'iel n'avait pas les fonds suffisants.");
                         } else {
                             updateAllClients(
                                     std::string(player.getClient()->getAccount()->getUsername()) + " a surenchéri!");
@@ -238,34 +250,23 @@ void GameServer::clientAuctionLoop(ClientManager &client, LandCell* land_cell) {
          */
 
 void GameServer::processStart(ClientManager &client) {
-    if (!game.isRunning()){
-        if (isClientAdmin(client)){
-            if (game.getNumberOfPlayers() > 1){
-                this->game.startGame();
-                updateAllClients("La partie est lancée!");
-            }
-            else {
-                client.send("Vous êtes seul dans la partie, invitiez un autre joueur pour lancer la partie.");
-            }
-        }
-        else {
-            client.send("Vous n'êtes pas administrateur.");
-        }
-    }
-    else {
-        client.send("La partie est déjà en cours.");
-    }
+    if (this->game.isRunning())               { client.send("La partie est déjà en cours."); return; }
+    if (!this->isClientAdmin(client))         { client.send("Vous n'êtes pas administrateur."); return; }
+    if (this->game.getNumberOfPlayers() <= 1) { client.send("Vous êtes seul dans la partie, invitez un autre joueur pour lancer la partie."); return; }
+    this->game.startGame();
+    this->updateAllClients("La partie est lancée!");
 }
 
 void GameServer::processEndTurn(ClientManager &client) {
-    if (game.getCurrentPlayer()->hasRolled() and !game.getCurrentPlayer()->isInJail()){
-        game.getDice()->resetDoubleCounter();
-        game.endCurrentTurn();
-        sendAllGameData();
-    }
-    else {
-        client.send("Vous devez jeter les dés avant de finir votre tour.");
-    }
+    Player* current = game.getCurrentPlayer();
+    // Si le joueur n'a pas encore lancé les dés ou qu'il est en prison, on lui notifie simplement de lancé les dés
+    if (!current->hasRolled() or current->isInJail()) {client.send("Vous devez jeter les dés avant de finir votre tour."); return;}
+    // S'il a lancé les dés et qu'il n'est pas en prison alors c'est la fin de son tour, on reset le compteur de double et on change de joueur.
+    this->game.getDice()->resetDoubleCounter();
+    this->game.endCurrentTurn();
+
+    // TODO : On envoie des infos pour le ncurse
+    this->sendAllGameData();
 }
 
 void GameServer::processDiceRoll(ClientManager &client) {
@@ -276,38 +277,43 @@ void GameServer::processDiceRoll(ClientManager &client) {
         output += "\nC'est un double! Iel pourra rejouer!";
     }
     updateAllClients(output);
-    game.getCurrentPlayer()->move(game.getBoard()->getCellByIndex((game.getCurrentPlayer()->getCurrentCell()->getPosition() + game.getDice()->getResults()) % BOARD_SIZE));
+
+    Player* current = game.getCurrentPlayer();
+    
+
+    current->move(game.getBoard()->getCellByIndex((current->getCurrentCell()->getPosition() + game.getDice()->getResults()) % BOARD_SIZE));
     updateAllClients(std::string(client.getAccount()->getUsername()) + " est arrivé sur la case " + std::to_string(game.getCurrentPlayer()->getCurrentCell()->getPosition())); //todo delete when affichage works
-
-    /*
-    if (game.getCurrentPlayer()->getPlayerStatus() == PLAYER_STATUS::BANKRUPT and game.getCurrentPlayer()->getBankruptingPlayer() !=
-                                                                                          nullptr){
-        clientBankruptLoop(client);
-    }
-*/
-    game.getCurrentPlayer()->getCurrentCell()->action(game.getCurrentPlayer());
-    LandCell *l;
-    l = dynamic_cast<LandCell*>(game.getCurrentPlayer()->getCurrentCell());
-    if (l != nullptr) {
-        std::cout << "Pointer to owner: " << l->getLand()->getOwner() << std::endl;
-
-        if (l->getLand()->getOwner() == nullptr){
-            updateAllClients("AUCTION STARTING");
-            clientAuctionLoop(client, l);
-        }
-        else{
-            std::cout << "Was already owned." << std::endl;
-            std::cout << "Owner is: " << std::string(l->getLand()->getOwner()->getClient()->getAccount()->getUsername()) << std::endl;
-        }
-    }
-    else{
-        std::cout << "Could not convert to LandCell" << std::endl;
-    }
 
     if (game.getDice()->isDouble()) { game.getCurrentPlayer()->rolled(false);}
     if (game.getDice()->getDoubleCounter() == 2) {
         client.send("Vous allez en prison.");
         game.getCurrentPlayer()->goToJail(game.getBoard()->getCellByIndex(PRISON_INDEX));
+    }
+    else {
+        game.getCurrentPlayer()->getCurrentCell()->action(game.getCurrentPlayer());
+        if (game.getCurrentPlayer()->getPlayerStatus() == PLAYER_STATUS::BANKRUPT and game.getCurrentPlayer()->getBankruptingPlayer() !=
+                                                                                      nullptr) {
+            clientBankruptLoop(client);
+        }
+        if (game.getCurrentPlayer()->getPlayerStatus() != PLAYER_STATUS::LOST){
+            LandCell *l;
+            l = dynamic_cast<LandCell*>(game.getCurrentPlayer()->getCurrentCell());
+            if (l != nullptr) {
+                std::cout << "Pointer to owner: " << l->getLand()->getOwner() << std::endl;
+
+                if (l->getLand()->getOwner() == nullptr){
+                    updateAllClients("AUCTION STARTING");
+                    clientAuctionLoop(client, l);
+                }
+                else{
+                    std::cout << "Was already owned." << std::endl;
+                    std::cout << "Owner is: " << std::string(l->getLand()->getOwner()->getClient()->getAccount()->getUsername()) << std::endl;
+                }
+            }
+            else {
+                std::cout << "Could not convert to LandCell" << std::endl;
+            }
+        }
     }
 }
 
@@ -417,16 +423,22 @@ void GameServer::processBuildBuildings(ClientManager &client) {
         client.send("Pour quitter le mode de sélection de propriétés. Tapez /leave.\n");
         client.receive(query, packet);
         if (query == GAME_QUERY_TYPE::LEAVE_SELECTION_MODE){
+            client.send("Vous quittez l'interface de sélection de propriétés.");
             break;
         }
         packet >> name;
         Land* land = getLandByName(name);
-        Property* p = dynamic_cast<Property*>(land);
-        if (p != nullptr and p->build(game.getCurrentPlayer())){
-            client.send("Vous avez construit un batiment.\n");
+        if (land == nullptr){
+            client.send("Cette propriété n'existe pas");
         }
-        else {
-            client.send("Building failed.\n");
+        else{
+            Property* p = dynamic_cast<Property*>(land);
+            if (p != nullptr and p->build(game.getCurrentPlayer())){
+                client.send("Vous avez construit un batiment.\n");
+            }
+            else {
+                client.send("Building failed.\n");
+            }
         }
     }
 }
@@ -445,11 +457,16 @@ void GameServer::processSellBuildings(ClientManager &client) {
         }
         packet >> name;
         Land *land = getLandByName(name);
-        Property *p = dynamic_cast<Property *>(land);
-        if (p != nullptr and p->sellBuilding(game.getCurrentPlayer())) {
-            client.send("Vous avez construit un bâtiment.\n");
-        } else {
-            client.send("Building failed.\n");
+        if (land == nullptr){
+            client.send("Cette propriété n'existe pas");
+        }
+        else{
+            Property *p = dynamic_cast<Property *>(land);
+            if (p != nullptr and p->sellBuilding(game.getCurrentPlayer())) {
+                client.send("Vous avez vendu un bâtiment.\n");
+            } else {
+                client.send("Selling failed.\n");
+            }
         }
     }
 }
@@ -497,13 +514,15 @@ void GameServer::processBankruptcyToPlayer(){
 
 Land *GameServer::getLandByName(std::string &name) {
     LandCell* land_cell = game.getBoard()->getCellByName(name);
+    if (land_cell == nullptr){
+        return nullptr;
+    }
     Land* land = land_cell->getLand();
     return land;
 }
 
 void GameServer::updateAllClients(std::string update) {
-    std::string start = "GENERAL:";
-    std::string new_update = start + update;
+    std::string new_update = "GENERAL : " + update;
     for (auto client : clients){
         client->send(new_update);
     }

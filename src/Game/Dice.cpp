@@ -1,6 +1,6 @@
 #include "Dice.hpp"
 
-Dice::Dice(){}
+Dice::Dice() {}
 
 int Dice::roll(){
     dice1.roll();
@@ -9,7 +9,7 @@ int Dice::roll(){
     if (dice1.getResult() == dice2.getResult()){
         double_counter++;
     }
-    result = 8; //TODO SUPPRIMER
+    result = 1; //TODO SUPPRIMER
     return result;
 }
 
