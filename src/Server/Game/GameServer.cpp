@@ -15,19 +15,28 @@
 #include <stdexcept>
 
 
-
-void GameServer::sendAllGameData(){
-    std::string ret;
-    int counter = 0;
-    for (auto &player : *game.getPlayers()){
-        ret += ("P" + std::to_string(counter) + ": pos-" + std::to_string(player.getCurrentCell()->getPosition()) + ",ba-" + std::to_string(player.getBankAccount()->getMoney()));
-        ret += ",j-" + std::to_string(player.getAllGOOJCards().size()) + ";";
-        counter++;
+void GameServer::sendStartInfo() {
+    std::string ret = "START_INFOS:\n";
+    // Nbr player;
+    ret += "n:" + std::to_string(game.getPlayers()->size()) + ";";
+    for ( auto &player : *game.getPlayers() ) {
+        ret += "P" + std::to_string(player.getIndex()) + ":" + player.getClient()->getAccount()->getUsernameString() + ";";
     }
-    counter = 0;
+    for (auto client : clients){
+        client->send(ret);
+    }
+
+}
+void GameServer::sendAllGameData(){
+    int counter = 0;
+    std::string ret = "GAMESTATE:\n";
+    for (auto &player : *game.getPlayers()){
+        ret += ("P" + std::to_string(player.getIndex()) + ": pos-" + std::to_string(player.getCurrentCell()->getPosition()) + ",ba-" + std::to_string(player.getBankAccount()->getMoney()));
+        ret += ",j-" + std::to_string(player.getAllGOOJCards().size()) + ";";
+    }
     ret += "\n";
     for (auto &player : *game.getPlayers()){
-        ret += ("P" + std::to_string(counter) + ": properties-");
+        ret += ("P" + std::to_string(player.getIndex()) + ": properties-");
         for (auto property : player.getAllProperties()){
             ret += property->getName() + ",level-" + std::to_string((int) property->getLevel()) + ",h-";
             if (property->isMortgaged()){ret += "n,";}
@@ -39,7 +48,6 @@ void GameServer::sendAllGameData(){
         for (auto company : player.getAllCompanies()){
             ret += company->getName() + ".";
         }
-        counter++;
         ret += ";";
     }
 
@@ -59,8 +67,22 @@ void GameServer::clientLoop(ClientManager &client) {
             game.getCurrentPlayer()->getCurrentCell()->action(game.getCurrentPlayer());
         }
          */
-
         //else {
+                if (game.getCurrentPlayer()->getPlayerStatus() == PLAYER_STATUS::LOST and game.getCurrentPlayer()->getClient() == &client){
+                    int index_counter = 0;
+                    for (auto &player : *game.getPlayers()){
+                        if (player.getPlayerStatus() == PLAYER_STATUS::LOST){
+                            clients.erase(clients.begin()+index_counter);
+                            *game.getPlayers()->erase(game.getPlayers()->begin() + index_counter);
+                            break;
+                        }
+                        index_counter++;
+                    }
+                    break;
+                }
+                if (game.getPlayers()->size() == 1){
+                    client.send("Vous avez gagné!");
+                }
                 clientBeforeRollLoop(client);
         //}
             // TODO after roll loop
@@ -72,31 +94,33 @@ void GameServer::clientLoop(ClientManager &client) {
          TODO manage leave game
          */
 	}
-	std::cout << client.getAccount()->getUsername() << " has left a game with code : " << this->code.getCode() << std::endl;
+    updateAllClients("Le joueur " + std::string(game.getCurrentPlayer()->getClient()->getAccount()->getUsername()) + " a fait faillite et est donc disqualifié de la partie!");
 }
 
 void GameServer::clientBeforeRollLoop(ClientManager &client) {
+    GAME_QUERY_TYPE query = GAME_QUERY_TYPE::NONE;
     while (true) {
-        GAME_QUERY_TYPE query = GAME_QUERY_TYPE::NONE;
+        // Récupération de l'information
         sf::Packet packet;
         client.receive(query);
-        if (GAME_QUERY_TYPE::START == query) {processStart(client);}
-        else if (&client == game.getCurrentPlayer()->getClient() or game.auctionInProgress() == 1){
-            if (game.isRunning()){
+
+        if ( query == GAME_QUERY_TYPE::START ) { processStart(client); }
+        else if ( &client == game.getCurrentPlayer()->getClient() or game.auctionInProgress() == 1 ) {
+            if ( game.isRunning() ) {
                 processGameQueryBeforeRoll(client, query);
-                if (game.getCurrentPlayer()->hasRolled() and game.getCurrentPlayer()->getClient() == &client){
+                if (game.getCurrentPlayer()->hasRolled() and game.getCurrentPlayer()->getClient() == &client and game.getCurrentPlayer()->getPlayerStatus() != PLAYER_STATUS::LOST){
                     client.send("Plus aucune commande ne vous est disponible ce tour ci. Votre tour s'est donc automatiquement terminé.");
                     processEndTurn(client);
                     break;
                 }
+                else if (game.getCurrentPlayer()->getPlayerStatus() == PLAYER_STATUS::LOST){
+                    client.send("Vous avez perdu :(");
+                    break;
+                }
             }
-            else {
-                client.send("La partie n'est pas encore lancée.");
-            }
+            else { client.send("La partie n'est pas encore lancée."); }
         }
-        else {
-            client.send("Cette action n'est pas permise étant donné que ça n'est pas votre tour.");
-        }
+        else { client.send("Cette action n'est pas permise étant donné que ça n'est pas votre tour."); }
         query = GAME_QUERY_TYPE::NONE;
     }
 }
@@ -105,6 +129,7 @@ void GameServer::addClient(ClientManager* client) {
 	this->clients.push_back(client);
 	client->setGameServer(this);
 }
+
 
 /* OBSOLETE
 void GameServer::processGameQuery(ClientManager &client, GAME_QUERY_TYPE query){
@@ -129,6 +154,7 @@ void GameServer::processGameQueryBeforeRoll(ClientManager &client, GAME_QUERY_TY
             case GAME_QUERY_TYPE::END_TURN : processEndTurn(client); break;
             case GAME_QUERY_TYPE::ROLL_DICE : processDiceRoll(client); break;
             case GAME_QUERY_TYPE::MORTGAGE : processMortgageProperty(client); break;
+            case GAME_QUERY_TYPE::DEMORTGAGE : processMortgageProperty(client); break;
             case GAME_QUERY_TYPE::EXCHANGE : processExchange(client); break;
             case GAME_QUERY_TYPE::BUILD : processBuildBuildings(client); break;
             case GAME_QUERY_TYPE::SELL_BUILDINGS : processSellBuildings(client); break;
@@ -156,8 +182,13 @@ void GameServer::clientBankruptLoop(ClientManager &client) {
             default: client.send("Cette commande n'est pas disponible.\n"); break;
         }
     }
-    client.send("Vous n'êtes plus en faillite! Continuez votre tour normalement.\n");
-    game.getCurrentPlayer()->setPlayerStatus(PLAYER_STATUS::FREE);
+    if (game.getCurrentPlayer()->getBankAccount()->getMoney() >= 0){
+        game.getCurrentPlayer()->setPlayerStatus(PLAYER_STATUS::FREE);
+    }
+    if (PLAYER_STATUS::LOST != game.getCurrentPlayer()->getPlayerStatus()){
+        client.send("Vous n'êtes plus en faillite! Continuez votre tour normalement.\n");
+        game.getCurrentPlayer()->setPlayerStatus(PLAYER_STATUS::FREE);
+    }
 }
 
 void GameServer::participateInAuction(ClientManager &client){
@@ -254,6 +285,7 @@ void GameServer::processStart(ClientManager &client) {
     if (!this->isClientAdmin(client))         { client.send("Vous n'êtes pas administrateur."); return; }
     if (this->game.getNumberOfPlayers() <= 1) { client.send("Vous êtes seul dans la partie, invitez un autre joueur pour lancer la partie."); return; }
     this->game.startGame();
+    sendStartInfo();
     this->updateAllClients("La partie est lancée!");
 }
 
@@ -317,6 +349,29 @@ void GameServer::processDiceRoll(ClientManager &client) {
     }
 }
 
+void GameServer::processDemortgageProperty(ClientManager &client) {
+    GAME_QUERY_TYPE query;
+    sf::Packet packet;
+    std::string name;
+    client.send("Veuillez sélectionner la propriété à déhypothéquer en utilisant /select [nom de la propriété].\nTapez /leave pour quitter le mode de selection des batiments.\n");
+    while (query != GAME_QUERY_TYPE::LEAVE_SELECTION_MODE){
+        client.receive(query, packet);
+        packet >> name;
+        if (query == GAME_QUERY_TYPE::SELECT){
+            LandCell* land_cell = game.getCellByName(name);
+            if (land_cell != nullptr and land_cell->getLand()->getOwner() == game.getCurrentPlayer() and land_cell->getLand()->isMortgaged()){
+                land_cell->getLand()->liftMortgage(game.getCurrentPlayer());
+            }
+            else {
+                client.send("Cette propriété n'existe pas ou elle ne vous appartient pas ou n'est pas hypothéquée.\n");
+            }
+        }
+        else {
+            client.send("Veuillez sélectionner la propriété à hypothéquer en utilisant /select [nom de la propriété].\nTapez /leave pour quitter le mode de selection des propriétés.\n");
+        }
+    }
+}
+
 void GameServer::processMortgageProperty(ClientManager &client) { //for now, only works for bankruptcy if bankrupt player is the player whose turn it is.
     GAME_QUERY_TYPE query;
     sf::Packet packet;
@@ -327,11 +382,11 @@ void GameServer::processMortgageProperty(ClientManager &client) { //for now, onl
         packet >> name;
         if (query == GAME_QUERY_TYPE::SELECT){
             LandCell* land_cell = game.getCellByName(name);
-            if (land_cell != nullptr and land_cell->getLand()->getOwner() == game.getCurrentPlayer()){
+            if (land_cell != nullptr and land_cell->getLand()->getOwner() == game.getCurrentPlayer() and !land_cell->getLand()->isMortgaged()){
                 land_cell->getLand()->mortgage(game.getCurrentPlayer());
             }
             else {
-                client.send("Cette propriété n'existe pas ou elle ne vous appartient pas.\n");
+                client.send("Cette propriété n'existe pas ou elle ne vous appartient pas ou elle est déjà hypothéquée.\n");
             }
         }
         else {
@@ -545,7 +600,10 @@ Capitalist* GameServer::getGame(){
     return &game;
 }
 
-void GameServer::addPlayer(ClientManager &client) {this->game.addPlayer(client);}
+void GameServer::addPlayer(ClientManager &client) {
+    this->game.addPlayer(client);
+    this->game.getPlayers()->at(game.getPlayers()->size() - 1).setIndex(game.getPlayers()->size() - 1);
+}
 
 bool GameServer::isClientAdmin(ClientManager &client) {return (game.getPlayerByClient(client)->isAdmin());}
 
