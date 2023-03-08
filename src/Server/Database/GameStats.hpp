@@ -1,6 +1,7 @@
 #ifndef _SERVER_GAME_STATS_HPP
 #define _SERVER_GAME_STATS_HPP
 
+#include <compare>
 
 class GameStats {
 	

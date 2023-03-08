@@ -50,7 +50,7 @@ class JailCell: public Cell {
             return this->outWithMoney(player, true);
         } else { return true; }    //si pas de double mais que pas le 3e lancée, fin du tour du joueur
 
-    };
+    }
     //force à payer -> potentiel faillite
 
     void out();
@@ -59,7 +59,7 @@ public:
 
     using Cell::Cell;
 
-    void action(Player *player) {
+    void action(Player *player) override {
         if (player->isInJail()) {    // y'avais un !
             player->getClient()->send("Vous êtes en prison, tapez /roll, /usecard ou /pay pour essayer de sortir.");
             player->getClient()->send(

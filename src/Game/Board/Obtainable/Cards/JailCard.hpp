@@ -2,7 +2,13 @@
 #define _GAME_CARD_JAIL_HPP
 
 #include <string>
+#ifdef __linux__
+#include <jsoncpp/json/json.h>
+#endif
+
+#ifdef __APPLE__
 #include <json/json.h>
+#endif
 
 #include "Card.hpp"
 
@@ -17,7 +23,7 @@ public:
 
 	using Card::Card;
 
-	void action(Player* player);
+	void action(Player* player) override;
 
 	Player* getOwner() {return owner; }
 

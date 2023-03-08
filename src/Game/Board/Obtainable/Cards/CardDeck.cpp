@@ -6,11 +6,12 @@
 #include "MoneyCard.hpp"
 #include "CellCard.hpp"
 #include "JailCard.hpp"
+#include "../../../../utils/Configs.hpp"
 
 
 CardDeck::CardDeck(std::string name) {
 	Json::Value root;
-	std::ifstream file("Game/Board/Obtainable/data/card_data.json", std::ifstream::binary);
+	std::ifstream file(CARD_DATA, std::ifstream::binary);
     file >> root;
 
 	Json::Value deck;
@@ -19,8 +20,6 @@ CardDeck::CardDeck(std::string name) {
 	Json::Value money_card_set = root[name]["MoneyCard"];
 	Json::Value cell_card_set = root[name]["CellCard"];
 
-    //std::cout << "Taille du deck (money_card " << name << ") : " << money_card_set.size() << std::endl;
-    //std::cout << "Taille du deck (cell_card " << name << ") : " << cell_card_set.size() << std::endl;
 
 	int idx=0;  //de la liste de carte
 	for (unsigned int i=0; i < money_card_set.size(); i++) {
@@ -35,9 +34,7 @@ CardDeck::CardDeck(std::string name) {
 
     this->card_list[idx] = std::make_shared<JailCard>(root[name]["JailCard"]);
 
-    //std::cout << "Jail added " << std::endl;
     std::cout << "CardDeck " << name << " done" << std::endl;
-
 }
 
 Card* CardDeck::drawACard() {

@@ -32,6 +32,8 @@ private:
     // Durée du timer en secondes
     int duration_;
 
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wunused-parameter"
     // Fonction handler qui est appelée lorsqu'un signal SIGALRM est reçu
     static void handler(int sig) {
         // Affiche un message lorsque le timer est terminé
@@ -40,6 +42,8 @@ private:
         // Réinitialise l'alarme d'interruption
         alarm(0);
     }
+#pragma GCC diagnostic pop
+
 };
 
 #endif //INFO_F209_GR5_2022_TIMER_HPP

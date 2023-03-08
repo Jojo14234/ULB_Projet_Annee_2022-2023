@@ -48,8 +48,6 @@ void GameServer::clientLoop(ClientManager &client) {
 	std::cout << client.getAccount()->getUsername() << " has join a game with code : " << this->code.getCode() << std::endl;
     client.send("Le code de cette partie est " + std::to_string(this->code.getCode()) + ". Partagez-le avec tous vos amis!");
 	while (this->active) {
-		GAME_QUERY_TYPE query;
-		sf::Packet packet;
 
         // if player is in jail
         if (game.getCurrentPlayer()->isInJail()){
@@ -60,6 +58,8 @@ void GameServer::clientLoop(ClientManager &client) {
         }
             // TODO after roll loop
         /*
+		GAME_QUERY_TYPE query;
+		sf::Packet packet;
 		game.receiveQuery(query, packet);
 		if (query == GAME_QUERY_TYPE::LEAVE) { break; }
          TODO manage leave game
@@ -145,7 +145,7 @@ void GameServer::clientBankruptLoop(ClientManager &client) {
         client.receive(query);
         switch (query) {
             case GAME_QUERY_TYPE::MORTGAGE : case GAME_QUERY_TYPE::SELL_BUILDINGS : processGameQueryBeforeRoll(client, query); break;
-            case GAME_QUERY_TYPE::GIVE_UP : processBankruptcyToPlayer(client); break;
+            case GAME_QUERY_TYPE::GIVE_UP : processBankruptcyToPlayer(); break;
             default: client.send("Cette commande n'est pas disponible.\n"); break;
         }
     }
@@ -179,6 +179,7 @@ void GameServer::clientAuctionLoop(ClientManager &client, LandCell* land_cell) {
                     updateAllClients("Le joueur " + std::string(player.getClient()->getAccount()->getUsername()) +
                                      " a remporté l'enchère!");
                     player.acquireLand(land_cell->getLand());
+                    player.pay(bid, true);
                     game.stopAuction();
                     break;
                 }
@@ -193,10 +194,10 @@ void GameServer::clientAuctionLoop(ClientManager &client, LandCell* land_cell) {
                         std::string new_bid;
                         packet >> new_bid;
                         std::cout << "Recu " << new_bid << std::endl;
-                        if (std::stoi(new_bid) <= bid) {
+                        if (std::stoi(new_bid) <= bid or std::stoi(new_bid) > player.getBankAccount()->getMoney()) {
                             player.leaveAuction();
                             updateAllClients(std::string(player.getClient()->getAccount()->getUsername()) +
-                                             " est sorti(e) de l'enchère étant donné que sa proposition de prix était en dessous du minimum.");
+                                             " est sorti(e) de l'enchère étant donné que sa proposition de prix était en dessous du minimum ou parce qu'iel n'avait pas les fonds suffisants.");
                         } else {
                             updateAllClients(
                                     std::string(player.getClient()->getAccount()->getUsername()) + " a surenchéri!");
@@ -487,7 +488,7 @@ bool GameServer::proposeExchange(Player &proposing_player, Player &proposed_to_p
     }
 }
 
-void GameServer::processBankruptcyToPlayer(ClientManager &client){
+void GameServer::processBankruptcyToPlayer(){
     for (auto property : game.getCurrentPlayer()->getAllProperties()){
         property->setOwner(game.getCurrentPlayer()->getBankruptingPlayer());
         game.getCurrentPlayer()->getBankruptingPlayer()->acquireProperty(*property);

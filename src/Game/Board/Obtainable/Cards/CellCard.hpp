@@ -2,7 +2,13 @@
 #define _GAME_CARD_CELL_HPP
 
 #include <string>
+#ifdef __linux__
+#include <jsoncpp/json/json.h>
+#endif
+
+#ifdef __APPLE__
 #include <json/json.h>
+#endif
 
 #include "Card.hpp"
 
@@ -20,7 +26,7 @@ public:
 
 	explicit CellCard(Json::Value &info):Card{info}, dest{info["dest"].asInt()}, gain_money{info["dest"].asBool()} {}
 
-	void action(Player* player);
+	void action(Player* player) override ;
 
 
 											//déplace le joueur à cells[dest]

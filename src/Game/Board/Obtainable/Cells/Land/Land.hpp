@@ -2,7 +2,14 @@
 #define _GAME_LAND_HPP
 
 
+#ifdef __linux__
+#include <jsoncpp/json/json.h>
+#endif
+
+#ifdef __APPLE__
 #include <json/json.h>
+#endif
+
 #include <string>
 #include <iostream>
 
@@ -27,8 +34,9 @@ protected:
 
 public: 
 
-	Land(Json::Value info) : name{info["name"].asString()}, purchase_price{info["purchase price"].asInt()}, pos{info["pos"].asInt()} {std::cout<<"Land constructor (owner) : "<< owner << std::endl;}
-    
+	Land(Json::Value info): name{info["name"].asString()}, purchase_price{info["purchase price"].asInt()}, pos{info["pos"].asInt()} {}
+    Land(std::string name, int purchase_price, int pos): name{name}, purchase_price{purchase_price}, pos{pos} {}
+
 	virtual ~Land()=default;
 
 	int virtual getRentPrice()=0;

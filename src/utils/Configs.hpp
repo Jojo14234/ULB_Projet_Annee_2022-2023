@@ -25,6 +25,10 @@ const char banned_character[] = {'-', '+', '*', '$', '&', '@', '?', '!'}; //'§'
 constexpr int MAX_FRIENDS = 20;
 constexpr int MAX_REQUESTS = 20;
 
+// Chemin fichier JSON
+const std::string CARD_DATA = "Game/Board/Obtainable/data/card_data.json";
+const std::string CELL_DATA = "Game/Board/Obtainable/data/cell_data.json";
+const std::string PROPERTY_DATA = "Game/Board/Obtainable/data/property_data.json";
 
 
 

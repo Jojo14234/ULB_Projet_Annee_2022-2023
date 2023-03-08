@@ -47,6 +47,7 @@ public:
 
 	// To enter the game
 	void enterGameLoop();
+
 	// Disconnect the client
 	void disconnect();
 	// If the client is connected
@@ -70,8 +71,8 @@ public:
 	void setGameServer(GameServer* gs);
 	void removeGameServer();
 
-    GameServer* getGameServer();
-
+  GameServer* getGameServer();
+  
 };
 
 #endif
