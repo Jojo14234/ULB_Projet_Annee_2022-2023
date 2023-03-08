@@ -11,7 +11,6 @@ public:
     int getRentPrice() override ;
     using Land::Land;
 	void playerPurchase(Player* player) override ;
-
 };
 
 #endif
