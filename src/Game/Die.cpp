@@ -2,13 +2,16 @@
 #include <random>
 
 
-Die::Die(){
-    std::srand(time(0));
-    result = std::rand()% 6 + 1;
-}
+//créé grâce aux infos trouvées ici:     //https://en.cppreference.com/w/cpp/numeric/random/uniform_int_distribution
+
+Die::Die() {}
 
 int Die::roll(){
-    result = std::rand()% 6 + 1;
+    std::random_device rd;  // Will be used to obtain a seed for the random number engine
+    std::mt19937 gen(rd()); // Standard mersenne_twister_engine seeded with rd()
+    std::uniform_int_distribution<> distrib(1, 6);
+
+    result = distrib(gen);
     return result;
 }
 int Die::getResult() { return result; }
