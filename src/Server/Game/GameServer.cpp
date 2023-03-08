@@ -178,6 +178,7 @@ void GameServer::clientAuctionLoop(ClientManager &client, LandCell* land_cell) {
                     updateAllClients("Le joueur " + std::string(player.getClient()->getAccount()->getUsername()) +
                                      " a remporté l'enchère!");
                     player.acquireLand(land_cell->getLand());
+                    player.pay(bid, true);
                     game.stopAuction();
                     break;
                 }
@@ -192,10 +193,10 @@ void GameServer::clientAuctionLoop(ClientManager &client, LandCell* land_cell) {
                         std::string new_bid;
                         packet >> new_bid;
                         std::cout << "Recu " << new_bid << std::endl;
-                        if (std::stoi(new_bid) <= bid) {
+                        if (std::stoi(new_bid) <= bid or std::stoi(new_bid) > player.getBankAccount()->getMoney()) {
                             player.leaveAuction();
                             updateAllClients(std::string(player.getClient()->getAccount()->getUsername()) +
-                                             " est sorti(e) de l'enchère étant donné que sa proposition de prix était en dessous du minimum.");
+                                             " est sorti(e) de l'enchère étant donné que sa proposition de prix était en dessous du minimum ou parce qu'iel n'avait pas les fonds suffisants.");
                         } else {
                             updateAllClients(
                                     std::string(player.getClient()->getAccount()->getUsername()) + " a surenchéri!");
