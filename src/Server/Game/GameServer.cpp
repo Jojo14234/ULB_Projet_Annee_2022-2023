@@ -15,19 +15,23 @@
 #include <stdexcept>
 
 
+
 void GameServer::sendAllGameData(){
     std::string ret = "GAMESTATE:\n";
     int counter = 0;
     for (auto &player : *game.getPlayers()){
-        ret += ("P" + std::to_string(counter) + ": pos-" + std::to_string(player.getCurrentCell()->getPosition()) + ",ba-" + std::to_string(player.getBankAccount()->getMoney()) + ";");
+        ret += ("P" + std::to_string(counter) + ": pos-" + std::to_string(player.getCurrentCell()->getPosition()) + ",ba-" + std::to_string(player.getBankAccount()->getMoney()));
+        ret += ",j-" + std::to_string(player.getAllGOOJCards().size()) + ";";
         counter++;
     }
     counter = 0;
     ret += "\n";
     for (auto &player : *game.getPlayers()){
-        ret += ("P" + std::to_string(counter) + " : properties-");
+        ret += ("P" + std::to_string(counter) + ": properties-");
         for (auto property : player.getAllProperties()){
-            ret += property->getName() + ",";
+            ret += property->getName() + ",level-" + std::to_string((int) property->getLevel()) + ",h-";
+            if (property->isMortgaged()){ret += "n,";}
+            else {ret += "y,";}
         }
         for (auto station : player.getAllStations()){
             ret += station->getName() + ",";
@@ -50,12 +54,15 @@ void GameServer::clientLoop(ClientManager &client) {
 	while (this->active) {
 
         // if player is in jail
+        /*
         if (game.getCurrentPlayer()->isInJail()){
             game.getCurrentPlayer()->getCurrentCell()->action(game.getCurrentPlayer());
         }
-        else {
+         */
+
+        //else {
                 clientBeforeRollLoop(client);
-        }
+        //}
             // TODO after roll loop
         /*
 		GAME_QUERY_TYPE query;
