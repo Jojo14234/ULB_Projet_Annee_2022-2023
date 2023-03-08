@@ -57,6 +57,7 @@ public:
     void processEndTurn(ClientManager &client);
     void processDiceRoll(ClientManager &client);
     void processMortgageProperty(ClientManager &client);
+    void processDemortgageProperty(ClientManager &client);
     void processExchange(ClientManager &client);
     void processBuildBuildings(ClientManager &client);
     void processSellBuildings(ClientManager &client);
