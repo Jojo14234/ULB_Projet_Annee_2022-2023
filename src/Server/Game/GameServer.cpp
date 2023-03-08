@@ -167,7 +167,10 @@ void GameServer::clientAuctionLoop(ClientManager &client, LandCell* land_cell) {
         updateAllClients(
                 "Une enchère a débuté! La propriété concernée est la suivante: " + land_cell->getLand()->getName() +
                 "\nPour participer, tapez /participate. Pour ne pas participer, tapez /out.");
-        client.send("Attention! Comme vous êtes à l'origine de cette enchère, vous participez par défaut. \nVeuillez attendre 15 secondes que les autres joueurs rejoignent.");
+        if (game.getCurrentPlayer()->getPlayerStatus() != PLAYER_STATUS::LOST or game.getCurrentPlayer()->getBankruptingPlayer() != PLAYER_STATUS::LOST) {
+            client.send(
+                    "Attention! Comme vous êtes à l'origine de cette enchère, vous participez par défaut. \nVeuillez attendre 15 secondes que les autres joueurs rejoignent.");
+        }
         game.startAuction();
         sleep(15);
         client.send("L'attente est terminée!");
@@ -183,7 +186,7 @@ void GameServer::clientAuctionLoop(ClientManager &client, LandCell* land_cell) {
                     game.stopAuction();
                     break;
                 }
-                if (player.isInAuction()) {
+                if (player.isInAuction() and (player.getPlayerStatus() != PLAYER_STATUS::LOST or player.getPlayerStatus() != PLAYER_STATUS::BANKRUPT)) {
                     player.getClient()->send(
                             "C'est à votre tour d'enchérir! \nLa plus haute enchère est actuellement à " +
                             std::to_string(bid) +
