@@ -1,6 +1,9 @@
 #include "Capitalist.hpp"
 #include "../Server/ClientManager/ClientManager.hpp"
 
+
+
+
 void Capitalist::receiveQuery(GAME_QUERY_TYPE query, sf::Packet &packet) {
     std::string s1="", s2="";
     switch (query) {
@@ -47,8 +50,13 @@ void Capitalist::endCurrentTurn() {
     players[current_player_index].getClient()->send("C'est à votre tour.");
 }
 
-int Capitalist::rollDice() {
-    return dice.roll();
+int Capitalist::rollDice() {return dice.roll();}
+
+std::string Capitalist::getRollString() {
+    int roll = rollDice();
+    std::string str = "Valeur des dés : [" + std::to_string(roll) + "]\n";
+    if (rolledADouble()) {str += "Vous avez obtenus un double [" + std::to_string(roll/2) + "]\nIel va pourvoir rejouer !"; }
+    return str;
 }
 
 bool Capitalist::rolledADouble() {

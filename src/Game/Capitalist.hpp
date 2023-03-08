@@ -13,6 +13,37 @@
 class ClientManager;
 
 
+class CapitalistUI {
+public:
+    CapitalistUI()=default;
+
+    std::string refactorName(std::string name) {
+        unsigned int size_diff = name.size() - 8;
+        for (unsigned int i = 0; i < size_diff; i++) {
+            name += " ";
+        }
+        return name;
+    }
+
+    std::string refactorValue(int value) {
+        if (value < 10) {return " " + std::to_string(value);}
+        return std::to_string(value);
+    }
+
+    std::string RollDiceMessage(std::string name, int value, bool isDouble) {
+        std::string str = "";
+        str += "+———————————————————————————————CAPITALI$T———————————————————————————————+\n";
+        str += ("|        Le joueur [" + this->refactorName(name) + "] a jeté les dés.            |\n");
+        str += ("|              Valeur des dés [" + this->refactorValue(value) + "]                      |\n");
+        if (isDouble) {
+            str += ("|         Vous avez obtenus un double [" + std::to_string(value/2) + "]             |\n");
+            str += ("|                      Iel va pouvoir rejouer !|                         |\n");
+        }
+        str += "+————————————————————————————————————————————————————————————————————————+";
+        return str;
+    }
+};
+
 class Capitalist {
     std::vector<Player> players;
     int current_player_index = 0;
@@ -22,6 +53,7 @@ class Capitalist {
 
     Board board;
     Dice dice;
+    CapitalistUI ui{};
 
 public:
 
@@ -34,6 +66,7 @@ public:
     void addPlayer(ClientManager &client);
     void removePlayer();
     void startGame();
+    CapitalistUI getUI() {return ui;}
 
     /*
     Player* getPlayerByClientId(int id){
@@ -52,6 +85,7 @@ public:
     void endCurrentTurn();
 
     int rollDice();
+    std::string getRollString();
 
     bool rolledADouble();
 
@@ -72,5 +106,6 @@ public:
     int auctionInProgress() { return auction_in_progress;}
     void setAuctionProgress(int progress) {auction_in_progress = progress;}
 };
+
 
 #endif

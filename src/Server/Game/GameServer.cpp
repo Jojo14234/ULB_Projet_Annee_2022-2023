@@ -240,34 +240,23 @@ void GameServer::clientAuctionLoop(ClientManager &client, LandCell* land_cell) {
          */
 
 void GameServer::processStart(ClientManager &client) {
-    if (!game.isRunning()){
-        if (isClientAdmin(client)){
-            if (game.getNumberOfPlayers() > 1){
-                this->game.startGame();
-                updateAllClients("La partie est lancée!");
-            }
-            else {
-                client.send("Vous êtes seul dans la partie, invitiez un autre joueur pour lancer la partie.");
-            }
-        }
-        else {
-            client.send("Vous n'êtes pas administrateur.");
-        }
-    }
-    else {
-        client.send("La partie est déjà en cours.");
-    }
+    if (this->game.isRunning())               { client.send("La partie est déjà en cours."); return; }
+    if (!this->isClientAdmin(client))         { client.send("Vous n'êtes pas administrateur."); return; }
+    if (this->game.getNumberOfPlayers() <= 1) { client.send("Vous êtes seul dans la partie, invitez un autre joueur pour lancer la partie."); return; }
+    this->game.startGame();
+    this->updateAllClients("La partie est lancée!");
 }
 
 void GameServer::processEndTurn(ClientManager &client) {
-    if (game.getCurrentPlayer()->hasRolled() and !game.getCurrentPlayer()->isInJail()){
-        game.getDice()->resetDoubleCounter();
-        game.endCurrentTurn();
-        sendAllGameData();
-    }
-    else {
-        client.send("Vous devez jeter les dés avant de finir votre tour.");
-    }
+    Player* current = game.getCurrentPlayer();
+    // Si le joueur n'a pas encore lancé les dés ou qu'il est en prison, on lui notifie simplement de lancé les dés
+    if (!current->hasRolled() or current->isInJail()) {client.send("Vous devez jeter les dés avant de finir votre tour."); return;}
+    // S'il a lancé les dés et qu'il n'est pas en prison alors c'est la fin de son tour, on reset le compteur de double et on change de joueur.
+    this->game.getDice()->resetDoubleCounter();
+    this->game.endCurrentTurn();
+
+    // TODO : On envoie des infos pour le ncurse
+    this->sendAllGameData();
 }
 
 void GameServer::processDiceRoll(ClientManager &client) {
@@ -278,7 +267,11 @@ void GameServer::processDiceRoll(ClientManager &client) {
         output += "\nC'est un double! Iel pourra rejouer!";
     }
     updateAllClients(output);
-    game.getCurrentPlayer()->move(game.getBoard()->getCellByIndex((game.getCurrentPlayer()->getCurrentCell()->getPosition() + game.getDice()->getResults()) % BOARD_SIZE));
+
+    Player* current = game.getCurrentPlayer();
+    
+
+    current->move(game.getBoard()->getCellByIndex((current->getCurrentCell()->getPosition() + game.getDice()->getResults()) % BOARD_SIZE));
     updateAllClients(std::string(client.getAccount()->getUsername()) + " est arrivé sur la case " + std::to_string(game.getCurrentPlayer()->getCurrentCell()->getPosition())); //todo delete when affichage works
 
     if (game.getDice()->isDouble()) { game.getCurrentPlayer()->rolled(false);}
@@ -519,8 +512,7 @@ Land *GameServer::getLandByName(std::string &name) {
 }
 
 void GameServer::updateAllClients(std::string update) {
-    std::string start = "GENERAL:";
-    std::string new_update = start + update;
+    std::string new_update = "GENERAL : " + update;
     for (auto client : clients){
         client->send(new_update);
     }
