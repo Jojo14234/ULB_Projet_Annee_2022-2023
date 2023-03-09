@@ -409,7 +409,7 @@ void GameServer::processExchange(ClientManager &client) {
         }
     }
     client.send(response);
-    while (query != GAME_QUERY_TYPE::SELECT){ //TODO check if no problem with undefined definition with while loop condition
+    while (query != GAME_QUERY_TYPE::SELECT){
         client.send("Pour choisir un joueur, utilisez /select nom d'utilisateur, pour annuler, tapez /leave.");
         client.receive(query, packet);
         packet >> name;
@@ -433,7 +433,7 @@ void GameServer::processExchange(ClientManager &client) {
             client.receive(query, packet);
             packet >> name;
             LandCell* land_cell = game.getBoard()->getCellByName(name);
-            if (land_cell->getLand()->getOwner() == exchange_player) {
+            if (land_cell != nullptr and land_cell->getLand()->getOwner() == exchange_player) {
                 client.send("Propriété sélectionée!");
                 client.send("Quel montant proposez-vous pour le rachat de cette propriété?\n Utilisez /select montant (ça doit être plus que 0).");
                 client.receive(query, packet);
@@ -461,6 +461,9 @@ void GameServer::processExchange(ClientManager &client) {
                 else{
                     client.send("Votre proposition a été refusée.\n");
                 }
+            }
+            else {
+                client.send("Cette propriété n'est pas valide");
             }
         }
     }
