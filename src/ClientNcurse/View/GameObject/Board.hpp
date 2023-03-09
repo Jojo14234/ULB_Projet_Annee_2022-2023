@@ -23,6 +23,7 @@ class Board : public AbstractViewObject {
 	static const int col_nb = 11; 
 	static const int line_nb = 11; 
 	static const int gamebox_nb = 40;
+	std::vector<int> old_pos_player;
 
     int n_player; //number of players in game
 
@@ -48,13 +49,12 @@ public:
 	Board(ObjectInfo info, int n_player): AbstractViewObject{info}, n_player{n_player} {
 		this->loadCellNames();    
 		this->createBoard();
-        // to avoir useless flags
-        this->n_player++;
-        this->n_player--;
+		old_pos_player.resize(n_player);
+		for(int i = 0; i< n_player ; i++){old_pos_player[i] = 0;}
 	}
 
 	void setPlayer(int cell, int player);
-	void unsetPlayer(int cell, int player);
+	void unsetPlayer(int player);
 	void setIdle(int cell);
 	void setPurchased(int cell, int player);
 	void addHouse(int cell, int house_nb);

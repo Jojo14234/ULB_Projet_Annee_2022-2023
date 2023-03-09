@@ -39,13 +39,16 @@ void Board::createBoard(){
 
 ////////////////////////////////////////////////////////////////
 //method for setting and unsetting player
+void Board::unsetPlayer(int player){
+	board[old_pos_player[player-1]]->removePlayer(player);
+}
+
 void Board::setPlayer(int cell,int player){
 	board[cell]->setPlayer(player);
+	old_pos_player[player-1] = cell;
 }
  
-void Board::unsetPlayer(int cell,int player){
-	board[cell]->removePlayer(player);
-}
+
 
 //method to clear all buildings a cell
 void Board::setIdle(int cell){
