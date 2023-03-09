@@ -19,6 +19,7 @@ void GameInputParser::parse() {
     else if ( query == "/leave" )       { this->query_type = GAME_QUERY_TYPE::LEAVE; }     // Quitte la partie
 	else if ( query == "/buy" )         { this->query_type = GAME_QUERY_TYPE::BUY; }       // Achète une propriété
 	else if ( query == "/disconnect" )  { this->query_type = GAME_QUERY_TYPE::LEAVE; }     // Quitte la partie
+    else if ( query == "/accept")       { this->query_type = GAME_QUERY_TYPE::ACCEPT; }    //accepte de participer à l'échange
 
     else if ( query == "/bid") {
         if ( this->getNbParameters() == 1 ) { this->query_type = GAME_QUERY_TYPE::BID; }   // Enchéri d'un certain montant

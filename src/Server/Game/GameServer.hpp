@@ -39,6 +39,7 @@ public:
     void clientBankruptLoop(ClientManager &client);
     void clientAuctionLoop(ClientManager &client, LandCell* land_cell);
     void participateInAuction(ClientManager &client);
+    void participateInExchange(ClientManager &client);
 	// Add a client to the game 
 	void addClient(ClientManager* client);
 

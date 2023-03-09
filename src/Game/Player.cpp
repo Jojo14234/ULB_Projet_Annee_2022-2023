@@ -206,6 +206,40 @@ void Player::acquireLand(Land *land) {
     //TODO check what type of land it is (used for exchanges)
 }
 
+void Player::removeLand(Land *land){
+    int index = 0;
+    Property* p = dynamic_cast<Property*>(land);
+    if (p != nullptr) {
+        for (auto property : properties) {
+            if (property == p) {
+                properties.erase(properties.begin()+index);
+            }
+            index++;
+        }
+        return;
+    }
+    Company* c = dynamic_cast<Company*>(land);
+    if (c != nullptr) {
+        for (auto company : companies) {
+            if (company == c) {
+                companies.erase(companies.begin()+index);
+            }
+            index++;
+        }
+        return;
+    }
+    Station* s = dynamic_cast<Station*>(land);
+    if (s != nullptr) {
+        for (auto station : stations) {
+            if (station == s) {
+                stations.erase(stations.begin()+index);
+            }
+            index++;
+        }
+        return;
+    }
+}
+
 void Player::auctionMustStart() {
     auction_must_start = true;
 }

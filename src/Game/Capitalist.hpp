@@ -50,6 +50,7 @@ class Capitalist {
     bool running = false;
 
     int auction_in_progress = 0;
+    int exchange_in_progress = 0;
 
     Board board;
     Dice dice;
@@ -105,6 +106,8 @@ public:
 
     int auctionInProgress() { return auction_in_progress;}
     void setAuctionProgress(int progress) {auction_in_progress = progress;}
+    void setExchangeStatus(int status) {exchange_in_progress = status;}
+    int getExchangeStatus() {return exchange_in_progress;}
 };
 
 

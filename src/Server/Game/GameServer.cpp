@@ -105,7 +105,7 @@ void GameServer::clientBeforeRollLoop(ClientManager &client) {
         client.receive(query);
 
         if ( query == GAME_QUERY_TYPE::START ) { processStart(client); }
-        else if ( &client == game.getCurrentPlayer()->getClient() or game.auctionInProgress() == 1 ) {
+        else if ( &client == game.getCurrentPlayer()->getClient() or game.auctionInProgress() == 1 or game.getExchangeStatus() == 1) {
             if ( game.isRunning() ) {
                 processGameQueryBeforeRoll(client, query);
                 if (game.getCurrentPlayer()->hasRolled() and game.getCurrentPlayer()->getClient() == &client and game.getCurrentPlayer()->getPlayerStatus() != PLAYER_STATUS::LOST){
@@ -113,7 +113,7 @@ void GameServer::clientBeforeRollLoop(ClientManager &client) {
                     processEndTurn(client);
                     break;
                 }
-                else if (game.getCurrentPlayer()->getPlayerStatus() == PLAYER_STATUS::LOST){
+                else if (game.getCurrentPlayer()->getPlayerStatus() == PLAYER_STATUS::LOST) {
                     client.send("Vous avez perdu :(");
                     break;
                 }
@@ -144,7 +144,7 @@ void GameServer::processGameQuery(ClientManager &client, GAME_QUERY_TYPE query){
         else {
             client.send("Cette action n'est pas permise étant donné que ça n'est pas votre tour.");
         }
-    }
+    }ƒ
 }
 */
 
@@ -158,6 +158,7 @@ void GameServer::processGameQueryBeforeRoll(ClientManager &client, GAME_QUERY_TY
             case GAME_QUERY_TYPE::EXCHANGE : processExchange(client); break;
             case GAME_QUERY_TYPE::BUILD : processBuildBuildings(client); break;
             case GAME_QUERY_TYPE::SELL_BUILDINGS : processSellBuildings(client); break;
+            case GAME_QUERY_TYPE::ACCEPT : participateInExchange(client); break;
             default: client.send("Cette commande n'est pas disponible."); break;
         }
     }
@@ -194,6 +195,12 @@ void GameServer::clientBankruptLoop(ClientManager &client) {
 void GameServer::participateInAuction(ClientManager &client){
     client.send("Vous participez à l'enchère!");
     while (game.auctionInProgress() != 0) {}
+}
+
+void GameServer::participateInExchange(ClientManager &client){
+    game.setExchangeStatus(2);
+    client.send("Vous participez à l'échange!");
+    while (game.getExchangeStatus() != 0) {}
 }
 
 void GameServer::clientAuctionLoop(ClientManager &client, LandCell* land_cell) {
@@ -317,7 +324,8 @@ void GameServer::processDiceRoll(ClientManager &client) {
     updateAllClients(std::string(client.getAccount()->getUsername()) + " est arrivé sur la case " + std::to_string(game.getCurrentPlayer()->getCurrentCell()->getPosition())); //todo delete when affichage works
 
     if (game.getDice()->isDouble()) { game.getCurrentPlayer()->rolled(false);}
-    if (game.getDice()->getDoubleCounter() == 2) {
+    if (game.getDice()->getDoubleCounter() == 3) {
+        game.getCurrentPlayer()->rolled(true);
         client.send("Vous allez en prison.");
         game.getCurrentPlayer()->goToJail(game.getBoard()->getCellByIndex(PRISON_INDEX));
     }
@@ -441,17 +449,20 @@ void GameServer::processExchange(ClientManager &client) {
                 while (true){
                     try {
                         proposed_amount = std::stoi(name);
-                        if (proposed_amount <= game.getCurrentPlayer()->getBankAccount()->getMoney()){
+                        if (proposed_amount <= game.getCurrentPlayer()->getBankAccount()->getMoney() and proposed_amount > 0){
                             break;
                         }
                         else {
-                            client.send("Vous n'avez pas assez d'argent pour proposer ce montant.\n");
+                            client.send("Vous n'avez pas assez d'argent pour proposer ce montant ou montant < 0.\n");
                         }
                     } catch (const std::invalid_argument& e) {
                         client.send("Invalid amount.\n");
+                        break;
                     }
                 }
+                game.setExchangeStatus(1);
                 if (proposeExchange(*game.getCurrentPlayer(), *exchange_player, land_cell->getLand(), proposed_amount)){
+                    exchange_player->removeLand(land_cell->getLand());
                     game.getCurrentPlayer()->acquireLand(land_cell->getLand());
                     game.getCurrentPlayer()->pay(proposed_amount);
                     exchange_player->receive(proposed_amount, std::string(game.getCurrentPlayer()->getClient()->getAccount()->getUsername()));
@@ -461,6 +472,9 @@ void GameServer::processExchange(ClientManager &client) {
                 else{
                     client.send("Votre proposition a été refusée.\n");
                 }
+                client.send("L'échange est terminé.");
+                exchange_player->getClient()->send("L'échange est terminé.");
+                game.setExchangeStatus(0);
             }
             else {
                 client.send("Cette propriété n'est pas valide");
@@ -535,6 +549,8 @@ bool GameServer::proposeExchange(Player &proposing_player, Player &proposed_to_p
     std::string response;
     std::string comm_string = "";
     comm_string += (std::string(proposing_player.getClient()->getAccount()->getUsername()) + "vous propose " + std::to_string(amount) + " pour votre possession nommée " + land->getName());
+    proposed_to_player.getClient()->send("Tapez /accept pour entretenir l'offre (c'est obligatoire).");
+    while (game.getExchangeStatus() != 2) {}
     proposed_to_player.getClient()->send(comm_string);
     while (true) {
         proposed_to_player.getClient()->send("Pour accepter, tapez /select yes, sinon tapez /select no.");

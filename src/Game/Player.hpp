@@ -163,6 +163,7 @@ public:
     void acquireGOOJCard(JailCard *jail_card);
 
     void acquireLand(Land* land);
+    void removeLand(Land* land);
 
     void auctionMustStart();
 
