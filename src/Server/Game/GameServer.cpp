@@ -154,7 +154,7 @@ void GameServer::processGameQueryBeforeRoll(ClientManager &client, GAME_QUERY_TY
             case GAME_QUERY_TYPE::END_TURN : processEndTurn(client); break;
             case GAME_QUERY_TYPE::ROLL_DICE : processDiceRoll(client); break;
             case GAME_QUERY_TYPE::MORTGAGE : processMortgageProperty(client); break;
-            case GAME_QUERY_TYPE::DEMORTGAGE : processMortgageProperty(client); break;
+            case GAME_QUERY_TYPE::DEMORTGAGE : processDemortgageProperty(client); break;
             case GAME_QUERY_TYPE::EXCHANGE : processExchange(client); break;
             case GAME_QUERY_TYPE::BUILD : processBuildBuildings(client); break;
             case GAME_QUERY_TYPE::SELL_BUILDINGS : processSellBuildings(client); break;
