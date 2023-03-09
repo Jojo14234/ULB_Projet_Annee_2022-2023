@@ -23,7 +23,8 @@ class GameStateParser {
 	std::string property_str;
 
 public:
-	GameStateParser(std::string game, int player_nb) : state_str{state_str} {
+	GameStateParser(std::string game, int player_nb) : state_str{game} {
+		state_str += ",";
 		res.state.resize(player_nb);
 		res.info.resize(player_nb);
 		parseStateLine();
@@ -55,7 +56,7 @@ public:
 				property_str = &state_str[i+1];
 				break;
 			}
-			else {
+			else{
 				tmp += c;
 			}
 			i++;
