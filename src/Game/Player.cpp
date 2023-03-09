@@ -256,8 +256,7 @@ void Player::setPlayerStatus(PLAYER_STATUS new_status){
 }
 
 std::string Player::getStringOfAllProperties(){
-    std::string ret_string = "";
-    ret_string += "Propriétés";
+    std::string ret_string = "\n";
     for (auto property : properties){
         ret_string += property->getName(); //TODO pq l'IDE boude?
         ret_string += ".\n";

@@ -15,6 +15,9 @@ class GameController : public AbstractController {
 	enum MENU_STATE { CHAT, CONSOLE, IDLE };
 	MENU_STATE STATE = IDLE;
 	GameView* view;
+	//
+	int n_player = 2;
+
 
 public:
 
@@ -84,13 +87,14 @@ public:
 	}
 
 	void receiveMessagesLoop() {
-		int n_player = 2;
+		for (int i = 0; i< n_player;i++){this->view->getBoard()->setPlayer(0, i);}
 		while (this->new_state == STATE::GAME) {
 			std::string response;
 			this->model->receive(response);
 			if (response[0] == 'G' && response[1] == 'M') {
 				GameStateParser parser(response, n_player);
 				for (int i = 0; i < n_player; i++){
+					this->view->getBoard()->unsetPlayer( i);
 					this->view->getBoard()->setPlayer(parser.getBufferSplit().state[i][0], i);
 					this->view->getInfo()->setMoney( i+1 ,parser.getBufferSplit().state[i][1]);
 				}} 
