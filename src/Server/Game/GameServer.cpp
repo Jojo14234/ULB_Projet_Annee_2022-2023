@@ -15,6 +15,60 @@
 #include <stdexcept>
 
 
+std::string refactorToAMaxLengthString(std::string str, int maxLength) {
+    if (str.size() < maxLength) {
+        int space = maxLength - str.size();
+        for (int i = 0; i < space; i++ ) {str += " ";}
+        return str;
+    }
+    else {
+        std::string new_str = "";
+        for (int i = 0; i < maxLength; i ++) {
+            new_str += str[i];
+        }
+        return new_str;
+    }
+}
+
+void GameServer::boardInfos() {
+    std::string str = "";
+    str += "+—————————CAPITALI$T————————+\n";
+    for (auto &player : *this->game.getPlayers()) {
+        std::string username = refactorToAMaxLengthString(player.getClient()->getAccount()->getUsernameString(),6);
+        std::string position = refactorToAMaxLengthString(std::to_string(player.getCurrentCell()->getPosition()), 8);
+        std::string money = refactorToAMaxLengthString(std::to_string(player.getBankAccount()->getMoney()),5);
+        str += "| PLAYER | POSITION | MONEY |\n";
+        str += "| " + username + " | " + position + " | " + money + " |\n";
+        if (player.getAllProperties().size() > 0) { str += "|PROPERTIES           LEVEL |\n"; }
+        for (auto property : player.getAllProperties()) {
+            std::string prop = refactorToAMaxLengthString(property->getName(),8);
+            std::string level = refactorToAMaxLengthString(std::to_string(property->getIntLevel()), 5);
+            str += "|        | " + prop + " | " + level + " |\n";
+        }
+        if (player.getAllCompanies().size() > 0) { str += "|COMPANIES            MULTI |\n"; }
+        for (auto property : player.getAllCompanies()) {
+            std::string prop = refactorToAMaxLengthString(property->getName(), 8);
+            int multiInt = (player.getAllCompanies().size() == 2) ? 12 : 5;
+            std::string multiString = refactorToAMaxLengthString(std::to_string(multiInt), 5);
+            str += "|        | " + prop + " | " + multiString + " |\n";
+        }
+        if (player.getAllStations().size() > 0) { str += "|STATIONS           LEVEL |\n"; }
+        for (auto property : player.getAllStations()) {
+            std::string prop = property->getName();
+            str += "| " + refactorToAMaxLengthString(" ", 6) + " | ";
+            str += refactorToAMaxLengthString(prop, 8)  + " | ";
+            str += refactorToAMaxLengthString(" ", 5) + " |\n";
+        }
+        str += "+———————————————————————————+\n";
+    }
+    std::string nextTurn = refactorToAMaxLengthString(game.getCurrentPlayer()->getClient()->getAccount()->getUsernameString(), 10);
+    str += "| A '" + nextTurn + "' de jouer ! |\n";
+    str += "+———————————————————————————+\n";
+
+    this->updateAllClients(str);
+}
+
+
 void GameServer::sendStartInfo() {
     std::string ret = "START_INFOS:\n";
     // Nbr player;
@@ -28,7 +82,7 @@ void GameServer::sendStartInfo() {
 }
 
 void GameServer::sendAllGameData(){
-    int counter = 0;
+    //int counter = 0;
     std::string ret = "GM-";
     for (auto &player : *game.getPlayers()){
         ret += ("P" + std::to_string(player.getIndex()) + ": pos-" + std::to_string(player.getCurrentCell()->getPosition()) + ",ba-" + std::to_string(player.getBankAccount()->getMoney()));
@@ -307,6 +361,7 @@ void GameServer::processEndTurn(ClientManager &client) {
 
     // TODO : On envoie des infos pour le ncurse
     this->sendAllGameData();
+    this->boardInfos();
 }
 
 void GameServer::processDiceRoll(ClientManager &client) {
@@ -599,9 +654,8 @@ Land *GameServer::getLandByName(std::string &name) {
 }
 
 void GameServer::updateAllClients(std::string update) {
-    std::string new_update = "GENERAL : " + update;
-    for (auto client : clients){
-        client->send(new_update);
+    for ( auto client : clients ) {
+        client->send(update);
     }
 }
 

@@ -52,7 +52,7 @@ public:
 		old_pos_player.resize(n_player);
 		for(int i = 0; i< n_player ; i++){old_pos_player[i] = 0;}
 	}
-
+    int getNPlayer() { return n_player; }
 	void setPlayer(int cell, int player);
 	void unsetPlayer(int player);
 	void setIdle(int cell);

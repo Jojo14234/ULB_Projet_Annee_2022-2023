@@ -32,6 +32,7 @@ public:
 
     void sendAllGameData();
     void sendStartInfo();
+    void boardInfos();
 
 	// Loop for the client
 	void clientLoop(ClientManager &client);
