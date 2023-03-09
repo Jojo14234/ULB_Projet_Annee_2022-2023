@@ -52,7 +52,7 @@ public:
         this->n_player++;
         this->n_player--;
 	}
-
+    int getNPlayer() { return n_player; }
 	void setPlayer(int cell, int player);
 	void unsetPlayer(int cell, int player);
 	void setIdle(int cell);

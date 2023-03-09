@@ -45,11 +45,11 @@ void Board::initPropertyLand(){
     file >> root;
 
 	Json::Value property_list = root["PROPERTY"];
-    this->extractProperty(property_list);
+    this->extractProperty<Property>(property_list);
     Json::Value station_list = root["STATION"];
-    this->extractProperty(station_list);
+    this->extractProperty<Station>(station_list);
     Json::Value company_list = root["COMPANY"];
-    this->extractProperty(company_list);
+    this->extractProperty<Company>(company_list);
     std::cout << "[Init all     property lands : 100%]" << std::endl;
 }
 
@@ -72,13 +72,14 @@ void Board::initNonPropertyLand() {
     std::cout << "[Init all non-property lands : 100%]" << std::endl;
 }
 
+template<typename T>
 void Board::extractProperty(Json::Value &list) {
     // Pas de couleur, mais pas de panic ça fonctionne
     for (auto property : list) {
         int position = property["pos"].asInt();
         //std::string purchase_price = property["purchase_price"].asString();
         //std::string name = property["name"].asString();
-        this->cells.at(position) = std::make_shared<LandCell>(position, std::make_shared<Property>(property));
+        this->cells.at(position) = std::make_shared<LandCell>(position, std::make_shared<T>(property));
     }
 }
 
