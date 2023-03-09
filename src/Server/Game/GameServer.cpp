@@ -427,6 +427,7 @@ void GameServer::processExchange(ClientManager &client) {
         }
         else {
             client.send("Nom de joueur invalide, veuillez réessayer.\n");
+            query = GAME_QUERY_TYPE::NONE;
         }
     }
     if (GAME_QUERY_TYPE::LEAVE_SELECTION_MODE == query){
@@ -478,6 +479,7 @@ void GameServer::processExchange(ClientManager &client) {
             }
             else {
                 client.send("Cette propriété n'est pas valide");
+                client.send("Vous quittez le module de proposition d'échange. Pour proposer un échange, tapez à nouveau /exchange.");
             }
         }
     }
