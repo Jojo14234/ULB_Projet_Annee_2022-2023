@@ -11,8 +11,10 @@
 class ClientManagerList : public List<ClientManager> {
 public:
 	using List<ClientManager>::List;
+    using List<ClientManager>::begin;
+    using List<ClientManager>::end;
 
-	// Join the ended threads
+    // Join the ended threads
 	// Remove the ended ClientManager from the list
 	void clean() {
 		this->am.lockWriter();

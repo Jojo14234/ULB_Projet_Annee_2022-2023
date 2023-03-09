@@ -58,6 +58,7 @@ void GameServer::sendAllGameData(){
 
 void GameServer::clientLoop(ClientManager &client) {
 	std::cout << client.getAccount()->getUsername() << " has join a game with code : " << this->code.getCode() << std::endl;
+    updateAllClients("Le joueur " + client.getAccount()->getUsernameString() + " a rejoint la partie!");
     client.send("Le code de cette partie est " + std::to_string(this->code.getCode()) + ". Partagez-le avec tous vos amis!");
 	while (this->active) {
 
