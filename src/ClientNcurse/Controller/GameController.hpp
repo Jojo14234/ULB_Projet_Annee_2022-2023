@@ -90,10 +90,11 @@ public:
 			this->model->receive(response);
 			if (response[0] == 'G' && response[1] == 'M') {
 				GameStateParser parser(response, n_player);
-				Informations info = parser.getBufferSplit();
-				for (int i = 0; i < n_player; i++)
-					this->view->getBoard()->setPlayer(info.state.at(i).at(0), i);
-			} else {
+				for (int i = 0; i < n_player; i++){
+					this->view->getBoard()->setPlayer(parser.getBufferSplit().state[i][0], i);
+					this->view->getInfo()->setMoney( i+1 ,parser.getBufferSplit().state[i][1]);
+				}} 
+			else {
 				this->view->getConsole()->addText(response);
 			} 
 		}
