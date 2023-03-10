@@ -14,7 +14,11 @@
 #include <string>
 #include <stdexcept>
 
-
+/*
+ * Return a string with the exact maxLength size.
+ * str < maxLength -> add ' '
+ * str > maxLength -> trim excédent character
+ */
 std::string refactorToAMaxLengthString(std::string str, int maxLength) {
     if (str.size() < maxLength) {
         int space = maxLength - str.size();
@@ -30,21 +34,28 @@ std::string refactorToAMaxLengthString(std::string str, int maxLength) {
     }
 }
 
+
 void GameServer::boardInfos() {
     std::string str = "";
     str += "+—————————CAPITALI$T————————+\n";
+    // Loop for all the players
     for (auto &player : *this->game.getPlayers()) {
+        // Player + Position + Money
         std::string username = refactorToAMaxLengthString(player.getClient()->getAccount()->getUsernameString(),6);
         std::string position = refactorToAMaxLengthString(std::to_string(player.getCurrentCell()->getPosition()), 8);
         std::string money = refactorToAMaxLengthString(std::to_string(player.getBankAccount()->getMoney()),5);
         str += "| PLAYER | POSITION | MONEY |\n";
         str += "| " + username + " | " + position + " | " + money + " |\n";
+
+        // Loop for all the player's properties
         if (player.getAllProperties().size() > 0) { str += "|PROPERTIES           LEVEL |\n"; }
         for (auto property : player.getAllProperties()) {
             std::string prop = refactorToAMaxLengthString(property->getName(),8);
             std::string level = refactorToAMaxLengthString(std::to_string(property->getIntLevel()), 5);
             str += "|        | " + prop + " | " + level + " |\n";
         }
+
+        // Loop for all the player's compagnie
         if (player.getAllCompanies().size() > 0) { str += "|COMPANIES            MULTI |\n"; }
         for (auto property : player.getAllCompanies()) {
             std::string prop = refactorToAMaxLengthString(property->getName(), 8);
@@ -52,6 +63,8 @@ void GameServer::boardInfos() {
             std::string multiString = refactorToAMaxLengthString(std::to_string(multiInt), 5);
             str += "|        | " + prop + " | " + multiString + " |\n";
         }
+
+        // Loop for all the player's stations
         if (player.getAllStations().size() > 0) { str += "|STATIONS           LEVEL |\n"; }
         for (auto property : player.getAllStations()) {
             std::string prop = property->getName();
@@ -68,47 +81,61 @@ void GameServer::boardInfos() {
     this->updateAllClients(str);
 }
 
-
+/*
+ * Send Start infos formatted for the n-curse terminal
+ */
 void GameServer::sendStartInfo() {
     std::string ret = "START_INFOS:\n";
-    // Nbr player;
-    ret += "n:" + std::to_string(game.getPlayers()->size()) + ";";
+    //Indexe + Nb_player
+    std::string nb_player = std::to_string(game.getPlayers()->size());
+    ret += "n:" + nb_player + ";";
+
+    // Indexe + username
     for ( auto &player : *game.getPlayers() ) {
-        ret += "P" + std::to_string(player.getIndex()) + ":" + player.getClient()->getAccount()->getUsernameString() + ";";
+        std::string indexe = std::to_string(player.getIndex());
+        std::string username = player.getClient()->getAccount()->getUsernameString();
+        ret += "P" + indexe + ":" + username + ";";
     }
-    for (auto client : clients){
-        client->send(ret);
-    }
+    this->updateAllClients(ret);
 }
 
+/*
+ * Send data formatted for the n-curse terminal
+ */
 void GameServer::sendAllGameData(){
-    //int counter = 0;
     std::string ret = "GM-";
+
+    // Player Index + Position + BankAccount + JailCard Possessed.
     for (auto &player : *game.getPlayers()){
-        ret += ("P" + std::to_string(player.getIndex()) + ": pos-" + std::to_string(player.getCurrentCell()->getPosition()) + ",ba-" + std::to_string(player.getBankAccount()->getMoney()));
-        ret += ",j-" + std::to_string(player.getAllGOOJCards().size()) + ";";
+        std::string indexe =    std::to_string(player.getIndex());
+        std::string position =  std::to_string(player.getCurrentCell()->getPosition());
+        std::string money =     std::to_string(player.getBankAccount()->getMoney());
+        std::string jailCard =  std::to_string(player.getAllGOOJCards().size());
+        ret += ("P" + indexe + ": pos-" + position + ",ba-" + money) + ",j-" + jailCard + ";";
     }
     ret += "\n";
-    for (auto &player : *game.getPlayers()){
-        ret += ("P" + std::to_string(player.getIndex()) + ": properties-");
+
+    // Player Indexe + {Properties possessed + level + mortgage}
+    for (auto &player : *game.getPlayers()) {
+        std::string indexe = std::to_string(player.getIndex());
+        ret += ("P" + indexe + ": properties-");
+
         for (auto property : player.getAllProperties()){
-            ret += property->getName() + ",level-" + std::to_string((int) property->getLevel()) + ",h-";
-            if (property->isMortgaged()){ret += "n,";}
-            else {ret += "y,";}
+            std::string level = std::to_string(property->getIntLevel());
+            std::string mortgage = (property->isMortgaged()) ? "n," : "y,";
+            ret += property->getName() + ",level-" + level + ",h-" + mortgage;
         }
-        for (auto station : player.getAllStations()){
-            ret += station->getName() + ".";
-        }
-        for (auto company : player.getAllCompanies()){
-            ret += company->getName() + ".";
-        }
+        // Station
+        for (auto station : player.getAllStations()){ret += station->getName() + ".";}
+        // Compagnie
+        for (auto company : player.getAllCompanies()){ret += company->getName() + ".";}
         ret += ";";
     }
-
-    for (auto client : clients){
-        client->send(ret);
-    }
+    this->updateAllClients(ret);
 }
+
+
+
 
 void GameServer::clientLoop(ClientManager &client) {
 	std::cout << client.getAccount()->getUsername() << " has join a game with code : " << this->code.getCode() << std::endl;
