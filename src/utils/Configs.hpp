@@ -30,6 +30,11 @@ const std::string CARD_DATA = "Game/Board/Obtainable/data/card_data.json";
 const std::string CELL_DATA = "Game/Board/Obtainable/data/cell_data.json";
 const std::string PROPERTY_DATA = "Game/Board/Obtainable/data/property_data.json";
 
+// CONSTANTE GAME
+const int starting_bid = 10;
+const int waiting_time_auction = 15;
+
+
 
 
 // Queries

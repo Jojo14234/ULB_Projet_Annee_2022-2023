@@ -91,7 +91,7 @@ bool Player::pay(int amount, bool forced) {
 
 void Player::receive(int amount, std::string source) {
     bank_account.gain(amount); //TODO?
-    getClient()->send("Vous avez recu " + std::to_string(amount) + "e de " + source);
+    getClient()->send("Vous avez reçu " + std::to_string(amount) + "e de " + source);
 }
 
 void Player::move(Cell *cell, bool pass_by_start) {
@@ -143,9 +143,14 @@ void Player::looseGOOJCard(){
     client->send("Vous perdez votre carte prison suite à son utilisation.\n");
 }
 
-bool Player::hasRolled() {return has_rolled;}
+bool Player::hasRolled() const {return has_rolled;}
 
-void Player::rolled(bool rolled) {has_rolled = rolled;}
+void Player::setRolled(bool rolled) {has_rolled = rolled;}
+
+int Player::roll(Dice &dice) {
+    setRolled(true);
+    return dice.roll();
+}
 
 std::vector<Property*> Player::getAllProperties() {
     return properties;
@@ -281,3 +286,5 @@ void Player::setBankruptingPlayer(Player* player){
 Player* Player::getBankruptingPlayer(){
     return bankrupting_player;
 }
+
+int Player::getPosition() { return current_cell->getPosition(); }

@@ -33,7 +33,6 @@ void ClientManager::receive(QUERY_TYPE &query) {
 		case QUERY_TYPE::FRIENDS_REFUSE: // same as under
 		case QUERY_TYPE::FRIENDS_ADD:    // same as under
 		case QUERY_TYPE::FRIENDS_REMOVE: packet >> args.s1; break;
-	
 		default : break;
 	}
 }

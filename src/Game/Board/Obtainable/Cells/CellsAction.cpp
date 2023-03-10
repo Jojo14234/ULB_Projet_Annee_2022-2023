@@ -18,7 +18,7 @@ void GoJailCell::action(Player* player){
 }
 
 void LandCell::action(Player* player) {
-		player->getClient()->send("Vous êtes tombé sur la propriéte " + land->getName());
+		player->getClient()->send("Vous êtes tombé sur la propriété " + land->getName());
 
 		if (land->getStatus()==LAND_STATUS::FREE) {
 			player->getClient()->send("La propriété est libre, voulez-vous l'acheter pour "+std::to_string(land->getPurchasePrice())+"e ?");

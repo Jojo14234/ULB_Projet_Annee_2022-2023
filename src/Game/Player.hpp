@@ -138,8 +138,9 @@ public:
     int hasGOOJCards();
     void looseGOOJCard();
 
-    bool hasRolled();
-    void rolled(bool rolled);
+    bool hasRolled() const;
+    void setRolled(bool rolled);
+    int roll(Dice &dice);
 
     std::vector<Property*> getAllProperties();
     std::vector<Company*> getAllCompanies();
@@ -184,6 +185,8 @@ public:
     void setIndex(int new_index) {index = new_index;}
 
     int getIndex() const {return index;}
+
+    int getPosition();
 };
 
 
