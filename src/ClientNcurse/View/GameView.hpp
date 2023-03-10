@@ -7,6 +7,8 @@
 #include "Object/Text.hpp"
 #include "GameObject/Dice.hpp"
 #include "GameObject/InformationBox.hpp"
+#include "../../utils/AccessMonitor.hpp"
+
 
 class GameView : public AbstractView {
 
@@ -36,11 +38,14 @@ class GameView : public AbstractView {
 	Text players_waiting{{5, 40, up_margin + ((5-1)*(11-1))/2, left_margin + ((11-1)*(11-1)+10-40)/2},
 						 {"En attente du lancement de la partie..."}};		   
 
+	mutable AccessMonitor am;
+
 public:
 
 	GameView(Client *model, int player_nb) : AbstractView(model), board{{11, 11, up_margin, left_margin}, player_nb} {}
 	
 	void draw() override {
+		this->am.lockWriter();
 		board.draw();
 		info.draw();
 		dice1.draw();
@@ -54,6 +59,7 @@ public:
 
 		players_waiting.draw();
 		owner_waiting.draw();
+		this->am.unlockWriter();
 	}
 
 	Board* getBoard() { return &board; }
