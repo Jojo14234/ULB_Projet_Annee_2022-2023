@@ -23,19 +23,31 @@ class GameStateParser {
 	std::string property_str;
 
 public:
-	GameStateParser(std::string game, int player_nb) : state_str{game} {
-		state_str += ",";
-		res.state.resize(player_nb);
-		res.info.resize(player_nb);
-		parseStateLine();
-		parsePropertiesLine();
+	GameStateParser(std::string game) : state_str{game} {
+		
+
 
 	};
 
-	void parseStateLine(){
+	int parseIntroLine(){
+		char n_player;
+		int i = 0;
+		while(state_str[i] != ';'){
+			n_player = state_str[i];
+			i++;
+		}
+		int n_p = int(n_player) - '0';
+		return n_p;
+
+	
+	}
+
+	void parseStateLine(int player_nb){
+		state_str += ",";
 		int player = 0;
 		int arg_nb = 0;
 		int i = 0;
+		res.state.resize(player_nb);
 		res.state.clear();
 		std::string tmp;
 
@@ -63,9 +75,10 @@ public:
 		}
 	}
 
-	void parsePropertiesLine(){
+	void parsePropertiesLine(int player_nb){
 		int player = 0;
 		int arg_nb = 0;
+		res.info.resize(player_nb);
 		res.info.clear();
 		std::string tmp;
 		PropertyInformation pi;
