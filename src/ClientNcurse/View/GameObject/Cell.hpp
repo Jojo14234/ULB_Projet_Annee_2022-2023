@@ -11,7 +11,7 @@ class Cell : public TextBox {
 
 public :
 
-    explicit Cell(ObjectInfo info, std::string name) : AbstractViewObject(info), TextBox{info, {name}, true}, Box(info), Text(info, {name}, true) {
+    explicit Cell(ObjectInfo info, std::string name) : AbstractViewObject(info), Box(info), Text(info, {name}, true), TextBox{info, {name}, true} {
 		this->win = newwin(info.getHeight(), info.getWidth(), info.getY(), info.getX());
 		this->draw();
 		texts.resize(3);

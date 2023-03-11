@@ -18,7 +18,7 @@
 
 class Dice: public TextBox {
     public:
-        Dice(ObjectInfo info): AbstractViewObject(info), TextBox{info,{""}}, Box(info), Text(info,{""}) {}
+        Dice(ObjectInfo info): AbstractViewObject(info), Box(info), Text(info,{""}), TextBox{info,{""}} {}
 
         void setDice(int new_number){ setText(std::to_string(new_number),0); }
 };

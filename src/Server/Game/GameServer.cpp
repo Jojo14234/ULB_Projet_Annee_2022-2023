@@ -16,7 +16,7 @@
 
 
 std::string refactorToAMaxLengthString(std::string str, int maxLength) {
-    if (str.size() < maxLength) {
+    if (static_cast<int>(str.size()) < maxLength) {
         int space = maxLength - str.size();
         for (int i = 0; i < space; i++ ) {str += " ";}
         return str;

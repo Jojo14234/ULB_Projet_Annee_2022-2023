@@ -22,15 +22,14 @@ class InformationBox: public TextBox{
 
 
 public:
-	InformationBox(ObjectInfo info, int n_player, std::vector<std::string> player_name):
-        AbstractViewObject{info}, TextBox{info,{"Cartes pour sortir de prison :"},false},
-		Box{info}, Text{info,{"Cartes pour sortir de prison : 0"},false}, n_player{n_player}, player_name{player_name}
-        {
-            addText("");
-			for ( int i = 1; i <= n_player; i++ ) {
-                addText(std::to_string(i) +":" + player_name[i-1] + " = " + std::to_string(money));
-            }
-		}
+	InformationBox(ObjectInfo info, int n_player, std::vector<std::string> player_name): AbstractViewObject{info}, Box{info},
+		Text{info,{"Cartes pour sortir de prison : 0"},false}, TextBox{info,{"Cartes pour sortir de prison :"},false},
+		n_player{n_player}, player_name{player_name} {
+        addText("");
+		for ( int i = 1; i <= n_player; i++ ) {
+        	addText(std::to_string(i) +":" + player_name[i-1] + " = " + std::to_string(money));
+        }
+	}
 	void setMoney( int player,int money ) {
 		setText(std::to_string(player) + ":" + player_name[player-1] + " = " + std::to_string(money),player+1);
     }
