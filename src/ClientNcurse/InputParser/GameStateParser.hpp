@@ -23,11 +23,7 @@ class GameStateParser {
 	std::string property_str;
 
 public:
-	GameStateParser(std::string game) : state_str{game} {
-		
-
-
-	};
+	GameStateParser(std::string game) : state_str{game} {};
 
 	int parseIntroLine(){
 		char n_player;

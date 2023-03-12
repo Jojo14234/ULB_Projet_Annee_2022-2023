@@ -47,11 +47,11 @@ public:
 				this->view->getConsole()->addText(response);
 				*/
 				if ( not this->model->sendCommand(parser)) this->view->getConsole()->addText("La commande n'existe pas");
-				if (parser.getQueryType() == GAME_QUERY_TYPE::START && this->model->isCreator()){
+				/*if (parser.getQueryType() == GAME_QUERY_TYPE::START && this->model->isCreator()){
 					startGame();
 					//if (this->model->isCreator()){this->view->getOwnerWaitingText()->setHidden();} 
 					//else {this->view->getPlayersWaitingText()->setHidden();}
-					}
+					}*/
 				break; }
 				
 			case CHAT: {
@@ -92,22 +92,27 @@ public:
 			std::string response;
 			this->model->receive(response);
 			GameStateParser parser(response);
+			//start game
 			if (response[0] == 'S' &&  response[1] == 'T'){
+				startGame();
 				n_player = parser.parseIntroLine();
-				for (int i = 1; i<= n_player;i++){this->view->getBoard()->setPlayer(0, i);}
-			}
+				for (int i = 1; i<= n_player;i++){this->view->getBoard()->setPlayer(0, i);}}
+			//move player + set up money
 			else if (response[0] == 'G' && response[1] == 'M') {
-
 				for (int i = 1; i <= n_player; i++){
 					parser.parseStateLine(n_player);
 					parser.parsePropertiesLine(n_player);
 					this->view->getBoard()->unsetPlayer(i);
 					this->view->getBoard()->setPlayer(parser.getBufferSplit().state[i-1][0], i);
+					/*
+					 for (int j = 0; j < parser.getBufferSplit().info[i-1].size();j++){
+						int index = this->view->getBoard()->getCellIndex(parser.getBufferSplit().info[i-1][j].name);
+						if (parser.getBufferSplit().info[i-1][j].level == 0){this->view->getBoard()->setPurchased(index, i);}
+						else{this->view->getBoard()->setHouse(index, parser.getBufferSplit().info[i-1][j].level);}} 
+						*/
 					this->view->getInfo()->setMoney( i,parser.getBufferSplit().state[i-1][1]);
 				}} 
-
-
-			
+			//add text on console
 			else {
 				this->view->getConsole()->addText(response);
 			} 
