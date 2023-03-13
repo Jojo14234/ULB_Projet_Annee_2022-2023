@@ -492,8 +492,8 @@ void GameServer::processDiceRoll(ClientManager &client) {
     current->move(new_cell);
 
     // Message terminal
-    str = "\n" + client.getAccount()->getUsername() + " a jeté les dés et obtenu un [" + std::to_string(roll_result_i) + "]";
-    str += "\nIel est arrivé sur la case [" + std::to_string(new_cell_idx) + "]";
+    str = "\n" + client.getAccount()->getUsername() + " a jeté les dés et obtenu un [" + std::to_string(game.getDice().getDice1()) + " et un " + std::to_string(game.getDice().getDice1()) + "]. Iel avance donc de " + std::to_string(game.getDice().getResults()) + ".";
+    str += "\nIel est arrivé sur la case [" + std::to_string(new_cell_idx) + "].";
     str += (game.rolledADouble()) ? "\nC'est un double ! Iel pourra rejouer !\n" : "\n";
     updateAllClients(str);
 
