@@ -2,7 +2,7 @@
  * Project Untitled
  */
 
-#include "MenuTerminalView.h"
+#include "MenuTerminalView.hpp"
 
 
 // Public

@@ -6,10 +6,10 @@
 
 
 enum class STATE {
-	WELCOME
+	WELCOME,
 	CONNECTION,
 	MENU,
 	FRIENDS,
-	RANK
+	RANK,
 	GAME
 };

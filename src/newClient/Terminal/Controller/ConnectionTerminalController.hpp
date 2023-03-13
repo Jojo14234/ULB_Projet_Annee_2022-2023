@@ -8,11 +8,12 @@
 #include "../configs.hpp"
 
 
+class Client; // forward declaration
 class ConnectionTerminalView; // forward declaration
 
 class ConnectionTerminalController: public AbstractTerminalController {
 
-	enum CONNECTION_STATE = { USERNAME, PASSWORD, DONE };
+	enum CONNECTION_STATE { USERNAME, PASSWORD, DONE };
 	CONNECTION_STATE state = USERNAME;
 
 	ConnectionTerminalView* view;

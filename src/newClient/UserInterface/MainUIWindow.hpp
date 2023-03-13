@@ -9,7 +9,6 @@
 #include "../AbstractMainWindow.hpp"
 #include "AbstractUI.hpp"
 #include "configs.hpp"
-#include "View/Objects.hpp"
 
 
 class MainUIWindow: public AbstractMainWindow<STATE, sf::Event>, public AbstractUI {
@@ -24,7 +23,7 @@ public:
 	
 	using AbstractMainWindow<STATE, sf::Event>::AbstractMainWindow;
 	
-	~MainWindow()=default;
+	~MainUIWindow()=default;
 	
 	void mainLoop() override;
 

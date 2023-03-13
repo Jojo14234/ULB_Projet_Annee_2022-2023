@@ -10,6 +10,7 @@
 #include "../configs.hpp"
 
 
+class Client; // forward declaration
 class GameUIView; // forward declaration
 
 class GameUIController: public AbstractUIController {

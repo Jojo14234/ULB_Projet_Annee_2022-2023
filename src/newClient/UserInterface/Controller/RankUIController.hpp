@@ -10,6 +10,7 @@
 #include "../configs.hpp"
 
 
+class Client; // forward declaration
 class RankUIView; // forward declaration
 
 class RankUIController: public AbstractUIController {

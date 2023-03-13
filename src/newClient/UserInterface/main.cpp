@@ -2,6 +2,6 @@
 
 int main() {
 	MainUIWindow win;	// Create a window
-	win.loop();	// Start the main loop
+	win.mainLoop();	// Start the main loop
 	return 0;
 }

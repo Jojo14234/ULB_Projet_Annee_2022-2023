@@ -8,11 +8,12 @@
 #include "../configs.hpp"
 
 
+class Client; // forward declaration
 class GameTerminalView; // forward declaration
 
 class GameTerminalController: public AbstractTerminalController {
 
-	enum GAME_STATE = { CHAT, CONSOLE, IDLE };
+	enum GAME_STATE { CHAT, CONSOLE, IDLE };
 	GAME_STATE state = IDLE;
 
 	GameTerminalView* view;

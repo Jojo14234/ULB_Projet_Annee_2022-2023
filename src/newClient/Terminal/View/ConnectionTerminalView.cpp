@@ -2,7 +2,7 @@
  * Project Untitled
  */
 
-#include "ConnectionTerminalView.h"
+#include "ConnectionTerminalView.hpp"
 
 
 // Public

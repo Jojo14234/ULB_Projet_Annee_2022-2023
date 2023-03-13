@@ -10,6 +10,7 @@
 #include "../configs.hpp"
 
 
+class Client; // forward declaration
 class MenuUIView; // forward declaration
 
 class MenuUIController: public AbstractUIController {

@@ -10,11 +10,12 @@
 #include "../configs.hpp"
 
 
+class Client; // forward declaration
 class ConnectionUIView; // forward declaration
 
 class ConnectionUIController: public AbstractUIController {
 
-	enum CONNECTION_STATE = { USERNAME, PASSWORD, DONE };
+	enum CONNECTION_STATE { USERNAME, PASSWORD, DONE };
 	CONNECTION_STATE state = USERNAME;
 
 	ConnectionUIView* view;

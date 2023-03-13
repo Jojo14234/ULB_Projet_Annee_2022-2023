@@ -9,13 +9,13 @@
 #include "../configs.hpp"
 
 
-class AbstractUIView: public AbstractView<STATE>, public AbstractUI {
+class AbstractUIView: public AbstractView, public AbstractUI {
 
 public:
 	
-	using AbstractView<STATE>::AbstractView;
+	using AbstractView::AbstractView;
 
-	virtual ~AbstractView()=default;
+	virtual ~AbstractUIView()=default;
 
 	virtual void draw()=0;
 

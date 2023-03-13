@@ -10,6 +10,7 @@
 #include "../configs.hpp"
 
 
+class Client; // forward declaration
 class FriendsUIView; // forward declaration
 
 class FriendsUIController: public AbstractUIController {
@@ -19,7 +20,7 @@ class FriendsUIController: public AbstractUIController {
 
 public: 
 	
-	FriendsUIView(Client* model, FriendsUIView* view) : AbstractUIController(model, STATE::FRIENDS), view{view} {}
+	FriendsUIView(Client* model, FriendsUIView* view) : AbstractUIController(model, STATE::FRIENDS), view(view) {}
 
 	~FriendsUIController()=default;
 

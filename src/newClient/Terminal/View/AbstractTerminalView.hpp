@@ -14,7 +14,7 @@ public:
 
 	using AbstractView::AbstractView;
 
-	virtual ~AbstractView()=default;
+	virtual ~AbstractTerminalView()=default;
 
 	virtual void draw()=0;
 
