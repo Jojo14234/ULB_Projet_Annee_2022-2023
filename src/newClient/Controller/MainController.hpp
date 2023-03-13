@@ -22,7 +22,7 @@ class MainController {
 public:
 
 	MainController()=default;
-	MainController(std::initializer_list<AbstractController<StateType, EventType>*> list) : controllers{list} {}
+	MainController(const std::initializer_list<AbstractController<StateType, EventType>*> &list) : controllers{list} {}
 
 	~MainController() { for (auto elem : controllers) delete elem; }
 

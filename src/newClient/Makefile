@@ -1,5 +1,5 @@
 CXX = $(shell [ `g++ -v 2>&1 | grep -o 'version [0-9]\+' | cut -d' ' -f2` -le 9 ] && echo g++-10 || echo g++)
-CXXFLAGS = -std=c++20 -Wall -Wextra -Wpedantic -Werror=all -D_GNU_SOURCE
+CXXFLAGS = -std=c++20 -Wall -Wextra -Wpedantic -Werror=all -D_GNU_SOURCE -fsanitize=address,leak -g
 LDLIBS 	 = -lpthread -lsfml-network -lsfml-graphics -lsfml-window -lsfml-system -lncurses
 
 ifneq ($(shell uname -s), Linux)

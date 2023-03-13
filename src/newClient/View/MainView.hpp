@@ -26,8 +26,6 @@ public:
 
 	~MainView() { for (auto elem : views) delete elem; }
 
-	void draw(StateType &state) {
-		this->getView(state)->draw();
-	}
+	void draw(StateType &state) { this->getView(state)->draw(); }
 
 };

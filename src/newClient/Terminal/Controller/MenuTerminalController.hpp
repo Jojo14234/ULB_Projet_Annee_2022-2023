@@ -20,7 +20,7 @@ class MenuTerminalController: public AbstractTerminalController {
 
 public: 
 	
-	MenuTerminalController(Client* model, MenuTerminalView* view) : AbstractTerminalController(model, STATE::MENU), view{view} {}
+	MenuTerminalController(Client* model, MenuTerminalView* view);
 
 	~MenuTerminalController()=default;
 

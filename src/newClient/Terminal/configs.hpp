@@ -6,7 +6,7 @@
 
 
 enum class STATE {
-	CONNECTION,
-	MENU,
-	GAME
+	CONNECTION = 0,
+	MENU = 1,
+	GAME = 2
 };

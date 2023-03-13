@@ -10,6 +10,9 @@
 
 // Public
 
+ConnectionTerminalController::ConnectionTerminalController(Client* model, ConnectionTerminalView* view) :
+	AbstractTerminalController(model, STATE::CONNECTION), view{view} {}
+
 void ConnectionTerminalController::handle(int event) {
 	switch (this->state) {
 	case USERNAME:

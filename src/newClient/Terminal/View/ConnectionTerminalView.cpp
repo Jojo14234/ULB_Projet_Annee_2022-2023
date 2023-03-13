@@ -2,12 +2,15 @@
  * Project Untitled
  */
 
+#include <ncurses.h>
+
 #include "ConnectionTerminalView.hpp"
 
 
 // Public
 
 void ConnectionTerminalView::draw() {
+	std::cout << "yo" << std::endl;
 	username_input_box.draw();
 	password_input_box.draw();
 	enter_username.draw();

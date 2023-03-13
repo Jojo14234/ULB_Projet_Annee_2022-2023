@@ -2,6 +2,9 @@
  * Project Untitled
  */
 
+
+#include <ncurses.h>
+
 #include "MenuTerminalView.hpp"
 
 

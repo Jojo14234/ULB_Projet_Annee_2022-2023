@@ -2,6 +2,8 @@
  * Project Untitled
  */
 
+#include <ncurses.h>
+
 #include "GameTerminalView.hpp"
 
 

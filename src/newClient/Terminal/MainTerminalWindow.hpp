@@ -16,6 +16,7 @@ class MainTerminalWindow: public AbstractMainWindow<STATE, int>, public Abstract
 
 	Window window{ObjectInfo{LINES, COLS, 0, 0}, "CAPITALI$T"};
 
+
 	void initAttributes() override;
 	
 	void draw() override;

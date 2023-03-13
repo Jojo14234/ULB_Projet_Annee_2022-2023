@@ -20,7 +20,7 @@ class ConnectionTerminalController: public AbstractTerminalController {
 
 public: 
 	
-	ConnectionTerminalController(Client* model, ConnectionTerminalView* view) : AbstractTerminalController(model, STATE::CONNECTION), view{view} {}
+	ConnectionTerminalController(Client* model, ConnectionTerminalView* view);
 
 	~ConnectionTerminalController()=default;
 

@@ -4,6 +4,8 @@
 
 #pragma once
 
+#include <ncurses.h>
+
 #include "AbstractTerminalView.hpp"
 #include "Objects.hpp"
 
