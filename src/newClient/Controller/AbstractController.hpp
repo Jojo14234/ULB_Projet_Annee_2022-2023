@@ -4,7 +4,7 @@
 
 #pragma once
 
-
+//#include "../Model/Client.hpp"
 class Client; // forward declaration
 
 template <typename StateType, typename EventType>

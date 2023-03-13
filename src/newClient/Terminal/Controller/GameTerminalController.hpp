@@ -20,7 +20,7 @@ class GameTerminalController: public AbstractTerminalController {
 
 public: 
 	
-	GameTerminalView(Client* model, GameTerminalView* view) : AbstractTerminalController(model, STATE::GAME), view{view} {}
+	GameTerminalController(Client* model, GameTerminalView* view) : AbstractTerminalController(model, STATE::GAME), view{view} {}
 
 	~GameTerminalController()=default;
 
