@@ -93,14 +93,10 @@ std::vector<Player>* Capitalist::getPlayers(){
 void Capitalist::startAuction() {
     auction_in_progress = 1;
     for (auto &player : players){
-        if (player.getPlayerStatus() != PLAYER_STATUS::BANKRUPT){
-            player.auctionStart();
-        }
-        else {
-            player.leaveAuction();
-        }
+            player.leaveAuctionSilently();
     }
 }
+
 void Capitalist::stopAuction() {auction_in_progress = 0;}
 
 Player *Capitalist::identifyAuctionWinner() {
