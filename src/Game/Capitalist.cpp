@@ -38,13 +38,13 @@ Player* Capitalist::getCurrentPlayer() {
     return &players.at(current_player_index);
 }
 
-bool Capitalist::isRunning() {
+bool Capitalist::isRunning() const {
     return running;
 }
 
 void Capitalist::endCurrentTurn() {
     players[current_player_index].setCurrentlyPlaying(false);
-    players[current_player_index].rolled(false);
+    players[current_player_index].setRolled(false);
     (current_player_index += 1) %= (players.size());
     players[current_player_index].setCurrentlyPlaying(true);
     players[current_player_index].getClient()->send("C'est à votre tour.");
@@ -74,8 +74,8 @@ Player* Capitalist::getPlayerByClient(ClientManager &client) {
     return ret;
 }
 
-Dice* Capitalist::getDice() {
-    return &dice;
+Dice& Capitalist::getDice() {
+    return dice;
 }
 
 Board* Capitalist::getBoard() {

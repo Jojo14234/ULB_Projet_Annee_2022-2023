@@ -53,6 +53,9 @@ class Server {
 	void clientProcessShowMessage(ClientManager &client);
 	void clientProcessSendMessage(ClientManager &client);
 
+    // Find if the account is already connected
+    bool find(User* user);
+
 public:
 
 	Server();
