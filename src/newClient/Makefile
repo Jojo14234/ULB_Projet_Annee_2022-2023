@@ -35,12 +35,13 @@ rm:
 	-rm ../capitalistUI ../capitalistTerminal 2> /dev/null
 
 
-main: UI Terminal
+main: _UI _Terminal clean
 
-UI: ${UI_BINS} ${UI_CONTROLLER_BINS} ${UI_VIEW_BINS} ${MODEL_BINS} ${MODEL_PARSER_BINS}
+_UI: ${UI_BINS} ${UI_CONTROLLER_BINS} ${UI_VIEW_BINS} ${MODEL_BINS} ${MODEL_PARSER_BINS}
 	${CXX} ${CXXFLAGS} -o ../capitalistUI $^ ${LDLIBS}
-	make clean
 
-Terminal: ${TERMINAL_BINS} ${TERMINAL_CONTROLLER_BINS} ${TERMINAL_VIEW_BINS} ${MODEL_BINS} ${MODEL_PARSER_BINS}
+_Terminal: ${TERMINAL_BINS} ${TERMINAL_CONTROLLER_BINS} ${TERMINAL_VIEW_BINS} ${MODEL_BINS} ${MODEL_PARSER_BINS}
 	${CXX} ${CXXFLAGS} -o ../capitalistTerminal $^ ${LDLIBS}
-	make clean
+
+UI: _UI clean
+Terminal: _Terminal clean

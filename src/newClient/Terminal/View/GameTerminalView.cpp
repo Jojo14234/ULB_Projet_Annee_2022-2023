@@ -2,11 +2,11 @@
  * Project Untitled
  */
 
-#include "MenuTerminalView.hpp"
+#include "GameTerminalView.hpp"
 
 
 // Public
 
-void MenuTerminalView::draw() {
+void GameTerminalView::draw() {
 
 }

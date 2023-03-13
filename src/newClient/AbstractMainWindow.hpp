@@ -19,7 +19,7 @@ protected:
 	MainController<StateType, EventType> controller;
 	StateType state = static_cast<StateType>(0);
 
-	virtual void initAttributes()=0;
+	virtual void initAttributes() {}
 
 	virtual void draw()=0;
 
