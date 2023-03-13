@@ -24,7 +24,7 @@ public:
 	MainView()=default;
 	MainView(std::initializer_list<AbstractView*> list) : views{list} {}
 
-	~MainView() { for (auto elem : Views) delete elem; }
+	~MainView() { for (auto elem : views) delete elem; }
 
 	void draw(StateType &state) {
 		this->getView(state)->draw();

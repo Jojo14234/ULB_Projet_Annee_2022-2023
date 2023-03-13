@@ -15,10 +15,14 @@ class AbstractController {
 
 public: 
 	
-	AbstractController(Client* model, StateType new_state) : model(model), state(state) {}
+	AbstractController(Client* model, StateType new_state) : model(model), new_state(new_state) {}
 
 	virtual ~AbstractController()=default;
 	
 	virtual void handle(EventType event)=0;
+
+	virtual void move() {}
+
+	StateType getNewState() { return new_state; }
 
 };

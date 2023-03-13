@@ -10,7 +10,7 @@ void MainTerminalWindow::initAttributes() {
 }
 
 void MainTerminalWindow::draw() {
-	this->win.draw();
+	this->window.draw();
 	this->view.draw(state);
 	refresh();
 }
@@ -36,7 +36,7 @@ void MainTerminalWindow::mainLoop() {
 	int event;
 	while ( (event=getch()) ) {
 		if ( event == 27 ) break;	// ESC
-		this->controller.handleInput(state, event);
+		this->controller.handle(state, event);
 		this->draw();
 		this->controller.move(state);
 	}

@@ -24,7 +24,7 @@ public:
 	
 	MainTerminalWindow();
 	
-	~MainWindow();
+	~MainTerminalWindow();
 	
 	void mainLoop() override;
 
