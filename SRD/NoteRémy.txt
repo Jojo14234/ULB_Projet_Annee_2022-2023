@@ -858,3 +858,54 @@ Caractère utilisable -> spécifié genre ascii - UTF-8
 
 -> 25% srd (mais la note qu'on obtient maintenant peut encore changer (1/3 note la plus basse, 2/3 note la plus haute)
 
+/////////////////////////////////////////////////////////////////////
+
+Clase User : 
+	- operator std::string (renvoie le nom de l'utilisateur)
+	- operator == (compare l'id avec un autre id)
+
+	- getId()
+	- getUsername()
+	- getPassword()
+	- getStats()
+	- getFriendList()
+	- getFriendRequestList()
+
+	- isId(id)
+	- isUsername(username)
+	- isPassword(password)
+	- isFriendWith(other_user)
+	- isFriendWith(other_id)
+	- hasSentRequestTo(other_user)
+	- hasSentRequestTo(other_id)
+	- hasReceiveFriendRequestFrom(other_user)
+	- hasReceiveFriendRequestFrom(other_id)
+
+	- updateStats(newStats)
+	- sendRequest(id, db)
+	- removeRequest(id, db)
+	- acceptRequest(id, db)
+	- removeFriend(id, db)
+
+	- read(file)
+	- write(file)
+
+Clase ClientManager 
+	- operator== (compare les tid)
+
+	- send(&input) 
+	- send(&&input)
+
+	- receive(&query) // QUERY_TYPE
+	- receive(&query) // GAME_QUERY_TYPE
+	- receive(&query, &packet) (dans le cas où on a besoin des arguments) //GAME_QUERY_TYPE
+	
+	- getSocket()
+	- getTidPtr()
+	- getAccount()
+	- getArgs()
+	- getUsername()
+	- getGameServer()
+	- getCode()
+	- 
+

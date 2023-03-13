@@ -10,7 +10,7 @@
 #include "../Database/User.hpp"
 
 
-class GameServer;	// forward declaraction
+class GameServer;	// forward declaration
 
 class ClientManager {
 
@@ -50,8 +50,9 @@ public:
 
 	// Disconnect the client
 	void disconnect();
-	// If the client is connected
+	// If the client is connected (same functions but names are useful for some functions comprehensions)
 	bool isDisconnected() const;
+	bool isConnected() const;
 
 	// If the client is in game
 	bool inGame() const;
@@ -59,20 +60,22 @@ public:
 	// GETTERS
 	sf::TcpSocket &getSocket();
 	pthread_t* getTidPtr();
-    User* getAccount();
+    User* getAccount() const;
 	// To get args (parsed from the client)
 	const struct args_t* getArgs() const { return &(this->args); }
+    std::string getUsername() const;
+    GameServer* getGameServer() const;
 	int getCode() const;
 	const std::string& getS1() const ;
 	const std::string& getS2() const;
 
+
 	// SETTERS
     void setAccount(User *user);
+    void removeAccount();
 	void setGameServer(GameServer* gs);
 	void removeGameServer();
 
-  GameServer* getGameServer();
-  
 };
 
 #endif

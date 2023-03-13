@@ -28,9 +28,9 @@ class Player {
 
     BankAccount bank_account = BankAccount{STARTING_MONEY};
 
-    Cell *current_cell;
+    Cell* current_cell;
 
-    ClientManager *client;
+    ClientManager* client;
 
     int rolls_in_prison = 0;
 
@@ -113,9 +113,12 @@ public:
     void setAdmin();
     bool isAdmin();
 
-    ClientManager* getClient();
+    ClientManager* getClient() const;
+    void send(std::string &s) const;
+    void send(std::string &&s) const;
+    std::string getUsername() const;
 
-    bool isCurrentlyPLaying();
+    bool isCurrentlyPLaying() const;
     void setCurrentlyPlaying(bool playing);
 
     bool pay(int amount, bool forced = false);
@@ -130,27 +133,33 @@ public:
 
     void exitJail();
     void goToJail(Cell *cell);
-    bool isInJail();
+    bool isInJail() const;
 
-    int getRollsInPrison();
+    int getRollsInPrison() const;
     void addRollInPrison();
 
-    int hasGOOJCards();
+    int hasGOOJCards() const;
     void looseGOOJCard();
 
-    bool hasRolled();
-    void rolled(bool rolled);
+    bool hasRolled() const;
+    void setRolled(bool rolled);
+    int roll(Dice &dice);
 
-    std::vector<Property*> getAllProperties();
-    std::vector<Company*> getAllCompanies();
-    std::vector<Station*> getAllStations();
-    std::vector<JailCard*> getAllGOOJCards();
+    std::vector<Property*> getAllProperties() const;
+    std::vector<Company*> getAllCompanies() const;
+    std::vector<Station*> getAllStations() const;
+    std::vector<JailCard*> getAllGOOJCards() const;
 
-    int getNumberOfStations();
-    int getNumberOfCompanies();
+    void removeProperty(Property* p);
+    void removeStation(Station* s);
+    void removeCompagnie(Company* c);
+
+
+    int getNumberOfStations() const;
+    int getNumberOfCompanies() const;
 
     void leaveAuction();
-    bool isInAuction();
+    bool isInAuction() const;
     void auctionStart();
 
 
@@ -184,6 +193,8 @@ public:
     void setIndex(int new_index) {index = new_index;}
 
     int getIndex() const {return index;}
+
+    int getPosition();
 };
 
 
