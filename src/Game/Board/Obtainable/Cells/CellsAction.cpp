@@ -42,13 +42,11 @@ void LandCell::action(Player* player) {
             // Dans le cas où le joueur souhaite acheter la propriété
             if ( response == "yes" ) {
                 // Il n'a pas assez d'argents.
-                if ( player->getBankAccount()->getMoney() < land->getPurchasePrice() ) { player->getClient()->send("Vous n'avez pas assez d'argent."); }
-
-                // Il achète la propriété
-                player->pay(this->land->getPurchasePrice());
-                player->acquireLand(getLand());
-                str = "Vous venez d'acheter la propriété [" + this->land->getName() + "]." ;
-                player->getClient()->send(str);
+                if ( player->pay(this->land->getPurchasePrice()) ) {
+                    player->acquireLand(getLand());
+                    str = "Vous venez d'acheter la propriété [" + this->land->getName() + "]." ;
+                    player->getClient()->send(str);
+                }
             }
             else if ( response == "no" ) { player->getClient()->send("Vous n'avez pas achetez la propriété !"); }
 		}

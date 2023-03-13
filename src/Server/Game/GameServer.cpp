@@ -212,7 +212,7 @@ void GameServer::clientBeforeRollLoop(ClientManager &client) {
             this->processGameQueryBeforeRoll(client, query);
 
             // Si le joueur a [lancé les dés] ET qu'il n'est pas en status [!perdu]
-            if ( current->hasRolled() and current->getPlayerStatus() != PLAYER_STATUS::LOST ) {
+            if ( game.getCurrentPlayer()->getClient() == &client and current->hasRolled() and current->getPlayerStatus() != PLAYER_STATUS::LOST ) {
                 client.send("Plus aucune commande ne vous est disponible ce tour ci. Votre tour s'est donc automatiquement terminé.");
                 processEndTurn(client);
                 break;
@@ -223,8 +223,12 @@ void GameServer::clientBeforeRollLoop(ClientManager &client) {
                 break;
             }
         }
-        // Si ce n'est [pas au client de jouer] ET qu'il n'y a pas [d'enchère] ET qu'il n'y a pas [d'échange]
-        client.send("Cette action n'est pas permise étant donné que ça n'est pas votre tour.");
+        else if (game.auctionInProgress() == 2){
+            client.send("Une enchère est en cours à laquelle vous ne participez pas. Attendez la fin de l'enchère avant d'entrer d'autres commandes.");
+        }
+        else {
+            client.send("Cette action n'est pas permise étant donné que ça n'est pas votre tour.");
+        }
     }
 }
 
@@ -286,9 +290,8 @@ void GameServer::processGameQueryBeforeRoll(ClientManager &client, GAME_QUERY_TY
     }
     else{
         switch (query) {
-            case GAME_QUERY_TYPE::PARTICIPATE : if (game.auctionInProgress() == 1) { participateInAuction(client); } else {client.send("Cette commande n'est pas disponible.");} break;
-            case GAME_QUERY_TYPE::LEAVE_BID : if (game.auctionInProgress() == 1) { for (auto &player : *game.getPlayers()) { if (player.getClient() == &client) { player.leaveAuction(); } } } break;
-            default: client.send("Cette commande n'est plus disponible, vous avez trop tardé."); break;
+            case GAME_QUERY_TYPE::PARTICIPATE : if (game.auctionInProgress() == 1) {for (auto &player : *game.getPlayers()) { if (player.getClient() == &client) { player.auctionStart(); } } participateInAuction(client); break; }
+            default: client.send("Cette commande n'est pas disponible."); break;
         }
     }
 }
@@ -354,8 +357,8 @@ void GameServer::clientAuctionLoop(ClientManager &client, LandCell* land_cell) {
 
     // Starting auction
     str =  "\nUne enchère a débuté! La propriété concernée est la suivante: " + land_cell->getLand()->getName();
-    str += "\n - Participez à l'enchère ( /participate )";
-    str += "\n - Ne pas participez à l'enchère ( /out )\n";
+    str += "\n - Participez à l'enchère ( /participate ). (Obligatoire).";
+    //str += "\n - Ne pas participez à l'enchère ( /out )\n";
     this->updateAllClients(str);
 
     if (current->getPlayerStatus() != PLAYER_STATUS::LOST or current->getBankruptingPlayer()->getPlayerStatus() != PLAYER_STATUS::LOST) {
@@ -365,6 +368,7 @@ void GameServer::clientAuctionLoop(ClientManager &client, LandCell* land_cell) {
     }
 
     game.startAuction();
+    game.getCurrentPlayer()->auctionStart();
     sleep(waiting_time_auction);
     client.send("L'attente est terminée!");
     game.setAuctionProgress(2);
@@ -388,10 +392,13 @@ void GameServer::clientAuctionLoop(ClientManager &client, LandCell* land_cell) {
             if ( player.isInAuction() and (player.getPlayerStatus() != PLAYER_STATUS::LOST or player.getPlayerStatus() != PLAYER_STATUS::BANKRUPT) ) {
                 str =  "\nC'est au tour de '" + player.getClient()->getAccount()->getUsername() + "` d'enchérir !";
                 str += "\nL'enchère est actuellement à " + std::to_string(bid);
+                this->updateAllClients(str);
+                str = "";
                 str += "\n - Enchérissez pour cette propriété ( /bid [montant] )";
                 str += "\n - Quittez l'enchère et abandonner la propriété ( /out )";
                 str += "\nToute erreur de commande entraine l'exclusion de l'enchère\n";
-                this->updateAllClients(str);
+
+                player.getClient()->send(str);
 
                 GAME_QUERY_TYPE query;
                 sf::Packet packet;
@@ -492,8 +499,8 @@ void GameServer::processDiceRoll(ClientManager &client) {
     current->move(new_cell);
 
     // Message terminal
-    str = "\n" + client.getAccount()->getUsername() + " a jeté les dés et obtenu un [" + std::to_string(roll_result_i) + "]";
-    str += "\nIel est arrivé sur la case [" + std::to_string(new_cell_idx) + "]";
+    str = "\n" + client.getAccount()->getUsername() + " a jeté les dés et obtenu un [" + std::to_string(game.getDice().getDice1()) + " et un " + std::to_string(game.getDice().getDice1()) + "]. Iel avance donc de " + std::to_string(game.getDice().getResults()) + ".";
+    str += "\nIel est arrivé sur la case [" + std::to_string(new_cell_idx) + "].";
     str += (game.rolledADouble()) ? "\nC'est un double ! Iel pourra rejouer !\n" : "\n";
     updateAllClients(str);
 
