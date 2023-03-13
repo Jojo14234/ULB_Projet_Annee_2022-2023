@@ -1,18 +1,7 @@
 #include "User.hpp"
 
 
-User::operator std::string() {
-	std::string str;
-	str += "Username : ";
-	str += this->getUsername();
-	str += " | Password : ";
-	str += this->getPassword();
-	str += " | Id : ";
-	str += std::to_string(this->getId());
-	return str;
-}
-
-
+// FRIEND INTERACTIONS
 void User::sendRequest(int id, Database& db) {
 	this->friend_request_list.sendRequest(this->getId(), id, db);
 }
@@ -31,6 +20,7 @@ void User::removeFriend(const int id, Database& db) {
 }
 
 
+// WRITE & READ
 void User::write(FILE* file) {
 	fwrite(&(this->id), sizeof(int), 1, file);
 	fwrite(this->username, sizeof(char), 32, file);

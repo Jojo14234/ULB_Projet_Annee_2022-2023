@@ -66,15 +66,19 @@ void Player::move(int distance) {
 
 //void Player::declareBankruptcy() {} pas encore possible à implémenter
 */
-int Player::getIndexOnBoard() {return 1;}//current_cell->getPosition();}
+int Player::getIndexOnBoard() {return 1;} //current_cell->getPosition();}
 
 void Player::setAdmin() {admin = true;}
 
-bool Player::isAdmin() {return admin;}
+bool Player::isAdmin() { return admin; }
 
-ClientManager *Player::getClient() { return client; }
+ClientManager *Player::getClient() const { return client; }
 
-bool Player::isCurrentlyPLaying() {return currently_playing;}
+void Player::send(std::string &s) const { if ( client ) client->send(s); }
+void Player::send(std::string &&s) const { if ( client ) client->send(s); }
+std::string Player::getUsername() const { return client->getAccount()->getUsername(); }
+
+bool Player::isCurrentlyPLaying() const { return currently_playing; }
 void Player::setCurrentlyPlaying(bool playing) {currently_playing = playing;}
 
 
@@ -107,34 +111,24 @@ bool Player::passedByStart(Cell* cell, bool pass_by_start) {
     }
     return false;
 }
-Cell *Player::getCurrentCell() {
-    return current_cell;
-}
+Cell *Player::getCurrentCell() { return current_cell; }
 
 void Player::goToJail(Cell *cell) {
     move(cell, false);
     this->status = JAILED;
     this->rolls_in_prison =0;
-    getClient()->send("Vous allez en prison.");
+    getClient()->send("-|-|-Vous allez en prison.-|-|-");
 }
 
-void Player::exitJail() {
-    this->status = FREE;
-}
+void Player::exitJail() { this->status = FREE; }
 
-bool Player::isInJail() {
-    return (status == JAILED);
-}
+bool Player::isInJail() const { return (status == JAILED); }
 
-int Player::getRollsInPrison() {
-    return rolls_in_prison;
-}
+int Player::getRollsInPrison() const { return rolls_in_prison; }
 
-void Player::addRollInPrison(){
-    rolls_in_prison++;
-}
+void Player::addRollInPrison() { rolls_in_prison++; }
 
-int Player::hasGOOJCards(){ return (GOOJ_cards.size() > 0);}
+int Player::hasGOOJCards() const { return (GOOJ_cards.size() > 0); }
 
 void Player::looseGOOJCard(){
     JailCard* card = GOOJ_cards.back();
@@ -143,7 +137,7 @@ void Player::looseGOOJCard(){
     client->send("Vous perdez votre carte prison suite à son utilisation.\n");
 }
 
-bool Player::hasRolled() const {return has_rolled;}
+bool Player::hasRolled() const { return has_rolled; }
 
 void Player::setRolled(bool rolled) {has_rolled = rolled;}
 
@@ -152,27 +146,14 @@ int Player::roll(Dice &dice) {
     return dice.roll();
 }
 
-std::vector<Property*> Player::getAllProperties() {
-    return properties;
-}
+std::vector<Property*> Player::getAllProperties() const { return properties; }
+std::vector<Company*> Player::getAllCompanies() const { return companies; }
+std::vector<Station*> Player::getAllStations() const { return stations; }
+std::vector<JailCard*> Player::getAllGOOJCards() const { return GOOJ_cards; }
+int Player::getNumberOfStations() const { return stations.size(); }
+int Player::getNumberOfCompanies() const { return companies.size(); }
 
-std::vector<Company*> Player::getAllCompanies(){
-    return companies;
-}
-std::vector<Station*> Player::getAllStations(){
-    return stations;
-}
-
-std::vector<JailCard*> Player::getAllGOOJCards() {
-    return GOOJ_cards;
-}
-
-int Player::getNumberOfStations() { return stations.size(); }
-
-int Player::getNumberOfCompanies() { return companies.size(); }
-
-bool Player::isInAuction() {return currently_in_auction;}
-
+bool Player::isInAuction() const {return currently_in_auction;}
 void Player::auctionStart() {currently_in_auction = true;}
 
 void Player::leaveAuction() {
@@ -180,7 +161,8 @@ void Player::leaveAuction() {
     currently_in_auction = false;
 }
 
-void Player::acquireProperty(Property &prop) { //ne pas ajouter de méthodes pour payer dans ces méthodes, elles sont aussi utilisées pour les échanges
+//ne pas ajouter de méthodes pour payer dans ces méthodes, elles sont aussi utilisées pour les échanges
+void Player::acquireProperty(Property &prop) {
     prop.setOwner(this);
     properties.push_back(&prop);
 }
@@ -216,9 +198,7 @@ void Player::removeLand(Land *land){
     Property* p = dynamic_cast<Property*>(land);
     if (p != nullptr) {
         for (auto property : properties) {
-            if (property == p) {
-                properties.erase(properties.begin()+index);
-            }
+            if (property == p) { properties.erase(properties.begin()+index); }
             index++;
         }
         return;
@@ -226,9 +206,7 @@ void Player::removeLand(Land *land){
     Company* c = dynamic_cast<Company*>(land);
     if (c != nullptr) {
         for (auto company : companies) {
-            if (company == c) {
-                companies.erase(companies.begin()+index);
-            }
+            if (company == c) { companies.erase(companies.begin()+index); }
             index++;
         }
         return;
@@ -236,41 +214,54 @@ void Player::removeLand(Land *land){
     Station* s = dynamic_cast<Station*>(land);
     if (s != nullptr) {
         for (auto station : stations) {
-            if (station == s) {
-                stations.erase(stations.begin()+index);
-            }
+            if (station == s) { stations.erase(stations.begin()+index); }
             index++;
         }
         return;
     }
 }
 
-void Player::auctionMustStart() {
-    auction_must_start = true;
+void Player::removeProperty(Property* p) {
+    for (auto property : properties) {
+        if (property == p) { properties.erase(properties.begin()+index); }
+        index++;
+    }
 }
 
-void Player::exchangeFromJail() {
-    exchange_from_jail = true;
+void Player::removeStation(Station* s) {
+    for (auto station : stations) {
+        if (station == s) { stations.erase(stations.begin()+index); }
+        index++;
+    }
 }
 
-PLAYER_STATUS Player::getPlayerStatus(){
-    return status;
+void Player::removeCompagnie(Company* c) {
+    for (auto company : companies) {
+        if (company == c) { companies.erase(companies.begin()+index); }
+        index++;
+    }
 }
-void Player::setPlayerStatus(PLAYER_STATUS new_status){
-    status = new_status;
-}
+
+void Player::auctionMustStart() { auction_must_start = true; }
+void Player::exchangeFromJail() { exchange_from_jail = true; }
+
+PLAYER_STATUS Player::getPlayerStatus() { return status; }
+void Player::setPlayerStatus(PLAYER_STATUS new_status) { status = new_status; }
 
 std::string Player::getStringOfAllProperties(){
     std::string ret_string = "\n";
-    for (auto property : properties){
+    for (auto property : properties) {
+        ret_string += " - ";
         ret_string += property->getName(); //TODO pq l'IDE boude?
-        ret_string += ".\n";
+        ret_string += "\n";
     }
     for (auto company : companies){
+        ret_string += " - ";
         ret_string += company->getName();
-        ret_string += ".\n";
+        ret_string += "\n";
     }
     for (auto station : stations){
+        ret_string += " - ";
         ret_string += station->getName();
         ret_string += ".\n";
     }

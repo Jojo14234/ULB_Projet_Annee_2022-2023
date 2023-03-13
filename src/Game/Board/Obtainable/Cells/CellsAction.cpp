@@ -57,10 +57,10 @@ void LandCell::action(Player* player) {
 			int rent = land->getRentPrice();
 			player->pay(rent, true);
 
-            str = "Cette propriété appartient à [" + this->land->getOwner()->getClient()->getAccount()->getUsernameString() + "]";
+            str = "Cette propriété appartient à [" + this->land->getOwner()->getClient()->getAccount()->getUsername() + "]";
             str += "\nVous lui payez [" + std::to_string(rent) + "e] de loyer\n";
 			player->getClient()->send(str);
-			land->getOwner()->receive(rent, player->getClient()->getAccount()->getUsernameString());
+			land->getOwner()->receive(rent, player->getClient()->getAccount()->getUsername());
 
             // TODO JOACHIM ????? ELLE FAIT QUOI CETTE LIGNE ??????
             if ( player->getPlayerStatus() == PLAYER_STATUS::BANKRUPT ) { player->setBankruptingPlayer(land->getOwner()); }

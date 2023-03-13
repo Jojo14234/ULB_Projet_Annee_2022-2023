@@ -43,8 +43,8 @@ void Server::clientLoop(ClientManager &client) {
             }
 		}
 	}
-	catch (const WritePipeServerException &exception) { std::cout << "[Exception catch (Server::clientLoop)] >" << exception.what() << std::endl; }
-	catch (const ReadPipeServerException &exception)  { std::cout << "[Exception catch (Server::clientLoop)] >" << exception.what() << std::endl; }
+	catch (const WritePipeServerException &exception) { std::cout << "[Exception catch (Server::clientLoop)] > " << exception.what() << std::endl; }
+	catch (const ReadPipeServerException &exception)  { std::cout << "[Exception catch (Server::clientLoop)] > " << exception.what() << std::endl; }
 	client.disconnect();
 }
 
@@ -126,13 +126,21 @@ void Server::clientProcessLogin(ClientManager &client) {
     // Condition du process
     if (client.getAccount() != nullptr)              { client.send("You are already connected"); return; }
 	User* user = database.getUser(client.getS1().c_str());
-	if ( user == nullptr )                           { client.send("FALSE"); return; }	// failed
-    if ( !user->isPassword(client.getS2().c_str()) ) { client.send("FALSE"); return; } // failed
-    // Process of linking account
+	if ( user == nullptr )                           { client.send("FALSE"); return; }	// User not find in the db
+    if ( !user->isPassword(client.getS2().c_str()) ) { client.send("FALSE"); return; }  // Incorrect password
+    if ( this->find(user) )                          { client.send("FALSE"); return; }  // Si le compte utilisateur est déjà
+    // Process of linking account                                                       // utilisé par un autre client
     client.setAccount(user);
     client.send("TRUE");	// succeed
     std::cout << "['login' to client account '"<< client.getAccount()->getUsername() <<"' was successful]\n" << std::endl;
 
+}
+
+bool Server::find(User* user) {
+    for (auto client : this->clients) {
+        if (client->getAccount() == user) { return true; }
+    }
+    return false;
 }
 
 // For game
@@ -196,7 +204,7 @@ void Server::clientProcessFriendsAccept(ClientManager &client) {
     if ( !client_account->hasReceiveFriendRequestFrom(*new_friend) ) { client.send("Ce joueur ne vous a pas demandé en ami!"); return; }
     // Process of accepting a friend request
     client_account->acceptRequest(new_friend->getId(), database);
-    client.send(std::string("Vous êtes désormais ami avec " + new_friend->getUsernameString() + " !"));
+    client.send(std::string("Vous êtes désormais ami avec " + new_friend->getUsername() + " !"));
     std::cout << "['friend accept' query from client '" << client.getAccount()->getUsername() << "' was successful]\n" << std::endl;
 }
 
@@ -209,7 +217,7 @@ void Server::clientProcessFriendsRefuse(ClientManager &client) {
     if ( !client_account->hasReceiveFriendRequestFrom(*new_friend) ) { client.send("Ce joueur ne vous a pas demandé en ami!"); return; }
     // Process of refusing friend request
     client_account->removeRequest(new_friend->getId(), database);
-    client.send("Vous avez refusé la demande d'ami de " + new_friend->getUsernameString() + ".");
+    client.send("Vous avez refusé la demande d'ami de " + new_friend->getUsername() + ".");
     std::cout << "['friend refuse' query from client '" << client.getAccount()->getUsername() << "' was successful]\n" << std::endl;
 }
 
@@ -225,7 +233,7 @@ void Server::clientProcessFriendsAdd(ClientManager &client) {
     // Process of making them friends
     if ( client_account->hasReceiveFriendRequestFrom(*new_friend) ) {
         client_account->acceptRequest(new_friend->getId(), database);
-        client.send("Cet utilisateur vous a déjà demandé en ami.\nVous êtes donc désormais ami avec " + new_friend->getUsernameString() + " !");
+        client.send("Cet utilisateur vous a déjà demandé en ami.\nVous êtes donc désormais ami avec " + new_friend->getUsername() + " !");
         std::cout << "['friend add' query from client '" << client.getAccount()->getUsername() << "' was successful]\n" << std::endl;
         return;
 	}
@@ -245,7 +253,7 @@ void Server::clientProcessFriendsRemove(ClientManager &client) {
     if ( !client_account->isFriendWith(*new_friend) ) { client.send("Vous n'êtes pas ami avec ce joueur !"); return; }
     // Process of removing one friend
     client_account->removeFriend(new_friend->getId(), database);
-    client.send("Vous n'êtes désormais plus ami avec " + new_friend->getUsernameString() + ".");
+    client.send("Vous n'êtes désormais plus ami avec " + new_friend->getUsername() + ".");
     std::cout << "['friend remove' query from client '" << client.getAccount()->getUsername() << "' was successful]\n" << std::endl;
 
 }
@@ -273,7 +281,7 @@ void Server::clientProcessSendMessage(ClientManager &client) {
     if ( !client.getAccount()->isFriendWith(user->getId()) ) { client.send("Vous n'êtes pas ami avec ce joueur !"); return; }
     // Process of sending a message
     database.sendMsg(client.getAccount(), user, client.getS2());
-    client.send("Vous avez bien envoyé un message à " + user->getUsernameString() + ".");
+    client.send("Vous avez bien envoyé un message à " + user->getUsername() + ".");
     std::cout << "['message send' query from client '" << client.getAccount()->getUsername() << "' was successful]\n" << std::endl;
 
 }

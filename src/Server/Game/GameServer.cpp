@@ -44,7 +44,7 @@ void GameServer::boardInfos() {
     // Loop for all the players
     for (auto &player : *this->game.getPlayers()) {
         // Player + Position + Money
-        std::string username = refactorToAMaxLengthString(player.getClient()->getAccount()->getUsernameString(),6);
+        std::string username = refactorToAMaxLengthString(player.getClient()->getAccount()->getUsername(),6);
         std::string position = refactorToAMaxLengthString(std::to_string(player.getCurrentCell()->getPosition()), 8);
         std::string money = refactorToAMaxLengthString(std::to_string(player.getBankAccount()->getMoney()),5);
         str += "| PLAYER | POSITION | MONEY |\n";
@@ -77,7 +77,7 @@ void GameServer::boardInfos() {
         }
         str += "+———————————————————————————+\n";
     }
-    std::string nextTurn = refactorToAMaxLengthString(game.getCurrentPlayer()->getClient()->getAccount()->getUsernameString(), 10);
+    std::string nextTurn = refactorToAMaxLengthString(game.getCurrentPlayer()->getClient()->getAccount()->getUsername(), 10);
     str += "| A '" + nextTurn + "' de jouer ! |\n";
     str += "+———————————————————————————+\n";
 
@@ -96,7 +96,7 @@ void GameServer::sendStartInfo() {
     // Indexe + username
     for ( auto &player : *game.getPlayers() ) {
         std::string indexe = std::to_string(player.getIndex());
-        std::string username = player.getClient()->getAccount()->getUsernameString();
+        std::string username = player.getClient()->getAccount()->getUsername();
         ret += "P" + indexe + ":" + username + ";";
     }
     this->updateAllClients(ret);
@@ -149,7 +149,7 @@ GAME_QUERY_TYPE GameServer::getGameQuery(ClientManager &client) {
 
 void GameServer::clientLoop(ClientManager &client) {
 	std::cout << client.getAccount()->getUsername() << " has join a game with code : " << this->code.getCode() << std::endl;
-    updateAllClients("Le joueur " + client.getAccount()->getUsernameString() + " a rejoint la partie!");
+    updateAllClients("Le joueur " + client.getAccount()->getUsername() + " a rejoint la partie!");
     client.send("Le code de cette partie est " + std::to_string(this->code.getCode()) + ". Partagez-le avec tous vos amis!");
 	while (this->active) {
 
@@ -374,7 +374,7 @@ void GameServer::clientAuctionLoop(ClientManager &client, LandCell* land_cell) {
         for ( auto &player : *this->game.getPlayers() ) {
             winner = game.identifyAuctionWinner();
             if ( winner != nullptr ) {
-                str = "Le joueur '" + player.getClient()->getAccount()->getUsernameString() + "' a remporté l'enchère !";
+                str = "Le joueur '" + player.getClient()->getAccount()->getUsername() + "' a remporté l'enchère !";
                 updateAllClients(str);
 
                 // Make function WIN AUCTION
@@ -386,7 +386,7 @@ void GameServer::clientAuctionLoop(ClientManager &client, LandCell* land_cell) {
             }
 
             if ( player.isInAuction() and (player.getPlayerStatus() != PLAYER_STATUS::LOST or player.getPlayerStatus() != PLAYER_STATUS::BANKRUPT) ) {
-                str =  "\nC'est au tour de '" + player.getClient()->getAccount()->getUsernameString() + "` d'enchérir !";
+                str =  "\nC'est au tour de '" + player.getClient()->getAccount()->getUsername() + "` d'enchérir !";
                 str += "\nL'enchère est actuellement à " + std::to_string(bid);
                 str += "\n - Enchérissez pour cette propriété ( /bid [montant] )";
                 str += "\n - Quittez l'enchère et abandonner la propriété ( /out )";
@@ -400,7 +400,7 @@ void GameServer::clientAuctionLoop(ClientManager &client, LandCell* land_cell) {
                 // Mauvaise commande
                 if ( query != GAME_QUERY_TYPE::BID) {
                     player.leaveAuction();
-                    str = player.getClient()->getAccount()->getUsernameString() + " est sorti(e) de l'enchère.";
+                    str = player.getClient()->getAccount()->getUsername() + " est sorti(e) de l'enchère.";
                     updateAllClients(str);
                 }
 
@@ -414,20 +414,20 @@ void GameServer::clientAuctionLoop(ClientManager &client, LandCell* land_cell) {
                     // Nouvelle enchère inférieure au précédent
                     if ( new_bid_i <= bid ) {
                         player.leaveAuction();
-                        str = player.getClient()->getAccount()->getUsernameString() + " est sorti(e) de l'enchère.";
+                        str = player.getClient()->getAccount()->getUsername() + " est sorti(e) de l'enchère.";
                         str += "\nSa proposition était inférieur par rapport au minimum requis !";
                         this->updateAllClients(str);
                     }
                     // Le joueur ayant fait l'enchère n'as pas les fonds nécessaires
                     else if ( new_bid_i > player.getBankAccount()->getMoney() ) {
                         player.leaveAuction();
-                        str = player.getClient()->getAccount()->getUsernameString() + " est sorti(e) de l'enchère.";
+                        str = player.getClient()->getAccount()->getUsername() + " est sorti(e) de l'enchère.";
                         str += "\nIel ne possède pas les fonds nécessaire pour faire cette enchère !";
                         this->updateAllClients(str);
                     }
                     // Tout s'est bien passé ! Il a pu enchérir !
                     else {
-                        str = player.getClient()->getAccount()->getUsernameString() + " a surenchéri de ";
+                        str = player.getClient()->getAccount()->getUsername() + " a surenchéri de ";
                         str += std::to_string(new_bid_i - bid) + "e !";
                         this->updateAllClients(str);
                         bid = new_bid_i;
@@ -492,7 +492,7 @@ void GameServer::processDiceRoll(ClientManager &client) {
     current->move(new_cell);
 
     // Message terminal
-    str = "\n" + client.getAccount()->getUsernameString() + " a jeté les dés et obtenu un [" + std::to_string(roll_result_i) + "]";
+    str = "\n" + client.getAccount()->getUsername() + " a jeté les dés et obtenu un [" + std::to_string(roll_result_i) + "]";
     str += "\nIel est arrivé sur la case [" + std::to_string(new_cell_idx) + "]";
     str += (game.rolledADouble()) ? "\nC'est un double ! Iel pourra rejouer !\n" : "\n";
     updateAllClients(str);
