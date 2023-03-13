@@ -32,14 +32,15 @@ public:
 	}
 
 	// To String
-	operator std::string() { return std::string(this->username); };
+	operator std::string();
 	
 	// To compare
 	bool operator==(const User &other) const { return id == other.id; }
 
 	// GETTERS
-	const int getId() const { return id; }
-    const std::string getUsername() const { return std::string{username}; }
+	int getId() const { return id; }
+	const char* getUsername() const { return username; }
+    std::string getUsernameString() const {return std::string{username};}
 	const char* getPassword() const { return password; }
 	const GameStats& getStats() const { return stats; }
 	const FriendList& getFriendList() const { return friend_list; }

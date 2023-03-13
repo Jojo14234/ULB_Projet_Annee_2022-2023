@@ -12,9 +12,9 @@ class ClientController {
 
 	std::string input;
 
-   /*
-    * Method that show an '>' and wait for an input from the user
-    */
+    /*
+     * Method that show an '>' and wait for an input from the user
+     */
 	void setInput() {
 		std::cout << "> ";
 		std::getline(std::cin, this->input);

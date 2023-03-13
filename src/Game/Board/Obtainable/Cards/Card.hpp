@@ -34,7 +34,7 @@ public:
 
 	virtual void action(Player* player) override =0;
 
-	std::string getDescription() { return description; }
+	std::string getDesciption() { return description; }
 
 };
 

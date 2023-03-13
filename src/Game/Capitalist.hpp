@@ -81,7 +81,7 @@ public:
 
     Player* getCurrentPlayer();
 
-    bool isRunning() const;
+    bool isRunning();
 
     void endCurrentTurn();
 
@@ -91,7 +91,7 @@ public:
     bool rolledADouble();
 
     Player* getPlayerByClient(ClientManager &client);
-    Dice& getDice();
+    Dice* getDice();
     Board* getBoard();
 
     int getNumberOfPlayers();

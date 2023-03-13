@@ -8,8 +8,6 @@
 #include "../../utils/Configs.hpp"
 #include "../../Game/Board/Obtainable/Cells/Land/Land.hpp"
 #include "../../Game/Player.hpp"
-#include <SFML/Network.hpp>
-
 
 
 class ClientManager;	// forward declaraction
@@ -38,13 +36,13 @@ public:
 
 	// Loop for the client
 	void clientLoop(ClientManager &client);
-    //void clientBeforeRollLoop(ClientManager &client);
+    void clientBeforeRollLoop(ClientManager &client);
     void clientBankruptLoop(ClientManager &client);
     void clientAuctionLoop(ClientManager &client, LandCell* land_cell);
     void participateInAuction(ClientManager &client);
     void participateInExchange(ClientManager &client);
 	// Add a client to the game 
-	//void addClient(ClientManager* client);
+	void addClient(ClientManager* client);
 
 	// GETTERS
 	int getCode() const;
@@ -76,20 +74,6 @@ public:
     bool proposeExchange(Player& proposing_player, Player &proposed_to_player, Land *land, int amount);
     Land* getLandByName(std::string &name);
     void processBankruptcyToPlayer();
-
-
-    /*
-     * Rémy Test
-     */
-    GAME_QUERY_TYPE getGameQuery(ClientManager &client);
-
-    void clientBeforeRollLoop(ClientManager &client);
-
-    void connectClientToThisGame(ClientManager* client);
-
-    void treeDouble(ClientManager& client);
-
-
 };
 
 #endif
