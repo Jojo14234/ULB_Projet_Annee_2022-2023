@@ -10,6 +10,8 @@ class Client; // forward declaration
 template <typename StateType, typename EventType>
 class AbstractController {
 
+protected:
+
 	Client* model;
 	StateType new_state;
 
