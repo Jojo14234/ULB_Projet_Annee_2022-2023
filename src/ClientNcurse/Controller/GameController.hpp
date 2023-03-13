@@ -87,6 +87,7 @@ public:
 	}
 
 	void receiveMessagesLoop() {
+        for (int i = 0; i< n_player;i++){this->view->getBoard()->setPlayer(0, i);}
 		while (this->new_state == STATE::GAME) {
 			std::string response;
 			this->model->receive(response);
@@ -100,13 +101,13 @@ public:
 			else {
 				this->view->getConsole()->addText(response);
 			}
-			this->view->draw(); 
+			//this->view->draw();
 		}
 	}
 	
 	void init() {
 		this->initScreen();
-		for (int i = 0; i< n_player;i++){this->view->getBoard()->setPlayer(0, i);}
+		//for (int i = 0; i< n_player;i++){this->view->getBoard()->setPlayer(0, i);}
 		// create a thread to receive messages
 		std::thread send_thread(&GameController::receiveMessagesLoop, this);
 		send_thread.detach();

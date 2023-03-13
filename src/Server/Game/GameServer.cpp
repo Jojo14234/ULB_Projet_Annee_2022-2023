@@ -414,7 +414,7 @@ void GameServer::processDiceRoll(ClientManager &client) {
 }
 
 void GameServer::processDemortgageProperty(ClientManager &client) {
-    GAME_QUERY_TYPE query;
+    GAME_QUERY_TYPE query = GAME_QUERY_TYPE::NONE;
     sf::Packet packet;
     std::string name;
     client.send("Veuillez sélectionner la propriété à déhypothéquer en utilisant /select [nom de la propriété].\nTapez /leave pour quitter le mode de selection des batiments.\n");
@@ -437,7 +437,7 @@ void GameServer::processDemortgageProperty(ClientManager &client) {
 }
 
 void GameServer::processMortgageProperty(ClientManager &client) { //for now, only works for bankruptcy if bankrupt player is the player whose turn it is.
-    GAME_QUERY_TYPE query;
+    GAME_QUERY_TYPE query = GAME_QUERY_TYPE::NONE;
     sf::Packet packet;
     std::string name;
     client.send("Veuillez sélectionner la propriété à hypothéquer en utilisant /select [nom de la propriété].\nTapez /leave pour quitter le mode de selection des batiments.\n");
