@@ -159,6 +159,7 @@ public:
     int getNumberOfCompanies() const;
 
     void leaveAuction();
+    void leaveAuctionSilently();
     bool isInAuction() const;
     void auctionStart();
 

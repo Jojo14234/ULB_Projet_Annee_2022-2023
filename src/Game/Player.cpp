@@ -161,6 +161,10 @@ void Player::leaveAuction() {
     currently_in_auction = false;
 }
 
+void Player::leaveAuctionSilently() {
+    currently_in_auction = false;
+}
+
 //ne pas ajouter de méthodes pour payer dans ces méthodes, elles sont aussi utilisées pour les échanges
 void Player::acquireProperty(Property &prop) {
     prop.setOwner(this);
