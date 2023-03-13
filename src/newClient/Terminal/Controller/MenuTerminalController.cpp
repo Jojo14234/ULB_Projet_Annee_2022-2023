@@ -13,7 +13,7 @@ MenuTerminalController::MenuTerminalController(Client* model, MenuTerminalView* 
 	AbstractTerminalController(model, STATE::MENU), view{view} {}
 
 void MenuTerminalController::handle(int event) {
-	std::cout << event << std::endl;
+	
 }
 
 void MenuTerminalController::move() {

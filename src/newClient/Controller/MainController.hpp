@@ -22,7 +22,6 @@ class MainController {
 public:
 
 	MainController()=default;
-	MainController(const std::initializer_list<AbstractController<StateType, EventType>*> &list) : controllers{list} {}
 
 	~MainController() { for (auto elem : controllers) delete elem; }
 
@@ -36,5 +35,7 @@ public:
 		AbstractController<StateType, EventType>* controller = this->getController(state);
 		controller->move();
 	}
+
+	void setController(const std::initializer_list<AbstractController<StateType, EventType>*> &list) { this->controllers = list; }
 
 };
