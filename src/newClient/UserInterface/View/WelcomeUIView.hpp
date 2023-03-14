@@ -21,8 +21,6 @@ public:
 
 	void draw() override;
 
-	void clear();
-
 	friend class WelcomeUIController;
 
 };
