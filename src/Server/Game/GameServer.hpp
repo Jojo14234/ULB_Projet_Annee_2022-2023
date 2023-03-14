@@ -73,6 +73,7 @@ public:
     bool isClientAdmin(ClientManager &client);
 
     void updateAllClients(std::string update);
+    void updateAllClientsWithQuery(QUERY &query, std::string update);
     bool proposeExchange(Player& proposing_player, Player &proposed_to_player, Land *land, int amount);
     Land* getLandByName(std::string &name);
     void processBankruptcyToPlayer();

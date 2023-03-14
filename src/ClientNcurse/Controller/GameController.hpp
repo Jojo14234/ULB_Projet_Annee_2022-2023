@@ -102,9 +102,9 @@ public:
 					this->view->getInfo()->setMoney( i+1 ,parser.getBufferSplit().state[i][1]);
 				}} 
 			else {
-				this->view->getConsole()->addText(response);
+                if ( response[0] != '+' ) { this->view->getConsole()->addText(response); }
 			}
-			this->win->update();
+			//this->win->update();
 		}
 	}
 	

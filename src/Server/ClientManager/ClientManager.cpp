@@ -6,13 +6,17 @@
 
 
 // SEND INFOS TO THE CLIENT
-void ClientManager::send(std::string &input) {
+void ClientManager::send(const std::string &input) {
 	sf::Packet packet;
 	packet << input;
 	if ( this->socket.send(packet) !=  sf::Socket::Done ) { throw WritePipeServerException(); } // failed to write on the socket
 }
 
-void ClientManager::send(std::string &&input) { this->send(input); }
+void ClientManager::sendQueryMsg(const std::string &input, QUERY query) {
+    sf::Packet packet;
+    packet << (int)query << input;
+    if ( this->socket.send(packet) !=  sf::Socket::Done ) { throw WritePipeServerException(); } // failed to write on the socket
+}
 
 // RECEIVE INFOS FROM THE CLIENT
 void ClientManager::receive(QUERY_TYPE &query) {

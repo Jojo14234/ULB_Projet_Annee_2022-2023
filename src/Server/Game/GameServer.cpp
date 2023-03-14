@@ -778,6 +778,12 @@ void GameServer::updateAllClients(std::string update) {
     }
 }
 
+void GameServer::updateAllClientsWithQuery(QUERY &query, std::string update) {
+    for ( auto client : clients ) {
+        client->sendQueryMsg(update, query);
+    }
+}
+
 int GameServer::getCode() const { return code.getCode(); }
 
 Player* GameServer::getPlayerByUsername(std::string &name) {

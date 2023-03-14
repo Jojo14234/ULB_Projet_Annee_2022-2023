@@ -283,5 +283,4 @@ void Server::clientProcessSendMessage(ClientManager &client) {
     database.sendMsg(client.getAccount(), user, client.getS2());
     client.send("Vous avez bien envoyé un message à " + user->getUsername() + ".");
     std::cout << "['message send' query from client '" << client.getAccount()->getUsername() << "' was successful]\n" << std::endl;
-
 }

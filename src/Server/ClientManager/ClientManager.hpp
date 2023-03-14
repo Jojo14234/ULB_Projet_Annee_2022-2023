@@ -8,6 +8,7 @@
 
 #include "../../utils/Configs.hpp"
 #include "../Database/User.hpp"
+#include "QUERY.hpp"
 
 
 class GameServer;	// forward declaration
@@ -34,8 +35,8 @@ class ClientManager {
 public:
 
 	// Send infos to the client
-	void send(std::string &input);
-    void send(std::string &&input);
+	void send(const std::string &input);
+    void sendQueryMsg(const std::string &input, QUERY query);
 
 	// Receive infos from the client
 	void receive(QUERY_TYPE &query);

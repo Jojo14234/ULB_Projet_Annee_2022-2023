@@ -105,3 +105,13 @@ void Client::receive(std::string &output) {
 	packet >> output;
 }
 
+void Client::receiveQueryMsg(std::string &output, QUERY &query) {
+    int i;
+    sf::Packet packet;
+    if (this->socket.receive(packet) != sf::Socket::Done) {
+        throw ReadPipeClientException(); // can't read on the socket
+    }
+    packet >> i >> output;
+    query = static_cast<QUERY>(i);
+}
+
