@@ -16,9 +16,9 @@
 
 
 void GameServer::sendStartInfo() {
-    std::string ret = "START_INFOS:\n";
+    std::string ret = "SI-";
     // Nbr player;
-    ret += "n:" + std::to_string(game.getPlayers()->size()) + ";";
+    ret += std::to_string(game.getPlayers()->size()) + ";";
     for ( auto &player : *game.getPlayers() ) {
         ret += "P" + std::to_string(player.getIndex()) + ":" + player.getClient()->getAccount()->getUsernameString() + ";";
     }

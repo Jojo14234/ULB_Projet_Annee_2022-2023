@@ -3,11 +3,14 @@
 
 #include <ncurses.h>
 #include <thread>
+#include <vector>
+#include <string>
 
 #include "AbstractController.hpp"
 #include "../View/GameView.hpp"
 #include "../InputParser/GameInputParser.hpp"
 #include "../InputParser/GameStateParser.hpp"
+#include "../InputParser/GameStartParser.hpp"
 
 
 class GameController : public AbstractController {
@@ -15,9 +18,9 @@ class GameController : public AbstractController {
 	enum MENU_STATE { CHAT, CONSOLE, IDLE };
 	MENU_STATE STATE = IDLE;
 	GameView* view;
-	int n_player ;
-	//
-
+	
+	int player_nb ;
+	std::vector<std::string> players_username;
 
 public:
 
@@ -91,17 +94,22 @@ public:
 		while (this->new_state == STATE::GAME) {
 			std::string response;
 			this->model->receive(response);
-			GameStateParser parser(response);
+
 			//start game
-			if (response[0] == 'S' &&  response[1] == 'T'){
+			if (response[0] == 'S' &&  response[1] == 'I'){
+				GameStartParser start_parser(response);
+				start_parser.parse();
+				player_nb = start_parser.getBufferSplit().player_nb;
+				players_username = start_parser.getBufferSplit().player_usernames;
 				startGame();
-				n_player = parser.parseIntroLine();
-				for (int i = 1; i<= n_player;i++){this->view->getBoard()->setPlayer(0, i);}}
+			}
+
 			//move player + set up money
 			else if (response[0] == 'G' && response[1] == 'M') {
-				for (int i = 1; i <= n_player; i++){
-					parser.parseStateLine(n_player);
-					parser.parsePropertiesLine(n_player);
+				GameStateParser parser(response);
+				for (int i = 1; i <= player_nb; i++){
+					parser.parseStateLine(player_nb);
+					parser.parsePropertiesLine(player_nb);
 					this->view->getBoard()->unsetPlayer(i);
 					this->view->getBoard()->setPlayer(parser.getBufferSplit().state[i-1][0], i);
 					for (int j = 0; j < parser.getBufferSplit().info[i-1].size();j++){
@@ -147,6 +155,10 @@ public:
 		this->view->getDice2()->setVisible();
 		this->view->getPlayersWaitingText()->setHidden();
 		this->view->getOwnerWaitingText()->setHidden();
+		for (int i = 1; i<= player_nb; i++) {
+			this->view->getBoard()->setPlayer(0, i);
+			this->view->getInfo()->addPlayer(players_username[i-1]);
+		}
 	}
 
 };

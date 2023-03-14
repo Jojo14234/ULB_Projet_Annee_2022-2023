@@ -21,8 +21,8 @@ class GameView : public AbstractView {
 	Dice dice2{{3,5,25,65}};
 	
 	//Creation of the information box
-	Text info_text{ObjectInfo{3, 12, up_margin + 28, 125+((65-12)/2)}, {"information"}};
-	InformationBox info{{7+(4*2),65,35,125}, 4, {"player1", "player2", "player3", "player4"}};
+	Text info_text{ObjectInfo{3, 13, up_margin + 28, 125+((65-13)/2)}, {"Informations"}};
+	InformationBox info{{7+(4*2),65,35,125}};
 
 	//Creation of the chat and console
 	Text chat_text{ObjectInfo{3, 4, up_margin + 13, 125+((65-4)/2)}, {"Chat"}};
@@ -34,7 +34,7 @@ class GameView : public AbstractView {
 	Text owner_waiting{{5, 44, up_margin + ((5-1)*(11-1))/2, left_margin + ((11-1)*(11-1)+10-44)/2},
 					   {"Vous êtes le propriétaire de cette partie", "Utilisez /start pour lancer la partie"}};
 	Text players_waiting{{5, 40, up_margin + ((5-1)*(11-1))/2, left_margin + ((11-1)*(11-1)+10-40)/2},
-						 {"En attente du lancement de la partie..."}};		   
+						 {"En attente du lancement de la partie..."}};
 
 public:
 
