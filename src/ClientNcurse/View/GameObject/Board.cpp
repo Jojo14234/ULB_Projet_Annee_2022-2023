@@ -23,12 +23,12 @@ void Board::loadCellNames(){
 int Board::getCellIndex(std::string cell){
 	int index_cell = -1;
 	for(int i = 0; i < gamebox_nb; i++) {
-        if(cellname[i] == cell) {
+        if(cellname[i] == cell){
             index_cell = i;
             break;
-        }
+        }}
 	return index_cell;
-}}
+}
 
 //method to create the gameboard
 void Board::createBoard(){

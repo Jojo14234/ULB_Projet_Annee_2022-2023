@@ -104,18 +104,21 @@ public:
 					parser.parsePropertiesLine(n_player);
 					this->view->getBoard()->unsetPlayer(i);
 					this->view->getBoard()->setPlayer(parser.getBufferSplit().state[i-1][0], i);
-					/*
-					 for (int j = 0; j < parser.getBufferSplit().info[i-1].size();j++){
+					for (int j = 0; j < parser.getBufferSplit().info[i-1].size();j++){
 						int index = this->view->getBoard()->getCellIndex(parser.getBufferSplit().info[i-1][j].name);
-						if (parser.getBufferSplit().info[i-1][j].level == 0){this->view->getBoard()->setPurchased(index, i);}
-						else{this->view->getBoard()->setHouse(index, parser.getBufferSplit().info[i-1][j].level);}} 
-						*/
+						if (parser.getBufferSplit().info[i-1][j].level == 0){
+							this->view->getBoard()->setPurchased(index, i);}
+						else{this->view->getBoard()->setHouse(index, parser.getBufferSplit().info[i-1][j].level);} //pas encore tester
+						} 
+						
 					this->view->getInfo()->setMoney( i,parser.getBufferSplit().state[i-1][1]);
 				}} 
 			//add text on console
-			else {
+			else{
 				this->view->getConsole()->addText(response);
-			} 
+			}
+				
+			
 		}
 	}
 	

@@ -15,7 +15,6 @@
 #include "../Object/ObjectInfo.hpp"
 #include "../Object/TextBox.hpp"
 
- 
 
 //Class representing the gameboard with the different game spaces and the spaces for the cards.
 class Board : public AbstractViewObject {

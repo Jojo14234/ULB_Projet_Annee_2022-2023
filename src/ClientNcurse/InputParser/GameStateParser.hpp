@@ -21,6 +21,7 @@ class GameStateParser {
 	std::string state_str;
 	Informations res;
 	std::string property_str;
+	int index;
 
 public:
 	GameStateParser(std::string game) : state_str{game} {};
@@ -43,11 +44,12 @@ public:
 		int player = 0;
 		int arg_nb = 0;
 		int i = 0;
+		index = 0;
 		res.state.resize(player_nb);
 		res.state.clear();
 		std::string tmp;
-
-		for (char c : state_str){
+		while(state_str[index] != '\n'){
+			char c = state_str[index];
 			if (c == ':'){ 
 				player = atoi(&tmp[1]);
 				tmp.clear();
@@ -68,8 +70,12 @@ public:
 				tmp += c;
 			}
 			i++;
+			index++;
 		}
+		
+		index++;	
 	}
+	
 
 	void parsePropertiesLine(int player_nb){
 		int player = 0;
@@ -78,26 +84,30 @@ public:
 		res.info.clear();
 		std::string tmp;
 		PropertyInformation pi;
-
-		for (char c : state_str){
+		while(index < state_str.size() ){
+			char c = state_str[index];
 			if (c == ':'){ 
+				
 				player = atoi(&tmp[1]);
 				tmp.clear();
 			} 
 			else if (c == '-'){
 				tmp.clear();
 			}
-			else if (c == ',' or c == ';'){
-				switch (arg_nb) {
-					case 0 : {pi.name = tmp; tmp.clear(); break;}
+			else if (c == ','){
+				switch (arg_nb % 3) {
+					case 0 : {pi.name = tmp;tmp.clear(); break;}
 					case 1 : {pi.level = atoi(tmp.c_str()); tmp.clear(); break;}
 					case 2 : {(c == 'n') ? pi.hypotek = false : pi.hypotek = true ; tmp.clear(); break;}
 					default : break;
 				}
-				c == ',' ? arg_nb++ : arg_nb = 0;
+				arg_nb++;
 			}
-			else if (c == '.'){
-				res.info[player].push_back(pi);
+			else if (c == ';'){
+				if (pi.name != ""){
+					res.info[player].push_back(pi);
+				}
+				
 				tmp.clear();
 				arg_nb = 0;
 			}
@@ -107,7 +117,9 @@ public:
 			else {
 				tmp += c;
 			}
+			index++;
 		}
+	
 	}
 
 	const Informations& getBufferSplit() const { return res; }
