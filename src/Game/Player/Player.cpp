@@ -93,7 +93,7 @@ bool Player::pay(int amount, bool forced) {
 }
 
 void Player::receive(int amount, std::string source) {
-    bank_account.gain(amount); //TODO?
+    bank_account.gain(amount);
     getClient()->send("Vous avez reçu " + std::to_string(amount) + "e de " + source);
 }
 
@@ -185,6 +185,9 @@ void Player::acquireGOOJCard(JailCard *jail_card) {
     GOOJ_cards.push_back(jail_card);
 }
 
+/*
+ * check what type of land it is (used for exchanges)
+ */
 void Player::acquireLand(Land *land) {
     Property* p = dynamic_cast<Property*>(land);
     if (p != nullptr) { acquireProperty(*p); return;}
@@ -192,8 +195,6 @@ void Player::acquireLand(Land *land) {
     if (c != nullptr) { acquireCompany(*c); return;}
     Station* s = dynamic_cast<Station*>(land);
     if (s != nullptr) { acquireStation(*s); return;}
-
-    //TODO check what type of land it is (used for exchanges)
 }
 
 void Player::removeLand(Land *land){
@@ -255,7 +256,7 @@ std::string Player::getStringOfAllProperties(){
     std::string ret_string = "\n";
     for (auto property : properties) {
         ret_string += " - ";
-        ret_string += property->getName(); //TODO pq l'IDE boude?
+        ret_string += property->getName();
         ret_string += "\n";
     }
     for (auto company : companies){

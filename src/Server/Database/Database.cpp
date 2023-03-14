@@ -6,7 +6,7 @@
 
 
 void Database::load() {
-	FILE *file = std::fopen(path, "rb");
+	FILE *file = std::fopen(path.c_str(), "rb");
 	if (!file) { this->data.reserve(10); std::cout << "Database empty !" << std::endl; return; }
 	size_t size;
 	fread(&size, sizeof(size_t), 1, file);
@@ -22,7 +22,7 @@ void Database::load() {
 
 void Database::save() {
 	this->user_am.lockReader();
-	FILE *file = std::fopen(path, "w+");
+	FILE *file = std::fopen(path.c_str(), "w+");
 	if (!file) exit(0);
 	size_t size = this->data.size();
 	fwrite(&size, sizeof(size_t), 1, file);

@@ -49,13 +49,14 @@ void Client::connectToServer() {
 }
 
 void Client::disconnectFromServer() {
-	this->sendToServer(MainInputParser{"/disconnect"});
+    MainInputParser input{"/disconnect"};
+	this->sendToServer(input);
 	std::string output;
 	this->receiveFromServer(output);
 	this->ui.disconnect();
 }
 
-void Client::sendToServer(const MainInputParser &input) {
+void Client::sendToServer(MainInputParser &input) {
     // Create the packet
     sf::Packet packet;
     packet << static_cast<int>(input.getQueryType());
@@ -66,8 +67,8 @@ void Client::sendToServer(const MainInputParser &input) {
 
             // Add both of the first and second arguments to the packet
         case QUERY_TYPE::REGISTER :
-        case QUERY_TYPE::LOGIN :
-        case QUERY_TYPE::MESSAGE_SEND : packet << input[1] << input[2]; break;
+        case QUERY_TYPE::LOGIN :    packet << input[1] << input[2]; break;
+        case QUERY_TYPE::MESSAGE_SEND : input.regroupParameters(2); packet << input[1] << input[2]; break;
 
             // Add only the second argument to the packet
         case QUERY_TYPE::MESSAGE_SHOW  :

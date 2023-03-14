@@ -9,6 +9,7 @@
 #include "ClientManager/ClientManagerList.hpp"
 #include "Game/GameServerList.hpp"
 #include "Database/Database.hpp"
+#include "../utils/Configs.hpp"
 
 
 class Server {
@@ -26,7 +27,7 @@ class Server {
 	bool server_online = true;
 
 	// The Database
-	Database database{"db.bin"};
+	Database database{DB_PATH};
 
 	// Connect a new client
 	void connectClient();

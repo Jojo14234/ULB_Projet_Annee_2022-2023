@@ -29,6 +29,7 @@ class Client {
 public:
 
 	Client() { this->connectToServer(); }
+    ~Client() { this->socket.disconnect(); }
 
 	// Send Queries
 	void sendLogin(const std::string &username, const std::string &password);

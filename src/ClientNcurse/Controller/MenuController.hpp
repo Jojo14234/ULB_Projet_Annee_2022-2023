@@ -19,7 +19,6 @@ public:
 	MenuController(Client* model, MenuView* view) : AbstractController(model), view(view) { this->new_state = STATE::MENU; }
 	
 	void handleInput(int ch) override {
-		// TODO: implement
 		switch(ch) {
 		case KEY_MOUSE:
 			MEVENT event;

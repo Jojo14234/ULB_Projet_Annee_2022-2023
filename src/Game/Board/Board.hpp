@@ -48,9 +48,6 @@ public:
 
     LandCell* getCellByName(const std::string &name);
 
-    //TODO ici on renvoie une copie, on pourrait renvoyer un pointeur vers le vecteur ?
-    std::array<std::shared_ptr<Cell>, BOARD_SIZE> getAllCells() { return cells; }
-
 };
 
 #endif 

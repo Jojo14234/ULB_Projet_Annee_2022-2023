@@ -41,14 +41,14 @@ namespace ClientSentence {
 	const std::string ALREADY_CONNECT = "Vous êtes déjà connecté"; // client process register
 
 	//GAME CODE
-	const std::string UNKNOWED_GAME = "aucune partie n'existe avec ce code";
-	const std::string KNOWED_GAME = "GAME";
+	const std::string UNKNOWN_GAME = "aucune partie n'existe avec ce code";
+	const std::string KNOWN_GAME = "GAME";
 	std::string NEW_GAME(int code){
 		return "vous avez crée une partie avec le code : " + std::to_string(code);
 	}
 
 	// FRIEND INTERACTIONS
-	const std::string UNKNOWED_USERNAME = "▌L'utilisateur n'existe pas.";
+	const std::string UNKNOWN_USERNAME = "▌L'utilisateur n'existe pas.";
 	const std::string ALREADY_FRIENDS = "▌Vous êtes déjà ami avec cet utilisateur !";
 	const std::string ALREADY_SENT_REQUEST = "▌Vous avez déjà envoyé une demandé d'ami a cet utilisateur !";
 	const std::string NOT_FRIEND = "▌Vous n'êtes pas ami avec ce joueur !";

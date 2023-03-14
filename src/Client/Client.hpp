@@ -38,7 +38,7 @@ class Client {
      * In function of first element of the MainInputParser objet, it adds one or two parameters on the socket
      * If the methode didn't succeed to write on the socket it throws an error.
      */
-    void sendToServer(const MainInputParser &input);
+    void sendToServer(MainInputParser &input);
 
     /*
      * Method that attempt to write the GameInputParser parameter `input` on the socket.

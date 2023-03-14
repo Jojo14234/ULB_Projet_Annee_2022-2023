@@ -18,8 +18,9 @@ void Client::connectToServer() {
 }
 
 void Client::disconnectFromServer() {
-	// TODO: send a disconnect query to the server
-	this->socket.disconnect();
+    sf::Packet packet;
+    packet << static_cast<int>(QUERY_TYPE::DISCONNECT);
+    this->sendPacket(packet);
 }
 
 void Client::sendPacket(sf::Packet &packet) {
@@ -73,7 +74,7 @@ bool Client::sendCommand(MainInputParser &parser) {
 	case QUERY_TYPE::FRIENDS_ADD:
 	case QUERY_TYPE::FRIENDS_REMOVE:
 	case QUERY_TYPE::MESSAGE_SHOW: packet << parser[2]; break;
-	case QUERY_TYPE::MESSAGE_SEND: packet << parser[1] << parser[2]; break;
+	case QUERY_TYPE::MESSAGE_SEND: parser.regroupParameters(2); packet << parser[1] << parser[2]; break;
 	default: break;
 	}
 	this->sendPacket(packet);

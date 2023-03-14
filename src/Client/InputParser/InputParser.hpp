@@ -57,15 +57,15 @@ public:
      */
 	int getNbParameters() const { return input_separated.size() - 1; }
 
-    void regroupParameters() {
+    void regroupParameters(int n = 1) {
         std::string merged_params = "";
         // Loop over the params of the loop (but not the last)
-        for (unsigned int i = 1; i < input_separated.size() - 1; i++) {
+        for (unsigned int i = n; i < input_separated.size() - 1; i++) {
             merged_params += input_separated[i]; // add the params to the `regroup_params` variable
             merged_params += " "; // Add a space between each params
         }
         merged_params += input_separated[input_separated.size()-1]; // Add the last params but without the space at the end.
-        input_separated[1] = merged_params; // Place the `regroup_params` variable at the place of the first params.
+        input_separated[n] = merged_params; // Place the `regroup_params` variable at the place of the first params.
     }
 };
 

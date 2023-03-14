@@ -14,7 +14,7 @@ void Client::connectToServer() {
 }
 
 void Client::disconnectFromServer() {
-	// TODO: send a disconnect query to the server
+	// send a disconnect query to the server
 	this->socket.disconnect();
 }
 

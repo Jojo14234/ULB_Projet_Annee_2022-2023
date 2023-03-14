@@ -32,7 +32,7 @@ void MainInputParser::joinInput() {
 }
 
 void MainInputParser::messageInput() {
-    if (this->getNbParameters() == 2) {
+    if (this->getNbParameters() >= 2) {
         this->query_type = ((*this)[1] == "show") ? QUERY_TYPE::MESSAGE_SHOW : QUERY_TYPE::MESSAGE_SEND; }
     else { std::cout << "(MainInputParser::messageInput()) Il n'y a pas exactement 2 arguments, il y en a [" << this->getNbParameters() << "]." << std::endl;}
 }

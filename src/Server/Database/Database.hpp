@@ -17,7 +17,7 @@ class Database {
 	
 	std::vector<User> data;
 	std::vector<Conversation> chat;	// not saved in path
-	const char* path;
+	std::string path;
     size_t fileSize(FILE *file);
 	mutable AccessMonitor user_am;
 	mutable AccessMonitor chat_am;
@@ -28,7 +28,7 @@ class Database {
 
 public:
 
-	Database(const char* path): path{path} { this->load(); }
+	Database(std::string path): path{path} { this->load(); }
 	~Database() { this->save(); }
 	
 	// Load from the db file
