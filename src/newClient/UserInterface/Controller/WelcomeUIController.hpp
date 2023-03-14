@@ -20,7 +20,7 @@ class WelcomeUIController: public AbstractUIController {
 
 public: 
 	
-	WelcomeUIView(Client* model, WelcomeUIView* view) : AbstractUIController(model, STATE::Welcome), view{view} {}
+	WelcomeUIController(Client* model, WelcomeUIView* view) : AbstractUIController(model, STATE::WELCOME), view{view} {}
 
 	~WelcomeUIController()=default;
 

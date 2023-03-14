@@ -20,7 +20,7 @@ class MenuUIController: public AbstractUIController {
 
 public: 
 	
-	MenuUIView(Client* model, MenuUIView* view) : AbstractUIController(model, STATE::Menu), view{view} {}
+	MenuUIController(Client* model, MenuUIView* view) : AbstractUIController(model, STATE::MENU), view{view} {}
 
 	~MenuUIController()=default;
 

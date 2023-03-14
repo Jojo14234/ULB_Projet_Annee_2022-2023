@@ -20,7 +20,7 @@ class FriendsUIController: public AbstractUIController {
 
 public: 
 	
-	FriendsUIView(Client* model, FriendsUIView* view) : AbstractUIController(model, STATE::FRIENDS), view(view) {}
+	FriendsUIController(Client* model, FriendsUIView* view) : AbstractUIController(model, STATE::FRIENDS), view(view) {}
 
 	~FriendsUIController()=default;
 

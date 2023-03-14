@@ -20,7 +20,7 @@ class GameUIController: public AbstractUIController {
 
 public: 
 	
-	GameUIView(Client* model, GameUIView* view) : AbstractUIController(model, STATE::Game), view{view} {}
+	GameUIController(Client* model, GameUIView* view) : AbstractUIController(model, STATE::GAME), view{view} {}
 
 	~GameUIController()=default;
 

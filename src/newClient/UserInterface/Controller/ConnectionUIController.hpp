@@ -22,7 +22,7 @@ class ConnectionUIController: public AbstractUIController {
 
 public: 
 	
-	ConnectionUIView(Client* model, ConnectionUIView* view) : AbstractUIController(model, STATE::CONNECTION), view{view} {}
+	ConnectionUIController(Client* model, ConnectionUIView* view) : AbstractUIController(model, STATE::CONNECTION), view{view} {}
 
 	~ConnectionUIController()=default;
 

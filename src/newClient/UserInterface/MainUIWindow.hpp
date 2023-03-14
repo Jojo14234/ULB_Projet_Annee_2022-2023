@@ -5,6 +5,7 @@
 #pragma once
 
 #include <SFML/Window.hpp>
+#include <SFML/Graphics.hpp>
 
 #include "../AbstractMainWindow.hpp"
 #include "AbstractUI.hpp"
@@ -14,6 +15,8 @@
 class MainUIWindow: public AbstractMainWindow<STATE, sf::Event>, public AbstractUI {
 
 	// attributes
+	sf::RenderWindow window;
+
 
 	void initAttributes() override;
 
@@ -21,9 +24,9 @@ class MainUIWindow: public AbstractMainWindow<STATE, sf::Event>, public Abstract
 
 public:
 	
-	using AbstractMainWindow<STATE, sf::Event>::AbstractMainWindow;
+	MainUIWindow();
 	
-	~MainUIWindow()=default;
+	~MainUIWindow();
 	
 	void mainLoop() override;
 

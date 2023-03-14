@@ -20,7 +20,7 @@ class RankUIController: public AbstractUIController {
 
 public: 
 	
-	RankUIView(Client* model, RankUIView* view) : AbstractUIController(model, STATE::Rank), view{view} {}
+	RankUIController(Client* model, RankUIView* view) : AbstractUIController(model, STATE::RANK), view{view} {}
 
 	~RankUIController()=default;
 
