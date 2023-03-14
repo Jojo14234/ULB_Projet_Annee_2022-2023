@@ -9,18 +9,21 @@
 #include "Controller/MainController.hpp"
 #include "View/MainView.hpp"
 #include "utils.hpp"
+#include "../utils/AccessMonitor.hpp"
 
 
-class MainWindow {
+class MainWindow : public Subject {
 
 	Window win{ObjectInfo{LINES, COLS, 0, 0}, "CAPITALI$T"};
 
 	Client model;
 	MainView view{&model};
-	MainController controller{&model, &view};
+	MainController controller{&model, &view, this};
 
 	// Initial state
 	STATE state=STATE::CONNECTION;
+
+	AccessMonitor am;
 
 public: 
 
@@ -32,17 +35,22 @@ public:
 		refresh();	// Print it on to the real screen
 		this->draw();
 		this->controller.move(state);
-		//state = STATE::MENU;
 	}
 
 	~MainWindow() {
 		endwin();	// End curses mode
 	}
 
+	void update() override {
+		this->draw();
+	}
+
 	void draw() {
+		this->am.lockWriter();
 		this->win.draw();
 		this->view.draw(state);
 		refresh();
+		this->am.unlockWriter();
 	}
 
 	void loop() {

@@ -8,6 +8,7 @@
 #include "../View/GameView.hpp"
 #include "../InputParser/GameInputParser.hpp"
 #include "../InputParser/GameStateParser.hpp"
+#include "../utils.hpp"
 
 
 class GameController : public AbstractController {
@@ -15,6 +16,8 @@ class GameController : public AbstractController {
 	enum MENU_STATE { CHAT, CONSOLE, IDLE };
 	MENU_STATE STATE = IDLE;
 	GameView* view;
+	Subject* win;
+
 	//
 	int n_player = 2;
 
@@ -101,7 +104,7 @@ public:
 			else {
 				this->view->getConsole()->addText(response);
 			}
-			//this->view->draw();
+			this->win->update();
 		}
 	}
 	
@@ -130,6 +133,8 @@ public:
 		this->view->getPlayersWaitingText()->setHidden();
 		this->view->getOwnerWaitingText()->setHidden();
 	}
+
+	void setSubject(Subject* win) { this->win = win; }
 
 };
 

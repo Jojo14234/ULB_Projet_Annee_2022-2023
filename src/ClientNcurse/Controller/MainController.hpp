@@ -21,7 +21,9 @@ class MainController {
 
 public:
 
-	MainController(Client *model, MainView* view) : model{model}, view{view} {}
+	MainController(Client *model, MainView* view, Subject* win) : model{model}, view{view} {
+		game.setSubject(win);
+	}
 
 	void handleInput(STATE &state, int ch) {
 		switch (state) {
