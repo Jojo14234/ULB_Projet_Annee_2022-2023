@@ -7,7 +7,7 @@
 #include "../../Game/Capitalist.hpp"
 #include "../../utils/Configs.hpp"
 #include "../../Game/Board/Obtainable/Cells/Land/Land.hpp"
-#include "../../Game/Player.hpp"
+#include "../../Game/Player/Player.hpp"
 #include <SFML/Network.hpp>
 
 

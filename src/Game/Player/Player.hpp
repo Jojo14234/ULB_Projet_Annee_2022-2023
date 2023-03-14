@@ -10,16 +10,18 @@
 
 #include "BankAccount.hpp"
 //#include "Board/Obtainable/Cells/Cell.hpp"
-#include "Board/Obtainable/Cards/JailCard.hpp"
-#include "Board/Obtainable/Cells/Land/Land.hpp"
-#include "Board/Obtainable/Cells/Land/Property.hpp"
-#include "Board/Obtainable/Cells/Land/Company.hpp"
-#include "Board/Obtainable/Cells/Land/Station.hpp"
+#include "../Board/Obtainable/Cards/JailCard.hpp"
+#include "../Board/Obtainable/Cells/Land/Land.hpp"
+#include "../Board/Obtainable/Cells/Land/Property.hpp"
+#include "../Board/Obtainable/Cells/Land/Company.hpp"
+#include "../Board/Obtainable/Cells/Land/Station.hpp"
 
 
 #include "PLAYER_STATUS.hpp"
-#include "Dice.hpp"
-#include "../utils/Configs.hpp"
+#include "../Dice/Dice.hpp"
+#include "../../utils/Configs.hpp"
+//#include "../../Server/ClientManager/ClientManager.hpp"
+
 
 class ClientManager;
 class Cell;

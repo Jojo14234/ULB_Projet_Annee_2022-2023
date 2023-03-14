@@ -95,19 +95,11 @@ Cell* Board::getCellByIndex(int index){
     return cells.at(index).get();
 }
 
-LandCell* Board::getCellByName(std::string &name){
-    LandCell* land_cell = nullptr; //TODO temp soltion, ask Hugo si ça lui semble logique
-    for (auto cell : cells){
-        land_cell = dynamic_cast<LandCell*>(cell.get());
-        if (land_cell != nullptr){
-            if (land_cell->getLand()->getName() == name){
-                return land_cell;
-            }
-            else{
-                land_cell = nullptr;
-            }
-        }
+LandCell* Board::getCellByName(const std::string &name) {
+    for (auto cell : cells) {
+        LandCell* land_cell = dynamic_cast<LandCell*>(cell.get());
+        if ( !land_cell ) { continue; }
+        if ( land_cell->getLand()->getName() == name ) { return land_cell; }
     }
-    return land_cell;
+    return nullptr;
 }
-

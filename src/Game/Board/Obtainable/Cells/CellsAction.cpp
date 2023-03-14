@@ -1,4 +1,4 @@
-#include "../../../Player.hpp"
+#include "../../../Player/Player.hpp"
 #include "DrawableCardCell.hpp"
 #include "GoJailCell.hpp"
 #include "JailCell.hpp"

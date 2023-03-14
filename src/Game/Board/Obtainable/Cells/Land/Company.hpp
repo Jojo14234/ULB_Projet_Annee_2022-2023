@@ -2,7 +2,7 @@
 #define _GAME_COMPANY_HPP
 
 #include "Land.hpp"
-#include "../../../../../Game/Dice.hpp"
+#include "../../../../Dice/Dice.hpp"
 
 class Player;
 

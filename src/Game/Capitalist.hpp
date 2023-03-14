@@ -5,7 +5,7 @@
 
 #include "../utils/Configs.hpp"
 
-#include "Player.hpp"
+#include "Player/Player.hpp"
 #include "Board/Board.hpp"
 #include "../Game/Board/Obtainable/Cells/LandCell.hpp"
 

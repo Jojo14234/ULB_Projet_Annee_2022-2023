@@ -35,6 +35,11 @@ SERVER_DB_CHAT_BINS = $(patsubst Server/Database/Chat/%.cpp, Server/Database/Cha
 SERVER_GAME_BINS = $(patsubst Server/Game/%.cpp, Server/Game/%.o, $(wildcard Server/Game/*.cpp))
 GAME_BINS = $(patsubst Game/%.cpp, Game/%.o, $(wildcard Game/*.cpp))
 
+
+# GAME
+PLAYER_BINS = $(patsubst Game/Player/%.cpp, Game/Player/%.o, $(wildcard Game/Player/*.cpp))
+DICE_BINS = $(patsubst Game/Dice/%.cpp, Game/Dice/%.o, $(wildcard Game/Dice/*.cpp))
+
 BOARD_BINS = $(patsubst Game/Board/%.cpp, Game/Board/%.o, $(wildcard Game/Board/*.cpp))
 OBTAINABLE_BINS = $(patsubst Game/Board/Obtainable/%.cpp, Game/Board/Obtainable/%.o, $(wildcard Game/Board/Obtainable/*.cpp))
 CARDS_BINS = $(patsubst Game/Board/Obtainable/Cards/%.cpp, Game/Board/Obtainable/Cards/%.o, $(wildcard Game/Board/Obtainable/Cards/*.cpp))
@@ -59,7 +64,7 @@ client: ${CLIENT_BINS} ${CLIENT_INPUTPARSER_BINS}
 	${CXX} ${CXXFLAGS} -o capitalist $^ ${LDLIBS}
 	make clean
 
-server: ${SERVER_BINS} ${SERVER_CM_BINS} ${SERVER_DB_BINS} ${GAME_BINS} ${BOARD_BINS} ${OBTAINABLE_BINS} ${CARDS_BINS} ${CELLS_BINS} ${LAND_BINS} ${SERVER_DB_FRIEND_BINS} ${SERVER_DB_CHAT_BINS} ${SERVER_GAME_BINS} 
+server: ${SERVER_BINS} ${SERVER_CM_BINS} ${SERVER_DB_BINS} ${GAME_BINS} ${PLAYER_BINS} ${DICE_BINS} ${BOARD_BINS}  ${OBTAINABLE_BINS} ${CARDS_BINS} ${CELLS_BINS} ${LAND_BINS} ${SERVER_DB_FRIEND_BINS} ${SERVER_DB_CHAT_BINS} ${SERVER_GAME_BINS}
 	${CXX} ${CXXFLAGS} -o server_capitalist $^ ${LDLIBS}
 	make clean
 

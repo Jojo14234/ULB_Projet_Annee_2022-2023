@@ -3,10 +3,9 @@
 //
 
 #include "Player.hpp"
-#include "Dice.hpp"
 #include "BankAccount.hpp"
-#include "Board/Board.hpp"
-#include "../Server/ClientManager/ClientManager.hpp"
+#include "../Board/Board.hpp"
+//#include "../../Server/ClientManager/ClientManager.hpp"
 
 /*
 void Player::payToExitPrison() {

@@ -1,7 +1,7 @@
 #include "CellCard.hpp"
 #include "../../../../Server/Game/GameServer.hpp"
 
-#include "../../../Player.hpp"
+#include "../../../Player/Player.hpp"
 
 void CellCard::action(Player* player) {
     player->getClient()->send("Vous vous déplacez à la case "+ std::to_string(dest));

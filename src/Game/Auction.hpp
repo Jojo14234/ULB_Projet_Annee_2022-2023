@@ -6,7 +6,7 @@
 #define INFO_F209_GR5_2022_AUCTION_HPP
 
 #include <vector>
-#include "Player.hpp"
+#include "Player/Player.hpp"
 
 
 class Auction {
