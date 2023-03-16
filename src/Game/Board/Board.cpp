@@ -90,10 +90,9 @@ void Board::extractDeckCard(Json::Value &list, std::shared_ptr<CardDeck> deck) {
     }
 }
 
-
-Cell* Board::getCellByIndex(int index){
-    return cells.at(index).get();
-}
+Cell* Board::operator[](int index) {
+    return cells.at(index % BOARD_SIZE).get();
+};
 
 LandCell* Board::getCellByName(const std::string &name) {
     for (auto cell : cells) {

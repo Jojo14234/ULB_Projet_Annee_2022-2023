@@ -4,72 +4,47 @@
 
 #include "Player.hpp"
 #include "BankAccount.hpp"
-#include "../Board/Board.hpp"
 //#include "../../Server/ClientManager/ClientManager.hpp"
 
-/*
-void Player::payToExitPrison() {
 
-    pay(50);
-    status = FREE;
-
+int Player::processRollDice(Dice &dice) {
+    int result = this->roll(dice);
+    // If no double then return
+    if ( !dice.isDouble() ) { return result; }
+    // If double then, set the hasRolled attribut to false;
+    if ( dice.getDoubleCounter() <= 2 ) { this->setRolled(false); return result; }
+    if ( dice.getDoubleCounter() == 3 ) { this->setStatus(JAILED); return 0; }
+    return result;
 }
-bool Player::useGetOutOfJailCard() {
-    if (GOOJ_cards.size() > 0){
-        GOOJ_cards.pop_back();
-        status = FREE;
-        return true;
+
+
+void Player::processMove(Cell* new_cell, bool gainMoneyIfPassByStart) {
+    if ( gainMoneyIfPassByStart && this->current_cell->getPosition() > new_cell->getPosition() ) {
+        this->receive(STARTING_MONEY, "la banque");
     }
-    return false;
+    this->current_cell = new_cell;
 }
-
-bool Player::isMine(Property property) {
-    //return (*this == property.owner);
-    return true; //delete this line
-}
-
-//void Player::partakeInAuction(int auction) {} pas encore d'actualité
-
-int Player::rollDice(Dice* dice) {
-    return dice->roll();
-}
-
-void Player::leaveGame() {
-    declareBankruptcy();
-    //warn that player is leaving, somehow
-}
-
-void Player::play() {
-    //tj pas compris à quoi ça servait, ça sert d'ailleurs à rien je pense après réflexion
-    //je ne sais pas comment envoyer des possibilités en client, mais c'est probablement ce qu'il faut faire ici
-}
-
-void Player::setPosition(Cell *cell) {
-    current_cell = cell;
-}
-
-bool Player::buyProperty() {
-    //return pay(current_cell->getPropertyPrice()); //cette méthode n'est pas dans le SRD, mais devrais exister
-    return true;
-}
+Cell* Player::processMove(int n, Board &board) {
+    // Calcul of the new Cell idx
+    int new_cell_idx = this->current_cell->getPosition() + n;
+    // If the new idx is greater than the board size then we are on the start_cell and we receive money
+    if (new_cell_idx >= BOARD_SIZE) { this->receive(MONEY_START_CELL, "la banque"); }
+    // set the new current_cell
+    this->current_cell = board[new_cell_idx];
+    return this->current_cell;
+};
 
 
-void Player::move(int distance) {
-    //current_cell->getPosition(); //n'existe pas dans le SRD!
-    //current_cell = Board().getCell(current_cell->getPosition()); //getCell n'est pas non plus dans le srd
-}
 
-//void Player::exchange(int negociation) {} pas encore possible à implémenter
-
-//int Player::getProperties() {} //le ide boude, je ne comprends pas pq
-
-//void Player::declareBankruptcy() {} pas encore possible à implémenter
-*/
 int Player::getIndexOnBoard() {return 1;} //current_cell->getPosition();}
 
 void Player::setAdmin() {admin = true;}
 
 bool Player::isAdmin() { return admin; }
+
+bool Player::isItMe(ClientManager &client) const {
+    return this->client == &client;
+}
 
 ClientManager *Player::getClient() const { return client; }
 
@@ -110,13 +85,12 @@ bool Player::passedByStart(Cell* cell, bool pass_by_start) {
     }
     return false;
 }
-Cell *Player::getCurrentCell() { return current_cell; }
+Cell *Player::getCurrentCell() const { return current_cell; }
 
 void Player::goToJail(Cell *cell) {
     move(cell, false);
     this->status = JAILED;
-    this->rolls_in_prison =0;
-    getClient()->send("-|-|-Vous allez en prison.-|-|-");
+    this->rolls_in_prison = 0;
 }
 
 void Player::exitJail() { this->status = FREE; }
@@ -160,7 +134,7 @@ void Player::leaveAuction() {
     currently_in_auction = false;
 }
 
-void Player::leaveAuctionSilently() {
+void Player::clearAuction() {
     currently_in_auction = false;
 }
 
@@ -249,8 +223,8 @@ void Player::removeCompagnie(Company* c) {
 void Player::auctionMustStart() { auction_must_start = true; }
 void Player::exchangeFromJail() { exchange_from_jail = true; }
 
-PLAYER_STATUS Player::getPlayerStatus() { return status; }
-void Player::setPlayerStatus(PLAYER_STATUS new_status) { status = new_status; }
+PLAYER_STATUS Player::getStatus() { return status; }
+void Player::setStatus(PLAYER_STATUS new_status) { status = new_status; }
 
 std::string Player::getStringOfAllProperties(){
     std::string ret_string = "\n";
@@ -282,4 +256,6 @@ Player* Player::getBankruptingPlayer(){
     return bankrupting_player;
 }
 
-int Player::getPosition() { return current_cell->getPosition(); }
+int Player::getPosition() const { return this->current_cell->getPosition(); }
+
+int Player::getMoney() const { return this->bank_account.getMoney(); }

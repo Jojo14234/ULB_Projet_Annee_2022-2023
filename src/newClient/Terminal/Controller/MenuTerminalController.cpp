@@ -32,7 +32,7 @@ void MenuTerminalController::handle(int event) {
 			this->view->console.addInput();
 			MainInputParser parser(this->view->console.getInput());
 			std::string response;
-			if (this->model->sendCommand(parser)) { this->model->receive(response); }
+			if (this->model->sendCommand(parser)) { QUERY query = this->model->receive(response); }
 			else { response = "La commande n'existe pas"; }
 			this->view->console.addText(response);
 
@@ -47,7 +47,7 @@ void MenuTerminalController::handle(int event) {
 		case JOIN: {
 			this->model->sendJoinGame(this->view->join.getValue());
 			std::string response;
-			this->model->receive(response);
+			QUERY query = this->model->receive(response);
 			this->view->console.addText(response);
 			if (response != "aucune partie n'existe avec ce code"){
 				this->new_state = STATE::GAME;

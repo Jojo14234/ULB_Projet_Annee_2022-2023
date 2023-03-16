@@ -18,7 +18,6 @@ class GameController : public AbstractController {
 	GameView* view;
 	Subject* win;
 
-	//
 	int n_player = 2;
 
 
@@ -89,6 +88,7 @@ public:
 		}
 	}
 
+    //TODO HERE
 	void receiveMessagesLoop() {
         for (int i = 0; i< n_player;i++){this->view->getBoard()->setPlayer(0, i);}
 		while (this->new_state == STATE::GAME) {

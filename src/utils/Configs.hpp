@@ -9,7 +9,8 @@
 const auto IP = "127.0.0.1";
 const auto PORT = 8080;
 const auto STARTING_MONEY = 1500;
-const int BOARD_SIZE = 40;
+const auto MONEY_START_CELL = 200;
+const auto BOARD_SIZE = 40;
 
 const int PRISON_INDEX = 10;
 
@@ -68,7 +69,6 @@ enum class QUERY_TYPE {
 
 enum class GAME_QUERY_TYPE {
     START,
-
     END_TURN,
 	ROLL_DICE,
     PAY,

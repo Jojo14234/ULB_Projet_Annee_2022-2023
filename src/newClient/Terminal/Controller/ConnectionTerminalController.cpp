@@ -7,6 +7,7 @@
 #include "ConnectionTerminalController.hpp"
 #include "../View/ConnectionTerminalView.hpp"
 #include "../../Model/Client.hpp"
+#include "../../../Server/ClientManager/QUERY.hpp"
 
 // Public
 
@@ -34,8 +35,8 @@ void ConnectionTerminalController::handle(int event) {
 					this->model->sendRegister(this->view->username_input_box.getText(), this->view->password_input_box.getText());
 				} else { break; }
 				std::string response;
-				this->model->receive(response);
-				if (response == "TRUE") { this->new_state = STATE::MENU; }
+				QUERY query = this->model->receive(response);
+				if ( query == QUERY::TRUE ) { this->new_state = STATE::MENU; }
 				this->clear();
 			}
 		}

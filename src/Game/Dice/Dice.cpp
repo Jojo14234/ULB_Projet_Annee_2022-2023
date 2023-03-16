@@ -8,9 +8,9 @@ int Dice::roll() {
     return result;
 }
 
-int Dice::getResults()          { return result; }
+int Dice::getResults() const    { return result; }
 int Dice::getDice1()            { return dice1.getResult(); }
 int Dice::getDice2()            { return dice2.getResult(); }
-int Dice::getDoubleCounter()    { return double_counter; }
+int Dice::getDoubleCounter() const { return double_counter; }
 void Dice::resetDoubleCounter() { double_counter = 0; }
-bool Dice::isDouble()           { return dice1.getResult() == dice2.getResult(); }
+bool Dice::isDouble() const     { return dice1.getResult() == dice2.getResult(); }

@@ -14,4 +14,4 @@ int Die::roll(){
     result = distrib(gen);
     return result;
 }
-int Die::getResult() { return result; }
+int Die::getResult() const { return result; }

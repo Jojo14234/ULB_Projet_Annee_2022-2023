@@ -32,12 +32,44 @@ public:
 	
 	GameServer() { clients.reserve(MAX_NB_PLAYER);}
 
-    void sendAllGameData();
-    void sendStartInfo();
-    void boardInfos();
+    // Send big string with infos in it.
+    void sendStartData();
+    void sendGameData();
+    void sendBetterGameData();
 
-	// Loop for the client
-	void clientLoop(ClientManager &client);
+    // Player
+
+    void client_has_join_the_game(ClientManager &client);
+
+    int clientLoop(ClientManager &client);
+
+    Player* findMe(ClientManager &client);
+
+
+    void clientTurn(ClientManager &client, Player* me);
+
+    void processRollDice(ClientManager&, Player* player);
+
+    bool hasFinishRolledDice(Player* player);
+
+    void processBuild(ClientManager &client, Player* player);
+
+    void processAuction(ClientManager &client, Player* player);
+
+    void processBankrupt(ClientManager &client, Player* player);
+
+    void processStart(ClientManager* client);
+
+
+
+
+
+
+
+    // Getter
+    GAME_QUERY_TYPE getGameQuery(ClientManager &client);
+
+
     //void clientBeforeRollLoop(ClientManager &client);
     void clientBankruptLoop(ClientManager &client);
     void clientAuctionLoop(ClientManager &client, LandCell* land_cell);
@@ -45,6 +77,7 @@ public:
     void participateInExchange(ClientManager &client);
 	// Add a client to the game 
 	//void addClient(ClientManager* client);
+    void removeClient(ClientManager* client);
 
 	// GETTERS
 	int getCode() const;
@@ -58,7 +91,6 @@ public:
     void processGameQuery(ClientManager &client, GAME_QUERY_TYPE query);
     void processGameQueryBeforeRoll(ClientManager &client, GAME_QUERY_TYPE query);
 
-    void processStart(ClientManager &client);
     void processEndTurn(ClientManager &client);
     void processDiceRoll(ClientManager &client);
     void processMortgageProperty(ClientManager &client);
@@ -73,7 +105,8 @@ public:
     bool isClientAdmin(ClientManager &client);
 
     void updateAllClients(std::string update);
-    void updateAllClientsWithQuery(QUERY &query, std::string update);
+    void updateAllClientsWithQuery(QUERY &&query, std::string update);
+    void updateThisClientWithQuery(QUERY &&query, std::string update, ClientManager &client);
     bool proposeExchange(Player& proposing_player, Player &proposed_to_player, Land *land, int amount);
     Land* getLandByName(std::string &name);
     void processBankruptcyToPlayer();
@@ -82,11 +115,11 @@ public:
     /*
      * Rémy Test
      */
-    GAME_QUERY_TYPE getGameQuery(ClientManager &client);
+
 
     void clientBeforeRollLoop(ClientManager &client);
 
-    void connectClientToThisGame(ClientManager* client);
+    void connectClientToThisGame(ClientManager &client);
 
     void treeDouble(ClientManager& client);
 

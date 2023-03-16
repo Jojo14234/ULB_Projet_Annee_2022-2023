@@ -8,6 +8,8 @@
 #include "InputParser/MainInputParser.hpp"
 #include "ClientController.hpp"
 #include "./UI/ConnectionUI.hpp"
+#include "../Server/ClientManager/QUERY.hpp"
+
 
 
 class Client {
@@ -52,18 +54,19 @@ class Client {
      * If the methode didn't succeed to read on the socket it throws an error.
      */
     void receiveFromServer(std::string &output);
+    QUERY receiveFromServer2(std::string &output);
 
     /*
      * Method that return whether or not the connection between an account and a client was made.
      * It also shows the right message in function of the connection and the query (register/login)
      */
-    bool checkAccountConnection(std::string &output, QUERY_TYPE query);
+    bool checkAccountConnection(QUERY output, QUERY_TYPE query);
 
     /*
      * Method that attempt to analyse what the server send to the client
      * It returns a string with the interpretation of the server message
      */
-    std::string analyseServerResponse(std::string &output);
+    std::string analyseServerResponse(QUERY query, std::string &output);
 
     /*
      * Executes a loop for handling user input and executing corresponding actions.
@@ -98,6 +101,9 @@ class Client {
      * And performed action based on the message.
      */
     void receiveFromServerLoop();
+
+    void parseQuery(QUERY query, std::string output);
+    void showMsg(std::string msg, QUERY query = QUERY::MESSAGE);
 
 public:
 

@@ -19,7 +19,7 @@ public:
     int gain(int amount);
 
     ///retrieve amount of money in account
-    int getMoney();
+    int getMoney() const;
 };
 
 

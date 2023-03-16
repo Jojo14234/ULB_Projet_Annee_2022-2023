@@ -44,7 +44,7 @@ public:
 	Board();
     ~Board()=default;
 
-    Cell* getCellByIndex(int index);
+    Cell* operator[](int index);
 
     LandCell* getCellByName(const std::string &name);
 

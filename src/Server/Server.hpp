@@ -32,6 +32,8 @@ class Server {
 	// Connect a new client
 	void connectClient();
 
+    // For Disconnection of the user
+    void clientProcessDisconnect(ClientManager &client);
 	// To process the client query 
 	void clientProcessQuery(ClientManager &client, QUERY_TYPE query);
 	// For connection

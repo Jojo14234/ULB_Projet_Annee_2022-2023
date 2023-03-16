@@ -9,52 +9,22 @@
 #include "Board/Board.hpp"
 #include "../Game/Board/Obtainable/Cells/LandCell.hpp"
 
-
+enum class AuctionStatus {STOP, START, OTHER};
+enum class ExchangeStatus{STOP, START, OTHER};
 class ClientManager;
 
 
-class CapitalistUI {
-public:
-    CapitalistUI()=default;
-
-    std::string refactorName(std::string name) {
-        unsigned int size_diff = name.size() - 8;
-        for (unsigned int i = 0; i < size_diff; i++) {
-            name += " ";
-        }
-        return name;
-    }
-
-    std::string refactorValue(int value) {
-        if (value < 10) {return " " + std::to_string(value);}
-        return std::to_string(value);
-    }
-
-    std::string RollDiceMessage(std::string name, int value, bool isDouble) {
-        std::string str = "";
-        str += "+———————————————————————————————CAPITALI$T———————————————————————————————+\n";
-        str += ("|        Le joueur [" + this->refactorName(name) + "] a jeté les dés.            |\n");
-        str += ("|              Valeur des dés [" + this->refactorValue(value) + "]                      |\n");
-        if (isDouble) {
-            str += ("|         Vous avez obtenus un double [" + std::to_string(value/2) + "]             |\n");
-            str += ("|                      Iel va pouvoir rejouer !|                         |\n");
-        }
-        str += "+————————————————————————————————————————————————————————————————————————+";
-        return str;
-    }
-};
-
 class Capitalist {
+
     std::vector<Player> players;
     int current_player_index = 0;
     bool running = false;
 
-    int auction_in_progress = 0;
-    int exchange_in_progress = 0;
+    AuctionStatus auction_in_progress = AuctionStatus::STOP;
+    ExchangeStatus exchange_in_progress = ExchangeStatus::STOP;
 
     Board board;
     Dice dice;
-    CapitalistUI ui{};
 
 public:
 
@@ -62,52 +32,51 @@ public:
 
 	void receiveQuery(GAME_QUERY_TYPE query, sf::Packet &packet);
 
-	//void sendMessage(std::string &output) { output = "coucou ici capitalist"; }
 
+    // Refactor order
+
+    // All the function about game Infos
+    std::string getStartInfos();
+    std::string getGameInfos();
+    std::string getBetterGameInfos();
+
+    // All the function about the player
     void addPlayer(ClientManager &client);
-    void removePlayer();
-    void startGame();
-    CapitalistUI getUI() {return ui;}
-
-    /*
-    Player* getPlayerByClientId(int id){
-        for (auto &player : players){
-            if (player.getId() == id)
-                return &player;
-            }
-        } return nullptr;
-    }
-*/
-
-    Player* getCurrentPlayer();
-
-    bool isRunning() const;
-
-    void endCurrentTurn();
-
-    int rollDice();
-    std::string getRollString();
-
-    bool rolledADouble();
-
-    Player* getPlayerByClient(ClientManager &client);
-    Dice& getDice();
-    Board* getBoard();
-
-    int getNumberOfPlayers();
-
+    void removePlayer(ClientManager &client);
     std::vector<Player>* getPlayers();
+    Player* getPlayer(ClientManager &client);
+    Player* getCurrentPlayer();
+    int getPlayersSize();
+
+    // All the function about the board or the cell
+    Board& getBoard();
+    LandCell* getLandCell(std::string  &name);
+
+    // Roll Dice
+    int rollDice();
+    bool rolledADouble() const;
+    Dice& getDice();
+
+    // All the function about auctions
     void startAuction();
     void stopAuction();
+    void setAuctionProgress(AuctionStatus progress);
+    AuctionStatus getAuctionStatus() const;
+    Player* getAuctionWinner();
 
-    Player* identifyAuctionWinner();
+    // All the function about exchange
+    void setExchangeStatus(ExchangeStatus status);
+    ExchangeStatus getExchangeStatus() const;
 
-    LandCell* getCellByName(std::string& name);
+    // Start the game
+    void startGame();
+    bool isRunning() const;
+    void endCurrentTurn();
 
-    int auctionInProgress() { return auction_in_progress;}
-    void setAuctionProgress(int progress) {auction_in_progress = progress;}
-    void setExchangeStatus(int status) {exchange_in_progress = status;}
-    int getExchangeStatus() {return exchange_in_progress;}
+
+    ///////////////////////////////////////
+    ClientManager* getWinner();
+
 };
 
 

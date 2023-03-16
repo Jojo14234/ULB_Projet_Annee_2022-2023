@@ -10,6 +10,7 @@
 
 #include "BankAccount.hpp"
 //#include "Board/Obtainable/Cells/Cell.hpp"
+#include "../Board/Board.hpp"
 #include "../Board/Obtainable/Cards/JailCard.hpp"
 #include "../Board/Obtainable/Cells/Land/Land.hpp"
 #include "../Board/Obtainable/Cells/Land/Property.hpp"
@@ -25,6 +26,7 @@
 
 class ClientManager;
 class Cell;
+class Board;
 
 class Player {
 
@@ -115,6 +117,8 @@ public:
     void setAdmin();
     bool isAdmin();
 
+    bool isItMe(ClientManager &client) const;
+
     ClientManager* getClient() const;
     void send(std::string &s) const;
     void send(std::string &&s) const;
@@ -131,7 +135,7 @@ public:
 
     bool passedByStart(Cell* cell, bool passed_by_start);
 
-    Cell* getCurrentCell();
+    Cell* getCurrentCell() const;
 
     void exitJail();
     void goToJail(Cell *cell);
@@ -161,7 +165,7 @@ public:
     int getNumberOfCompanies() const;
 
     void leaveAuction();
-    void leaveAuctionSilently();
+    void clearAuction();
     bool isInAuction() const;
     void auctionStart();
 
@@ -181,9 +185,9 @@ public:
 
     void exchangeFromJail();
 
-    PLAYER_STATUS getPlayerStatus();
+    PLAYER_STATUS getStatus();
 
-    void setPlayerStatus(PLAYER_STATUS new_status);
+    void setStatus(PLAYER_STATUS new_status);
 
     std::string getStringOfAllProperties();
 
@@ -193,11 +197,20 @@ public:
 
     Player* getBankruptingPlayer();
 
-    void setIndex(int new_index) {index = new_index;}
+    void setIndex(int new_index) {
+        if ( this->index != -1 ) return;
+        index = new_index;
+    }
 
     int getIndex() const {return index;}
 
-    int getPosition();
+    int getPosition() const;
+
+    int getMoney() const;
+
+    int processRollDice(Dice &dice);
+    Cell* processMove(int n, Board &board);
+    void processMove(Cell* new_cell, bool gainMoneyIfPassByStart);
 };
 
 

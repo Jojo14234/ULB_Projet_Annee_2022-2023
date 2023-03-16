@@ -12,12 +12,12 @@ public:
     Dice();
     int roll();
 
-    int getResults();
+    int getResults() const;
     int getDice1();
     int getDice2();
-    int getDoubleCounter();
+    int getDoubleCounter() const;
     void resetDoubleCounter();
-    bool isDouble();
+    bool isDouble() const;
 
 };
 

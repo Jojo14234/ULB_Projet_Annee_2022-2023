@@ -2,8 +2,7 @@
 
 #include "Capitalist.hpp"
 #include "../Server/ClientManager/ClientManager.hpp"
-
-
+#include "../utils/randomFunctions.hpp"
 
 
 void Capitalist::receiveQuery(GAME_QUERY_TYPE query, sf::Packet &packet) {
@@ -17,105 +16,320 @@ void Capitalist::receiveQuery(GAME_QUERY_TYPE query, sf::Packet &packet) {
     std::cout << "in capitalist : " << (int)query << " " << s1 << " " << s2 << std::endl;
 }
 
+
+
+// Refactor order
+
 /*
-void Capitalist::sendMessage(std::string &output) {
-    output = "coucou ici capitalist";
-}
-*/
-void Capitalist::addPlayer(ClientManager &client) {
-    players.push_back(Player(&client, board.getCellByIndex(0)));
-    if (players.size() == 1) {players.at(0).setAdmin(); players[0].setCurrentlyPlaying(true);}
-}
+ * Return a string with all the game information at the start of the game.
+ * String is formatted like this :
+ *      nb_player|index=username|index=username|...
+ *  E.G. :  3|0=remy|1=hugo|2=a|
+ *
+ *  nb_player = number of player at the start of the game [int]
+ *  indexe = indexe of the player in the Players list [int]
+ *  username = name of the player [string]
+ */
+std::string Capitalist::getStartInfos() {
+    std::string ret = "";
 
-void Capitalist::removePlayer() {
-    //TODO : find correspinding id of player to delete
-    players.pop_back();
-}
+    std::string nb_players = std::to_string(this->players.size());
+    ret += nb_players + "|";
 
-void Capitalist::startGame() {
-    running = true;
-}
-
-Player* Capitalist::getCurrentPlayer() {
-    return &players.at(current_player_index);
-}
-
-bool Capitalist::isRunning() const {
-    return running;
+    for (const auto &player : this->players) {
+        std::string index =     std::to_string(player.getIndex());
+        std::string username =  player.getUsername();
+        ret += index + "=" + username + "|";
+    }
+    return ret;
 }
 
-void Capitalist::endCurrentTurn() {
-    players[current_player_index].setCurrentlyPlaying(false);
-    players[current_player_index].setRolled(false);
-    (current_player_index += 1) %= (players.size());
-    players[current_player_index].setCurrentlyPlaying(true);
-    players[current_player_index].getClient()->send("C'est à votre tour.");
-}
+/*
+ * return a string with all the game informations in it.
+ * String is formatted like this :
+ *      index:username:position:money:jailCardNb:property_name;level;mortgage|
+ *  E.G : O:remy:5:1500:0:cyan2;3;O|1:hugo:10:1400:2:rose1;3;0:rose2;2;1|
+ *
+ *  indexe = 0..n players [int]
+ *  username = account username [string]
+ *  position = current position [int]
+ *  money = current money [int]
+ *  jailCardNb = number of Go out of jail [int]
+ *  property_name = name of the property/station/company [string]
+ *  level = building level of a property [int]
+ *  mortgage = 0 = false / 1 = true [bool]
+ */
+std::string Capitalist::getGameInfos() {
+    std::string ret = "";
+    for ( const auto &player : this->players) {
+        std::string index =     std::to_string(player.getIndex());
+        std::string username =  player.getUsername();
+        std::string position =  std::to_string(player.getPosition());
+        std::string money =     std::to_string(player.getMoney());
+        std::string jailCard =  std::to_string(player.getAllGOOJCards().size());
+        ret += index + ":" + username + ":" + position + ":" + money + ":" + jailCard + ":";
 
-int Capitalist::rollDice() {return dice.roll();}
+        for (const auto property : player.getAllProperties()) {
+            std::string property_name =     property->getName();
+            std::string property_level =    std::to_string(property->getIntLevel());
+            std::string property_mortgage = std::to_string(property->isMortgaged());
+            ret += property_name + ";" + property_level + ";" + property_mortgage + ":";
+        }
 
-std::string Capitalist::getRollString() {
-    int roll = rollDice();
-    std::string str = "Valeur des dés : [" + std::to_string(roll) + "]\n";
-    if (rolledADouble()) {str += "Vous avez obtenus un double [" + std::to_string(roll/2) + "]\nIel va pourvoir rejouer !"; }
-    return str;
-}
+        for (const auto station : player.getAllStations()) {
+            std::string station_name =      station->getName();
+            std::string station_level =     "0";
+            std::string station_mortgage =  std::to_string(station->isMortgaged());
+            ret += station_name + ";" +station_level + ";" + station_mortgage + ":";
+        }
 
-bool Capitalist::rolledADouble() {
-    return dice.isDouble();
-}
-
-Player* Capitalist::getPlayerByClient(ClientManager &client) {
-    Player* ret = nullptr;
-    for (auto &player : players){
-        if (player.getClient() == &client){
-            ret = &player;
-            break;
+        for (const auto company : player.getAllCompanies()) {
+            std::string company_name =      company->getName();
+            std::string company_level =     "0";
+            std::string company_mortgage =  std::to_string(company->isMortgaged());
+            ret += company_name + ";" + company_level + ";" + company_mortgage + "|";
         }
     }
     return ret;
 }
 
-Dice& Capitalist::getDice() {
-    return dice;
+/*
+ * Return a string formatted with all the infos but this time it is readable by a human
+ */
+std::string Capitalist::getBetterGameInfos() {
+    std::string ret = "";
+    ret += "+——————————————————CAPITALI$T————————————————+\n";
+    for (const auto &player : this->players) {
+        std::string username =  changeStringSize(player.getUsername(), 8);
+        std::string position =  changeStringSize(player.getCurrentCell()->getName(), 7);
+        std::string positionI = changeStringSize(std::to_string(player.getPosition()), 2);
+        std::string money =     changeStringSize(std::to_string(player.getMoney()), 7);
+        ret += "| PLAYER | POSITION | MONEY | PROPERTY | LVL |\n";
+        ret += "|" + username + "|" + position + " " + positionI + "|" + money + "|                |\n";
+        for (const auto property : player.getAllProperties()) {
+            std::string prop = changeStringSize(property->getName(),10);
+            std::string level = changeStringSize(std::to_string(property->getIntLevel()), 5);
+            ret += "|                           |" + prop + "|" + level + "|\n";
+        }
+        for (const auto property : player.getAllCompanies()) {
+            std::string prop = changeStringSize(property->getName(), 10);
+            int multiInt = (player.getAllCompanies().size() == 2) ? 12 : 5;
+            std::string multiString = changeStringSize(std::to_string(multiInt), 5);
+            ret += "|                           |" + prop + "|" + multiString + "|\n";
+        }
+        for (const auto property : player.getAllStations()) {
+            std::string prop = changeStringSize(property->getName(), 10);
+            ret += "|                           |" + prop + "|     |\n";
+        }
+        ret += "+——————————————————CAPITALI$T————————————————+\n";
+    }
+    std::string nextTurn = changeStringSize((this->getCurrentPlayer()->getUsername() + "]"), 10);
+    ret += "|              A [" + nextTurn + " de jouer !      |\n";
+    ret += "+——————————————————————————————————————————————+\n";
+    return ret;
 }
 
-Board* Capitalist::getBoard() {
-    return &board;
+
+
+/*
+ * Add a player to Players list
+ * If it's the first player to be added he is automatically the admin of the game
+ */
+void Capitalist::addPlayer(ClientManager &client) {
+    Cell* starting_cell = this->board[0];
+    Player player{&client, starting_cell};
+    if ( players.empty() ) { player.setAdmin(); }
+    players.push_back(player);
 }
 
-int Capitalist::getNumberOfPlayers() {
-    return players.size();
-}
-
-std::vector<Player>* Capitalist::getPlayers(){
-    return &players; //ça marche ceci?
-}
-
-void Capitalist::startAuction() {
-    auction_in_progress = 1;
-    for (auto &player : players){
-            player.leaveAuctionSilently();
+/*
+ * Remove a player from the Players list by matching his client address
+ */
+void Capitalist::removePlayer(ClientManager &client) {
+    int i = 0;
+    while ( i < this->players.size() ) {
+        if (this->players[i].getClient() == &client) {
+            this->players[i] = this->players[this->players.size()-1];
+            this->players.pop_back();
+            break;
+        }
+        i++;
     }
 }
 
-void Capitalist::stopAuction() {auction_in_progress = 0;}
+/*
+ * Return the address of Players vector
+ */
+std::vector<Player>* Capitalist::getPlayers(){
+    return &this->players;
+}
 
-Player *Capitalist::identifyAuctionWinner() {
+/*
+ * Return the address of the player by matching the address of the clientManager
+ * If don't find the client return nullptr
+ */
+Player* Capitalist::getPlayer(ClientManager &client) {
+    for ( auto &player : this->players ) {
+        if ( player.getClient() == &client ) { return &player; }
+    }
+    return nullptr;
+}
+
+/*
+ * Return the player at the index "current_player_index";
+ */
+Player* Capitalist::getCurrentPlayer() {
+    return &this->players[this->current_player_index];
+}
+
+/*
+ * return the number of player in the game
+ */
+int Capitalist::getPlayersSize() {
+    return this->players.size();
+}
+
+
+
+/*
+ * Return the board
+ */
+Board& Capitalist::getBoard() {
+    return this->board;
+}
+
+/*
+ * Return the address of a land cell by it's name
+ */
+LandCell *Capitalist::getLandCell(std::string &name) {
+    return this->board.getCellByName(name);
+}
+
+
+
+/*
+ * Roll the dice and return the result
+ */
+int Capitalist::rollDice() {
+    return this->dice.roll();
+}
+
+/*
+ * Return if the last roll was a double or not
+ */
+bool Capitalist::rolledADouble() const {
+    return this->dice.isDouble();
+}
+
+/*
+ * Return the dice
+ */
+Dice& Capitalist::getDice() {
+    return this->dice;
+}
+
+
+
+/*
+ * Start an auction and clear everyone from the thing that know who is in the auction
+ * (Player will be added to this thing after doing a /participate)
+ */
+void Capitalist::startAuction() {
+    this->auction_in_progress = AuctionStatus::START;
+    for ( auto &player : this->players ) {
+        player.clearAuction();
+    }
+}
+
+/*
+ * Stop the auction
+ */
+void Capitalist::stopAuction() {
+    this->auction_in_progress = AuctionStatus::STOP;
+}
+
+/*
+ * Allow to set the auctionStatus
+ */
+void Capitalist::setAuctionProgress(AuctionStatus progress) {
+    this->auction_in_progress = progress;
+}
+
+/*
+ * Return teh auction status
+ */
+AuctionStatus Capitalist::getAuctionStatus() const {
+    return this->auction_in_progress;
+}
+
+/*
+ * Return a pointer to the last player in the auction if he is alone.
+ * If there is still other player with him, return nullptr.
+ */
+Player* Capitalist::getAuctionWinner() {
+    int count = 0;
     Player* winner = nullptr;
-    for (auto player : players){
-        if (player.isInAuction()){
-            if (winner == nullptr){
-                winner = &player;
-            }
-            else {
-                return nullptr;
-            }
-        }
+    for ( auto &player: this->players ) {
+        if ( player.isInAuction() ) { count++; winner = &player; }
+        if ( count > 1 ) { return nullptr; }
     }
     return winner;
 }
 
-LandCell *Capitalist::getCellByName(std::string &name) {
-    return board.getCellByName(name);
+
+
+/*
+ * Allow to set the exchange status
+ */
+void Capitalist::setExchangeStatus(ExchangeStatus status) {
+    this->exchange_in_progress = status;
+}
+
+/*
+ * Return the exchange status
+ */
+ExchangeStatus Capitalist::getExchangeStatus() const {
+    return this->exchange_in_progress;
+}
+
+
+//Other function
+/*
+ * Start the game
+ * Set the attribut running to [TRUE]
+ * Allow the first Player to play by setting to [TRUE] his attribut currently playing.
+ */
+void Capitalist::startGame() {
+    this->players[0].setCurrentlyPlaying(true);
+    this->running = true;
+}
+
+/*
+ * Return if the game is started or not
+ */
+bool Capitalist::isRunning() const {
+    return this->running;
+}
+
+/*
+ * End the current turn for the player who was playing by setting his attribut "currently playing" to [false]
+ * Update the current_index
+ * Begin the turn for the player with the new current index by setting his attribut "currently playing" to [true]
+ */
+void Capitalist::endCurrentTurn() {
+    this->players[this->current_player_index].setCurrentlyPlaying(false);
+    this->players[this->current_player_index].setRolled(false);
+
+    this->current_player_index = (this->current_player_index + 1) % this->players.size();
+
+    this->players[this->current_player_index].setCurrentlyPlaying(true);
+    this->players[this->current_player_index].setRolled(false);
+
+}
+
+
+////////////////////////////////////////////
+ClientManager *Capitalist::getWinner() {
+    if (this->players.size() > 1) return nullptr;
+    return this->players[0].getClient();
 }
