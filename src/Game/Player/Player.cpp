@@ -11,10 +11,28 @@ int Player::processRollDice(Dice &dice) {
     int result = this->roll(dice);
     // If no double then return
     if ( !dice.isDouble() ) { return result; }
-    // If double then, set the hasRolled attribut to false;
-    if ( dice.getDoubleCounter() <= 2 ) { this->setRolled(false); return result; }
+    // if 3 double then go to jail
     if ( dice.getDoubleCounter() == 3 ) { this->setStatus(JAILED); return 0; }
+    // else just reset the setRolled because player will have to play again
+    this->setRolled(false);
     return result;
+}
+
+/*
+ * Return a string formatted with all the infos about the roll dice
+ * r1 = result of the first die
+ * r2 = result of the second die
+ * r = Result of both die (r1 + r2)
+ * d = is double ? (0 false, true 1)
+ * dc = double counter;
+ */
+std::string Player::rollInfos(Dice &dice) {
+    std::string r1 = std::to_string(dice.getDice1());
+    std::string r2 = std::to_string(dice.getDice2());
+    std::string r = std::to_string(dice.getResults());
+    std::string d = std::to_string(dice.isDouble());
+    std::string dc = std::to_string(dice.getDoubleCounter());
+    return r1 + ":" + r2 + ":" + r + ":" + d + ":" + dc;
 }
 
 

@@ -17,6 +17,8 @@
 
 
 
+// INFOS / MESSAGE
+
 /*
  * Send Start infos formatted for the n-curse terminal
  */
@@ -38,6 +40,43 @@ void GameServer::sendBetterGameData() {
     this->updateAllClientsWithQuery(QUERY::USELESS_MESSAGE, this->game.getBetterGameInfos());
 }
 
+/*
+ * Send a Message with the username and the game code to everyone
+ */
+void GameServer::client_has_join_the_game(ClientManager &client) {
+    std::string name = client.getUsername();
+    std::string gc = std::to_string(this->getCode());
+    this->updateAllClientsWithQuery(QUERY::PLAYER_JOIN_GAME, name + ":" + gc);
+}
+
+/*
+ * Send a message with the new player and the size of the clients connected to this game
+ */
+void GameServer::clientsSizeData(ClientManager &client) {
+    std::string username = client.getUsername();
+    std::string clientsSize = std::to_string(this->clients.size());
+    std::string str = username + " enter the game !\n";
+    str += "Your are now [" + clientsSize + "] in this game.";
+    this->updateAllClientsWithQuery(QUERY::MESSAGE, str);
+}
+
+
+// GESTION CLIENT
+
+/*
+ * Permet de connecter le client à la partie
+ *
+ * Add client to Clients list
+ * Add This server tho client.gameServer
+ * Create and Add a Player to the game (this player is link to the client)
+ * Set the index of this player
+ */
+void GameServer::connectClientToThisGame(ClientManager &client) {
+    this->clients.push_back(&client);
+    client.setGameServer(this);
+    this->addPlayer(client);
+    this->client_has_join_the_game(client);
+}
 
 /*
  * Remove a client form the Clients list
@@ -56,75 +95,23 @@ void GameServer::removeClient(ClientManager* client) {
     }
 }
 
-/*
- * Send a Message with the username and the game code to everyone
- */
-void GameServer::client_has_join_the_game(ClientManager &client) {
-    std::string name = client.getUsername();
-    std::string gc = std::to_string(this->getCode());
-    this->updateAllClientsWithQuery(QUERY::PLAYER_JOIN_GAME, name + ":" + gc);
-}
 
-/*
- * Permet de connecter le client à la partie
- *
- * Add client to Clients list
- * Add This server tho client.gameServer
- * Create and Add a Player to the game (this player is link to the client)
- * Set the index of this player
- */
-void GameServer::connectClientToThisGame(ClientManager &client) {
-    this->clients.push_back(&client);
-    client.setGameServer(this);
-    this->addPlayer(client);
-    client.sendQueryMsg( client.getUsername() + ":" + std::to_string(this->getCode()), QUERY::PLAYER_JOIN_GAME);
-}
+
+
+
+// UTILITAIRE
 
 /*
  * Return the player link to the clientManager
  */
 Player *GameServer::findMe(ClientManager &client) {
-    for ( auto &player : *this->game.getPlayers()) {
-        if ( player.isItMe(client) ) { return &player; }
+    int i = 0;
+    while (i < this->game.getPlayers()->size()) {
+        if ( this->game.getPlayers()->operator[](i).isItMe(client) ) { return &this->game.getPlayers()->operator[](i); }
+        i++;
     }
     return nullptr;
 }
-
-/*
- * Loop for the client when he join the gameServer
- */
-int GameServer::clientLoop(ClientManager &client) {
-    Player* me = this->findMe(client);
-    this->updateAllClientsWithQuery(QUERY::MESSAGE, client.getUsername() + " enter the game, you are now " + std::to_string(this->clients.size()) + " in this game !");
-    while ( !this->game.isRunning() ) {
-        if ( me->isAdmin() ) { this->processStart(&client); } // Can start the game
-        // Other actions possible when waiting the host to begin the game
-    }
-    // Until we fnd a winner
-    std::cout << me->getUsername() << " Before getWinner "<< std::endl;
-    while ( !this->game.getWinner() ) {
-        // Possible action if it's the client turn
-        if (this->game.getCurrentPlayer() == me) {
-            std::cout << "Its my turn : " << me->getUsername() << std::endl;
-            if ( me->getStatus() == PLAYER_STATUS::FREE ) { this->clientTurn(client, me); continue; }
-            if ( me->getStatus() == PLAYER_STATUS::LOST ) { /*TODO manage lost*/; me->getClient()->setRankForActualGame(this->game.getPlayersSize()+1); continue; }
-            if ( me->getStatus() == PLAYER_STATUS::JAILED ) { /*TODO manage Jail*/; continue; }
-            if ( me->getStatus() == PLAYER_STATUS::BANKRUPT ) { /*TODO manage bankrupt*/; continue; }
-        }
-        else {
-            /*
-             * TODO : Participate in auction
-             * TODO : Exchange
-             * TODO : LeaveGame
-             */
-            continue;
-        }
-    }
-    // If I'm the winner, then I must have the rank number 1
-    if ( this->game.getWinner() == me->getClient() ) { client.setRankForActualGame(1); }
-    return client.getRankForActualGame();
-}
-
 
 /*
  * Renvoie une GAME_QUERY obtenue depuis un client.receive().
@@ -135,17 +122,59 @@ GAME_QUERY_TYPE GameServer::getGameQuery(ClientManager &client) {
     return query;
 }
 
+
+
+// LOOP
 /*
- * TODO OPTIMISER :)
+ * Loop for the client when he join the gameServer
  */
-bool GameServer::hasFinishRolledDice(Player* player) {
-    if ( !player->hasRolled() ) { return false; }
-    if ( this->game.getDice().getDoubleCounter() == 0) { return true; }
-    if ( this->game.getDice().getDoubleCounter() == 1) { return false; }
-    if ( this->game.getDice().getDoubleCounter() == 2) { return false; }
-    if ( this->game.getDice().getDoubleCounter() == 3) { return true; }
-    return true;
+int GameServer::clientLoop(ClientManager &client) {
+    Player* me = this->findMe(client);
+    this->clientsSizeData(client); // MESSAGE
+
+    // LOOP UNTIL THE HOST START THE GAME
+    while ( !this->game.isRunning() ) {
+        // ACTION POSSIBLE IF YOU ARE THE HOST
+        if ( me->isAdmin() ) {
+            this->processStart(&client);
+            // TODO
+        }
+        // ACTION POSSIBLE IF YOU ARE NOT THE HOST
+        else {
+            // TODO
+        }
+    }
+
+    // LOOP UNTIL THERE IS A WINNER
+    while ( this->game.getWinner() == nullptr ) {
+
+        // POSSIBLE ACTION IF IT IS THE CLIENT TURN
+        if (this->game.getCurrentPlayer()->getClient() == &client) {
+            Player* me = this->game.getCurrentPlayer();
+
+            if ( me->getStatus() == PLAYER_STATUS::FREE ) { this->clientTurn(client, me); continue; }
+            if ( me->getStatus() == PLAYER_STATUS::LOST ) { /*TODO manage lost*/; me->getClient()->setRankForActualGame(this->game.getPlayersSize()+1); continue; }
+            if ( me->getStatus() == PLAYER_STATUS::JAILED ) { /*TODO manage Jail*/; continue; }
+            if ( me->getStatus() == PLAYER_STATUS::BANKRUPT ) { /*TODO manage bankrupt*/; continue; }
+        }
+        // POSSIBLE ACTION ITS NOT THE CLIENT TURN
+        else {
+            /*
+             * TODO : Participate in auction
+             * TODO : Exchange
+             * TODO : LeaveGame
+             */
+            continue;
+        }
+    }
+    // SET RANK FOR WINNER
+    if ( this->game.getWinner() == me->getClient() ) { client.setRankForActualGame(1); }
+    // RETURN RANK
+    return client.getRankForActualGame();
 }
+
+
+// PROCESS
 
 /*
  * Roll the dice,
@@ -161,11 +190,14 @@ void GameServer::processRollDice(ClientManager &, Player *player) {
 
     // Déplacement du joueur
     Cell* new_cell = player->processMove(roll_result, this->game.getBoard());
-    // TODO MSG to other client to indicate roll nb, case_final, ...
+
+    // Update the other player of the game
+    this->updateAllClientsWithQuery(QUERY::INFOS_ROLL_DICE, player->rollInfos(this->game.getDice()));
 
     // Action de la case
     new_cell->action(player);
 }
+
 
 /*
  * Lance la partie si il y a au moins 2 joueurs
@@ -173,8 +205,8 @@ void GameServer::processRollDice(ClientManager &, Player *player) {
 void GameServer::processStart(ClientManager* client) {
     GAME_QUERY_TYPE query;
     client->receive(query);
-    if (query != GAME_QUERY_TYPE::START ) { return; }
-    if (this->game.getPlayersSize() <= 1) {/*Vous êtes seul dans la partie*/ return;}
+    if ( query != GAME_QUERY_TYPE::START ) { this->updateThisClientWithQuery(QUERY::MESSAGE,"Pour démarrer la partie ( /start )" ,*client); return; }
+    if ( this->game.getPlayersSize() < 2 ) { this->updateThisClientWithQuery(QUERY::MESSAGE,"Attend tes amis avant de lancer la partie !" ,*client); return; }
     this->game.startGame();
     this->sendStartData();
     this->updateAllClientsWithQuery(QUERY::MESSAGE, "Lancement de la partie");
@@ -205,10 +237,15 @@ void GameServer::processDiceRoll(ClientManager &client) {
 
 
 void GameServer::clientTurn(ClientManager &client, Player* me) {
-
-    while ( !hasFinishRolledDice(me) ) {
+    while ( !me->hasRolled() ) {
         GAME_QUERY_TYPE query = this->getGameQuery(client);
-        if ( query == GAME_QUERY_TYPE::BUILD ) { this->processBuild(client, me); continue; }
+        if ( query == GAME_QUERY_TYPE::BUILD )          { this->processBuild(client, me); continue; }
+        if ( query == GAME_QUERY_TYPE::SELL_BUILDINGS ) { continue; }
+        if ( query == GAME_QUERY_TYPE::MORTGAGE )       { continue; }
+        if ( query == GAME_QUERY_TYPE::DEMORTGAGE )     { continue; }
+        if ( query == GAME_QUERY_TYPE::EXCHANGE )       { continue; }
+
+
 
 
         if ( query == GAME_QUERY_TYPE::ROLL_DICE ) {
@@ -224,6 +261,9 @@ void GameServer::clientTurn(ClientManager &client, Player* me) {
         }
     }
     // End of the turn
+    this->game.endCurrentTurn();
+    this->sendGameData();
+    this->sendBetterGameData();
 }
 
 /*
@@ -772,7 +812,7 @@ void GameServer::updateAllClients(std::string update) {
 }
 
 void GameServer::updateAllClientsWithQuery(QUERY &&query, std::string update) {
-    std::cout << clients.size() << std::endl;
+    std::cout << clients.size() << " number of client for the loop (updateAllClientsWithQuery)" << std::endl;
     for ( auto client : clients ) {
         client->sendQueryMsg(update, query);
     }

@@ -16,8 +16,10 @@ enum class QUERY {
     MESSAGE, // All indication message
     USELESS_MESSAGE, // Message useless outside out the terminal app
 
-    PLAYER_JOIN_GAME, // username:gameCode
+    PLAYER_JOIN_GAME, // username:gameCode [string]:[int]
     WIN, // username
+
+    INFOS_ROLL_DICE, // dice1:dice2:result:isDouble:doubleCount [int]:[int]:[int]:[bool]:[int]
 
 
 

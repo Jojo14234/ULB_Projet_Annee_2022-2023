@@ -18,7 +18,7 @@ class LandCell : public Cell {
 
 public: 
 
-	LandCell(int pos, std::shared_ptr<Land> land): Cell{pos}, land{land} {}
+	LandCell(int pos, std::shared_ptr<Land> land, std::string name="Undefined"): Cell{pos, name}, land{land} {}
     
 	//~LandCell() { delete land; }
 

@@ -37,5 +37,8 @@ void GameInputParser::parse() {
         if ( this->getNbParameters() == 2 ) { this->query_type = GAME_QUERY_TYPE::ARG2; }   // Argument numéro 2
         else { std::cout << "(GameInputParser::parse(/arg2)) cependant il y a [" << this->getNbParameters() << "] argument(s) !" << std::endl; }
     }
-    else { std::cout << "(GameInputParser::parse(...)), commande non reconnue !" << std::endl; } // Autre
+    else {
+        this->query_type = GAME_QUERY_TYPE::NONE;
+        std::cout << "(GameInputParser::parse(...)), commande non reconnue !" << std::endl;
+    } // Autre
 }

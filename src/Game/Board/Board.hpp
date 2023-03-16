@@ -37,7 +37,7 @@ class Board {
 
     template<typename T>
     void extractProperty(Json::Value &list);
-    void extractDeckCard(Json::Value &list, std::shared_ptr<CardDeck> deck);
+    void extractDeckCard(Json::Value &list, std::shared_ptr<CardDeck> deck, std::string name);
 	
 public:
 

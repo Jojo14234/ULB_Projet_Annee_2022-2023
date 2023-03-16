@@ -23,7 +23,7 @@ class TaxCell: public Cell {
 
 public:
     
-	TaxCell(int pos, int tax_price, std::string &name) : Cell{pos}, tax_price{tax_price}, name{name} {}
+	TaxCell(int pos, int tax_price, std::string &name) : Cell{pos, name}, tax_price{tax_price}, name{name} {}
     
 	void action(Player* player) override ;
 

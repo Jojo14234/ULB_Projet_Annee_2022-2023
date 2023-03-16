@@ -211,6 +211,8 @@ public:
     int processRollDice(Dice &dice);
     Cell* processMove(int n, Board &board);
     void processMove(Cell* new_cell, bool gainMoneyIfPassByStart);
+
+    std::string rollInfos(Dice &dice);
 };
 
 

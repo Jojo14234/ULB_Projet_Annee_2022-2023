@@ -87,8 +87,9 @@ std::string Capitalist::getGameInfos() {
             std::string company_name =      company->getName();
             std::string company_level =     "0";
             std::string company_mortgage =  std::to_string(company->isMortgaged());
-            ret += company_name + ";" + company_level + ";" + company_mortgage + "|";
+            ret += company_name + ";" + company_level + ";" + company_mortgage + ":";
         }
+        ret += "|";
     }
     return ret;
 }
@@ -125,7 +126,7 @@ std::string Capitalist::getBetterGameInfos() {
     }
     std::string nextTurn = changeStringSize((this->getCurrentPlayer()->getUsername() + "]"), 10);
     ret += "|              A [" + nextTurn + " de jouer !      |\n";
-    ret += "+——————————————————————————————————————————————+\n";
+    ret += "+————————————————————————————————————————————+\n";
     return ret;
 }
 
