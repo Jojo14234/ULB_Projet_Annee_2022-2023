@@ -15,3 +15,5 @@ int Die::roll(){
     return result;
 }
 int Die::getResult() const { return result; }
+
+void Die::setResult(int new_result) { this->result = new_result; }

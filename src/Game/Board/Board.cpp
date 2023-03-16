@@ -99,6 +99,7 @@ LandCell* Board::getCellByName(const std::string &name) {
     for (auto cell : cells) {
         LandCell* land_cell = dynamic_cast<LandCell*>(cell.get());
         if ( !land_cell ) { continue; }
+        std::cout << land_cell->getLand()->getName() << "|" << name << std::endl;
         if ( land_cell->getLand()->getName() == name ) { return land_cell; }
     }
     return nullptr;

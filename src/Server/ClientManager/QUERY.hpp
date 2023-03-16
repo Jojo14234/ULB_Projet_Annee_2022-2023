@@ -12,6 +12,7 @@ enum class QUERY {
 
     INFOS_START, // See sendStartData in GameServer for formatting
     INFOS_GAME, // See sendGameData in GameServer for formatting
+    INFOS_PLAYER_PROP, // All the property possessed by a player
 
     MESSAGE, // All indication message
     USELESS_MESSAGE, // Message useless outside out the terminal app
@@ -20,7 +21,11 @@ enum class QUERY {
     WIN, // username
 
     INFOS_ROLL_DICE, // dice1:dice2:result:isDouble:doubleCount [int]:[int]:[int]:[bool]:[int]
-
+    INFOS_BUILD_PROP, // All the property name if they are buildable
+    INFOS_BUILD_SUCCESS, // property_name (indicate the level up)
+    INFOS_SELL_BUILD_SUCCESS, // property_name (indicate the level down)
+    INFOS_SELL_BUILD, // All the property name if build can be sell
+    INFOS_MORTGAGE_BUILD,
 
     DISCONNECT, // Disconnection
     RANKING, // Ranking

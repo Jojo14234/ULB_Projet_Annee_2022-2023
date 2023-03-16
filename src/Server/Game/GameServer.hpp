@@ -63,6 +63,15 @@ public:
 
     void playerInJailInfos(ClientManager &client);
 
+    void playerBuildInfos(ClientManager &client);
+
+    void processSellBuild(ClientManager &client, Player *player);
+
+    void playerSellBuildInfos(ClientManager &client);
+
+    void processMortgage(ClientManager &client, Player *player);
+
+    void playerMortgageInfos(ClientManager &client);
 
 
 
@@ -114,7 +123,7 @@ public:
     void updateAllClientsWithQuery(QUERY &&query, std::string update);
     void updateThisClientWithQuery(QUERY &&query, std::string update, ClientManager &client);
     bool proposeExchange(Player& proposing_player, Player &proposed_to_player, Land *land, int amount);
-    Land* getLandByName(std::string &name);
+    Land* getLand(std::string &name);
     void processBankruptcyToPlayer();
 
 

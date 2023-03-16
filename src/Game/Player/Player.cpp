@@ -12,7 +12,7 @@ int Player::processRollDice(Dice &dice) {
     // If no double then return
     if ( !dice.isDouble() ) { dice.resetDoubleCounter(); return result; }
     // if 3 double then go to jail
-    if ( dice.getDoubleCounter() == 3 ) { this->setStatus(JAILED); return 0; }
+    if ( dice.getDoubleCounter() >= 3 ) { this->setStatus(JAILED); dice.resetDoubleCounter(); return 0; }
     // else just reset the setRolled because player will have to play again
     this->setRolled(false);
     return result;
@@ -35,7 +35,7 @@ std::string Player::rollInfos(Dice &dice) {
     return r1 + ":" + r2 + ":" + r + ":" + d + ":" + dc;
 }
 
-
+// BOTH processMove are Use
 void Player::processMove(Cell* new_cell, bool gainMoneyIfPassByStart) {
     if ( gainMoneyIfPassByStart && this->current_cell->getPosition() > new_cell->getPosition() ) {
         this->receive(STARTING_MONEY, "la banque");
@@ -248,30 +248,23 @@ void Player::removeCompagnie(Company* c) {
 void Player::auctionMustStart() { auction_must_start = true; }
 void Player::exchangeFromJail() { exchange_from_jail = true; }
 
-PLAYER_STATUS Player::getStatus() { return status; }
+PLAYER_STATUS Player::getStatus() {
+    std::cout << "PLAYER STATUS GET" << std::endl;
+    std::cout << this->getUsername() << " is " << status << std::endl;
+    std::cout << "FREE=0, JAIL=1, BANKRUPT=2, LOST=3" << std::endl;
+    return status; }
 void Player::setStatus(PLAYER_STATUS new_status) {
     std::cout << "PLAYER STATUS CHANGE" << std::endl;
     std::cout << this->getUsername() << " is now " << (int)new_status << std::endl;
     std::cout << "FREE=0, JAIL=1, BANKRUPT=2, LOST=3" << std::endl;
-    status = new_status; }
+    status = new_status;
+}
 
-std::string Player::getStringOfAllProperties(){
-    std::string ret_string = "\n";
-    for (auto property : properties) {
-        ret_string += " - ";
-        ret_string += property->getName();
-        ret_string += "\n";
-    }
-    for (auto company : companies){
-        ret_string += " - ";
-        ret_string += company->getName();
-        ret_string += "\n";
-    }
-    for (auto station : stations){
-        ret_string += " - ";
-        ret_string += station->getName();
-        ret_string += ".\n";
-    }
+std::string Player::getAllPossession(){
+    std::string ret_string = "";
+    for (auto property : properties) { ret_string += property->getName() + ":"; }
+    for (auto company : companies)  { ret_string += company->getName() + ":"; }
+    for (auto station : stations)    { ret_string += station->getName() + ":"; }
     return ret_string;
 }
 

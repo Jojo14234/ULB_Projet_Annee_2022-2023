@@ -17,6 +17,7 @@
 #include <array>
 #include <memory>
 #include <string>
+#include <vector>
 
 class Cell;
 
@@ -50,6 +51,9 @@ public:
 
     std::shared_ptr<CardDeck> getLuckyDeck();
     std::shared_ptr<CardDeck> getCommuDeck();
+
+
+
 
 };
 

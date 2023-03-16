@@ -10,6 +10,7 @@ public:
     Die();
     int roll();
     int getResult() const;
+    void setResult(int new_result);
 };
 
 

@@ -372,3 +372,27 @@ void Capitalist::processJailRoll(Player *player) {
         player->resetRollInPrison();
     }
 }
+
+
+bool Capitalist::processBuild(Player *player, std::string &name) {
+    LandCell* land = getLandCell(name);
+    if (!land) {return false;}
+    Property* prop = dynamic_cast<Property*>(land->getLand());
+    if (prop) { return prop->build(player); }
+    return false;
+}
+
+bool Capitalist::processSellBuild(Player *player, std::string &name) {
+    LandCell* land = getLandCell(name);
+    if (!land) {return false;}
+    Property* prop = dynamic_cast<Property*>(land->getLand());
+    if (prop) { return prop->sellBuilding(player); }
+    return false;
+}
+
+bool Capitalist::processMortgage(Player *player, std::string &name) {
+    LandCell* land = getLandCell(name);
+    if (!land or land->getLand()->isMortgaged() ) {return false;}
+    land->getLand()->mortgage(player);
+    return true;
+}

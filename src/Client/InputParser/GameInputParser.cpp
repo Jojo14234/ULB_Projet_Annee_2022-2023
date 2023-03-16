@@ -5,16 +5,21 @@ void GameInputParser::parse() {
 	const std::string &query = (*this)[0];
 
 	if      ( query == "/roll" )        { this->query_type = GAME_QUERY_TYPE::ROLL_DICE; } // Lance les dés
+    else if ( query == "/start" )       { this->query_type = GAME_QUERY_TYPE::START; }     // Démarre la partie
+    else if ( query == "/pay" )         { this->query_type = GAME_QUERY_TYPE::PAY; } // To pay to exit prison
+    else if ( query == "/use" )         { this->query_type = GAME_QUERY_TYPE::USEGOOJCARD; } // To use the card get out of jail
+    else if ( query == "/leave" )       { this->query_type = GAME_QUERY_TYPE::LEAVE_SELECTION; } // Qui la sélection
+    else if ( query == "/build" )       { this->query_type = GAME_QUERY_TYPE::BUILD; }     // Construit un/des bâtiment(s)
+    else if ( query == "/sell" )        { this->query_type = GAME_QUERY_TYPE::SELL_BUILDINGS; } // Vend un/des bâtiment(s)
+
+
+
     else if ( query == "/out" )         { this->query_type = GAME_QUERY_TYPE::LEAVE_BID; } // Quitte une enchère
     else if ( query == "/mortgage" )    { this->query_type = GAME_QUERY_TYPE::MORTGAGE; }  // Passe en mode hypothèque
     else if ( query == "/demortgage")   { this->query_type = GAME_QUERY_TYPE::DEMORTGAGE; }
-    else if ( query == "/leave" )       { this->query_type = GAME_QUERY_TYPE::LEAVE_SELECTION_MODE; } // Qui la sélection
     else if ( query == "/exchange" )    { this->query_type = GAME_QUERY_TYPE::EXCHANGE;}   // Commence un échange
-    else if ( query == "/build" )       { this->query_type = GAME_QUERY_TYPE::BUILD; }     // Construit un/des bâtiment(s)
-    else if ( query == "/sell" )        { this->query_type = GAME_QUERY_TYPE::SELL_BUILDINGS; } // Vend un/des bâtiment(s)
     else if ( query == "/give-up" )     { this->query_type = GAME_QUERY_TYPE::GIVE_UP; }   // Abandonne
     else if ( query == "/participate" ) { this->query_type = GAME_QUERY_TYPE::PARTICIPATE; } // Participe à une enchère
-    else if ( query == "/start" )       { this->query_type = GAME_QUERY_TYPE::START; }     // Démarre la partie
     else if ( query == "/end" )         { this->query_type = GAME_QUERY_TYPE::END_TURN; }  // Termine son tour
     else if ( query == "/leave" )       { this->query_type = GAME_QUERY_TYPE::LEAVE; }     // Quitte la partie
 	else if ( query == "/buy" )         { this->query_type = GAME_QUERY_TYPE::BUY; }       // Achète une propriété

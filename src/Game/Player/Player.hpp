@@ -191,7 +191,7 @@ public:
 
     void setStatus(PLAYER_STATUS new_status);
 
-    std::string getStringOfAllProperties();
+    std::string getAllPossession();
 
     BankAccount* getBankAccount();
 

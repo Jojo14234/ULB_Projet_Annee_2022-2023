@@ -57,6 +57,14 @@ public:
     int getIntLevel() { return static_cast<int>(level); }
     PROPERTY_LEVEL getLevel() { return this->level; }
     PROPERTY_COLOR getColor() { return this->color; }
+
+	bool isBuildable(Player* player);
+	bool canSellBuilding(Player* player);
+
+
+
+	////////////////////////
+
 };
 
 #endif
