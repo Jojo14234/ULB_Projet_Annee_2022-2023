@@ -25,6 +25,8 @@ public:
 
 	void action(Player* player) override;
 
+    void use();
+
 	Player* getOwner() {return owner; }
 
 	void setOwner(Player* new_player) { this->owner = new_player; }

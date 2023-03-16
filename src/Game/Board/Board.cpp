@@ -103,3 +103,11 @@ LandCell* Board::getCellByName(const std::string &name) {
     }
     return nullptr;
 }
+
+std::shared_ptr <CardDeck> Board::getCommuDeck() {
+    return this->community_deck;
+}
+
+std::shared_ptr <CardDeck> Board::getLuckyDeck() {
+    return this->lucky_deck;
+}

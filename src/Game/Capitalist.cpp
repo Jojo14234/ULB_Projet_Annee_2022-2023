@@ -334,3 +334,41 @@ ClientManager *Capitalist::getWinner() {
     if (this->players.size() > 1) return nullptr;
     return this->players[0].getClient();
 }
+
+void Capitalist::processJailPay(Player *player) {
+    if ( player->pay(50) ) { player->setStatus(PLAYER_STATUS::FREE); }
+}
+
+void Capitalist::processJailUseCard(Player *player) {
+    if ( player->getAllGOOJCards().size() > 0 ) {
+        JailCard* card = player->getAllGOOJCards().back();
+        card->use();
+        if (this->board.getLuckyDeck()->isJailCardInside()) {
+            this->board.getLuckyDeck()->replaceJailCard();
+        }
+        else if (this->board.getCommuDeck()->isJailCardInside()) {
+            this->board.getCommuDeck()->replaceJailCard();
+        }
+    }
+}
+
+void Capitalist::processJailRoll(Player *player) {
+    int roll_result = player->roll(this->dice);
+    player->addRollInPrison();
+    if ( this->rolledADouble() ) {
+        this->dice.resetDoubleCounter();
+        player->processMove(PRISON_INDEX + roll_result, this->getBoard());
+        player->getCurrentCell()->action(player);
+        player->setStatus(PLAYER_STATUS::FREE);
+        player->resetRollInPrison();
+        return;
+    }
+    else if ( player->getRollsInPrison() == 3 ) {
+        this->dice.resetDoubleCounter();
+        player->pay(50, true);
+        player->processMove(PRISON_INDEX + roll_result, this->getBoard());
+        player->getCurrentCell()->action(player);
+        if (player->getStatus() == PLAYER_STATUS::JAILED) { player->setStatus(PLAYER_STATUS::FREE); }
+        player->resetRollInPrison();
+    }
+}

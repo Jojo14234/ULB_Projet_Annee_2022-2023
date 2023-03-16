@@ -77,6 +77,11 @@ public:
     ///////////////////////////////////////
     ClientManager* getWinner();
 
+    void processJailPay(Player* player);
+    void processJailUseCard(Player* player);
+    void processJailRoll(Player* player);
+
+
 };
 
 

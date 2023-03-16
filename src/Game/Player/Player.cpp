@@ -10,7 +10,7 @@
 int Player::processRollDice(Dice &dice) {
     int result = this->roll(dice);
     // If no double then return
-    if ( !dice.isDouble() ) { return result; }
+    if ( !dice.isDouble() ) { dice.resetDoubleCounter(); return result; }
     // if 3 double then go to jail
     if ( dice.getDoubleCounter() == 3 ) { this->setStatus(JAILED); return 0; }
     // else just reset the setRolled because player will have to play again
@@ -98,7 +98,7 @@ void Player::move(Cell *cell, bool pass_by_start) {
 }
 
 bool Player::passedByStart(Cell* cell, bool pass_by_start) {
-    if (cell->getPosition() - current_cell->getPosition() < 0 and pass_by_start) {
+    if (cell->getPosition() - current_cell->getPosition() <= 0 and pass_by_start) {
         return true;
     }
     return false;
@@ -118,6 +118,8 @@ bool Player::isInJail() const { return (status == JAILED); }
 int Player::getRollsInPrison() const { return rolls_in_prison; }
 
 void Player::addRollInPrison() { rolls_in_prison++; }
+
+void Player::resetRollInPrison() { this->rolls_in_prison = 0; }
 
 int Player::hasGOOJCards() const { return (GOOJ_cards.size() > 0); }
 
@@ -175,6 +177,11 @@ void Player::acquireStation(Station &station) {
 void Player::acquireGOOJCard(JailCard *jail_card) {
     jail_card->setOwner(this);
     GOOJ_cards.push_back(jail_card);
+}
+
+void Player::useGOOJCard() {
+    this->status = PLAYER_STATUS::FREE;
+    GOOJ_cards.pop_back();
 }
 
 /*
@@ -242,7 +249,11 @@ void Player::auctionMustStart() { auction_must_start = true; }
 void Player::exchangeFromJail() { exchange_from_jail = true; }
 
 PLAYER_STATUS Player::getStatus() { return status; }
-void Player::setStatus(PLAYER_STATUS new_status) { status = new_status; }
+void Player::setStatus(PLAYER_STATUS new_status) {
+    std::cout << "PLAYER STATUS CHANGE" << std::endl;
+    std::cout << this->getUsername() << " is now " << (int)new_status << std::endl;
+    std::cout << "FREE=0, JAIL=1, BANKRUPT=2, LOST=3" << std::endl;
+    status = new_status; }
 
 std::string Player::getStringOfAllProperties(){
     std::string ret_string = "\n";

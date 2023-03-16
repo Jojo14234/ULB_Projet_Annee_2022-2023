@@ -5,11 +5,10 @@
 #include "Card.hpp"
 #include "MoneyCard.hpp"
 #include "CellCard.hpp"
-#include "JailCard.hpp"
 #include "../../../../utils/Configs.hpp"
 
 
-CardDeck::CardDeck(std::string name) {
+CardDeck::CardDeck(std::string name): name{name} {
 	Json::Value root;
 	std::ifstream file(CARD_DATA, std::ifstream::binary);
     file >> root;
@@ -41,8 +40,22 @@ Card* CardDeck::drawACard() {
 		}
 		else {
 			if (dynamic_cast<JailCard*>(drawed_card)->getOwner() == nullptr) {
+                this->card_list.at(15) = nullptr;
 				return drawed_card;
 			}
 		}
 	}
+}
+
+bool CardDeck::isJailCardInside() {
+    return this->card_list.at(15) != nullptr;
+}
+
+void CardDeck::replaceJailCard() {
+    if (!isJailCardInside()) {
+        Json::Value root;
+        std::ifstream file(CARD_DATA, std::ifstream::binary);
+        file >> root;
+        this->card_list[15] = std::make_shared<JailCard>(root[this->name]["JailCard"]);
+    }
 }

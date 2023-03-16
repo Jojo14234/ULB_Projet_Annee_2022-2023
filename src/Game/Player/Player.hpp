@@ -143,6 +143,7 @@ public:
 
     int getRollsInPrison() const;
     void addRollInPrison();
+    void resetRollInPrison();
 
     int hasGOOJCards() const;
     void looseGOOJCard();
@@ -177,6 +178,7 @@ public:
     void acquireStation(Station &station);
 
     void acquireGOOJCard(JailCard *jail_card);
+    void useGOOJCard();
 
     void acquireLand(Land* land);
     void removeLand(Land* land);

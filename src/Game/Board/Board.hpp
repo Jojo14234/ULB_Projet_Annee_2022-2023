@@ -48,6 +48,9 @@ public:
 
     LandCell* getCellByName(const std::string &name);
 
+    std::shared_ptr<CardDeck> getLuckyDeck();
+    std::shared_ptr<CardDeck> getCommuDeck();
+
 };
 
 #endif 

@@ -60,6 +60,19 @@ void GameServer::clientsSizeData(ClientManager &client) {
     this->updateAllClientsWithQuery(QUERY::MESSAGE, str);
 }
 
+void GameServer::playerInJailInfos(ClientManager &client) {
+    Player* me = findMe(client);
+    std::string rollInJail = std::to_string(me->getRollsInPrison());
+    std::string str = "Vous êtes en prison depuis [" + rollInJail + "] tours !\n";
+    str += "Pour en sortir vous avez plusieurs options : \n";
+    str += " - Tentez de faire un double ( /roll )\n";
+    str += " - Payer votre caution de 50$ ( /pay )\n";
+    if ( me->getAllGOOJCards().size() > 0 ) {
+        str += " - Utilisez votre carte [Sortie de prison]";
+    }
+    updateThisClientWithQuery(QUERY::MESSAGE, str, client);
+}
+
 
 // GESTION CLIENT
 
@@ -95,7 +108,16 @@ void GameServer::removeClient(ClientManager* client) {
     }
 }
 
-
+/*
+ * Create and Add a player to the game
+ * The player is link to the client (but the client is not link to the player)
+ * Set the index of the player (it's like an Id that will never change during the game)
+ */
+void GameServer::addPlayer(ClientManager &client) {
+    this->game.addPlayer(client);
+    int new_index = game.getPlayersSize() - 1;
+    this->game.getPlayers()->at(new_index).setIndex(new_index);
+}
 
 
 
@@ -154,7 +176,7 @@ int GameServer::clientLoop(ClientManager &client) {
 
             if ( me->getStatus() == PLAYER_STATUS::FREE ) { this->clientTurn(client, me); continue; }
             if ( me->getStatus() == PLAYER_STATUS::LOST ) { /*TODO manage lost*/; me->getClient()->setRankForActualGame(this->game.getPlayersSize()+1); continue; }
-            if ( me->getStatus() == PLAYER_STATUS::JAILED ) { /*TODO manage Jail*/; continue; }
+            if ( me->getStatus() == PLAYER_STATUS::JAILED ) { this->processJail(client, me); continue; }
             if ( me->getStatus() == PLAYER_STATUS::BANKRUPT ) { /*TODO manage bankrupt*/; continue; }
         }
         // POSSIBLE ACTION ITS NOT THE CLIENT TURN
@@ -173,69 +195,9 @@ int GameServer::clientLoop(ClientManager &client) {
     return client.getRankForActualGame();
 }
 
-
-// PROCESS
-
 /*
- * Roll the dice,
- * check if that's the third time you do a double ans end you in jail if it's the case
- * move the player to the right case
- * Do the action cell
+ * Gestion des action possible durant le tour du client
  */
-void GameServer::processRollDice(ClientManager &, Player *player) {
-    int roll_result = player->processRollDice(this->game.getDice());
-
-    // SI on a fait 3 double notre status est passé à JAILED;
-    if ( player->getStatus() == PLAYER_STATUS::JAILED ) { player->processMove(this->game.getBoard()[10], false); return; }
-
-    // Déplacement du joueur
-    Cell* new_cell = player->processMove(roll_result, this->game.getBoard());
-
-    // Update the other player of the game
-    this->updateAllClientsWithQuery(QUERY::INFOS_ROLL_DICE, player->rollInfos(this->game.getDice()));
-
-    // Action de la case
-    new_cell->action(player);
-}
-
-
-/*
- * Lance la partie si il y a au moins 2 joueurs
- */
-void GameServer::processStart(ClientManager* client) {
-    GAME_QUERY_TYPE query;
-    client->receive(query);
-    if ( query != GAME_QUERY_TYPE::START ) { this->updateThisClientWithQuery(QUERY::MESSAGE,"Pour démarrer la partie ( /start )" ,*client); return; }
-    if ( this->game.getPlayersSize() < 2 ) { this->updateThisClientWithQuery(QUERY::MESSAGE,"Attend tes amis avant de lancer la partie !" ,*client); return; }
-    this->game.startGame();
-    this->sendStartData();
-    this->updateAllClientsWithQuery(QUERY::MESSAGE, "Lancement de la partie");
-}
-
-/*--------------------------------------------------------------------------------------------------------------------*/
-
-
-
-
-// GETTER
-
-void GameServer::processBuild(ClientManager &client, Player *player) {
-    //TODO
-}
-
-void GameServer::processAuction(ClientManager &client, Player *player) {
-    //TODO
-}
-
-void GameServer::processBankrupt(ClientManager &client, Player *player) {
-    //TODO
-}
-
-void GameServer::processDiceRoll(ClientManager &client) {
-    //TODO
-}
-
-
 void GameServer::clientTurn(ClientManager &client, Player* me) {
     while ( !me->hasRolled() ) {
         GAME_QUERY_TYPE query = this->getGameQuery(client);
@@ -266,15 +228,92 @@ void GameServer::clientTurn(ClientManager &client, Player* me) {
     this->sendBetterGameData();
 }
 
-/*
- *     // Message terminal
-    str = "\n" + client.getAccount()->getUsername() + " a jeté les dés et obtenu un [" + std::to_string(game.getDice().getDice1()) + " et un " + std::to_string(game.getDice().getDice2()) + "]. Iel avance donc de " + std::to_string(game.getDice().getResults()) + ".";
-    str += "\nIel est arrivé sur la case [" + std::to_string(new_cell_idx) + "].";
-    str += (game.rolledADouble()) ? "\nC'est un double ! Iel pourra rejouer !\n" : "\n";
-    QUERY query = ( game.rolledADouble() ) ? QUERY::ROLL_DICE_DOUBLE : QUERY::ROLL_DICE;
-    this->updateAllClientsWithQuery(query, std::to_string(game.getDice().getDice1()) + ":" + std::to_string(game.getDice().getDice2()));
- */
 
+// PROCESS
+
+/*
+ * Lance la partie si il y a au moins 2 joueurs
+ */
+void GameServer::processStart(ClientManager* client) {
+    GAME_QUERY_TYPE query;
+    client->receive(query);
+    if ( query != GAME_QUERY_TYPE::START ) { this->updateThisClientWithQuery(QUERY::MESSAGE,"Pour démarrer la partie ( /start )" ,*client); return; }
+    if ( this->game.getPlayersSize() < 2 ) { this->updateThisClientWithQuery(QUERY::MESSAGE,"Attend tes amis avant de lancer la partie !" ,*client); return; }
+    this->game.startGame();
+    this->sendStartData();
+    this->updateAllClientsWithQuery(QUERY::MESSAGE, "Lancement de la partie");
+}
+
+/*
+ * Roll the dice,
+ * check if that's the third time you do a double ans end you in jail if it's the case
+ * move the player to the right case
+ * Do the action cell
+ */
+void GameServer::processRollDice(ClientManager &, Player *player) {
+    int roll_result = player->processRollDice(this->game.getDice());
+
+    // SI on a fait 3 double notre status est passé à JAILED;
+    if ( player->getStatus() == PLAYER_STATUS::JAILED ) { player->processMove(this->game.getBoard()[10], false); return; }
+
+    // Déplacement du joueur
+    Cell* new_cell = player->processMove(roll_result, this->game.getBoard());
+
+    // Update the other player of the game
+    this->updateAllClientsWithQuery(QUERY::INFOS_ROLL_DICE, player->rollInfos(this->game.getDice()));
+
+    // Action de la case
+    new_cell->action(player);
+}
+
+
+
+
+/*--------------------------------------------------------------------------------------------------------------------*/
+
+
+void GameServer::processJail(ClientManager &client, Player *player) {
+    // Informer de ses droit :
+    // - Soit lancer les dés et faire un double
+    // - Soit utiliser une carte sortie de prison / lancer les dés
+    // - Payer 50$ + lancer les dés
+    // CONDITION : 3 tours max
+    this->playerInJailInfos(client);
+    GAME_QUERY_TYPE query;
+    client.receive(query);
+    switch (query) {
+        case GAME_QUERY_TYPE::PAY :         this->game.processJailPay(player); break;
+        case GAME_QUERY_TYPE::USEGOOJCARD : this->game.processJailUseCard(player); break;
+        case GAME_QUERY_TYPE::ROLL_DICE :   this->game.processJailRoll(player); break;
+        default: break;
+    }
+    // End of the turn
+    if ( player->getStatus() != PLAYER_STATUS::BANKRUPT ) {
+        this->game.endCurrentTurn();
+        this->sendGameData();
+        this->sendBetterGameData();
+    }
+
+}
+
+void GameServer::processBuild(ClientManager &client, Player *player) {
+    //TODO
+}
+
+void GameServer::processAuction(ClientManager &client, Player *player) {
+    //TODO
+}
+
+void GameServer::processBankrupt(ClientManager &client, Player *player) {
+    //TODO
+}
+
+void GameServer::processDiceRoll(ClientManager &client) {
+    //TODO
+}
+
+
+/*--------------------------------------------------------------------------------------------------------------------*/
 
 /*
  * Boucle dans laquelle un client est envoyé
@@ -324,7 +363,6 @@ void GameServer::clientBeforeRollLoop(ClientManager &client) {
         }
     }
 }
-
 
 /*
  * Process une Game_Query
@@ -805,6 +843,9 @@ Land *GameServer::getLandByName(std::string &name) {
     return land;
 }
 
+/*--------------------------------------------------------------------------------------------------------------------*/
+
+
 void GameServer::updateAllClients(std::string update) {
     for ( auto client : clients ) {
         client->send(update);
@@ -821,6 +862,9 @@ void GameServer::updateAllClientsWithQuery(QUERY &&query, std::string update) {
 void GameServer::updateThisClientWithQuery(QUERY &&query, std::string update, ClientManager &client) {
     client.sendQueryMsg(update, query);
 }
+
+/*--------------------------------------------------------------------------------------------------------------------*/
+
 
 int GameServer::getCode() const { return code.getCode(); }
 
@@ -839,16 +883,6 @@ Capitalist* GameServer::getGame(){
     return &game;
 }
 
-/*
- * Create and Add a player to the game
- * The player is link to the client (but the client is not link to the player)
- * Set the index of the player (it's like an Id that will never change during the game)
- */
-void GameServer::addPlayer(ClientManager &client) {
-    this->game.addPlayer(client);
-    int new_index = game.getPlayersSize() - 1;
-    this->game.getPlayers()->at(new_index).setIndex(new_index);
-}
 
 bool GameServer::isClientAdmin(ClientManager &client) {return (game.getPlayer(client)->isAdmin());}
 

@@ -87,9 +87,9 @@
 			},
             
 			{ 
-                "descript" : "Avancez jusqu’à la case départ",
+                "descript" : "Avancez jusqu’à la case départ, et touchez 200$",
                 "dest" : 0,
-                "money" : 0
+                "money" : 1
             },
             
 			{ 
@@ -226,15 +226,15 @@
             },
         
             { 
-                "descript" : "Placez-vous sur la case départ",
+                "descript" : "Placez-vous sur la case départ, et recevez 200$",
                 "dest" : 0,
-                "money" : 0
+                "money" : 1
             },
             
             { 
-                "descript" : "Retournez à la propriété brune 1",
+                "descript" : "Retournez à la propriété brune 1. Si vous passez par la case départ, recevez 200$",
                 "dest" : 1,
-                "money" : 0
+                "money" : 1
             },
                
             {

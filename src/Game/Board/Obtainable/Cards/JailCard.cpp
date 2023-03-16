@@ -8,3 +8,8 @@ void JailCard::action(Player* player) {
 	player->acquireGOOJCard(this);
 	player->getClient()->send("Vous avez reçu une carte sortie de prison");
 }
+
+void JailCard::use() {
+    this->owner->useGOOJCard();
+    this->setOwner(nullptr);
+}

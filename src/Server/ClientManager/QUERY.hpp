@@ -22,7 +22,6 @@ enum class QUERY {
     INFOS_ROLL_DICE, // dice1:dice2:result:isDouble:doubleCount [int]:[int]:[int]:[bool]:[int]
 
 
-
     DISCONNECT, // Disconnection
     RANKING, // Ranking
     ENDGAME, // TO leave the game

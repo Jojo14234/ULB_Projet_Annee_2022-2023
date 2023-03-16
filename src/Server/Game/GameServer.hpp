@@ -59,6 +59,13 @@ public:
 
     void processStart(ClientManager* client);
 
+    void processJail(ClientManager& client, Player *player);
+
+    void playerInJailInfos(ClientManager &client);
+
+
+
+
 
 
 
