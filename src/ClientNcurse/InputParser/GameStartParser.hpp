@@ -21,7 +21,7 @@ public:
 
 	GameStartParser(std::string player_info_str) : state_str{player_info_str} {};
 
-	int parse(){
+	void parse(){
 		bool first_semicolon = true;
 		int player_index = 0;
 		std::string tmp;
@@ -46,8 +46,9 @@ public:
 			else {
 				tmp += c;
 			}
-		}	
+		}
 	}
+
 
 	const PlayersInformations& getBufferSplit() const { return res; }
 };

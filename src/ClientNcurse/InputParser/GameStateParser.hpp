@@ -22,7 +22,7 @@ class GameStateParser {
 	std::string state_str;
 	Informations res;
 	std::string property_str;
-	int index;
+	unsigned int index;
 
 public:
 	GameStateParser(std::string game) : state_str{game} {};
@@ -85,7 +85,7 @@ public:
 		res.info.clear();
 		std::string tmp;
 		PropertyInformation pi;
-		while(index < state_str.size() ){
+		while(index < (unsigned int)state_str.size() ){
 			char c = state_str[index];
 			if (c == ':'){ 
 				

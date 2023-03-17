@@ -6,8 +6,8 @@
 #define INFO_F209_GR5_2022_QUERY_HPP
 
 enum class QUERY {
-    FALSE, // BOOL
-    TRUE, // BOOL
+    FALSEQ, // BOOL
+    TRUEQ, // BOOL
 
 
     INFOS_START, // See sendStartData in GameServer for formatting

@@ -130,12 +130,12 @@ QUERY Client::receiveFromServer2(std::string &output) {
 
 bool Client::checkAccountConnection(QUERY output, QUERY_TYPE query) {
     // Show the right message on the screen in function of the connection output and the query
-    if      (output == QUERY::FALSE and query == QUERY_TYPE::REGISTER)  { this->ui.refuseRegister(); }
-    else if (output == QUERY::FALSE and query == QUERY_TYPE::LOGIN)     { this->ui.refuseLogin(); }
-    else if (output == QUERY::TRUE and query == QUERY_TYPE::REGISTER) { this->ui.acceptRegister(); }
-    else if (output == QUERY::TRUE and query == QUERY_TYPE::LOGIN)    { this->ui.acceptLogin(); }
+    if      (output == QUERY::FALSEQ and query == QUERY_TYPE::REGISTER)  { this->ui.refuseRegister(); }
+    else if (output == QUERY::FALSEQ and query == QUERY_TYPE::LOGIN)     { this->ui.refuseLogin(); }
+    else if (output == QUERY::TRUEQ and query == QUERY_TYPE::REGISTER) { this->ui.acceptRegister(); }
+    else if (output == QUERY::TRUEQ and query == QUERY_TYPE::LOGIN)    { this->ui.acceptLogin(); }
     // Return whether or not the connection between the account and the client was made
-    return output == QUERY::TRUE;
+    return output == QUERY::TRUEQ;
 }
 
 bool Client::connectionLoop() {

@@ -118,26 +118,26 @@ void Server::clientProcessRegister(ClientManager &client) {
 	std::cout << "[Received 'register' query from client]" << std::endl;
     // Condition du process
     if ( client.getAccount() != nullptr )                  { client.send("You are already connected"); return; }
-    if ( this->database.contains(client.getS1().c_str()) ) { client.sendQueryMsg("FALSE", QUERY::FALSE); return; }
+    if ( this->database.contains(client.getS1().c_str()) ) { client.sendQueryMsg("FALSE", QUERY::FALSEQ); return; }
     // Process of creating the new account
     User* user = database.addUser(client.getS1(), client.getS2());
     database.save();
     client.setAccount(user);
-    client.sendQueryMsg("TRUE", QUERY::TRUE);	// succeed
+    client.sendQueryMsg("TRUE", QUERY::TRUEQ);	// succeed
     std::cout << "[Register client account '"<< client.getAccount()->getUsername() <<"' was successful]\n" << std::endl;
 }
 
 void Server::clientProcessLogin(ClientManager &client) {
 	std::cout << "[Received 'login' query from client]" << std::endl;
     // Condition du process
-    if (client.getAccount() != nullptr)              { client.sendQueryMsg("You are already connected", QUERY::TRUE); return; }
+    if (client.getAccount() != nullptr)              { client.sendQueryMsg("You are already connected", QUERY::TRUEQ); return; }
 	User* user = database.getUser(client.getS1().c_str());
-	if ( user == nullptr )                           { client.sendQueryMsg("FALSE", QUERY::FALSE); return; }	// User not find in the db
-    if ( !user->isPassword(client.getS2().c_str()) ) { client.sendQueryMsg("FALSE", QUERY::FALSE); return; }  // Incorrect password
-    if ( this->find(user) )                          { client.sendQueryMsg("FALSE", QUERY::TRUE); return; }  // Si le compte utilisateur est déjà
+	if ( user == nullptr )                           { client.sendQueryMsg("FALSE", QUERY::FALSEQ); return; }	// User not find in the db
+    if ( !user->isPassword(client.getS2().c_str()) ) { client.sendQueryMsg("FALSE", QUERY::FALSEQ); return; }  // Incorrect password
+    if ( this->find(user) )                          { client.sendQueryMsg("FALSE", QUERY::TRUEQ); return; }  // Si le compte utilisateur est déjà
     // Process of linking account                                                       // utilisé par un autre client
     client.setAccount(user);
-    client.sendQueryMsg("TRUE", QUERY::TRUE);	// succeed
+    client.sendQueryMsg("TRUE", QUERY::TRUEQ);	// succeed
     std::cout << "['login' to client account '"<< client.getAccount()->getUsername() <<"' was successful]\n" << std::endl;
 
 }
