@@ -144,7 +144,7 @@ void GameServer::connectClientToThisGame(ClientManager &client) {
  * Remove a client form the Clients list
  */
 void GameServer::removeClient(ClientManager* client) {
-    int i = 0;
+    unsigned int i = 0;
     this->game.removePlayer(*client);
     while ( i < this->clients.size() ) {
         if (this->clients[i] == client) {
@@ -176,7 +176,7 @@ void GameServer::addPlayer(ClientManager &client) {
  * Return the player link to the clientManager
  */
 Player *GameServer::findMe(ClientManager &client) {
-    int i = 0;
+    unsigned int i = 0;
     while (i < this->game.getPlayers()->size()) {
         if ( this->game.getPlayers()->operator[](i).isItMe(client) ) { return &this->game.getPlayers()->operator[](i); }
         i++;
@@ -607,11 +607,15 @@ void GameServer::processExchange(ClientManager &client) {
 
 
 void GameServer::processAuction(ClientManager &client, Player *player) {
-    //TODO
+    //TODO à faire, j'ai mis n'imp dans la fonction pour la faire fonctionner
+    client.getAccount();
+    player->getClient();
 }
 
 void GameServer::processBankrupt(ClientManager &client, Player *player) {
-    //TODO
+    //TODO LA MEME CHOSE QUE AU DESSUS
+    client.getAccount();
+    player->getClient();
 }
 
 
@@ -870,6 +874,7 @@ void GameServer::clientAuctionLoop(ClientManager &client, LandCell* land_cell) {
 
 
 void GameServer::processEndTurn(ClientManager &client) {
+    client.getRankForActualGame(); // TODO: inutil pour le moment, il faudra régler ce probleme de unused parametre
     Player* current = game.getCurrentPlayer();
     // Si le joueur n'a pas encore lancé les dés ou qu'il est en prison, on lui notifie simplement de lancé les dés
     if (!current->hasRolled() or current->isInJail()) {
@@ -883,6 +888,8 @@ void GameServer::processEndTurn(ClientManager &client) {
     // On envoie des infos pour le ncurse
     this->sendGameData();
     this->sendBetterGameData();
+
+    
 }
 
 /*

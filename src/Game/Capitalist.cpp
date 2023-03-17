@@ -147,7 +147,7 @@ void Capitalist::addPlayer(ClientManager &client) {
  * Remove a player from the Players list by matching his client address
  */
 void Capitalist::removePlayer(ClientManager &client) {
-    int i = 0;
+    unsigned int i = 0;
     while ( i < this->players.size() ) {
         if (this->players[i].getClient() == &client) {
             this->players[i] = this->players[this->players.size()-1];
@@ -413,10 +413,10 @@ bool Capitalist::processSendExchangeRequest(Player *player, std::string &name, i
     if (prop && prop->getLevel() != PROPERTY_LEVEL::EMPTY) { return false; }
 
     Player* trader = land->getLand()->getOwner();
-    trader->getClient()->sendQueryMsg(QUERY::ASK_EXCHANGE, land->getLand()->getName() + ":" + money);
+    trader->getClient()->sendQueryMsg( land->getLand()->getName() + ":" + std::to_string(money),QUERY::ASK_EXCHANGE);
 
     GAME_QUERY_TYPE query;
-    trader->receive(query);
+    trader->getClient()->receive(query);
 
     if ( query == GAME_QUERY_TYPE::ACCEPT ) {
         land->getLand()->exchange(player, money);

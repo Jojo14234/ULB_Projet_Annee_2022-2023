@@ -12,13 +12,13 @@
  * str > size -> erase char to fit the size
  */
 std::string changeStringSize(std::string str, int size, char c = ' ') {
-    if ( str.size() > size ) { str.erase(size); }
-    if ( str.size() < size ) { str.append(size-str.size(), c); }
+    if ( str.size() > (unsigned int)size ) { str.erase(size); }
+    if ( str.size() < (unsigned int)size ) { str.append(size-str.size(), c); }
     return str;
 }
 
 int stringToInt(std::string str) {
-    int i = 0;
+    unsigned int i = 0;
     int nb = 0;
     while (i < str.size()) {
         char c = str[i];
