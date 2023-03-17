@@ -38,7 +38,9 @@ public:
 
                 }
                 else{player_insert = true;}
-            }}}
+            }
+        }
+    }
             
     const PlayersInformations& getBufferSplit() const { return res;}        
             

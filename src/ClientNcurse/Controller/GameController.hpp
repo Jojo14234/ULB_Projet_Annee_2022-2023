@@ -11,7 +11,6 @@
 #include "../InputParser/GameInputParser.hpp"
 #include "../InputParser/GameStateParser.hpp"
 #include "../utils.hpp"
-//#include "../InputParser/GameStartParser.hpp"
 #include "../InputParser/GameStartParser2.hpp"
 
 class GameController : public AbstractController {
@@ -92,7 +91,7 @@ public:
 	}
 
     //TODO HERE
-	/*void receiveMessagesLoop() {
+	void receiveMessagesLoop2() {
 		while (this->new_state == STATE::GAME) {
 			std::string response;
 			QUERY cury;
@@ -123,7 +122,6 @@ public:
 						else{this->view->getBoard()->setHouse(index, 2);} //pas encore tester
 						} 
 					
-
 					this->view->getInfo()->setMoney( i,parser.getBufferSplit().state[i-1][1]);
 				}} 
 
@@ -132,7 +130,7 @@ public:
 				this->view->getConsole()->addText(response);
 			}
         }
-	}*/
+	}
 	void receiveMessagesLoop(){
 		while (this->new_state == STATE::GAME) {
 			std::string response;
@@ -144,19 +142,33 @@ public:
 						GameStartParser start_parser(response);  //GameStartParser2.hpp
 						start_parser.parse();
 						player_nb = start_parser.getBufferSplit().player_nb;
+						this->view->getConsole()->addText(std::to_string(player_nb));
 						players_username = start_parser.getBufferSplit().player_usernames;
-						startGame();}
-				default: {
-					this->view->getConsole()->addText(std::to_string((int)cury));
-					break;}
+						startGame(); 
+				}
+				
+				case QUERY::INFOS_GAME: {
+					GameStateParser game_parser(response);
+					for (int i = 1; i <= player_nb; i++){
+						game_parser.parseStateLine(player_nb);
+						game_parser.parsePropertiesLine(player_nb);
+						this->view->getBoard()->unsetPlayer(i);
+						this->view->getBoard()->setPlayer(game_parser.getBufferSplit().state[i-1][0], i);
+						for (unsigned int j = 0; j < game_parser.getBufferSplit().info[i-1].size();j++){
+							int index = this->view->getBoard()->getCellIndex(game_parser.getBufferSplit().info[i-1][j].name);
+							if (game_parser.getBufferSplit().info[i-1][j].level == 0){
+								this->view->getBoard()->setPurchased(index, game_parser.getBufferSplit().info[i-1][j].owner);}
+							else{this->view->getBoard()->setHouse(index, 2);} //pas encore tester
+							} 
+						
+						this->view->getInfo()->setMoney( i,game_parser.getBufferSplit().state[i-1][1]);
+					}
+				}
 
-
-
+				default: 
+					this->view->getConsole()->addText(response);
+					break;
 			}
-			this->view->getConsole()->addText(response);
-			
-			
-			
 			}
 	}
 
