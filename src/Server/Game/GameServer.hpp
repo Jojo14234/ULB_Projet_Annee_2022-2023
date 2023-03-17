@@ -73,6 +73,14 @@ public:
 
     void playerMortgageInfos(ClientManager &client);
 
+    void processLiftMortgage(ClientManager &client, Player *player);
+
+    void playerLiftMortgageInfos(ClientManager &client);
+
+    void processExchange(ClientManager &client, Player *player);
+
+    void playerExchangeInfos(ClientManager &client);
+
 
 
 

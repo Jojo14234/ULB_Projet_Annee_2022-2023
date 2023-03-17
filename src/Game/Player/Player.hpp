@@ -193,6 +193,15 @@ public:
 
     std::string getAllPossession();
 
+    std::string getAllPossessionMortgageable();
+
+    std::string getAllBuildableProperties();
+
+    std::string getAllSellableBuildProperties();
+
+    std::string getAllExchangeablePossession();
+
+
     BankAccount* getBankAccount();
 
     void setBankruptingPlayer(Player* player);

@@ -392,7 +392,35 @@ bool Capitalist::processSellBuild(Player *player, std::string &name) {
 
 bool Capitalist::processMortgage(Player *player, std::string &name) {
     LandCell* land = getLandCell(name);
-    if (!land or land->getLand()->isMortgaged() ) {return false;}
+    if (!land or land->getLand()->isMortgaged() ) { return false; }
+    Property* prop = dynamic_cast<Property*>(land->getLand());
+    if (!prop || prop->getLevel() == PROPERTY_LEVEL::EMPTY ) { land->getLand()->mortgage(player); return true; }
+    return false;
+}
+
+bool Capitalist::processLiftMortgage(Player *player, std::string &name) {
+    LandCell* land = getLandCell(name);
+    if (!land or !land->getLand()->isMortgaged() ) { return false; }
+    if (player->getBankAccount()->getMoney() < land->getLand()->getPurchasePrice()/2 ) { return false; }
     land->getLand()->mortgage(player);
     return true;
+}
+
+bool Capitalist::processSendExchangeRequest(Player *player, std::string &name, int money) {
+    LandCell* land = getLandCell(name);
+    if ( player->getBankAccount()->getMoney() < money ) { return false; }
+    Property* prop = dynamic_cast<Property*>(land->getLand());
+    if (prop && prop->getLevel() != PROPERTY_LEVEL::EMPTY) { return false; }
+
+    Player* trader = land->getLand()->getOwner();
+    trader->getClient()->sendQueryMsg(QUERY::ASK_EXCHANGE, land->getLand()->getName() + ":" + money);
+
+    GAME_QUERY_TYPE query;
+    trader->receive(query);
+
+    if ( query == GAME_QUERY_TYPE::ACCEPT ) {
+        land->getLand()->exchange(player, money);
+        return true;
+    }
+    return false;
 }

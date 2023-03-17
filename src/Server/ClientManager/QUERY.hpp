@@ -12,23 +12,32 @@ enum class QUERY {
 
     INFOS_START, // See sendStartData in GameServer for formatting
     INFOS_GAME, // See sendGameData in GameServer for formatting
-    INFOS_PLAYER_PROP, // All the property possessed by a player
+    PLAYER_JOIN_GAME, // username:gameCode [string]:[int]
 
     MESSAGE, // All indication message
     USELESS_MESSAGE, // Message useless outside out the terminal app
 
-    PLAYER_JOIN_GAME, // username:gameCode [string]:[int]
-    WIN, // username
 
     INFOS_ROLL_DICE, // dice1:dice2:result:isDouble:doubleCount [int]:[int]:[int]:[bool]:[int]
+
     INFOS_BUILD_PROP, // All the property name if they are buildable
-    INFOS_BUILD_SUCCESS, // property_name (indicate the level up)
-    INFOS_SELL_BUILD_SUCCESS, // property_name (indicate the level down)
     INFOS_SELL_BUILD, // All the property name if build can be sell
-    INFOS_MORTGAGE_BUILD,
+    INFOS_MORTGAGEABLE_PROP, // All the property mortgageable by a player
+    INFOS_LIFT_MORTGAGEABLE_PROP, // All the property lift mortgageable by a player
+    INFOS_EXCHANGEABLE_PROP, // username=property_exchangeable:property_exchangeable:|... All teh properties exchangeable by all the player
+
+
+    INFOS_BUILD_SUCCESS, // property_name (indicate the level up) // TODO add lvl
+    INFOS_SELL_BUILD_SUCCESS, // property_name (indicate the level down) // TODO add lvl
+    INFOS_MORTGAGE_SUCCESS, // property name of the mortgaged property
+    INFOS_LIFT_MORTGAGE_SUCCESS, // property name of the lift mortgaged property
+
+    ASK_EXCHANGE, // property_name:price // envoyé au propriétaire de la case pour lui demander si il souhaite accepter l'échange ou non
+
 
     DISCONNECT, // Disconnection
     RANKING, // Ranking
+    WIN, // username
     ENDGAME, // TO leave the game
 
 

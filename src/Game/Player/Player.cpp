@@ -248,11 +248,7 @@ void Player::removeCompagnie(Company* c) {
 void Player::auctionMustStart() { auction_must_start = true; }
 void Player::exchangeFromJail() { exchange_from_jail = true; }
 
-PLAYER_STATUS Player::getStatus() {
-    std::cout << "PLAYER STATUS GET" << std::endl;
-    std::cout << this->getUsername() << " is " << status << std::endl;
-    std::cout << "FREE=0, JAIL=1, BANKRUPT=2, LOST=3" << std::endl;
-    return status; }
+PLAYER_STATUS Player::getStatus() { return status; }
 void Player::setStatus(PLAYER_STATUS new_status) {
     std::cout << "PLAYER STATUS CHANGE" << std::endl;
     std::cout << this->getUsername() << " is now " << (int)new_status << std::endl;
@@ -262,10 +258,38 @@ void Player::setStatus(PLAYER_STATUS new_status) {
 
 std::string Player::getAllPossession(){
     std::string ret_string = "";
-    for (auto property : properties) { ret_string += property->getName() + ":"; }
-    for (auto company : companies)  { ret_string += company->getName() + ":"; }
-    for (auto station : stations)    { ret_string += station->getName() + ":"; }
+    for (auto property : properties ) { ret_string += property->getName() + ":"; }
+    for (auto company : companies ) { ret_string += company->getName() + ":"; }
+    for (auto station : stations ) { ret_string += station->getName() + ":"; }
     return ret_string;
+}
+
+std::string Player::getAllPossessionMortgageable() {
+    std::string ret_string = "";
+    for ( auto property : properties ) { if ( !property->isMortgaged() && property->getLevel() == PROPERTY_LEVEL::EMPTY ) { ret_string += property->getName() + ":"; } }
+    for ( auto company : companies ) { if ( !company->isMortgaged() ) { ret_string += company->getName() + ":"; } }
+    for ( auto station : stations ) { if ( !station->isMortgaged() ) { ret_string += station->getName() + ":"; } }
+    return ret_string;
+}
+
+std::string Player::getAllBuildableProperties() {
+    std::string str = "";
+    for ( auto property : this->getAllProperties() ) { if ( property->isBuildable(this) ) { str += property->getName() + ":"; } }
+    return str;
+}
+
+std::string Player::getAllSellableBuildProperties() {
+    std::string str = "";
+    for ( auto property : getAllProperties() ) { if ( property->canSellBuilding(this) ) { str += property->getName() + ":"; } }
+    return str;
+}
+
+std::string Player::getAllExchangeablePossession() {
+    std::string str = "";
+    for ( auto property : properties ) { if ( property->getLevel() == PROPERTY_LEVEL::EMPTY ) { str += property->getName() + ":"; } }
+    for ( auto company : companies )  { str += company->getName() + ":"; }
+    for ( auto station : stations )    { str += station->getName() + ":"; }
+    return str;
 }
 
 BankAccount* Player::getBankAccount(){

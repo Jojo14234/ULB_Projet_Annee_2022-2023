@@ -104,6 +104,7 @@ void Client::sendToServer(const GameInputParser &input) {
         case GAME_QUERY_TYPE::BID    :
         case GAME_QUERY_TYPE::SELECT : packet << input[1]; break;
         // Add both of the first and second arguments to the packet
+        case GAME_QUERY_TYPE::TRADE  :
         case GAME_QUERY_TYPE::ARG2   : packet << input[1] << input[2]; break;
 		default : break;
 	}

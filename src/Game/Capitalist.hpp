@@ -83,6 +83,8 @@ public:
     bool processBuild(Player *player, std::string &name);
     bool processSellBuild(Player *player, std::string &name);
     bool processMortgage(Player *player, std::string &name);
+    bool processLiftMortgage(Player *player, std::string &name);
+    bool processSendExchangeRequest(Player *player, std::string &name, int money);
 
 
 };

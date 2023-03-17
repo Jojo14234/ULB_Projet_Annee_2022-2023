@@ -81,3 +81,11 @@ int Station::getRentPrice() {
 }
 
 
+void Land::exchange(Player *new_owner, int money) {
+    this->owner->removeLand(this);
+    new_owner->pay(money);
+    this->owner->receive(money, new_owner->getUsername())
+    new_owner->acquireLand(this);
+    this->setOwner(new_owner);
+}
+

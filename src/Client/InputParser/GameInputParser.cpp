@@ -4,20 +4,29 @@ void GameInputParser::parse() {
 	InputParser::parse();
 	const std::string &query = (*this)[0];
 
-	if      ( query == "/roll" )        { this->query_type = GAME_QUERY_TYPE::ROLL_DICE; } // Lance les dés
-    else if ( query == "/start" )       { this->query_type = GAME_QUERY_TYPE::START; }     // Démarre la partie
-    else if ( query == "/pay" )         { this->query_type = GAME_QUERY_TYPE::PAY; } // To pay to exit prison
+	if      ( query == "/start" )       { this->query_type = GAME_QUERY_TYPE::START; } // Démarre la partie
+    else if ( query == "/roll" )        { this->query_type = GAME_QUERY_TYPE::ROLL_DICE; } // Lance les dés
+    else if ( query == "/pay" )         { this->query_type = GAME_QUERY_TYPE::PAY; }       // To pay to exit prison
     else if ( query == "/use" )         { this->query_type = GAME_QUERY_TYPE::USEGOOJCARD; } // To use the card get out of jail
-    else if ( query == "/leave" )       { this->query_type = GAME_QUERY_TYPE::LEAVE_SELECTION; } // Qui la sélection
-    else if ( query == "/build" )       { this->query_type = GAME_QUERY_TYPE::BUILD; }     // Construit un/des bâtiment(s)
-    else if ( query == "/sell" )        { this->query_type = GAME_QUERY_TYPE::SELL_BUILDINGS; } // Vend un/des bâtiment(s)
+    else if ( query == "/leave" )       { this->query_type = GAME_QUERY_TYPE::LEAVE_SELECTION; } // Quitte la sélection
+    else if ( query == "/build" )       { this->query_type = GAME_QUERY_TYPE::BUILD; }     // passer en mode construction
+    else if ( query == "/sell" )        { this->query_type = GAME_QUERY_TYPE::SELL_BUILDINGS; } // passer en mode vente
+    else if ( query == "/mortgage" )    { this->query_type = GAME_QUERY_TYPE::MORTGAGE; }  // Passe en mode hypothèque
+    else if ( query == "/liftMortgage" ){ this->query_type = GAME_QUERY_TYPE::LIFT_MORTGAGE; } // Passer en mode lift hypothèque
+    else if ( query == "/exchange" )    { this->query_type = GAME_QUERY_TYPE::EXCHANGE;}   // Commence un échange
+    else if ( query == "/trade" )       {
+        if (this->getNbParameters() == 2 ) { this->query_type = GAME_QUERY_TYPE::TRADE; }
+        else { std::cout << "Format de la requête doit être /trade [prop_wanted] [money]" << std::endl; }
+    }
+    else if ( query == "/accept" )      { this->query_type = GAME_QUERY_TYPE::ACCEPT; }
+    else if ( query == "/refuse" )      { this->query_type = GAME_QUERY_TYPE::REFUSE; }
+
+
+
 
 
 
     else if ( query == "/out" )         { this->query_type = GAME_QUERY_TYPE::LEAVE_BID; } // Quitte une enchère
-    else if ( query == "/mortgage" )    { this->query_type = GAME_QUERY_TYPE::MORTGAGE; }  // Passe en mode hypothèque
-    else if ( query == "/demortgage")   { this->query_type = GAME_QUERY_TYPE::DEMORTGAGE; }
-    else if ( query == "/exchange" )    { this->query_type = GAME_QUERY_TYPE::EXCHANGE;}   // Commence un échange
     else if ( query == "/give-up" )     { this->query_type = GAME_QUERY_TYPE::GIVE_UP; }   // Abandonne
     else if ( query == "/participate" ) { this->query_type = GAME_QUERY_TYPE::PARTICIPATE; } // Participe à une enchère
     else if ( query == "/end" )         { this->query_type = GAME_QUERY_TYPE::END_TURN; }  // Termine son tour
