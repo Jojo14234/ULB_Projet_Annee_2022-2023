@@ -241,6 +241,8 @@ int GameServer::clientLoop(ClientManager &client) {
         else {
             Player* me = this->findMe(client);
             if ( me->getStatus() == PLAYER_STATUS::IN_EXCHANGE ) { this->processAskExchange(client, me); continue; }
+            if ( me->getStatus() == PLAYER_STATUS::ASK_AUCTION ) { this->processAskAuction(client, me); continue;}
+            if ( me->getStatus() == PLAYER_STATUS::IN_AUCTION ) { this->participateAuction(client, me); continue;}
             /*
              * TODO : Participate in auction
              * TODO : LeaveGame
@@ -516,14 +518,86 @@ void GameServer::processAskExchange(ClientManager &client, Player *player) {
     }
 }
 
+void GameServer::processAskAuction(ClientManager &client, Player *player) {
+    sleep(MAX_WAIT_AUCTION);
+    if (player->getStatus() == PLAYER_STATUS::ASK_AUCTION) {
+        this->updateThisClientWithQuery(QUERY::STOP_WAIT, "", client);
+        this->updateThisClientWithQuery(QUERY::MESSAGE, "Vous avez mis trop de temps a répondre à l'offre, elle à été automatiquement annulé",client);
+    }
+}
+
+void GameServer::participateAuction(ClientManager &client, Player *player) {
+
+}
+
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
 
 
 
-void GameServer::processAuction(ClientManager &client, Player *player) {
-    //TODO
+void GameServer::processAuction(ClientManager &client, Player *me) {
+    // Passer tout les joueurs autre que me en status in_auction
+    // récupérer un /participate et les ajouter à un vecteur
+    // boucler un a un sur leur offres
+    std::string name = me->getCurrentCell()->getName();
+
+    std::vector<Player*> participants = this->game.processAskAuction(me, name);
+
+    // AUCTION
+    LandCell* land = getLandCell(name);
+    int starting_bid = land->getLand()->getPurchasePrice();
+
+    Player* futur_owner = nullptr;
+    std::vector<int> leaving_participant;
+
+    while ( participants.size() > (unsigned int)1 ) {
+
+        int idx = 0;
+        leaving_participant.clear();
+
+        for ( auto player : participants ) {
+            // Envoyer que le prix minimum est de starting bid
+            player->getClient()->sendQueryMsg(std::to_string(starting_bid), QUERY::INFOS_AUCTION_BID);
+
+
+            GAME_QUERY_TYPE query;
+            sf::Packet packet;
+            string bid_s;
+            int bid;
+
+            player->getClient()->receive(query, packet);
+            if ( query != GAME_QUERY_TYPE::BID ) {leaving_participant.push_back(idx); idx++; continue; }
+            // Récupérer une réponse
+            packet << bid_s;
+            bid = std::stoi(bid_s);
+            // Vérifier que player possède assez de thune
+            if ( player->getBankAccount()->getMoney() < bid ) { leaving_participant.push_back(idx); idx++; continue; }
+            // Vérifier prix > starting bid
+            if ( bid <= starting_bid ) { leaving_participant.push_back(idx); idx++; continue; }
+
+            // starting bid = nouveau prix // futur owner = player
+            starting_bid = bid;
+            futur_owner = player;
+
+            // SINON retenir idx
+            idx++;
+        }
+
+        // tej les participants ayant donner une mauvaise réponse
+        unsigned int i = leaving_participant.size() - 1;
+        while (i >= 0) {
+            int idy = leaving_participant[i];
+            participants[idy]->setStatus(PLAYER_STATUS::FREE);
+            participants.erase(participants.begin() + idy);
+            i--;
+        }
+    }
+    // Si futur_owner != nullptr -> futur->owner.acquire.prop
+    if (futur_owner) {
+        futur_owner->acquireLand(land);
+        futur_owner->pay(starting_bid);
+    }
 }
 
 void GameServer::processBankrupt(ClientManager &client, Player *player) {
@@ -590,11 +664,11 @@ void GameServer::processGameQueryBeforeRoll(ClientManager &client, GAME_QUERY_TY
         switch (query) {
             case GAME_QUERY_TYPE::END_TURN       : processEndTurn(client); break;
             case GAME_QUERY_TYPE::ROLL_DICE      :  break;
-            case GAME_QUERY_TYPE::LIFT_MORTGAGE     :  break;
-            case GAME_QUERY_TYPE::EXCHANGE       : processExchange(client); break;
+            case GAME_QUERY_TYPE::LIFT_MORTGAGE  :  break;
+            case GAME_QUERY_TYPE::EXCHANGE       :  break;
             case GAME_QUERY_TYPE::BUILD          :  break;
             case GAME_QUERY_TYPE::SELL_BUILDINGS :  break;
-            case GAME_QUERY_TYPE::ACCEPT         : participateInExchange(client); break;
+            case GAME_QUERY_TYPE::ACCEPT         :  break;
             default:
                 this->updateThisClientWithQuery(QUERY::COMMAND_INDISPONIBLE, "Cette commande n'est pas disponible.", client);
                 //client.send("Cette commande n'est pas disponible.");

@@ -425,3 +425,31 @@ bool Capitalist::processSendExchangeRequest(Player *player, std::string &name, i
     }
     return false;
 }
+
+std::vector<Player*> Capitalist::processAskAuction(Player *player, std::string &name) {
+
+    // ENVOYER DEMANDE DE PARTICIPATION AU CLIENT
+    for (auto &other : this->players ) {
+        if (&other != player) {
+            other.setStatus(PLAYER_STATUS::ASK_AUCTION);
+            other.getClient()->sendQueryMsg(name, QUERY::ASK_AUCTION);
+        }
+    }
+
+    std::vector<Player*> participants;
+    GAME_QUERY_TYPE query;
+    // RéCUPéRER LES PARTICIPANT
+    for ( auto &other : this->players ) {
+        if (&other != player) {
+            other.getClient()->receive(query);
+            if ( query == GAME_QUERY_TYPE::PARTICIPATE) {
+                other.setStatus(PLAYER_STATUS::IN_AUCTION);
+                participants.push_back(&other);
+            }
+            else {
+                other.setStatus(PLAYER_STATUS::FREE);
+            }
+        }
+    }
+    return participants;
+}

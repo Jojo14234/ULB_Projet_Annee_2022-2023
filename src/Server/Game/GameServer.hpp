@@ -83,7 +83,9 @@ public:
 
     void processAskExchange(ClientManager &client, Player *player);
 
+    void processAskAuction(ClientManager &client, Player *player);
 
+    void participateAuction(ClientManager &client, Player *player);
 
 
 

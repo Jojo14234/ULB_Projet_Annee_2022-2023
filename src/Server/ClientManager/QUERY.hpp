@@ -33,8 +33,10 @@ enum class QUERY {
     INFOS_LIFT_MORTGAGE_SUCCESS, // property name of the lift mortgaged property
     INFOS_EXCHANGE_SUCCESS, // PropertyName:new_propriétaire nom // Tells that the exchange was successfully made
 
-    ASK_EXCHANGE, // property_name:price // envoyé au propriétaire de la case pour lui demander si il souhaite accepter l'échange ou non
+    INFOS_AUCTION_BID,
 
+    ASK_EXCHANGE, // property_name:price // envoyé au propriétaire de la case pour lui demander si il souhaite accepter l'échange ou non
+    ASK_AUCTION, // property_name // envoyé à tout les joueurs pour leur demander de participer à l'enchère
     STOP_WAIT,
 
     DISCONNECT, // Disconnection
