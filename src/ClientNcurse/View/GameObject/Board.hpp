@@ -15,7 +15,6 @@
 #include "../Object/ObjectInfo.hpp"
 #include "../Object/TextBox.hpp"
 
- 
 
 //Class representing the gameboard with the different game spaces and the spaces for the cards.
 class Board : public AbstractViewObject {
@@ -23,7 +22,9 @@ class Board : public AbstractViewObject {
 	static const int col_nb = 11; 
 	static const int line_nb = 11; 
 	static const int gamebox_nb = 40;
+
 	std::vector<int> old_pos_player;
+	std::array<int,40> old_lev_house;
 
     int n_player; //number of players in game
 
@@ -53,12 +54,13 @@ public:
 		for(int i = 0; i< n_player ; i++){old_pos_player[i] = 0;}
 	}
     int getNPlayer() { return n_player; }
+	int getCellIndex(std::string cell);
 	void setPlayer(int cell, int player);
 	void unsetPlayer(int player);
 	void setIdle(int cell);
 	void setPurchased(int cell, int player);
-	void addHouse(int cell, int house_nb);
-	void removeHouse(int cell, int house_nb);
+	void setHouse(int cell, int house_nb);
+	//void removeHouse(int cell, int house_nb);
 
 };
 

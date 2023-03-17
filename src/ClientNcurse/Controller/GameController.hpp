@@ -3,12 +3,15 @@
 
 #include <ncurses.h>
 #include <thread>
+#include <vector>
+#include <string>
 
 #include "AbstractController.hpp"
 #include "../View/GameView.hpp"
 #include "../InputParser/GameInputParser.hpp"
 #include "../InputParser/GameStateParser.hpp"
 #include "../utils.hpp"
+#include "../InputParser/GameStartParser.hpp"
 
 
 class GameController : public AbstractController {
@@ -16,10 +19,9 @@ class GameController : public AbstractController {
 	enum MENU_STATE { CHAT, CONSOLE, IDLE };
 	MENU_STATE STATE = IDLE;
 	GameView* view;
-	Subject* win;
 
-	int n_player = 2;
-
+	int player_nb ;
+	std::vector<std::string> players_username;
 
 public:
 
@@ -49,11 +51,11 @@ public:
 				this->view->getConsole()->addText(response);
 				*/
 				if ( not this->model->sendCommand(parser)) this->view->getConsole()->addText("La commande n'existe pas");
-				if (parser.getQueryType() == GAME_QUERY_TYPE::START && this->model->isCreator()){
-					this->view->getDice1()->setVisible();
-					this->view->getDice2()->setVisible();
-					if (this->model->isCreator()){this->view->getOwnerWaitingText()->setHidden();} 
-					else {this->view->getPlayersWaitingText()->setHidden();}}
+				/*if (parser.getQueryType() == GAME_QUERY_TYPE::START && this->model->isCreator()){
+					startGame();
+					//if (this->model->isCreator()){this->view->getOwnerWaitingText()->setHidden();} 
+					//else {this->view->getPlayersWaitingText()->setHidden();}
+					}*/
 				break; }
 				
 			case CHAT: {
@@ -90,22 +92,44 @@ public:
 
     //TODO HERE
 	void receiveMessagesLoop() {
-        for (int i = 0; i< n_player;i++){this->view->getBoard()->setPlayer(0, i);}
 		while (this->new_state == STATE::GAME) {
 			std::string response;
 			this->model->receive(response);
-			if (response[0] == 'G' && response[1] == 'M') {
-				GameStateParser parser(response, n_player);
-				for (int i = 0; i < n_player; i++){
-					this->view->getBoard()->unsetPlayer( i);
-					this->view->getBoard()->setPlayer(parser.getBufferSplit().state[i][0], i);
-					this->view->getInfo()->setMoney( i+1 ,parser.getBufferSplit().state[i][1]);
-				}} 
-			else {
-                if ( response[0] != '+' ) { this->view->getConsole()->addText(response); }
+
+			//start game
+			if (response[0] == 'S' &&  response[1] == 'I'){
+				GameStartParser start_parser(response);
+				start_parser.parse();
+				player_nb = start_parser.getBufferSplit().player_nb;
+				players_username = start_parser.getBufferSplit().player_usernames;
+				startGame();
 			}
-			//this->win->update();
-		}
+
+			//move player + set up money
+			else if (response[0] == 'G' && response[1] == 'M') {
+				GameStateParser parser(response);
+
+				for (int i = 1; i <= player_nb; i++){
+					parser.parseStateLine(player_nb);
+					parser.parsePropertiesLine(player_nb);
+					this->view->getBoard()->unsetPlayer(i);
+					this->view->getBoard()->setPlayer(parser.getBufferSplit().state[i-1][0], i);
+					for (int j = 0; j < parser.getBufferSplit().info[i-1].size();j++){
+						int index = this->view->getBoard()->getCellIndex(parser.getBufferSplit().info[i-1][j].name);
+						if (parser.getBufferSplit().info[i-1][j].level == 0){
+							this->view->getBoard()->setPurchased(index, parser.getBufferSplit().info[i-1][j].owner);}
+						else{this->view->getBoard()->setHouse(index, 2);} //pas encore tester
+						} 
+					
+
+					this->view->getInfo()->setMoney( i,parser.getBufferSplit().state[i-1][1]);
+				}} 
+
+			//add text on console
+			else{
+				this->view->getConsole()->addText(response);
+			}
+        }
 	}
 	
 	void init() {
@@ -130,8 +154,14 @@ public:
 	}
 
 	void startGame() {
+		this->view->getDice1()->setVisible();
+		this->view->getDice2()->setVisible();
 		this->view->getPlayersWaitingText()->setHidden();
 		this->view->getOwnerWaitingText()->setHidden();
+		for (int i = 1; i<= player_nb; i++) {
+			this->view->getBoard()->setPlayer(0, i);
+			this->view->getInfo()->addPlayer(players_username[i-1]);
+		}
 	}
 
 	void setSubject(Subject* win) { this->win = win; }
