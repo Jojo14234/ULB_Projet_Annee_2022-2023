@@ -115,9 +115,9 @@ public:
 					this->view->getBoard()->setPlayer(parser.getBufferSplit().state[i-1][0], i);
 					for (int j = 0; j < parser.getBufferSplit().info[i-1].size();j++){
 						int index = this->view->getBoard()->getCellIndex(parser.getBufferSplit().info[i-1][j].name);
-						/*if (parser.getBufferSplit().info[i-1][j].level == 0){
-							this->view->getBoard()->setPurchased(index, i);}*/
-						/*else{*/this->view->getBoard()->setHouse(index, 2);//} //pas encore tester
+						if (parser.getBufferSplit().info[i-1][j].level == 0){
+							this->view->getBoard()->setPurchased(index, parser.getBufferSplit().info[i-1][j].owner);}
+						else{this->view->getBoard()->setHouse(index, 2);} //pas encore tester
 						} 
 					
 

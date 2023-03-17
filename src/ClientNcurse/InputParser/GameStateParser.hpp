@@ -6,6 +6,7 @@
 #include <array>
 
 struct PropertyInformation {
+	int owner;
 	std::string name;
 	int level;
 	bool hypotek;
@@ -101,6 +102,7 @@ public:
 					case 2 : {(c == 'n') ? pi.hypotek = false : pi.hypotek = true ; tmp.clear(); break;}
 					default : break;
 				}
+				pi.owner = player + 1;
 				arg_nb++;
 			}
 			else if (c == ';'){
