@@ -11,8 +11,8 @@
 #include "../InputParser/GameInputParser.hpp"
 #include "../InputParser/GameStateParser.hpp"
 #include "../utils.hpp"
-#include "../InputParser/GameStartParser.hpp"
-
+//#include "../InputParser/GameStartParser.hpp"
+#include "../InputParser/GameStartParser2.hpp"
 
 class GameController : public AbstractController {
 
@@ -92,7 +92,7 @@ public:
 	}
 
     //TODO HERE
-	void receiveMessagesLoop() {
+	/*void receiveMessagesLoop() {
 		while (this->new_state == STATE::GAME) {
 			std::string response;
 			QUERY cury;
@@ -132,7 +132,34 @@ public:
 				this->view->getConsole()->addText(response);
 			}
         }
+	}*/
+	void receiveMessagesLoop(){
+		while (this->new_state == STATE::GAME) {
+			std::string response;
+			QUERY cury;
+			this->model->receiveQueryMsg(response, cury);
+			
+			switch(cury){
+				case QUERY::INFOS_START: {
+						GameStartParser start_parser(response);  //GameStartParser2.hpp
+						start_parser.parse();
+						player_nb = start_parser.getBufferSplit().player_nb;
+						players_username = start_parser.getBufferSplit().player_usernames;
+						startGame();}
+				default: {
+					this->view->getConsole()->addText(std::to_string((int)cury));
+					break;}
+
+
+
+			}
+			this->view->getConsole()->addText(response);
+			
+			
+			
+			}
 	}
+
 	
 	void init() {
 		this->initScreen();
