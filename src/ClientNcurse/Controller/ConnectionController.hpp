@@ -40,7 +40,8 @@ public:
 						this->model->sendRegister(this->view->getUsernameInputBox()->getText(), this->view->getPasswordInputBox()->getText());
 					} else { break; }
 					std::string response;
-					this->model->receive(response);
+					QUERY cury;
+					this->model->receiveQueryMsg(response, cury);
 					if (response == "TRUE") { this->new_state = STATE::MENU; }
 					this->clear();
 				}

@@ -95,7 +95,8 @@ public:
 	void receiveMessagesLoop() {
 		while (this->new_state == STATE::GAME) {
 			std::string response;
-			this->model->receive(response);
+			QUERY cury;
+			this->model->receiveQueryMsg(response, cury);
 
 			//start game
 			if (response[0] == 'S' &&  response[1] == 'I'){
