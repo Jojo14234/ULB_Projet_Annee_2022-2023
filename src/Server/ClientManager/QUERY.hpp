@@ -31,9 +31,11 @@ enum class QUERY {
     INFOS_SELL_BUILD_SUCCESS, // property_name (indicate the level down) // TODO add lvl
     INFOS_MORTGAGE_SUCCESS, // property name of the mortgaged property
     INFOS_LIFT_MORTGAGE_SUCCESS, // property name of the lift mortgaged property
+    INFOS_EXCHANGE_SUCCESS, // PropertyName:new_propriétaire nom // Tells that the exchange was successfully made
 
     ASK_EXCHANGE, // property_name:price // envoyé au propriétaire de la case pour lui demander si il souhaite accepter l'échange ou non
 
+    STOP_WAIT,
 
     DISCONNECT, // Disconnection
     RANKING, // Ranking

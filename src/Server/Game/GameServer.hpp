@@ -81,6 +81,8 @@ public:
 
     void playerExchangeInfos(ClientManager &client);
 
+    void processAskExchange(ClientManager &client, Player *player);
+
 
 
 

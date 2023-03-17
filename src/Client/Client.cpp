@@ -189,6 +189,10 @@ void Client::receiveFromServerLoop() {
     while (this->in_game) {
         std::string output;
         QUERY query = this->receiveFromServer2(output); // get the output from the server
+        if (query == QUERY::STOP_WAIT) {
+            std::cout << "Received stop time" << std::endl;
+            this->sendToServer(GameInputParser{"/refuse"});
+        }
         if( query == QUERY::ENDGAME ) { this->in_game = false; } // If output is "ENDGAME" it should stop the loop.
         else { std::cout << output << std::endl; }
     }

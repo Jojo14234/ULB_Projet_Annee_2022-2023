@@ -373,7 +373,6 @@ void Capitalist::processJailRoll(Player *player) {
     }
 }
 
-
 bool Capitalist::processBuild(Player *player, std::string &name) {
     LandCell* land = getLandCell(name);
     if (!land) {return false;}
@@ -413,13 +412,15 @@ bool Capitalist::processSendExchangeRequest(Player *player, std::string &name, i
     if (prop && prop->getLevel() != PROPERTY_LEVEL::EMPTY) { return false; }
 
     Player* trader = land->getLand()->getOwner();
-    trader->getClient()->sendQueryMsg(QUERY::ASK_EXCHANGE, land->getLand()->getName() + ":" + money);
+    trader->setStatus(PLAYER_STATUS::IN_EXCHANGE);
+    trader->getClient()->sendQueryMsg(land->getLand()->getName() + ":" + std::to_string(money), QUERY::ASK_EXCHANGE);
 
     GAME_QUERY_TYPE query;
-    trader->receive(query);
+    trader->getClient()->receive(query);
 
     if ( query == GAME_QUERY_TYPE::ACCEPT ) {
         land->getLand()->exchange(player, money);
+        trader->setStatus(PLAYER_STATUS::FREE);
         return true;
     }
     return false;
