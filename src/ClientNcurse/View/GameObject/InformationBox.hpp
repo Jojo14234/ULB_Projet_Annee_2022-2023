@@ -18,7 +18,7 @@ class InformationBox: public TextBox{
 	std::vector<std::string> usernames;
 	std::vector<int> player_money;
 	// int jcard = 0; // for now, useless
-	int money = 1500;
+	// int money = 1500;
 
 
 public:
@@ -56,6 +56,11 @@ public:
 		this->addText(std::to_string(player_nb+1) + ": " + username);
 		usernames.push_back(username);
 		player_nb++;
+	}
+
+	void setPlayersInGame(std::vector<std::string>& players){
+		this->clearAllText();
+		for (auto& player : players) this->addText("- " + player); 
 	}
 
 	void setMoney(int player, int money){

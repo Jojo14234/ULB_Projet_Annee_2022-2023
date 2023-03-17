@@ -23,10 +23,11 @@ void Capitalist::receiveQuery(GAME_QUERY_TYPE query, sf::Packet &packet) {
 /*
  * Return a string with all the game information at the start of the game.
  * String is formatted like this :
- *      nb_player|index=username|index=username|...
- *  E.G. :  3|0=remy|1=hugo|2=a|
+ *      nb_player|beginner|index=username|index=username|...
+ *  E.G. :  3|0|0=remy|1=hugo|2=a|
  *
  *  nb_player = number of player at the start of the game [int]
+ *  beginner = index of the player who begins to play [int]
  *  indexe = indexe of the player in the Players list [int]
  *  username = name of the player [string]
  */
@@ -35,6 +36,7 @@ std::string Capitalist::getStartInfos() {
 
     std::string nb_players = std::to_string(this->players.size());
     ret += nb_players + "|";
+    ret += std::to_string(this->getCurrentPlayer()->getIndex()) + "|";
 
     for (const auto &player : this->players) {
         std::string index =     std::to_string(player.getIndex());

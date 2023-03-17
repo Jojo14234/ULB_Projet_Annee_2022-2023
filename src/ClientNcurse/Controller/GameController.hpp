@@ -11,7 +11,7 @@
 #include "../InputParser/GameInputParser.hpp"
 #include "../InputParser/GameStateParser.hpp"
 #include "../utils.hpp"
-#include "../InputParser/GameStartParser2.hpp"
+#include "../InputParser/GameLaunchingParser.hpp"
 
 class GameController : public AbstractController {
 
@@ -20,7 +20,7 @@ class GameController : public AbstractController {
 	GameView* view;
 	Subject* win;
 
-	int player_nb ;
+	int player_nb;
 	std::vector<std::string> players_username;
 
 public:
@@ -90,47 +90,6 @@ public:
 		}
 	}
 
-    //TODO HERE
-	void receiveMessagesLoop2() {
-		while (this->new_state == STATE::GAME) {
-			std::string response;
-			QUERY cury;
-			this->model->receiveQueryMsg(response, cury);
-
-			//start game
-			if (response[0] == 'S' &&  response[1] == 'I'){
-				GameStartParser start_parser(response);
-				start_parser.parse();
-				player_nb = start_parser.getBufferSplit().player_nb;
-				players_username = start_parser.getBufferSplit().player_usernames;
-				startGame();
-			}
-
-			//move player + set up money
-			else if (response[0] == 'G' && response[1] == 'M') {
-				GameStateParser parser(response);
-
-				for (int i = 1; i <= player_nb; i++){
-					parser.parseStateLine(player_nb);
-					parser.parsePropertiesLine(player_nb);
-					this->view->getBoard()->unsetPlayer(i);
-					this->view->getBoard()->setPlayer(parser.getBufferSplit().state[i-1][0], i);
-					for (unsigned int j = 0; j < parser.getBufferSplit().info[i-1].size();j++){
-						int index = this->view->getBoard()->getCellIndex(parser.getBufferSplit().info[i-1][j].name);
-						if (parser.getBufferSplit().info[i-1][j].level == 0){
-							this->view->getBoard()->setPurchased(index, parser.getBufferSplit().info[i-1][j].owner);}
-						else{this->view->getBoard()->setHouse(index, 2);} //pas encore tester
-						} 
-					
-					this->view->getInfo()->setMoney( i,parser.getBufferSplit().state[i-1][1]);
-				}} 
-
-			//add text on console
-			else{
-				this->view->getConsole()->addText(response);
-			}
-        }
-	}
 	void receiveMessagesLoop(){
 		while (this->new_state == STATE::GAME) {
 			std::string response;
@@ -139,12 +98,12 @@ public:
 			
 			switch(cury){
 				case QUERY::INFOS_START: {
-						GameStartParser start_parser(response);  //GameStartParser2.hpp
-						start_parser.parse();
-						player_nb = start_parser.getBufferSplit().player_nb;
-						this->view->getConsole()->addText(std::to_string(player_nb));
-						players_username = start_parser.getBufferSplit().player_usernames;
-						startGame(); 
+					GameLaunchingParser start_parser(response);
+					PlayersInformations p_i = start_parser.parseStartInfo();
+					player_nb = p_i.player_nb;
+					players_username = p_i.player_usernames;
+					this->gameStartUpdate(p_i.beginner); 
+					break;
 				}
 				
 				case QUERY::INFOS_GAME: {
@@ -163,13 +122,23 @@ public:
 						
 						this->view->getInfo()->setMoney( i,game_parser.getBufferSplit().state[i-1][1]);
 					}
+					break;
+				}
+
+				case QUERY::PLAYER_JOIN_GAME: {
+					GameLaunchingParser start_parser(response);
+					PlayersInformations p_i = start_parser.parseJoinInfo();
+					player_nb = p_i.player_nb;
+					players_username = p_i.player_usernames;
+					this->playerJoinUpdate();
+					break;
 				}
 
 				default: 
 					this->view->getConsole()->addText(response);
 					break;
 			}
-			}
+		}
 	}
 
 	
@@ -194,11 +163,17 @@ public:
 		}
 	}
 
-	void startGame() {
-		this->view->getDice1()->setVisible();
-		this->view->getDice2()->setVisible();
+	void playerJoinUpdate() { this->view->getInfo()->setPlayersInGame(players_username); }
+
+	void gameStartUpdate(int beginner) {
+		if (this->model->getUsername() == players_username[beginner]){
+			this->view->getDice1()->setVisible();
+			this->view->getDice2()->setVisible();
+		}
 		this->view->getPlayersWaitingText()->setHidden();
 		this->view->getOwnerWaitingText()->setHidden();
+		
+		this->view->getInfo()->clearAllText();
 		for (int i = 1; i<= player_nb; i++) {
 			this->view->getBoard()->setPlayer(0, i);
 			this->view->getInfo()->addPlayer(players_username[i-1]);

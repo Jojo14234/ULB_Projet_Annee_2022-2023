@@ -31,7 +31,12 @@ public:
 	void addText(std::string new_text){texts.push_back(new_text);}
 
 	void clearText(int line){
-		for (int i = 1; i < info.getWidth() - 1; i++){mvwprintw(win,line,i," ");}}
+		for (int i = 1; i < info.getWidth() - 1; i++){mvwprintw(win,line,i," ");}
+	}
+
+	void clearAllText(){
+		this->texts.clear();
+	}
 
 	virtual void draw() {
 		if ( !this->isVisible() ) return;

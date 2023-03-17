@@ -52,11 +52,13 @@ void GameServer::client_has_join_the_game(ClientManager &client) {
  * Send a message with the new player and the size of the clients connected to this game
  */
 void GameServer::clientsSizeData(ClientManager &client) {
-    std::string username = client.getUsername();
     std::string clientsSize = std::to_string(this->clients.size());
-    std::string str = username + " enter the game !\n";
-    str += "Your are now [" + clientsSize + "] in this game.";
-    this->updateAllClientsWithQuery(QUERY::MESSAGE, str);
+    std::string str = clientsSize + "|";
+    for (auto& e : this->clients){
+        str += e->getUsername();
+        str += ";";
+    }
+    this->updateAllClientsWithQuery(QUERY::PLAYER_JOIN_GAME, str);
 }
 
 /*
