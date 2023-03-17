@@ -1,9 +1,6 @@
-//
-// Created by Rémy Ryckeboer on 14/03/2023.
-//
 
-#ifndef INFO_F209_GR5_2022_QUERY_HPP
-#define INFO_F209_GR5_2022_QUERY_HPP
+#pragma once
+
 
 enum class QUERY {
     FALSEQ, // BOOL
@@ -81,5 +78,3 @@ enum class QUERY {
     LOST,
      // Message à afficher
 };
-
-#endif //INFO_F209_GR5_2022_QUERY_HPP

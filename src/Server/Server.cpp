@@ -4,6 +4,7 @@
 
 #include "Server.hpp"
 #include "ClientManager/ClientManager.hpp"
+#include "ClientManager/QUERY.hpp"
 #include "SigHandler.hpp"
 #include "../utils/Exceptions.hpp"
 #include "../utils/Configs.hpp"

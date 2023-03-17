@@ -22,7 +22,7 @@
  * Send Start infos formatted for the n-curse terminal
  */
 void GameServer::sendStartData() {
-    this->updateAllClientsWithQuery(QUERY::MESSAGE, this->game.getStartInfos());
+    this->updateAllClientsWithQuery(QUERY::INFOS_START, this->game.getStartInfos());
 }
 
 /*
