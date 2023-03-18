@@ -57,9 +57,12 @@ public:
 	}
 
 	// Checker
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wunused-parameter"
 	virtual bool checkValidity(char c) const {
 		return true;
 	}
+#pragma GCC diagnostic pop
 
 	// Handle
 	void handle(sf::Event event) {
