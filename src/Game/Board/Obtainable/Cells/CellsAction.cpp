@@ -5,6 +5,7 @@
 #include "LandCell.hpp"
 #include "ParkingCell.hpp"
 #include "TaxCell.hpp"
+#include "../../../../Server/Game/GameServer.hpp"
 
 void DrawableCardCell::action(Player* player) {
     Card* drawn_card = deck->drawACard();
@@ -16,8 +17,8 @@ void GoJailCell::action(Player* player) { player->goToJail(jail); }
 
 void LandCell::action(Player* player) {
     std::string str = "", response = "";
-    str = "\nVous êtes tombé sur la propriété [" + land->getName() + "] !";
-    player->getClient()->send(str);
+    str = std::to_string(player->getClient()->getGameServer()->getCurrentPlayerIndex()) + ":" + land->getName();
+    player->getClient()->getGameServer()->updateAllClientsWithQuery(QUERY::INFOS_PLAYER_MOVE, str);
 
 		if (land->getStatus()==LAND_STATUS::FREE) {
             // Message concernant l'achat ou non d'une propriété
@@ -44,8 +45,8 @@ void LandCell::action(Player* player) {
                 // Il n'a pas assez d'argents.
                 if ( player->pay(this->land->getPurchasePrice()) ) {
                     player->acquireLand(getLand());
-                    str = "Vous venez d'acheter la propriété [" + this->land->getName() + "]." ;
-                    player->getClient()->send(str);
+                    str = std::to_string(player->getClient()->getGameServer()->getCurrentPlayerIndex()) + ":" + land->getName();
+                    player->getClient()->getGameServer()->updateAllClientsWithQuery(QUERY::INFOS_PLAYER_BOUGHT, str);
                 }
             }
             else if ( response == "no" ) { player->getClient()->send("Vous n'avez pas achetez la propriété !"); }

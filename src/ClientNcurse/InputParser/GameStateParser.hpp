@@ -19,6 +19,11 @@ struct PlayerInformations{
 	std::vector<PropertyInformation> properties;
 };
 
+struct PlayerInteractProperty{
+	int player;
+	std::string property_name;
+};
+
 
 struct DiceInformations {
 	int first_value;
@@ -33,6 +38,7 @@ class GameStateParser {
 	std::string str;
 
 	std::vector<PlayerInformations> players;
+	PlayerInteractProperty interact;
 	DiceInformations dice;
 
 public:
@@ -99,6 +105,15 @@ public:
 		}
 		dice.double_counter = atoi(tmp.c_str());
 		return dice;
+	}
+
+	const PlayerInteractProperty& parseInteraction(){
+		int i = 0;
+		std::string tmp;
+		while (str[i] != ':') {tmp += str[i]; i++;}
+		interact.player = atoi(tmp.c_str())+1;
+		interact.property_name = &str[i+1];
+		return interact;
 	}
 
 };

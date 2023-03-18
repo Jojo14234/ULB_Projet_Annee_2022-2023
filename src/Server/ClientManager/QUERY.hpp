@@ -10,6 +10,8 @@ enum class QUERY {
     INFOS_START, // See sendStartData in GameServer for formatting
     INFOS_GAME, // See sendGameData in GameServer for formatting
     INFOS_NEW_TURN,
+    INFOS_PLAYER_MOVE,
+    INFOS_PLAYER_BOUGHT,
     PLAYER_JOIN_GAME, // username:gameCode [string]:[int]
 
     MESSAGE, // All indication message

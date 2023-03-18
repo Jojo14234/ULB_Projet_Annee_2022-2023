@@ -148,6 +148,23 @@ public:
 					break;
 				}
 
+				case QUERY::INFOS_PLAYER_MOVE: {
+					GameStateParser game_parser(response);
+					PlayerInteractProperty p_i_p = game_parser.parseInteraction();
+					int index = this->view->getBoard()->getCellIndex(p_i_p.property_name);
+					this->view->getBoard()->unsetPlayer(p_i_p.player);
+					this->view->getBoard()->setPlayer(index, p_i_p.player);
+					break;
+				}
+
+				case QUERY::INFOS_PLAYER_BOUGHT: {
+					GameStateParser game_parser(response);
+					PlayerInteractProperty p_i_p = game_parser.parseInteraction();
+					int index = this->view->getBoard()->getCellIndex(p_i_p.property_name);
+					this->view->getBoard()->setPurchased(index, p_i_p.player);
+					break;
+				}
+
 				case QUERY::USELESS_MESSAGE:{
 					break;
 				}		
@@ -182,8 +199,9 @@ public:
 	void playerJoinUpdate() { this->view->getInfo()->setPlayersInGame(players_username); }
 
 	void gameStartUpdate(int beginner) {
-		if (this->model->getUsername() == players_username[beginner])
+		if (this->model->getUsername() == players_username[beginner]){
 			this->showDice();
+		}	
 		this->view->getPlayersWaitingText()->setHidden();
 		this->view->getOwnerWaitingText()->setHidden();
 		

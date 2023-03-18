@@ -18,6 +18,10 @@
 
 // INFOS / MESSAGE
 
+int GameServer::getCurrentPlayerIndex(){
+    return this->game.getCurrentPlayer()->getIndex();
+}
+
 /*
  * Send Start infos formatted for the n-curse terminal
  */

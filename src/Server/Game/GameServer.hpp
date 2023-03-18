@@ -146,6 +146,7 @@ public:
 
     void treeDouble(ClientManager& client);
 
+    int getCurrentPlayerIndex();
 
 };
 
