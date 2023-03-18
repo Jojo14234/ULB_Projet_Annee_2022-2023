@@ -22,7 +22,7 @@ public:
 
 	virtual ~AbstractViewObject()=default;
 
-	virtual void draw() = 0;
+	virtual void draw(sf::RenderWindow &window) const = 0;
 
 
 	// GETTERS

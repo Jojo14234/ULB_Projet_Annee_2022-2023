@@ -10,7 +10,7 @@
 #include "AbstractViewObject.hpp"
 
 
-class Image : AbstractViewObject {
+class Image : public virtual AbstractViewObject {
 
 	sf::Texture texture;
 	sf::Sprite sprite;
@@ -24,7 +24,7 @@ public:
 		this->sprite.setScale(this->info.getWidth() / this->sprite.getLocalBounds().width, this->info.getHeight() / this->sprite.getLocalBounds().height);
 	}
 
-    void draw(sf::RenderWindow& window) const {
+    virtual void draw(sf::RenderWindow &window) const override {
         window.draw(this->sprite);
     }
 
