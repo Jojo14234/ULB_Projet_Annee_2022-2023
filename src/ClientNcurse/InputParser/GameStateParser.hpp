@@ -17,31 +17,24 @@ struct Informations {
 	std::vector<std::vector<PropertyInformation>> info;
 };
 
+struct DiceInformations {
+	int first_value;
+	int second_value;
+	int total_value;
+	bool is_double;
+	int double_counter; 
+};
+
 class GameStateParser {
 
-	std::string state_str;
-	Informations res;
-	std::string property_str;
+	std::string str;
 	unsigned int index;
-
-public:
-	GameStateParser(std::string game) : state_str{game} {};
-
-	int parseIntroLine(){
-		char n_player;
-		int i = 0;
-		while(state_str[i] != ';'){
-			n_player = state_str[i];
-			i++;
-		}
-		int n_p = int(n_player) - '0';
-		return n_p;
-
 	
-	}
+	Informations res;
+	DiceInformations dice;
 
 	void parseStateLine(int player_nb){
-		state_str += ",";
+		str += ",";
 		int player = 0;
 		int arg_nb = 0;
 		int i = 0;
@@ -49,8 +42,8 @@ public:
 		res.state.resize(player_nb);
 		res.state.clear();
 		std::string tmp;
-		while(state_str[index] != '\n'){
-			char c = state_str[index];
+		while(str[index] != '\n'){
+			char c = str[index];
 			if (c == ':'){ 
 				player = atoi(&tmp[1]);
 				tmp.clear();
@@ -63,8 +56,7 @@ public:
 				tmp.clear();
 				c == ',' ? arg_nb++ : arg_nb = 0;
 			}
-			else if (c == '\n'){
-				property_str = &state_str[i+1];
+			else if (c == '\n'){ 
 				break;
 			}
 			else{
@@ -85,8 +77,8 @@ public:
 		res.info.clear();
 		std::string tmp;
 		PropertyInformation pi;
-		while(index < (unsigned int)state_str.size() ){
-			char c = state_str[index];
+		while(index < (unsigned int)str.size() ){
+			char c = str[index];
 			if (c == ':'){ 
 				
 				player = atoi(&tmp[1]);
@@ -122,9 +114,46 @@ public:
 			index++;
 		}
 	
+	}	
+
+public:
+
+	GameStateParser(std::string game) : str{game} {};
+
+	const Informations& parseEndTurnLine(int player_nb){
+		this->parseStateLine(player_nb);
+		this->parsePropertiesLine(player_nb);
+		return res;
 	}
 
-	const Informations& getBufferSplit() const { return res; }
+	const DiceInformations& parseDiceLine(){
+		std::string tmp;
+		int colon_nb = 0;
+		for (char c : str){
+			if (c == ':'){
+				switch (colon_nb){
+					case 0: {
+						dice.first_value = atoi(tmp.c_str());
+						break;
+					}
+					case 1: {
+						dice.second_value = atoi(tmp.c_str());
+					}
+					case 2: {
+						dice.total_value = atoi(tmp.c_str());
+					}
+					case 3: {
+						dice.is_double = static_cast<bool>((atoi(tmp.c_str())));
+					}
+				}
+				colon_nb++;	
+				tmp.clear();
+			} else tmp += c;
+		}
+		dice.double_counter = atoi(tmp.c_str());
+		return dice;
+	}
+
 };
 
 

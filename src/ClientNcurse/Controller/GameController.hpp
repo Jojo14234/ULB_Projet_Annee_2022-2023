@@ -105,25 +105,6 @@ public:
 					this->gameStartUpdate(p_i.beginner); 
 					break;
 				}
-				
-				case QUERY::INFOS_GAME: {
-					GameStateParser game_parser(response);
-					for (int i = 1; i <= player_nb; i++){
-						game_parser.parseStateLine(player_nb);
-						game_parser.parsePropertiesLine(player_nb);
-						this->view->getBoard()->unsetPlayer(i);
-						this->view->getBoard()->setPlayer(game_parser.getBufferSplit().state[i-1][0], i);
-						for (unsigned int j = 0; j < game_parser.getBufferSplit().info[i-1].size();j++){
-							int index = this->view->getBoard()->getCellIndex(game_parser.getBufferSplit().info[i-1][j].name);
-							if (game_parser.getBufferSplit().info[i-1][j].level == 0){
-								this->view->getBoard()->setPurchased(index, game_parser.getBufferSplit().info[i-1][j].owner);}
-							else{this->view->getBoard()->setHouse(index, 2);} //pas encore tester
-							} 
-						
-						this->view->getInfo()->setMoney( i,game_parser.getBufferSplit().state[i-1][1]);
-					}
-					break;
-				}
 
 				case QUERY::PLAYER_JOIN_GAME: {
 					GameLaunchingParser start_parser(response);
@@ -133,6 +114,32 @@ public:
 					this->playerJoinUpdate();
 					break;
 				}
+
+				case QUERY::INFOS_ROLL_DICE: {
+					GameStateParser game_parser(response);
+					DiceInformations d_i = game_parser.parseDiceLine();
+					this->view->getDice1()->setText(std::to_string(d_i.first_value), 0);
+					this->view->getDice2()->setText(std::to_string(d_i.second_value), 0);
+					break;
+				}
+
+				case QUERY::INFOS_GAME: {
+					GameStateParser game_parser(response);
+					Informations inf = game_parser.parseEndTurnLine(player_nb);
+					for (int i = 1; i <= player_nb; i++){
+						this->view->getBoard()->unsetPlayer(i);
+						this->view->getBoard()->setPlayer(inf.state[i-1][0], i);
+						for (unsigned int j = 0; j < inf.info[i-1].size(); j++){
+							int index = this->view->getBoard()->getCellIndex(inf.info[i-1][j].name);
+							if (inf.info[i-1][j].level == 0){
+								this->view->getBoard()->setPurchased(index, inf.info[i-1][j].owner);}
+							else{this->view->getBoard()->setHouse(index, 2);} //pas encore tester
+							} 
+						
+						this->view->getInfo()->setMoney(i, inf.state[i-1][1]);
+					}
+					break;
+				}			
 
 				default: 
 					this->view->getConsole()->addText(response);
