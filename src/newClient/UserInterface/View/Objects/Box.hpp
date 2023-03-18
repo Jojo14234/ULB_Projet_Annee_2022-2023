@@ -16,7 +16,7 @@ class Box : public virtual AbstractViewObject {
 
 public:
 
-	Box(ObjectInfo<> info, sf::Color color=sf::Color::White) : AbstractViewObject(info) {
+	Box(ObjectInfo<> info, sf::Color color=sf::Color::Black) : AbstractViewObject(info) {
 		box.setSize(sf::Vector2f(info.getWidth(), info.getHeight()));
 		box.setPosition(info.getX(), info.getY());
 		box.setFillColor(color);

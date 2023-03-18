@@ -10,4 +10,4 @@
 #include "Objects/ImageButton.hpp"
 #include "Objects/Box.hpp"
 #include "Objects/Text.hpp"
-//#include "Objects/TextBox.hpp"
+#include "Objects/ModalBox.hpp"
