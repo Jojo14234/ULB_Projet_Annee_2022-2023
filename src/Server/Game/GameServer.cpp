@@ -928,3 +928,7 @@ Capitalist* GameServer::getGame(){
 bool GameServer::isClientAdmin(ClientManager &client) {return (game.getPlayer(client)->isAdmin());}
 
 bool GameServer::isCode(int other) const { return code.getCode() == other; }
+
+CardDeck* GameServer::getDeck(std::string name){
+    return this->game->getBoard()->getDeckByName(name);
+}

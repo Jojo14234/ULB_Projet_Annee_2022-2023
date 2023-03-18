@@ -52,6 +52,11 @@ public:
     std::shared_ptr<CardDeck> getLuckyDeck();
     std::shared_ptr<CardDeck> getCommuDeck();
 
+    CardDeck* getDeckByName(std::string name) {
+        if (name == "LUCKY DECK") { return this->lucky_deck.get(); }
+        else {return this->community_deck.get(); }
+    }
+
 
 
 

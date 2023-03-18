@@ -31,7 +31,7 @@ CardDeck::CardDeck(std::string name): name{name} {
     std::cout << "[init all     " << name << " : 100%]" << std::endl;
 }
 
-Card* CardDeck::drawACard() {
+Card* CardDeck::drawACard() {	//drawn !!!
 	std::srand(time(0));
 	while(true){
 		int result = std::rand()% 16;
