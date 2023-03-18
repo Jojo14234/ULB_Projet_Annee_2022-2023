@@ -15,6 +15,7 @@ CardDeck::CardDeck(std::string name): name{name} {
 
 	int idx=0;  //indexe de la liste de carte
     // Add all the card that leads to pay money
+    //Json::Value money_card = root[name]["MoneyCard"];		//for refactor construct parameter !!
 	for (unsigned int i=0; i < root[name]["MoneyCard"].size(); i++) {
 		this->card_list[idx] = std::make_shared<MoneyCard>(root[name]["MoneyCard"][i]);
 		idx++;
