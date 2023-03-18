@@ -73,8 +73,6 @@ public:
 				tmp.clear();
 			}
 			else if (c == '|'){
-				p_i.mortgage = static_cast<bool>(atoi(tmp.c_str()));
-				players[player_index].properties.push_back(p_i);
 				semicolon_nb = 0;
 				colon_nb = 0;
 				tmp.clear();
@@ -93,7 +91,7 @@ public:
 					case 0: { dice.first_value = atoi(tmp.c_str()); break;}
 					case 1: { dice.second_value = atoi(tmp.c_str()); break;}
 					case 2: { dice.total_value = atoi(tmp.c_str()); break;}
-					case 3: { dice.is_double = static_cast<bool>((atoi(tmp.c_str()))); break;}
+					case 3: { dice.is_double = static_cast<bool>(atoi(tmp.c_str())); break;}
 				}
 				colon_nb++;	
 				tmp.clear();

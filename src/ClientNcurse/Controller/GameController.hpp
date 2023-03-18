@@ -116,6 +116,7 @@ public:
 				}
 
 				case QUERY::INFOS_ROLL_DICE: {
+					this->view->getConsole()->addText(response);
 					GameStateParser game_parser(response);
 					DiceInformations d_i = game_parser.parseDiceLine();
 					this->view->getDice1()->setText(std::to_string(d_i.first_value), 0);
@@ -130,13 +131,15 @@ public:
 						this->view->getBoard()->unsetPlayer(i+1);
 						this->view->getBoard()->setPlayer(players[i].position, i+1);
 						for (unsigned int j = 0; j < players[i].properties.size(); j++){
+							this->view->getConsole()->addText(std::to_string(i));
 							int index = this->view->getBoard()->getCellIndex(players[i].properties[j].name);
 							if (players[i].properties[j].level == 0){
-								this->view->getBoard()->setPurchased(index, i+1);}
-							else{this->view->getBoard()->setHouse(index, 2);}
-							} 
+								this->view->getBoard()->setPurchased(index, i+1);
+							}
+							else this->view->getBoard()->setHouse(index, 2);
+						} 
 						
-						this->view->getInfo()->setMoney(i, players[i].money);
+						this->view->getInfo()->setMoney(i+1, players[i].money);
 					}
 					break;
 				}	
@@ -188,6 +191,7 @@ public:
 		for (int i = 1; i<= player_nb; i++) {
 			this->view->getBoard()->setPlayer(0, i);
 			this->view->getInfo()->addPlayer(players_username[i-1]);
+			this->view->getInfo()->setMoney(i, 1500);
 		}
 	}
 
