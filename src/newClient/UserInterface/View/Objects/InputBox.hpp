@@ -17,7 +17,7 @@ class InputBox : public InputText, public Box {
 
 public:
 
-	InputBox(ObjectInfo info, sf::Color text_color=sf::Color::Black, const std::string &font_path=DEFAULT_FONT_PATH, sf::Color box_color=sf::Color::Black) :
+	InputBox(ObjectInfo<> info, sf::Color text_color=sf::Color::Black, const std::string &font_path=DEFAULT_FONT_PATH, sf::Color box_color=sf::Color::Black) :
 		AbstractViewObject(info), InputText(info, text_color, font_path), Box(info, box_color) {}
 
 	virtual void draw(sf::RenderWindow &window) const override {
