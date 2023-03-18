@@ -4,6 +4,7 @@
 
 #pragma once
 
+#include <iostream>
 #include <string>
 #include <SFML/Graphics.hpp>
 
@@ -21,7 +22,7 @@ public:
 		this->texture.loadFromFile(path);
 		this->sprite.setTexture(this->texture);
 		this->sprite.setPosition(this->info.getX(), this->info.getY());
-		this->sprite.setScale(this->info.getWidth() / this->sprite.getLocalBounds().width, this->info.getHeight() / this->sprite.getLocalBounds().height);
+		this->sprite.setScale(this->info.getWidth() / (float)this->texture.getSize().x, this->info.getHeight() / (float)this->texture.getSize().y);
 	}
 
     virtual void draw(sf::RenderWindow &window) const override {

@@ -17,12 +17,12 @@
 
 void MainUIWindow::initAttributes() {
 	// Views
-	WelcomeUIView* welcome_view = new WelcomeUIView();
-	ConnectionUIView* connection_view = new ConnectionUIView();
-	MenuUIView* menu_view = new MenuUIView();
-	FriendsUIView* friends_view = new FriendsUIView();
-	RankUIView* rank_view = new RankUIView();
-	GameUIView* game_view = new GameUIView();
+	WelcomeUIView* welcome_view = new WelcomeUIView(&this->window);
+	ConnectionUIView* connection_view = new ConnectionUIView(&this->window);
+	MenuUIView* menu_view = new MenuUIView(&this->window);
+	FriendsUIView* friends_view = new FriendsUIView(&this->window);
+	RankUIView* rank_view = new RankUIView(&this->window);
+	GameUIView* game_view = new GameUIView(&this->window);
 	this->view.setViews({welcome_view, connection_view, menu_view, friends_view, rank_view, game_view});
 	// Controllers
 	WelcomeUIController* welcome_controller = new WelcomeUIController(&this->model, welcome_view);
@@ -43,7 +43,7 @@ void MainUIWindow::draw() {
 // Public
 
 MainUIWindow::MainUIWindow() :
-	window(sf::VideoMode(1500, 1000), "CAPITALI$T") {
+	window(sf::VideoMode(WINDOW_WIDTH, WINDOW_HEIGHT), "CAPITALI$T") {
 	this->initAttributes();
 }
 

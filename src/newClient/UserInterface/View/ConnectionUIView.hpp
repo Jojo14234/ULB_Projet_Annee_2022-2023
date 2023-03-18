@@ -5,6 +5,8 @@
 #pragma once
 
 #include "AbstractUIView.hpp"
+#include "Objects.hpp"
+#include "ImagesPath.hpp"
 
 
 class ConnectionUIController; // forward declaration
@@ -13,9 +15,9 @@ class ConnectionUIView: public AbstractUIView {
 
 	// Objects
 
-public: 
-	
-	ConnectionUIView()=default;
+public:
+
+	using AbstractUIView::AbstractUIView;
 	
 	~ConnectionUIView()=default;
 

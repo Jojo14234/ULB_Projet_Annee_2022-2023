@@ -13,9 +13,9 @@ class GameUIView: public AbstractUIView {
 
 	// Objects
 
-public: 
-	
-	GameUIView()=default;
+public:
+
+	using AbstractUIView::AbstractUIView;
 	
 	~GameUIView()=default;
 

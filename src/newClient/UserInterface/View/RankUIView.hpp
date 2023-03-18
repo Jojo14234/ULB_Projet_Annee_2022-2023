@@ -13,9 +13,9 @@ class RankUIView: public AbstractUIView {
 
 	// Objects
 
-public: 
-	
-	RankUIView()=default;
+public:
+
+	using AbstractUIView::AbstractUIView;
 	
 	~RankUIView()=default;
 

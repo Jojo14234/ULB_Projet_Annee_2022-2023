@@ -13,3 +13,7 @@ enum class STATE {
 	RANK,
 	GAME
 };
+
+
+constexpr int WINDOW_WIDTH = 1600;
+constexpr int WINDOW_HEIGHT = WINDOW_WIDTH * 9 / 16;

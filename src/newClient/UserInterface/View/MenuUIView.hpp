@@ -13,9 +13,9 @@ class MenuUIView: public AbstractUIView {
 
 	// Objects
 
-public: 
-	
-	MenuUIView()=default;
+public:
+
+	using AbstractUIView::AbstractUIView;
 	
 	~MenuUIView()=default;
 

@@ -13,9 +13,9 @@ class FriendsUIView: public AbstractUIView {
 
 	// Objects
 
-public: 
-	
-	FriendsUIView()=default;
+public:
+
+	using AbstractUIView::AbstractUIView;
 	
 	~FriendsUIView()=default;
 
