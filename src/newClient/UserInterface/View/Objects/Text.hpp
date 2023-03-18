@@ -5,6 +5,7 @@
 #pragma once
 
 #include "AbstractViewObject.hpp"
+#include "../AssetsPath.hpp"
 
 
 class Text : public virtual AbstractViewObject {
@@ -14,7 +15,7 @@ class Text : public virtual AbstractViewObject {
 
 public:
 
-	Text(ObjectInfo<> info, const std::string &text, const std::string &font_path, sf::Color color=sf::Color::Black) : AbstractViewObject(info) {
+	Text(ObjectInfo<> info, const std::string &text, sf::Color color=sf::Color::Black, const std::string &font_path=DEFAULT_FONT_PATH) : AbstractViewObject(info) {
 		if (!font.loadFromFile(font_path)) {
 			throw std::runtime_error("Font not found");
 		}
