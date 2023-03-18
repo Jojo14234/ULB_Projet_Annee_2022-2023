@@ -125,21 +125,25 @@ public:
 
 				case QUERY::INFOS_GAME: {
 					GameStateParser game_parser(response);
-					Informations inf = game_parser.parseEndTurnLine(player_nb);
+					std::vector<PlayerInformations> players = game_parser.parseEndTurnLine(player_nb);
 					for (int i = 1; i <= player_nb; i++){
 						this->view->getBoard()->unsetPlayer(i);
-						this->view->getBoard()->setPlayer(inf.state[i-1][0], i);
-						for (unsigned int j = 0; j < inf.info[i-1].size(); j++){
-							int index = this->view->getBoard()->getCellIndex(inf.info[i-1][j].name);
-							if (inf.info[i-1][j].level == 0){
-								this->view->getBoard()->setPurchased(index, inf.info[i-1][j].owner);}
-							else{this->view->getBoard()->setHouse(index, 2);} //pas encore tester
+						this->view->getBoard()->setPlayer(players[i-1].position, i);
+						for (unsigned int j = 0; j < players[i-1].properties.size(); j++){
+							int index = this->view->getBoard()->getCellIndex(players[i-1].properties[j].name);
+							if (players[i-1].properties[j].level == 0){
+								this->view->getBoard()->setPurchased(index, i);}
+							else{this->view->getBoard()->setHouse(index, 2);}
 							} 
 						
-						this->view->getInfo()->setMoney(i, inf.state[i-1][1]);
+						this->view->getInfo()->setMoney(i, players[i-1].money);
 					}
 					break;
-				}			
+				}	
+
+				case QUERY::USELESS_MESSAGE:{
+					break;
+				}		
 
 				default: 
 					this->view->getConsole()->addText(response);

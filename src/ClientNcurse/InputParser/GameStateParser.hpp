@@ -6,16 +6,19 @@
 #include <array>
 
 struct PropertyInformation {
-	int owner;
 	std::string name;
 	int level;
-	bool hypotek;
+	bool mortgage;
 };
 
-struct Informations {
-	std::vector<std::array<int, 3>> state; // position, argent, nombre j carte
-	std::vector<std::vector<PropertyInformation>> info;
+struct PlayerInformations{
+	std::string username;
+	int position;
+	int money;
+	int jail_card_nb;
+	std::vector<PropertyInformation> properties;
 };
+
 
 struct DiceInformations {
 	int first_value;
@@ -28,102 +31,57 @@ struct DiceInformations {
 class GameStateParser {
 
 	std::string str;
-	unsigned int index;
-	
-	Informations res;
+
+	std::vector<PlayerInformations> players;
 	DiceInformations dice;
-
-	void parseStateLine(int player_nb){
-		str += ",";
-		int player = 0;
-		int arg_nb = 0;
-		int i = 0;
-		index = 0;
-		res.state.resize(player_nb);
-		res.state.clear();
-		std::string tmp;
-		while(str[index] != '\n'){
-			char c = str[index];
-			if (c == ':'){ 
-				player = atoi(&tmp[1]);
-				tmp.clear();
-			} 
-			else if (c == '-'){
-				tmp.clear();
-			}
-			else if (c == ',' or c == ';'){
-				res.state[player][arg_nb] = atoi(tmp.c_str());
-				tmp.clear();
-				c == ',' ? arg_nb++ : arg_nb = 0;
-			}
-			else if (c == '\n'){ 
-				break;
-			}
-			else{
-				tmp += c;
-			}
-			i++;
-			index++;
-		}
-		
-		index++;	
-	}
-	
-
-	void parsePropertiesLine(int player_nb){
-		int player = 0;
-		int arg_nb = 0;
-		res.info.resize(player_nb);
-		res.info.clear();
-		std::string tmp;
-		PropertyInformation pi;
-		while(index < (unsigned int)str.size() ){
-			char c = str[index];
-			if (c == ':'){ 
-				
-				player = atoi(&tmp[1]);
-				tmp.clear();
-			} 
-			else if (c == '-'){
-				tmp.clear();
-			}
-			else if (c == ','){
-				switch (arg_nb % 3) {
-					case 0 : {pi.name = tmp;tmp.clear(); break;}
-					case 1 : {pi.level = atoi(tmp.c_str()); tmp.clear(); break;}
-					case 2 : {(c == 'n') ? pi.hypotek = false : pi.hypotek = true ; tmp.clear(); break;}
-					default : break;
-				}
-				pi.owner = player + 1;
-				arg_nb++;
-			}
-			else if (c == ';'){
-				if (pi.name != ""){
-					res.info[player].push_back(pi);
-				}
-				
-				tmp.clear();
-				arg_nb = 0;
-			}
-			else if (c == '\n'){
-				break;
-			}
-			else {
-				tmp += c;
-			}
-			index++;
-		}
-	
-	}	
 
 public:
 
 	GameStateParser(std::string game) : str{game} {};
 
-	const Informations& parseEndTurnLine(int player_nb){
-		this->parseStateLine(player_nb);
-		this->parsePropertiesLine(player_nb);
-		return res;
+	const std::vector<PlayerInformations>& parseEndTurnLine(int player_nb){
+		players.resize(player_nb);
+		std::string tmp;
+		PropertyInformation p_i;
+		int colon_nb = 0;
+		int semicolon_nb = 0;
+		int player_index = 0;
+
+		for (char c : str){
+			if (c == ':'){
+				switch (colon_nb){
+					case 0: { player_index = atoi(tmp.c_str()); break;}
+					case 1: { players[player_index].username = tmp; break;}
+					case 2: { players[player_index].position = atoi(tmp.c_str()); break;}
+					case 3: { players[player_index].money = atoi(tmp.c_str()); break;}
+					case 4: { players[player_index].jail_card_nb = atoi(tmp.c_str()); break;}
+					default:{
+						p_i.mortgage = static_cast<bool>(atoi(tmp.c_str()));
+						players[player_index].properties.push_back(p_i);
+						semicolon_nb = 0;
+					}
+				}
+				colon_nb++;
+				tmp.clear();
+			}
+			else if (c == ';'){
+				switch (semicolon_nb){
+					case 0: { p_i.name = tmp; break;}
+					case 1: { p_i.level = atoi(tmp.c_str()); break;}
+				}
+				semicolon_nb++;
+				tmp.clear();
+			}
+			else if (c == '|'){
+				p_i.mortgage = static_cast<bool>(atoi(tmp.c_str()));
+				players[player_index].properties.push_back(p_i);
+				semicolon_nb = 0;
+				colon_nb = 0;
+				tmp.clear();
+			}
+			else tmp += c;
+		}
+		return players;
 	}
 
 	const DiceInformations& parseDiceLine(){
@@ -132,19 +90,10 @@ public:
 		for (char c : str){
 			if (c == ':'){
 				switch (colon_nb){
-					case 0: {
-						dice.first_value = atoi(tmp.c_str());
-						break;
-					}
-					case 1: {
-						dice.second_value = atoi(tmp.c_str());
-					}
-					case 2: {
-						dice.total_value = atoi(tmp.c_str());
-					}
-					case 3: {
-						dice.is_double = static_cast<bool>((atoi(tmp.c_str())));
-					}
+					case 0: { dice.first_value = atoi(tmp.c_str()); break;}
+					case 1: { dice.second_value = atoi(tmp.c_str()); break;}
+					case 2: { dice.total_value = atoi(tmp.c_str()); break;}
+					case 3: { dice.is_double = static_cast<bool>((atoi(tmp.c_str()))); break;}
 				}
 				colon_nb++;	
 				tmp.clear();
