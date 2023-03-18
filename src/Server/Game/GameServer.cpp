@@ -30,6 +30,8 @@ void GameServer::sendStartData() {
  */
 void GameServer::sendGameData() {
     this->updateAllClientsWithQuery(QUERY::INFOS_GAME, this->game.getGameInfos());
+    this->updateAllClientsWithQuery(QUERY::INFOS_NEW_TURN, 
+                                    this->game.getCurrentPlayer()->getUsername());
 }
 
 /*

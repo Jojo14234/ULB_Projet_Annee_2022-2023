@@ -4,7 +4,6 @@ Dice::Dice() {}
 
 int Dice::roll() {
     result = dice1.roll() + dice2.roll();
-    this->result = 1;
     if ( dice1.getResult() == dice2.getResult() ) { double_counter++; }
     return result;
 }

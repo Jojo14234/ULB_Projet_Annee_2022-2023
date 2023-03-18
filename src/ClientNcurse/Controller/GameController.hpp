@@ -23,6 +23,23 @@ class GameController : public AbstractController {
 	int player_nb;
 	std::vector<std::string> players_username;
 
+	void hideDice(){
+		this->clearDice();
+		this->view->getDice1()->setHidden();
+		this->view->getDice2()->setHidden();
+	}
+
+	void showDice(){
+		this->clearDice();
+		this->view->getDice1()->setVisible();
+		this->view->getDice2()->setVisible();
+	}
+
+	void clearDice(){
+		this->view->getDice1()->clearResult();
+		this->view->getDice2()->clearResult();
+	}
+
 public:
 
 	GameController(Client* model, GameView* view) : AbstractController(model), view(view) { this->new_state = STATE::GAME; }
@@ -44,29 +61,12 @@ public:
 			case CONSOLE: {
 				this->view->getConsole()->addInput();
 				GameInputParser parser(this->view->getConsole()->getInput());
-				/*
-				std::string response;
-				if (this->model->sendCommand(parser)) { this->model->receive(response); }
-				else { response = "La commande n'existe pas"; }
-				this->view->getConsole()->addText(response);
-				*/
 				if ( not this->model->sendCommand(parser)) this->view->getConsole()->addText("La commande n'existe pas");
-				/*if (parser.getQueryType() == GAME_QUERY_TYPE::START && this->model->isCreator()){
-					startGame();
-					//if (this->model->isCreator()){this->view->getOwnerWaitingText()->setHidden();} 
-					//else {this->view->getPlayersWaitingText()->setHidden();}
-					}*/
 				break; }
 				
 			case CHAT: {
 				this->view->getChat()->addInput();
 				MainInputParser parser(this->view->getChat()->getInput());
-				/*
-				std::string response;
-				if (this->model->sendCommand(parser)) { this->model->receive(response); }
-				else { response = "La commande n'existe pas"; }
-				this->view->getChat()->addText(response);
-				*/
 				if (not this->model->sendCommand(parser)) this->view->getChat()->addText("La commande n'existe pas");
 				break; }
 			
@@ -116,7 +116,6 @@ public:
 				}
 
 				case QUERY::INFOS_ROLL_DICE: {
-					this->view->getConsole()->addText(response);
 					GameStateParser game_parser(response);
 					DiceInformations d_i = game_parser.parseDiceLine();
 					this->view->getDice1()->setText(std::to_string(d_i.first_value), 0);
@@ -131,7 +130,6 @@ public:
 						this->view->getBoard()->unsetPlayer(i+1);
 						this->view->getBoard()->setPlayer(players[i].position, i+1);
 						for (unsigned int j = 0; j < players[i].properties.size(); j++){
-							this->view->getConsole()->addText(std::to_string(i));
 							int index = this->view->getBoard()->getCellIndex(players[i].properties[j].name);
 							if (players[i].properties[j].level == 0){
 								this->view->getBoard()->setPurchased(index, i+1);
@@ -143,6 +141,12 @@ public:
 					}
 					break;
 				}	
+
+				case QUERY::INFOS_NEW_TURN: {
+					if (response == this->model->getUsername()) { this->showDice(); }
+					else { this->hideDice(); }
+					break;
+				}
 
 				case QUERY::USELESS_MESSAGE:{
 					break;
@@ -158,15 +162,13 @@ public:
 	
 	void init() {
 		this->initScreen();
-		//for (int i = 0; i< n_player;i++){this->view->getBoard()->setPlayer(0, i);}
 		// create a thread to receive messages
 		std::thread send_thread(&GameController::receiveMessagesLoop, this);
 		send_thread.detach();
 	}
 
 	void initScreen() {
-		this->view->getDice1()->setHidden();
-		this->view->getDice2()->setHidden();
+		this->hideDice();
 
 		if (this->model->isCreator()){
 			this->view->getOwnerWaitingText()->addText("Gamecode : " + std::to_string(this->model->getGameCode()));
@@ -180,10 +182,8 @@ public:
 	void playerJoinUpdate() { this->view->getInfo()->setPlayersInGame(players_username); }
 
 	void gameStartUpdate(int beginner) {
-		if (this->model->getUsername() == players_username[beginner]){
-			this->view->getDice1()->setVisible();
-			this->view->getDice2()->setVisible();
-		}
+		if (this->model->getUsername() == players_username[beginner])
+			this->showDice();
 		this->view->getPlayersWaitingText()->setHidden();
 		this->view->getOwnerWaitingText()->setHidden();
 		
