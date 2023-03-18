@@ -6,7 +6,7 @@
 
 #include "AbstractUIView.hpp"
 #include "Objects.hpp"
-#include "ImagesPath.hpp"
+#include "AssetsPath.hpp"
 
 
 class ConnectionUIController; // forward declaration
