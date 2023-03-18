@@ -126,17 +126,17 @@ public:
 				case QUERY::INFOS_GAME: {
 					GameStateParser game_parser(response);
 					std::vector<PlayerInformations> players = game_parser.parseEndTurnLine(player_nb);
-					for (int i = 1; i <= player_nb; i++){
-						this->view->getBoard()->unsetPlayer(i);
-						this->view->getBoard()->setPlayer(players[i-1].position, i);
-						for (unsigned int j = 0; j < players[i-1].properties.size(); j++){
-							int index = this->view->getBoard()->getCellIndex(players[i-1].properties[j].name);
-							if (players[i-1].properties[j].level == 0){
-								this->view->getBoard()->setPurchased(index, i);}
+					for (int i = 0; i < player_nb; i++){
+						this->view->getBoard()->unsetPlayer(i+1);
+						this->view->getBoard()->setPlayer(players[i].position, i+1);
+						for (unsigned int j = 0; j < players[i].properties.size(); j++){
+							int index = this->view->getBoard()->getCellIndex(players[i].properties[j].name);
+							if (players[i].properties[j].level == 0){
+								this->view->getBoard()->setPurchased(index, i+1);}
 							else{this->view->getBoard()->setHouse(index, 2);}
 							} 
 						
-						this->view->getInfo()->setMoney(i, players[i-1].money);
+						this->view->getInfo()->setMoney(i, players[i].money);
 					}
 					break;
 				}	
