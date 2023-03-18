@@ -40,7 +40,13 @@ public:
 	FromOtherMoneyCard() {}
 
 	void action(Player* player) {
-		
+		std::vector<Player>* players = player->getClient()->getGameServer()->getGame()->getPlayers();
+		for (auto &other_player : *players) {
+			if (not player == &other_player) {	//opti calcul nombre de gens et somme total
+				other_player->forcedPay(amount);
+				player->receive(amount);
+			}
+		}
 	}
 
 };
