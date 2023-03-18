@@ -19,6 +19,7 @@ public:
 
 	template<typename T>
 	bool contains(T x, T y) const {
+		if (isHidden()) return false;
 		// if the click pos is inside the button
 		return this->info.getX() <= x && x <= this->info.getX() + this->info.getWidth() &&
 			this->info.getY() <= y && y <= this->info.getY() + this->info.getHeight();

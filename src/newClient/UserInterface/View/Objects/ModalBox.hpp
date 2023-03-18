@@ -29,6 +29,7 @@ public:
 	~ModalBox()=default;
 
 	void draw(sf::RenderWindow &window) const override {
+		if (isHidden()) return;
 		background.draw(window);
 		Box::draw(window);
 		for (auto &image : images) image->draw(window);

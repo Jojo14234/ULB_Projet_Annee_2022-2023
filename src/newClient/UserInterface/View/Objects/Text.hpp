@@ -31,6 +31,7 @@ public:
 	}
 
 	virtual void draw(sf::RenderWindow &window) const override {
+		if (isHidden()) return;
 		window.draw(text);
 	}
 

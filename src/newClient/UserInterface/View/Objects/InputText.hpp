@@ -30,11 +30,10 @@ public:
 	~InputText()=default;
 
 
-	void draw(sf::RenderWindow &window) const override {
+	virtual void draw(sf::RenderWindow &window) const override {
+		if (isHidden()) return;
 		Text::draw(window);
-		if (is_selected) {
-			window.draw(cursor);
-		}
+		if (is_selected) window.draw(cursor);
 	}
 
 	// Modifiers
