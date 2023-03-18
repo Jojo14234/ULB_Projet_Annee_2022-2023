@@ -19,7 +19,7 @@ public:
 	
 	~FriendsUIView()=default;
 
-	void draw() override;
+	void draw() override {}
 
 	void clear();
 

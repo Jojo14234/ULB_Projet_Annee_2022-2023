@@ -11,3 +11,5 @@
 #include "Objects/Box.hpp"
 #include "Objects/Text.hpp"
 #include "Objects/ModalBox.hpp"
+#include "Objects/InputText.hpp"
+#include "Objects/InputBox.hpp"

@@ -19,7 +19,7 @@ public:
 	
 	~MenuUIView()=default;
 
-	void draw() override;
+	void draw() override {}
 
 	friend class MenuUIController;
 

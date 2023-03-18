@@ -19,7 +19,7 @@ public:
 	
 	~RankUIView()=default;
 
-	void draw() override;
+	void draw() override {}
 
 	friend class RankUIController;
 

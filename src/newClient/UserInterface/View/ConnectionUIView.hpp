@@ -21,7 +21,7 @@ public:
 	
 	~ConnectionUIView()=default;
 
-	void draw() override;
+	void draw() override {}
 
 	void clear();
 

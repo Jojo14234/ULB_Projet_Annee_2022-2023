@@ -4,11 +4,15 @@
 
 #pragma once
 
+#include <SFML/Graphics.hpp>
+#include <string>
+
 #include "AbstractViewObject.hpp"
 #include "../AssetsPath.hpp"
 
 
 class Text : public virtual AbstractViewObject {
+protected:
 
 	sf::Text text;
 	sf::Font font;
