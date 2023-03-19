@@ -24,7 +24,7 @@ class ModalBox : public Box {
 
 public:
 
-	ModalBox(ObjectInfo<> info, sf::Color color=sf::Color::Black) : AbstractViewObject(info), Box(info, color) {}
+	explicit ModalBox(ObjectInfo<> info, sf::Color color=sf::Color::Black) : AbstractViewObject(info), Box(info, color) {}
 
 	~ModalBox()=default;
 

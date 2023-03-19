@@ -19,7 +19,7 @@ protected:
 
 public:
 	
-	AbstractUIView(sf::RenderWindow* window) : window(window) {}
+	explicit AbstractUIView(sf::RenderWindow* window) : window(window) {}
 
 	virtual ~AbstractUIView()=default;
 

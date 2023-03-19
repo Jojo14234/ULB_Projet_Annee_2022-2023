@@ -20,7 +20,7 @@ class InputText: public Text, public Button {
 
 public:
 
-	InputText(ObjectInfo<> info, sf::Color color=sf::Color::Black, const std::string &font_path=DEFAULT_FONT_PATH) :
+	explicit InputText(ObjectInfo<> info, sf::Color color=sf::Color::Black, const std::string &font_path=DEFAULT_FONT_PATH) :
 		AbstractViewObject(info), Text(info, "", color, font_path), Button(info) {
 		cursor.setSize(sf::Vector2f(2.f, info.getHeight()));
 		cursor.setFillColor(color);

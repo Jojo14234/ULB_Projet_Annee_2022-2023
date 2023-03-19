@@ -20,7 +20,7 @@ class WelcomeUIView: public AbstractUIView {
 
 public:
 
-	WelcomeUIView(sf::RenderWindow* window) : AbstractUIView(window) {
+	explicit WelcomeUIView(sf::RenderWindow* window) : AbstractUIView(window) {
 		modal_box.addText(new Text{ObjectInfo<>(0, 80, WINDOW_WIDTH/4.f, WINDOW_HEIGHT/4.f), "Welcome to the game!"});
 	}
 	
