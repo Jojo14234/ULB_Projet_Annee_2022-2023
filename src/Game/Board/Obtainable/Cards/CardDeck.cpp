@@ -21,8 +21,22 @@ CardDeck::CardDeck(std::string name): name{name} {
 		idx++;
 	}
     // Add all the card that lead to a cells
-    for (unsigned int i=0; i < root[name]["CellCard"].size(); i++) {
-		this->card_list[idx] = std::make_shared<CellCard>(root[name]["CellCard"][i]);
+    Json::Value cell_cards = root[name]["CellCard"];
+    for (unsigned int i=0; i < cell_cards.size(); i++) {
+
+    	if (cell_cards[i]["dest"].size() > 1) {	//tester si ça marche !! et mettre tout ça dans dans une fonction ?
+    		Json::Value current = cell_cards[i];
+    		std::array<4, int> dest_list;
+    		for (int i=0; current["dest"].size(); i++) {dest_list[i] = current["dest"][i];}
+    		this->card_list[idx] = std::make_shared<NearestCellCard>(current["descript"].asString(), current["money"].asBool(),)
+    	}
+    	else if (cell_cards[i]["dest"].asInt() < 0) {
+    		Json::Value current = cell_cards[i];
+    		this->card_list[idx] = std::make_shared<MoveBackCellCard>(current["descript"].asString(), current["money"].asBool(), current["dest"].asInt());
+    	}
+    	else {
+			this->card_list[idx] = std::make_shared<CellCard>(cell_cards[i]);
+		}
 		idx++;
 	}
     // Add Jail card to the deck

@@ -30,6 +30,7 @@ protected:
 public:
 	
 	explicit MoneyCard(Json::Value &info):Card{info}, amount{info["amount"].asInt()}, amount_house{info["amount_house"].asInt()}, amount_hotel{info["amount_hotel"].asInt()}, receive(info["receive"].asBool()) {}
+	MoneyCard(std::string descript, int amount, bool receive): Card{descript}, amount{amount}, amount_house{0}, amount_hotel{0}, receive{receive} {}
 
 	void action(Player* player) override ;
 
@@ -37,17 +38,9 @@ public:
 
 class FromOtherMoneyCard: public MoneyCard {
 public:
-	FromOtherMoneyCard() {}
+	FromOtherMoneyCard(std::string descript, int amount, bool receive): MoneyCard{descript, amount, receive} {}
 
-	void action(Player* player) {
-		std::vector<Player>* players = player->getClient()->getGameServer()->getGame()->getPlayers();
-		for (auto &other_player : *players) {
-			if (not player == &other_player) {	//opti calcul nombre de gens et somme total
-				other_player->forcedPay(amount);
-				player->receive(amount);
-			}
-		}
-	}
+	void action(Player* player);
 
 };
 
@@ -56,31 +49,9 @@ private:
 	std::string deck_name;
 
 public:
-	ChoiceMoneyCard() {}
+	ChoiceMoneyCard(std::string descript, int amount, bool receive, std::string deckname): MoneyCard{descript, amount, receive}, deck_name{deck_name} {}
 
-	void action(Player* player) {
-		std::string msg = "amende: /select amende | carte: /select carte";
-		player->getClient()->sendQueryMsg(msg, QUERY::SELECT);
-
-		std::string answer;
-		GAME_QUERY_TYPE query;
-        sf::Packet packet;
-        player->getClient()->receive(query, packet);
-
-        packet >> answer;
-
-        if (answer == "amende") {
-        	player->forcedPay(this->amount);
-        }
-        else if (answer == "carte") {
-        	CardDeck* deck = player->getClient()->getGameServer()->getDeck(this->deck_name);
-        	Card* drawn_card = deck->drawACard();
-    		player->getClient()->send("Vous avez pioché cette carte : \n\t" + drawn_card->getDescription() + "\n");
-    		drawn_card->action(player);
-        }
-        //faire une boucle car possible qu'il disent n'imp (break si boucle while)
-
-	}
+	void action(Player* player);
 
 };
 

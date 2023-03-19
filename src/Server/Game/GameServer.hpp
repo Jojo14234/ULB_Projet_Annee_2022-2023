@@ -150,6 +150,8 @@ public:
 
     void treeDouble(ClientManager& client);
 
+    CardDeck* getDeck(std::string name);
+
 
 };
 

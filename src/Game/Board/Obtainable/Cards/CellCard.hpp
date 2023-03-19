@@ -24,7 +24,9 @@ private:
 
 public:
 
-	explicit CellCard(Json::Value &info):Card{info}, dest{info["dest"].asInt()}, gain_money{info["dest"].asBool()} {}
+	explicit CellCard(Json::Value &info):Card{info}, dest{info["dest"].asInt()}, gain_money{info["money"].asBool()} {}
+
+	CellCard(std::string descript, int dest, bool gain_money): Card{descript}, dest{dest}, gain_money{gain_money} {}
 
 	void action(Player* player) override ;
 
@@ -38,16 +40,12 @@ public:
 
 class MoveBackCellCard : public CellCard {
 private:
-	int back;
+	int step_back;
 
 public:
-	MoveBackCell(std::string descript, int dest, bool gain_money) CellCard{} { }
+	MoveBackCellCard(std::string descript, bool gain_money, int back): CellCard{descript, 0, gain_money}, step_back{abs(back)} {}
 
-	void action(Player* player){
-		int current_pos = player.getCurrentCell().getPosition();
-		this->setDest(current_pos+back);
-		this->CellCard::action();
-	};
+	void action(Player* player) override;
 
 };
 
@@ -55,36 +53,14 @@ class NearestCellCard : public CellCard {
 private:
 	std::array<int, 4> near_pos;
 
-	int searchMinIdx(std::array<int, 4> dest_pos) {
-		int min_idx = 0;
-		for (int i=0; i<4, i++){
-			if (dest_pos[i] > 0) {
-				if (dest_pos[i] < dest_pos[min_idx]) {
-					min_idx = i;
-				}
-			}
-		}
-		return min_idx;
-	};
+	int searchMinIdx(std::array<int, 4> dest_pos);
 
-	std::array<int, 4> makeDestArray(int current_pos) {
-		std::array<int, 4> dest_pos;
-		for (int i=0; i<4; i++){
-			dest_pos[i] = this->near_pos[i] - current_pos;
-		}
-		return dest_pos;
-	};
+	std::array<int, 4> makeDestArray(int current_pos);
 
 public:
-	NearestCellCard() CellCard{} { }
+	NearestCellCard(std::string descript, bool gain_money, Json::Value pos_info): CellCard{descript, 0, gain_money} { }	//passer l'array ici ou faire ici
 
-	void action(Player* player){
-		int current_pos = player.getCurrentCell().getPosition();
-		std::array<int, 4> dest_pos = this->makeDestArray(current_pos);
-		int nearest_dest = this->searchMinIdx(dest_pos);
-		this->setDest(nearest_dest);
-		this->CellCard::action();
-	};
+	void action(Player* player) override;
 };
 
 #endif
