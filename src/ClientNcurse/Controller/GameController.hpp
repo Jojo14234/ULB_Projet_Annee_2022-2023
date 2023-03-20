@@ -137,7 +137,7 @@ public:
 							else this->view->getBoard()->setHouse(index, 2);
 						} 
 						
-						this->view->getInfo()->setMoney(i+1, players[i].money);
+						this->view->getInfo()->setPlayerInfo(i+1, players[i].money, players[i].jail_card_nb);
 					}
 					break;
 				}	
@@ -208,8 +208,8 @@ public:
 		this->view->getInfo()->clearAllText();
 		for (int i = 1; i<= player_nb; i++) {
 			this->view->getBoard()->setPlayer(0, i);
-			this->view->getInfo()->addPlayer(players_username[i-1]);
-			this->view->getInfo()->setMoney(i, 1500);
+			this->view->getInfo()->addPlayerLine(players_username[i-1]);
+			this->view->getInfo()->setPlayerInfo(i, 1500, 0);
 		}
 	}
 
