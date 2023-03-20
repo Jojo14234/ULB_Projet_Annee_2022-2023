@@ -23,23 +23,6 @@ class GameController : public AbstractController {
 	int player_nb;
 	std::vector<std::string> players_username;
 
-	void hideDice(){
-		this->clearDice();
-		this->view->getDice1()->setHidden();
-		this->view->getDice2()->setHidden();
-	}
-
-	void showDice(){
-		this->clearDice();
-		this->view->getDice1()->setVisible();
-		this->view->getDice2()->setVisible();
-	}
-
-	void clearDice(){
-		this->view->getDice1()->clearResult();
-		this->view->getDice2()->clearResult();
-	}
-
 public:
 
 	GameController(Client* model, GameView* view) : AbstractController(model), view(view) { this->new_state = STATE::GAME; }
@@ -127,8 +110,7 @@ public:
 					GameStateParser game_parser(response);
 					std::vector<PlayerInformations> players = game_parser.parseEndTurnLine(player_nb);
 					for (int i = 0; i < player_nb; i++){
-						this->view->getBoard()->unsetPlayer(i+1);
-						this->view->getBoard()->setPlayer(players[i].position, i+1);
+						this->view->getBoard()->movePlayer(players[i].position, i+1);
 						for (unsigned int j = 0; j < players[i].properties.size(); j++){
 							int index = this->view->getBoard()->getCellIndex(players[i].properties[j].name);
 							if (players[i].properties[j].level == 0){
@@ -143,8 +125,8 @@ public:
 				}	
 
 				case QUERY::INFOS_NEW_TURN: {
-					if (response == this->model->getUsername()) { this->showDice(); }
-					else { this->hideDice(); }
+					if (response == this->model->getUsername()) { this->view->startTurn(); }
+					else { this->view->endTurn(); }
 					break;
 				}
 
@@ -152,8 +134,7 @@ public:
 					GameStateParser game_parser(response);
 					PlayerInteractProperty p_i_p = game_parser.parseInteraction();
 					int index = this->view->getBoard()->getCellIndex(p_i_p.property_name);
-					this->view->getBoard()->unsetPlayer(p_i_p.player);
-					this->view->getBoard()->setPlayer(index, p_i_p.player);
+					this->view->getBoard()->movePlayer(index, p_i_p.player);
 					break;
 				}
 
@@ -185,7 +166,7 @@ public:
 	}
 
 	void initScreen() {
-		this->hideDice();
+		this->view->startWaitingRoom();
 
 		if (this->model->isCreator()){
 			this->view->getOwnerWaitingText()->addText("Gamecode : " + std::to_string(this->model->getGameCode()));
@@ -199,11 +180,9 @@ public:
 	void playerJoinUpdate() { this->view->getInfo()->setPlayersInGame(players_username); }
 
 	void gameStartUpdate(int beginner) {
-		if (this->model->getUsername() == players_username[beginner]){
-			this->showDice();
-		}	
-		this->view->getPlayersWaitingText()->setHidden();
-		this->view->getOwnerWaitingText()->setHidden();
+		this->view->endWaitingRoom();
+		if (this->model->getUsername() == players_username[beginner])
+			this->view->startTurn();
 		
 		this->view->getInfo()->clearAllText();
 		for (int i = 1; i<= player_nb; i++) {

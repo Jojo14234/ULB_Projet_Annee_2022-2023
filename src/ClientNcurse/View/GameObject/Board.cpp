@@ -57,6 +57,11 @@ void Board::setPlayer(int cell,int player){
 	board[cell]->setPlayer(player);
 	old_pos_player[player-1] = cell;
 }
+
+void Board::movePlayer(int cell, int player){
+	unsetPlayer(player);
+	setPlayer(cell, player);
+}
  
 
 

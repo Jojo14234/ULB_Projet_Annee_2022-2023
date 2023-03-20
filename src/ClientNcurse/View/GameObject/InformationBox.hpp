@@ -39,7 +39,7 @@ public:
 
 	void setPlayerInfo(int player, int money, int nb_card){
 		this->setText(std::to_string(player) + ": " +
-					  usernames[player-1] +  " -   " +
+					  usernames[player-1] +  " - " +
 					  std::to_string(money) + "$, " +
 					  std::to_string(nb_card) + " cartes prisons"
 					  ,player-1);

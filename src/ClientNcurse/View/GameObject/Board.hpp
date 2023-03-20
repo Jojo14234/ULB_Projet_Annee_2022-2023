@@ -57,6 +57,7 @@ public:
 	int getCellIndex(std::string cell);
 	void setPlayer(int cell, int player);
 	void unsetPlayer(int player);
+	void movePlayer(int cell, int player);
 	void setIdle(int cell);
 	void setPurchased(int cell, int player);
 	void setHouse(int cell, int house_nb);
