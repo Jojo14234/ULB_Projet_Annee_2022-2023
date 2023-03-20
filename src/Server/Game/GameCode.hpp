@@ -21,10 +21,8 @@ class GameCode {
 		GameCode::am.lockReader();
         std::random_device rd;  // Will be used to obtain a seed for the random number engine
         std::mt19937 gen(rd());
-        //std::uniform_int_distribution<> distrib(1000, 9999);
         std::uniform_int_distribution<> distrib(1000, 9999);
         this->code = distrib(gen);
-		//while ( codes.contains(this->code) or this->code < 1000 );
 		GameCode::am.unlockReader();
 	}
 	
