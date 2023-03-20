@@ -164,7 +164,7 @@
                 "amount" : 15,
                 "amount house" : 0,
                 "amount hotel" : 0,
-                "receive" : 1
+                "receive" : -1
             },
             
             {
@@ -196,7 +196,7 @@
                 "amount" : 15,
                 "amount house" : 0,
                 "amount hotel" : 0,
-                "receive" : 0
+                "receive" : -2
             },
             
             {
@@ -239,7 +239,7 @@
                
             {
                 "descript" : "Rendez-vous à la gare la plus proche. Si vous passez par la case départ, recevez 200$.",
-                "dest" : 5,
+                "dest" : [5, 15, 25, 35],
                 "money" : 1        
             }
         ]

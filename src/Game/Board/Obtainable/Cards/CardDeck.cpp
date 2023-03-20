@@ -15,8 +15,18 @@ CardDeck::CardDeck(std::string name): name{name} {
 
 	int idx=0;  //indexe de la liste de carte
     // Add all the card that leads to pay money
-    //Json::Value money_card = root[name]["MoneyCard"];		//for refactor construct parameter !!
+    Json::Value money_cards = root[name]["MoneyCard"];		//for refactor construct parameter !!
 	for (unsigned int i=0; i < root[name]["MoneyCard"].size(); i++) {
+		if (money_cards[i]["receive"] == -1){	//bday card
+			Json::Value current = money_cards[i];
+			this->card_list[idx] = std::make_shared<FromOtherMoneyCard>(current["descript"].asString(),current["amount"].asInt(),1);
+
+		}
+		else (money_cards[i]["receive"] == -2) {	//choice card
+			Json::Value current = money_cards[i];
+			std::string deck_name = "LUCKY DECK";
+			this->card_list[idx] = std::make_shared<ChoiceMoneyCard>(current["descript"].asString(),current["amount"].asInt(),0,deck_name);
+		}
 		this->card_list[idx] = std::make_shared<MoneyCard>(root[name]["MoneyCard"][i]);
 		idx++;
 	}
@@ -24,11 +34,11 @@ CardDeck::CardDeck(std::string name): name{name} {
     Json::Value cell_cards = root[name]["CellCard"];
     for (unsigned int i=0; i < cell_cards.size(); i++) {
 
-    	if (cell_cards[i]["dest"].size() > 1) {	//tester si ça marche !! et mettre tout ça dans dans une fonction ?
+    	if (cell_cards[i]["dest"].size() > 1) {	//tester si ça marche (size) !! et mettre tout ça dans dans une fonction ?
     		Json::Value current = cell_cards[i];
     		std::array<4, int> dest_list;
     		for (int i=0; current["dest"].size(); i++) {dest_list[i] = current["dest"][i];}
-    		this->card_list[idx] = std::make_shared<NearestCellCard>(current["descript"].asString(), current["money"].asBool(),)
+    		this->card_list[idx] = std::make_shared<NearestCellCard>(current["descript"].asString(), current["money"].asBool());
     	}
     	else if (cell_cards[i]["dest"].asInt() < 0) {
     		Json::Value current = cell_cards[i];
