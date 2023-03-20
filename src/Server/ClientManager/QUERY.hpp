@@ -13,9 +13,9 @@ enum class QUERY {
     INFOS_PLAYER_MOVE, // username:cell_name:player_money
     INFOS_PLAYER_BOUGHT, // username:cell_name:player_money
     INFOS_PLAYER_DIDNT_BUY, //username
-    INFOS_PLAYER_PAID_PLAYER, //amout:username_lose_money,money:username_won_money,money
+    INFOS_PLAYER_PAID_PLAYER, //amout:loser_index:money:winner_index:money
     INFOS_PLAYER_MOVE_ON_MORTGAGED_CELL, //username:owner_username
-    INFOS_PLAYER_MOVE_ON_TAX_CELL, //tax_name:price:username:player_money
+    INFOS_PLAYER_MOVE_ON_TAX_CELL, //tax_name:price:index:player_money
     INFOS_PLAYER_MOVE_ON_OWN_CELL, //username
     PLAYER_JOIN_GAME, // username:gameCode [string]:[int]
 

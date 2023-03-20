@@ -36,7 +36,25 @@ struct DiceInformations {
 
 
 struct PlayerPaidPlayerInformations{
+	int amount;
+	int loser;
+	int loser_money;
+	int winner;
+	int winner_money;
+};
 
+
+struct PlayerInteractTax{
+    std::string tax_name;
+    int price;
+    int player;
+    int player_money;
+};
+
+
+struct PlayerInteractMortgagedCell{
+    std::string username;
+    std::string owner_username;
 };
 
 class GameStateParser {
@@ -46,6 +64,9 @@ class GameStateParser {
 	std::vector<PlayerInformations> players;
 	PlayerInteractProperty interact;
 	DiceInformations dice;
+	PlayerPaidPlayerInformations payment;
+	PlayerInteractTax tax;
+	PlayerInteractMortgagedCell mortgaged;
 
 public:
 
@@ -131,6 +152,52 @@ public:
 		return interact;
 	}
 
+	const PlayerPaidPlayerInformations& parsePayement(){
+		std::string tmp;
+		int colon_nb = 0;
+		for (char c : str){
+			if (c == ':'){
+				switch (colon_nb){
+					case 0: { payment.amount = atoi(tmp.c_str()); break;}
+					case 1: { payment.loser = atoi(tmp.c_str()) + 1; break;}
+					case 2: { payment.loser_money = atoi(tmp.c_str()); break;}
+					case 3: { payment.winner = atoi(tmp.c_str()) + 1; break;}
+				}
+				colon_nb++;	
+				tmp.clear();
+			} 
+			else tmp += c;
+		}
+		payment.winner_money = atoi(tmp.c_str());
+		return payment;
+	}
+
+	const PlayerInteractTax& parseTaxLine() {
+		std::string tmp;
+		int colon_nb = 0;
+		for (char c : str){
+			if (c == ':'){
+				switch (colon_nb){
+					case 0: { tax.tax_name = tmp; break;}
+					case 1: { tax.price = atoi(tmp.c_str()); break;}
+					case 2: { tax.player = atoi(tmp.c_str()) + 1; break;}
+				}
+				colon_nb++;
+				tmp.clear();
+			} else tmp += c;
+		}
+		tax.player_money = atoi(tmp.c_str());
+		return tax;
+	}
+
+    const PlayerInteractMortgagedCell& parseMortgagedLine() {
+		int i = 0;
+		std::string tmp;
+		while (str[i] != ':' ) { tmp += str[i]; i++; }
+		mortgaged.username = tmp;
+		mortgaged.owner_username = &str[i+1];
+		return mortgaged;
+    }
 };
 
 

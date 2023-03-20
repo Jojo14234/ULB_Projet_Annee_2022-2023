@@ -57,15 +57,15 @@ void LandCell::action(Player* player) {
 		else if (this->land->getStatus() == LAND_STATUS::PAID && !this->isOwner(player) ) {
 			int rent = land->getRentPrice();
 			player->pay(rent, true);
+            land->getOwner()->receive(rent, player->getClient()->getAccount()->getUsername());
 
             str = std::to_string(rent) + ":";
-            str += player->getUsername() + ",";
-            str += player->getMoney();
-            str += this->land->getOwner()->getUsername() + ",";
-            str += this->land->getOwner()->getMoney() + ":";
+            str += std::to_string(player->getIndex()) + ":";
+            str += std::to_string(player->getMoney()) + ":";
+            str += std::to_string(this->land->getOwner()->getIndex()) + ":";
+            str += std::to_string(this->land->getOwner()->getMoney());
             player->getClient()->getGameServer()->updateAllClientsWithQuery(QUERY::INFOS_PLAYER_PAID_PLAYER, str); 
 
-			land->getOwner()->receive(rent, player->getClient()->getAccount()->getUsername());
 
             // TODO JOACHIM ????? ELLE FAIT QUOI CETTE LIGNE ??????
             if ( player->getStatus() == PLAYER_STATUS::BANKRUPT ) { player->setBankruptingPlayer(land->getOwner()); }
@@ -81,6 +81,6 @@ void LandCell::action(Player* player) {
 
 void TaxCell::action(Player* player) {
     player->pay(tax_price, true); 
-    std::string str = name + ":" + std::to_string(tax_price) + ":" + player->getUsername() + ":" + std::to_string(player->getMoney()); 
+    std::string str = name + ":" + std::to_string(tax_price) + ":" + std::to_string(player->getIndex()) + ":" + std::to_string(player->getMoney()); 
     player->getClient()->getGameServer()->updateAllClientsWithQuery(QUERY::INFOS_PLAYER_MOVE_ON_OWN_CELL, str); 
 }

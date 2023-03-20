@@ -152,10 +152,16 @@ public:
 				}
 
 				case QUERY::INFOS_PLAYER_PAID_PLAYER:{
+					GameStateParser game_parser(response);
+					PlayerPaidPlayerInformations pppi = game_parser.parsePayement();
+					this->view->getInfo()->changePlayerMoney(pppi.loser, pppi.loser_money);
+					this->view->getInfo()->changePlayerMoney(pppi.winner, pppi.winner_money);
 					break;
 				}
 
 				case QUERY::INFOS_PLAYER_MOVE_ON_MORTGAGED_CELL:{
+					GameStateParser game_parser(response);
+					PlayerInteractMortgagedCell pimc = game_parser.parseMortgagedLine();
 					break;
 				}
 
@@ -164,6 +170,9 @@ public:
 				}
 
 				case QUERY::INFOS_PLAYER_MOVE_ON_TAX_CELL:{
+					GameStateParser game_parser(response);
+					PlayerInteractTax pit = game_parser.parseTaxLine();
+					this->view->getInfo()->changePlayerMoney(pit.player, pit.player_money);
 					break;
 				}
 
