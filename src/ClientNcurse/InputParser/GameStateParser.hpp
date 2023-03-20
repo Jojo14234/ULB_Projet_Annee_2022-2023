@@ -22,6 +22,7 @@ struct PlayerInformations{
 struct PlayerInteractProperty{
 	int player;
 	std::string property_name;
+	int player_money;
 };
 
 
@@ -108,11 +109,20 @@ public:
 	}
 
 	const PlayerInteractProperty& parseInteraction(){
+		int colon_nb = 0;
 		int i = 0;
 		std::string tmp;
-		while (str[i] != ':') {tmp += str[i]; i++;}
-		interact.player = atoi(tmp.c_str())+1;
-		interact.property_name = &str[i+1];
+		while (str[i] != ':' || colon_nb < 1) {
+			if (str[i] == ':') {
+				interact.player = atoi(tmp.c_str())+1;
+				colon_nb++;
+				tmp.clear();
+			}
+			else tmp += str[i]; 
+			i++;
+		}
+		interact.property_name = tmp;
+		interact.player_money = atoi(&str[i+1]);
 		return interact;
 	}
 

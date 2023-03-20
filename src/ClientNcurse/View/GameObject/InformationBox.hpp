@@ -17,6 +17,8 @@ class InformationBox: public TextBox{
 	int player_nb = 0;
 	std::vector<std::string> usernames;
 	std::vector<int> player_money;
+	int money = 0;
+	int nb_card = 0;
 
 public:
 
@@ -38,11 +40,31 @@ public:
 	}
 
 	void setPlayerInfo(int player, int money, int nb_card){
+		this->money = money;
+		this->nb_card = nb_card;
 		this->setText(std::to_string(player) + ": " +
 					  usernames[player-1] +  " - " +
 					  std::to_string(money) + "$, " +
 					  std::to_string(nb_card) + " cartes prisons"
-					  ,player-1);
+					  , player-1);
+	}
+
+	void changePlayerMoney(int player, int money){
+		this->money = money;
+		this->setText(std::to_string(player) + ": " +
+					  usernames[player-1] +  " - " +
+					  std::to_string(money) + "$, " +
+					  std::to_string(this->nb_card) + " cartes prisons"
+					  , player-1);
+	}
+
+	void changePlayerCardNb(int player, int nb_card){
+		this->nb_card = nb_card;
+		this->setText(std::to_string(player) + ": " +
+					  usernames[player-1] +  " - " +
+					  std::to_string(this->money) + "$, " +
+					  std::to_string(nb_card) + " cartes prisons"
+					  , player-1);
 	}
 };
 

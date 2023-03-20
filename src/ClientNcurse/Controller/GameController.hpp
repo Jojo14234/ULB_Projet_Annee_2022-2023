@@ -143,6 +143,7 @@ public:
 					PlayerInteractProperty p_i_p = game_parser.parseInteraction();
 					int index = this->view->getBoard()->getCellIndex(p_i_p.property_name);
 					this->view->getBoard()->setPurchased(index, p_i_p.player);
+					this->view->getInfo()->changePlayerMoney(p_i_p.player, p_i_p.player_money);
 					break;
 				}
 

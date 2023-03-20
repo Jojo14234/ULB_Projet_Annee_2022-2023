@@ -17,7 +17,7 @@ void GoJailCell::action(Player* player) { player->goToJail(jail); }
 
 void LandCell::action(Player* player) {
     std::string str = "", response = "";
-    str = std::to_string(player->getClient()->getGameServer()->getCurrentPlayerIndex()) + ":" + land->getName();
+    str = std::to_string(player->getClient()->getGameServer()->getCurrentPlayerIndex()) + ":" + land->getName() + ":0";
     player->getClient()->getGameServer()->updateAllClientsWithQuery(QUERY::INFOS_PLAYER_MOVE, str);
 
 		if (land->getStatus()==LAND_STATUS::FREE) {
@@ -45,7 +45,7 @@ void LandCell::action(Player* player) {
                 // Il n'a pas assez d'argents.
                 if ( player->pay(this->land->getPurchasePrice()) ) {
                     player->acquireLand(getLand());
-                    str = std::to_string(player->getClient()->getGameServer()->getCurrentPlayerIndex()) + ":" + land->getName();
+                    str = std::to_string(player->getClient()->getGameServer()->getCurrentPlayerIndex()) + ":" + land->getName() + ":" + std::to_string(player->getBankAccount()->getMoney());
                     player->getClient()->getGameServer()->updateAllClientsWithQuery(QUERY::INFOS_PLAYER_BOUGHT, str);
                 }
             }
