@@ -461,6 +461,7 @@ std::vector<Player*> Capitalist::processAskAuction(Player *player, std::string &
 
 
 void Capitalist::shufflePlayers() {
-    auto rng = std::default_random_engine {};
-    std::shuffle(std::begin(this->players), std::end(this->players), rng);
+    std::random_device rd;  // Will be used to obtain a seed for the random number engine
+    std::mt19937 gen(rd());
+    std::shuffle(std::begin(this->players), std::end(this->players), rd);
 }
