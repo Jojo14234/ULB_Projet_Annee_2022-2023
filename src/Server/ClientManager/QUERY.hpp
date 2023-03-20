@@ -37,7 +37,7 @@ enum class QUERY {
 
     ASK_EXCHANGE, // property_name:price // envoyé au propriétaire de la case pour lui demander si il souhaite accepter l'échange ou non
     ASK_AUCTION, // property_name // envoyé à tout les joueurs pour leur demander de participer à l'enchère
-    STOP_WAIT,
+    STOP_WAIT, // Arrête l'échange ou l'enchère en cas de trop longue attente (NE PAS MODIF NI PARSE autrement DANS LE CLIENT)
 
     DISCONNECT, // Disconnection
     RANKING, // Ranking

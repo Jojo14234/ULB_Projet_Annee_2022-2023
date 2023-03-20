@@ -87,6 +87,8 @@ public:
 
     void participateAuction(ClientManager &client, Player *player);
 
+    void processAskBid(ClientManager &client, Player *player);
+
 
 
 
@@ -97,44 +99,26 @@ public:
     GAME_QUERY_TYPE getGameQuery(ClientManager &client);
 
 
-    //void clientBeforeRollLoop(ClientManager &client);
     void clientBankruptLoop(ClientManager &client);
     void clientAuctionLoop(ClientManager &client, LandCell* land_cell);
     void participateInAuction(ClientManager &client);
     void participateInExchange(ClientManager &client);
-	// Add a client to the game 
-	//void addClient(ClientManager* client);
     void removeClient(ClientManager* client);
 
 	// GETTERS
 	int getCode() const;
-    Player* getPlayerByUsername(std::string &name);
-
     Capitalist* getGame();
 	
 	// VERIFIERS
 	bool isCode(int other) const;
 
-    void processGameQuery(ClientManager &client, GAME_QUERY_TYPE query);
-    void processGameQueryBeforeRoll(ClientManager &client, GAME_QUERY_TYPE query);
-
-    void processEndTurn(ClientManager &client);
-    void processDiceRoll(ClientManager &client);
-    void processMortgageProperty(ClientManager &client);
-    void processDemortgageProperty(ClientManager &client);
-    void processExchange(ClientManager &client);
-    void processBuildBuildings(ClientManager &client);
-    void processSellBuildings(ClientManager &client);
-
     //add Player object to players vector in Capitalist
     void addPlayer(ClientManager &client);
 
-    bool isClientAdmin(ClientManager &client);
 
     void updateAllClients(std::string update);
     void updateAllClientsWithQuery(QUERY &&query, std::string update);
     void updateThisClientWithQuery(QUERY &&query, std::string update, ClientManager &client);
-    bool proposeExchange(Player& proposing_player, Player &proposed_to_player, Land *land, int amount);
     Land* getLand(std::string &name);
     void processBankruptcyToPlayer();
 
@@ -144,11 +128,8 @@ public:
      */
 
 
-    void clientBeforeRollLoop(ClientManager &client);
-
     void connectClientToThisGame(ClientManager &client);
 
-    void treeDouble(ClientManager& client);
 
 
 };

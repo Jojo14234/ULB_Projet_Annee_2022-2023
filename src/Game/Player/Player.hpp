@@ -195,6 +195,8 @@ public:
 
     std::string getAllPossessionMortgageable();
 
+    std::string getAllPossessionLiftMortgageable();
+
     std::string getAllBuildableProperties();
 
     std::string getAllSellableBuildProperties();

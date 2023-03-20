@@ -272,6 +272,18 @@ std::string Player::getAllPossessionMortgageable() {
     return ret_string;
 }
 
+std::string Player::getAllPossessionLiftMortgageable() {
+    std::string str = "";
+    for ( auto property : properties ) { if ( property->isMortgaged() ) { str += property->getName() + ":"; } }
+    for ( auto company : companies ) { if ( company->isMortgaged() ) { str += company->getName() + ":"; } }
+    for ( auto station : stations ) { if ( station->isMortgaged() ) { str += station->getName() + ":"; } }
+    return str;
+
+
+
+
+}
+
 std::string Player::getAllBuildableProperties() {
     std::string str = "";
     for ( auto property : this->getAllProperties() ) { if ( property->isBuildable(this) ) { str += property->getName() + ":"; } }

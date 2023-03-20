@@ -401,7 +401,7 @@ bool Capitalist::processLiftMortgage(Player *player, std::string &name) {
     LandCell* land = getLandCell(name);
     if (!land or !land->getLand()->isMortgaged() ) { return false; }
     if (player->getBankAccount()->getMoney() < land->getLand()->getPurchasePrice()/2 ) { return false; }
-    land->getLand()->mortgage(player);
+    land->getLand()->liftMortgage(player);
     return true;
 }
 
@@ -430,23 +430,25 @@ std::vector<Player*> Capitalist::processAskAuction(Player *player, std::string &
 
     // ENVOYER DEMANDE DE PARTICIPATION AU CLIENT
     for (auto &other : this->players ) {
-        if (&other != player) {
+        if ( &other != player ) {
             other.setStatus(PLAYER_STATUS::ASK_AUCTION);
             other.getClient()->sendQueryMsg(name, QUERY::ASK_AUCTION);
+            other.getClient()->sendQueryMsg("Pour participer à l'enchère /participate !!", QUERY::MESSAGE);
         }
     }
 
     std::vector<Player*> participants;
     GAME_QUERY_TYPE query;
-    // RéCUPéRER LES PARTICIPANT
+    // RÉCUPÉRER LES PARTICIPANTS
     for ( auto &other : this->players ) {
         if (&other != player) {
             other.getClient()->receive(query);
             if ( query == GAME_QUERY_TYPE::PARTICIPATE) {
-                other.setStatus(PLAYER_STATUS::IN_AUCTION);
+                other.setStatus(PLAYER_STATUS::WAITING_FOR_AUCTION_TURN);
                 participants.push_back(&other);
             }
             else {
+                std::cout << "Player " + other.getUsername() + " doe's not participate in auction" << std::endl;
                 other.setStatus(PLAYER_STATUS::FREE);
             }
         }

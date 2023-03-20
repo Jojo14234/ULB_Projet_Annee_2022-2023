@@ -8,7 +8,7 @@
 /*
  * Met en hypothèque une propriété et donne la moitié du prix d'achat au player
  */
-void Land::mortgage(Player* player){
+void Land::mortgage(Player* player) {
 	this->status = LAND_STATUS::HYPOTEK;
     player->receive(purchase_price/2, "hypothèque");
 }
