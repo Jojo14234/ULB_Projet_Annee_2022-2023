@@ -5,7 +5,7 @@
 #include <vector>
 #include <array>
 
-struct PropertyInformation {
+struct PropertyInformations {
 	std::string name;
 	int level;
 	bool mortgage;
@@ -16,7 +16,7 @@ struct PlayerInformations{
 	int position;
 	int money;
 	int jail_card_nb;
-	std::vector<PropertyInformation> properties;
+	std::vector<PropertyInformations> properties;
 };
 
 struct PlayerInteractProperty{
@@ -34,6 +34,11 @@ struct DiceInformations {
 	int double_counter; 
 };
 
+
+struct PlayerPaidPlayerInformations{
+
+};
+
 class GameStateParser {
 
 	std::string str;
@@ -49,7 +54,7 @@ public:
 	const std::vector<PlayerInformations>& parseEndTurnLine(int player_nb){
 		players.resize(player_nb);
 		std::string tmp;
-		PropertyInformation p_i;
+		PropertyInformations p_i;
 		int colon_nb = 0;
 		int semicolon_nb = 0;
 		int player_index = 0;

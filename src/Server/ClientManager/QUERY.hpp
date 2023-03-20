@@ -9,9 +9,14 @@ enum class QUERY {
 
     INFOS_START, // See sendStartData in GameServer for formatting
     INFOS_GAME, // See sendGameData in GameServer for formatting
-    INFOS_NEW_TURN,
-    INFOS_PLAYER_MOVE,
-    INFOS_PLAYER_BOUGHT,
+    INFOS_NEW_TURN, // pseudo
+    INFOS_PLAYER_MOVE, // username:cell_name:player_money
+    INFOS_PLAYER_BOUGHT, // username:cell_name:player_money
+    INFOS_PLAYER_DIDNT_BUY, //username
+    INFOS_PLAYER_PAID_PLAYER, //amout:username_lose_money,money:username_won_money,money
+    INFOS_PLAYER_MOVE_ON_MORTGAGED_CELL, //username:owner_username
+    INFOS_PLAYER_MOVE_ON_TAX_CELL, //tax_name:price:username:player_money
+    INFOS_PLAYER_MOVE_ON_OWN_CELL, //username
     PLAYER_JOIN_GAME, // username:gameCode [string]:[int]
 
     MESSAGE, // All indication message

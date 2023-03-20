@@ -147,6 +147,26 @@ public:
 					break;
 				}
 
+				case QUERY::INFOS_PLAYER_DIDNT_BUY: {
+					break;
+				}
+
+				case QUERY::INFOS_PLAYER_PAID_PLAYER:{
+					break;
+				}
+
+				case QUERY::INFOS_PLAYER_MOVE_ON_MORTGAGED_CELL:{
+					break;
+				}
+
+				case QUERY::INFOS_PLAYER_MOVE_ON_OWN_CELL:{
+					break;
+				}
+
+				case QUERY::INFOS_PLAYER_MOVE_ON_TAX_CELL:{
+					break;
+				}
+
 				case QUERY::USELESS_MESSAGE:{
 					break;
 				}		
