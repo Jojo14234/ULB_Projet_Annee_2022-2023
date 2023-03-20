@@ -87,6 +87,8 @@ public:
     bool processSendExchangeRequest(Player *player, std::string &name, int money);
     std::vector<Player*> processAskAuction(Player *player, std::string &name);
 
+    void shufflePlayers();
+
 
 };
 

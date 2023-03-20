@@ -222,6 +222,7 @@ int GameServer::clientLoop(ClientManager &client) {
         // ACTION POSSIBLE IF YOU ARE NOT THE HOST
         else {
             // TODO
+            sleep(1); // fait moins lag
         }
     }
 
@@ -231,6 +232,7 @@ int GameServer::clientLoop(ClientManager &client) {
         // POSSIBLE ACTION IF IT IS THE CLIENT TURN
         if (this->game.getCurrentPlayer()->getClient() == &client) {
             Player* me = this->game.getCurrentPlayer();
+            this->updateThisClientWithQuery(QUERY::INFOS_PLAYER_TURN, me->getUsername(), client);
 
             if ( me->getStatus() == PLAYER_STATUS::FREE ) { this->clientTurn(client, me); continue; }
             if ( me->getStatus() == PLAYER_STATUS::LOST ) { /*TODO manage lost*/; me->getClient()->setRankForActualGame(this->game.getPlayersSize()+1); continue; }
@@ -245,9 +247,9 @@ int GameServer::clientLoop(ClientManager &client) {
             if ( me->getStatus() == PLAYER_STATUS::WAITING_FOR_AUCTION_TURN ) { /*Il n'y a rien à faire à part attendre*/ }
             if ( me->getStatus() == PLAYER_STATUS::AUCTION_TURN ) { this->processAskBid(client, me); continue;}
             /*
-             * TODO : Participate in auction
              * TODO : LeaveGame
              */
+            sleep(1); // fait moins lag
             continue;
         }
     }
@@ -296,6 +298,7 @@ void GameServer::clientTurn(ClientManager &client, Player* me) {
  * Lance la partie si il y a au moins 2 joueurs
  */
 void GameServer::processStart(ClientManager* client) {
+    if ( this->game.isRunning() ) { return; }
     GAME_QUERY_TYPE query;
     client->receive(query);
     if ( query != GAME_QUERY_TYPE::START ) { this->updateThisClientWithQuery(QUERY::MESSAGE,"Pour démarrer la partie ( /start )" ,*client); return; }
@@ -539,9 +542,6 @@ void GameServer::processAskBid(ClientManager &client, Player *player) {
 
 
 /*--------------------------------------------------------------------------------------------------------------------*/
-
-
-
 
 
 void GameServer::processAuction(ClientManager &client, Player *me) {

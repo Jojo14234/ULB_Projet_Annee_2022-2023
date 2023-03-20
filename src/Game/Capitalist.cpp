@@ -3,7 +3,8 @@
 #include "Capitalist.hpp"
 #include "../Server/ClientManager/ClientManager.hpp"
 #include "../utils/randomFunctions.hpp"
-
+#include <random>
+#include <algorithm>
 
 void Capitalist::receiveQuery(GAME_QUERY_TYPE query, sf::Packet &packet) {
     std::string s1="", s2="";
@@ -297,11 +298,13 @@ ExchangeStatus Capitalist::getExchangeStatus() const {
 //Other function
 /*
  * Start the game
+ * Shufle the player vector
  * Set the attribut running to [TRUE]
  * Allow the first Player to play by setting to [TRUE] his attribut currently playing.
  */
 void Capitalist::startGame() {
-    this->players[0].setCurrentlyPlaying(true);
+    this->shufflePlayers();
+    this->players[this->current_player_index].setCurrentlyPlaying(true);
     this->running = true;
 }
 
@@ -454,4 +457,10 @@ std::vector<Player*> Capitalist::processAskAuction(Player *player, std::string &
         }
     }
     return participants;
+}
+
+
+void Capitalist::shufflePlayers() {
+    auto rng = std::default_random_engine {};
+    std::shuffle(std::begin(this->players), std::end(this->players), rng);
 }
