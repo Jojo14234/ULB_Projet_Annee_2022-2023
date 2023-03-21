@@ -85,7 +85,8 @@ public:
 					PlayersInformations p_i = start_parser.parseStartInfo();
 					player_nb = p_i.player_nb;
 					players_username = p_i.player_usernames;
-					this->gameStartUpdate(p_i.beginner); 
+					this->gameStartUpdate(p_i.beginner);
+					this->view->getConsole()->addText("La partie commence");
 					break;
 				}
 
@@ -129,7 +130,7 @@ public:
 				case QUERY::INFOS_NEW_TURN: {
 					this->model->setPlayerTurn(response);
 					if (response == this->model->getUsername()) { this->view->startTurn(); this->model->startTurn(); }
-					else { this->view->endTurn(); this->model->endTurn(); }
+					else { this->view->endTurn(); this->model->endTurn(); this->view->getConsole()->addText("C'est au tour de " + response + " !"); }
 					break;
 				}
 
@@ -151,6 +152,7 @@ public:
 				}
 
 				case QUERY::INFOS_PLAYER_DIDNT_BUY: {
+					if(response != this->model->getUsername()) this->view->getConsole()->addText("Le joueur " + response + " n'a pas achete la propriete");
 					break;
 				}
 
@@ -161,12 +163,14 @@ public:
 					PlayerPaidPlayerInformations pppi = game_parser.parsePayement();
 					this->view->getInfo()->changePlayerMoney(pppi.loser, pppi.loser_money);
 					this->view->getInfo()->changePlayerMoney(pppi.winner, pppi.winner_money);
+					this->view->getConsole()->addText(players_username[pppi.loser-1] + " a paye " + std::to_string(pppi.amount) + " dollars a " + players_username[pppi.winner-1]);
 					break;
 				}
 
 				case QUERY::INFOS_PLAYER_MOVE_ON_MORTGAGED_CELL:{
 					GameStateParser game_parser(response);
 					PlayerInteractMortgagedCell pimc = game_parser.parseMortgagedLine();
+					this->view->getConsole()->addText(pimc.username + " est tombe sur une propriete hypothequee");
 					break;
 				}
 
@@ -178,6 +182,7 @@ public:
 					GameStateParser game_parser(response);
 					PlayerInteractTax pit = game_parser.parseTaxLine();
 					this->view->getInfo()->changePlayerMoney(pit.player, pit.player_money);
+					this->view->getConsole()->addText(players_username[pit.player] + " a paye " + std::to_string(pit.price) + " dollars de taxe");
 					break;
 				}
 
