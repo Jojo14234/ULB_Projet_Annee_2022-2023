@@ -21,3 +21,37 @@ void MoneyCard::action(Player* player) {
     }
 }								//modif argent du joueur selon receive et amount
                                 //si carte spécial annif, prendre argent des autres joueurs
+
+void FromOtherMoneyCard::action(Player* player) {
+        std::vector<Player>* players = player->getClient()->getGameServer()->getGame()->getPlayers();
+        for (auto &other_player : *players) {
+            if (not player == &other_player) {  //opti calcul nombre de gens et somme total
+                other_player->forcedPay(amount);
+                player->receive(amount);        //MoneyCard::action() ?
+            }
+        }
+}
+
+void ChoiceMoneyCard::action(Player* player) {
+        std::string msg = "amende: /select amende | carte: /select carte";
+        player->getClient()->sendQueryMsg(msg, QUERY::SELECT);
+
+        std::string answer;
+        GAME_QUERY_TYPE query;
+        sf::Packet packet;
+        player->getClient()->receive(query, packet);
+
+        packet >> answer;
+
+        if (answer == "amende") {
+            player->forcedPay(this->amount);    //MoneyCard::action() ?
+        }
+        else if (answer == "carte") {
+            CardDeck* deck = player->getClient()->getGameServer()->getDeck(this->deck_name);
+            Card* drawn_card = deck->drawACard();
+            player->getClient()->send("Vous avez pioché cette carte : \n\t" + drawn_card->getDescription() + "\n");
+            drawn_card->action(player);
+        }
+        //faire une boucle car possible qu'il disent n'imp (break si boucle while) !!
+
+}
