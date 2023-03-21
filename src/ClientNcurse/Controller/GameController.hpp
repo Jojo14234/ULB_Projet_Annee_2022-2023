@@ -100,9 +100,11 @@ public:
 
 				case QUERY::INFOS_ROLL_DICE: {
 					GameStateParser game_parser(response);
-					DiceInformations d_i = game_parser.parseDiceLine();
-					this->view->getDice1()->setText(std::to_string(d_i.first_value), 0);
-					this->view->getDice2()->setText(std::to_string(d_i.second_value), 0);
+					DiceInformations dice_i = game_parser.parseDiceLine();
+					if (this->model->isMyTurn()) {
+						this->view->getDice1()->setText(std::to_string(dice_i.first_value), 0);
+						this->view->getDice2()->setText(std::to_string(dice_i.second_value), 0);
+					}  else this->view->getConsole()->addText("Le joueur " + this->model->getPlayerTurn() + " a obtenu " + std::to_string(dice_i.first_value ) + " et " + std::to_string(dice_i.second_value));
 					break;
 				}
 
@@ -125,8 +127,9 @@ public:
 				}	
 
 				case QUERY::INFOS_NEW_TURN: {
-					if (response == this->model->getUsername()) { this->view->startTurn(); }
-					else { this->view->endTurn(); }
+					this->model->setPlayerTurn(response);
+					if (response == this->model->getUsername()) { this->view->startTurn(); this->model->startTurn(); }
+					else { this->view->endTurn(); this->model->endTurn(); }
 					break;
 				}
 
@@ -150,6 +153,8 @@ public:
 				case QUERY::INFOS_PLAYER_DIDNT_BUY: {
 					break;
 				}
+
+				// TODO AJOUTER VISUELLE POUR DIRE QUAND UNE PERSONNE A ACHETÉ UNE MAISON/VENDRE + HOTEL
 
 				case QUERY::INFOS_PLAYER_PAID_PLAYER:{
 					GameStateParser game_parser(response);
@@ -211,8 +216,11 @@ public:
 
 	void gameStartUpdate(int beginner) {
 		this->view->endWaitingRoom();
-		if (this->model->getUsername() == players_username[beginner])
+		this->model->setPlayerTurn(players_username[beginner]);
+		if (this->model->getUsername() == players_username[beginner]){
 			this->view->startTurn();
+			this->model->startTurn();
+		} 
 		
 		this->view->getInfo()->clearAllText();
 		for (int i = 1; i<= player_nb; i++) {

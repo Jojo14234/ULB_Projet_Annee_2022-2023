@@ -58,6 +58,7 @@ void GameServer::client_has_join_the_game(ClientManager &client) {
  * Send a message with the new player and the size of the clients connected to this game
  */
 void GameServer::clientsSizeData(ClientManager &client) {
+    client.getAccount(); // TODO UTILISER MOI CE PTIN DE PARAMETRE 
     std::string clientsSize = std::to_string(this->clients.size());
     std::string str = clientsSize + "|";
     for (auto& e : this->clients){
