@@ -33,199 +33,146 @@ class Player {
     BankAccount bank_account = BankAccount{STARTING_MONEY};
 
     Cell* current_cell;
-
     ClientManager* client;
 
     int rolls_in_prison = 0;
-
     int index = -1;
-
     bool admin = false;
 
     bool has_rolled = false;
     bool currently_playing = false;
 
-    bool currently_in_auction;
-    bool auction_must_start;
+    int money_debt = 0;
+
     bool exchange_from_jail = false;
 
     PLAYER_STATUS status = FREE;
-    Player* bankrupting_player = nullptr;
+    Player* player_to_refund = nullptr;
 
     std::vector<JailCard*> GOOJ_cards;   //get out of jail cards
     std::vector<Property*> properties;
     std::vector<Company*> companies;
     std::vector<Station*> stations;
 
-/*
-    //std::vector<*Property> properties; waiting for Hawen
-
-    PLAYER_STATUS status = FREE;
-
-    bool online = true;
-
-    void payToExitPrison();
-
-    //use a GOOJ card, if available
-    bool useGetOutOfJailCard();
-
-    //exectues action based on current cell
-    void propertyAction(); //nécessaire étant donné la méthode acton dans cell et ses enfants?
-
-
-    bool isMine(Property property);
-
-
-    //void partakeInAuction(Auction auction); //classe Auction pas encore créée
-
-    //rolls dice
-    int rollDice(Dice* dice); //waiting for dice merge
-
-    //quit game
-    void leaveGame();
-
 public:
-
-    // what does this do?
-    void play();
-
-    //set player to specific cell
-    void setPosition(Cell* cell);
-
-    //pay for property and add property to properties
-    bool buyProperty();
-
-    //pay an amount of money, return false if not capable
-    bool pay(int amount);
-
-    //moves player depending on result from dice
-    void move(int distance);
-
-    //exectues exchange agreed to by the 2 players involved (should this be in this class?)
-    //void exchange(Negociation negociation); //requires modifications to Negociation class compared to what is discribed in srd
-
-
-    //std::vector<*Property> getProperties(); waiting for Hawen
-
-    void declareBankruptcy();
-*/
-public:
-    int getIndexOnBoard();
 
     Player(ClientManager* client, Cell* start_cell) : client{client} {current_cell = start_cell;}
 
+    int processRollDice(Dice &dice);
+
+
+    // SETTER
     void setAdmin();
-    bool isAdmin();
-
-    bool isItMe(ClientManager &client) const;
-
-    ClientManager* getClient() const;
-    void send(std::string &s) const;
-    void send(std::string &&s) const;
-    std::string getUsername() const;
-
-    bool isCurrentlyPLaying() const;
     void setCurrentlyPlaying(bool playing);
-
-    bool pay(int amount, bool forced = false);
-    void forcedPay(int amount);
-    void receive(int amount, std::string source);
-
-    void move(Cell* cell, bool pass_by_start = true);
-
-    bool passedByStart(Cell* cell, bool passed_by_start);
-
-    Cell* getCurrentCell() const;
-
-    void exitJail();
-    void goToJail(Cell *cell);
-    bool isInJail() const;
-
-    int getRollsInPrison() const;
-    void addRollInPrison();
-    void resetRollInPrison();
-
-    int hasGOOJCards() const;
-    void looseGOOJCard();
-
-    bool hasRolled() const;
     void setRolled(bool rolled);
-    int roll(Dice &dice);
+    void setExchangeFromJail();
+    void setStatus(PLAYER_STATUS new_status);
+    void setPlayerToRefund(Player* player);
+    void setIndex(int new_index);
+    void setExitJail();
 
+
+
+
+
+    // GETTER
+    bool isAdmin() const;
+    ClientManager* getClient() const;
+    std::string getUsername() const;
+    Cell* getCurrentCell() const;
+    int getRollsInPrison() const;
     std::vector<Property*> getAllProperties() const;
     std::vector<Company*> getAllCompanies() const;
     std::vector<Station*> getAllStations() const;
     std::vector<JailCard*> getAllGOOJCards() const;
+    int getNumberOfStations() const;
+    int getNumberOfCompanies() const;
+    PLAYER_STATUS getStatus();
+    BankAccount* getBankAccount();
+    int getPosition() const;
+    int getMoney() const;
+    Player* getPlayerToRefund();
+    int getPatrimoine();
+    int getIndex() const;
+    int getDebt() const;
 
+
+
+
+
+
+    // CHECK
+    bool isItMe(ClientManager &client) const;
+    bool isCurrentlyPLaying() const;
+    bool isInJail() const;
+    int hasGOOJCards() const;
+    bool hasRolled() const;
+    bool isBankruptToPlayer() const;
+    bool isBankrupt() const;
+
+
+
+
+
+    // ABOUT client
+    void send(std::string &s) const;
+    void send(std::string &&s) const;
+
+
+    // ABOUT bankAccount
+    bool pay(int amount, bool forced = false);
+    void receive(int amount, std::string source);
+
+
+    // MOVEMENT
+    void move(Cell* cell, bool pass_by_start = true);
+    bool passedByStart(Cell* cell, bool passed_by_start);
+    void goToJail(Cell *cell);
+
+    Cell* processMove(int n, Board &board);
+    void processMove(Cell* new_cell, bool gainMoneyIfPassByStart);
+
+
+
+    // roll_in_prison
+    void addRollInPrison();
+    void resetRollInPrison();
+
+
+    // OTHER
+    void looseGOOJCard();
+    void useGOOJCard();
+
+    void resetDebt();
+
+
+    int roll(Dice &dice);
+
+    void acquireLand(Land* land);
+    void acquireProperty(Property &prop);
+    void acquireCompany(Company &comp);
+    void acquireStation(Station &station);
+    void acquireGOOJCard(JailCard *jail_card);
+
+    void removeLand(Land* land);
     void removeProperty(Property* p);
     void removeStation(Station* s);
     void removeCompagnie(Company* c);
 
-
-    int getNumberOfStations() const;
-    int getNumberOfCompanies() const;
-
-    void leaveAuction();
-    void clearAuction();
-    bool isInAuction() const;
-    void auctionStart();
-
-
-    void acquireProperty(Property &prop);
-
-    void acquireCompany(Company &comp);
-
-    void acquireStation(Station &station);
-
-    void acquireGOOJCard(JailCard *jail_card);
-    void useGOOJCard();
-
-    void acquireLand(Land* land);
-    void removeLand(Land* land);
-
-    void auctionMustStart();
-
-    void exchangeFromJail();
-
-    PLAYER_STATUS getStatus();
-
-    void setStatus(PLAYER_STATUS new_status);
-
+    // STRING
     std::string getAllPossession();
-
     std::string getAllPossessionMortgageable();
-
     std::string getAllPossessionLiftMortgageable();
-
     std::string getAllBuildableProperties();
-
     std::string getAllSellableBuildProperties();
-
     std::string getAllExchangeablePossession();
-
-
-    BankAccount* getBankAccount();
-
-    void setBankruptingPlayer(Player* player);
-
-    Player* getBankruptingPlayer();
-
-    void setIndex(int new_index) {
-        if ( this->index != -1 ) return;
-        index = new_index;
-    }
-
-    int getIndex() const {return index;}
-
-    int getPosition() const;
-
-    int getMoney() const;
-
-    int processRollDice(Dice &dice);
-    Cell* processMove(int n, Board &board);
-    void processMove(Cell* new_cell, bool gainMoneyIfPassByStart);
-
     std::string rollInfos(Dice &dice);
+
+    // NEW FUNCTION
+    std::vector<Land*> getAllLand();
+
+
+
 };
 
 

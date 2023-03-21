@@ -40,6 +40,8 @@ enum class QUERY {
     ASK_AUCTION, // property_name // envoyé à tout les joueurs pour leur demander de participer à l'enchère
     STOP_WAIT, // Arrête l'échange ou l'enchère en cas de trop longue attente (NE PAS MODIF NI PARSE autrement DANS LE CLIENT)
 
+    INFOS_DEBT, // amount:username // Montant à rembourser à une joueur [int]:[string], si le username = BANK, c'est qu'il doit de l'argent à la banque
+
     DISCONNECT, // Disconnection
     RANKING, // Ranking
     WIN, // username

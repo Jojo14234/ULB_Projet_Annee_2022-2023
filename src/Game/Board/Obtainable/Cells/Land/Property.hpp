@@ -61,6 +61,12 @@ public:
 	bool isBuildable(Player* player);
 	bool canSellBuilding(Player* player);
 
+    void reset() {
+        this->Land::reset();
+        this->level = PROPERTY_LEVEL::EMPTY;
+    }
+
+    int getConstructPrice() { return this->construct_price; }
 
 
 	////////////////////////

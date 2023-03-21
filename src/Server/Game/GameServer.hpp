@@ -53,10 +53,6 @@ public:
 
     void processBuild(ClientManager &client, Player* player);
 
-    void processAuction(ClientManager &client, Player* player);
-
-    void processBankrupt(ClientManager &client, Player* player);
-
     void processStart(ClientManager* client);
 
     void processJail(ClientManager& client, Player *player);
@@ -89,6 +85,19 @@ public:
 
     void processAskBid(ClientManager &client, Player *player);
 
+    void processAuction(ClientManager &client, Player* player, Land* land);
+
+    void processBankruptByGame(ClientManager &client, Player *player);
+    void processBankruptByPlayer(ClientManager &client, Player* player, Player* other);
+
+    void playerDebtInfos(ClientManager &client, Player* player);
+
+    void suspectBankrupt(Player* player);
+    void processPayDebt(ClientManager &client, Player* player);
+    void processBankrupt(ClientManager &client, Player* player);
+
+
+    void processLost(ClientManager &client);
 
 
 

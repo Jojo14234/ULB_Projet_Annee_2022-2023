@@ -144,7 +144,7 @@ void GameServer::connectClientToThisGame(ClientManager &client) {
  * Remove a client form the Clients list
  */
 void GameServer::removeClient(ClientManager* client) {
-    int i = 0;
+    unsigned int i = 0;
     this->game.removePlayer(*client);
     while ( i < this->clients.size() ) {
         if (this->clients[i] == client) {
@@ -176,7 +176,7 @@ void GameServer::addPlayer(ClientManager &client) {
  * Return the player link to the clientManager
  */
 Player *GameServer::findMe(ClientManager &client) {
-    int i = 0;
+    unsigned int i = 0;
     while (i < this->game.getPlayers()->size()) {
         if ( this->game.getPlayers()->operator[](i).isItMe(client) ) { return &this->game.getPlayers()->operator[](i); }
         i++;
@@ -235,9 +235,9 @@ int GameServer::clientLoop(ClientManager &client) {
             this->updateThisClientWithQuery(QUERY::INFOS_PLAYER_TURN, me->getUsername(), client);
 
             if ( me->getStatus() == PLAYER_STATUS::FREE ) { this->clientTurn(client, me); continue; }
-            if ( me->getStatus() == PLAYER_STATUS::LOST ) { /*TODO manage lost*/; me->getClient()->setRankForActualGame(this->game.getPlayersSize()+1); continue; }
+            if ( me->getStatus() == PLAYER_STATUS::LOST ) { this->processLost(client); continue; }
             if ( me->getStatus() == PLAYER_STATUS::JAILED ) { this->processJail(client, me); continue; }
-            if ( me->getStatus() == PLAYER_STATUS::BANKRUPT ) { /*TODO manage bankrupt*/; continue; }
+            if ( me->getStatus() == PLAYER_STATUS::BANKRUPT_SUSPECTED ) { /*TODO manage bankrupt*/; continue; }
         }
         // POSSIBLE ACTION ITS NOT THE CLIENT TURN
         else {
@@ -279,10 +279,12 @@ void GameServer::clientTurn(ClientManager &client, Player* me) {
 
             // Lancement enchère si c'est une case achetable + si personne ne la possède
             LandCell* landCell = dynamic_cast<LandCell*>(me->getCurrentCell());
-            if ( landCell && !landCell->getLand()->getOwner() ) { this->processAuction(client, me); }
+            if ( landCell && !landCell->getLand()->getOwner() ) { this->processAuction(client, me, landCell->getLand()); }
 
             // Vérification si le joueur est en faillite
-            if ( me->getStatus() == PLAYER_STATUS::BANKRUPT ) { this->processBankrupt(client, me); }
+            if ( me->getStatus() == PLAYER_STATUS::BANKRUPT_SUSPECTED ) { this->suspectBankrupt(me); }
+            if ( me->getStatus() == PLAYER_STATUS::DEBT ) { this->processPayDebt(client, me); }
+            if ( me->getStatus() == PLAYER_STATUS::BANKRUPT_CONFIRMED ) { this->processBankrupt(client, me); }
         }
     }
     // End of the turn
@@ -348,7 +350,7 @@ void GameServer::processJail(ClientManager &client, Player *player) {
         default: break;
     }
     // End of the turn
-    if ( player->getStatus() != PLAYER_STATUS::BANKRUPT ) {
+    if ( player->getStatus() != PLAYER_STATUS::BANKRUPT_SUSPECTED ) {
         this->game.endCurrentTurn();
         this->sendGameData();
         this->sendBetterGameData();
@@ -539,23 +541,18 @@ void GameServer::processAskBid(ClientManager &client, Player *player) {
     }
 }
 
-
-
-/*--------------------------------------------------------------------------------------------------------------------*/
-
-
-void GameServer::processAuction(ClientManager &client, Player *me) {
+void GameServer::processAuction(ClientManager &client, Player *me, Land* land) {
     this->updateAllClientsWithQuery(QUERY::MESSAGE, "DÉBUT ENCHÈRE !");
+    this->updateThisClientWithQuery(QUERY::MESSAGE, "Ne parlez pas pendant les enchères !", client);
     // Passer tout les joueurs autre que me en status in_auction
     // récupérer un /participate et les ajouter à un vecteur
     // boucler un a un sur leur offres
-    std::string name = me->getCurrentCell()->getName();
+    std::string name = land->getName();
 
     std::vector<Player*> participants = this->game.processAskAuction(me, name);
 
     // AUCTION
-    LandCell* land = this->game.getLandCell(name);
-    int starting_bid = land->getLand()->getPurchasePrice();
+    int starting_bid = land->getPurchasePrice();
 
     Player* futur_owner = nullptr;
 
@@ -598,199 +595,78 @@ void GameServer::processAuction(ClientManager &client, Player *me) {
     // Si futur_owner != nullptr -> futur->owner.acquire.prop
     if (futur_owner) {
         futur_owner->setStatus(PLAYER_STATUS::FREE);
-        futur_owner->acquireLand(land->getLand());
+        futur_owner->acquireLand(land);
         futur_owner->pay(starting_bid);
     }
-}
-
-void GameServer::processBankrupt(ClientManager &client, Player *player) {
-    //TODO
 }
 
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-
-
-/*
- * Boucle pour la faillite
- */
-void GameServer::clientBankruptLoop(ClientManager &client) {
-    //client.send("Vous avez fait faillite!\n");
-    this->updateThisClientWithQuery(QUERY::HAS_BANKRUPT, "Vous avez fait faillite !", client);
-    Player* current = game.getCurrentPlayer();
-
-    while (current->getBankAccount()->getMoney() < 0 and current->getStatus() != PLAYER_STATUS::LOST){
-        std::string str = "3 OPTIONS POSSIBLES : ";
-        str += "\n -Hypothéquez vos propriétés restantes ( /mortgage )";
-        str += "\n -Vendez vos propriétés ( /sell )";
-        str += "\n -Abandonnez la partie ( /give-up )\n";
-        updateThisClientWithQuery(QUERY::OPTIONS_WHEN_BANKRUPT, str, client);
-        //client.send(str);
-
-        GAME_QUERY_TYPE query = this->getGameQuery(client);
-        switch (query) {
-            case GAME_QUERY_TYPE::MORTGAGE :        // Same as under
-            case GAME_QUERY_TYPE::SELL_BUILDINGS : break;
-            case GAME_QUERY_TYPE::GIVE_UP : processBankruptcyToPlayer(); current->setStatus(PLAYER_STATUS::LOST); break;
-            default:
-                this->updateThisClientWithQuery(QUERY::COMMAND_INDISPONIBLE, "Cette commande n'est pas disponible.", client);
-                break;
-        }
-    }
-
-    if ( current->getBankAccount()->getMoney() >= 0 or current->getStatus() != PLAYER_STATUS::LOST ) {
-        current->setStatus(PLAYER_STATUS::FREE);
-        this->updateThisClientWithQuery(QUERY::NO_MORE_BANKRUPT, "Vous n'êtes plus en faillite! Continuez votre tour normalement.", client);
-        //client.send("Vous n'êtes plus en faillite! Continuez votre tour normalement.");
-    }
+void GameServer::suspectBankrupt(Player *player) {
+    if (this->game.checkBankrupt(player)) { player->setStatus(PLAYER_STATUS::BANKRUPT_CONFIRMED); }
+    else { player->setStatus(PLAYER_STATUS::DEBT); }
 }
 
-/*
- * Boucle qui dure tant que [auctionInProgress] est différent de [0].
- */
-void GameServer::participateInAuction(ClientManager &client) {
-    this->updateThisClientWithQuery(QUERY::PARTICIPATE_IN_AUCTION, "Vous participez à l'enchère!", client);
-    //client.send("Vous participez à l'enchère!");
-    while ( game.getAuctionStatus() != AuctionStatus::STOP ) { }
-}
-
-/*
- * Boucle pour les enchères
- */
-void GameServer::clientAuctionLoop(ClientManager &client, LandCell* land_cell) {
-
-    Player* current = this->game.getCurrentPlayer();
-    // Si ce n'est pas le tour du client
-    if ( current->getClient() != &client ) { return; }
-
-    //Déclaration de variables
-    int bid = starting_bid;
+void GameServer::playerDebtInfos(ClientManager &client, Player* player) {
     std::string str = "";
+    str += std::to_string(player->getDebt() - player->getMoney());
+    str += ":";
+    if (player->isBankruptToPlayer()) {str += player->getPlayerToRefund()->getUsername();}
+    else { str += "BANK"; }
+    this->updateThisClientWithQuery(QUERY::INFOS_DEBT, str, client);
+}
 
-    // Starting auction
-    str =  "\nUne enchère a débuté! La propriété concernée est la suivante: " + land_cell->getLand()->getName();
-    str += "\n - Participez à l'enchère ( /participate ). (Obligatoire).";
-    //str += "\n - Ne pas participez à l'enchère ( /out )\n";
-    //this->updateAllClients(str);
-    this->updateAllClientsWithQuery(QUERY::BEGIN_AUCTION, land_cell->getLand()->getName());
+void GameServer::processPayDebt(ClientManager &client, Player *player) {
+    while ( player->isBankrupt() ) {
+        this->playerDebtInfos(client, player);
+        GAME_QUERY_TYPE query = this->getGameQuery(client);
 
-
-    if (current->getStatus() != PLAYER_STATUS::LOST or current->getBankruptingPlayer()->getStatus() != PLAYER_STATUS::LOST) {
-        str = "Attention! Comme vous êtes à l'origine de cette enchère, vous participez par défaut.";
-        str += "\nVeuillez attendre " + std::to_string(MAX_WAIT_AUCTION) + " secondes pour que les autres joueurs rejoignent.";
-        //client.send(str);
-        this->updateThisClientWithQuery(QUERY::WAIT_BEFORE_AUCTION_BEGIN, str, client);
+        if ( query == GAME_QUERY_TYPE::SELL_BUILDINGS ) { this->processSellBuild(client, player); continue; }
+        if ( query == GAME_QUERY_TYPE::MORTGAGE )       { this->processMortgage(client, player); continue; }
     }
 
-    game.startAuction();
-    game.getCurrentPlayer()->auctionStart();
-    sleep(MAX_WAIT_AUCTION);
-    this->updateThisClientWithQuery(QUERY::FINISH_WAITING_TIME, "L'attente est terminée!", client);
-    //client.send("L'attente est terminée!");
-    game.setAuctionProgress(AuctionStatus::OTHER);
-
-    Player* winner = nullptr;
-    while ( winner == nullptr ) {
-        for ( auto &player : *this->game.getPlayers() ) {
-            winner = game.getAuctionWinner();
-            if ( winner != nullptr ) {
-                str = "Le joueur '" + player.getClient()->getAccount()->getUsername() + "' a remporté l'enchère !";
-                this->updateAllClientsWithQuery(QUERY::WIN_AUCTION, player.getClient()->getAccount()->getUsername());
-                //this->updateAllClients(str);
-
-                // Make function WIN AUCTION
-                player.acquireLand(land_cell->getLand());
-                player.pay(bid);
-
-                this->game.stopAuction();
-                break; // return (serait aussi bon ici ?)
-            }
-
-            if ( player.isInAuction() and (player.getStatus() != PLAYER_STATUS::LOST or player.getStatus() != PLAYER_STATUS::BANKRUPT) ) {
-                str =  "\nC'est au tour de '" + player.getClient()->getAccount()->getUsername() + "` d'enchérir !";
-                str += "\nL'enchère est actuellement à " + std::to_string(bid);
-                this->updateAllClientsWithQuery(QUERY::AUCTION_TURN, str);
-                //this->updateAllClients(str);
-                str = "";
-                str += "\n - Enchérissez pour cette propriété ( /bid [montant] )";
-                str += "\n - Quittez l'enchère et abandonner la propriété ( /out )";
-                str += "\nToute erreur de commande entraine l'exclusion de l'enchère\n";
-
-                //player.getClient()->send(str);
-                QUERY query1 = QUERY::AUCTION_HOW_TO_BID;
-                player.getClient()->sendQueryMsg(str, query1);
-                //this->updateThisClientWithQuery(QUERY::AUCTION_HOW_TO_BID, str, client);
-
-                GAME_QUERY_TYPE query;
-                sf::Packet packet;
-                player.getClient()->receive(query, packet);
-
-                // Mauvaise commande
-                if ( query != GAME_QUERY_TYPE::BID) {
-                    player.leaveAuction();
-                    str = player.getClient()->getAccount()->getUsername() + " est sorti(e) de l'enchère.";
-                    this->updateAllClientsWithQuery(QUERY::HAS_LEAVE_AUCTION_WRONG_CMD, player.getClient()->getAccount()->getUsername());
-                    //this->updateAllClients(str);
-                }
-
-                // Commande /bid [montant]
-                if ( query == GAME_QUERY_TYPE::BID) {
-                    std::string new_bid_s;
-                    packet >> new_bid_s;
-                    std::cout << "Un joueur à enchéri " << new_bid_s << "e pour une propriété" << std::endl;
-                    int new_bid_i = std::stoi(new_bid_s);
-
-                    // Nouvelle enchère inférieure au précédent
-                    if ( new_bid_i <= bid ) {
-                        player.leaveAuction();
-                        str = player.getClient()->getAccount()->getUsername() + " est sorti(e) de l'enchère.";
-                        str += "\nSa proposition était inférieur par rapport au minimum requis !";
-                        //this->updateAllClients(str);
-                        this->updateAllClientsWithQuery(QUERY::HAS_LEAVE_AUCTION_TO_LOW_BID, player.getClient()->getAccount()->getUsername());
-                    }
-                    // Le joueur ayant fait l'enchère n'as pas les fonds nécessaires
-                    else if ( new_bid_i > player.getBankAccount()->getMoney() ) {
-                        player.leaveAuction();
-                        str = player.getClient()->getAccount()->getUsername() + " est sorti(e) de l'enchère.";
-                        str += "\nIel ne possède pas les fonds nécessaire pour faire cette enchère !";
-                        //this->updateAllClients(str);
-                        this->updateAllClientsWithQuery(QUERY::HAS_LEAVE_AUCTION_TO_HIGH_BID, player.getClient()->getAccount()->getUsername());
-
-                    }
-                    // Tout s'est bien passé ! Il a pu enchérir !
-                    else {
-                        str = player.getClient()->getAccount()->getUsername() + " a surenchéri de ";
-                        str += std::to_string(new_bid_i - bid) + "e !";
-                        this->updateAllClientsWithQuery(QUERY::AUCTION_NEW_BID, str);
-                        //this->updateAllClients(str);
-                        bid = new_bid_i;
-                    }
-                }
-            }
-        }
+    if ( player->isBankruptToPlayer() ) {
+        player->getPlayerToRefund()->receive(player->getDebt(), player->getUsername());
     }
+    player->pay(player->getDebt(), true);
+    player->resetDebt();
 }
 
 
-void GameServer::processBankruptcyToPlayer(){
-    for (auto property : game.getCurrentPlayer()->getAllProperties()){
-        property->setOwner(game.getCurrentPlayer()->getBankruptingPlayer());
-        game.getCurrentPlayer()->getBankruptingPlayer()->acquireProperty(*property);
+
+void GameServer::processBankruptByGame(ClientManager &client, Player *player) {
+    for ( auto property : player->getAllProperties() ) {
+        property->reset();
+        this->processAuction(client, player, property);
     }
-    for (auto company : game.getCurrentPlayer()->getAllCompanies()){
-        company->setOwner(game.getCurrentPlayer()->getBankruptingPlayer());
-        game.getCurrentPlayer()->getBankruptingPlayer()->acquireCompany(*company);
+    for ( auto station : player->getAllStations() ) {
+        station->reset();
+        this->processAuction(client, player, station);
     }
-    for (auto station : game.getCurrentPlayer()->getAllStations()){
-        station->setOwner(game.getCurrentPlayer()->getBankruptingPlayer());
-        game.getCurrentPlayer()->getBankruptingPlayer()->acquireStation(*station);
-    }
-    for (auto GOOJ_cards : game.getCurrentPlayer()->getAllGOOJCards()){
-        GOOJ_cards->setOwner(game.getCurrentPlayer()->getBankruptingPlayer());
-        game.getCurrentPlayer()->getBankruptingPlayer()->acquireGOOJCard(GOOJ_cards);
+    for ( auto company : player->getAllCompanies() ) {
+        company->reset();
+        this->processAuction(client, player, company);
     }
 }
+void GameServer::processBankruptByPlayer(ClientManager &client, Player *player, Player *other) {
+    this->updateThisClientWithQuery(QUERY::MESSAGE, "Vous venez de faire faillite, vous donnez toutes vos possessions à l'autre joueur", client);
+    this->game.processBankruptByPlayer(player, other);
+}
+
+void GameServer::processBankrupt(ClientManager &client, Player *player) {
+    if ( player->isBankruptToPlayer() ) { this->processBankruptByPlayer(client, player, player->getPlayerToRefund()); }
+    else {this->processBankruptByGame(client, player); }
+    player->setStatus(PLAYER_STATUS::LOST);
+}
+
+void GameServer::processLost(ClientManager &client) {
+    this->game.removePlayer(client);
+    client.setRankForActualGame(this->clients.size() - this->game.getPlayersSize());
+}
+
+
+/*--------------------------------------------------------------------------------------------------------------------*/
 
 
 

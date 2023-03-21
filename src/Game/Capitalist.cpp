@@ -148,7 +148,7 @@ void Capitalist::addPlayer(ClientManager &client) {
  * Remove a player from the Players list by matching his client address
  */
 void Capitalist::removePlayer(ClientManager &client) {
-    int i = 0;
+    unsigned int i = 0;
     while ( i < this->players.size() ) {
         if (this->players[i].getClient() == &client) {
             this->players[i] = this->players[this->players.size()-1];
@@ -231,55 +231,6 @@ Dice& Capitalist::getDice() {
 }
 
 
-
-/*
- * Start an auction and clear everyone from the thing that know who is in the auction
- * (Player will be added to this thing after doing a /participate)
- */
-void Capitalist::startAuction() {
-    this->auction_in_progress = AuctionStatus::START;
-    for ( auto &player : this->players ) {
-        player.clearAuction();
-    }
-}
-
-/*
- * Stop the auction
- */
-void Capitalist::stopAuction() {
-    this->auction_in_progress = AuctionStatus::STOP;
-}
-
-/*
- * Allow to set the auctionStatus
- */
-void Capitalist::setAuctionProgress(AuctionStatus progress) {
-    this->auction_in_progress = progress;
-}
-
-/*
- * Return teh auction status
- */
-AuctionStatus Capitalist::getAuctionStatus() const {
-    return this->auction_in_progress;
-}
-
-/*
- * Return a pointer to the last player in the auction if he is alone.
- * If there is still other player with him, return nullptr.
- */
-Player* Capitalist::getAuctionWinner() {
-    int count = 0;
-    Player* winner = nullptr;
-    for ( auto &player: this->players ) {
-        if ( player.isInAuction() ) { count++; winner = &player; }
-        if ( count > 1 ) { return nullptr; }
-    }
-    return winner;
-}
-
-
-
 /*
  * Allow to set the exchange status
  */
@@ -360,18 +311,18 @@ void Capitalist::processJailRoll(Player *player) {
     player->addRollInPrison();
     if ( this->rolledADouble() ) {
         this->dice.resetDoubleCounter();
+        player->setStatus(PLAYER_STATUS::FREE);
         player->processMove(PRISON_INDEX + roll_result, this->getBoard());
         player->getCurrentCell()->action(player);
-        player->setStatus(PLAYER_STATUS::FREE);
         player->resetRollInPrison();
         return;
     }
     else if ( player->getRollsInPrison() == 3 ) {
         this->dice.resetDoubleCounter();
         player->pay(50, true);
+        if (player->getStatus() == PLAYER_STATUS::JAILED) { player->setStatus(PLAYER_STATUS::FREE); }
         player->processMove(PRISON_INDEX + roll_result, this->getBoard());
         player->getCurrentCell()->action(player);
-        if (player->getStatus() == PLAYER_STATUS::JAILED) { player->setStatus(PLAYER_STATUS::FREE); }
         player->resetRollInPrison();
     }
 }
@@ -464,4 +415,18 @@ void Capitalist::shufflePlayers() {
     std::random_device rd;  // Will be used to obtain a seed for the random number engine
     std::mt19937 gen(rd());
     std::shuffle(std::begin(this->players), std::end(this->players), rd);
+}
+
+
+bool Capitalist::checkBankrupt(Player *player) {
+    return player->getDebt() > player->getPatrimoine();
+}
+
+void Capitalist::processBankruptByPlayer(Player *player, Player *other) {
+    for ( auto property : player->getAllProperties() ) { property->exchange(other, 0); }
+    for ( auto station : player->getAllStations() ) { station->exchange(other, 0); }
+    for ( auto company : player->getAllCompanies() ) { company->exchange(other, 0); }
+    /*TODO : donner les cartes sortie de prison*/
+    other->receive(player->getMoney(), player->getUsername());
+    player->pay(player->getMoney(), true);
 }
