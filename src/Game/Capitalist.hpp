@@ -91,6 +91,8 @@ public:
 
     void shufflePlayers();
 
+    void setRunning(bool new_running);
+
 
 };
 

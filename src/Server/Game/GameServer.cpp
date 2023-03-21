@@ -123,6 +123,16 @@ void GameServer::playerExchangeInfos(ClientManager &client) {
 
 }
 
+void GameServer::playerDebtInfos(ClientManager &client, Player* player) {
+    std::string str = "";
+    str += std::to_string(player->getDebt() - player->getMoney());
+    str += ":";
+    if (player->isBankruptToPlayer()) {str += player->getPlayerToRefund()->getUsername();}
+    else { str += "BANK"; }
+    this->updateThisClientWithQuery(QUERY::INFOS_DEBT, str, client);
+}
+
+
 // GESTION CLIENT
 
 /*
@@ -255,6 +265,9 @@ int GameServer::clientLoop(ClientManager &client) {
     }
     // SET RANK FOR WINNER
     if ( this->game.getWinner() == me->getClient() ) { client.setRankForActualGame(1); }
+    // clean clients
+    this->game.setRunning(false);
+    updateThisClientWithQuery(QUERY::ENDGAME, "ENDGAME", client);
     // RETURN RANK
     return client.getRankForActualGame();
 }
@@ -602,23 +615,6 @@ void GameServer::processAuction(ClientManager &client, Player *me, Land* land) {
     }
 }
 
-
-/*--------------------------------------------------------------------------------------------------------------------*/
-
-void GameServer::suspectBankrupt(Player *player) {
-    if (this->game.checkBankrupt(player)) { player->setStatus(PLAYER_STATUS::BANKRUPT_CONFIRMED); }
-    else { player->setStatus(PLAYER_STATUS::DEBT); }
-}
-
-void GameServer::playerDebtInfos(ClientManager &client, Player* player) {
-    std::string str = "";
-    str += std::to_string(player->getDebt() - player->getMoney());
-    str += ":";
-    if (player->isBankruptToPlayer()) {str += player->getPlayerToRefund()->getUsername();}
-    else { str += "BANK"; }
-    this->updateThisClientWithQuery(QUERY::INFOS_DEBT, str, client);
-}
-
 void GameServer::processPayDebt(ClientManager &client, Player *player) {
     while ( player->isBankrupt() ) {
         this->playerDebtInfos(client, player);
@@ -634,6 +630,16 @@ void GameServer::processPayDebt(ClientManager &client, Player *player) {
     player->pay(player->getDebt(), true);
     player->resetDebt();
 }
+
+
+/*--------------------------------------------------------------------------------------------------------------------*/
+
+void GameServer::suspectBankrupt(Player *player) {
+    if (this->game.checkBankrupt(player)) { player->setStatus(PLAYER_STATUS::BANKRUPT_CONFIRMED); }
+    else { player->setStatus(PLAYER_STATUS::DEBT); }
+}
+
+
 
 
 

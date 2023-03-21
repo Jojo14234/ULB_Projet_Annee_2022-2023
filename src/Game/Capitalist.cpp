@@ -430,3 +430,7 @@ void Capitalist::processBankruptByPlayer(Player *player, Player *other) {
     other->receive(player->getMoney(), player->getUsername());
     player->pay(player->getMoney(), true);
 }
+
+void Capitalist::setRunning(bool new_running) {
+    this->running = new_running;
+}
