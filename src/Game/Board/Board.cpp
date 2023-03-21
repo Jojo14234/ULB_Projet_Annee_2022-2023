@@ -26,14 +26,13 @@ Board::Board() {
 void Board::initDecksCardLand(){
     this->community_deck = std::make_shared<CardDeck>("COMMUNITY DECK");
     this->lucky_deck = std::make_shared<CardDeck>("LUCKY DECK");
-
     Json::Value root;
     std::ifstream file(CELL_DATA);
     file >> root;
-
     //draw card land
     Json::Value community_card_list = root["DRAW CARD"]["COMMUNITY"];
     this->extractDeckCard(community_card_list, this->community_deck, "Community");
+
     Json::Value lucky_card_list = root["DRAW CARD"]["LUCKY"];
     this->extractDeckCard(lucky_card_list, this->lucky_deck, "Lucky");
     std::cout << "[Init all    deck card lands : 100%]" << std::endl;

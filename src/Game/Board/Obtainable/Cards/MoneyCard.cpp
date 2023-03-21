@@ -2,6 +2,7 @@
 #include "../../../Player/Player.hpp"
 #include "../../../../Server/ClientManager/ClientManager.hpp"
 #include "../Cells/Land/Property.hpp"
+#include "../../../../Server/Game/GameServer.hpp"
 
 
 void MoneyCard::action(Player* player) {
@@ -25,16 +26,16 @@ void MoneyCard::action(Player* player) {
 void FromOtherMoneyCard::action(Player* player) {
         std::vector<Player>* players = player->getClient()->getGameServer()->getGame()->getPlayers();
         for (auto &other_player : *players) {
-            if (not player == &other_player) {  //opti calcul nombre de gens et somme total
-                other_player->forcedPay(amount);
-                player->receive(amount);        //MoneyCard::action() ?
+            if (player != &other_player) {  //opti calcul nombre de gens et somme total
+                other_player.pay(amount, true);
+                player->receive(amount, other_player.getUsername());        //MoneyCard::action() ?
             }
         }
 }
 
 void ChoiceMoneyCard::action(Player* player) {
         std::string msg = "amende: /select amende | carte: /select carte";
-        player->getClient()->sendQueryMsg(msg, QUERY::SELECT);
+        player->getClient()->sendQueryMsg(msg, QUERY::MESSAGE);
 
         std::string answer;
         GAME_QUERY_TYPE query;
@@ -44,7 +45,7 @@ void ChoiceMoneyCard::action(Player* player) {
         packet >> answer;
 
         if (answer == "amende") {
-            player->forcedPay(this->amount);    //MoneyCard::action() ?
+            player->pay(this->amount, true);    //MoneyCard::action() ?
         }
         else if (answer == "carte") {
             CardDeck* deck = player->getClient()->getGameServer()->getDeck(this->deck_name);

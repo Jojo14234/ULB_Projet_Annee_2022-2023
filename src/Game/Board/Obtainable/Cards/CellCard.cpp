@@ -10,22 +10,22 @@ void CellCard::action(Player* player) {
 }
 
 void MoveBackCellCard::action(Player* player){
-        int current_pos = player.getCurrentCell().getPosition();
+        int current_pos = player->getCurrentCell()->getPosition();
         this->setDest(current_pos-step_back);
-        this->CellCard::action();
+        this->CellCard::action(player);
 }
 
 void NearestCellCard::action(Player* player){
-        int current_pos = player.getCurrentCell().getPosition();
+        int current_pos = player->getCurrentCell()->getPosition();
         std::array<int, 4> dest_pos = this->makeDestArray(current_pos);
         int nearest_dest = this->searchMinIdx(dest_pos);
         this->setDest(nearest_dest);
-        this->CellCard::action();
+        this->CellCard::action(player);
 }
 
 int NearestCellCard::searchMinIdx(std::array<int, 4> dest_pos) {
     int min_idx = 0;
-    for (int i=0; i<4, i++){
+    for (int i=0; i < 4; i++){
         if (dest_pos[i] > 0) {
             if (dest_pos[i] < dest_pos[min_idx]) {
                 min_idx = i;
