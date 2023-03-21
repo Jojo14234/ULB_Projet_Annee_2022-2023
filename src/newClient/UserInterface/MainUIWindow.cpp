@@ -39,6 +39,9 @@ void MainUIWindow::draw() {
 	this->window.display();
 }
 
+void MainUIWindow::clear() {
+	this->window.clear(sf::Color::Black);
+}
 
 // Public
 
@@ -57,6 +60,7 @@ void MainUIWindow::mainLoop() {
 		this->window.waitEvent(event);
 		if (event.type == sf::Event::Closed) break; 
 		this->controller.handle(this->state, event);
+		this->clear();
 		this->draw();
 	}
 }

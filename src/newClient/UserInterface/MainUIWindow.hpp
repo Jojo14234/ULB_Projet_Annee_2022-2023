@@ -22,6 +22,8 @@ class MainUIWindow: public AbstractMainWindow<STATE, sf::Event>, public Abstract
 
 	void draw() override;
 
+	void clear();
+
 public:
 	
 	MainUIWindow();
