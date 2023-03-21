@@ -46,7 +46,7 @@
 			"name" : "Brun1",
 			"pos" : 1,
 			"color" : 1,
-			"rent prices" : [2, 10, 30, 90, 160, 250],
+			"rent prices" : [1000, 10, 30, 90, 160, 250],
 			"purchase price" : 60,
 			"construct price" : 50
 		},
@@ -55,7 +55,7 @@
 			"name" : "Brun2",
 			"pos" : 3,
 			"color" :1,
-			"rent prices" : [4, 20, 60, 180, 320, 450],
+			"rent prices" : [1000, 20, 60, 180, 320, 450],
 			"purchase price" : 60,
 			"construct price" : 50
 		},

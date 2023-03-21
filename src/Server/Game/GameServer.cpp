@@ -393,10 +393,12 @@ void GameServer::processBuild(ClientManager &client, Player *player) {
 void GameServer::processSellBuild(ClientManager &client, Player *player) {
     // récupérer toute les propriétés en état de perdre une maison
     this->playerSellBuildInfos(client);
+
     GAME_QUERY_TYPE query;
     std::string property_name;
     sf::Packet packet;
     client.receive(query, packet);
+
     while ( query != GAME_QUERY_TYPE::LEAVE_SELECTION ) {
         if ( query != GAME_QUERY_TYPE::SELECT ) {
             this->playerSellBuildInfos(client);
@@ -411,7 +413,7 @@ void GameServer::processSellBuild(ClientManager &client, Player *player) {
         }
 
         // SELL PROCESS DIDN'T WORK
-        this->playerBuildInfos(client);
+        this->playerSellBuildInfos(client);
         client.receive(query, packet);
     }
     this->updateThisClientWithQuery(QUERY::MESSAGE, "Vous quittez le mode de sélection", client);
@@ -621,7 +623,7 @@ void GameServer::processPayDebt(ClientManager &client, Player *player) {
     while ( player->isBankrupt() ) {
         this->playerDebtInfos(client, player);
         GAME_QUERY_TYPE query = this->getGameQuery(client);
-
+        this->game.getBetterGameInfos();
         if ( query == GAME_QUERY_TYPE::SELL_BUILDINGS ) { this->processSellBuild(client, player); continue; }
         if ( query == GAME_QUERY_TYPE::MORTGAGE )       { this->processMortgage(client, player); continue; }
     }

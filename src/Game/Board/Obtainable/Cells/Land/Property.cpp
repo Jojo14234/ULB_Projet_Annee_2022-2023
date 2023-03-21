@@ -36,7 +36,7 @@ bool Property::isBuildable(Player *player) {
     if ( this->isMortgaged() )                                { return false; }
     if ( this->getLevel() == PROPERTY_LEVEL::HOTEL )          { /*player->getClient()->send("Le niveau max de construction est atteint (construction refusée)");*/ return false; }
     if ( !this->hasAllSameColorProperties(player) )           { /*player->getClient()->send("Vous ne possédez pas toutes les propriété de la même couleur (construction refusée)");*/ return false;}
-    if ( !this->AllSameColorPropertiesHaveGoodLevel(player) ) { /*player->getClient()->send("L'écart de niveau entre vos propriété de la même couleur est trop grand (construction refusée)");*/ return false; }
+    if ( !this->AllSameColorPropertiesHaveGoodLevel(player, false) ) { /*player->getClient()->send("L'écart de niveau entre vos propriété de la même couleur est trop grand (construction refusée)");*/ return false; }
     if ( player->getBankAccount()->getMoney() < this->construct_price ) { /*player->getClient()->send("Vous êtes trop pauvre que pour construire un bâtiment sur cette propriété(construction refusée)");*/ return false; }
     return true;
 }
@@ -44,6 +44,7 @@ bool Property::isBuildable(Player *player) {
 bool Property::canSellBuilding(Player* player) {
     if ( this->owner != player ) { /*player->getClient()->send("Vous n'êtes pas propriétaire de cette propriété (vente refusée)");*/ return false; }
     if ( this->getLevel() == PROPERTY_LEVEL::EMPTY ) { /*player->getClient()->send("Aucun bâtiment à vendre sur cette propriété (vente refusée)");*/ return false; }
+    std::cout << std::endl;
     if ( !this->AllSameColorPropertiesHaveGoodLevel(player, true) ) { /*player->getClient()->send("Les niveaux de vos construction ne seront pas équilibrée (vente refusée)");*/ return false;}
     return true;
 }
@@ -78,9 +79,10 @@ bool Property::hasAllSameColorProperties(Player* player) {
  * et les autres que possède le joueur est supérieur à 1.
  */
 bool Property::AllSameColorPropertiesHaveGoodLevel(Player* player, bool sell) {
-    int add_to_level = (sell) ? -1 : 1 ;
+    int add_to_level = (sell) ? (-1) : 1 ;
     for (auto property : getOtherSameColorPropFromPlayer(player)) {
-        if ( this->getIntLevel() + add_to_level - property->getIntLevel() > 1 ) { return false; }
+        int calcLvl = this->getIntLevel() + add_to_level - property->getIntLevel();
+        if ( calcLvl > 1 || calcLvl < -1) { return false; }
     }
     return true;
 }
