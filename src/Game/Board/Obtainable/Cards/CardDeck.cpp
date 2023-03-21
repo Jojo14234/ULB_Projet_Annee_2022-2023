@@ -38,7 +38,7 @@ CardDeck::CardDeck(std::string name): name{name} {
     		Json::Value current = cell_cards[i];
     		std::array<4, int> dest_list;
     		for (int i=0; current["dest"].size(); i++) {dest_list[i] = current["dest"][i];}
-    		this->card_list[idx] = std::make_shared<NearestCellCard>(current["descript"].asString(), current["money"].asBool());
+    		this->card_list[idx] = std::make_shared<NearestCellCard>(current["descript"].asString(), current["money"].asBool(), dest_list);
     	}
     	else if (cell_cards[i]["dest"].asInt() < 0) {
     		Json::Value current = cell_cards[i];

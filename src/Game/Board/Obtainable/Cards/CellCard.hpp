@@ -58,7 +58,7 @@ private:
 	std::array<int, 4> makeDestArray(int current_pos);
 
 public:
-	NearestCellCard(std::string descript, bool gain_money, Json::Value pos_info): CellCard{descript, 0, gain_money} { }	//passer l'array ici ou faire ici
+	NearestCellCard(std::string descript, bool gain_money, std::array<int, 4> dest_array): CellCard{descript, 0, gain_money}, near_pos{dest_array} { }	//passer l'array ici ou faire ici
 
 	void action(Player* player) override;
 };

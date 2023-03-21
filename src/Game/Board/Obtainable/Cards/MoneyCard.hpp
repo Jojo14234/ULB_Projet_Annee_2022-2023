@@ -17,15 +17,14 @@
 class Player;
 
 class MoneyCard: public Card {
+protected:
+	int amount;	//reflechir à garder montant negatif si retire argent ou pas
 
 private:
 	//"Versez pour chaque maison 25$. Versez pour chaque hôtel 80$."
 	int amount_house;
 	int amount_hotel;
 	bool receive; //1 true, reçoit l'amount, sinon retire l'amount perd argent
-
-protected:
-	int amount;	//reflechir à garder montant negatif si retire argent ou pas
 
 public:
 	
@@ -49,7 +48,7 @@ private:
 	std::string deck_name;
 
 public:
-	ChoiceMoneyCard(std::string descript, int amount, bool receive, std::string deckname): MoneyCard{descript, amount, receive}, deck_name{deck_name} {}
+	ChoiceMoneyCard(std::string descript, int amount, bool receive, std::string deckname): MoneyCard{descript, amount, receive}, deck_name{deckname} {}
 
 	void action(Player* player);
 
