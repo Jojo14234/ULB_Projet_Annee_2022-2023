@@ -172,6 +172,7 @@ void Client::gameLoop() {
     //this->in_game = true; //test
     std::thread send_thread(&Client::receiveFromServerLoop, this);
     this->sendToServerLoop();
+    send_thread.join();
     //this->in_game = false; //test
     std::cout << "Vous quittez la partie (Client.cpp client.gameLoop)" << std::endl;
 }

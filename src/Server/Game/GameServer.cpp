@@ -260,7 +260,6 @@ int GameServer::clientLoop(ClientManager &client) {
              * TODO : LeaveGame
              */
             sleep(1); // fait moins lag
-            continue;
         }
     }
     std::cout << "FIN DE LA PARTIE POUR " + client.getUsername() << std::endl;
@@ -299,8 +298,7 @@ void GameServer::clientTurn(ClientManager &client, Player* me) {
             if ( me->getStatus() == PLAYER_STATUS::BANKRUPT_SUSPECTED ) { this->suspectBankrupt(me); }
             if ( me->getStatus() == PLAYER_STATUS::DEBT ) { this->processPayDebt(client, me); }
             if ( me->getStatus() == PLAYER_STATUS::BANKRUPT_CONFIRMED ) { this->processBankrupt(client, me); }
-            if ( me->getStatus() == PLAYER_STATUS::LOST ) { this->processLost(client); continue; }
-
+            if ( me->getStatus() == PLAYER_STATUS::LOST ) { this->processLost(client); break; }
         }
     }
     // End of the turn
