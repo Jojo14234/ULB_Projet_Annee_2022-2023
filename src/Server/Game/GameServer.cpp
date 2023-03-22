@@ -263,6 +263,7 @@ int GameServer::clientLoop(ClientManager &client) {
             continue;
         }
     }
+    std::cout << "FIN DE LA PARTIE POUR " + client.getUsername() << std::endl;
     // SET RANK FOR WINNER
     if ( this->game.getWinner() == me->getClient() ) { client.setRankForActualGame(1); }
     // clean clients
@@ -298,6 +299,8 @@ void GameServer::clientTurn(ClientManager &client, Player* me) {
             if ( me->getStatus() == PLAYER_STATUS::BANKRUPT_SUSPECTED ) { this->suspectBankrupt(me); }
             if ( me->getStatus() == PLAYER_STATUS::DEBT ) { this->processPayDebt(client, me); }
             if ( me->getStatus() == PLAYER_STATUS::BANKRUPT_CONFIRMED ) { this->processBankrupt(client, me); }
+            if ( me->getStatus() == PLAYER_STATUS::LOST ) { this->processLost(client); continue; }
+
         }
     }
     // End of the turn
