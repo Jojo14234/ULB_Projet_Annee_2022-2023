@@ -218,7 +218,7 @@ GAME_QUERY_TYPE GameServer::getGameQuery(ClientManager &client) {
 /*
  * Loop for the client when he join the gameServer
  */
-int GameServer::clientLoop(ClientManager &client) {
+GameStats GameServer::clientLoop(ClientManager &client) {
     Player* me = this->findMe(client);
     this->clientsSizeData(client); // MESSAGE
 
@@ -245,13 +245,13 @@ int GameServer::clientLoop(ClientManager &client) {
             this->updateThisClientWithQuery(QUERY::INFOS_PLAYER_TURN, me->getUsername(), client);
 
             if ( me->getStatus() == PLAYER_STATUS::FREE ) { this->clientTurn(client, me); continue; }
-            if ( me->getStatus() == PLAYER_STATUS::LOST ) { this->processLost(client); continue; }
             if ( me->getStatus() == PLAYER_STATUS::JAILED ) { this->processJail(client, me); continue; }
-            if ( me->getStatus() == PLAYER_STATUS::BANKRUPT_SUSPECTED ) { /*TODO manage bankrupt*/; continue; }
+            if ( me->getStatus() == PLAYER_STATUS::LOST ) { this->processLost(client); continue; }
         }
         // POSSIBLE ACTION ITS NOT THE CLIENT TURN
         else {
             Player* me = this->findMe(client);
+            if ( !me ) { sleep(5); continue; }
             if ( me->getStatus() == PLAYER_STATUS::IN_EXCHANGE ) { this->processAskExchange(client, me); }
             if ( me->getStatus() == PLAYER_STATUS::ASK_AUCTION ) { this->processAskAuction(client, me); }
             if ( me->getStatus() == PLAYER_STATUS::WAITING_FOR_AUCTION_TURN ) { /*Il n'y a rien à faire à part attendre*/ }
@@ -262,14 +262,14 @@ int GameServer::clientLoop(ClientManager &client) {
             sleep(1); // fait moins lag
         }
     }
-    std::cout << "FIN DE LA PARTIE POUR " + client.getUsername() << std::endl;
-    // SET RANK FOR WINNER
-    if ( this->game.getWinner() == me->getClient() ) { client.setRankForActualGame(1); }
-    // clean clients
+    // STOP THE GAME
     this->game.setRunning(false);
+    // allow client to get out of the receiveFromServerLoop and SendToServerLoop
     updateThisClientWithQuery(QUERY::ENDGAME, "ENDGAME", client);
-    // RETURN RANK
-    return client.getRankForActualGame();
+
+    // RETURN STATS for winner and looser.
+    if ( this->game.getWinner() == &client ) { return GameStats{(int)this->clients.size(), 1, 1}; }
+    else { return GameStats{client.getScore(), 1, 0}; }
 }
 
 /*
@@ -296,7 +296,7 @@ void GameServer::clientTurn(ClientManager &client, Player* me) {
 
             // Vérification si le joueur est en faillite
             if ( me->getStatus() == PLAYER_STATUS::BANKRUPT_SUSPECTED ) { this->suspectBankrupt(me); }
-            if ( me->getStatus() == PLAYER_STATUS::DEBT ) { this->processPayDebt(client, me); }
+            if ( me->getStatus() == PLAYER_STATUS::DEBT ) { this->processPayDebt(client, me); continue; }
             if ( me->getStatus() == PLAYER_STATUS::BANKRUPT_CONFIRMED ) { this->processBankrupt(client, me); }
             if ( me->getStatus() == PLAYER_STATUS::LOST ) { this->processLost(client); break; }
         }
@@ -671,8 +671,8 @@ void GameServer::processBankrupt(ClientManager &client, Player *player) {
 }
 
 void GameServer::processLost(ClientManager &client) {
+    client.setScore(this->clients.size() - this->game.getPlayersSize() + 1);
     this->game.removePlayer(client);
-    client.setRankForActualGame(this->clients.size() - this->game.getPlayersSize());
 }
 
 

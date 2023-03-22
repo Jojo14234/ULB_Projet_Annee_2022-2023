@@ -78,9 +78,9 @@ void Database::print_in_file() {
 }
 
 int Database::getRankingPos(User* user) {
-	int idx = 0;
+	int idx = 1;
 	for (auto &u : this->data) if (u.getStats() > user->getStats()) idx++;
-	return idx + 1;
+	return idx;
 }
 
 void Database::emplace(const User* user, std::array<const User*, 5> &bests) {
@@ -107,6 +107,12 @@ std::array<const User*, 5> Database::getRanking() {
 	for (const auto &u : this->data) this->emplace(&u, bests);
 	this->user_am.unlockReader();
 	return bests;
+}
+
+void Database::resetRanking() {
+    for ( auto &user : this->data ) {
+        user.resetStats();
+    }
 }
 
 void Database::addUser(User user) { this->data.push_back(user); }

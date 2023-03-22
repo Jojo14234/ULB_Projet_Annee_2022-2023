@@ -149,14 +149,15 @@ void Capitalist::addPlayer(ClientManager &client) {
  */
 void Capitalist::removePlayer(ClientManager &client) {
     unsigned int i = 0;
-    while ( i < this->players.size() ) {
-        if (this->players[i].getClient() == &client) {
-            this->players[i] = this->players[this->players.size()-1];
-            this->players.pop_back();
-            break;
+    while (i < this->players.size()-1) {
+        Player player = this->players[i];
+        if (player.getClient() == &client) {
+            this->players[i] = this->players[i+1];
+            this->players[i+1] = player;
         }
         i++;
     }
+    this->players.pop_back();
 }
 
 /*

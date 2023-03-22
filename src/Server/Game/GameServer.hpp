@@ -43,7 +43,7 @@ public:
 
     void client_has_join_the_game(ClientManager &client);
 
-    int clientLoop(ClientManager &client);
+    GameStats clientLoop(ClientManager &client);
 
     Player* findMe(ClientManager &client);
 

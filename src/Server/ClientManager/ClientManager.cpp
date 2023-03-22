@@ -61,9 +61,8 @@ bool ClientManager::operator==(const ClientManager& other) { return this->tid ==
 
 
 void ClientManager::enterGameLoop() {
-    int place = this->game_server->clientLoop(*this);
-    GameStats newStat{(int)(1.0/place)*100, 1, 1};
-    this->getAccount()->updateStats(newStat);
+    GameStats stats = this->game_server->clientLoop(*this);
+    this->getAccount()->updateStats(stats);
 }
 
 void ClientManager::disconnect() { this->connected = false; }
@@ -93,8 +92,8 @@ void ClientManager::removeAccount() { this->account = nullptr; }
 void ClientManager::setGameServer(GameServer* gs) { this->game_server = gs; }
 void ClientManager::removeGameServer() { this->game_server = nullptr; }
 
-//
-void ClientManager::setRankForActualGame(int new_rank) { this->rankForActualGame = new_rank; }
+// Gestion stats
+void ClientManager::setScore(int new_score) { this->Score = new_score; }
 
-int ClientManager::getRankForActualGame() const { return this->rankForActualGame; }
+int ClientManager::getScore() const { return this->Score; }
 
