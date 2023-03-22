@@ -657,8 +657,9 @@ void GameServer::processBankruptByGame(ClientManager &client, Player *player) {
         this->processAuction(client, player, company);
     }
 }
+
 void GameServer::processBankruptByPlayer(ClientManager &client, Player *player, Player *other) {
-    this->updateThisClientWithQuery(QUERY::MESSAGE, "Vous venez de faire faillite, vous donnez toutes vos possessions à l'autre joueur", client);
+    this->updateThisClientWithQuery(QUERY::MESSAGE, "Vous venez de faire faillite, vous donnez toutes vos possessions au joueur ayant provoqué votre faillite.", client);
     this->game.processBankruptByPlayer(player, other);
 }
 
