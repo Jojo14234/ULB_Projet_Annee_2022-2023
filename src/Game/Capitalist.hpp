@@ -85,6 +85,13 @@ public:
     bool processMortgage(Player *player, std::string &name);
     bool processLiftMortgage(Player *player, std::string &name);
     bool processSendExchangeRequest(Player *player, std::string &name, int money);
+    std::vector<Player*> processAskAuction(Player *player, std::string &name);
+    bool checkBankrupt(Player *player);
+    void processBankruptByPlayer(Player *player, Player* other);
+
+    void shufflePlayers();
+
+    void setRunning(bool new_running);
 
 
 };

@@ -13,3 +13,11 @@ bool GameServerList::joinGame(ClientManager* client, int code) {
 		if (gs->isCode(code)) { gs->connectClientToThisGame(*client); return true; }
 	} return false;
 }
+
+void GameServerList::removeGameServer(int gc) {
+    for (auto game : *this) {
+        if (game->isCode(gc)) {
+            /*TODO remove gameServer*/
+        }
+    }
+}

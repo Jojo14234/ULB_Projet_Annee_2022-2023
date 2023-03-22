@@ -9,6 +9,7 @@ enum class QUERY {
 
     INFOS_START, // See sendStartData in GameServer for formatting
     INFOS_GAME, // See sendGameData in GameServer for formatting
+
     INFOS_NEW_TURN, // pseudo
     INFOS_PLAYER_MOVE, // username:cell_name:player_money
     INFOS_PLAYER_BOUGHT, // username:cell_name:player_money
@@ -17,6 +18,10 @@ enum class QUERY {
     INFOS_PLAYER_MOVE_ON_MORTGAGED_CELL, //username:owner_username
     INFOS_PLAYER_MOVE_ON_TAX_CELL, //tax_name:price:index:player_money
     INFOS_PLAYER_MOVE_ON_OWN_CELL, //username
+
+    //INFOS_PLAYER_TURN, // username // Inform the player that it's his turn
+
+
     PLAYER_JOIN_GAME, // username:gameCode [string]:[int]
 
     MESSAGE, // All indication message
@@ -36,9 +41,15 @@ enum class QUERY {
     INFOS_SELL_BUILD_SUCCESS, // property_name (indicate the level down) // TODO add lvl
     INFOS_MORTGAGE_SUCCESS, // property name of the mortgaged property
     INFOS_LIFT_MORTGAGE_SUCCESS, // property name of the lift mortgaged property
+    INFOS_EXCHANGE_SUCCESS, // PropertyName:new_propriétaire nom // Tells that the exchange was successfully made
+
+    INFOS_AUCTION_BID,
 
     ASK_EXCHANGE, // property_name:price // envoyé au propriétaire de la case pour lui demander si il souhaite accepter l'échange ou non
+    ASK_AUCTION, // property_name // envoyé à tout les joueurs pour leur demander de participer à l'enchère
+    STOP_WAIT, // Arrête l'échange ou l'enchère en cas de trop longue attente (NE PAS MODIF NI PARSE autrement DANS LE CLIENT)
 
+    INFOS_DEBT, // amount:username // Montant à rembourser à une joueur [int]:[string], si le username = BANK, c'est qu'il doit de l'argent à la banque
 
     DISCONNECT, // Disconnection
     RANKING, // Ranking

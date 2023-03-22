@@ -59,6 +59,7 @@ public:
     // GetRanking
 	int getRankingPos(User* user);
     std::array<const User*, 5> getRanking();
+    void resetRanking();
 
 	// Chat
 	Conversation* getConv(User* sender, User* receiver);

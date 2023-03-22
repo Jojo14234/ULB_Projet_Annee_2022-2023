@@ -89,6 +89,7 @@ void Server::clientProcessQuery(ClientManager &client, QUERY_TYPE query) {
 		// For ranking
 		case QUERY_TYPE::RANKING_POS:       this->clientProcessRankingPos(client); break;
 		case QUERY_TYPE::RANKING_TOP:       this->clientProcessRankingTop(client); break;
+        case QUERY_TYPE::RANKING_RESET:     this->clientProcessRankingReset(client); break;
 		// For friends
 		case QUERY_TYPE::FRIENDS_LIST:      this->clientProcessFriendsList(client); break;
 		case QUERY_TYPE::FRIENDS_REQUEST:   this->clientProcessFriendsRequest(client); break;
@@ -188,6 +189,11 @@ void Server::clientProcessRankingTop(ClientManager &client) {
 	client.send(input);
     std::cout << "['ranking top' query from client '" << client.getAccount()->getUsername() << "' was successful]\n" << std::endl;
 
+}
+
+void Server::clientProcessRankingReset(ClientManager &client) {
+    if (client.getUsername() == "admin") { this->database.resetRanking(); }
+    client.send("reset");
 }
 
 // For friends

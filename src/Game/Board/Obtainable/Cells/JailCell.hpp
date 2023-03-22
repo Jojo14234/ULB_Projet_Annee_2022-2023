@@ -12,10 +12,10 @@ class JailCell: public Cell {
 
     bool outWithMoney(Player *player, bool forced) {
         if (player->pay(50, forced)) {   //si n'arrive pas a payer
-            player->exitJail();
+            player->setExitJail();
             player->getClient()->send("Vous êtes sorti de prison !");
             return true;
-        } else if (forced == false) {
+        } else if (!forced) {
             return false;   //s'il a fait le choix de payer mais pas assez d'argent
             //continue à choisir un moyen de sortir de prison
             //(otherwise c'est bankrupt)
@@ -28,12 +28,12 @@ class JailCell: public Cell {
 
     bool outWithCard(Player *player) {
         if (player->hasGOOJCards()) {
-            player->exitJail();
+            player->setExitJail();
             player->looseGOOJCard();
             player->getClient()->send("Vous êtes sorti de prison !");
             return true;
         } else {   //echange demandé depuis prison, mettre à jour le player et sortie de boucle (boucle echange lancé dans game server)
-            player->exchangeFromJail();  //achete ou non une carte
+            player->setExchangeFromJail();  //achete ou non une carte
             return false;   //retour à la boucle de choix, si le joueur a acheter une carte, peut l'utiliser en choississant l'option GOOJ
         }
 
@@ -42,7 +42,7 @@ class JailCell: public Cell {
     bool outWithDice(Player *player, Dice dice) { //test les dés et apres fin du tour
         player->addRollInPrison();
         if (dice.isDouble()) {
-            player->exitJail();
+            player->setExitJail();
             player->getClient()->send("Vous êtes sorti de prison !");
             //penser à une méthode pour que le joueur joue (si pas le temps, juste freed et tour du joueur suivantS)
             return true;

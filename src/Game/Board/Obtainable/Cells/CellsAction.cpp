@@ -68,7 +68,7 @@ void LandCell::action(Player* player) {
 
 
             // TODO JOACHIM ????? ELLE FAIT QUOI CETTE LIGNE ??????
-            if ( player->getStatus() == PLAYER_STATUS::BANKRUPT ) { player->setBankruptingPlayer(land->getOwner()); }
+            if ( player->getStatus() == PLAYER_STATUS::BANKRUPT_SUSPECTED ) { player->setPlayerToRefund(land->getOwner()); }
 		}
 
 		else if ( land->getStatus() == LAND_STATUS::HYPOTEK ) {

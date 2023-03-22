@@ -3,25 +3,25 @@
 			{
 				"name" : "Gare1",
 				"pos" : 5,
-				"purchase_price" : 200
+				"purchase price" : 200
 			},
 		
 			{
 				"name" : "Gare2",
 				"pos" : 15,
-				"purchase_price" : 200
+				"purchase price" : 200
 			},
 		
 			{
 				"name" : "Gare3",
 				"pos" : 25,
-				"purchase_price" : 200
+				"purchase price" : 200
 			},
 		
 			{
 				"name" : "Gare4",
 				"pos" : 35,
-				"purchase_price" : 200
+				"purchase price" : 200
 			}
 		],
 	
@@ -29,13 +29,13 @@
 			{
 				"name" : "Elec",
 				"pos" : 12,
-				"purchase_price" : 150
+				"purchase price" : 150
 			},
 			
 			{
 				"name" : "Eau",
 				"pos" : 28,
-				"purchase_price" : 150
+				"purchase price" : 150
 			}
 		],
 	
@@ -46,7 +46,7 @@
 			"name" : "Brun1",
 			"pos" : 1,
 			"color" : 1,
-			"rent prices" : [2, 10, 30, 90, 160, 250],
+			"rent prices" : [1000, 10, 30, 90, 160, 250],
 			"purchase price" : 60,
 			"construct price" : 50
 		},
@@ -55,7 +55,7 @@
 			"name" : "Brun2",
 			"pos" : 3,
 			"color" :1,
-			"rent prices" : [4, 20, 60, 180, 320, 450],
+			"rent prices" : [1000, 20, 60, 180, 320, 450],
 			"purchase price" : 60,
 			"construct price" : 50
 		},

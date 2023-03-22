@@ -21,6 +21,9 @@ void GameInputParser::parse() {
     else if ( query == "/accept" )      { this->query_type = GAME_QUERY_TYPE::ACCEPT; }
     else if ( query == "/refuse" )      { this->query_type = GAME_QUERY_TYPE::REFUSE; }
 
+    else if ( query == "/participate" ) { this->query_type = GAME_QUERY_TYPE::PARTICIPATE; } // Participe à une enchère
+
+
 
 
 
