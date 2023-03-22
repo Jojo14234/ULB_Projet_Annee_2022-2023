@@ -11,16 +11,18 @@
 class Cell: public Obtainable {
 
     int position;
+    std::string name;
 
 public:
 
-	Cell(int pos): position{pos} {}
+	Cell(int pos, std::string name = "Undefined"): position{pos}, name{name} {}
     
 	virtual ~Cell()=default;
 
 	virtual void action(Player* player) override =0;
 
-    int getPosition() { return position; }
+    int getPosition() const { return position; }
+    std::string getName() { return name; }
 
 };
 

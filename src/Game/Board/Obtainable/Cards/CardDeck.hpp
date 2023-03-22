@@ -17,11 +17,14 @@
 #include "Card.hpp"
 #include "MoneyCard.hpp"
 #include "CellCard.hpp"
+#include "JailCard.hpp"
+
 
 
 class CardDeck {
 	
 	std::array<std::shared_ptr<Card>, 16> card_list; // + ajouter carte prison
+    std::string name;
 
 public:
 
@@ -30,6 +33,10 @@ public:
 	CardDeck(std::string name);
 
 	Card* drawACard();
+
+    bool isJailCardInside();
+
+    void replaceJailCard();
 
 };
 

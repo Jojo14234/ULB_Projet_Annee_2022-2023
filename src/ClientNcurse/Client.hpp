@@ -22,6 +22,9 @@ class Client {
 	int game_code = 0;
 	bool is_creator = false;
 	std::string user_name;
+	bool is_my_turn = false;
+	std::string player_turn;
+
 
 public:
 
@@ -43,6 +46,12 @@ public:
 	void createGame() { is_creator = true; }
 	void leaveGame() { is_creator = false; } 
 	bool isCreator() { return is_creator; }
+	bool isMyTurn() { return is_my_turn; }
+	void startTurn() { is_my_turn = true; }
+	void endTurn() { is_my_turn = false; }
+
+	std::string getPlayerTurn() { return player_turn; }
+	void setPlayerTurn(const std::string &player) { player_turn = player; }
 	
 	std::string getUsername() { return user_name; }
 };

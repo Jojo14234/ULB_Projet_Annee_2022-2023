@@ -17,7 +17,9 @@ void Client::mainLoop() {
         this->ui.connexionMsg();
 
         // Connection to an account
-        while (!this->connected_to_an_account) {if (!this->connectionLoop()) { return; }}
+        while (!this->connected_to_an_account) {
+            if (!this->connectionLoop()) { return; }
+        }
         // ConnectionLoop returns false if the user want to quit the application
         // ConnectionLoop returns true if the user have not succeeded to log into it's account
         // The only way to know if the user is connected to its account is through the variable `connect_to_an_account`
@@ -29,15 +31,25 @@ void Client::mainLoop() {
 
             std::string output;
             this->sendToServer(parser);     // send the input to the server
-            this->receiveFromServer(output);  // get the output from the server
-            output = this->analyseServerResponse(output); // Analyse the output
+            QUERY query = this->receiveFromServer2(output);  // get the output from the server
 
-            // Enter the gameLoop if output from the server is "GAME" or if the query correspond to CREATE_GAME
-            if (output == "GAME" or parser.getQueryType() == QUERY_TYPE::CREATE_GAME) { this->in_game = true; this->gameLoop(); }
-            // If not entered the game, just show the output.
-            else { std::cout << output << std::endl; }
+            this->parseQuery(query, output); // Analyse the output
         }
     }
+}
+
+void Client::parseQuery(QUERY query, std::string output) {
+    switch (query) {
+        case QUERY::DISCONNECT : this->connected_to_an_account = false; showMsg("Déconnexion de votre compte"); break;
+        case QUERY::RANKING : showMsg(output); break;
+        case QUERY::PLAYER_JOIN_GAME : this->in_game = true; showMsg(output, query) ;this->gameLoop(); break;
+        case QUERY::MESSAGE : showMsg(output);
+        default : break;
+    }
+}
+
+void Client::showMsg(std::string msg, QUERY query) {
+    std::cout << "["<<(int)query<<"] " << msg << std::endl;
 }
 
 
@@ -51,8 +63,6 @@ void Client::connectToServer() {
 void Client::disconnectFromServer() {
     MainInputParser input{"/disconnect"};
 	this->sendToServer(input);
-	std::string output;
-	this->receiveFromServer(output);
 	this->ui.disconnect();
 }
 
@@ -94,6 +104,7 @@ void Client::sendToServer(const GameInputParser &input) {
         case GAME_QUERY_TYPE::BID    :
         case GAME_QUERY_TYPE::SELECT : packet << input[1]; break;
         // Add both of the first and second arguments to the packet
+        case GAME_QUERY_TYPE::TRADE  :
         case GAME_QUERY_TYPE::ARG2   : packet << input[1] << input[2]; break;
 		default : break;
 	}
@@ -108,26 +119,23 @@ void Client::receiveFromServer(std::string &output) {
     packet >> output; // Extract the content of the socket
 }
 
-bool Client::checkAccountConnection(std::string &output, QUERY_TYPE query) {
-    // Show the right message on the screen in function of the connection output and the query
-    if      (output != "TRUE" and query == QUERY_TYPE::REGISTER)  { this->ui.refuseRegister(); }
-    else if (output != "TRUE" and query == QUERY_TYPE::LOGIN)     { this->ui.refuseLogin(); }
-    else if (output != "FALSE" and query == QUERY_TYPE::REGISTER) { this->ui.acceptRegister(); }
-    else if (output != "FALSE" and query == QUERY_TYPE::LOGIN)    { this->ui.acceptLogin(); }
-    // Return whether or not the connection between the account and the client was made
-    return output == "TRUE";
+QUERY Client::receiveFromServer2(std::string &output) {
+    sf::Packet packet;
+    int query;
+    // Throw an error if it can't read the socket
+    if (this->socket.receive(packet) != sf::Socket::Done) { throw ReadPipeClientException(); }
+    packet >> query >> output; // Extract the content of the socket
+    return static_cast<QUERY>(query);
 }
 
-
-std::string Client::analyseServerResponse(std::string &output) {
-    // Déconnexion du compte
-    if      ( output == "DISCONNECT" ) { this->connected_to_an_account = false; return "Déconnexion de votre compte !";}
-        // Affichage du classement
-    else if ( output[0] == '1' and output[1] == '.' ) { return output + "Fin du classement !"; }
-        // Rentrer dans une partie (useless for now)
-    else if ( output == "GAME" ) { return output; }
-        // Autre
-    else { return output; }
+bool Client::checkAccountConnection(QUERY output, QUERY_TYPE query) {
+    // Show the right message on the screen in function of the connection output and the query
+    if      (output == QUERY::FALSEQ and query == QUERY_TYPE::REGISTER)  { this->ui.refuseRegister(); }
+    else if (output == QUERY::FALSEQ and query == QUERY_TYPE::LOGIN)     { this->ui.refuseLogin(); }
+    else if (output == QUERY::TRUEQ and query == QUERY_TYPE::REGISTER) { this->ui.acceptRegister(); }
+    else if (output == QUERY::TRUEQ and query == QUERY_TYPE::LOGIN)    { this->ui.acceptLogin(); }
+    // Return whether or not the connection between the account and the client was made
+    return output == QUERY::TRUEQ;
 }
 
 bool Client::connectionLoop() {
@@ -141,12 +149,13 @@ bool Client::connectionLoop() {
         AuthentificationManager authentication{parser[1], parser[2]};
         authentication.showErrorMessage(ui);         // Show error message if needed
 
+
         if (authentication.isValid()) {
             std::string output;
             this->sendToServer(parser);   // send the input to the server
-            this->receiveFromServer(output);// get the output from the server
+            QUERY query1 = this->receiveFromServer2(output);// get the output from the server
             // Update the `connected_to_an_account` variable with the output from the server
-            this->connected_to_an_account = this->checkAccountConnection(output, query);
+            this->connected_to_an_account = this->checkAccountConnection(query1, query);
         }
         return true;
     }
@@ -159,12 +168,13 @@ bool Client::connectionLoop() {
 }
 
 void Client::gameLoop() {
-    std::cout << "Vous entrez dans une partie" << std::endl;
+    //std::cout << "Vous entrez dans une partie (Client.cpp client.gameLoop)" << std::endl;
     //this->in_game = true; //test
     std::thread send_thread(&Client::receiveFromServerLoop, this);
     this->sendToServerLoop();
+    send_thread.join();
     //this->in_game = false; //test
-    std::cout << "Vous quittez la partie" << std::endl;
+    std::cout << "Vous quittez la partie (Client.cpp client.gameLoop)" << std::endl;
 }
 
 void Client::sendToServerLoop() {
@@ -179,9 +189,12 @@ void Client::sendToServerLoop() {
 void Client::receiveFromServerLoop() {
     while (this->in_game) {
         std::string output;
-        this->receiveFromServer(output); // get the output from the server
-        //std::cout << "receiveFromServerLoop" << std::endl;
-        if( output == "ENDGAME" ) { this->in_game = false; } // If output is "ENDGAME" it should stop the loop.
+        QUERY query = this->receiveFromServer2(output); // get the output from the server
+        if (query == QUERY::STOP_WAIT) {
+            std::cout << "Received stop time exchange" << std::endl;
+            this->sendToServer(GameInputParser{output});
+        }
+        if( query == QUERY::ENDGAME ) { this->in_game = false; } // If output is "ENDGAME" it should stop the loop.
         else { std::cout << output << std::endl; }
     }
 }

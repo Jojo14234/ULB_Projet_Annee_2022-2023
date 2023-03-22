@@ -16,7 +16,7 @@
             
 			{
                 "descript" : "Vous avez gagné le prix de mots croisés. Recevez 100$.",
-                "amount" : 10,
+                "amount" : 100,
                 "amount house" : 0,
                 "amount hotel" : 0,
                 "receive" : 1
@@ -87,9 +87,9 @@
 			},
             
 			{ 
-                "descript" : "Avancez jusqu’à la case départ",
+                "descript" : "Avancez jusqu’à la case départ, et touchez 200$",
                 "dest" : 0,
-                "money" : 0
+                "money" : 1
             },
             
 			{ 
@@ -164,7 +164,7 @@
                 "amount" : 15,
                 "amount house" : 0,
                 "amount hotel" : 0,
-                "receive" : 1
+                "receive" : -1
             },
             
             {
@@ -196,7 +196,7 @@
                 "amount" : 15,
                 "amount house" : 0,
                 "amount hotel" : 0,
-                "receive" : 0
+                "receive" : -2
             },
             
             {
@@ -226,20 +226,20 @@
             },
         
             { 
-                "descript" : "Placez-vous sur la case départ",
+                "descript" : "Placez-vous sur la case départ, et recevez 200$",
                 "dest" : 0,
-                "money" : 0
+                "money" : 1
             },
             
             { 
-                "descript" : "Retournez à la propriété brune 1",
+                "descript" : "Retournez à la propriété brune 1. Si vous passez par la case départ, recevez 200$",
                 "dest" : 1,
-                "money" : 0
+                "money" : 1
             },
                
             {
                 "descript" : "Rendez-vous à la gare la plus proche. Si vous passez par la case départ, recevez 200$.",
-                "dest" : 5,
+                "dest" : [5, 15, 25, 35],
                 "money" : 1        
             }
         ]

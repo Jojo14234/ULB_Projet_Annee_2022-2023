@@ -12,6 +12,9 @@ int Die::roll(){
     std::uniform_int_distribution<> distrib(1, 6);
 
     result = distrib(gen);
+    result = 4;
     return result;
 }
-int Die::getResult() { return result; }
+int Die::getResult() const { return result; }
+
+void Die::setResult(int new_result) { this->result = new_result; }

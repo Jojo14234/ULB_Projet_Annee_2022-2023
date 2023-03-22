@@ -8,7 +8,7 @@
 // SEND INFOS TO THE CLIENT
 void ClientManager::send(const std::string &input) {
 	sf::Packet packet;
-	packet << input;
+	packet << (int)QUERY::MESSAGE << input;
 	if ( this->socket.send(packet) !=  sf::Socket::Done ) { throw WritePipeServerException(); } // failed to write on the socket
 }
 
@@ -60,7 +60,10 @@ void ClientManager::receive(GAME_QUERY_TYPE &query) {
 bool ClientManager::operator==(const ClientManager& other) { return this->tid == other.tid; }
 
 
-void ClientManager::enterGameLoop() { this->game_server->addPlayer(*this); this->game_server->clientLoop(*this); }
+void ClientManager::enterGameLoop() {
+    GameStats stats = this->game_server->clientLoop(*this);
+    this->getAccount()->updateStats(stats);
+}
 
 void ClientManager::disconnect() { this->connected = false; }
 
@@ -88,4 +91,9 @@ void ClientManager::removeAccount() { this->account = nullptr; }
 // Gestion gameServer
 void ClientManager::setGameServer(GameServer* gs) { this->game_server = gs; }
 void ClientManager::removeGameServer() { this->game_server = nullptr; }
+
+// Gestion stats
+void ClientManager::setScore(int new_score) { this->Score = new_score; }
+
+int ClientManager::getScore() const { return this->Score; }
 

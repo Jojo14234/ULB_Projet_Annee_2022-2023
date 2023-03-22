@@ -20,6 +20,9 @@ class ClientManager {
 	// A link to the game server, nullptr if not in game
 	GameServer* game_server;
 
+    // Classement dans la partie, -1 si pas de classement;
+    int Score = -1;
+
 	// If client is connected
 	bool connected = true;
 
@@ -69,13 +72,16 @@ public:
 	int getCode() const;
 	const std::string& getS1() const ;
 	const std::string& getS2() const;
+    int getScore() const;
 
 
-	// SETTERS
+
+    // SETTERS
     void setAccount(User *user);
     void removeAccount();
 	void setGameServer(GameServer* gs);
 	void removeGameServer();
+    void setScore(int score);
 
 };
 

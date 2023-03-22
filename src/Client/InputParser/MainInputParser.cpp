@@ -41,6 +41,7 @@ void MainInputParser::rankingInput() {
     if (this->getNbParameters() != 1) { return; }
     else if ((*this)[1] == "top") { this->query_type = QUERY_TYPE::RANKING_TOP; }
     else if ((*this)[1] == "pos") { this->query_type = QUERY_TYPE::RANKING_POS; }
+    else if ((*this)[1] == "reset" ) {this->query_type = QUERY_TYPE::RANKING_RESET; }
     else { std::cout << "(MainInputParser::rankingInput()) Format de la requête incorrect, essayez /ranking {top, pos}" << std::endl;}
 }
 

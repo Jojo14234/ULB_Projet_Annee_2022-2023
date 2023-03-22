@@ -30,6 +30,8 @@ public:
 
 	explicit Card(Json::Value &info):description{info["descript"].asString()} {}
 
+	Card(std::string descript):description{descript} {}
+
 	virtual ~Card()=default;
 
 	virtual void action(Player* player) override =0;

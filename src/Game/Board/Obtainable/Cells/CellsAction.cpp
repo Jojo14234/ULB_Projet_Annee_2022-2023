@@ -5,6 +5,7 @@
 #include "LandCell.hpp"
 #include "ParkingCell.hpp"
 #include "TaxCell.hpp"
+#include "../../../../Server/Game/GameServer.hpp"
 
 void DrawableCardCell::action(Player* player) {
     Card* drawn_card = deck->drawACard();
@@ -16,8 +17,8 @@ void GoJailCell::action(Player* player) { player->goToJail(jail); }
 
 void LandCell::action(Player* player) {
     std::string str = "", response = "";
-    str = "\nVous êtes tombé sur la propriété [" + land->getName() + "] !";
-    player->getClient()->send(str);
+    str = std::to_string(player->getClient()->getGameServer()->getCurrentPlayerIndex()) + ":" + land->getName() + ":" + std::to_string(player->getBankAccount()->getMoney());
+    player->getClient()->getGameServer()->updateAllClientsWithQuery(QUERY::INFOS_PLAYER_MOVE, str);
 
 		if (land->getStatus()==LAND_STATUS::FREE) {
             // Message concernant l'achat ou non d'une propriété
@@ -44,37 +45,42 @@ void LandCell::action(Player* player) {
                 // Il n'a pas assez d'argents.
                 if ( player->pay(this->land->getPurchasePrice()) ) {
                     player->acquireLand(getLand());
-                    str = "Vous venez d'acheter la propriété [" + this->land->getName() + "]." ;
-                    player->getClient()->send(str);
+                    str = std::to_string(player->getClient()->getGameServer()->getCurrentPlayerIndex()) + ":" + land->getName() + ":" + std::to_string(player->getBankAccount()->getMoney());
+                    player->getClient()->getGameServer()->updateAllClientsWithQuery(QUERY::INFOS_PLAYER_BOUGHT, str);
                 }
             }
-            else if ( response == "no" ) { player->getClient()->send("Vous n'avez pas achetez la propriété !"); }
+            else if ( response == "no" ) { 
+                player->getClient()->getGameServer()->updateAllClientsWithQuery(QUERY::INFOS_PLAYER_DIDNT_BUY, player->getUsername()); 
+            }
 		}
 
 		else if (this->land->getStatus() == LAND_STATUS::PAID && !this->isOwner(player) ) {
 			int rent = land->getRentPrice();
 			player->pay(rent, true);
+            land->getOwner()->receive(rent, player->getClient()->getAccount()->getUsername());
 
-            str = "Cette propriété appartient à [" + this->land->getOwner()->getClient()->getAccount()->getUsername() + "]";
-            str += "\nVous lui payez [" + std::to_string(rent) + "e] de loyer\n";
-			player->getClient()->send(str);
-			land->getOwner()->receive(rent, player->getClient()->getAccount()->getUsername());
+            str = std::to_string(rent) + ":";
+            str += std::to_string(player->getIndex()) + ":";
+            str += std::to_string(player->getMoney()) + ":";
+            str += std::to_string(this->land->getOwner()->getIndex()) + ":";
+            str += std::to_string(this->land->getOwner()->getMoney());
+            player->getClient()->getGameServer()->updateAllClientsWithQuery(QUERY::INFOS_PLAYER_PAID_PLAYER, str); 
+
 
             // TODO JOACHIM ????? ELLE FAIT QUOI CETTE LIGNE ??????
-            if ( player->getPlayerStatus() == PLAYER_STATUS::BANKRUPT ) { player->setBankruptingPlayer(land->getOwner()); }
+            if ( player->getStatus() == PLAYER_STATUS::BANKRUPT_SUSPECTED ) { player->setPlayerToRefund(land->getOwner()); }
 		}
 
 		else if ( land->getStatus() == LAND_STATUS::HYPOTEK ) {
-            str = "<[*_*]> Cette propriété est hypothéquée <[*_*]>\n <[*_*]> Vous ne devez donc pas payer de loyer <[ù_ù]>\n";
-            player->getClient()->send(str);
+            player->getClient()->getGameServer()->updateAllClientsWithQuery(QUERY::INFOS_PLAYER_MOVE_ON_MORTGAGED_CELL, player->getUsername() + ":" + land->getOwner()->getUsername()); 
 		}
 		else {
-            str = " <[$_$]> La propriété "+ land->getName() + " vous appartient <[$_$]>\n";
-			player->getClient()->send(str);
+            player->getClient()->getGameServer()->updateAllClientsWithQuery(QUERY::INFOS_PLAYER_MOVE_ON_OWN_CELL, player->getUsername()); 
 		}
 }
 
 void TaxCell::action(Player* player) {
     player->pay(tax_price, true); 
-    player->getClient()->send("<[T.T]>Tu dois payer la taxe " + name + " et tu as payé " + std::to_string(tax_price) + "e ! <[T.T]>\n");
+    std::string str = name + ":" + std::to_string(tax_price) + ":" + std::to_string(player->getIndex()) + ":" + std::to_string(player->getMoney()); 
+    player->getClient()->getGameServer()->updateAllClientsWithQuery(QUERY::INFOS_PLAYER_MOVE_ON_OWN_CELL, str); 
 }

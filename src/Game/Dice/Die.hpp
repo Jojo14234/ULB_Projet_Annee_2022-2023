@@ -9,7 +9,8 @@ class Die{
 public:
     Die();
     int roll();
-    int getResult();
+    int getResult() const;
+    void setResult(int new_result);
 };
 
 

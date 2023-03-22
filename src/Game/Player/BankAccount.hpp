@@ -19,7 +19,10 @@ public:
     int gain(int amount);
 
     ///retrieve amount of money in account
-    int getMoney();
+    int getMoney() const;
+
+    // return true if the account can pay this amount, else false
+    bool canPay(int amount);
 };
 
 

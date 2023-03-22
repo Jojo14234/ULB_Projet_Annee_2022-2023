@@ -61,6 +61,7 @@ public:
 
 	// MODIFIERS
 	void updateStats(const GameStats &stats) { this->stats += stats; }
+    void resetStats() { this->stats = GameStats{};}
 	
 	// FRIEND INTERACTIONS
 	void sendRequest(int id, Database& db);

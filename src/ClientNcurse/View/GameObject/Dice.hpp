@@ -17,10 +17,15 @@
 
 
 class Dice: public TextBox {
-    public:
-        Dice(ObjectInfo info): AbstractViewObject(info), Box(info), Text(info,{""}), TextBox{info,{""}} {}
+    
+public:
+    Dice(ObjectInfo info): AbstractViewObject(info), Box(info), Text(info,{"?"}), TextBox{info,{"?"}} {}
 
-        void setDice(int new_number){ setText(std::to_string(new_number),0); }
+    void setDice(int new_number) { setText(std::to_string(new_number),0); }
+
+    void clearResult() { setText("?",0); }
+
+
 };
 
 

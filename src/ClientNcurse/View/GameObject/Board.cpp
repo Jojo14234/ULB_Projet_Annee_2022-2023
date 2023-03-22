@@ -20,6 +20,16 @@ void Board::loadCellNames(){
 	} else exit(1);
 }
 
+int Board::getCellIndex(std::string cell){
+	int index_cell = -1;
+	for(int i = 0; i < gamebox_nb; i++) {
+        if(cellname[i] == cell){
+            index_cell = i;
+            break;
+        }}
+	return index_cell;
+}
+
 //method to create the gameboard
 void Board::createBoard(){
 	int n=0;
@@ -47,6 +57,11 @@ void Board::setPlayer(int cell,int player){
 	board[cell]->setPlayer(player);
 	old_pos_player[player-1] = cell;
 }
+
+void Board::movePlayer(int cell, int player){
+	unsetPlayer(player);
+	setPlayer(cell, player);
+}
  
 
 
@@ -59,10 +74,16 @@ void Board::setPurchased(int cell, int player){
 	board[cell]->setOwner(player);	
 }
 
-void Board::addHouse(int cell, int house_nb){
-	board[cell]->addBuilding(house_nb);
+void Board::setHouse(int cell, int house_nb){
+	if (old_lev_house[cell] < house_nb){
+		board[cell]->addBuilding(house_nb - old_lev_house[cell]);
+		old_lev_house[cell] = house_nb - old_lev_house[cell];
+
+	}
+	else if (old_lev_house[cell] > house_nb){
+		board[cell]->removeBuilding(old_lev_house[cell] - house_nb);
+		old_lev_house[cell] = old_lev_house[cell] - house_nb;
+	}
+	
 }
 
-void Board::removeHouse(int cell, int house_nb){
-	board[cell]->removeBuilding(house_nb);
-}

@@ -18,6 +18,8 @@ public:
 	// To make a client join a game by its code
 	bool joinGame(ClientManager* client, int code);
 
+    void removeGameServer(int gc);
+
 };
 
 #endif

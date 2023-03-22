@@ -17,6 +17,7 @@
 #include <array>
 #include <memory>
 #include <string>
+#include <vector>
 
 class Cell;
 
@@ -37,16 +38,27 @@ class Board {
 
     template<typename T>
     void extractProperty(Json::Value &list);
-    void extractDeckCard(Json::Value &list, std::shared_ptr<CardDeck> deck);
+    void extractDeckCard(Json::Value &list, std::shared_ptr<CardDeck> deck, std::string name);
 	
 public:
 
 	Board();
     ~Board()=default;
 
-    Cell* getCellByIndex(int index);
+    Cell* operator[](int index);
 
     LandCell* getCellByName(const std::string &name);
+
+    std::shared_ptr<CardDeck> getLuckyDeck();
+    std::shared_ptr<CardDeck> getCommuDeck();
+
+    CardDeck* getDeckByName(std::string name) {
+        if (name == "LUCKY DECK") { return this->lucky_deck.get(); }
+        else {return this->community_deck.get(); }
+    }
+
+
+
 
 };
 

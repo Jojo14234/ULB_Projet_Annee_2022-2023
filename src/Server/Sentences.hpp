@@ -43,7 +43,7 @@ namespace ClientSentence {
 	//GAME CODE
 	const std::string UNKNOWN_GAME = "aucune partie n'existe avec ce code";
 	const std::string KNOWN_GAME = "GAME";
-	std::string NEW_GAME(int code){
+	std::string NEW_GAME(int code) {
 		return "vous avez crée une partie avec le code : " + std::to_string(code);
 	}
 

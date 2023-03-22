@@ -9,7 +9,8 @@
 const auto IP = "127.0.0.1";
 const auto PORT = 8080;
 const auto STARTING_MONEY = 1500;
-const int BOARD_SIZE = 40;
+const auto MONEY_START_CELL = 200;
+const auto BOARD_SIZE = 40;
 
 const int PRISON_INDEX = 10;
 
@@ -35,7 +36,8 @@ const std::string PROPERTY_DATA = "Game/Board/Obtainable/data/property_data.json
 
 // CONSTANTE GAME
 const int starting_bid = 10;
-const int waiting_time_auction = 15;
+const int MAX_WAIT_EXCHANGE = 15;
+const int MAX_WAIT_AUCTION = 15;
 
 
 
@@ -50,6 +52,7 @@ enum class QUERY_TYPE {
 
 	RANKING_TOP,
 	RANKING_POS,
+    RANKING_RESET,
 
 	FRIENDS_LIST,
 	FRIENDS_REQUEST,
@@ -68,7 +71,6 @@ enum class QUERY_TYPE {
 
 enum class GAME_QUERY_TYPE {
     START,
-
     END_TURN,
 	ROLL_DICE,
     PAY,
@@ -78,13 +80,15 @@ enum class GAME_QUERY_TYPE {
     LEAVE_BID,
     SELECT,
     MORTGAGE,
-    DEMORTGAGE,
-    LEAVE_SELECTION_MODE,
+    LIFT_MORTGAGE,
+    TRADE,
+    LEAVE_SELECTION,
     EXCHANGE,
     BUILD,
     SELL_BUILDINGS,
     GIVE_UP,
     ACCEPT,
+    REFUSE,
     DECLINE,
     PARTICIPATE,
 

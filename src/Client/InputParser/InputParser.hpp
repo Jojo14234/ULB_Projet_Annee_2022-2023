@@ -11,7 +11,7 @@ class InputParser {
 private:
 
 	const std::string input;
-	std::vector<std::string> input_separated;
+
 
    /*
 	* Belong to InputParser classe.
@@ -28,7 +28,7 @@ private:
 	}
 
 protected:
-
+    std::vector<std::string> input_separated;
 	/*
 	 * Belongs to InputParser
 	 * Called in the constructor.

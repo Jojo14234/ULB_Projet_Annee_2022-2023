@@ -4,187 +4,191 @@
 
 #include "Player.hpp"
 #include "BankAccount.hpp"
-#include "../Board/Board.hpp"
 //#include "../../Server/ClientManager/ClientManager.hpp"
 
 /*
-void Player::payToExitPrison() {
-
-    pay(50);
-    status = FREE;
-
-}
-bool Player::useGetOutOfJailCard() {
-    if (GOOJ_cards.size() > 0){
-        GOOJ_cards.pop_back();
-        status = FREE;
-        return true;
-    }
-    return false;
-}
-
-bool Player::isMine(Property property) {
-    //return (*this == property.owner);
-    return true; //delete this line
-}
-
-//void Player::partakeInAuction(int auction) {} pas encore d'actualité
-
-int Player::rollDice(Dice* dice) {
-    return dice->roll();
-}
-
-void Player::leaveGame() {
-    declareBankruptcy();
-    //warn that player is leaving, somehow
-}
-
-void Player::play() {
-    //tj pas compris à quoi ça servait, ça sert d'ailleurs à rien je pense après réflexion
-    //je ne sais pas comment envoyer des possibilités en client, mais c'est probablement ce qu'il faut faire ici
-}
-
-void Player::setPosition(Cell *cell) {
-    current_cell = cell;
-}
-
-bool Player::buyProperty() {
-    //return pay(current_cell->getPropertyPrice()); //cette méthode n'est pas dans le SRD, mais devrais exister
-    return true;
+ * Renvoie le résultat du lancé de dés.
+ * Lance les dés -> met à jour l'attribut "has_rolled" à [TRUE]
+ * Si ce n'est pas un double, on reset le compteur de double
+ * Si le compteur de double >= 3, passe le joueur en status [JAILED], reset le compteur de double, renvoie 0 comme résultat.
+ * Si c'est un double mais que le compteur n'est pas encore à 3, remet la valeur "has_rolled" à [FALSE] et renvoie le résultat
+ */
+int Player::processRollDice(Dice &dice) {
+    int result = this->roll(dice);
+    // If no double then return
+    if ( !dice.isDouble() ) { dice.resetDoubleCounter(); return result; }
+    // if 3 double then go to jail
+    if ( dice.getDoubleCounter() >= 3 ) { this->setStatus(JAILED); dice.resetDoubleCounter(); return 0; }
+    // else just reset the setRolled because player will have to play again
+    this->setRolled(false);
+    return result;
 }
 
 
-void Player::move(int distance) {
-    //current_cell->getPosition(); //n'existe pas dans le SRD!
-    //current_cell = Board().getCell(current_cell->getPosition()); //getCell n'est pas non plus dans le srd
-}
-
-//void Player::exchange(int negociation) {} pas encore possible à implémenter
-
-//int Player::getProperties() {} //le ide boude, je ne comprends pas pq
-
-//void Player::declareBankruptcy() {} pas encore possible à implémenter
-*/
-int Player::getIndexOnBoard() {return 1;} //current_cell->getPosition();}
-
-void Player::setAdmin() {admin = true;}
-
-bool Player::isAdmin() { return admin; }
-
-ClientManager *Player::getClient() const { return client; }
-
-void Player::send(std::string &s) const { if ( client ) client->send(s); }
-void Player::send(std::string &&s) const { if ( client ) client->send(s); }
-std::string Player::getUsername() const { return client->getAccount()->getUsername(); }
-
-bool Player::isCurrentlyPLaying() const { return currently_playing; }
-void Player::setCurrentlyPlaying(bool playing) {currently_playing = playing;}
-
-
-void Player::forcedPay(int amount) {
-    bank_account.pay(amount);
-    if ( bank_account.getMoney() < 0 ) { this->status = PLAYER_STATUS::BANKRUPT; }
-}
-
-bool Player::pay(int amount, bool forced) {
-    if ( forced || bank_account.getMoney() >= amount ) { this->forcedPay(amount); return true; }
-    getClient()->send("Vous n'avez pas assez d'argent ! (Achat refusé)");
-    return false;
-}
-
-void Player::receive(int amount, std::string source) {
-    bank_account.gain(amount);
-    getClient()->send("Vous avez reçu " + std::to_string(amount) + "e de " + source);
-}
-
-void Player::move(Cell *cell, bool pass_by_start) {
-    if (passedByStart(cell, pass_by_start)) {
-        receive(200, "Banque");
-    }
-    current_cell = cell;
-}
-
-bool Player::passedByStart(Cell* cell, bool pass_by_start) {
-    if (cell->getPosition() - current_cell->getPosition() < 0 and pass_by_start) {
-        return true;
-    }
-    return false;
-}
-Cell *Player::getCurrentCell() { return current_cell; }
-
-void Player::goToJail(Cell *cell) {
-    move(cell, false);
-    this->status = JAILED;
-    this->rolls_in_prison =0;
-    getClient()->send("-|-|-Vous allez en prison.-|-|-");
-}
-
-void Player::exitJail() { this->status = FREE; }
-
-bool Player::isInJail() const { return (status == JAILED); }
-
-int Player::getRollsInPrison() const { return rolls_in_prison; }
-
-void Player::addRollInPrison() { rolls_in_prison++; }
-
-int Player::hasGOOJCards() const { return (GOOJ_cards.size() > 0); }
-
-void Player::looseGOOJCard(){
-    JailCard* card = GOOJ_cards.back();
-    this->GOOJ_cards.pop_back();
-    card->setOwner(nullptr);
-    client->send("Vous perdez votre carte prison suite à son utilisation.\n");
-}
-
-bool Player::hasRolled() const { return has_rolled; }
-
+// SETTER
+void Player::setAdmin() { admin = true; }
+void Player::setCurrentlyPlaying(bool playing) { currently_playing = playing; }
 void Player::setRolled(bool rolled) {has_rolled = rolled;}
-
-int Player::roll(Dice &dice) {
-    setRolled(true);
-    return dice.roll();
+void Player::setExchangeFromJail() { exchange_from_jail = true; }
+void Player::setStatus(PLAYER_STATUS new_status) {
+    std::cout << "PLAYER STATUS CHANGE" << std::endl;
+    std::cout << this->getUsername() << " is now " << (int)new_status << std::endl;
+    std::cout << "FREE=0, JAIL=1, LOST=2, IN_EXCHANGE=3, ASK_AUCTION=4, WAITING_FOR_AUCTION_TURN=5, AUCTION_TURN=6, BANKRUPT_SUS=7, BANKRUPT_CONF=8, OTHER=9" << std::endl;
+    status = new_status;
 }
+void Player::setPlayerToRefund(Player* player){ player_to_refund = player; }
+void Player::setIndex(int new_index) {
+    if (this->index == -1 ) { this->index = new_index; };
+}
+void Player::setExitJail() { this->status = FREE; }
 
+
+
+
+
+
+// GETTER
+bool Player::isAdmin() const { return admin; }
+ClientManager *Player::getClient() const { return client; }
+std::string Player::getUsername() const { return client->getAccount()->getUsername(); }
+Cell *Player::getCurrentCell() const { return current_cell; }
+int Player::getRollsInPrison() const { return rolls_in_prison; }
 std::vector<Property*> Player::getAllProperties() const { return properties; }
 std::vector<Company*> Player::getAllCompanies() const { return companies; }
 std::vector<Station*> Player::getAllStations() const { return stations; }
 std::vector<JailCard*> Player::getAllGOOJCards() const { return GOOJ_cards; }
 int Player::getNumberOfStations() const { return stations.size(); }
 int Player::getNumberOfCompanies() const { return companies.size(); }
+PLAYER_STATUS Player::getStatus() { return status; }
+BankAccount* Player::getBankAccount(){ return &bank_account; }
+int Player::getPosition() const { return this->current_cell->getPosition(); }
+int Player::getMoney() const { return this->bank_account.getMoney(); }
+Player* Player::getPlayerToRefund() { return player_to_refund; }
+int Player::getPatrimoine() {
+    int money = getMoney();
+    for (auto property : this->properties) {
+        int money_from_sell_buildings = property->getIntLevel() * (property->getConstructPrice()/2);
+        int money_from_hypotheque = property->getPurchasePrice()/2;
+        money += money_from_sell_buildings;
+        money += money_from_hypotheque;
+    }
 
-bool Player::isInAuction() const {return currently_in_auction;}
-void Player::auctionStart() {currently_in_auction = true;}
+    for (auto station : this->stations) {
+        int money_from_hypotheque = station->getPurchasePrice()/2;
+        money += money_from_hypotheque;
+    }
 
-void Player::leaveAuction() {
-    getClient()->send("Vous quittez l'enchère.");
-    currently_in_auction = false;
+    for (auto company : this->companies) {
+        int money_from_hypotheque = company->getPurchasePrice()/2;
+        money += money_from_hypotheque;
+    }
+    return money;
+}
+int Player::getIndex() const { return this->index; }
+int Player::getDebt() const { return this->money_debt; }
+
+
+// CHECK
+bool Player::isItMe(ClientManager &client) const { return this->client == &client; }
+bool Player::isCurrentlyPLaying() const { return currently_playing; }
+bool Player::isInJail() const { return (status == JAILED); }
+int Player::hasGOOJCards() const { return (GOOJ_cards.size() > 0); }
+bool Player::hasRolled() const { return has_rolled; }
+bool Player::isBankrupt() const { return this->money_debt > this->getMoney(); }
+bool Player::isBankruptToPlayer() const { return this->player_to_refund != nullptr; }
+
+
+
+
+// ABOUT Client
+void Player::send(std::string &s) const { if ( client ) client->send(s); }
+void Player::send(std::string &&s) const { if ( client ) client->send(s); }
+
+
+// ABOUT bankAccount
+bool Player::pay(int amount, bool forced) {
+    // Assez d'argent -> on paye et tout va bien
+    if ( bank_account.canPay(amount) ) { bank_account.pay(amount); return true; }
+    // Pas assez d'argent, mais pas forcer -> on ne paye pas et on renvoie qu'on a pas payer.
+    if ( !forced ) {this->getClient()->send("Pas assez d'argent !"); return false; }
+    // Pas assez d'argent mais forcer de payer -> on passe en status de faillite suspecter mais on ne paye pas non plus.
+    this->status = PLAYER_STATUS::BANKRUPT_SUSPECTED;
+    this->money_debt = amount;
+    return false; // TODO PTT FAUT METTRE RETURN TRUE (AVANT ON PAYAIS MÊME SI ON AVAIT PAS LES FONDS).
+}
+void Player::receive(int amount, std::string source) {
+    bank_account.gain(amount);
+    getClient()->send("Vous avez reçu " + std::to_string(amount) + "e de " + source);
 }
 
-void Player::leaveAuctionSilently() {
-    currently_in_auction = false;
+
+// MOUVEMENT
+void Player::move(Cell *cell, bool pass_by_start) {
+    if (passedByStart(cell, pass_by_start)) {
+        receive(200, "Banque");
+    }
+    current_cell = cell;
+}
+bool Player::passedByStart(Cell* cell, bool pass_by_start) {
+    if (cell->getPosition() - current_cell->getPosition() <= 0 and pass_by_start) {
+        return true;
+    }
+    return false;
+}
+void Player::goToJail(Cell *cell) {
+    move(cell, false);
+    this->status = JAILED;
+    this->rolls_in_prison = 0;
+}
+// BOTH processMove are Use
+void Player::processMove(Cell* new_cell, bool gainMoneyIfPassByStart) {
+    if ( gainMoneyIfPassByStart && this->current_cell->getPosition() > new_cell->getPosition() ) {
+        this->receive(STARTING_MONEY, "la banque");
+    }
+    this->current_cell = new_cell;
+}
+Cell* Player::processMove(int n, Board &board) {
+    // Calcul of the new Cell idx
+    int new_cell_idx = this->current_cell->getPosition() + n;
+    // If the new idx is greater than the board size then we are on the start_cell and we receive money
+    if (new_cell_idx >= BOARD_SIZE) { this->receive(MONEY_START_CELL, "la banque"); }
+    // set the new current_cell
+    this->current_cell = board[new_cell_idx];
+    return this->current_cell;
+};
+
+
+// roll_in_prison
+void Player::addRollInPrison() { rolls_in_prison++; }
+void Player::resetRollInPrison() { this->rolls_in_prison = 0; }
+
+
+// OTHER
+void Player::looseGOOJCard(){
+    JailCard* card = GOOJ_cards.back();
+    this->GOOJ_cards.pop_back();
+    card->setOwner(nullptr);
+    client->send("Vous perdez votre carte prison suite à son utilisation.\n");
+}
+void Player::useGOOJCard() {
+    this->status = PLAYER_STATUS::FREE;
+    GOOJ_cards.pop_back();
+}
+
+void Player::resetDebt() {
+    this->money_debt = 0;
+    this->player_to_refund = nullptr;
+    this->status = PLAYER_STATUS::FREE;
+}
+
+
+
+int Player::roll(Dice &dice) {
+    setRolled(true);
+    return dice.roll();
 }
 
 //ne pas ajouter de méthodes pour payer dans ces méthodes, elles sont aussi utilisées pour les échanges
-void Player::acquireProperty(Property &prop) {
-    prop.setOwner(this);
-    properties.push_back(&prop);
-}
-
-void Player::acquireCompany(Company &comp) {
-    comp.setOwner(this);
-    companies.push_back(&comp);
-}
-
-void Player::acquireStation(Station &station) {
-    station.setOwner(this);
-    stations.push_back(&station);
-}
-
-void Player::acquireGOOJCard(JailCard *jail_card) {
-    jail_card->setOwner(this);
-    GOOJ_cards.push_back(jail_card);
-}
-
 /*
  * check what type of land it is (used for exchanges)
  */
@@ -196,7 +200,24 @@ void Player::acquireLand(Land *land) {
     Station* s = dynamic_cast<Station*>(land);
     if (s != nullptr) { acquireStation(*s); return;}
 }
+void Player::acquireProperty(Property &prop) {
+    prop.setOwner(this);
+    properties.push_back(&prop);
+}
+void Player::acquireCompany(Company &comp) {
+    comp.setOwner(this);
+    companies.push_back(&comp);
+}
+void Player::acquireStation(Station &station) {
+    station.setOwner(this);
+    stations.push_back(&station);
+}
+void Player::acquireGOOJCard(JailCard *jail_card) {
+    jail_card->setOwner(this);
+    GOOJ_cards.push_back(jail_card);
+}
 
+//TODO
 void Player::removeLand(Land *land){
     int index = 0;
     Property* p = dynamic_cast<Property*>(land);
@@ -224,21 +245,18 @@ void Player::removeLand(Land *land){
         return;
     }
 }
-
 void Player::removeProperty(Property* p) {
     for (auto property : properties) {
         if (property == p) { properties.erase(properties.begin()+index); }
         index++;
     }
 }
-
 void Player::removeStation(Station* s) {
     for (auto station : stations) {
         if (station == s) { stations.erase(stations.begin()+index); }
         index++;
     }
 }
-
 void Player::removeCompagnie(Company* c) {
     for (auto company : companies) {
         if (company == c) { companies.erase(companies.begin()+index); }
@@ -246,40 +264,75 @@ void Player::removeCompagnie(Company* c) {
     }
 }
 
-void Player::auctionMustStart() { auction_must_start = true; }
-void Player::exchangeFromJail() { exchange_from_jail = true; }
 
-PLAYER_STATUS Player::getPlayerStatus() { return status; }
-void Player::setPlayerStatus(PLAYER_STATUS new_status) { status = new_status; }
-
-std::string Player::getStringOfAllProperties(){
-    std::string ret_string = "\n";
-    for (auto property : properties) {
-        ret_string += " - ";
-        ret_string += property->getName();
-        ret_string += "\n";
-    }
-    for (auto company : companies){
-        ret_string += " - ";
-        ret_string += company->getName();
-        ret_string += "\n";
-    }
-    for (auto station : stations){
-        ret_string += " - ";
-        ret_string += station->getName();
-        ret_string += ".\n";
-    }
+// STRING
+std::string Player::getAllPossession(){
+    std::string ret_string = "";
+    for (auto property : properties ) { ret_string += property->getName() + ":"; }
+    for (auto company : companies ) { ret_string += company->getName() + ":"; }
+    for (auto station : stations ) { ret_string += station->getName() + ":"; }
     return ret_string;
 }
+std::string Player::getAllPossessionMortgageable() {
+    std::string ret_string = "";
+    for ( auto property : properties ) { if ( !property->isMortgaged() && property->getLevel() == PROPERTY_LEVEL::EMPTY ) { ret_string += property->getName() + ":"; } }
+    for ( auto company : companies ) { if ( !company->isMortgaged() ) { ret_string += company->getName() + ":"; } }
+    for ( auto station : stations ) { if ( !station->isMortgaged() ) { ret_string += station->getName() + ":"; } }
+    return ret_string;
+}
+std::string Player::getAllPossessionLiftMortgageable() {
+    std::string str = "";
+    for ( auto property : properties ) { if ( property->isMortgaged() ) { str += property->getName() + ":"; } }
+    for ( auto company : companies ) { if ( company->isMortgaged() ) { str += company->getName() + ":"; } }
+    for ( auto station : stations ) { if ( station->isMortgaged() ) { str += station->getName() + ":"; } }
+    return str;
 
-BankAccount* Player::getBankAccount(){
-    return &bank_account;
+
+
+
 }
-void Player::setBankruptingPlayer(Player* player){
-    bankrupting_player = player;
+std::string Player::getAllBuildableProperties() {
+    std::string str = "";
+    for ( auto property : this->getAllProperties() ) { if ( property->isBuildable(this) ) { str += property->getName() + ":"; } }
+    return str;
 }
-Player* Player::getBankruptingPlayer(){
-    return bankrupting_player;
+std::string Player::getAllSellableBuildProperties() {
+    std::string str = "";
+    for ( auto property : getAllProperties() ) { if ( property->canSellBuilding(this) ) { str += property->getName() + ":"; } }
+    return str;
+}
+std::string Player::getAllExchangeablePossession() {
+    std::string str = "";
+    for ( auto property : properties ) { if ( property->getLevel() == PROPERTY_LEVEL::EMPTY ) { str += property->getName() + ":"; } }
+    for ( auto company : companies )  { str += company->getName() + ":"; }
+    for ( auto station : stations )    { str += station->getName() + ":"; }
+    return str;
+}
+/*
+ * Return a string formatted with all the infos about the roll dice
+ * r1 = result of the first die
+ * r2 = result of the second die
+ * r = Result of both die (r1 + r2)
+ * d = is double ? (0 false, true 1)
+ * dc = double counter;
+ */
+std::string Player::rollInfos(Dice &dice) {
+    std::string r1 = std::to_string(dice.getDice1());
+    std::string r2 = std::to_string(dice.getDice2());
+    std::string r = std::to_string(dice.getResults());
+    std::string d = std::to_string(dice.isDouble());
+    std::string dc = std::to_string(dice.getDoubleCounter());
+    return r1 + ":" + r2 + ":" + r + ":" + d + ":" + dc;
 }
 
-int Player::getPosition() { return current_cell->getPosition(); }
+
+// NEW FUNCTION
+
+std::vector<Land *> Player::getAllLand() {
+    std::vector<Land*> lands;
+    for ( auto property : this->properties ) { lands.push_back(property); }
+    for ( auto station : this->stations ) { lands.push_back(station); }
+    for ( auto company : this->companies ) { lands.push_back(company); }
+    return lands;
+}
+

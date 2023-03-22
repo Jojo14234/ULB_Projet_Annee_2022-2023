@@ -6,10 +6,12 @@
 
 BankAccount::BankAccount(int money) : money{money} {}
 
-void BankAccount::pay(int amount) {
-    money = money - amount;
+void BankAccount::pay(int amount) { money = money - amount; }
+
+int BankAccount::gain(int amount) { money += amount; return amount; }
+
+int BankAccount::getMoney() const { return money; }
+
+bool BankAccount::canPay(int amount) {
+    return this->money >= amount;
 }
-
-int BankAccount::gain(int amount) {money += amount; return amount;}
-
-int BankAccount::getMoney() {return money;}

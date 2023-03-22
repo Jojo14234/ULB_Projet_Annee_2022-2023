@@ -4,6 +4,7 @@
 
 #include "Server.hpp"
 #include "ClientManager/ClientManager.hpp"
+#include "ClientManager/QUERY.hpp"
 #include "SigHandler.hpp"
 #include "../utils/Exceptions.hpp"
 #include "../utils/Configs.hpp"
@@ -35,14 +36,12 @@ void Server::clientLoop(ClientManager &client) {
         QUERY_TYPE query;
 		while (true) {
 			client.receive(query);
-			this->clientProcessQuery(client, query);
-			if (query == QUERY_TYPE::DISCONNECT) {
-				if (!client.getAccount()) { break; }
-				client.setAccount(nullptr);
-                std::cout << "[Client using account '" << client.getAccount()->getUsername() << "' disconnected from his account]" << std::endl;
-            }
+            if (query == QUERY_TYPE::DISCONNECT && !client.getAccount()) { break; }
+            this->clientProcessQuery(client, query);
 		}
-	}
+        std::cout << "[one client went out of the Server::clientLoop(), he disconnect the normal way]" << std::endl;
+        client.disconnect();
+    }
 	catch (const WritePipeServerException &exception) { std::cout << "[Exception catch (Server::clientLoop)] > " << exception.what() << std::endl; }
 	catch (const ReadPipeServerException &exception)  { std::cout << "[Exception catch (Server::clientLoop)] > " << exception.what() << std::endl; }
 	client.disconnect();
@@ -90,6 +89,7 @@ void Server::clientProcessQuery(ClientManager &client, QUERY_TYPE query) {
 		// For ranking
 		case QUERY_TYPE::RANKING_POS:       this->clientProcessRankingPos(client); break;
 		case QUERY_TYPE::RANKING_TOP:       this->clientProcessRankingTop(client); break;
+        case QUERY_TYPE::RANKING_RESET:     this->clientProcessRankingReset(client); break;
 		// For friends
 		case QUERY_TYPE::FRIENDS_LIST:      this->clientProcessFriendsList(client); break;
 		case QUERY_TYPE::FRIENDS_REQUEST:   this->clientProcessFriendsRequest(client); break;
@@ -101,9 +101,17 @@ void Server::clientProcessQuery(ClientManager &client, QUERY_TYPE query) {
 		case QUERY_TYPE::MESSAGE_SHOW:      this->clientProcessShowMessage(client); break;
 		case QUERY_TYPE::MESSAGE_SEND:      this->clientProcessSendMessage(client); break;
 		// For disconnect
-		case QUERY_TYPE::DISCONNECT:        client.send("DISCONNECT"); break;
+        case QUERY_TYPE::DISCONNECT:        this->clientProcessDisconnect(client); break;
 		default : std::cout << "[(Server::clientProcessQuery()) Unknown query type]" << std::endl; break;
 	}
+}
+
+// Deconnection
+void Server::clientProcessDisconnect(ClientManager &client) {
+    std::cout << "[Received 'disconnect' query from client]" << std::endl;
+    client.sendQueryMsg("DISCONNECT", QUERY::DISCONNECT);
+    std::cout << "[Client using account '" << client.getAccount()->getUsername() << "' disconnected from his account]" << std::endl;
+    client.setAccount(nullptr);
 }
 
 
@@ -112,26 +120,26 @@ void Server::clientProcessRegister(ClientManager &client) {
 	std::cout << "[Received 'register' query from client]" << std::endl;
     // Condition du process
     if ( client.getAccount() != nullptr )                  { client.send("You are already connected"); return; }
-    if ( this->database.contains(client.getS1().c_str()) ) { client.send("FALSE"); return; }
+    if ( this->database.contains(client.getS1().c_str()) ) { client.sendQueryMsg("FALSE", QUERY::FALSEQ); return; }
     // Process of creating the new account
     User* user = database.addUser(client.getS1(), client.getS2());
     database.save();
     client.setAccount(user);
-    client.send("TRUE");	// succeed
+    client.sendQueryMsg("TRUE", QUERY::TRUEQ);	// succeed
     std::cout << "[Register client account '"<< client.getAccount()->getUsername() <<"' was successful]\n" << std::endl;
 }
 
 void Server::clientProcessLogin(ClientManager &client) {
 	std::cout << "[Received 'login' query from client]" << std::endl;
     // Condition du process
-    if (client.getAccount() != nullptr)              { client.send("You are already connected"); return; }
+    if (client.getAccount() != nullptr)              { client.sendQueryMsg("You are already connected", QUERY::TRUEQ); return; }
 	User* user = database.getUser(client.getS1().c_str());
-	if ( user == nullptr )                           { client.send("FALSE"); return; }	// User not find in the db
-    if ( !user->isPassword(client.getS2().c_str()) ) { client.send("FALSE"); return; }  // Incorrect password
-    if ( this->find(user) )                          { client.send("FALSE"); return; }  // Si le compte utilisateur est déjà
+	if ( user == nullptr )                           { client.sendQueryMsg("FALSE", QUERY::FALSEQ); return; }	// User not find in the db
+    if ( !user->isPassword(client.getS2().c_str()) ) { client.sendQueryMsg("FALSE", QUERY::FALSEQ); return; }  // Incorrect password
+    if ( this->find(user) )                          { client.sendQueryMsg("FALSE", QUERY::TRUEQ); return; }  // Si le compte utilisateur est déjà
     // Process of linking account                                                       // utilisé par un autre client
     client.setAccount(user);
-    client.send("TRUE");	// succeed
+    client.sendQueryMsg("TRUE", QUERY::TRUEQ);	// succeed
     std::cout << "['login' to client account '"<< client.getAccount()->getUsername() <<"' was successful]\n" << std::endl;
 
 }
@@ -147,13 +155,14 @@ bool Server::find(User* user) {
 void Server::clientProcessJoinGame(ClientManager &client) {
 	std::cout << "[Received 'join' query from client  '" << client.getAccount()->getUsername() << "']\n" << std::endl;
     if ( !games.joinGame(&client, client.getCode()) ) { client.send("Aucune partie n'existe avec ce code"); return; }
-    client.send("GAME");
+    client.send("(clientProcessJoinGame) Vous venez d'entrer dans la partie avec le code : " + std::to_string(client.getCode()));
     client.enterGameLoop();
 }
 
 void Server::clientProcessCreateGame(ClientManager &client) {
 	std::cout << "[Received 'create' query from client '" << client.getAccount()->getUsername() << "']\n" << std::endl;
-	client.send("Vous avez crée une partie avec le code : " + std::to_string(games.createGame(&client)));
+    int gc = games.createGame(&client);
+	client.send("(clientProcessCreateGame) Vous avez crée une partie avec le code : " + std::to_string(gc));
 	client.enterGameLoop();
 }
 
@@ -180,6 +189,11 @@ void Server::clientProcessRankingTop(ClientManager &client) {
 	client.send(input);
     std::cout << "['ranking top' query from client '" << client.getAccount()->getUsername() << "' was successful]\n" << std::endl;
 
+}
+
+void Server::clientProcessRankingReset(ClientManager &client) {
+    if (client.getUsername() == "admin") { this->database.resetRanking(); }
+    client.send("reset");
 }
 
 // For friends

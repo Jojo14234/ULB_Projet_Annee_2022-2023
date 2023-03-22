@@ -105,6 +105,7 @@ void Client::receive(std::string &output) {
 	packet >> output;
 }
 
+//TODO USE THAT
 void Client::receiveQueryMsg(std::string &output, QUERY &query) {
     int i;
     sf::Packet packet;

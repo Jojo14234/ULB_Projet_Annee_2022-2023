@@ -31,11 +31,12 @@ public:
 
 		case '\n':
 			switch(this->STATE) {
+				QUERY cury;
 			case CONSOLE: {
 				this->view->getConsoleInputBox()->addInput();
 				MainInputParser parser(this->view->getConsoleInputBox()->getInput());
 				std::string response;
-				if (this->model->sendCommand(parser)) { this->model->receive(response); }
+				if (this->model->sendCommand(parser)) { this->model->receiveQueryMsg(response, cury); }
 				else { response = "La commande n'existe pas"; }
 				this->view->getConsoleInputBox()->addText(response);
 
@@ -51,7 +52,7 @@ public:
 			case JOIN: {
 				this->model->sendJoinGame(this->view->getJoinInputBox()->getValue());
 				std::string response;
-				this->model->receive(response);
+				this->model->receiveQueryMsg(response, cury);
 				this->view->getConsoleInputBox()->addText(response);
 
 				if (response != "aucune partie n'existe avec ce code"){

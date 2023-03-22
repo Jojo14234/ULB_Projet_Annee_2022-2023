@@ -32,64 +32,117 @@ public:
 	
 	GameServer() { clients.reserve(MAX_NB_PLAYER);}
 
-    void sendAllGameData();
-    void sendStartInfo();
-    void boardInfos();
+    // Send big string with infos in it.
+    void sendStartData();
+    void sendGameData();
+    void sendBetterGameData();
 
-	// Loop for the client
-	void clientLoop(ClientManager &client);
-    //void clientBeforeRollLoop(ClientManager &client);
+    void clientsSizeData(ClientManager &client);
+
+    // Player
+
+    void client_has_join_the_game(ClientManager &client);
+
+    GameStats clientLoop(ClientManager &client);
+
+    Player* findMe(ClientManager &client);
+
+    void clientTurn(ClientManager &client, Player* me);
+
+    void processRollDice(ClientManager&, Player* player);
+
+    void processBuild(ClientManager &client, Player* player);
+
+    void processStart(ClientManager* client);
+
+    void processJail(ClientManager& client, Player *player);
+
+    void playerInJailInfos(ClientManager &client);
+
+    void playerBuildInfos(ClientManager &client);
+
+    void processSellBuild(ClientManager &client, Player *player);
+
+    void playerSellBuildInfos(ClientManager &client);
+
+    void processMortgage(ClientManager &client, Player *player);
+
+    void playerMortgageInfos(ClientManager &client);
+
+    void processLiftMortgage(ClientManager &client, Player *player);
+
+    void playerLiftMortgageInfos(ClientManager &client);
+
+    void processExchange(ClientManager &client, Player *player);
+
+    void playerExchangeInfos(ClientManager &client);
+
+    void processAskExchange(ClientManager &client, Player *player);
+
+    void processAskAuction(ClientManager &client, Player *player);
+
+    void participateAuction(ClientManager &client, Player *player);
+
+    void processAskBid(ClientManager &client, Player *player);
+
+    void processAuction(ClientManager &client, Player* player, Land* land);
+
+    void processBankruptByGame(ClientManager &client, Player *player);
+    void processBankruptByPlayer(ClientManager &client, Player* player, Player* other);
+
+    void playerDebtInfos(ClientManager &client, Player* player);
+
+    void suspectBankrupt(Player* player);
+    void processPayDebt(ClientManager &client, Player* player);
+    void processBankrupt(ClientManager &client, Player* player);
+
+
+    void processLost(ClientManager &client);
+
+
+
+
+
+
+    // Getter
+    GAME_QUERY_TYPE getGameQuery(ClientManager &client);
+
+
     void clientBankruptLoop(ClientManager &client);
     void clientAuctionLoop(ClientManager &client, LandCell* land_cell);
     void participateInAuction(ClientManager &client);
     void participateInExchange(ClientManager &client);
-	// Add a client to the game 
-	//void addClient(ClientManager* client);
+    void removeClient(ClientManager* client);
 
 	// GETTERS
 	int getCode() const;
-    Player* getPlayerByUsername(std::string &name);
-
     Capitalist* getGame();
 	
 	// VERIFIERS
 	bool isCode(int other) const;
 
-    void processGameQuery(ClientManager &client, GAME_QUERY_TYPE query);
-    void processGameQueryBeforeRoll(ClientManager &client, GAME_QUERY_TYPE query);
-
-    void processStart(ClientManager &client);
-    void processEndTurn(ClientManager &client);
-    void processDiceRoll(ClientManager &client);
-    void processMortgageProperty(ClientManager &client);
-    void processDemortgageProperty(ClientManager &client);
-    void processExchange(ClientManager &client);
-    void processBuildBuildings(ClientManager &client);
-    void processSellBuildings(ClientManager &client);
-
     //add Player object to players vector in Capitalist
     void addPlayer(ClientManager &client);
 
-    bool isClientAdmin(ClientManager &client);
 
     void updateAllClients(std::string update);
-    void updateAllClientsWithQuery(QUERY &query, std::string update);
-    bool proposeExchange(Player& proposing_player, Player &proposed_to_player, Land *land, int amount);
-    Land* getLandByName(std::string &name);
+    void updateAllClientsWithQuery(QUERY &&query, std::string update);
+    void updateThisClientWithQuery(QUERY &&query, std::string update, ClientManager &client);
+    Land* getLand(std::string &name);
     void processBankruptcyToPlayer();
 
 
     /*
      * Rémy Test
      */
-    GAME_QUERY_TYPE getGameQuery(ClientManager &client);
 
-    void clientBeforeRollLoop(ClientManager &client);
 
-    void connectClientToThisGame(ClientManager* client);
+    void connectClientToThisGame(ClientManager &client);
 
-    void treeDouble(ClientManager& client);
 
+    CardDeck* getDeck(std::string name);
+
+    int getCurrentPlayerIndex();
 
 };
 

@@ -5,103 +5,199 @@
 #include <vector>
 #include <array>
 
-struct PropertyInformation {
+struct PropertyInformations {
 	std::string name;
 	int level;
-	bool hypotek;
+	bool mortgage;
 };
 
-struct Informations {
-	std::vector<std::array<int, 3>> state; // position, argent, nombre j carte
-	std::vector<std::vector<PropertyInformation>> info;
+struct PlayerInformations{
+	std::string username;
+	int position;
+	int money;
+	int jail_card_nb;
+	std::vector<PropertyInformations> properties;
+};
+
+struct PlayerInteractProperty{
+	int player;
+	std::string property_name;
+	int player_money;
+};
+
+
+struct DiceInformations {
+	int first_value;
+	int second_value;
+	int total_value;
+	bool is_double;
+	int double_counter; 
+};
+
+
+struct PlayerPaidPlayerInformations{
+	int amount;
+	int loser;
+	int loser_money;
+	int winner;
+	int winner_money;
+};
+
+
+struct PlayerInteractTax{
+    std::string tax_name;
+    int price;
+    int player;
+    int player_money;
+};
+
+
+struct PlayerInteractMortgagedCell{
+    std::string username;
+    std::string owner_username;
 };
 
 class GameStateParser {
 
-	std::string state_str;
-	Informations res;
-	std::string property_str;
+	std::string str;
+
+	std::vector<PlayerInformations> players;
+	PlayerInteractProperty interact;
+	DiceInformations dice;
+	PlayerPaidPlayerInformations payment;
+	PlayerInteractTax tax;
+	PlayerInteractMortgagedCell mortgaged;
 
 public:
-	GameStateParser(std::string game, int player_nb) : state_str{game} {
-		state_str += ",";
-		res.state.resize(player_nb);
-		res.info.resize(player_nb);
-		parseStateLine();
-		parsePropertiesLine();
 
-	};
+	GameStateParser(std::string game) : str{game} {};
 
-	void parseStateLine(){
-		int player = 0;
-		int arg_nb = 0;
-		int i = 0;
-		res.state.clear();
+	const std::vector<PlayerInformations>& parseEndTurnLine(int player_nb){
+		players.resize(player_nb);
 		std::string tmp;
+		PropertyInformations p_i;
+		int colon_nb = 0;
+		int semicolon_nb = 0;
+		int player_index = 0;
 
-		for (char c : state_str){
-			if (c == ':'){ 
-				player = atoi(&tmp[1]);
+		for (char c : str){
+			if (c == ':'){
+				switch (colon_nb){
+					case 0: { player_index = atoi(tmp.c_str()); break;}
+					case 1: { players[player_index].username = tmp; break;}
+					case 2: { players[player_index].position = atoi(tmp.c_str()); break;}
+					case 3: { players[player_index].money = atoi(tmp.c_str()); break;}
+					case 4: { players[player_index].jail_card_nb = atoi(tmp.c_str()); break;}
+					default:{
+						p_i.mortgage = static_cast<bool>(atoi(tmp.c_str()));
+						players[player_index].properties.push_back(p_i);
+						semicolon_nb = 0;
+					}
+				}
+				colon_nb++;
 				tmp.clear();
-			} 
-			else if (c == '-'){
+			}
+			else if (c == ';'){
+				switch (semicolon_nb){
+					case 0: { p_i.name = tmp; break;}
+					case 1: { p_i.level = atoi(tmp.c_str()); break;}
+				}
+				semicolon_nb++;
 				tmp.clear();
 			}
-			else if (c == ',' or c == ';'){
-				res.state[player][arg_nb] = atoi(tmp.c_str());
+			else if (c == '|'){
+				semicolon_nb = 0;
+				colon_nb = 0;
 				tmp.clear();
-				c == ',' ? arg_nb++ : arg_nb = 0;
 			}
-			else if (c == '\n'){
-				property_str = &state_str[i+1];
-				break;
+			else tmp += c;
+		}
+		return players;
+	}
+
+	const DiceInformations& parseDiceLine(){
+		std::string tmp;
+		int colon_nb = 0;
+		for (char c : str){
+			if (c == ':'){
+				switch (colon_nb){
+					case 0: { dice.first_value = atoi(tmp.c_str()); break;}
+					case 1: { dice.second_value = atoi(tmp.c_str()); break;}
+					case 2: { dice.total_value = atoi(tmp.c_str()); break;}
+					case 3: { dice.is_double = static_cast<bool>(atoi(tmp.c_str())); break;}
+				}
+				colon_nb++;	
+				tmp.clear();
+			} else tmp += c;
+		}
+		dice.double_counter = atoi(tmp.c_str());
+		return dice;
+	}
+
+	const PlayerInteractProperty& parseInteraction(){
+		int colon_nb = 0;
+		int i = 0;
+		std::string tmp;
+		while (str[i] != ':' || colon_nb < 1) {
+			if (str[i] == ':') {
+				interact.player = atoi(tmp.c_str())+1;
+				colon_nb++;
+				tmp.clear();
 			}
-			else{
-				tmp += c;
-			}
+			else tmp += str[i]; 
 			i++;
 		}
+		interact.property_name = tmp;
+		interact.player_money = atoi(&str[i+1]);
+		return interact;
 	}
 
-	void parsePropertiesLine(){
-		int player = 0;
-		int arg_nb = 0;
-		res.info.clear();
+	const PlayerPaidPlayerInformations& parsePayement(){
 		std::string tmp;
-		PropertyInformation pi;
-
-		for (char c : state_str){
-			if (c == ':'){ 
-				player = atoi(&tmp[1]);
+		int colon_nb = 0;
+		for (char c : str){
+			if (c == ':'){
+				switch (colon_nb){
+					case 0: { payment.amount = atoi(tmp.c_str()); break;}
+					case 1: { payment.loser = atoi(tmp.c_str()) + 1; break;}
+					case 2: { payment.loser_money = atoi(tmp.c_str()); break;}
+					case 3: { payment.winner = atoi(tmp.c_str()) + 1; break;}
+				}
+				colon_nb++;	
 				tmp.clear();
 			} 
-			else if (c == '-'){
-				tmp.clear();
-			}
-			else if (c == ',' or c == ';'){
-				switch (arg_nb) {
-					case 0 : {pi.name = tmp; tmp.clear(); break;}
-					case 1 : {pi.level = atoi(tmp.c_str()); tmp.clear(); break;}
-					case 2 : {(c == 'n') ? pi.hypotek = false : pi.hypotek = true ; tmp.clear(); break;}
-					default : break;
-				}
-				c == ',' ? arg_nb++ : arg_nb = 0;
-			}
-			else if (c == '.'){
-				res.info[player].push_back(pi);
-				tmp.clear();
-				arg_nb = 0;
-			}
-			else if (c == '\n'){
-				break;
-			}
-			else {
-				tmp += c;
-			}
+			else tmp += c;
 		}
+		payment.winner_money = atoi(tmp.c_str());
+		return payment;
 	}
 
-	const Informations& getBufferSplit() const { return res; }
+	const PlayerInteractTax& parseTaxLine() {
+		std::string tmp;
+		int colon_nb = 0;
+		for (char c : str){
+			if (c == ':'){
+				switch (colon_nb){
+					case 0: { tax.tax_name = tmp; break;}
+					case 1: { tax.price = atoi(tmp.c_str()); break;}
+					case 2: { tax.player = atoi(tmp.c_str()) + 1; break;}
+				}
+				colon_nb++;
+				tmp.clear();
+			} else tmp += c;
+		}
+		tax.player_money = atoi(tmp.c_str());
+		return tax;
+	}
+
+    const PlayerInteractMortgagedCell& parseMortgagedLine() {
+		int i = 0;
+		std::string tmp;
+		while (str[i] != ':' ) { tmp += str[i]; i++; }
+		mortgaged.username = tmp;
+		mortgaged.owner_username = &str[i+1];
+		return mortgaged;
+    }
 };
 
 

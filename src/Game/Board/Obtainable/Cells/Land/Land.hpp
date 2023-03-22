@@ -40,18 +40,24 @@ public:
 	virtual ~Land()=default;
 
 	int virtual getRentPrice()=0;
-	Player* getOwner() {std::cout << "Pointer to owner : " << owner << std::endl; return owner;} //TODO change
+	Player* getOwner() { return owner; } //TODO change
     void setOwner(Player* player) {owner = player; status = LAND_STATUS::PAID;}
 	std::string getName() {return name;}
 	int getPurchasePrice() { return this->purchase_price;}
 	LAND_STATUS getStatus() {return status;}
+	void setStatus(LAND_STATUS new_status) { this->status = new_status; }
 
 	virtual void playerPurchase(Player* player);
 
 	void mortgage(Player* player);
     void liftMortgage(Player* player);
-    bool isMortgaged() {return (status != LAND_STATUS::HYPOTEK);}
+    bool isMortgaged() { return status == LAND_STATUS::HYPOTEK; }
+    void exchange(Player* new_owner, int money);
 
+    void reset() {
+        this->status = LAND_STATUS::FREE;
+        this->owner = nullptr;
+    }
 };
 
 #endif

@@ -11,7 +11,7 @@
 #include "Client.hpp"
 #include "InputParser/MainInputParser.hpp"
 #include "InputParser/GameInputParser.hpp"
-
+#include "../../Server/ClientManager/QUERY.hpp"
 
 class Client {
 
@@ -38,7 +38,7 @@ public:
 	bool sendCommand(MainInputParser &parser);
 	bool sendCommand(GameInputParser &parser);
 
-	void receive(std::string &output);
+	QUERY receive(std::string &output);
 
 	void setGameCode(int gc) { game_code = gc; }
 	int getGameCode() { return game_code; }
