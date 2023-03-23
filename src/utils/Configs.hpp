@@ -38,6 +38,8 @@ const std::string PROPERTY_DATA = "Game/Board/Obtainable/data/property_data.json
 const int starting_bid = 10;
 const int MAX_WAIT_EXCHANGE = 15;
 const int MAX_WAIT_AUCTION = 15;
+const int MAX_HOTEL = 12;
+const int MAX_HOME = 32;
 
 
 

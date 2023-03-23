@@ -9,7 +9,8 @@
 #include "../../utils/Configs.hpp"
 
 
-Board::Board() {
+Board::Board(int max_home, int max_hotel): hotel_remaining{max_hotel}, home_remaining{max_home}
+{
     std::cout << "-----Start Board constructor-----" << std::endl;
     /*
      * 1. init board cells

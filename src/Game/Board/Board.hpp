@@ -26,6 +26,10 @@ class Board {
     std::shared_ptr<CardDeck> community_deck;
     std::shared_ptr<CardDeck> lucky_deck;
 
+    // Constructeur
+    int hotel_remaining;
+    int home_remaining;
+
 	// cells
 	std::array<std::shared_ptr<Cell>, BOARD_SIZE> cells;
 
@@ -42,7 +46,7 @@ class Board {
 	
 public:
 
-	Board();
+	Board(int max_home = MAX_HOME , int max_hotel = MAX_HOTEL);
     ~Board()=default;
 
     Cell* operator[](int index);
@@ -57,7 +61,8 @@ public:
         else {return this->community_deck.get(); }
     }
 
-
+    int& getRemainingHome() { return this->home_remaining; }
+    int& getRemainingHotel() { return this->hotel_remaining; }
 
 
 };

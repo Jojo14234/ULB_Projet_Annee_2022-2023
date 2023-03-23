@@ -332,18 +332,40 @@ void Capitalist::processJailRoll(Player *player) {
 
 bool Capitalist::processBuild(Player *player, std::string &name) {
     LandCell* land = getLandCell(name);
+    // Le nom ne correspond à rien
     if (!land) {return false;}
     Property* prop = dynamic_cast<Property*>(land->getLand());
-    if (prop) { return prop->build(player); }
-    return false;
+    // Pas un color property
+    if (!prop) { return false; }
+    // Pass assez d'hotel disponible
+    if (prop->getLevel() == PROPERTY_LEVEL::FOUR && this->board.getRemainingHotel() <= 0) { return false; }
+    // Pas assez de maison disponible
+    else if (prop->getIntLevel() < 4 && this->board.getRemainingHome() <= 0) { return false; }
+    // Construction à échouer
+    if (!prop->build(player)) { return false; }
+    // On retire un hotel mais on rajoute 4 maison
+    if (prop->getLevel() == PROPERTY_LEVEL::HOTEL) { this->board.getRemainingHotel()--; this->board.getRemainingHotel()+= 4; }
+    // On retire une maison
+    else { this->board.getRemainingHome()--; }
+    return true;
 }
 
 bool Capitalist::processSellBuild(Player *player, std::string &name) {
     LandCell* land = getLandCell(name);
+    // Le nom ne correspond à rien
     if (!land) {return false;}
     Property* prop = dynamic_cast<Property*>(land->getLand());
-    if (prop) { return prop->sellBuilding(player); }
-    return false;
+    // Si ce n'est pas une propriété de couleur
+    if (!prop) {return false;}
+    // Si il ne reste pas 4 maison pour remplacer un hotel
+    if (prop->getLevel() == PROPERTY_LEVEL::HOTEL && this->board.getRemainingHome() < 4) { return false; }
+    // Si la vente a échoué
+    if (!prop->sellBuilding(player)) { return false; }
+    // On rajoute 1 hotel mais on retire 4 maison
+    if (prop->getLevel() == PROPERTY_LEVEL::FOUR) { this->board.getRemainingHotel()++; this->board.getRemainingHome() -= 4; }
+    // On rajoute une maison
+    else { this->board.getRemainingHome()++; }
+    return true;
 }
 
 bool Capitalist::processMortgage(Player *player, std::string &name) {
