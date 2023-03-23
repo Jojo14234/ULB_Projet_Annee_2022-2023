@@ -44,6 +44,12 @@ public:
 
 	// To compare
 	bool operator==(const GameStats &other) const { return score==other.score and played==other.played and wins==other.wins; }
+    bool operator<(const GameStats &other) const {
+        if (this->score != other.score) { return this->score < other.score; }
+        if (this->calculateMiddleScore() != other.calculateMiddleScore()) {return this->calculateMiddleScore() < other.calculateMiddleScore();}
+        return this->wins < other.wins;
+
+    }
 	auto operator<=>(const GameStats &other) const { return score <=> other.score; }
 };
 

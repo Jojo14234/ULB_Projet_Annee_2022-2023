@@ -12,8 +12,8 @@ void Database::load() {
 	fread(&size, sizeof(size_t), 1, file);
 	this->data.reserve(size + size/4);
 	for (size_t i = 0; i < size; i++) {
-		User user;
-		user.read(file);
+		std::shared_ptr<User> user = std::make_shared<User>();
+		user->read(file);
 		this->data.push_back(user);
 	}
 	std::fclose(file);
@@ -26,7 +26,7 @@ void Database::save() {
 	if (!file) exit(0);
 	size_t size = this->data.size();
 	fwrite(&size, sizeof(size_t), 1, file);
-	for (size_t i = 0; i < size; i++) this->data[i].write(file);
+	for (size_t i = 0; i < size; i++) this->data[i]->write(file);
 	std::fclose(file);
 	std::cout << "Database saved : [" << this->getSize() << " account saved]"<< std::endl;
 	this->user_am.unlockReader();
@@ -35,28 +35,28 @@ void Database::save() {
 bool Database::contains(const int id) const {
 	this->user_am.lockReader();
 	for (const auto &user : this->data) {
-		if (user.isId(id)) { return true; }
+		if (user->isId(id)) { return true; }
 	} this->user_am.unlockReader(); return false;
 }
 
 bool Database::contains(const char username[32]) const {
 	this->user_am.lockReader();
 	for (const auto &user : this->data) {
-		if (user.isUsername(username)) { return true; }
+		if (user->isUsername(username)) { return true; }
 	} this->user_am.unlockReader(); return false;
 }
 
 User* Database::getUser(const int id) {
 	this->user_am.lockReader();
 	for (auto &user : this->data) {
-		if (user.isId(id)) { this->user_am.unlockReader(); return &user; }
+		if (user->isId(id)) { this->user_am.unlockReader(); return user.get(); }
 	} this->user_am.unlockReader(); return nullptr;
 }
 
 User* Database::getUser(const char username[32]) {
 	this->user_am.lockReader();
 	for (auto &user : this->data) {
-		if (user.isUsername(username)) { this->user_am.unlockReader(); return &user; }
+		if (user->isUsername(username)) { this->user_am.unlockReader(); return user.get(); }
 	} this->user_am.unlockReader(); return nullptr;
 }
 
@@ -64,22 +64,27 @@ std::string Database::getUsername(const int id) { return this->getUser(id)->getU
 
 User* Database::addUser(std::string username, std::string password) {
 	this->user_am.lockWriter();
-	User &user = this->data.emplace_back(this->getSize()+1, username.c_str(), password.c_str());
+	std::shared_ptr<User> user = std::make_shared<User>(this->getSize()+1, username.c_str(), password.c_str());
+    this->data.push_back(user);
 	this->user_am.unlockWriter();
-	return &user;
+	return user.get();
 }
 
 void Database::print_in_file() {
 	std::ofstream file("clear.txt", std::ios::out | std::ios::trunc);
 	if (file) {
-		for (auto &user : this->data) file << std::string{user} << std::endl;
+		for (auto &user : this->data) file << std::string{*user} << std::endl;
 	}
 	file.close();
 }
 
 int Database::getRankingPos(User* user) {
+    this->sortByRank(this->data.size());
 	int idx = 1;
-	for (auto &u : this->data) if (u.getStats() > user->getStats()) idx++;
+    for (auto u : this->data) {
+        if (u.get() == user) { return idx; }
+        idx++;
+    }
 	return idx;
 }
 
@@ -93,39 +98,38 @@ void Database::emplace(const User* user, std::array<const User*, 5> &bests) {
 }
 
 std::array<const User*, 5> Database::getRanking() {
+    this->sortByRank(this->data.size());
 	std::array<const User*, 5> bests{nullptr, nullptr, nullptr, nullptr, nullptr};
 	this->user_am.lockReader();
-	for (short unsigned i = 0; i < 5; i++) bests[i] = &(this->data[i]);
-	std::sort(bests.begin(), bests.end(),
-		[](const User* a, const User* b) { 
-			if (a == nullptr || b == nullptr) return false;
-			if (a == nullptr) return true;
-			if (b == nullptr) return false;
-			return a->getStats() > b->getStats();
-		}
-	);
-	for (const auto &u : this->data) this->emplace(&u, bests);
+	for (short unsigned i = 0; i < 5; i++) bests[i] = this->data[i].get();
 	this->user_am.unlockReader();
 	return bests;
 }
 
+void Database::sortByRank(int size) {
+    bool sorted = true;
+    this->user_am.lockReader();
+    for (unsigned int j = 0; j < size - 1; j++) {
+        if (this->data[j]->getStats() < this->data[j+1]->getStats()) {
+            std::shared_ptr<User> tmp = this->data[j];
+            this->data[j] = this->data[j+1];
+            this->data[j+1] = tmp;
+            sorted = false;
+        }
+    }
+    this->user_am.unlockReader();
+    if (!sorted) { this->sortByRank(size); }
+}
+
 void Database::resetRanking() {
     for ( auto &user : this->data ) {
-        user.resetStats();
+        user->resetStats();
     }
 }
 
-void Database::addUser(User user) { this->data.push_back(user); }
-
-void Database::removeUser(User &user) {
-	this->user_am.lockWriter();
-	auto it = std::find(this->data.begin(), this->data.end(), user);
-	this->data.erase(it);
-	this->user_am.unlockWriter();
-}
+void Database::addUser(User user) { this->data.push_back(std::make_shared<User>(user)); }
 
 bool Database::contains(const User &user) const { return this->contains(user.getId()); }
-
 
 Conversation* Database::createConv(User* sender, User* receiver) {
 	this->chat_am.lockWriter();

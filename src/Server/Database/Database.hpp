@@ -15,7 +15,7 @@ class User;
 
 class Database {
 	
-	std::vector<User> data;
+	std::vector<std::shared_ptr<User>> data;
 	std::vector<Conversation> chat;	// not saved in path
 	std::string path;
     size_t fileSize(FILE *file);
@@ -42,8 +42,6 @@ public:
 	void addUser(User user);
 	// Create a user, add and return it
     User* addUser(std::string username, std::string password);
-	// Remove a User
-	void removeUser(User &user);
 	
 	// If the db contains
 	bool contains(const int id) const;
@@ -60,6 +58,7 @@ public:
 	int getRankingPos(User* user);
     std::array<const User*, 5> getRanking();
     void resetRanking();
+    void sortByRank(int size);
 
 	// Chat
 	Conversation* getConv(User* sender, User* receiver);
