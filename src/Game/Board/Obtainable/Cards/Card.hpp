@@ -30,7 +30,7 @@ public:
 
 	explicit Card(Json::Value &info):description{info["descript"].asString()} {}
 
-	Card(std::string descript):description{descript} {}
+	Card(std::string description): description{description} {}
 
 	virtual ~Card()=default;
 

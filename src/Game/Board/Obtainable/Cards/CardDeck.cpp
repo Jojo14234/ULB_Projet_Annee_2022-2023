@@ -17,8 +17,23 @@ CardDeck::CardDeck(std::string name): name{name} {
     Json::Value money_cards = root[name]["MoneyCard"];		//for refactor construct parameter !!
 
 
-	for (unsigned int i=0; i < root[name]["MoneyCard"].size(); i++) {
+	for (unsigned int i=0; i < money_cards.size(); i++) {
+        std::string description = money_cards[i]["descript"].asString();
+        int amount = money_cards[i]["amount"].asInt();
+        int receive = money_cards[i]["receive"].asInt();
 
+        if (receive == -1) { // Birthday card
+           this->card_list[idx] = std::make_shared<FromOtherMoneyCard>(description, amount, true);
+        }
+        else if (receive == -2) { // Choice card
+            this->card_list[idx] = std::make_shared<ChoiceMoneyCard>(description, amount, false, "LUCKY_DECK");
+        }
+        else { // Other
+            this->card_list[idx] = std::make_shared<MoneyCard>(description, amount, (bool)receive);
+        }
+        idx++;
+
+        /*
         if (money_cards[i]["receive"] == -1){	//bday card
 			Json::Value current = money_cards[i];
             std::string description = current["descript"].asString();
@@ -34,72 +49,78 @@ CardDeck::CardDeck(std::string name): name{name} {
 		}
         this->card_list[idx] = std::make_shared<MoneyCard>(root[name]["MoneyCard"][i]);
 		idx++;
+         */
 	}
 
     // Add all the card that lead to a cells
     Json::Value cell_cards = root[name]["CellCard"];
+
     for (unsigned int i=0; i < cell_cards.size(); i++) {
 
+        std::string description = cell_cards[i]["descript"].asString();
+        bool money = cell_cards[i]["money"].asBool();
+
+        if (cell_cards[i]["dest"].size() == 1) {
+            int destination = cell_cards[i]["dest"][0].asInt();
+            // Cell card normal
+            if (destination >= 0) { this->card_list[idx] = std::make_shared<CellCard>(description, money, destination); }
+            // MoveBack card
+            else { this->card_list[idx] = std::make_shared<MoveBackCellCard>(description, money, destination); }
+        }
+        else if (cell_cards[i]["dest"].size() > 1) {
+            // Construction de l array des destination
+            std::array<int, 4> dest_list;
+            for (int i=0; i < cell_cards[i]["dest"].size(); i++) { dest_list[i] = cell_cards[i]["dest"][i].asInt(); }
+            // Nearest Card
+            this->card_list[idx] = std::make_shared<NearestCellCard>(description, money, dest_list);
+        }
+        idx++;
+
+        /*
     	if (cell_cards[i]["dest"].size() > 1) {	//tester si ça marche (size) !! et mettre tout ça dans dans une fonction ?
-
-            Json::Value current = cell_cards[i];
     		std::array<int, 4> dest_list;
-    		for (int i=0; i < current["dest"].size(); i++) {
-                dest_list[i] = current["dest"][i].asInt();
+    		for (int i=0; i < cell_cards[i]["dest"].size(); i++) {
+                dest_list[i] = cell_cards[i]["dest"][i].asInt();
             }
-
-            std::string description = current["descript"].asString();
-            bool money = current["money"].asBool();
 
     		this->card_list[idx] = std::make_shared<NearestCellCard>(description, money, dest_list);
 
         }
     	else if (cell_cards[i]["dest"].asInt() < 0) {
-    		Json::Value current = cell_cards[i];
-            std::string description = current["descript"].asString();
-            bool money = current["money"].asBool();
-            int destination = current["dest"].asInt();
+            int destination = cell_cards[i]["dest"].asInt();
             this->card_list[idx] = std::make_shared<MoveBackCellCard>(description, money, destination);
         }
     	else {
 			this->card_list[idx] = std::make_shared<CellCard>(cell_cards[i]);
 
         }
-		idx++;
+        */
+
     }
 
     // Add Jail card to the deck
-    this->card_list[idx] = std::make_shared<JailCard>(root[name]["JailCard"]);
+    std::string description = root[name]["JailCard"]["descript"].asString();
+    this->card_list[idx] = std::make_shared<JailCard>(description);
 
     std::cout << "[init all     " << name << " : 100%]" << std::endl;
 }
 
 Card* CardDeck::drawACard() {	//drawn !!!
 	std::srand(time(0));
-	while(true){
+    Card* drawn_card;
+	while(true) {
 		int result = std::rand()% 16;
-		Card* drawed_card = this->card_list.at(result).get();
-		if (result!=15) {
-			return drawed_card;
-		}
-		else {
-			if (dynamic_cast<JailCard*>(drawed_card)->getOwner() == nullptr) {
-                this->card_list.at(15) = nullptr;
-				return drawed_card;
-			}
-		}
+		drawn_card = this->card_list.at(result).get();
+		if (result != 15) { break; }
+        if (isJailCardInside()) { break; }
 	}
+    return drawn_card;
 }
 
 bool CardDeck::isJailCardInside() {
-    return this->card_list.at(15) != nullptr;
+    return dynamic_cast<JailCard*>(this->card_list.at(15).get())->getOwner() == nullptr;
 }
 
 void CardDeck::replaceJailCard() {
-    if (!isJailCardInside()) {
-        Json::Value root;
-        std::ifstream file(CARD_DATA, std::ifstream::binary);
-        file >> root;
-        this->card_list[15] = std::make_shared<JailCard>(root[this->name]["JailCard"]);
-    }
+    dynamic_cast<JailCard*>(this->card_list.at(15).get())->setOwner(nullptr);
 }

@@ -75,44 +75,44 @@
 
             {
                 "descript" : "Allez en prison. Rendez-vous directement en prison. Ne franchissez pas par la case départ, ne touchez pas 200$.",
-                "dest" : 10,
+                "dest" : [10],
                 "money" : 0
 
             },
         
 			{
                 "descript" : "Rendez-vous à la propriété bleu foncé 2",
-                "dest" : 39,
+                "dest" : [39],
                 "money" : 0
 			},
             
 			{ 
                 "descript" : "Avancez jusqu’à la case départ, et touchez 200$",
-                "dest" : 0,
+                "dest" : [0],
                 "money" : 1
             },
             
 			{ 
                 "descript" : "Rendez-vous à la propriété rouge 3. Si vous passez par la case départ, recevez 200$",
-                "dest" : 24,
+                "dest" : [24],
                 "money" : 1
 			},
             
 			{ 
                 "descript" : "Rendez-vous à la propriété rose 1. Si vous passez par la case départ, recevez 200$.",
-                "dest" : 11,
+                "dest" : [11],
                 "money" : 1
             },
             
 			{ 
                 "descript" : "Avancez jusqu’à la Gare 2. Si vous passez par la case départ, recevez 200$.",
-                "dest" : 15,
+                "dest" : [15],
                 "money" : 1
             },
             
 			{ 
                 "descript" : "Reculez de trois cases",
-                "dest" : -3,
+                "dest" : [-3],
                 "money" : 0
             }
         ]
@@ -220,20 +220,20 @@
 
             {
                 "descript" : "Allez en prison. Rendez-vous directement en prison. Ne franchissez pas par la case départ, ne touchez pas 200$.",
-                "dest" : 10,
+                "dest" : [10],
                 "money" : 0
 
             },
         
             { 
                 "descript" : "Placez-vous sur la case départ, et recevez 200$",
-                "dest" : 0,
+                "dest" : [0],
                 "money" : 1
             },
             
             { 
                 "descript" : "Retournez à la propriété brune 1. Si vous passez par la case départ, recevez 200$",
-                "dest" : 1,
+                "dest" : [1],
                 "money" : 1
             },
                
