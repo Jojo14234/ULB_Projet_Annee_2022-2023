@@ -8,16 +8,23 @@
 /*
  * Met en hypothèque une propriété et donne la moitié du prix d'achat au player
  */
-void Land::mortgage(Player* player) {
+void Land::mortgage(Player* player, bool is_fast_game) {
 	this->status = LAND_STATUS::HYPOTEK;
-    player->receive(purchase_price/2, "hypothèque");
+
+    if (is_fast_game) player->receive(purchase_price * 80 / 100, "hypothèque");
+
+    else player->receive(purchase_price/2, "hypothèque");
 }
 
 /*
  * Le `player` rachète la propriété qui était en hypothèque et la paye moitié prix
  */
-void Land::liftMortgage(Player *player) {
-    if ( player->pay(purchase_price/2) ) { this->status = LAND_STATUS::PAID; }
+void Land::liftMortgage(Player *player, bool is_fast_game) {
+
+    if ( !is_fast_game && player->pay(purchase_price/2) ) { this->status = LAND_STATUS::PAID; }
+
+    else if ( is_fast_game && player->pay(purchase_price * 80 / 100) ) { this->status = LAND_STATUS::PAID; }
+
 }
 /*
  * Pay le Land et marque owner comme étant le player, change le status en PAID

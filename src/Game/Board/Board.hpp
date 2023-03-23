@@ -59,6 +59,9 @@ public:
 
 
 
+    int getBoardSize(){
+        return cells.size();
+    }
 
 };
 

@@ -80,7 +80,7 @@ void GameServer::playerInJailInfos(ClientManager &client) {
  */
 void GameServer::playerBuildInfos(ClientManager &client) {
     Player* me = findMe(client);
-    this->updateThisClientWithQuery(QUERY::INFOS_BUILD_PROP, me->getAllBuildableProperties(), client);
+    this->updateThisClientWithQuery(QUERY::INFOS_BUILD_PROP, me->getAllBuildableProperties(game.isFastGame()), client);
     std::string str = "Choisir une propriété ( /select [nom] )\n";
     str +="Quittez le menu de construction ( /leave )";
     this->updateThisClientWithQuery(QUERY::MESSAGE, str, client);
@@ -259,6 +259,7 @@ GameStats GameServer::clientLoop(ClientManager &client) {
             /*
              * TODO : LeaveGame
              */
+
             sleep(1); // fait moins lag
         }
     }
@@ -455,7 +456,7 @@ void GameServer::processMortgage(ClientManager &client, Player *player) {
         // QUERY IS SELECT
         packet >> property_name;
         // BUILDING PROCESS WORK
-        if ( this->game.processMortgage(player, property_name) ) {
+        if ( this->game.processMortgage(player, property_name, game.isFastGame()) ) {
             this->updateAllClientsWithQuery(QUERY::INFOS_MORTGAGE_SUCCESS, property_name);
         }
 
@@ -487,7 +488,7 @@ void GameServer::processLiftMortgage(ClientManager &client, Player *player) {
         // QUERY IS SELECT
         packet >> property_name;
         // BUILDING PROCESS WORK
-        if ( this->game.processLiftMortgage(player, property_name) ) {
+        if ( this->game.processLiftMortgage(player, property_name, game.isFastGame()) ) {
             this->updateAllClientsWithQuery(QUERY::INFOS_LIFT_MORTGAGE_SUCCESS, property_name);
         }
 

@@ -41,6 +41,7 @@ class Player {
 
     bool has_rolled = false;
     bool currently_playing = false;
+    int build_level = 0;
 
     int money_debt = 0;
 
@@ -100,7 +101,6 @@ public:
 
 
 
-
     // CHECK
     bool isItMe(ClientManager &client) const;
     bool isCurrentlyPLaying() const;
@@ -145,8 +145,11 @@ public:
 
     void resetDebt();
 
-
     int roll(Dice &dice);
+
+    void increaseBuildLevel();
+    int getBuildLevel();
+
 
     void acquireLand(Land* land);
     void acquireProperty(Property &prop);
@@ -163,7 +166,7 @@ public:
     std::string getAllPossession();
     std::string getAllPossessionMortgageable();
     std::string getAllPossessionLiftMortgageable();
-    std::string getAllBuildableProperties();
+    std::string getAllBuildableProperties(bool is_fast_game);
     std::string getAllSellableBuildProperties();
     std::string getAllExchangeablePossession();
     std::string rollInfos(Dice &dice);

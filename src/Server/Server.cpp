@@ -160,9 +160,16 @@ void Server::clientProcessJoinGame(ClientManager &client) {
 
 void Server::clientProcessCreateGame(ClientManager &client) {
 	std::cout << "[Received 'create' query from client '" << client.getAccount()->getUsername() << "']\n" << std::endl;
-    int gc = games.createGame(&client);
+    int gc = games.createGame(&client, false);
 	client.send("(clientProcessCreateGame) Vous avez crée une partie avec le code : " + std::to_string(gc));
 	client.enterGameLoop();
+}
+
+void Server::clientProcessCreateFastGame(ClientManager &client) {
+    std::cout << "[Received 'createfast' query from client '" << client.getAccount()->getUsername() << "']\n" << std::endl;
+    int gc = games.createGame(&client, true);
+    client.send("(clientProcessCreateGame) Vous avez crée une partie rapide avec le code : " + std::to_string(gc));
+    client.enterGameLoop();
 }
 
 // For ranking

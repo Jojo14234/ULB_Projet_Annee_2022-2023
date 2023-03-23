@@ -125,7 +125,8 @@ void Player::receive(int amount, std::string source) {
 // MOUVEMENT
 void Player::move(Cell *cell, bool pass_by_start) {
     if (passedByStart(cell, pass_by_start)) {
-        receive(200, "Banque");
+        this->receive(200, "Banque");
+        this->increaseBuildLevel();
     }
     current_cell = cell;
 }
@@ -144,6 +145,7 @@ void Player::goToJail(Cell *cell) {
 void Player::processMove(Cell* new_cell, bool gainMoneyIfPassByStart) {
     if ( gainMoneyIfPassByStart && this->current_cell->getPosition() > new_cell->getPosition() ) {
         this->receive(STARTING_MONEY, "la banque");
+        this->increaseBuildLevel();
     }
     this->current_cell = new_cell;
 }
@@ -151,7 +153,7 @@ Cell* Player::processMove(int n, Board &board) {
     // Calcul of the new Cell idx
     int new_cell_idx = this->current_cell->getPosition() + n;
     // If the new idx is greater than the board size then we are on the start_cell and we receive money
-    if (new_cell_idx >= BOARD_SIZE) { this->receive(MONEY_START_CELL, "la banque"); }
+    if (new_cell_idx >= BOARD_SIZE) { this->receive(MONEY_START_CELL, "la banque"); this->increaseBuildLevel(); }
     // set the new current_cell
     this->current_cell = board[new_cell_idx];
     return this->current_cell;
@@ -186,6 +188,12 @@ void Player::resetDebt() {
 int Player::roll(Dice &dice) {
     setRolled(true);
     return dice.roll();
+}
+
+void Player::increaseBuildLevel() {
+    if (build_level < 2){
+        build_level++;
+    }
 }
 
 //ne pas ajouter de méthodes pour payer dans ces méthodes, elles sont aussi utilisées pour les échanges
@@ -291,9 +299,9 @@ std::string Player::getAllPossessionLiftMortgageable() {
 
 
 }
-std::string Player::getAllBuildableProperties() {
+std::string Player::getAllBuildableProperties(bool is_fast_game) {
     std::string str = "";
-    for ( auto property : this->getAllProperties() ) { if ( property->isBuildable(this) ) { str += property->getName() + ":"; } }
+    for ( auto property : this->getAllProperties() ) { if ( property->isBuildable(this, is_fast_game) ) { str += property->getName() + ":"; } }
     return str;
 }
 std::string Player::getAllSellableBuildProperties() {
@@ -336,3 +344,6 @@ std::vector<Land *> Player::getAllLand() {
     return lands;
 }
 
+int Player::getBuildLevel() {
+    return build_level;
+}

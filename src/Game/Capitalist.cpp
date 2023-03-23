@@ -141,6 +141,9 @@ void Capitalist::addPlayer(ClientManager &client) {
     Cell* starting_cell = this->board[0];
     Player player{&client, starting_cell};
     if ( players.empty() ) { player.setAdmin(); }
+    if (isFastGame()){
+        player.getBankAccount()->setMoney(STARTING_MONEY_FAST);
+    }
     players.push_back(player);
 }
 
@@ -280,7 +283,6 @@ void Capitalist::endCurrentTurn() {
 
     this->players[this->current_player_index].setCurrentlyPlaying(true);
     this->players[this->current_player_index].setRolled(false);
-
 }
 
 
@@ -332,7 +334,7 @@ bool Capitalist::processBuild(Player *player, std::string &name) {
     LandCell* land = getLandCell(name);
     if (!land) {return false;}
     Property* prop = dynamic_cast<Property*>(land->getLand());
-    if (prop) { return prop->build(player); }
+    if (prop) { return prop->build(player, isFastGame()); }
     return false;
 }
 
@@ -344,19 +346,21 @@ bool Capitalist::processSellBuild(Player *player, std::string &name) {
     return false;
 }
 
-bool Capitalist::processMortgage(Player *player, std::string &name) {
+bool Capitalist::processMortgage(Player *player, std::string &name, bool is_fast_game) {
     LandCell* land = getLandCell(name);
     if (!land or land->getLand()->isMortgaged() ) { return false; }
     Property* prop = dynamic_cast<Property*>(land->getLand());
-    if (!prop || prop->getLevel() == PROPERTY_LEVEL::EMPTY ) { land->getLand()->mortgage(player); return true; }
+    if (!prop || prop->getLevel() == PROPERTY_LEVEL::EMPTY ) { land->getLand()->mortgage(player, is_fast_game); return true; }
     return false;
 }
 
-bool Capitalist::processLiftMortgage(Player *player, std::string &name) {
+bool Capitalist::processLiftMortgage(Player *player, std::string &name, bool is_fast_game) {
     LandCell* land = getLandCell(name);
     if (!land or !land->getLand()->isMortgaged() ) { return false; }
-    if (player->getBankAccount()->getMoney() < land->getLand()->getPurchasePrice()/2 ) { return false; }
-    land->getLand()->liftMortgage(player);
+
+    if ( player->getBankAccount()->getMoney() < land->getLand()->getPurchasePrice()/2 ) { return false; }
+    else if (is_fast_game && player->getBankAccount()->getMoney() < land->getLand()->getPurchasePrice() * 80 / 100) { return false; }
+    land->getLand()->liftMortgage(player, is_fast_game);
     return true;
 }
 
@@ -434,4 +438,19 @@ void Capitalist::processBankruptByPlayer(Player *player, Player *other) {
 
 void Capitalist::setRunning(bool new_running) {
     this->running = new_running;
+}
+
+void Capitalist::setFastGame(bool is_fast) {
+    fast = is_fast;
+}
+
+bool Capitalist::isFastGame() {
+    return fast;
+}
+
+void Capitalist::forceAcquisition(Player *player) {
+    //int range = getBoard().getBoardSize();
+    //TODO code method to get all avaialble landcells (ça va être moche)
+    //TODO select 2 randomly (if possible)
+    //TODO force player to pay for both + manage potential bankruptcy
 }

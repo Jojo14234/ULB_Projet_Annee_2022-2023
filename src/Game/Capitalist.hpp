@@ -19,6 +19,7 @@ class Capitalist {
     std::vector<Player> players;
     int current_player_index = 0;
     bool running = false;
+    bool fast = false;
 
     AuctionStatus auction_in_progress = AuctionStatus::STOP;
     ExchangeStatus exchange_in_progress = ExchangeStatus::STOP;
@@ -82,8 +83,8 @@ public:
     void processJailRoll(Player* player);
     bool processBuild(Player *player, std::string &name);
     bool processSellBuild(Player *player, std::string &name);
-    bool processMortgage(Player *player, std::string &name);
-    bool processLiftMortgage(Player *player, std::string &name);
+    bool processMortgage(Player *player, std::string &name, bool is_fast_game);
+    bool processLiftMortgage(Player *player, std::string &name, bool is_fast_game);
     bool processSendExchangeRequest(Player *player, std::string &name, int money);
     std::vector<Player*> processAskAuction(Player *player, std::string &name);
     bool checkBankrupt(Player *player);
@@ -93,6 +94,10 @@ public:
 
     void setRunning(bool new_running);
 
+    bool isFastGame();
+    void setFastGame(bool is_fast);
+
+    void forceAcquisition(Player *player);
 
 };
 

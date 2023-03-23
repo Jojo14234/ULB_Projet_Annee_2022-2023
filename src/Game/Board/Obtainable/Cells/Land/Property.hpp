@@ -49,7 +49,7 @@ public:
     std::vector<Property*> getOtherSameColorPropFromPlayer(Player* player);
     bool hasAllSameColorProperties(Player* player);
     bool AllSameColorPropertiesHaveGoodLevel(Player* player, bool sell = false);
-    bool build(Player* player);
+    bool build(Player* player, bool is_fast_game);
     bool sellBuilding(Player* player);
     int getRentPrice() override;
     void levelUp();
@@ -58,7 +58,7 @@ public:
     PROPERTY_LEVEL getLevel() { return this->level; }
     PROPERTY_COLOR getColor() { return this->color; }
 
-	bool isBuildable(Player* player);
+	bool isBuildable(Player* player, bool is_fast_game);
 	bool canSellBuilding(Player* player);
 
     void reset() {
