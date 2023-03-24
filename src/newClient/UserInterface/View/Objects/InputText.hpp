@@ -18,14 +18,55 @@ class InputText: public Text, public Button {
 
 	bool is_selected=false;
 	sf::RectangleShape cursor;
+	unsigned int max_length = 32;
+	unsigned int cursor_pos = 0;
+	
+protected:
+
+	void setCursor() {
+		float x = text.findCharacterPos(cursor_pos).x;
+		float y = text.getPosition().y;
+		cursor.setPosition(x, y);
+	}
+
+	void addChar(sf::Uint32 c) {
+		if (c < 128) {
+			if (text.getString().getSize() < max_length) {
+				// Insert the character at the cursor position
+				std::string str = text.getString();
+				str.insert(cursor_pos, 1, static_cast<char>(c));
+				text.setString(str);
+				// Update the cursor position and visual cursor
+				cursor_pos++;
+				setCursor();
+				sf::Glyph glyph = font.getGlyph(c, text.getCharacterSize(), false);
+				float char_width = glyph.bounds.width;
+				cursor.move(char_width, 0);
+			}
+		}
+	}
+
+	void removeChar() {
+		if (cursor_pos > 0) {
+			std::string str = text.getString();
+			str.erase(cursor_pos - 1, 1);
+			text.setString(str);
+			cursor_pos--;
+			setCursor();
+			sf::Glyph glyph = font.getGlyph(str[cursor_pos], text.getCharacterSize(), false);
+			float char_width = glyph.bounds.width;
+			cursor.move(-char_width, 0);
+		}
+	}
+
 
 public:
 
-	explicit InputText(ObjectInfo<> info, sf::Color color=sf::Color::Black, const std::string &font_path=DEFAULT_FONT_PATH) :
+	InputText(ObjectInfo<> info, sf::Color color=sf::Color::Black, const std::string &font_path=DEFAULT_FONT_PATH) :
 		AbstractViewObject(info), Text(info, "", color, font_path), Button(info) {
 		cursor.setSize(sf::Vector2f(2.f, info.getHeight()));
 		cursor.setFillColor(color);
-		cursor.setPosition(info.getX(), info.getY());
+		this->setCursor();
 	}
 
 	~InputText()=default;
@@ -41,20 +82,6 @@ public:
 	void select() { is_selected=true; }
 	void deselect() { is_selected=false; }
 
-	void addChar(char c) {
-		std::string str = text.getString();
-		str += c;
-		text.setString(str);
-		cursor.setPosition(cursor.getPosition().x + text.getCharacterSize() / 2.f, cursor.getPosition().y);
-	}
-
-	void removeChar() {
-		std::string str = text.getString();
-		if (str.size() <= 0) return;
-		str.pop_back();
-		text.setString(str);
-		cursor.setPosition(cursor.getPosition().x - text.getCharacterSize() / 2.f, cursor.getPosition().y);
-	}
 
 	// Checker
 #pragma GCC diagnostic push
