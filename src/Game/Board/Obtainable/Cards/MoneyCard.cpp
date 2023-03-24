@@ -15,7 +15,7 @@ void MoneyCard::action(Player* player) {
         else {
             std::vector<Property*> properties = player->getAllProperties();
             for ( auto &elem : properties ){
-                if (elem->getIntLevel() <= 4) { player->pay(amount_house, true); }
+                if (elem->getIntLevel() <= 4) { player->pay(amount_house * elem->getIntLevel() , true); }
                 else if (elem->getIntLevel() == 5) { player->pay(amount_hotel, true); }
             }
         }

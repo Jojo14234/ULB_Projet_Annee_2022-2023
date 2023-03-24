@@ -26,7 +26,7 @@ CardDeck::CardDeck(std::string name): name{name} {
            this->card_list[idx] = std::make_shared<FromOtherMoneyCard>(description, amount, true);
         }
         else if (receive == -2) { // Choice card
-            this->card_list[idx] = std::make_shared<ChoiceMoneyCard>(description, amount, false, "LUCKY_DECK");
+            this->card_list[idx] = std::make_shared<ChoiceMoneyCard>(description, amount, false, "LUCKY DECK");
         }
         else { // Other
             this->card_list[idx] = std::make_shared<MoneyCard>(description, amount, (bool)receive);
@@ -62,15 +62,16 @@ CardDeck::CardDeck(std::string name): name{name} {
 
         if (cell_cards[i]["dest"].size() == 1) {
             int destination = cell_cards[i]["dest"][0].asInt();
+            std::cout << description << " " << destination << std::endl;
             // Cell card normal
-            if (destination >= 0) { this->card_list[idx] = std::make_shared<CellCard>(description, money, destination); }
+            if (destination >= 0) { this->card_list[idx] = std::make_shared<CellCard>(description, destination, money); }
             // MoveBack card
             else { this->card_list[idx] = std::make_shared<MoveBackCellCard>(description, money, destination); }
         }
         else if (cell_cards[i]["dest"].size() > 1) {
             // Construction de l array des destination
             std::array<int, 4> dest_list;
-            for (unsigned int i=0; i < cell_cards[i]["dest"].size(); i++) { dest_list[i] = cell_cards[i]["dest"][i].asInt(); }
+            for (unsigned int j=0; j < cell_cards[i]["dest"].size(); j++) { dest_list[j] = cell_cards[i]["dest"][j].asInt(); }
             // Nearest Card
             this->card_list[idx] = std::make_shared<NearestCellCard>(description, money, dest_list);
         }
@@ -110,7 +111,7 @@ Card* CardDeck::drawACard() {	//drawn !!!
     Card* drawn_card;
 	while(true) {
 		int result = std::rand()% 16;
-		drawn_card = this->card_list.at(result).get();
+		drawn_card = this->card_list.at(8).get();
 		if (result != 15) { break; }
         if (isJailCardInside()) { break; }
 	}

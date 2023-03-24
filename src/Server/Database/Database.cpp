@@ -110,7 +110,6 @@ std::array<const User*, 5> Database::getRanking() {
 void Database::sortByRank(unsigned int size) {
     bool sorted = true;
     this->user_am.lockReader();
-    for (unsigned int j = 0; j < size - 1; j++) {
         if (this->data[j]->getStats() < this->data[j+1]->getStats()) {
             std::shared_ptr<User> tmp = this->data[j];
             this->data[j] = this->data[j+1];

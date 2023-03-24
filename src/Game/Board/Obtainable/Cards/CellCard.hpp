@@ -9,7 +9,7 @@
 #ifdef __APPLE__
 #include <json/json.h>
 #endif
-
+#include <array>
 #include "Card.hpp"
 
 
@@ -54,6 +54,7 @@ private:
 	std::array<int, 4> near_pos;
 
 	int searchMinIdx(std::array<int, 4> dest_pos);
+    int findNearestStation(int current_pos);
 
 	std::array<int, 4> makeDestArray(int current_pos);
 
