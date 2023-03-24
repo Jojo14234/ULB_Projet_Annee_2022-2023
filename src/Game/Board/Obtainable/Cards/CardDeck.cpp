@@ -1,10 +1,11 @@
-#include <random>
-#include <iostream>
-#include "CardDeck.hpp"
 
+#include <random>
+
+#include "CardDeck.hpp"
 #include "Card.hpp"
 #include "MoneyCard.hpp"
 #include "CellCard.hpp"
+#include "JailCard.hpp"
 #include "../../../../utils/Configs.hpp"
 
 
@@ -38,15 +39,18 @@ void CardDeck::extractMoneyCard(Json::Value &cards, int &idx) {
         // Extraction des données
         std::string description = cards[i]["description"].asString();
         int amount = cards[i]["amount"].asInt();
-        int receive = cards[i]["receive"].asInt();
+        std::string type = cards[i]["type"].asString();
 
-        // Différent type de carte en fonction de la valeur de receive
-        switch (receive) {
-            case -1: this->card_list[idx] = std::make_shared<FromOtherMoneyCard>(description, amount, true); break;
-            case -2: this->card_list[idx] = std::make_shared<ChoiceMoneyCard>(description, amount, false, "LUCKY DECK"); break;
-            default: this->card_list[idx] = std::make_shared<MoneyCard>(description, amount, (bool) receive); break;
+        // Parsing des cartes
+        if      (type == "Money")    { this->card_list[idx] = std::make_shared<MoneyCard2>(description, amount); }
+        else if (type == "Birthday") { this->card_list[idx] = std::make_shared<FromOtherMoneyCard>(description, amount); }
+        else if (type == "Choice")   { this->card_list[idx] = std::make_shared<ChoiceMoneyCard>(description, amount, "LUCKY DECK"); }
+        else if (type == "HouseHotel") {
+            int house_price = cards[i]["params"][0].asInt();
+            int hotel_price = cards[i]["params"][1].asInt();
+            this->card_list[idx] = std::make_shared<HouseHotelMoneyCard>(description, amount, house_price, hotel_price);
         }
-        // Incrément de l'index pour l array
+        else { continue; }
         idx++;
     }
 }
@@ -61,19 +65,12 @@ void CardDeck::extractCellCard(Json::Value &cards, int &idx) {
         // Extraction des données
         std::string description = cards[i]["description"].asString();
         bool receive_money = cards[i]["money"].asBool();
-        int number_destinations = cards[i]["dest"].size();
         int destination = cards[i]["dest"][0].asInt();
+        std::string type = cards[i]["type"].asString();
 
-        // Si une seule destination négative, moveBackCard
-        if ( number_destinations == 1 && destination < 0 ) { this->card_list[idx] = std::make_shared<MoveBackCellCard>(description, receive_money, destination); }
-        // Si une seule destination positive, CellCard
-        if ( number_destinations == 1 && destination >= 0) { this->card_list[idx] = std::make_shared<CellCard>(description, destination, receive_money); }
-        // Si plusieurs destination, NearestStationCard
-        if ( number_destinations > 1 ) {
-            std::array<int, 4> dest_list;
-            for ( unsigned int j=0; j < cards[i]["dest"].size(); j++ ) { dest_list[j] = cards[i]["dest"][j].asInt(); }
-            this->card_list[idx] = std::make_shared<NearestCellCard>(description, receive_money, dest_list);
-        }
+        if      ( type == "Cell" )     { this->card_list[idx] = std::make_shared<CellCard>(description, destination, receive_money); }
+        else if ( type == "Stations" ) { this->card_list[idx] = std::make_shared<NearestCellCard>(description, receive_money, this->extractStationsArray(cards[i]));}
+        else                           { continue; }
         idx++;
     }
 }
@@ -90,12 +87,23 @@ void CardDeck::extractJailCard(Json::Value &cards, int &idx) {
 }
 
 /*
+ * Extrait les 4 position des gares et les renvoie un array les contenants
+ */
+std::array<int, 4> CardDeck::extractStationsArray(Json::Value &cards) {
+    std::array<int, 4> stations;
+    for (unsigned int j = 0; j < cards["dest"].size(); j++) {
+        stations[j] = cards["dest"][j].asInt();
+    }
+    return stations;
+}
+
+/*
  * Renvoie la carte tirée au hasard parmi le paquet de 16 carte
  */
 Card* CardDeck::drawACard() {
     // Seed pour le hasard pris sur le temps en seconde depuis ...
 	std::srand(time(0));
-    Card* drawn_card;
+    Card* drawn_card = nullptr;
 
     // Boucle tant qu'on n'a pas tiré une carte
 	while(!drawn_card) {

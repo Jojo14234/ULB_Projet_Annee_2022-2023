@@ -158,6 +158,7 @@ public:
     void removeProperty(Property* p);
     void removeStation(Station* s);
     void removeCompagnie(Company* c);
+    void removeOneGoOutOfJailCard(JailCard* card);
 
     // STRING
     std::string getAllPossession();

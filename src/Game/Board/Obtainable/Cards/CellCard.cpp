@@ -1,68 +1,51 @@
 #include "CellCard.hpp"
-#include "../../../../Server/Game/GameServer.hpp"
 
+#include "../../../../Server/Game/GameServer.hpp"
 #include "../../../Player/Player.hpp"
 
-void CellCard::action(Player* player) {
-    std::cout << this->dest << std::endl;
-    player->getClient()->send("Vous vous déplacez à la case "+ std::to_string(this->dest));
-    player->move(player->getClient()->getGameServer()->getGame()->getBoard()[this->dest], gain_money);	//get cell by index
-    if (this->dest == PRISON_INDEX) { player->setStatus(PLAYER_STATUS::JAILED); }
+/*
+ * Check si la destination est négative au quelle cas re-calcul une destination
+ * Déplace le joueur
+ * SI le joueur tombe en prison, il devient prisonnier
+ * Sinon il peut simplement effectué l'action de la nouvelle case sur laquelle il se trouve
+ */
+void CellCard::action(Player *player) {
+    // On vérifie si la destination est négative, on calcule la position de destination
+    if ( this->destination < 0 ) { this->destination = ( player->getPosition() - this->destination + BOARD_SIZE ) % BOARD_SIZE; }
+    // Message pour l'affichage
+    player->getClient()->sendQueryMsg(std::to_string(this->destination), QUERY::INFOS_CARD_CELL_TO_GO);
+    // Case de destination
+    Cell* destination_cell = player->getClient()->getGameServer()->getGame()->getBoard()[this->destination];
+    // Déplacement du joueur
+    player->processMove(destination_cell, this->receive_money);
+    // Si joueur est en prison, il devient prisonnier
+    if ( this->destination == PRISON_INDEX ) { player->setStatus(PLAYER_STATUS::JAILED); }
+    // Sinon il exécute l'action de la case.
     else { player->getCurrentCell()->action(player); }
-
 }
 
-void MoveBackCellCard::action(Player* player){
-        int current_pos = player->getCurrentCell()->getPosition();
-        this->setDest(current_pos-step_back);
-        this->CellCard::action(player);
-}
-
+/*
+ * Cherche la gare la plus proche et met indexe dans l'attribut destination
+ * Appelle CellCard::action
+ */
 void NearestCellCard::action(Player* player){
         int nearestStation = this->findNearestStation(player->getCurrentCell()->getPosition());
         this->setDest(nearestStation);
         this->CellCard::action(player);
-
-        /*
-        int current_pos = player->getCurrentCell()->getPosition();
-        std::array<int, 4> dest_pos = this->makeDestArray(current_pos);
-        int nearest_dest = this->searchMinIdx(dest_pos);
-        this->setDest(nearest_dest);
-        this->CellCard::action(player);
-         */
 }
+
 /*
-int NearestCellCard::searchMinIdx(std::array<int, 4> dest_pos) {
-    int min_idx = 0;
-    for (int i=0; i < 4; i++){
-        if (dest_pos[i] > 0) {
-            if (dest_pos[i] < dest_pos[min_idx]) {
-                min_idx = i;
-            }
-        }
-    }
-    return dest_pos[min_idx];
-}
-
-std::array<int, 4> NearestCellCard::makeDestArray(int current_pos) {
-    std::array<int, 4> dest_pos;
-    for (int i=0; i<4; i++){
-        dest_pos[i] = this->near_pos[i] - current_pos;
-    }
-    return dest_pos;
-}
-*/
-
-
+ * Renvoie la position de la gare la plus proche dans un vecteur de x gare
+ * par rapport à la position actuelle en sachant qu'on ne peut que avancer
+ */
 int NearestCellCard::findNearestStation(int current_pos) {
-    for (auto j : this->near_pos ) {std::cout << j << std::endl;}
-    int nearestStation = this->near_pos[0];
+    int nearestStation = this->stations[0];
     int shorterPath = (nearestStation - current_pos + BOARD_SIZE) % BOARD_SIZE;
-    for (unsigned int i = 1; i < this->near_pos.size(); i++) {
-        int path = (this->near_pos[i] - current_pos + BOARD_SIZE) % BOARD_SIZE;
+    for (unsigned int i = 1; i < this->stations.size(); i++) {
+        int path = (this->stations[i] - current_pos + BOARD_SIZE) % BOARD_SIZE;
         if ( path < shorterPath ) {
             shorterPath = path;
-            nearestStation = this->near_pos[i];
+            nearestStation = this->stations[i];
         }
     }
     return nearestStation;

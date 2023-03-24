@@ -93,6 +93,7 @@ enum class GAME_QUERY_TYPE {
     REFUSE,
     DECLINE,
     PARTICIPATE,
+    CARD,
 
 	ARG1, // temp
 	ARG2, // temp

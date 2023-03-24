@@ -1,58 +1,62 @@
+
 #include "MoneyCard.hpp"
-#include "../../../Player/Player.hpp"
-#include "../../../../Server/ClientManager/ClientManager.hpp"
-#include "../Cells/Land/Property.hpp"
 #include "../../../../Server/Game/GameServer.hpp"
 
 
-void MoneyCard::action(Player* player) {
-    if (receive) {
-        player->receive(amount, "Bank");
-        player->getClient()->send("Vous recevez "+std::to_string(amount)+"$");
-    }
-    else {
-        if (amount != 0) { player->pay(amount, true); player->getClient()->send("Vous payez "+std::to_string(amount));}
-        else {
-            std::vector<Property*> properties = player->getAllProperties();
-            for ( auto &elem : properties ){
-                if (elem->getIntLevel() <= 4) { player->pay(amount_house * elem->getIntLevel() , true); }
-                else if (elem->getIntLevel() == 5) { player->pay(amount_hotel, true); }
-            }
-        }
-    }
-}								//modif argent du joueur selon receive et amount
-                                //si carte spécial annif, prendre argent des autres joueurs
 
-void FromOtherMoneyCard::action(Player* player) {
-        std::vector<Player>* players = player->getClient()->getGameServer()->getGame()->getPlayers();
-        for (auto &other_player : *players) {
-            if (player != &other_player) {  //opti calcul nombre de gens et somme total
-                other_player.pay(amount, true);
-                player->receive(amount, other_player.getUsername());        //MoneyCard::action() ?
-            }
-        }
+int MoneyCard2::getAmount() { return this->amount; }
+
+void MoneyCard2::setAmount(int new_amount) { this->amount = new_amount; }
+
+void MoneyCard2::action(Player *player) {
+    player->pay(std::abs(this->amount), true);
+}
+
+void HouseHotelMoneyCard::action(Player *player) {
+    int house = 0;
+    int hotel = 0;
+
+    for (auto property : player->getAllProperties()) {
+        if ( property->getLevel() == PROPERTY_LEVEL::HOTEL ) { hotel++; }
+        else { house += property->getIntLevel(); }
+    }
+    int new_amount = (house * this->house_price + hotel + this->hotel_price) * -1;
+    this->setAmount(new_amount);
+    MoneyCard2::action(player);
 }
 
 void ChoiceMoneyCard::action(Player* player) {
-        std::string msg = "amende: /select amende | carte: /select carte";
-        player->getClient()->sendQueryMsg(msg, QUERY::MESSAGE);
+    std::string str = " - payer l'amende ( /pay )\n";
+    str += " - piochez une carte CHANCE ( /carte )";
 
-        std::string answer;
+    while ( true ) {
+
         GAME_QUERY_TYPE query;
-        sf::Packet packet;
-        player->getClient()->receive(query, packet);
+        player->getClient()->sendQueryMsg(str, QUERY::CHOICE_MONEY_CARD);
+        player->getClient()->receive(query);
 
-        packet >> answer;
+        if ( query == GAME_QUERY_TYPE::PAY ) { MoneyCard2::action(player); break; }
 
-        if (answer == "amende") {
-            player->pay(this->amount, true);    //MoneyCard::action() ?
-        }
-        else if (answer == "carte") {
+        if ( query == GAME_QUERY_TYPE::CARD ) {
             CardDeck* deck = player->getClient()->getGameServer()->getDeck(this->deck_name);
             Card* drawn_card = deck->drawACard();
             player->getClient()->send("Vous avez pioché cette carte : \n\t" + drawn_card->getDescription() + "\n");
             drawn_card->action(player);
+            break;
         }
-        //faire une boucle car possible qu'il disent n'imp (break si boucle while) !!
-
+    }
 }
+
+void FromOtherMoneyCard::action(Player* player) {
+    std::vector<Player>* players = player->getClient()->getGameServer()->getGame()->getPlayers();
+    int new_amount = 0;
+    for (auto &other_player : *players) {
+        if (player != &other_player) {
+            other_player.pay(this->getAmount(), true);
+            new_amount += this->getAmount();
+        }
+    }
+    this->setAmount(new_amount);
+    MoneyCard2::action(player);
+}
+

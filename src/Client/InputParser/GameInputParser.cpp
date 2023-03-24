@@ -7,6 +7,7 @@ void GameInputParser::parse() {
 	if      ( query == "/start" )       { this->query_type = GAME_QUERY_TYPE::START; } // Démarre la partie
     else if ( query == "/roll" )        { this->query_type = GAME_QUERY_TYPE::ROLL_DICE; } // Lance les dés
     else if ( query == "/pay" )         { this->query_type = GAME_QUERY_TYPE::PAY; }       // To pay to exit prison
+    else if ( query == "/card" )        { this->query_type = GAME_QUERY_TYPE::CARD; } // Pioche une carte lors qu'on a piocher la carte choix
     else if ( query == "/use" )         { this->query_type = GAME_QUERY_TYPE::USEGOOJCARD; } // To use the card get out of jail
     else if ( query == "/leave" )       { this->query_type = GAME_QUERY_TYPE::LEAVE_SELECTION; } // Quitte la sélection
     else if ( query == "/build" )       { this->query_type = GAME_QUERY_TYPE::BUILD; }     // passer en mode construction

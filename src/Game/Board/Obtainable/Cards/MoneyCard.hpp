@@ -2,55 +2,57 @@
 #define _GAME_MONEY_CARD_HPP
 
 #include <string>
-#ifdef __linux__
-#include <jsoncpp/json/json.h>
-#endif
-
-#ifdef __APPLE__
-#include <json/json.h>
-#endif
-
 #include "Card.hpp"
-#include "../../../../Server/ClientManager/QUERY.hpp"
+#include "../../../Player/Player.hpp"
 
 
-class Player;
+class MoneyCard2 : public Card {
 
-class MoneyCard: public Card {
-protected:
-	int amount;	//reflechir à garder montant negatif si retire argent ou pas
-
-private:
-	//"Versez pour chaque maison 25$. Versez pour chaque hôtel 80$."
-	int amount_house;
-	int amount_hotel;
-	bool receive; //1 true, reçoit l'amount, sinon retire l'amount perd argent
+    int amount;
 
 public:
-	
-	explicit MoneyCard(Json::Value &info):Card{info}, amount{info["amount"].asInt()}, amount_house{info["amount_house"].asInt()}, amount_hotel{info["amount_hotel"].asInt()}, receive(info["receive"].asBool()) {}
-	MoneyCard(std::string descript, int amount, bool receive): Card{descript}, amount{amount}, amount_house{0}, amount_hotel{0}, receive{receive} {}
 
-	void action(Player* player) override ;
+    MoneyCard2(std::string description, int amount): Card{description}, amount{amount} {}
+
+    int getAmount();
+    void setAmount(int new_amount);
+
+    void action(Player* player) override ;
 
 };
 
-class FromOtherMoneyCard: public MoneyCard {
-public:
-	FromOtherMoneyCard(std::string descript, int amount, bool receive): MoneyCard{descript, amount, receive} {}
+class HouseHotelMoneyCard : public MoneyCard2 {
+    int house_price;
+    int hotel_price;
 
-	void action(Player* player);
+public:
+
+    HouseHotelMoneyCard(std::string description, int amount ,int house_price, int hotel_price)
+            : MoneyCard2{description, amount}, house_price{house_price}, hotel_price{hotel_price} {};
+
+    void action(Player* player);
 
 };
 
-class ChoiceMoneyCard: public MoneyCard {
-private:
-	std::string deck_name;
+class ChoiceMoneyCard: public MoneyCard2 {
+
+    std::string deck_name;
 
 public:
-	ChoiceMoneyCard(std::string descript, int amount, bool receive, std::string deckname): MoneyCard{descript, amount, receive}, deck_name{deckname} {}
+    ChoiceMoneyCard(std::string description, int amount, std::string deck_name)
+            :MoneyCard2{description, amount}, deck_name{deck_name} {}
 
-	void action(Player* player);
+    void action(Player* player);
+
+};
+
+class FromOtherMoneyCard: public MoneyCard2 {
+
+public:
+    FromOtherMoneyCard(std::string description, int amount)
+            :MoneyCard2{description, amount} {};
+
+    void action(Player* player);
 
 };
 

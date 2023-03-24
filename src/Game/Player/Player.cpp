@@ -175,6 +175,14 @@ void Player::useGOOJCard() {
     GOOJ_cards.pop_back();
 }
 
+void Player::removeOneGoOutOfJailCard(JailCard *card) {
+    if (this->GOOJ_cards.size() == 0) { return; }
+    unsigned int i = 0;
+    while (i < this->GOOJ_cards.size()) {
+        if (this->GOOJ_cards[i] == card) { this->GOOJ_cards.erase(this->GOOJ_cards.begin() + i); }
+    }
+}
+
 void Player::resetDebt() {
     this->money_debt = 0;
     this->player_to_refund = nullptr;
