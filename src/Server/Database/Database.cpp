@@ -1,4 +1,5 @@
 #include <algorithm>
+#include <memory>
 
 #include "Database.hpp"
 #include "User.hpp"
@@ -106,7 +107,7 @@ std::array<const User*, 5> Database::getRanking() {
 	return bests;
 }
 
-void Database::sortByRank(int size) {
+void Database::sortByRank(unsigned int size) {
     bool sorted = true;
     this->user_am.lockReader();
     for (unsigned int j = 0; j < size - 1; j++) {

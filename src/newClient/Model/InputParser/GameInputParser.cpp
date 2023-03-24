@@ -7,7 +7,7 @@ void GameInputParser::parse() {
 	if      ( query == "/roll" )        { this->query_type = GAME_QUERY_TYPE::ROLL_DICE; } // Lance les dés
 	else if ( query == "/out" )         { this->query_type = GAME_QUERY_TYPE::LEAVE_BID; } // Quitte une enchère
 	else if ( query == "/mortgage" )    { this->query_type = GAME_QUERY_TYPE::MORTGAGE; }  // Passe en mode hypothèque
-	else if ( query == "/leave" )       { this->query_type = GAME_QUERY_TYPE::LEAVE_SELECTION_MODE; } // Qui la sélection
+	else if ( query == "/leave" )       { this->query_type = GAME_QUERY_TYPE::LEAVE_SELECTION; } // Qui la sélection
 	else if ( query == "/exchange" )    { this->query_type = GAME_QUERY_TYPE::EXCHANGE;}   // Commence un échange
 	else if ( query == "/build" )       { this->query_type = GAME_QUERY_TYPE::BUILD; }     // Construit un/des bâtiment(s)
 	else if ( query == "/sell" )        { this->query_type = GAME_QUERY_TYPE::SELL_BUILDINGS; } // Vend un/des bâtiment(s)

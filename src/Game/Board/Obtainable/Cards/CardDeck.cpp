@@ -70,7 +70,7 @@ CardDeck::CardDeck(std::string name): name{name} {
         else if (cell_cards[i]["dest"].size() > 1) {
             // Construction de l array des destination
             std::array<int, 4> dest_list;
-            for (int i=0; i < cell_cards[i]["dest"].size(); i++) { dest_list[i] = cell_cards[i]["dest"][i].asInt(); }
+            for (unsigned int i=0; i < cell_cards[i]["dest"].size(); i++) { dest_list[i] = cell_cards[i]["dest"][i].asInt(); }
             // Nearest Card
             this->card_list[idx] = std::make_shared<NearestCellCard>(description, money, dest_list);
         }

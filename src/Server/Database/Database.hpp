@@ -6,6 +6,7 @@
 #include <stdio.h>
 #include <iostream>
 #include <fstream>
+#include <memory>
 
 #include "../../utils/AccessMonitor.hpp"
 #include "Chat/Conversation.hpp"
@@ -58,7 +59,7 @@ public:
 	int getRankingPos(User* user);
     std::array<const User*, 5> getRanking();
     void resetRanking();
-    void sortByRank(int size);
+    void sortByRank(unsigned int size);
 
 	// Chat
 	Conversation* getConv(User* sender, User* receiver);
