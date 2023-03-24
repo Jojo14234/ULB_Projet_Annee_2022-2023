@@ -8,9 +8,15 @@ class Player;
 class Station : public Land {
 
 public:
-    int getRentPrice() override ;
+
     using Land::Land;
-	void playerPurchase(Player* player) override ;
+
+    virtual ~Station()=default;
+
+    int getRentPrice() override ;
+
+    bool playerPurchase(Player* player) override ;
+
 };
 
 #endif

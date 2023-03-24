@@ -12,10 +12,7 @@ public:
 	
 	using Cell::Cell;
 
-#pragma GCC diagnostic push
-#pragma GCC diagnostic ignored "-Wunused-parameter"
-	void action(Player* player) override {}
-#pragma GCC diagnostic pop
+	void action(Player* player) override;
 
 };
 

@@ -6,9 +6,10 @@
 
 #include "Cell.hpp"
 #include "Land/Land.hpp"
+#include "../../../Player/Player.hpp"
 
 
-class PLayer;
+//class PLayer;
 
 class LandCell : public Cell {
 
@@ -19,12 +20,15 @@ class LandCell : public Cell {
 public: 
 
 	LandCell(int pos, std::shared_ptr<Land> land, std::string name="Undefined"): Cell{pos, name}, land{land} {}
-    
-	//~LandCell() { delete land; }
 
-	void action(Player* player) override ;
+	void action(Player* player) override;
 
-    Land* getLand(){return land.get(); }
+    void buy(Player* player);
+    void pay(Player* player);
+    void mortgage(Player* player);
+
+    Land* getLand() const { return this->land.get(); }
+    Player* getOwner() const { return this->land->getOwner(); }
 
 };
 

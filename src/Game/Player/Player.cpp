@@ -193,7 +193,16 @@ void Player::resetDebt() {
 
 int Player::roll(Dice &dice) {
     setRolled(true);
-    return dice.roll();
+    this->result_last_roll = dice.roll();
+    return this->result_last_roll;
+}
+
+void Player::setResultLastRoll(int new_result) {
+    this->result_last_roll = new_result;
+}
+
+int Player::getResultLastRoll() {
+    return this->result_last_roll;
 }
 
 //ne pas ajouter de méthodes pour payer dans ces méthodes, elles sont aussi utilisées pour les échanges

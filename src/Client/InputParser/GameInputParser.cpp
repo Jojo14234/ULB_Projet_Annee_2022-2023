@@ -15,6 +15,8 @@ void GameInputParser::parse() {
     else if ( query == "/mortgage" )    { this->query_type = GAME_QUERY_TYPE::MORTGAGE; }  // Passe en mode hypothèque
     else if ( query == "/liftMortgage" ){ this->query_type = GAME_QUERY_TYPE::LIFT_MORTGAGE; } // Passer en mode lift hypothèque
     else if ( query == "/exchange" )    { this->query_type = GAME_QUERY_TYPE::EXCHANGE;}   // Commence un échange
+    else if ( query == "/yes" )         { this->query_type = GAME_QUERY_TYPE::YES; } // C'est un oui
+    else if ( query == "/no" )          { this->query_type = GAME_QUERY_TYPE::NO; } // C'est un non
     else if ( query == "/trade" )       {
         if (this->getNbParameters() == 2 ) { this->query_type = GAME_QUERY_TYPE::TRADE; }
         else { std::cout << "Format de la requête doit être /trade [prop_wanted] [money]" << std::endl; }

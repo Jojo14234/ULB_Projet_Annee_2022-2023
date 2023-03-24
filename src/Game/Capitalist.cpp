@@ -207,7 +207,7 @@ Board& Capitalist::getBoard() {
  * Return the address of a land cell by it's name
  */
 LandCell *Capitalist::getLandCell(std::string &name) {
-    return this->board.getCellByName(name);
+    return this->board.getLandCell(name);
 }
 
 
@@ -303,8 +303,8 @@ void Capitalist::processJailUseCard(Player *player) {
         if (this->board.getLuckyDeck()->isJailCardInside()) {
             this->board.getLuckyDeck()->replaceJailCard();
         }
-        else if (this->board.getCommuDeck()->isJailCardInside()) {
-            this->board.getCommuDeck()->replaceJailCard();
+        else if (this->board.getCommunityDeck()->isJailCardInside()) {
+            this->board.getCommunityDeck()->replaceJailCard();
         }
     }
 }

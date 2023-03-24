@@ -22,7 +22,8 @@ public:
 	virtual void action(Player* player) override =0;
 
     int getPosition() const { return position; }
-    std::string getName() { return name; }
+
+    std::string getName() const { return name; }
 
 };
 

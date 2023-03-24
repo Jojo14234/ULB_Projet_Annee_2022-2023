@@ -36,6 +36,7 @@ class Player {
     ClientManager* client;
 
     int rolls_in_prison = 0;
+    int result_last_roll = 0;
     int index = -1;
     bool admin = false;
 
@@ -97,10 +98,6 @@ public:
     int getDebt() const;
 
 
-
-
-
-
     // CHECK
     bool isItMe(ClientManager &client) const;
     bool isCurrentlyPLaying() const;
@@ -109,9 +106,6 @@ public:
     bool hasRolled() const;
     bool isBankruptToPlayer() const;
     bool isBankrupt() const;
-
-
-
 
 
     // ABOUT client
@@ -147,6 +141,9 @@ public:
 
 
     int roll(Dice &dice);
+    void setResultLastRoll(int new_result);
+    int getResultLastRoll();
+
 
     void acquireLand(Land* land);
     void acquireProperty(Property &prop);

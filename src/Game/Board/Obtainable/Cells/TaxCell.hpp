@@ -1,14 +1,6 @@
 #ifndef _GAME_TAX_CELL_HPP
 #define _GAME_TAX_CELL_HPP
 
-#ifdef __linux__
-#include <jsoncpp/json/json.h>
-#endif
-
-#ifdef __APPLE__
-#include <json/json.h>
-#endif
-
 #include <string>
 #include "Cell.hpp"
 
@@ -19,7 +11,6 @@ class TaxCell: public Cell {
     
 	int tax_price;
 	std::string name;
-
 
 public:
     

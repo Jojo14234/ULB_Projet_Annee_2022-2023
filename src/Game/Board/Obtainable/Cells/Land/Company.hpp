@@ -2,18 +2,20 @@
 #define _GAME_COMPANY_HPP
 
 #include "Land.hpp"
-#include "../../../../Dice/Dice.hpp"
 
 class Player;
 
 class Company : public Land {
+
 public:
 
     using Land::Land;
 
+    virtual ~Company()=default;
+
     int getRentPrice() override ;
 
-	void playerPurchase(Player* player) override ;
+	bool playerPurchase(Player* player) override ;
 
 };
 
