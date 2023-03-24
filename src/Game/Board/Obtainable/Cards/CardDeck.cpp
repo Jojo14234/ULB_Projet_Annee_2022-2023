@@ -8,120 +8,118 @@
 #include "../../../../utils/Configs.hpp"
 
 
+
 CardDeck::CardDeck(std::string name): name{name} {
+    // Extraction du deck du fichier Json
     Json::Value root;
-	std::ifstream file(CARD_DATA, std::ifstream::binary);
+    std::ifstream file(CARD_DATA, std::ifstream::binary);
     file >> root;
-    int idx=0;  //indexe de la liste de carte
-    // Add all the card that leads to pay money
-    Json::Value money_cards = root[name]["MoneyCard"];		//for refactor construct parameter !!
 
+    // Indexe pour placer les cartes dans l array
+    int idx = 0;
 
-	for (unsigned int i=0; i < money_cards.size(); i++) {
-        std::string description = money_cards[i]["descript"].asString();
-        int amount = money_cards[i]["amount"].asInt();
-        int receive = money_cards[i]["receive"].asInt();
+    // Extraction de la partie MoneyCard
+    Json::Value money_cards = root[name]["MoneyCard"];
+    this->extractMoneyCard(money_cards, idx);
 
-        if (receive == -1) { // Birthday card
-           this->card_list[idx] = std::make_shared<FromOtherMoneyCard>(description, amount, true);
-        }
-        else if (receive == -2) { // Choice card
-            this->card_list[idx] = std::make_shared<ChoiceMoneyCard>(description, amount, false, "LUCKY DECK");
-        }
-        else { // Other
-            this->card_list[idx] = std::make_shared<MoneyCard>(description, amount, (bool)receive);
-        }
-        idx++;
-
-        /*
-        if (money_cards[i]["receive"] == -1){	//bday card
-			Json::Value current = money_cards[i];
-            std::string description = current["descript"].asString();
-            int amount = current["amount"].asInt();
-			this->card_list[idx] = std::make_shared<FromOtherMoneyCard>(description, amount, true);
-		}
-        else if (money_cards[i]["receive"] == -2) {	//choice card
-			Json::Value current = money_cards[i];
-            std::string description = current["descript"].asString();
-            int amount = current["amount"].asInt();
-			std::string deck_name = "LUCKY DECK";
-			this->card_list[idx] = std::make_shared<ChoiceMoneyCard>(description, amount, false, deck_name);
-		}
-        this->card_list[idx] = std::make_shared<MoneyCard>(root[name]["MoneyCard"][i]);
-		idx++;
-         */
-	}
-
-    // Add all the card that lead to a cells
+    // Extraction de la partie CellCard
     Json::Value cell_cards = root[name]["CellCard"];
+    this->extractCellCard(cell_cards, idx);
 
-    for (unsigned int i=0; i < cell_cards.size(); i++) {
+    // Extraction de la JailCard
+    Json::Value jail_card = root[name]["JailCard"];
+    this->extractJailCard(jail_card, idx);
 
-        std::string description = cell_cards[i]["descript"].asString();
-        bool money = cell_cards[i]["money"].asBool();
-
-        if (cell_cards[i]["dest"].size() == 1) {
-            int destination = cell_cards[i]["dest"][0].asInt();
-            std::cout << description << " " << destination << std::endl;
-            // Cell card normal
-            if (destination >= 0) { this->card_list[idx] = std::make_shared<CellCard>(description, destination, money); }
-            // MoveBack card
-            else { this->card_list[idx] = std::make_shared<MoveBackCellCard>(description, money, destination); }
-        }
-        else if (cell_cards[i]["dest"].size() > 1) {
-            // Construction de l array des destination
-            std::array<int, 4> dest_list;
-            for (unsigned int j=0; j < cell_cards[i]["dest"].size(); j++) { dest_list[j] = cell_cards[i]["dest"][j].asInt(); }
-            // Nearest Card
-            this->card_list[idx] = std::make_shared<NearestCellCard>(description, money, dest_list);
-        }
-        idx++;
-
-        /*
-    	if (cell_cards[i]["dest"].size() > 1) {	//tester si ça marche (size) !! et mettre tout ça dans dans une fonction ?
-    		std::array<int, 4> dest_list;
-    		for (int i=0; i < cell_cards[i]["dest"].size(); i++) {
-                dest_list[i] = cell_cards[i]["dest"][i].asInt();
-            }
-
-    		this->card_list[idx] = std::make_shared<NearestCellCard>(description, money, dest_list);
-
-        }
-    	else if (cell_cards[i]["dest"].asInt() < 0) {
-            int destination = cell_cards[i]["dest"].asInt();
-            this->card_list[idx] = std::make_shared<MoveBackCellCard>(description, money, destination);
-        }
-    	else {
-			this->card_list[idx] = std::make_shared<CellCard>(cell_cards[i]);
-
-        }
-        */
-
-    }
-
-    // Add Jail card to the deck
-    std::string description = root[name]["JailCard"]["descript"].asString();
-    this->card_list[idx] = std::make_shared<JailCard>(description);
-
-    std::cout << "[init all     " << name << " : 100%]" << std::endl;
 }
 
-Card* CardDeck::drawACard() {	//drawn !!!
+void CardDeck::extractMoneyCard(Json::Value &cards, int &idx) {
+
+    for (unsigned int i=0; i < cards.size(); i++) {
+        // Extraction des données
+        std::string description = cards[i]["description"].asString();
+        int amount = cards[i]["amount"].asInt();
+        int receive = cards[i]["receive"].asInt();
+
+        // Différent type de carte en fonction de la valeur de receive
+        switch (receive) {
+            case -1: this->card_list[idx] = std::make_shared<FromOtherMoneyCard>(description, amount, true); break;
+            case -2: this->card_list[idx] = std::make_shared<ChoiceMoneyCard>(description, amount, false, "LUCKY DECK"); break;
+            default: this->card_list[idx] = std::make_shared<MoneyCard>(description, amount, (bool) receive); break;
+        }
+        // Incrément de l'index pour l array
+        idx++;
+    }
+}
+
+/*
+ * Extrait les carte qui font se déplacer le joueur vers une autre case du fichier Json
+ * et les place dans le paquet
+ */
+void CardDeck::extractCellCard(Json::Value &cards, int &idx) {
+
+    for (unsigned int i=0; i < cards.size(); i++) {
+        // Extraction des données
+        std::string description = cards[i]["description"].asString();
+        bool receive_money = cards[i]["money"].asBool();
+        int number_destinations = cards[i]["dest"].size();
+        int destination = cards[i]["dest"][0].asInt();
+
+        // Si une seule destination négative, moveBackCard
+        if ( number_destinations == 1 && destination < 0 ) { this->card_list[idx] = std::make_shared<MoveBackCellCard>(description, receive_money, destination); }
+        // Si une seule destination positive, CellCard
+        if ( number_destinations == 1 && destination >= 0) { this->card_list[idx] = std::make_shared<CellCard>(description, destination, receive_money); }
+        // Si plusieurs destination, NearestStationCard
+        if ( number_destinations > 1 ) {
+            std::array<int, 4> dest_list;
+            for ( unsigned int j=0; j < cards[i]["dest"].size(); j++ ) { dest_list[j] = cards[i]["dest"][j].asInt(); }
+            this->card_list[idx] = std::make_shared<NearestCellCard>(description, receive_money, dest_list);
+        }
+        idx++;
+    }
+}
+
+/*
+ * Extrait la carte Sortie de prison du fichier Json
+ * et la place dans le paquet
+ */
+void CardDeck::extractJailCard(Json::Value &cards, int &idx) {
+    // Extraction des donnés
+    std::string description = cards["description"].asString();
+    // Placement de la carte
+    this->card_list[idx] = std::make_shared<JailCard>(description);
+}
+
+/*
+ * Renvoie la carte tirée au hasard parmi le paquet de 16 carte
+ */
+Card* CardDeck::drawACard() {
+    // Seed pour le hasard pris sur le temps en seconde depuis ...
 	std::srand(time(0));
     Card* drawn_card;
-	while(true) {
+
+    // Boucle tant qu'on n'a pas tiré une carte
+	while(!drawn_card) {
 		int result = std::rand()% 16;
-		drawn_card = this->card_list.at(8).get();
-		if (result != 15) { break; }
-        if (isJailCardInside()) { break; }
+		drawn_card = this->card_list.at(result).get();
+        // Si la carte est le numéro 15, c'est que c'est la carte sortie de prison,
+        // et si elle n'est pas dans le paquet il faut retirer une carte
+        if (result == 15 && !isJailCardInside()) { drawn_card = nullptr; }
 	}
     return drawn_card;
 }
 
+/*
+ * Renvoie si la carte se trouvant à la position 15, ne possède pas de propriétaire.
+ * Si tel est le cas -> la carte est présente dans le paquet (True)
+ * Sinon elle n'est pas présente dans le paquet (False)
+ */
 bool CardDeck::isJailCardInside() {
     return dynamic_cast<JailCard*>(this->card_list.at(15).get())->getOwner() == nullptr;
 }
 
+/*
+ * Replace la carte dans le paquet en supprimant le pointeur vers son propriétaire
+ */
 void CardDeck::replaceJailCard() {
     dynamic_cast<JailCard*>(this->card_list.at(15).get())->setOwner(nullptr);
 }

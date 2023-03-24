@@ -26,6 +26,10 @@ class CardDeck {
 	std::array<std::shared_ptr<Card>, 16> card_list; // + ajouter carte prison
     std::string name;
 
+    void extractMoneyCard(Json::Value &cards, int &idx);
+    void extractCellCard(Json::Value &cards, int &idx);
+    void extractJailCard(Json::Value &cards, int &idx);
+
 public:
 
 	CardDeck()=default;
