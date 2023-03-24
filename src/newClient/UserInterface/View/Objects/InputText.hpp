@@ -6,6 +6,7 @@
 
 #include <SFML/Graphics.hpp>
 #include <string>
+#include <iostream>
 
 #include "ObjectInfo.hpp"
 #include "AbstractViewObject.hpp"
@@ -74,6 +75,8 @@ public:
 		} else if (event.type == sf::Event::KeyPressed and is_selected) {
 			if (event.key.code == sf::Keyboard::BackSpace) {
 				removeChar();
+				std::cout << "bye char" << std::endl;
+				std::cout << (std::string) text.getString() << std::endl;
 			} else if (event.key.code == sf::Keyboard::Enter) {
 				deselect();
 			}

@@ -58,7 +58,8 @@ void MainUIWindow::mainLoop() {
 	while (window.isOpen()) {
 		sf::Event event;
 		this->window.waitEvent(event);
-		if (event.type == sf::Event::Closed) break; 
+		if (event.type == sf::Event::Closed or event.type == sf::Event::KeyPressed
+			and event.key.code == sf::Keyboard::Escape ) break;
 		this->controller.handle(this->state, event);
 		this->clear();
 		this->draw();
