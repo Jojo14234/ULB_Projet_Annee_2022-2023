@@ -79,7 +79,7 @@ public:
 			QUERY cury;
 			this->model->receiveQueryMsg(response, cury);
 			
-			switch(cury){
+			switch(cury) {
 				case QUERY::INFOS_START: {
 					GameLaunchingParser start_parser(response);
 					PlayersInformations p_i = start_parser.parseStartInfo();
