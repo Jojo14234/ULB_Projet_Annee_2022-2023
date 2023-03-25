@@ -28,9 +28,16 @@ CardDeck::CardDeck(std::string name): name{name} {
     this->extractCellCard(cell_cards, idx);
 
     // Extraction de la JailCard
-    Json::Value jail_card = root[name]["JailCard"];
-    this->extractJailCard(jail_card, idx);
+    //Json::Value jail_card = root[name]["JailCard"];
+    this->extractJailCard(root[name]["JailCard"], idx);
 
+    //for testing card
+    std::cout<<"----Deck card "<<this->name<<"----"<<std::endl;
+    for (unsigned int i=0; i<this->card_list.size(); i++){
+        std::cout<<"----#"<<i<<"----"<<std::endl;
+        std::cout<<this->card_list[i]->getDescription()<<std::endl;
+    }
+    std::cout<<"--------------"<<std::endl;
 }
 
 void CardDeck::extractMoneyCard(Json::Value &cards, int &idx) {
@@ -82,6 +89,7 @@ void CardDeck::extractCellCard(Json::Value &cards, int &idx) {
 void CardDeck::extractJailCard(Json::Value &cards, int &idx) {
     // Extraction des donnés
     std::string description = cards["description"].asString();
+    std::cout<<"jailjailjail"<<description<<"????"<<std::endl;
     // Placement de la carte
     this->card_list[idx] = std::make_shared<JailCard>(description);
 }
