@@ -114,6 +114,7 @@ Card* CardDeck::drawACard() {
         if (result == 15 && !isJailCardInside()) { drawn_card = nullptr; }
 	}
     return drawn_card;
+    //return this->card_list.at(14).get();;     //pour debug
 }
 
 /*

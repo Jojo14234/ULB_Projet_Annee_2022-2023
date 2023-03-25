@@ -9,7 +9,13 @@ int MoneyCard2::getAmount() { return this->amount; }
 void MoneyCard2::setAmount(int new_amount) { this->amount = new_amount; }
 
 void MoneyCard2::action(Player *player) {
-    player->pay(std::abs(this->amount), true);
+    if (this->amount > 0) {
+        player->receive(std::abs(this->amount), "la banque");
+    }
+    else if (this->amount < 0) {
+        player->pay(std::abs(this->amount), true);
+    }
+    
 }
 
 void HouseHotelMoneyCard::action(Player *player) {
@@ -27,7 +33,7 @@ void HouseHotelMoneyCard::action(Player *player) {
 
 void ChoiceMoneyCard::action(Player* player) {
     std::string str = " - payer l'amende ( /pay )\n";
-    str += " - piochez une carte CHANCE ( /carte )";
+    str += " - piochez une carte CHANCE ( /card )";
 
     while ( true ) {
 
