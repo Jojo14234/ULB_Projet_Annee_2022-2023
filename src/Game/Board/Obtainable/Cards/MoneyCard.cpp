@@ -26,7 +26,7 @@ void HouseHotelMoneyCard::action(Player *player) {
         if ( property->getLevel() == PROPERTY_LEVEL::HOTEL ) { hotel++; }
         else { house += property->getIntLevel(); }
     }
-    int new_amount = (house * this->house_price + hotel + this->hotel_price) * -1;
+    int new_amount = (house * this->house_price + hotel * this->hotel_price) * -1;
     this->setAmount(new_amount);
     MoneyCard2::action(player);
 }
