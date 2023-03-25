@@ -19,7 +19,10 @@ void CellCard::action(Player *player) {
     // Déplacement du joueur
     player->processMove(destination_cell, this->receive_money);
     // Si joueur est en prison, il devient prisonnier
-    if ( this->destination == PRISON_INDEX ) { player->setStatus(PLAYER_STATUS::JAILED); }
+    if ( this->destination == PRISON_INDEX ) { 
+        player->setStatus(PLAYER_STATUS::JAILED); 
+        player->getClient()->getGameServer()->updateAllClientsWithQuery(QUERY::INFOS_PLAYER_SEND_TO_PRISON, player->getUsername());
+    }
     // Sinon il exécute l'action de la case.
     else { player->getCurrentCell()->action(player); }
 }

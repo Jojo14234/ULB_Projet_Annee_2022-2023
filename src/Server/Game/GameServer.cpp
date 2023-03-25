@@ -347,7 +347,11 @@ void GameServer::processRollDice(ClientManager &, Player *player) {
 
 
     // SI on a fait 3 double notre status est passé à JAILED;
-    if ( player->getStatus() == PLAYER_STATUS::JAILED ) { player->processMove(this->game.getBoard()[10], false); return; }
+    if ( player->getStatus() == PLAYER_STATUS::JAILED ) { 
+        player->processMove(this->game.getBoard()[10], false);
+        player->getClient()->getGameServer()->updateAllClientsWithQuery(QUERY::INFOS_PLAYER_SEND_TO_PRISON, player->getUsername());
+        return;
+    }
 
     // Déplacement du joueur
     Cell* new_cell = player->processMove(roll_result, this->game.getBoard());

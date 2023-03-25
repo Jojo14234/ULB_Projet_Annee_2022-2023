@@ -58,8 +58,17 @@ public:
 					  , player-1);
 	}
 
-	void changePlayerCardNb(int player, int nb_card){
-		this->nb_card = nb_card;
+	void addCardToPlayer(int player){
+		this->nb_card++;
+		this->setText(std::to_string(player) + ": " +
+					  usernames[player-1] +  " - " +
+					  std::to_string(this->money) + "$, " +
+					  std::to_string(nb_card) + " cartes prisons"
+					  , player-1);
+	}
+
+	void removeCardToPlayer(int player){
+		this->nb_card--;
 		this->setText(std::to_string(player) + ": " +
 					  usernames[player-1] +  " - " +
 					  std::to_string(this->money) + "$, " +

@@ -105,7 +105,7 @@ public:
 					if (this->model->isMyTurn()) {
 						this->view->getDice1()->setText(std::to_string(dice_i.first_value), 0);
 						this->view->getDice2()->setText(std::to_string(dice_i.second_value), 0);
-					}  else this->view->getConsole()->addText("Le joueur " + this->model->getPlayerTurn() + " a obtenu " + std::to_string(dice_i.first_value ) + " et " + std::to_string(dice_i.second_value));
+					}  else this->view->getConsole()->addText("Le joueur " + this->model->getPlayerTurn() + " a obtenu un " + std::to_string(dice_i.first_value ) + " et un " + std::to_string(dice_i.second_value));
 					break;
 				}
 
@@ -164,8 +164,9 @@ public:
 					if (this->model->isMyTurn()) {
 						this->view->getInfo()->changePlayerMoney(pppi.loser, pppi.loser_money);
 						this->view->getInfo()->changePlayerMoney(pppi.winner, pppi.winner_money);
+						this->view->getConsole()->addText("Vous payez " + std::to_string(pppi.amount) + "$ a " + players_username[pppi.winner-1]);
 					} else {
-						this->view->getConsole()->addText(players_username[pppi.loser-1] + " a paye " + std::to_string(pppi.amount) + " dollars a " + players_username[pppi.winner-1]);
+						this->view->getConsole()->addText(players_username[pppi.loser-1] + " a paye " + std::to_string(pppi.amount) + "$ a " + players_username[pppi.winner-1]);
 					}
 					break;
 				}
@@ -188,6 +189,51 @@ public:
 					this->view->getConsole()->addText(players_username[pit.player] + " a paye " + std::to_string(pit.price) + " dollars de taxe");
 					break;
 				}
+
+				case QUERY::INFOS_PLAYER_GO_OUT_PRISON:{
+					if (this->model->isMyTurn()){
+						this->view->getConsole()->addText("Vous sortez de prison.");
+					} else this->view->getConsole()->addText(response + "sort de prison.");
+					break;
+				}
+
+				case QUERY::INFOS_PLAYER_SEND_TO_PRISON:{
+					if (this->model->isMyTurn()){
+						this->view->getConsole()->addText("Vous etes envoye en prison.");
+					} else this->view->getConsole()->addText(response + " a ete envoye en prison.");
+					break;
+				}
+
+				case QUERY::GET_GO_OUT_JAIL_CARD:{
+					this->view->getInfo()->addCardToPlayer(atoi(response.c_str()));
+					if (this->model->isMyTurn()){
+						this->view->getConsole()->addText("Vous obtenez une carte sortie de prison.");
+					} else this->view->getConsole()->addText(players_username[atoi(response.c_str()-1)] + "a obtenu une carte sortie de prison.");
+					break;
+				}
+
+				case QUERY::LOST_GO_OUT_JAIL_CARD:{
+					this->view->getInfo()->removeCardToPlayer(atoi(response.c_str()));
+					if (this->model->isMyTurn()) this->view->getConsole()->addText("Vous utilisez votre carte.");
+					break;
+				}
+
+				case QUERY::INFOS_PLAYER_WON_MONEY:{
+					GameStateParser game_parser(response);
+					PlayerWonOrLoseMoneyInfo pwolmi = game_parser.parseWonOrLoseMoney();
+					this->view->getInfo()->changePlayerMoney(pwolmi.player, pwolmi.player_money);
+					if (! this->model->isMyTurn()) this->view->getConsole()->addText(players_username[pwolmi.player-1] + " a gagne " + std::to_string(pwolmi.amount) + "$");
+
+				}
+
+				case QUERY::INFOS_PLAYER_LOSE_MONEY:{
+					GameStateParser game_parser(response);
+					PlayerWonOrLoseMoneyInfo pwolmi = game_parser.parseWonOrLoseMoney();
+					this->view->getInfo()->changePlayerMoney(pwolmi.player, pwolmi.player_money);
+					if (! this->model->isMyTurn()) this->view->getConsole()->addText(players_username[pwolmi.player-1] + " a perdu " + std::to_string(-pwolmi.amount) + "$");
+					break;
+				}
+
 
 				case QUERY::USELESS_MESSAGE:{
 					break;

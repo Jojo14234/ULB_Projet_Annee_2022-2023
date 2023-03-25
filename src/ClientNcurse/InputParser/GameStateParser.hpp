@@ -57,6 +57,13 @@ struct PlayerInteractMortgagedCell{
     std::string owner_username;
 };
 
+
+struct PlayerWonOrLoseMoneyInfo{
+	int player;
+	int amount;
+	int player_money;
+};
+
 class GameStateParser {
 
 	std::string str;
@@ -67,6 +74,7 @@ class GameStateParser {
 	PlayerPaidPlayerInformations payment;
 	PlayerInteractTax tax;
 	PlayerInteractMortgagedCell mortgaged;
+	PlayerWonOrLoseMoneyInfo won_or_lose;
 
 public:
 
@@ -198,6 +206,23 @@ public:
 		mortgaged.owner_username = &str[i+1];
 		return mortgaged;
     }
+
+	const PlayerWonOrLoseMoneyInfo& parseWonOrLoseMoney(){
+		int colon_nb = 0;
+		int i = 0;
+		std::string tmp;
+		while (str[i] != ':' || colon_nb < 1) {
+			if (str[i] == ':') {
+				won_or_lose.player = atoi(tmp.c_str())+1;
+				colon_nb++;
+				tmp.clear();
+			} else tmp += str[i]; 
+			i++;
+		}
+		won_or_lose.amount = atoi(tmp.c_str());
+		won_or_lose.player_money = atoi(&str[i+1]);
+		return won_or_lose;
+	}	
 };
 
 

@@ -18,11 +18,15 @@ enum class QUERY {
     INFOS_PLAYER_MOVE_ON_MORTGAGED_CELL, //username:owner_username
     INFOS_PLAYER_MOVE_ON_TAX_CELL, //tax_name:price:index:player_money
     INFOS_PLAYER_MOVE_ON_OWN_CELL, //username
+    INFOS_PLAYER_SEND_TO_PRISON, //username
+    INFOS_PLAYER_GO_OUT_PRISON, //username
+    INFOS_PLAYER_WON_MONEY, // index:amount:player_money [int]:[int]:[int]
+    INFOS_PLAYER_LOSE_MONEY, // index:amount:player_money [int]:[int]:[int]
     //INFOS_PLAYER_MOVE_ON_PARC, //index:amount:player_money
 
     INFOS_CARD_CELL_TO_GO, // idx de la nouvelle case
-    LOST_GO_OUT_JAIL_CARD, // informe juste de l'utilisation / la perte d'une carte sortie de prison
-    GET_GO_OUT_JAIL_CARD, // informe de l'événement d'une acquisition d'une carte sortie de prison
+    LOST_GO_OUT_JAIL_CARD, // player_index, informe juste de l'utilisation / la perte d'une carte sortie de prison
+    GET_GO_OUT_JAIL_CARD, // player_index, informe de l'événement d'une acquisition d'une carte sortie de prison
 
     CHOICE_MONEY_CARD, // Informe du choix entre payer ou piocher une carte chance
 

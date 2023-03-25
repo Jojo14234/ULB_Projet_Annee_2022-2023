@@ -9,11 +9,14 @@ int MoneyCard2::getAmount() { return this->amount; }
 void MoneyCard2::setAmount(int new_amount) { this->amount = new_amount; }
 
 void MoneyCard2::action(Player *player) {
+    std::string str = std::to_string(player->getIndex()) + ":" + std::to_string(amount) + ":" + std::to_string(player->getMoney());
     if (this->amount > 0) {
         player->receive(std::abs(this->amount), "la banque");
+        player->getClient()->getGameServer()->updateAllClientsWithQuery(QUERY::INFOS_PLAYER_WON_MONEY, str);
     }
     else if (this->amount < 0) {
         player->pay(std::abs(this->amount), true);
+        player->getClient()->getGameServer()->updateAllClientsWithQuery(QUERY::INFOS_PLAYER_LOSE_MONEY, str);
     }
     
 }
@@ -28,6 +31,8 @@ void HouseHotelMoneyCard::action(Player *player) {
     }
     int new_amount = (house * this->house_price + hotel * this->hotel_price) * -1;
     this->setAmount(new_amount);
+    std::string str = std::to_string(player->getIndex()) + ":" + std::to_string(new_amount) + ":" + std::to_string(player->getMoney());
+    player->getClient()->getGameServer()->updateAllClientsWithQuery(QUERY::INFOS_PLAYER_LOSE_MONEY, str);
     MoneyCard2::action(player);
 }
 
@@ -60,6 +65,7 @@ void FromOtherMoneyCard::action(Player* player) {
         if (player != &other_player) {
             other_player.pay(this->getAmount(), true);
             new_amount += this->getAmount();
+            //Query Spéciale qui envoie toutes les infos à jours 
         }
     }
     this->setAmount(new_amount);
