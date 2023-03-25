@@ -103,5 +103,7 @@ void TaxCell::action(Player* player) {
 }
 
 void ParkingCell::action(Player *player) {
-    player->getClient()->send("Vous êtes sur le parking gratuit");
+    std::string str = player->getUsername() + ":" +  this->getName() + ":" + std::to_string(player->getMoney());
+    player->getClient()->getGameServer()->updateAllClientsWithQuery(QUERY::INFOS_PLAYER_MOVE, str);
+    player->getClient()->send("Incroyable! le parc gratuit! il ne se passe rien."); 
 }

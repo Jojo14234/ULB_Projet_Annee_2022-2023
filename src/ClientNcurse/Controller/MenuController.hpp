@@ -53,12 +53,12 @@ public:
 				this->model->sendJoinGame(this->view->getJoinInputBox()->getValue());
 				std::string response;
 				this->model->receiveQueryMsg(response, cury);
-				this->view->getConsoleInputBox()->addText(response);
 
-				if (response != "aucune partie n'existe avec ce code"){
+				if (cury == QUERY::PLAYER_JOIN_GAME){
 					this->new_state = STATE::GAME;
 					this->model->setGameCode(this->view->getJoinInputBox()->getValue());
-				}
+				} else this->view->getConsoleInputBox()->addText("Aucune partie n'existe avec ce gamecode !");
+				
 
 				break; }
 			

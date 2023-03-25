@@ -154,8 +154,8 @@ bool Server::find(User* user) {
 // For game
 void Server::clientProcessJoinGame(ClientManager &client) {
 	std::cout << "[Received 'join' query from client  '" << client.getAccount()->getUsername() << "']\n" << std::endl;
-    if ( !games.joinGame(&client, client.getCode()) ) { client.send("Aucune partie n'existe avec ce code"); return; }
-    client.send("(clientProcessJoinGame) Vous venez d'entrer dans la partie avec le code : " + std::to_string(client.getCode()));
+    if ( !games.joinGame(&client, client.getCode()) ) { client.sendQueryMsg("", QUERY::FALSEQ); return; }
+    client.sendQueryMsg("", QUERY::PLAYER_JOIN_GAME);
     client.enterGameLoop();
 }
 

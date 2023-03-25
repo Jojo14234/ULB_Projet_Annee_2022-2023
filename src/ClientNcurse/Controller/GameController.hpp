@@ -161,9 +161,12 @@ public:
 				case QUERY::INFOS_PLAYER_PAID_PLAYER:{
 					GameStateParser game_parser(response);
 					PlayerPaidPlayerInformations pppi = game_parser.parsePayement();
-					this->view->getInfo()->changePlayerMoney(pppi.loser, pppi.loser_money);
-					this->view->getInfo()->changePlayerMoney(pppi.winner, pppi.winner_money);
-					this->view->getConsole()->addText(players_username[pppi.loser-1] + " a paye " + std::to_string(pppi.amount) + " dollars a " + players_username[pppi.winner-1]);
+					if (this->model->isMyTurn()) {
+						this->view->getInfo()->changePlayerMoney(pppi.loser, pppi.loser_money);
+						this->view->getInfo()->changePlayerMoney(pppi.winner, pppi.winner_money);
+					} else {
+						this->view->getConsole()->addText(players_username[pppi.loser-1] + " a paye " + std::to_string(pppi.amount) + " dollars a " + players_username[pppi.winner-1]);
+					}
 					break;
 				}
 

@@ -4,20 +4,42 @@ void GameInputParser::parse() {
 	InputParser::parse();
 	const std::string &query = (*this)[0];
 
-	if      ( query == "/roll" )        { this->query_type = GAME_QUERY_TYPE::ROLL_DICE; } // Lance les dés
-    else if ( query == "/out" )         { this->query_type = GAME_QUERY_TYPE::LEAVE_BID; } // Quitte une enchère
+	if      ( query == "/start" )       { this->query_type = GAME_QUERY_TYPE::START; } // Démarre la partie
+    else if ( query == "/roll" )        { this->query_type = GAME_QUERY_TYPE::ROLL_DICE; } // Lance les dés
+    else if ( query == "/pay" )         { this->query_type = GAME_QUERY_TYPE::PAY; }       // To pay to exit prison
+    else if ( query == "/card" )        { this->query_type = GAME_QUERY_TYPE::CARD; } // Pioche une carte lors qu'on a piocher la carte choix
+    else if ( query == "/use" )         { this->query_type = GAME_QUERY_TYPE::USEGOOJCARD; } // To use the card get out of jail
+    else if ( query == "/leave" )       { this->query_type = GAME_QUERY_TYPE::LEAVE_SELECTION; } // Quitte la sélection
+    else if ( query == "/build" )       { this->query_type = GAME_QUERY_TYPE::BUILD; }     // passer en mode construction
+    else if ( query == "/sell" )        { this->query_type = GAME_QUERY_TYPE::SELL_BUILDINGS; } // passer en mode vente
     else if ( query == "/mortgage" )    { this->query_type = GAME_QUERY_TYPE::MORTGAGE; }  // Passe en mode hypothèque
-    else if ( query == "/leave" )       { this->query_type = GAME_QUERY_TYPE::LEAVE_SELECTION; } // Qui la sélection
+    else if ( query == "/liftMortgage" ){ this->query_type = GAME_QUERY_TYPE::LIFT_MORTGAGE; } // Passer en mode lift hypothèque
     else if ( query == "/exchange" )    { this->query_type = GAME_QUERY_TYPE::EXCHANGE;}   // Commence un échange
-    else if ( query == "/build" )       { this->query_type = GAME_QUERY_TYPE::BUILD; }     // Construit un/des bâtiment(s)
-    else if ( query == "/sell" )        { this->query_type = GAME_QUERY_TYPE::SELL_BUILDINGS; } // Vend un/des bâtiment(s)
+    else if ( query == "/yes" )         { this->query_type = GAME_QUERY_TYPE::YES; } // C'est un oui
+    else if ( query == "/no" )          { this->query_type = GAME_QUERY_TYPE::NO; } // C'est un non
+    else if ( query == "/trade" )       {
+        if (this->getNbParameters() == 2 ) { this->query_type = GAME_QUERY_TYPE::TRADE; }
+        else { std::cout << "Format de la requête doit être /trade [prop_wanted] [money]" << std::endl; }
+    }
+    else if ( query == "/accept" )      { this->query_type = GAME_QUERY_TYPE::ACCEPT; }
+    else if ( query == "/refuse" )      { this->query_type = GAME_QUERY_TYPE::REFUSE; }
+
+    else if ( query == "/participate" ) { this->query_type = GAME_QUERY_TYPE::PARTICIPATE; } // Participe à une enchère
+
+
+
+
+
+
+
+    else if ( query == "/out" )         { this->query_type = GAME_QUERY_TYPE::LEAVE_BID; } // Quitte une enchère
     else if ( query == "/give-up" )     { this->query_type = GAME_QUERY_TYPE::GIVE_UP; }   // Abandonne
     else if ( query == "/participate" ) { this->query_type = GAME_QUERY_TYPE::PARTICIPATE; } // Participe à une enchère
-    else if ( query == "/start" )       { this->query_type = GAME_QUERY_TYPE::START; }     // Démarre la partie
     else if ( query == "/end" )         { this->query_type = GAME_QUERY_TYPE::END_TURN; }  // Termine son tour
     else if ( query == "/leave" )       { this->query_type = GAME_QUERY_TYPE::LEAVE; }     // Quitte la partie
 	else if ( query == "/buy" )         { this->query_type = GAME_QUERY_TYPE::BUY; }       // Achète une propriété
 	else if ( query == "/disconnect" )  { this->query_type = GAME_QUERY_TYPE::LEAVE; }     // Quitte la partie
+    else if ( query == "/accept")       { this->query_type = GAME_QUERY_TYPE::ACCEPT; }    //accepte de participer à l'échange
 
     else if ( query == "/bid") {
         if ( this->getNbParameters() == 1 ) { this->query_type = GAME_QUERY_TYPE::BID; }   // Enchéri d'un certain montant
@@ -35,5 +57,8 @@ void GameInputParser::parse() {
         if ( this->getNbParameters() == 2 ) { this->query_type = GAME_QUERY_TYPE::ARG2; }   // Argument numéro 2
         else { std::cout << "(GameInputParser::parse(/arg2)) cependant il y a [" << this->getNbParameters() << "] argument(s) !" << std::endl; }
     }
-    else { std::cout << "(GameInputParser::parse(...)), commande non reconnue !" << std::endl; } // Autre
+    else {
+        this->query_type = GAME_QUERY_TYPE::NONE;
+        std::cout << "(GameInputParser::parse(...)), commande non reconnue !" << std::endl;
+    } // Autre
 }
