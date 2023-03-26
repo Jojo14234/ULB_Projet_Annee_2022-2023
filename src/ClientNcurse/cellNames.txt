@@ -36,5 +36,5 @@ Vert3
 Gare4
 Chance
 Bleu1
-Taxe
+Taxes
 Bleu2

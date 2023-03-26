@@ -177,7 +177,7 @@
             
 			{
                 "description" :  "Payez une amende de 15$ ou bien tirez une carte « CHANCE ».",
-                "amount" : 15,
+                "amount" : -15,
                 "type" : "Choice"
             },
             

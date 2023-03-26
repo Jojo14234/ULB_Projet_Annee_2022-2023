@@ -122,8 +122,8 @@ Card* CardDeck::drawACard() {
         // et si elle n'est pas dans le paquet il faut retirer une carte
         if (result == 15 && !isJailCardInside()) { drawn_card = nullptr; }
 	}
-    //return drawn_card;
-    return this->card_list.at(8).get();;     //pour debug
+    return drawn_card;
+    //return this->card_list.at(8).get();;     //pour debug
 }
 
 /*

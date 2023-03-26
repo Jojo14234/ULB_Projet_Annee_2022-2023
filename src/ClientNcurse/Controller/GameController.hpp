@@ -180,14 +180,18 @@ public:
 				}
 
 				case QUERY::INFOS_PLAYER_MOVE_ON_OWN_CELL:{
+					if (this->model->isMyTurn()) this->view->getConsole()->addText("Vous etes chez vous.");
 					break;
 				}
 
 				case QUERY::INFOS_PLAYER_MOVE_ON_TAX_CELL:{
 					GameStateParser game_parser(response);
 					PlayerInteractTax pit = game_parser.parseTaxLine();
+					int index = this->view->getBoard()->getCellIndex(pit.tax_name);
+					this->view->getBoard()->movePlayer(index, pit.player);
+
 					this->view->getInfo()->changePlayerMoney(pit.player, pit.player_money);
-					this->view->getConsole()->addText(players_username[pit.player] + " a paye " + std::to_string(pit.price) + " dollars de taxe");
+					this->view->getConsole()->addText(players_username[pit.player-1] + " a paye " + std::to_string(pit.price) + " dollars de taxe");
 					break;
 				}
 
@@ -224,6 +228,7 @@ public:
 					PlayerWonOrLoseMoneyInfo pwolmi = game_parser.parseWonOrLoseMoney();
 					this->view->getInfo()->changePlayerMoney(pwolmi.player, pwolmi.player_money);
 					if (! this->model->isMyTurn()) this->view->getConsole()->addText(players_username[pwolmi.player-1] + " a gagne " + std::to_string(pwolmi.amount) + "$");
+					break;
 
 				}
 
@@ -242,8 +247,24 @@ public:
 					break;
 				}
 
-				case QUERY::CHOICE_MONEY_CARD:{
+				case QUERY::INFOS_PLAYER_MOVE_ON_CARD_CELL:{
+					GameStateParser game_parser(response);
+					PlayerMoveOnCardCell pmocc = game_parser.parseMoveOnCardCell();	
+					this->view->getBoard()->movePlayer(pmocc.new_pos, pmocc.player);
+					if (this->model->isMyTurn()){
+						this->view->getConsole()->addText("Vous venez de piocher une carte :");
+						this->view->getConsole()->addText(pmocc.description);
+					} else this->view->getConsole()->addText(players_username[pmocc.player-1] + " a pioche un carte.");
+					break;
+				}
+
+				case QUERY::INFOS_CARD_DESCRIPTION:{
+					this->view->getConsole()->addText("Vous venez de piocher une carte :");
 					this->view->getConsole()->addText(response);
+				}
+
+				case QUERY::CHOICE_MONEY_CARD:{
+					this->view->getConsole()->addText("/pay ou /card");
 					break;
 				}
 
@@ -280,6 +301,21 @@ public:
 						int index = this->view->getBoard()->getCellIndex(property);
 						this->view->getBoard()->leaveSelection(index);
 					}
+					break;
+				}
+
+				case QUERY::INFOS_ASK_FOR_PURCHASE:{
+					GameStateParser game_parser(response);
+					AskPlayerForPurchase purchase = game_parser.parseAskForPurchase();
+
+					this->view->getConsole()->addText("Acheter " + purchase.cell_name + " pour " + std::to_string(purchase.amount)+"$ ?");
+		 			this->view->getConsole()->addText("/yes ou /no");
+					this->view->getConsole()->addText("Si vous ne l'achetez pas, des encheres debuteront");
+					break;
+				}
+
+				case QUERY::INFOS_NOT_ENOUGH_MONEY:{
+					this->view->getConsole()->addText("Vous ne possedez pas assez d'argent.");
 					break;
 				}
 

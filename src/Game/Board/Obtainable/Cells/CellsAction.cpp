@@ -9,7 +9,9 @@
 
 void DrawableCardCell::action(Player* player) {
     Card* drawn_card = deck->drawACard();
-    player->getClient()->send("Vous avez pioché cette carte : \n\t" + drawn_card->getDescription() + "\n");
+    std::string str = std::to_string(player->getClient()->getGameServer()->getCurrentPlayerIndex()) + ":" + std::to_string(player->getPosition()) + ":" + drawn_card->getDescription();
+    player->getClient()->getGameServer()->updateAllClientsWithQuery(QUERY::INFOS_PLAYER_MOVE_ON_CARD_CELL, str);
+    
     drawn_card->action(player);
 } 
 
@@ -25,7 +27,6 @@ void LandCell::action(Player* player) {
     str += std::to_string(player->getBankAccount()->getMoney());
     player->getClient()->getGameServer()->updateAllClientsWithQuery(QUERY::INFOS_PLAYER_MOVE, str);
 
-
     switch (land->getStatus()) {
         case::LAND_STATUS::FREE : this->buy(player); break;
         case::LAND_STATUS::PAID : this->pay(player); break;
@@ -40,9 +41,7 @@ void LandCell::buy(Player *player) {
         // MESSAGE + OUTPUT
         GAME_QUERY_TYPE query;
         sf::Packet packet;
-        player->getClient()->send("Acheter " + land->getName() + " pour " + std::to_string(land->getPurchasePrice())+"$ ?");
-        player->getClient()->send("/yes ou /no");
-        player->getClient()->send("Si vous ne l'achetez pas, des encheres debuteront");
+        player->getClient()->sendQueryMsg(land->getName() + ":" + std::to_string(land->getPurchasePrice()), QUERY::INFOS_ASK_FOR_PURCHASE);
         player->getClient()->receive(query);
 
         if ( query == GAME_QUERY_TYPE::YES ) {
@@ -91,12 +90,8 @@ void LandCell::mortgage(Player *player) {
 void TaxCell::action(Player* player) {
     player->pay(tax_price, true);
 
-    std::string str = name + ":";
-    str += std::to_string(tax_price) + ":";
-    str += std::to_string(player->getIndex()) + ":";
-    str += std::to_string(player->getMoney());
-
-    player->getClient()->getGameServer()->updateAllClientsWithQuery(QUERY::INFOS_PLAYER_MOVE_ON_OWN_CELL, str); 
+    std::string str = name + ":" + std::to_string(tax_price) + ":" + std::to_string(player->getIndex()) + ":" + std::to_string(player->getMoney());
+    player->getClient()->getGameServer()->updateAllClientsWithQuery(QUERY::INFOS_PLAYER_MOVE_ON_TAX_CELL, str); 
 }
 
 void ParkingCell::action(Player *player) {

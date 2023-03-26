@@ -16,6 +16,7 @@ enum class QUERY {
     INFOS_PLAYER_DIDNT_BUY, //username
     INFOS_PLAYER_PAID_PLAYER, //amount:loser_index:money:winner_index:money
     INFOS_PLAYER_MOVE_ON_MORTGAGED_CELL, //username:owner_username
+    INFOS_PLAYER_MOVE_ON_CARD_CELL, //player:cell_index:description [int]:[int]:[string]
     INFOS_PLAYER_MOVE_ON_TAX_CELL, //tax_name:price:index:player_money
     INFOS_PLAYER_MOVE_ON_OWN_CELL, //username
     INFOS_PLAYER_SEND_TO_PRISON, //username
@@ -29,6 +30,10 @@ enum class QUERY {
     GET_GO_OUT_JAIL_CARD, // player_index, informe de l'événement d'une acquisition d'une carte sortie de prison
 
     CHOICE_MONEY_CARD, // Informe du choix entre payer ou piocher une carte chance
+
+    INFOS_NOT_ENOUGH_MONEY,
+    INFOS_ASK_FOR_PURCHASE, // land_name:land_price [string]:[int]
+    INFOS_CARD_DESCRIPTION, // description
 
 
     PLAYER_JOIN_GAME, // username:gameCode [string]:[int]

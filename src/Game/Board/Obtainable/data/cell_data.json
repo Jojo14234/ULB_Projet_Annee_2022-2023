@@ -24,13 +24,13 @@
 	"TAX" : [
 			{
 				"pos" : 4,
-				"type" : "impot",
+				"type" : "Impots",
 				"amount" : 200 
 			},
 
 			{
 				"pos" : 38,
-				"type" : "luxe taxe",
+				"type" : "Taxes",
 				"amount" : 100
 			}
 

@@ -71,6 +71,19 @@ struct PlayerMoveByCard{
 };
 
 
+struct PlayerMoveOnCardCell{
+	int player;
+	int new_pos;
+	std::string description;
+};
+
+
+struct AskPlayerForPurchase{
+	std::string cell_name;
+	int amount;
+};
+
+
 class GameStateParser {
 
 	std::string str;
@@ -84,6 +97,8 @@ class GameStateParser {
 	PlayerWonOrLoseMoneyInfo won_or_lose;
 	PlayerMoveByCard move_by_card;
 	std::vector<std::string> properties;
+	PlayerMoveOnCardCell card_cell;
+	AskPlayerForPurchase ask_purchase;
 
 public:
 
@@ -253,6 +268,32 @@ public:
 		return properties;
 	}
 	
+	const PlayerMoveOnCardCell& parseMoveOnCardCell(){
+		int colon_nb = 0;
+		int i = 0;
+		std::string tmp;
+		while (str[i] != ':' || colon_nb < 1) {
+			if (str[i] == ':') {
+				card_cell.player = atoi(tmp.c_str())+1;
+				colon_nb++;
+				tmp.clear();
+			} else tmp += str[i]; 
+			i++;
+		}
+		card_cell.new_pos = atoi(tmp.c_str());
+		card_cell.description = &str[i+1];
+		return card_cell;
+	}	
+
+	const AskPlayerForPurchase& parseAskForPurchase() {
+		int i = 0;
+		std::string tmp;
+		while (str[i] != ':' ) { tmp += str[i]; i++; }
+		ask_purchase.cell_name = tmp;
+		ask_purchase.amount = atoi(&str[i+1]);
+		return ask_purchase;
+	}
+
 };
 
 

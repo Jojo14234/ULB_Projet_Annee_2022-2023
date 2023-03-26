@@ -110,7 +110,7 @@ bool Player::pay(int amount, bool forced) {
     // Assez d'argent -> on paye et tout va bien
     if ( bank_account.canPay(amount) ) { bank_account.pay(amount); return true; }
     // Pas assez d'argent, mais pas forcer -> on ne paye pas et on renvoie qu'on a pas payer.
-    if ( !forced ) {this->getClient()->send("Pas assez d'argent !"); return false; }
+    if ( !forced ) {this->getClient()->sendQueryMsg("", QUERY::INFOS_NOT_ENOUGH_MONEY); return false; }
     // Pas assez d'argent mais forcer de payer -> on passe en status de faillite suspecter mais on ne paye pas non plus.
     this->status = PLAYER_STATUS::BANKRUPT_SUSPECTED;
     this->money_debt = amount;
@@ -118,7 +118,7 @@ bool Player::pay(int amount, bool forced) {
 }
 void Player::receive(int amount, std::string source) {
     bank_account.gain(amount);
-    getClient()->send("Vous avez reçu " + std::to_string(amount) + "e de " + source);
+    //getClient()->send("Vous avez reçu " + std::to_string(amount) + "e de " + source);
 }
 
 
@@ -168,7 +168,7 @@ void Player::looseGOOJCard(){
     JailCard* card = GOOJ_cards.back();
     this->GOOJ_cards.pop_back();
     card->setOwner(nullptr);
-    client->send("Vous perdez votre carte prison suite à son utilisation.\n");
+    //client->send("Vous perdez votre carte prison suite à son utilisation.\n");
 }
 void Player::useGOOJCard() {
     this->status = PLAYER_STATUS::FREE;
