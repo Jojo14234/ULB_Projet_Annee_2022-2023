@@ -22,7 +22,7 @@
 **Asstistant responsable** : Nil Lojo Fernandez
 
 
-# Capitali$t menu principale
+# Capitali$t menu principal
 
 Capitali$t est un jeu utilisant le modèle client-serveur. Chaque utilisateur doit avant de pouvoir jouer se créer un compte 
 auquel il pourra par la suite se connecter. Une fois connecté à son compte l'utilisateur à accès à plusieurs choix :
