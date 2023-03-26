@@ -64,6 +64,13 @@ struct PlayerWonOrLoseMoneyInfo{
 	int player_money;
 };
 
+
+struct PlayerMoveByCard{
+	int player;
+	int new_pos;
+};
+
+
 class GameStateParser {
 
 	std::string str;
@@ -75,6 +82,8 @@ class GameStateParser {
 	PlayerInteractTax tax;
 	PlayerInteractMortgagedCell mortgaged;
 	PlayerWonOrLoseMoneyInfo won_or_lose;
+	PlayerMoveByCard move_by_card;
+	std::vector<std::string> properties;
 
 public:
 
@@ -198,14 +207,14 @@ public:
 		return tax;
 	}
 
-    const PlayerInteractMortgagedCell& parseMortgagedLine() {
+	const PlayerInteractMortgagedCell& parseMortgagedLine() {
 		int i = 0;
 		std::string tmp;
 		while (str[i] != ':' ) { tmp += str[i]; i++; }
 		mortgaged.username = tmp;
 		mortgaged.owner_username = &str[i+1];
 		return mortgaged;
-    }
+	}
 
 	const PlayerWonOrLoseMoneyInfo& parseWonOrLoseMoney(){
 		int colon_nb = 0;
@@ -223,6 +232,27 @@ public:
 		won_or_lose.player_money = atoi(&str[i+1]);
 		return won_or_lose;
 	}	
+
+	const PlayerMoveByCard& parsePlayerMoveByCard() {
+		int i = 0;
+		std::string tmp;
+		while (str[i] != ':' ) { tmp += str[i]; i++; }
+		move_by_card.player = atoi(tmp.c_str())+1;
+		move_by_card.new_pos = atoi(&str[i+1]);
+		return move_by_card;
+	}
+
+	std::vector<std::string> parsePropertiesName() {
+		std::string tmp;
+		for (char c : str){
+			if (c == ':') {
+				properties.push_back(tmp);
+				tmp.clear();
+			} else tmp += c;
+		}
+		return properties;
+	}
+	
 };
 
 

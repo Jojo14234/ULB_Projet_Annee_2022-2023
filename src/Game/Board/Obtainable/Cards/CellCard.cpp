@@ -13,7 +13,7 @@ void CellCard::action(Player *player) {
     // On vérifie si la destination est négative, on calcule la position de destination
     if ( this->destination < 0 ) { this->destination = ( player->getPosition() - std::abs(this->destination) + BOARD_SIZE ) % BOARD_SIZE; }
     // Message pour l'affichage
-    player->getClient()->sendQueryMsg(std::to_string(this->destination), QUERY::INFOS_CARD_CELL_TO_GO);
+    player->getClient()->getGameServer()->updateAllClientsWithQuery(QUERY::INFOS_CARD_CELL_TO_GO, std::to_string(player->getIndex()) + ":" + std::to_string(this->destination));
     // Case de destination
     Cell* destination_cell = player->getClient()->getGameServer()->getGame()->getBoard()[this->destination];
     // Déplacement du joueur

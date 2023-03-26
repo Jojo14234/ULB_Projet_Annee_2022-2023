@@ -62,6 +62,9 @@ public:
 	void setPurchased(int cell, int player);
 	void setHouse(int cell, int house_nb);
 	//void removeHouse(int cell, int house_nb);
+	void setBuildable(int cell);
+	void setSalable(int cell);
+	void leaveSelection(int cell);
 
 };
 

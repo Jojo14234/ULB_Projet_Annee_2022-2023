@@ -414,7 +414,7 @@ void GameServer::processBuild(ClientManager &client, Player *player) {
         this->playerBuildInfos(client);
         client.receive(query, packet);
     }
-    this->updateThisClientWithQuery(QUERY::MESSAGE, "Vous quittez le mode de sélection", client);
+    this->updateThisClientWithQuery(QUERY::INFOS_LEAVE_BUILD_MODE, "Vous quittez le mode de sélection", client);
 }
 
 void GameServer::processSellBuild(ClientManager &client, Player *player) {

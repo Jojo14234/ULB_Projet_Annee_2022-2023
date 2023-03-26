@@ -24,7 +24,7 @@ enum class QUERY {
     INFOS_PLAYER_LOSE_MONEY, // index:amount:player_money [int]:[int]:[int]
     //INFOS_PLAYER_MOVE_ON_PARC, //index:amount:player_money
 
-    INFOS_CARD_CELL_TO_GO, // idx de la nouvelle case
+    INFOS_CARD_CELL_TO_GO, // player_index:land_index [int]:[int]
     LOST_GO_OUT_JAIL_CARD, // player_index, informe juste de l'utilisation / la perte d'une carte sortie de prison
     GET_GO_OUT_JAIL_CARD, // player_index, informe de l'événement d'une acquisition d'une carte sortie de prison
 
@@ -39,8 +39,10 @@ enum class QUERY {
 
     INFOS_ROLL_DICE, // dice1:dice2:result:isDouble:doubleCount [int]:[int]:[int]:[bool]:[int]
 
-    INFOS_BUILD_PROP, // All the property name if they are buildable
-    INFOS_SELL_BUILD, // All the property name if build can be sell
+    INFOS_LEAVE_BUILD_MODE,
+
+    INFOS_BUILD_PROP, // name:name:... [string]:[string]:... All the property name if they are buildable
+    INFOS_SELL_BUILD, // name:name:... [string]:[string]:... All the property name if build can be sell
     INFOS_MORTGAGEABLE_PROP, // All the property mortgageable by a player
     INFOS_LIFT_MORTGAGEABLE_PROP, // All the property lift mortgageable by a player
     INFOS_EXCHANGEABLE_PROP, // username=property_exchangeable:property_exchangeable:|... All teh properties exchangeable by all the player

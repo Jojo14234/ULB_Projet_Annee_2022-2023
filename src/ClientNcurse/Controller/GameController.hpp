@@ -22,6 +22,7 @@ class GameController : public AbstractController {
 
 	int player_nb;
 	std::vector<std::string> players_username;
+	std::vector<std::string> build_mode;
 
 public:
 
@@ -234,10 +235,53 @@ public:
 					break;
 				}
 
+				case QUERY::INFOS_CARD_CELL_TO_GO:{
+					GameStateParser game_parser(response);
+					PlayerMoveByCard pmbc = game_parser.parsePlayerMoveByCard();
+					this->view->getBoard()->movePlayer(pmbc.new_pos, pmbc.player);
+					break;
+				}
+
+				case QUERY::CHOICE_MONEY_CARD:{
+					this->view->getConsole()->addText(response);
+					break;
+				}
 
 				case QUERY::USELESS_MESSAGE:{
 					break;
 				}		
+
+				case QUERY::INFOS_BUILD_PROP:{
+					GameStateParser game_parser(response);
+					std::vector<std::string> build_mode = game_parser.parsePropertiesName();
+					if (this->model->isMyTurn()){
+						for (auto property : build_mode){
+							int index = this->view->getBoard()->getCellIndex(property);
+							this->view->getBoard()->setBuildable(index);
+						}	
+					}
+					break;
+				}
+
+				case QUERY::INFOS_SELL_BUILD:{
+					GameStateParser game_parser(response);
+					std::vector<std::string> build_mode = game_parser.parsePropertiesName();
+					if (this->model->isMyTurn()){
+						for (auto property : build_mode){
+							int index = this->view->getBoard()->getCellIndex(property);
+							this->view->getBoard()->setSalable(index);
+						}
+					}										
+					break;
+				}
+
+				case QUERY::INFOS_LEAVE_BUILD_MODE:{
+					for (auto property : build_mode){
+						int index = this->view->getBoard()->getCellIndex(property);
+						this->view->getBoard()->leaveSelection(index);
+					}
+					break;
+				}
 
 				default: 
 					this->view->getConsole()->addText(response);

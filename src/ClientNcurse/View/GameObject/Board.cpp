@@ -87,3 +87,9 @@ void Board::setHouse(int cell, int house_nb){
 	
 }
 
+void Board::setBuildable(int cell) { board[cell]->enterBuildMode(); }
+
+void Board::setSalable(int cell) { board[cell]->enterSellMode(); }
+
+void Board::leaveSelection(int cell) { board[cell]->leaveBuildMode(); }
+

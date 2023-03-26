@@ -35,6 +35,18 @@ public :
 		texts.at(2) = "Owner: " + std::to_string(player);
 	}
 
+	void enterBuildMode(){
+		texts.at(2) = "BUILD";
+	}
+
+	void enterSellMode(){
+		texts.at(2) = "SELL";
+	}
+
+	void leaveBuildMode(){
+		addBuilding(this->building_nb);
+	}
+
 	void setIdle(){
 		texts.at(2).clear();
 		building_nb = 0;
