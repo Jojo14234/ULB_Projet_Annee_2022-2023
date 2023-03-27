@@ -72,3 +72,13 @@ ncurse: ${NCURSE_BINS} ${NCURSE_CONTROLLER_BINS} ${NCURSE_INPUT_PARSER_BINS} ${N
 	${CXX} ${CXXFLAGS} -o ncurse $^ ${LDLIBS}
 	make clean
 
+
+# new Client part
+GUI:
+	cd newClient && make GUI
+
+CUI:
+	cd newClient && make CUI
+
+CLI:
+	cd newClient && make CLI
