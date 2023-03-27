@@ -175,7 +175,7 @@ public:
 				case QUERY::INFOS_PLAYER_MOVE_ON_MORTGAGED_CELL:{
 					GameStateParser game_parser(response);
 					PlayerInteractMortgagedCell pimc = game_parser.parseMortgagedLine();
-					this->view->getConsole()->addText(pimc.username + " est tombe sur une propriete hypothequee");
+					this->view->getConsole()->addText(pimc.username + " est tombe sur une propriete hypotheque");
 					break;
 				}
 

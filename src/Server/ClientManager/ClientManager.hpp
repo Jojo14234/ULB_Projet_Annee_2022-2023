@@ -36,6 +36,7 @@ class ClientManager {
 	args_t args;
 
 public:
+    ClientManager()=default;
 
 	// Send infos to the client
 	void send(const std::string &input);
