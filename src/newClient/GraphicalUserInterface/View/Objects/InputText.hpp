@@ -56,7 +56,7 @@ protected:
 
 public:
 
-	InputText(ObjectInfo<> info, sf::Color color=sf::Color::Black, const std::string &font_path=DEFAULT_FONT_PATH) :
+	InputText(ObjectInfo<> info, sf::Color color=sf::Color::White, const std::string &font_path=DEFAULT_FONT_PATH) :
 		AbstractViewObject(info), Text(ObjectInfo<>(info.getWidth(), info.getHeight()*0.75, info.getX(), info.getY()), "", color, font_path), Button(info) {
 		cursor.setSize(sf::Vector2f(2.f, info.getHeight()));
 		cursor.setFillColor(color);
@@ -87,13 +87,7 @@ public:
 
 	// Handle
 	void handle(sf::Event event) {
-		if (event.type == sf::Event::MouseButtonPressed) {
-			if (this->contains(event.mouseButton.x, event.mouseButton.y)) {
-				select();
-			} else {
-				deselect();
-			}
-		} else if (event.type == sf::Event::KeyPressed and is_selected) {
+		if (event.type == sf::Event::KeyPressed and is_selected) {
 			if (event.key.code == sf::Keyboard::BackSpace) {
 				removeChar();
 			} else if (event.key.code == sf::Keyboard::Enter) {
