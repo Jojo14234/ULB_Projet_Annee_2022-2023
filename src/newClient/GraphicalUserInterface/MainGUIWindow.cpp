@@ -12,6 +12,8 @@
 #include "Controller/FriendsGUIController.hpp"
 #include "Controller/RankGUIController.hpp"
 #include "Controller/GameGUIController.hpp"
+#include "View/configs.hpp"
+
 
 // Private
 
@@ -40,7 +42,7 @@ void MainGUIWindow::draw() {
 }
 
 void MainGUIWindow::clear() {
-	this->window.clear(sf::Color::Black);
+	this->window.clear(BACKGROUND_COLOR);
 }
 
 // Public
