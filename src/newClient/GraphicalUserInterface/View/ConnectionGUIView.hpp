@@ -19,8 +19,8 @@ class ConnectionGUIView: public AbstractGUIView {
 
 	InputBox username{ObjectInfo<>(WINDOW_WIDTH/3.f, WINDOW_HEIGHT/15.f, WINDOW_WIDTH/2.f - WINDOW_WIDTH/6.f, WINDOW_HEIGHT/2.f - WINDOW_HEIGHT/15.f), BOX_COLOR, SERIF_FONT_PATH};
 	InputBox password{ObjectInfo<>(WINDOW_WIDTH/3.f, WINDOW_HEIGHT/15.f, WINDOW_WIDTH/2.f - WINDOW_WIDTH/6.f, WINDOW_HEIGHT/2.f + WINDOW_HEIGHT/15.f), BOX_COLOR, SERIF_FONT_PATH};
-	Box border1{ObjectInfo<>(WINDOW_WIDTH/3.f+10, WINDOW_HEIGHT/15.f+10, WINDOW_WIDTH/2.f - WINDOW_WIDTH/6.f -5, WINDOW_HEIGHT/2.f - WINDOW_HEIGHT/15.f -5), sf::Color::White};
-	Box border2{ObjectInfo<>(WINDOW_WIDTH/3.f+10, WINDOW_HEIGHT/15.f+10, WINDOW_WIDTH/2.f - WINDOW_WIDTH/6.f -5, WINDOW_HEIGHT/2.f + WINDOW_HEIGHT/15.f -5), sf::Color::White};
+	Border username_border{username, 5};
+	Border password_border{password, 5};
 
 	ModalBox modal_box{ObjectInfo<>(WINDOW_WIDTH/2.f, WINDOW_HEIGHT/2.f, WINDOW_WIDTH/4.f, WINDOW_HEIGHT/4.f), BOX_COLOR};
 
@@ -36,8 +36,8 @@ public:
 
 	void draw() override {
 		logo.draw(*window);
-		border1.draw(*window);
-		border2.draw(*window);
+		username_border.draw(*window);
+		password_border.draw(*window);
 		username.draw(*window);
 		password.draw(*window);
 		modal_box.draw(*window);
