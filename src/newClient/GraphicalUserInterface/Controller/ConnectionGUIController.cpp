@@ -7,6 +7,9 @@
 void ConnectionGUIController::handle(sf::Event event) {
 	switch(event.type) {
 		case sf::Event::MouseButtonPressed: {
+
+			// buttons
+
 			this->view->username.deselect();
 			this->view->password.deselect();
 			if (this->view->username.contains(event.mouseButton.x, event.mouseButton.y)) {

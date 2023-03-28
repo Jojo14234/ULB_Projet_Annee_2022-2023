@@ -76,6 +76,8 @@ public:
 	void select() { is_selected=true; }
 	void deselect() { is_selected=false; }
 
+	void clear() { text.setString(""); cursor_pos=0; setCursor(); }
+
 
 	// Checker
 #pragma GCC diagnostic push
@@ -99,5 +101,8 @@ public:
 			addChar(c);
 		}
 	}
+
+	// Getter
+	std::string getText() const { return text.getString(); }
 
 };
