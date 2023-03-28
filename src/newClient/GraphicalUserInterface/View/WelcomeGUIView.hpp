@@ -14,7 +14,7 @@ class WelcomeGUIController; // forward declaration
 class WelcomeGUIView: public AbstractGUIView {
 
 	// Objects
-	Image logo{ObjectInfo<>(788.f, 145.f, WINDOW_WIDTH/2.f - 788.f/2.f, WINDOW_HEIGHT/10.f), LOGO_PATH};
+	Image logo{ObjectInfo<>(WINDOW_WIDTH/2.f, WINDOW_WIDTH/2.f * 145.f/788.f, WINDOW_WIDTH/4.f , WINDOW_HEIGHT/10.f), LOGO_PATH};
 
 public:
 
