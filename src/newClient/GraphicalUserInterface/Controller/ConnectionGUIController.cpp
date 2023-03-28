@@ -9,15 +9,20 @@ void ConnectionGUIController::handle(sf::Event event) {
 		case sf::Event::MouseButtonPressed: {
 
 			// buttons
-
-			this->view->username.deselect();
-			this->view->password.deselect();
-			if (this->view->username.contains(event.mouseButton.x, event.mouseButton.y)) {
-				this->state = USERNAME;
-				this->view->username.select();
-			} else if (this->view->password.contains(event.mouseButton.x, event.mouseButton.y)) {
-				this->state = PASSWORD;
-				this->view->password.select();
+			if (this->view->login_button.contains(event.mouseButton.x, event.mouseButton.y)) {
+				// TODO : model
+			} else if (this->view->register_button.contains(event.mouseButton.x, event.mouseButton.y)) {
+				// TODO : model
+			} else {
+				this->view->username.deselect();
+				this->view->password.deselect();
+				if (this->view->username.contains(event.mouseButton.x, event.mouseButton.y)) {
+					this->state = USERNAME;
+					this->view->username.select();
+				} else if (this->view->password.contains(event.mouseButton.x, event.mouseButton.y)) {
+					this->state = PASSWORD;
+					this->view->password.select();
+				} 
 			} break;
 		}
 		case sf::Event::TextEntered:
