@@ -21,6 +21,7 @@ GUI_VIEW_BINS = $(patsubst GraphicalUserInterface/View/%.cpp, GraphicalUserInter
 CUI_BINS = $(patsubst CommandUserInterface/%.cpp, CommandUserInterface/%.o, $(wildcard CommandUserInterface/*.cpp))
 CUI_CONTROLLER_BINS = $(patsubst CommandUserInterface/Controller/%.cpp, CommandUserInterface/Controller/%.o, $(wildcard CommandUserInterface/Controller/*.cpp))
 CUI_VIEW_BINS = $(patsubst CommandUserInterface/View/%.cpp, CommandUserInterface/View/%.o, $(wildcard CommandUserInterface/View/*.cpp))
+CUI_GAME_OBJECT_BINS = $(patsubst CommandUserInterface/View/GameObject/%.cpp, CommandUserInterface/View/GameObject/%.o, $(wildcard CommandUserInterface/View/GameObject/*.cpp))
 
 # CLI
 CLI_BINS = $(patsubst CommandLineInterface/%.cpp, CommandLineInterface/%.o, $(wildcard CommandLineInterface/*.cpp))
@@ -47,7 +48,7 @@ CLI: _CLI clean
 _GUI: ${GUI_BINS} ${GUI_CONTROLLER_BINS} ${GUI_VIEW_BINS} ${MODEL_BINS} ${MODEL_PARSER_BINS}
 	${CXX} ${CXXFLAGS} -o ../capitalistGUI $^ ${LDLIBS}
 
-_CUI: ${CUI_BINS} ${CUI_CONTROLLER_BINS} ${CUI_VIEW_BINS} ${MODEL_BINS} ${MODEL_PARSER_BINS}
+_CUI: ${CUI_BINS} ${CUI_CONTROLLER_BINS} ${CUI_VIEW_BINS} ${MODEL_BINS} ${MODEL_PARSER_BINS} ${CUI_GAME_OBJECT_BINS}
 	${CXX} ${CXXFLAGS} -o ../capitalistCUI $^ ${LDLIBS}
 
 _CLI: ${CLI_BINS}  ${MODEL_BINS} ${MODEL_PARSER_BINS}

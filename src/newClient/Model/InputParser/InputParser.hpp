@@ -33,7 +33,8 @@ public:
 
     void split() {
         this->inputs.clear();
-        std::istringstream input = this->input;
+        std::istringstream input;
+        input.str(this->input);
         for (std::string word; std::getline(input, word, ' ');) {
             this->inputs.push_back(word);
         }

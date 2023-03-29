@@ -15,7 +15,7 @@ void MainCUIWindow::initAttributes() {
 	// Views
 	ConnectionCUIView* connection_view = new ConnectionCUIView();
 	MenuCUIView* menu_view = new MenuCUIView();
-	GameCUIView* game_view = new GameCUIView();
+	GameCUIView* game_view = new GameCUIView(6);
 	this->view.setViews({connection_view, menu_view, game_view});
 	// Controllers
 	ConnectionCUIController* connection_controller = new ConnectionCUIController(&this->model, connection_view);

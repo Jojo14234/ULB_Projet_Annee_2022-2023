@@ -1,5 +1,6 @@
 #pragma once
 
+#include <vector>
 #include "AbstractCUIController.hpp"
 #include "../configs.hpp"
 
@@ -13,6 +14,11 @@ class GameCUIController: public AbstractCUIController {
 	GAME_STATE state = IDLE;
 
 	GameCUIView* view;
+	Subject* win;
+
+	int player_nb;
+	std::vector<std::string> players_username;
+	std::vector<std::string> build_mode;
 
 public: 
 	
@@ -33,7 +39,7 @@ public:
 	void startGame(int beginner);
 
     //todo add from n-curse
-    void playerJoinUpdate() { this->view->getInfo()->setPlayersInGame(players_username); }
+    void playerJoinUpdate();
     void setSubject(Subject* win) { this->win = win; }
 
 

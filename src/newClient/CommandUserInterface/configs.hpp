@@ -10,3 +10,8 @@ enum class STATE {
 	MENU = 1,
 	GAME = 2
 };
+
+class Subject {
+public:
+	virtual void update() = 0;
+};

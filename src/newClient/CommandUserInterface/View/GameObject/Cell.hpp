@@ -2,7 +2,7 @@
 #define _CELL_HPP
 
 #include <string>
-#include "../Object/TextBox.hpp"
+#include "../Objects/TextBox.hpp"
 
 class Cell : public TextBox {
 

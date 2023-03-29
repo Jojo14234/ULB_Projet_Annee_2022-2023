@@ -5,6 +5,9 @@
 #include <string>
 
 #include "GameCUIController.hpp"
+#include "../View/GameCUIView.hpp"
+#include "../../Model/QueryParser/GameLaunchingParser.hpp"
+#include "../../Model/QueryParser/GameStateParser.hpp"
 
 
 // Public
@@ -13,19 +16,19 @@ GameCUIController::GameCUIController(Client* model, GameCUIView* view) :
 	AbstractCUIController(model, STATE::GAME), view{view} {};
 
 // todo added from n-curse
-void GameCUIController::handle(int event) {
+void GameCUIController::handle(int ch) {
     switch(ch) {
         case KEY_MOUSE:
             MEVENT event;
             if (getmouse(&event) != OK) { break; }
             if (event.bstate & BUTTON1_CLICKED) {
-                if ( this->view->getConsole()->isClicked(Position{event.x, event.y}) ) { this->STATE = CONSOLE; }
-                else if ( this->view->getChat()->isClicked(Position{event.x, event.y}) ) { this->STATE = CHAT; }
-                else { this->STATE = IDLE; }
+                if ( this->view->getConsole()->isClicked(Position{event.x, event.y}) ) { this->state = CONSOLE; }
+                else if ( this->view->getChat()->isClicked(Position{event.x, event.y}) ) { this->state = CHAT; }
+                else { this->state = IDLE; }
             } break;
 
         case '\n':
-            switch(this->STATE) {
+            switch(this->state) {
                 case CONSOLE: {
                     this->view->getConsole()->addInput();
                     GameInputParser parser(this->view->getConsole()->getInput());
@@ -42,7 +45,7 @@ void GameCUIController::handle(int event) {
             } break;
 
         default:
-            switch (this->STATE) {
+            switch (this->state) {
                 case CONSOLE: this->view->getConsole()->handleInput(ch); break;
                 case CHAT: this->view->getChat()->handleInput(ch); break;
                 case IDLE: break;
@@ -52,7 +55,7 @@ void GameCUIController::handle(int event) {
 
 // todo added from n-curse
 void GameCUIController::move() {
-    switch (this->STATE) {
+    switch (this->state) {
         case CHAT: this->view->getChat()->move(); break;
         case CONSOLE: this->view->getConsole()->move(); break;
         case IDLE: break;
@@ -62,8 +65,7 @@ void GameCUIController::move() {
 void GameCUIController::receiveMsgLoop() {
     while (this->new_state == STATE::GAME) {
         std::string response;
-        QUERY cury;
-        this->model->receiveQueryMsg(response, cury);
+        QUERY cury = this->model->receive(response);
 
         switch(cury) {
             case QUERY::INFOS_START: {
@@ -71,7 +73,7 @@ void GameCUIController::receiveMsgLoop() {
                 PlayersInformations p_i = start_parser.parseStartInfo();
                 player_nb = p_i.player_nb;
                 players_username = p_i.player_usernames;
-                this->gameStartUpdate(p_i.beginner);
+                this->startGame(p_i.beginner);
                 this->view->getConsole()->addText("La partie commence");
                 break;
             }
@@ -315,7 +317,7 @@ void GameCUIController::receiveMsgLoop() {
 void GameCUIController::initGame() {
     this->initScreen();
     // create a thread to receive messages
-    std::thread send_thread(&GameController::receiveMessagesLoop, this);
+    std::thread send_thread(&GameCUIController::receiveMsgLoop, this);
     send_thread.detach();
 }
 
@@ -347,3 +349,5 @@ void GameCUIController::startGame(int beginner) {
         this->view->getInfo()->setPlayerInfo(i, 1500, 0);
     }
 }
+
+void GameCUIController::playerJoinUpdate() { this->view->getInfo()->setPlayersInGame(players_username); }

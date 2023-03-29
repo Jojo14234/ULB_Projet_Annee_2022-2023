@@ -8,8 +8,9 @@
 
 #include "AbstractCUIView.hpp"
 #include "Objects.hpp"
+#include "GameObject/Board.hpp"
 #include "../../../utils/AccessMonitor.hpp"
-
+#include "../../Model/Client.hpp"
 
 class GameCUIController; // forward declaration
 
@@ -48,7 +49,7 @@ class GameCUIView: public AbstractCUIView {
 
 public: 
 	
-	GameCUIView()=default;
+    GameCUIView(int player_nb) : AbstractCUIView(), board{{11, 11, up_margin, left_margin}, player_nb} {}
 	
 	~GameCUIView()=default;
 

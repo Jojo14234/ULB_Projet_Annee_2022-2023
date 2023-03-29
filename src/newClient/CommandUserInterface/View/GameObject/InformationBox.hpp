@@ -10,7 +10,7 @@
 #include <array>
 #include <memory>
 
-#include "../Object/TextBox.hpp"
+#include "../Objects/TextBox.hpp"
 
 class InformationBox: public TextBox{
 

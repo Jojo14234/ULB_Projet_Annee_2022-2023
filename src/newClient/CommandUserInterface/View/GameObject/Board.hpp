@@ -11,9 +11,9 @@
 #include <memory>
 
 #include "Cell.hpp"
-#include "../Object/AbstractViewObject.hpp"
-#include "../Object/ObjectInfo.hpp"
-#include "../Object/TextBox.hpp"
+#include "../Objects/AbstractViewObject.hpp"
+#include "../Objects/ObjectInfo.hpp"
+#include "../Objects/TextBox.hpp"
 
 
 //Class representing the gameboard with the different game spaces and the spaces for the cards.
@@ -24,7 +24,7 @@ class Board : public AbstractViewObject {
 	static const int gamebox_nb = 40;
 
 	std::vector<int> old_pos_player;
-	std::array<int,40> old_lev_house;
+	std::array<int, 40> old_lev_house;
 
     int n_player; //number of players in game
 
