@@ -10,34 +10,41 @@
 #include "../../../utils/Configs.hpp"
 #include "InputParser.hpp"
 
-/*
- * Classe permettant de Parser des inputs durant une partie
- * Hérite de la classe `InputParser`
- *
- * GameInputParser(const string &input)
- */
+
 class GameInputParser : public InputParser {
 
 	GAME_QUERY_TYPE query_type = GAME_QUERY_TYPE::NONE;
 
-	/*
-	* This function parses the input string by calling InputParser::parse() function and
-	* determines the type of query by examining the first element of the resulting vector.
-	* Based on the value of the first element, the function assigns the corresponding value to the `query_type`
-	* First element can be :  /arg1, /arg2, /bid, /build, /buy, /disconnect, /end, /exchange, /give-up,
-	*                         /leave, /mortgage, /out, /participate, /roll, /select, /sell, /start.
-	*/
-	void parse() override;
+	void parse() override {
+        this->split();
+
+        const std::string query = this->inputs[0];
+        if      ( query == "/start" )       { this->query_type = GAME_QUERY_TYPE::START; }          // Démarre la partie
+        else if ( query == "/roll" )        { this->query_type = GAME_QUERY_TYPE::ROLL_DICE; }      // Lance les dés
+        else if ( query == "/pay" )         { this->query_type = GAME_QUERY_TYPE::PAY; }            // To pay to exit prison
+        else if ( query == "/card" )        { this->query_type = GAME_QUERY_TYPE::CARD; }           // Pioche une carte lors qu'on a piocher la carte choix
+        else if ( query == "/use" )         { this->query_type = GAME_QUERY_TYPE::USEGOOJCARD; }    // To use the card get out of jail
+        else if ( query == "/leave" )       { this->query_type = GAME_QUERY_TYPE::LEAVE_SELECTION; }// Quitte la sélection
+        else if ( query == "/build" )       { this->query_type = GAME_QUERY_TYPE::BUILD; }          // passer en mode construction
+        else if ( query == "/sell" )        { this->query_type = GAME_QUERY_TYPE::SELL_BUILDINGS; } // passer en mode vente
+        else if ( query == "/mortgage" )    { this->query_type = GAME_QUERY_TYPE::MORTGAGE; }       // Passe en mode hypothèque
+        else if ( query == "/liftMortgage" ){ this->query_type = GAME_QUERY_TYPE::LIFT_MORTGAGE; }  // Passer en mode lift hypothèque
+        else if ( query == "/exchange" )    { this->query_type = GAME_QUERY_TYPE::EXCHANGE;}        // Commence un échange
+        else if ( query == "/yes" )         { this->query_type = GAME_QUERY_TYPE::YES; }            // C'est un oui
+        else if ( query == "/no" )          { this->query_type = GAME_QUERY_TYPE::NO; }             // C'est un non
+        else if ( query == "/accept" )      { this->query_type = GAME_QUERY_TYPE::ACCEPT; }         // refuser
+        else if ( query == "/refuse" )      { this->query_type = GAME_QUERY_TYPE::REFUSE; }         // accepter
+        else if ( query == "/participate" ) { this->query_type = GAME_QUERY_TYPE::PARTICIPATE; }    // Participe à une enchère
+        else if ( query == "/trade" )       {
+            if (this->size() >= 2 )         { this->query_type = GAME_QUERY_TYPE::TRADE; }
+        }
+        else                                { this->query_type = GAME_QUERY_TYPE::NONE; }
+    }
 
 public:
 
-	/*
-	 * Constructor of GameInputParser, take a string `Input` as parameters.
-	 * It directly split and parse it.
-	 */
 	GameInputParser(const std::string &input) : InputParser{input} { this->parse(); }
 	
-	// GETTERS
-	GAME_QUERY_TYPE getQueryType() const { return query_type; }
+	GAME_QUERY_TYPE getQuery() const { return query_type; }
 
 };

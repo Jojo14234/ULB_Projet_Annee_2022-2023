@@ -2,7 +2,9 @@
 
 
 void MainCLIWindow::mainLoop() {
-
+    while ( true ) {
+        break;
+    }
 }
 
 void MainCLIWindow::initAttributes() {

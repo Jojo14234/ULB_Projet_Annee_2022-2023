@@ -6,7 +6,6 @@
 
 
 enum class STATE {
-	WELCOME,
 	CONNECTION,
 	MENU,
 	FRIENDS,

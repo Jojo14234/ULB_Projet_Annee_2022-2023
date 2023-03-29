@@ -1,7 +1,3 @@
-/**
- * Project Untitled
- */
-
 #pragma once
 
 #include "AbstractCUIController.hpp"

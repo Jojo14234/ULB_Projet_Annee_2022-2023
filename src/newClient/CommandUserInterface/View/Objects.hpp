@@ -16,3 +16,8 @@
 #include "Objects/TextBox.hpp"
 #include "Objects/TextButton.hpp"
 #include "Objects/Window.hpp"
+
+#include "GameObject/Board.hpp"
+#include "GameObject/Cell.hpp"
+#include "GameObject/Dice.hpp"
+#include "GameObject/InformationBox.hpp"

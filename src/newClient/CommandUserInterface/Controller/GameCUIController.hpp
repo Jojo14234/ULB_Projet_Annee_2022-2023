@@ -1,7 +1,3 @@
-/**
- * Project Untitled
- */
-
 #pragma once
 
 #include "AbstractCUIController.hpp"
@@ -34,6 +30,12 @@ public:
 
 	void initScreen();
 
-	void startGame();
+	void startGame(int beginner);
+
+    //todo add from n-curse
+    void playerJoinUpdate() { this->view->getInfo()->setPlayersInGame(players_username); }
+    void setSubject(Subject* win) { this->win = win; }
+
+
 
 };
