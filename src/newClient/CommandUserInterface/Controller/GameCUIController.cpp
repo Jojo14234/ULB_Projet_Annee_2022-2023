@@ -79,10 +79,13 @@ void GameCUIController::receiveMsgLoop() {
             }
 
             case QUERY::PLAYER_JOIN_GAME: {
+                //#TODO query fonctionnent plus
+                exit(1);
                 GameLaunchingParser start_parser(response);
                 PlayersInformations p_i = start_parser.parseJoinInfo();
                 player_nb = p_i.player_nb;
                 players_username = p_i.player_usernames;
+                this->initScreen();
                 this->playerJoinUpdate();
                 break;
             }
