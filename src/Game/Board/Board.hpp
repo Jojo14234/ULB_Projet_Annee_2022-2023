@@ -12,7 +12,6 @@
 #include "../../jsoncpp/include/json/value.h"
 #include "../../jsoncpp/include/json/version.h"
 #include "../../jsoncpp/include/json/writer.h"
-#include "../../jsoncpp/src/lib_json/json_valueiterator.inl"
 
 #include <array>
 #include <memory>

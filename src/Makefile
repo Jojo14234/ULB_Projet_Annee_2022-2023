@@ -54,7 +54,7 @@ clean:
 	-rm *.o */*.o */*/*.o */*/*/*.o */*/*/*/*.o */*/*/*/*/*.o 2> /dev/null
 
 rm:
-	-rm capitalist server_capitalist ncurse json 2> /dev/null
+	-rm capitalist server_capitalist ncurse 2> /dev/null
 
 
 main: client server
@@ -63,17 +63,13 @@ client: ${CLIENT_BINS} ${CLIENT_INPUTPARSER_BINS}
 	${CXX} ${CXXFLAGS} -o capitalist $^ ${LDLIBS}
 	make clean
 
-server: ${SERVER_BINS} ${SERVER_CM_BINS} ${SERVER_DB_BINS} ${GAME_BINS} ${PLAYER_BINS} ${DICE_BINS} ${BOARD_BINS}  ${OBTAINABLE_BINS} ${CARDS_BINS} ${CELLS_BINS} ${LAND_BINS} ${SERVER_DB_FRIEND_BINS} ${SERVER_DB_CHAT_BINS} ${SERVER_GAME_BINS}
+server: ${SERVER_BINS} ${SERVER_CM_BINS} ${SERVER_DB_BINS} ${GAME_BINS} ${PLAYER_BINS} ${DICE_BINS} ${BOARD_BINS}  ${OBTAINABLE_BINS} ${CARDS_BINS} ${CELLS_BINS} ${LAND_BINS} ${SERVER_DB_FRIEND_BINS} ${SERVER_DB_CHAT_BINS} ${SERVER_GAME_BINS} ${JSON_BINS}
 	${CXX} ${CXXFLAGS} -o server_capitalist $^ ${LDLIBS}
 	make clean
 
 ncurse: ${NCURSE_BINS} ${NCURSE_CONTROLLER_BINS} ${NCURSE_INPUT_PARSER_BINS} ${NCURSE_VIEW_BINS} ${NCURSE_VIEW_GAME_OBJECT_BINS}
 	${CXX} ${CXXFLAGS} -o ncurse $^ ${LDLIBS}
 	make clean
-
-json: ${JSON_BINS} ${JSON_TEST_RUNNER_BINS}
-	${CXX} ${CXXFLAGS} -o json $^
- 
 
 # new Client part
 GUI:
