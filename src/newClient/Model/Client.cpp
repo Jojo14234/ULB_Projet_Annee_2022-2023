@@ -101,6 +101,8 @@ bool Client::sendCommand(GameInputParser &parser) {
 	return true;
 }
 
+bool Client::sendCommand(GameInputParser &&parser) {this->sendCommand(parser);}
+bool Client::sendCommand(MainInputParser &&parser) {this->sendCommand(parser);}
 
 // Receive Query from the server
 // todo different from n-curse

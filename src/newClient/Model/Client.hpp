@@ -41,8 +41,12 @@ public:
 	void sendJoinGame(int code);
 	bool sendCommand(MainInputParser &parser); // todo == sendToServer in terminal
 	bool sendCommand(GameInputParser &parser); // todo == sendToServer in terminal
+    bool sendCommand(MainInputParser &&parser);
+    bool sendCommand(GameInputParser &&parser);
 
-	QUERY receive(std::string &output); // todo == receiveFromServer2 in terminal
+
+
+    QUERY receive(std::string &output); // todo == receiveFromServer2 in terminal
 
 	void setGameCode(int gc) { game_code = gc; }
 	int getGameCode() const { return game_code; }

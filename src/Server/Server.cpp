@@ -164,14 +164,14 @@ bool Server::find(User* user) {
 void Server::clientProcessJoinGame(ClientManager &client) {
 	std::cout << "[Received 'join' query from client  '" << client.getAccount()->getUsername() << "']\n" << std::endl;
     if ( !games.joinGame(&client, client.getCode()) ) { client.sendQueryMsg("", QUERY::FALSEQ); return; }
-    client.sendQueryMsg("", QUERY::PLAYER_JOIN_GAME);
+    client.sendQueryMsg(client.getUsername() + ":" + std::to_string(client.getCode()), QUERY::PLAYER_JOIN_GAME);
     client.enterGameLoop();
 }
 
 void Server::clientProcessCreateGame(ClientManager &client) {
 	std::cout << "[Received 'create' query from client '" << client.getAccount()->getUsername() << "']\n" << std::endl;
     int gc = games.createGame(&client);
-	client.send("(clientProcessCreateGame) Vous avez crée une partie avec le code : " + std::to_string(gc));
+	client.sendQueryMsg(client.getUsername() + ":" + std::to_string(gc), QUERY::PLAYER_CREATE_GAME);
 	client.enterGameLoop();
 }
 

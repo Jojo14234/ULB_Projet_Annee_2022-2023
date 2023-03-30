@@ -39,7 +39,7 @@ void MenuCUIController::handle(int event) {
 
 			if (parser.getQuery() == QUERY_TYPE::CREATE_GAME) {
 				this->new_state = STATE::GAME;
-				
+                this->notify();
 				int gamecode = atoi(&response[response.length()-4]);
 				this->model->setGameCode(gamecode);
 				this->model->createGame();

@@ -37,6 +37,7 @@ enum class QUERY {
 
 
     PLAYER_JOIN_GAME, // username:gameCode [string]:[int]
+    PLAYER_CREATE_GAME, // username:gameCode [string]:[int]
 
     MESSAGE, // All indication message
     USELESS_MESSAGE, // Message useless outside out the terminal app
