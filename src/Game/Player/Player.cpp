@@ -117,10 +117,11 @@ bool Player::pay(int amount, bool forced) {
     return false; // TODO PTT FAUT METTRE RETURN TRUE (AVANT ON PAYAIS MÊME SI ON AVAIT PAS LES FONDS).
 }
 void Player::receive(int amount, std::string source) {
+    source += "menfou"; //TODO UTILISR MOI CE PARAMETRE
     bank_account.gain(amount);
     //getClient()->send("Vous avez reçu " + std::to_string(amount) + "e de " + source);
 }
-
+    
 
 // MOUVEMENT
 void Player::move(Cell *cell, bool pass_by_start) {
