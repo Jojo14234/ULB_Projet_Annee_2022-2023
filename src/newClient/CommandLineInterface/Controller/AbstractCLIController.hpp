@@ -7,17 +7,17 @@
 
 
 #include "../../Controller/AbstractController.hpp"
-#include "../AbstractCUI.hpp"
+#include "../AbstractCLI.hpp"
 #include "../configs.hpp"
 
 
-class AbstractCUIController: public AbstractController<STATE, int>, public AbstractCUI {
+class AbstractCLIController: public AbstractController<STATE, int>, public AbstractCLI {
 
 public:
 
     using AbstractController<STATE, int>::AbstractController;
 
-    virtual ~AbstractCUIController()=default;
+    virtual ~AbstractCLIController()=default;
 
     virtual void handle(int event) override = 0;
 

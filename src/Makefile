@@ -54,7 +54,7 @@ clean:
 	-rm *.o */*.o */*/*.o */*/*/*.o */*/*/*/*.o */*/*/*/*/*.o 2> /dev/null
 
 rm:
-	-rm capitalist server_capitalist ncurse 2> /dev/null
+	-rm capitalist capitalistCLI capitalistGUI capitalistCui server_capitalist ncurse 2> /dev/null
 
 
 main: client server

@@ -25,6 +25,10 @@ CUI_GAME_OBJECT_BINS = $(patsubst CommandUserInterface/View/GameObject/%.cpp, Co
 
 # CLI
 CLI_BINS = $(patsubst CommandLineInterface/%.cpp, CommandLineInterface/%.o, $(wildcard CommandLineInterface/*.cpp))
+CLI_CONTROLLER_BINS = $(patsubst CommandLineInterface/Controller/%.cpp, CommandLineInterface/Controller/%.o, $(wildcard CommandLineInterface/Controller/*.cpp))
+CLI_VIEW_BINS = $(patsubst CommandLineInterface/View/%.cpp, CommandLineInterface/View/%.o, $(wildcard CommandLineInterface/View/*.cpp))
+
+
 
 
 .PHONY: default
@@ -51,5 +55,5 @@ _GUI: ${GUI_BINS} ${GUI_CONTROLLER_BINS} ${GUI_VIEW_BINS} ${MODEL_BINS} ${MODEL_
 _CUI: ${CUI_BINS} ${CUI_CONTROLLER_BINS} ${CUI_VIEW_BINS} ${MODEL_BINS} ${MODEL_PARSER_BINS} ${CUI_GAME_OBJECT_BINS}
 	${CXX} ${CXXFLAGS} -o ../capitalistCUI $^ ${LDLIBS}
 
-_CLI: ${CLI_BINS}  ${MODEL_BINS} ${MODEL_PARSER_BINS}
+_CLI: ${CLI_BINS}  ${CLI_CONTROLLER_BINS} ${CLI_VIEW_BINS} ${MODEL_BINS} ${MODEL_PARSER_BINS}
 	${CXX} ${CXXFLAGS} -o ../capitalistCLI $^ ${LDLIBS}

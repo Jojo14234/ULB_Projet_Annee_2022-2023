@@ -5,7 +5,7 @@
 #ifndef INFO_F209_GR5_2022_CONNECTIONINPUTPARSER_HPP
 #define INFO_F209_GR5_2022_CONNECTIONINPUTPARSER_HPP
 
-#include "../../CommandLineInterface/Controller/InputParser/InputParser.hpp"
+#include "InputParser.hpp"
 
 enum class CONNECTION_QUERY {LOGIN, REGISTER, OTHER};
 
