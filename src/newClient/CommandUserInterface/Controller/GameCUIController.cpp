@@ -68,6 +68,14 @@ void GameCUIController::receiveMsgLoop() {
         QUERY cury = this->model->receive(response);
 
         switch(cury) {
+            case QUERY::PLAYER_CREATE_GAME:{
+                GameLaunchingParser start_parser(response);
+                JoinInfo p_i = start_parser.parseJoin();
+                this->initScreen(p_i.game_code);
+                this->playerJoinUpdate();
+                break;
+            }
+
             case QUERY::INFOS_START: {
                 GameLaunchingParser start_parser(response);
                 PlayersInformations p_i = start_parser.parseStartInfo();
@@ -83,7 +91,10 @@ void GameCUIController::receiveMsgLoop() {
                 PlayersInformations p_i = start_parser.parseJoinInfo();
                 player_nb = p_i.player_nb;
                 players_username = p_i.player_usernames;
-                this->initScreen();
+
+                GameLaunchingParser start_parser2(response);
+                JoinInfo p_i2 = start_parser2.parseJoin();
+                this->initScreen(p_i2.game_code);
                 this->playerJoinUpdate();
                 break;
             }
@@ -316,22 +327,23 @@ void GameCUIController::receiveMsgLoop() {
 
 //todo added from n-curse (init())
 void GameCUIController::initGame() {
-    this->initScreen();
     // create a thread to receive messages
     std::thread send_thread(&GameCUIController::receiveMsgLoop, this);
     send_thread.detach();
 }
 
-void GameCUIController::initScreen() {
+void GameCUIController::initScreen(int gamecode) {
+    if (! init) return;
     this->view->startWaitingRoom();
 
     if (this->model->isCreator()){
-        this->view->getOwnerWaitingText()->addText("Gamecode : " + std::to_string(this->model->getGameCode()));
+        this->view->getOwnerWaitingText()->addText("Gamecode : " + std::to_string(gamecode));
         this->view->getPlayersWaitingText()->setHidden();
     } else {
-        this->view->getPlayersWaitingText()->addText("Gamecode : " + std::to_string(this->model->getGameCode()));
+        this->view->getPlayersWaitingText()->addText("Gamecode : " + std::to_string(gamecode));
         this->view->getOwnerWaitingText()->setHidden();
     }
+    init = false;
 }
 
 //todo added from n-curse

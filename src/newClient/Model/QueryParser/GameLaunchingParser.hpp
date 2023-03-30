@@ -11,20 +11,27 @@ struct PlayersInformations {
 	std::vector<std::string> player_usernames;
 };
 
+struct JoinInfo {
+	std::string username;
+	int game_code;
+};
+
+
 class GameLaunchingParser {
 
-	std::string state_str;
+	std::string str;
 	PlayersInformations res;
+	JoinInfo join;
 
 public:
 
-	GameLaunchingParser(std::string player_info_str) : state_str{player_info_str} {};
+	GameLaunchingParser(std::string player_info_str) : str{player_info_str} {};
 
 	const PlayersInformations& parseJoinInfo(){
 		res.beginner = -1;
 		std::string tmp;
 
-		for (char c : state_str){
+		for (char c : str){
 			if (c == '|'){
 				res.player_nb = atoi(tmp.c_str());
 				tmp.clear();
@@ -44,7 +51,7 @@ public:
 		int player = 0;
 		std::string tmp;
 
-		for (char c : state_str){
+		for (char c : str){
 			if (c == '|'){
 				if (rod_nb == 0){
 					res.player_nb = atoi(tmp.c_str());
@@ -67,6 +74,15 @@ public:
 		}
 
 		return res;
+	}
+
+	const JoinInfo& parseJoin() {
+		int i = 0;
+		std::string tmp;
+		while (str[i] != ':' ) { tmp += str[i]; i++; }
+		join.username = tmp;
+		join.game_code = atoi(&str[i+1]);
+		return join;
 	}
 };
 

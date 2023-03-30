@@ -17,6 +17,7 @@ class GameCUIController: public AbstractCUIController, public MenuCUIObserver {
 	Subject* win;
 
 	int player_nb;
+	bool init = true;
 	std::vector<std::string> players_username;
 	std::vector<std::string> build_mode;
 
@@ -34,7 +35,7 @@ public:
 
 	void initGame();
 
-	void initScreen();
+	void initScreen(int gamecode);
 
 	void startGame(int beginner);
 
