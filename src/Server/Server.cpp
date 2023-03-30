@@ -36,9 +36,10 @@ void Server::clientLoop(ClientManager &client) {
         QUERY_TYPE query;
 		while (true) {
 			client.receive(query);
-            if (query == QUERY_TYPE::DISCONNECT && !client.getAccount()) { break; }
             this->clientProcessQuery(client, query);
-		}
+            if (query == QUERY_TYPE::QUIT && !client.getAccount()) { break; }
+
+        }
         std::cout << "[one client went out of the Server::clientLoop(), he disconnect the normal way]" << std::endl;
         client.disconnect();
     }
@@ -102,6 +103,7 @@ void Server::clientProcessQuery(ClientManager &client, QUERY_TYPE query) {
 		case QUERY_TYPE::MESSAGE_SEND:      this->clientProcessSendMessage(client); break;
 		// For disconnect
         case QUERY_TYPE::DISCONNECT:        this->clientProcessDisconnect(client); break;
+        case QUERY_TYPE::QUIT:              this->clientProcessQuit(client); break;
 		default : std::cout << "[(Server::clientProcessQuery()) Unknown query type]" << std::endl; break;
 	}
 }
@@ -109,10 +111,17 @@ void Server::clientProcessQuery(ClientManager &client, QUERY_TYPE query) {
 // Deconnection
 void Server::clientProcessDisconnect(ClientManager &client) {
     std::cout << "[Received 'disconnect' query from client]" << std::endl;
+    std::cout << "[Client using " + client.getUsername() + " disconnected from his account]" << std::endl;
     client.sendQueryMsg("DISCONNECT", QUERY::DISCONNECT);
-    std::cout << "[Client using account '" << client.getAccount()->getUsername() << "' disconnected from his account]" << std::endl;
     client.setAccount(nullptr);
 }
+
+void Server::clientProcessQuit(ClientManager &client) {
+    std::cout << "[Received 'quit' query from client]" << std::endl;
+    client.sendQueryMsg("DISCONNECT", QUERY::DISCONNECT);
+    client.setAccount(nullptr);
+}
+
 
 
 // For connection

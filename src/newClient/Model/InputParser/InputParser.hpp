@@ -13,7 +13,7 @@
 
 class InputParser {
 
-    const std::string input;
+    std::string input;
 
 protected:
 
@@ -34,6 +34,7 @@ public:
     void split() {
         this->inputs.clear();
         std::istringstream input;
+        if (this->input.size() < 1) { this->input = "None"; }
         input.str(this->input);
         for (std::string word; std::getline(input, word, ' ');) {
             this->inputs.push_back(word);

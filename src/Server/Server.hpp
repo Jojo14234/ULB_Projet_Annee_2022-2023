@@ -34,6 +34,7 @@ class Server {
 
     // For Disconnection of the user
     void clientProcessDisconnect(ClientManager &client);
+    void clientProcessQuit(ClientManager &client);
 	// To process the client query 
 	void clientProcessQuery(ClientManager &client, QUERY_TYPE query);
 	// For connection

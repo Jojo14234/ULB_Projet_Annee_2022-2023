@@ -18,17 +18,21 @@ void MenuCLIController::handle(int event) {
     MainInputParser parser{input};
 
     switch (parser.getQuery()) {
-
+        //todo ici voir si le switch est obligatoire
+        case QUERY_TYPE::FRIENDS_LIST :
         case QUERY_TYPE::RANKING_POS :
-        case QUERY_TYPE::RANKING_TOP : this->model->sendCommand(parser); break;
-        default : break;
+        case QUERY_TYPE::RANKING_TOP :
+        default : this->model->sendCommand(parser);
     }
 
     if (parser.getQuery() != QUERY_TYPE::NONE) {
         std::string response;
         QUERY query = this->model->receive(response);
-        std::cout << response << std::endl;
+        std::cout << (int)query << std::endl;
+        if ( query == QUERY::DISCONNECT ) { this->new_state = STATE::CONNECTION; }
+        else { std::cout << response << std::endl; } //todo ici utilisé la vue
     }
+    else { this->new_state = STATE::MENU; }
 
 }
 

@@ -24,6 +24,7 @@ void ConnectionCLIController::handle(int event) {
     switch (parser.getQuery()) {
         case CONNECTION_QUERY::LOGIN :      this->model->sendLogin(parser[1], parser[2]); break;
         case CONNECTION_QUERY::REGISTER :   this->model->sendRegister(parser[1], parser[2]); break;
+        case CONNECTION_QUERY::DISCONNECT:  this->model->sendDisconnect(); break;
         default: break;
     }
 
@@ -31,7 +32,9 @@ void ConnectionCLIController::handle(int event) {
         std::string response;
         QUERY query = this->model->receive(response);
         if ( query == QUERY::TRUEQ ) { this->new_state = STATE::MENU; }
+        else if ( query == QUERY::DISCONNECT ) { exit(0); }
     }
+    else { this->new_state = STATE::CONNECTION; }
 }
 //todo
 void ConnectionCLIController::move() {

@@ -15,7 +15,7 @@ void Client::connectToServer() {
 
 void Client::disconnectFromServer() {
     sf::Packet packet;
-    packet << static_cast<int>(QUERY_TYPE::DISCONNECT); //Todo different from ncurse
+    packet << static_cast<int>(QUERY_TYPE::DISCONNECT); //todo different from ncurse
     this->sendPacket(packet);
 }
 
@@ -32,9 +32,6 @@ void Client::sendPacket(sf::Packet &packet) {
 
 // Authentification
 void Client::sendLogin(const std::string &username, const std::string &password) {
-    std::cout << username << std::endl;
-    std::cout << password << std::endl;
-
 	this->user_name = username;
 	sf::Packet packet;
 	packet << static_cast<int>(QUERY_TYPE::LOGIN);
@@ -50,6 +47,12 @@ void Client::sendRegister(const std::string &username, const std::string &passwo
 	packet << username;
 	packet << password;
 	this->sendPacket(packet);
+}
+
+void Client::sendDisconnect() {
+    sf::Packet packet;
+    packet << static_cast<int>(QUERY_TYPE::QUIT);
+    this->sendPacket(packet);
 }
 
 // Game

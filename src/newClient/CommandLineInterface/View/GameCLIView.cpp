@@ -7,7 +7,7 @@
 
 void GameCLIView::draw() {
     std::cout << "+———————————————————————————————CAPITALI$T———————————————————————————————+" << std::endl;
-    std::cout << "|                                 GAME                                   |" << std::endl;
+    std::cout << "|             Liste des commandes disponibles dans la partie :           |" << std::endl;
     std::cout << "|                                                                        |" << std::endl;
     std::cout << "|      - Lancer les dés -> /roll                                         |" << std::endl;
     std::cout << "|      - Acheter un bâtiment -> /build + /select [property]              |" << std::endl;

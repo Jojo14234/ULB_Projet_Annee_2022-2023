@@ -37,6 +37,7 @@ public:
 	// Send Queries
 	void sendLogin(const std::string &username, const std::string &password);
 	void sendRegister(const std::string &username, const std::string &password);
+    void sendDisconnect();
 	void sendJoinGame(int code);
 	bool sendCommand(MainInputParser &parser); // todo == sendToServer in terminal
 	bool sendCommand(GameInputParser &parser); // todo == sendToServer in terminal
