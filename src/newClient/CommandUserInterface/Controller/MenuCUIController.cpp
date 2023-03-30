@@ -13,8 +13,8 @@
 
 // Public
 
-MenuCUIController::MenuCUIController(Client* model, MenuCUIView* view) :
-	AbstractCUIController(model, STATE::MENU), view{view} {}
+MenuCUIController::MenuCUIController(Client* model, MenuCUIView* view, MenuCUIObserver* game_cui_controller) :
+	AbstractCUIController(model, STATE::MENU), GameCUISubject{game_cui_controller}, view{view} {}
 
 void MenuCUIController::handle(int event) {
 	switch(event) {
@@ -39,6 +39,7 @@ void MenuCUIController::handle(int event) {
 
 			if (parser.getQuery() == QUERY_TYPE::CREATE_GAME){
 				this->new_state = STATE::GAME;
+				
 				int gamecode = atoi(&response[response.length()-4]);
 				this->model->setGameCode(gamecode);
 				this->model->createGame();
@@ -51,6 +52,7 @@ void MenuCUIController::handle(int event) {
 			this->view->console.addText(response);
 			if (response != "aucune partie n'existe avec ce code"){
 				this->new_state = STATE::GAME;
+				this->notify();
 				this->model->setGameCode(this->view->join.getValue());
 			}
 			break; }

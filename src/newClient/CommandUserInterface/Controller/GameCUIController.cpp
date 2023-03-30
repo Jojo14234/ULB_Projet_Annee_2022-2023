@@ -79,8 +79,6 @@ void GameCUIController::receiveMsgLoop() {
             }
 
             case QUERY::PLAYER_JOIN_GAME: {
-                //#TODO query fonctionnent plus
-                exit(1);
                 GameLaunchingParser start_parser(response);
                 PlayersInformations p_i = start_parser.parseJoinInfo();
                 player_nb = p_i.player_nb;
@@ -354,3 +352,6 @@ void GameCUIController::startGame(int beginner) {
 }
 
 void GameCUIController::playerJoinUpdate() { this->view->getInfo()->setPlayersInGame(players_username); }
+
+
+void GameCUIController::update() { this->initGame(); }

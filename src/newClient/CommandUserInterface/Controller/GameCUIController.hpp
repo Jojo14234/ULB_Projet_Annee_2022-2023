@@ -8,7 +8,7 @@
 class Client; // forward declaration
 class GameCUIView; // forward declaration
 
-class GameCUIController: public AbstractCUIController {
+class GameCUIController: public AbstractCUIController, public MenuCUIObserver {
 
 	enum GAME_STATE { CHAT, CONSOLE, IDLE };
 	GAME_STATE state = IDLE;
@@ -42,6 +42,6 @@ public:
     void playerJoinUpdate();
     void setSubject(Subject* win) { this->win = win; }
 
-
+	void update() override;
 
 };
