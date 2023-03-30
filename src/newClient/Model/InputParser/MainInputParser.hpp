@@ -61,6 +61,7 @@ class MainInputParser : public InputParser {
 		else if ( query == "/friends" ) { this->friendsParser(); }
 		else if ( query == "/f" )       { this->friendsParser(); }
 		else if ( query == "/join" )    { this->joinParser();    }
+        else if (query == "/disconnect"){this->query_type = QUERY_TYPE::DISCONNECT;}
         else                            { this->query_type = QUERY_TYPE::NONE; }
 	}
 

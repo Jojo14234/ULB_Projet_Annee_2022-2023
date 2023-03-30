@@ -67,6 +67,7 @@ enum class QUERY_TYPE {
 	MESSAGE_SHOW,
 
 	DISCONNECT,
+    QUIT,
 
 	NONE
 };
