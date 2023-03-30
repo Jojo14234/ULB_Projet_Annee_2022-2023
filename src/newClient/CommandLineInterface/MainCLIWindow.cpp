@@ -4,6 +4,7 @@
 #include "View/GameCLIView.hpp"
 
 #include "Controller/ConnectionCLIController.hpp"
+#include "Controller/MenuCLIController.hpp"
 
 
 
@@ -11,6 +12,7 @@
 MainCLIWindow::MainCLIWindow() {
     this->initAttributes();
     this->draw();
+    this->controller.move(state);
 }
 
 void MainCLIWindow::mainLoop() {
@@ -27,7 +29,8 @@ void MainCLIWindow::initAttributes() {
     this->view.setViews({connection_view, menu_view, game_view});
 
     ConnectionCLIController* connection_controller = new ConnectionCLIController(&this->model, connection_view);
-    this->controller.setController({connection_controller});
+    MenuCLIController* menu_controller = new MenuCLIController(&this->model, menu_view);
+    this->controller.setController({connection_controller, menu_controller});
 
 
 }

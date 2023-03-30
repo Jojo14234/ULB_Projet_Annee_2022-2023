@@ -15,13 +15,14 @@ class ConnectionInputParser : public InputParser {
     CONNECTION_QUERY query = CONNECTION_QUERY::OTHER;
 
 public:
-    ConnectionInputParser(std::string input): InputParser{input} {}
+    ConnectionInputParser(std::string input): InputParser{input} {this->parse();}
 
     void parse() {
         this->split();
 
 
         std::string query = this->inputs[0];
+        std::cout << query << "| is suppose to be the query" << std::endl;
         if      ( query == "/login" )     { this->query = CONNECTION_QUERY::LOGIN; }
         else if ( query == "/register" )  { this->query = CONNECTION_QUERY::REGISTER; }
         else                              { this->query = CONNECTION_QUERY::OTHER; }

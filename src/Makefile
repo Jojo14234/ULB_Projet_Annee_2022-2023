@@ -10,6 +10,12 @@ OTHERFLAGS = -fanalyzer -Walloc-zero -Wcast-align \
 #CXXFLAGS += ${OTHERFLAGS}
 LDLIBS 	 = -lpthread -lsfml-network -lsfml-system -lncurses
 
+
+ifneq ($(shell uname -s), Linux)
+	CXXFLAGS += -I/opt/homebrew/Cellar/sfml/2.5.1_2/include -I/opt/homebrew/Cellar/jsoncpp/1.9.5/include
+	LDLIBS   += -L/opt/homebrew/Cellar/sfml/2.5.1_2/lib -L/opt/homebrew/Cellar/jsoncpp/1.9.5/lib
+endif
+
 # Create Client objects
 CLIENT_BINS = $(patsubst Client/%.cpp, Client/%.o, $(wildcard Client/*.cpp))
 CLIENT_INPUTPARSER_BINS = $(patsubst Client/InputParser/%.cpp, Client/InputParser/%.o, $(wildcard Client/InputParser/*.cpp))
