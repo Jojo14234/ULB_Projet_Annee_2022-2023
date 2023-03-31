@@ -79,16 +79,12 @@ void GameCUIController::receiveMsgLoop() {
             }
 
             case QUERY::PLAYER_JOIN_GAME:{
-                this->view->getConsole()->addText(response);
                 GameLaunchingParser start_parser(response);
                 JoinInfo p_i = start_parser.parseJoinInfo();
                 player_nb = p_i.nb_player;
                 players_username = p_i.player_usernames;
                 this->initScreen(p_i.game_code);
                 this->playerJoinUpdate();
-                this->view->getConsole()->addText(p_i.username);
-                this->view->getConsole()->addText(std::to_string(p_i.nb_player));
-                this->view->getConsole()->addText(std::to_string(p_i.game_code));
                 break;
             }
 

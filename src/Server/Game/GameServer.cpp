@@ -54,7 +54,6 @@ void GameServer::client_has_join_the_game(ClientManager &client) {
         str += this->clients[i]->getUsername();
         if (i != this->clients.size()-1) str += ":"; 
     }
-    std::cout << str << std::endl;
     this->updateAllClientsWithQuery(QUERY::PLAYER_JOIN_GAME, str);
 }
 
@@ -219,6 +218,7 @@ GAME_QUERY_TYPE GameServer::getGameQuery(ClientManager &client) {
  */
 GameStats GameServer::clientLoop(ClientManager &client) {
     Player* me = this->findMe(client);
+    this->client_has_join_the_game(client);
 
     // LOOP UNTIL THE HOST START THE GAME
     while ( !this->game.isRunning() ) {

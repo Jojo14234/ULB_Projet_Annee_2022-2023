@@ -164,7 +164,7 @@ bool Server::find(User* user) {
 void Server::clientProcessJoinGame(ClientManager &client) {
 	std::cout << "[Received 'join' query from client  '" << client.getAccount()->getUsername() << "']\n" << std::endl;
     if ( !games.joinGame(&client, client.getCode()) ) { client.sendQueryMsg("", QUERY::FALSEQ); return; }
-    client.sendQueryMsg(client.getUsername() + ":" + std::to_string(client.getCode()), QUERY::PLAYER_JOIN_GAME);
+    //client.sendQueryMsg(client.getUsername() + ":" + std::to_string(client.getCode()), QUERY::PLAYER_JOIN_GAME);
     client.enterGameLoop();
 }
 
