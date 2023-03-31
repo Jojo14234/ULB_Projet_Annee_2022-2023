@@ -36,7 +36,7 @@ enum class QUERY {
     INFOS_CARD_DESCRIPTION, // description
 
 
-    PLAYER_JOIN_GAME, // username:gameCode [string]:[int]
+    PLAYER_JOIN_GAME, // username:gameCode:nb_player:all_players [string]:[int]:[int]:[string]
     PLAYER_CREATE_GAME, // username:gameCode [string]:[int]
 
     MESSAGE, // All indication message

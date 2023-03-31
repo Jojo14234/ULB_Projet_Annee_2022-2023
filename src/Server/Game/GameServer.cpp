@@ -49,22 +49,12 @@ void GameServer::sendBetterGameData() {
  * Send a Message with the username and the game code to everyone
  */
 void GameServer::client_has_join_the_game(ClientManager &client) {
-    std::string name = client.getUsername();
-    std::string gc = std::to_string(this->getCode());
-    this->updateAllClientsWithQuery(QUERY::PLAYER_JOIN_GAME, name + ":" + gc);
-}
-
-/*
- * Send a message with the new player and the size of the clients connected to this game
- */
-void GameServer::clientsSizeData(ClientManager &client) {
-    client.getAccount(); // TODO UTILISER MOI CE PTIN DE PARAMETRE 
-    std::string clientsSize = std::to_string(this->clients.size());
-    std::string str = clientsSize + "|";
-    for (auto& e : this->clients){
-        str += e->getUsername();
-        str += ";";
+    std::string str = client.getUsername() + ":" + std::to_string(this->getCode()) + ":" + std::to_string(this->clients.size()) + ":";
+    for (size_t i = 0; i < this->clients.size(); i++){
+        str += this->clients[i]->getUsername();
+        if (i != this->clients.size()-1) str += ":"; 
     }
+    std::cout << str << std::endl;
     this->updateAllClientsWithQuery(QUERY::PLAYER_JOIN_GAME, str);
 }
 
@@ -229,7 +219,6 @@ GAME_QUERY_TYPE GameServer::getGameQuery(ClientManager &client) {
  */
 GameStats GameServer::clientLoop(ClientManager &client) {
     Player* me = this->findMe(client);
-    this->clientsSizeData(client); // MESSAGE
 
     // LOOP UNTIL THE HOST START THE GAME
     while ( !this->game.isRunning() ) {

@@ -14,6 +14,8 @@ struct PlayersInformations {
 struct JoinInfo {
 	std::string username;
 	int game_code;
+	int nb_player;
+	std::vector<std::string> player_usernames;
 };
 
 
@@ -26,25 +28,6 @@ class GameLaunchingParser {
 public:
 
 	GameLaunchingParser(std::string player_info_str) : str{player_info_str} {};
-
-	const PlayersInformations& parseJoinInfo(){
-		res.beginner = -1;
-		std::string tmp;
-
-		for (char c : str){
-			if (c == '|'){
-				res.player_nb = atoi(tmp.c_str());
-				tmp.clear();
-			}
-			else if (c == ';'){
-				res.player_usernames.push_back(tmp);
-				tmp.clear();
-			}
-			else tmp += c;
-		}
-
-		return res;
-	}
 
 	const PlayersInformations& parseStartInfo(){
 		int rod_nb = 0;
@@ -76,12 +59,33 @@ public:
 		return res;
 	}
 
-	const JoinInfo& parseJoin() {
-		int i = 0;
+	const JoinInfo& parseCreateInfo() {
 		std::string tmp;
+		int i = 0;
 		while (str[i] != ':' ) { tmp += str[i]; i++; }
 		join.username = tmp;
 		join.game_code = atoi(&str[i+1]);
+		join.nb_player = 1;
+		join.player_usernames.push_back(tmp);
+		return join;
+	}
+
+	const JoinInfo& parseJoinInfo() {
+		std::string tmp = "";
+		int colon_nb = 0;
+		for (char c : str){
+			if (c == ':'){
+				switch (colon_nb){
+					case 0: { join.username = tmp; break;}
+					case 1: { join.game_code = atoi(tmp.c_str()); break;}
+					case 2: { join.nb_player = atoi(tmp.c_str()); break;}
+					default: { join.player_usernames.push_back(tmp); }
+				}
+				colon_nb++;	
+				tmp.clear();
+			} else tmp += c;
+		}
+		join.player_usernames.push_back(tmp);
 		return join;
 	}
 };

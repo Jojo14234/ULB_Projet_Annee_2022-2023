@@ -70,9 +70,25 @@ void GameCUIController::receiveMsgLoop() {
         switch(cury) {
             case QUERY::PLAYER_CREATE_GAME:{
                 GameLaunchingParser start_parser(response);
-                JoinInfo p_i = start_parser.parseJoin();
+                JoinInfo p_i = start_parser.parseCreateInfo();
+                player_nb = p_i.nb_player;
+                players_username = p_i.player_usernames;
                 this->initScreen(p_i.game_code);
                 this->playerJoinUpdate();
+                break;
+            }
+
+            case QUERY::PLAYER_JOIN_GAME:{
+                this->view->getConsole()->addText(response);
+                GameLaunchingParser start_parser(response);
+                JoinInfo p_i = start_parser.parseJoinInfo();
+                player_nb = p_i.nb_player;
+                players_username = p_i.player_usernames;
+                this->initScreen(p_i.game_code);
+                this->playerJoinUpdate();
+                this->view->getConsole()->addText(p_i.username);
+                this->view->getConsole()->addText(std::to_string(p_i.nb_player));
+                this->view->getConsole()->addText(std::to_string(p_i.game_code));
                 break;
             }
 
@@ -83,19 +99,6 @@ void GameCUIController::receiveMsgLoop() {
                 players_username = p_i.player_usernames;
                 this->startGame(p_i.beginner);
                 this->view->getConsole()->addText("La partie commence");
-                break;
-            }
-
-            case QUERY::PLAYER_JOIN_GAME: {
-                GameLaunchingParser start_parser(response);
-                PlayersInformations p_i = start_parser.parseJoinInfo();
-                player_nb = p_i.player_nb;
-                players_username = p_i.player_usernames;
-
-                GameLaunchingParser start_parser2(response);
-                JoinInfo p_i2 = start_parser2.parseJoin();
-                this->initScreen(p_i2.game_code);
-                this->playerJoinUpdate();
                 break;
             }
 
@@ -260,6 +263,7 @@ void GameCUIController::receiveMsgLoop() {
             case QUERY::INFOS_CARD_DESCRIPTION:{
                 this->view->getConsole()->addText("Vous venez de piocher une carte :");
                 this->view->getConsole()->addText(response);
+                break;
             }
 
             case QUERY::CHOICE_MONEY_CARD:{
