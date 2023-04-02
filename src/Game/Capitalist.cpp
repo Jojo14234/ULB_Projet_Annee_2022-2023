@@ -310,21 +310,21 @@ void Capitalist::processJailUseCard(Player *player) {
 }
 
 void Capitalist::processJailRoll(Player *player) {
-    int roll_result = player->roll(this->dice);
+    int roll_result = player->processRollDice(this->dice);
     player->addRollInPrison();
     if ( this->rolledADouble() ) {
-        this->dice.resetDoubleCounter();
+        //this->dice.resetDoubleCounter();
         player->setStatus(PLAYER_STATUS::FREE);
-        player->processMove(PRISON_INDEX + roll_result, this->getBoard());
+        player->processMove(roll_result, this->getBoard());
         player->getCurrentCell()->action(player);
         player->resetRollInPrison();
         return;
     }
     else if ( player->getRollsInPrison() == 3 ) {
-        this->dice.resetDoubleCounter();
+        //this->dice.resetDoubleCounter();
         player->pay(50, true);
         if (player->getStatus() == PLAYER_STATUS::JAILED) { player->setStatus(PLAYER_STATUS::FREE); }
-        player->processMove(PRISON_INDEX + roll_result, this->getBoard());
+        player->processMove(roll_result, this->getBoard());
         player->getCurrentCell()->action(player);
         player->resetRollInPrison();
     }

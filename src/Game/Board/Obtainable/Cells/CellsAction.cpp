@@ -67,7 +67,10 @@ void LandCell::buy(Player *player) {
 }
 
 void LandCell::pay(Player *player) {
-    if (player == this->getOwner()) { player->getClient()->getGameServer()->updateAllClientsWithQuery(QUERY::INFOS_PLAYER_MOVE_ON_OWN_CELL, player->getUsername());}
+    if (player == this->getOwner()) { 
+        player->getClient()->getGameServer()->updateAllClientsWithQuery(QUERY::INFOS_PLAYER_MOVE_ON_OWN_CELL, player->getUsername());
+        return;
+    }
 
     if (!player->pay(land->getRentPrice(), true)) { player->setPlayerToRefund(this->getOwner()); }
 
