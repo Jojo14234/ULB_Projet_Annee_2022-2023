@@ -49,12 +49,18 @@ void MenuCUIController::handle(int event) {
 			this->model->sendJoinGame(this->view->join.getValue());
 			std::string response;
 			QUERY query = this->model->receive(response);
-			this->view->console.addText(response);
-			if (response != "aucune partie n'existe avec ce code"){
+			if (query != QUERY::FALSEQ){
 				this->new_state = STATE::GAME;
 				this->notify();
 				this->model->setGameCode(this->view->join.getValue());
+			} else {
+				this->view->console.addText("Il n'existe pas de partie avec ce code");
 			}
+			/*if (response != "aucune partie n'existe avec ce code"){
+				this->new_state = STATE::GAME;
+				this->notify();
+				this->model->setGameCode(this->view->join.getValue());
+			}*/
 			break; }
 		case IDLE: break;
 		} break;
