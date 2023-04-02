@@ -44,7 +44,8 @@ void MenuCUIController::handle(int event) {
 				this->model->setGameCode(gamecode);
 				this->model->createGame();
 			}
-			break; }
+			break; 
+		}
 		case JOIN: {
 			this->model->sendJoinGame(this->view->join.getValue());
 			std::string response;
@@ -53,15 +54,9 @@ void MenuCUIController::handle(int event) {
 				this->new_state = STATE::GAME;
 				this->notify();
 				this->model->setGameCode(this->view->join.getValue());
-			} else {
-				this->view->console.addText("Il n'existe pas de partie avec ce code");
-			}
-			/*if (response != "aucune partie n'existe avec ce code"){
-				this->new_state = STATE::GAME;
-				this->notify();
-				this->model->setGameCode(this->view->join.getValue());
-			}*/
-			break; }
+			} else this->view->console.addText("Il n'existe pas de partie avec ce code");
+			break; 
+		}
 		case IDLE: break;
 		} break;
 	default:

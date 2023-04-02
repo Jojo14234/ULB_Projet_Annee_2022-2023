@@ -3,6 +3,7 @@
 #include <thread>
 #include <vector>
 #include <string>
+#include <memory>
 
 #include "GameCUIController.hpp"
 #include "../View/GameCUIView.hpp"
@@ -70,30 +71,30 @@ void GameCUIController::receiveMsgLoop() {
         switch(cury) {
             case QUERY::PLAYER_CREATE_GAME:{
                 GameLaunchingParser start_parser(response);
-                JoinInfo p_i = start_parser.parseCreateInfo();
-                player_nb = p_i.nb_player;
-                players_username = p_i.player_usernames;
-                this->initScreen(p_i.game_code);
+                std::shared_ptr<JoinInfo> p_i = start_parser.parseCreateQuery();
+                player_nb = p_i->nb_player;
+                players_username = p_i->player_usernames;
+                this->initScreen(p_i->game_code);
                 this->playerJoinUpdate();
                 break;
             }
 
             case QUERY::PLAYER_JOIN_GAME:{
                 GameLaunchingParser start_parser(response);
-                JoinInfo p_i = start_parser.parseJoinInfo();
-                player_nb = p_i.nb_player;
-                players_username = p_i.player_usernames;
-                this->initScreen(p_i.game_code);
+                std::shared_ptr<JoinInfo> p_i = start_parser.parseJoinQuery();
+                player_nb = p_i->nb_player;
+                players_username = p_i->player_usernames;
+                this->initScreen(p_i->game_code);
                 this->playerJoinUpdate();
                 break;
             }
 
             case QUERY::INFOS_START: {
                 GameLaunchingParser start_parser(response);
-                PlayersInformations p_i = start_parser.parseStartInfo();
-                player_nb = p_i.player_nb;
-                players_username = p_i.player_usernames;
-                this->startGame(p_i.beginner);
+                std::shared_ptr<StartInfo> p_i = start_parser.parseStartQuery();
+                player_nb = p_i->player_nb;
+                players_username = p_i->player_usernames;
+                this->startGame(p_i->beginner);
                 this->view->getConsole()->addText("La partie commence");
                 break;
             }
