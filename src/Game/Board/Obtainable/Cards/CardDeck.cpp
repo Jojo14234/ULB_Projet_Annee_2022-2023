@@ -123,7 +123,8 @@ Card* CardDeck::drawACard() {
         if (result == 15 && !isJailCardInside()) { drawn_card = nullptr; }
 	}
     return drawn_card;
-    //return this->card_list.at(8).get();;     //pour debug
+    //return this->card_list.at(14).get();;     //gare la + proche / reculer
+    //return this->card_list.at(8).get();;     //aller en prison
 }
 
 /*

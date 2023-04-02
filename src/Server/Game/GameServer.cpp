@@ -319,7 +319,6 @@ void GameServer::processStart(ClientManager* client) {
     if ( this->game.getPlayersSize() < 2 ) { this->updateThisClientWithQuery(QUERY::MESSAGE,"Attend tes amis avant de lancer la partie !" ,*client); return; }
     this->game.startGame();
     this->sendStartData();
-    this->updateAllClientsWithQuery(QUERY::MESSAGE, "Lancement de la partie");
 }
 
 /*

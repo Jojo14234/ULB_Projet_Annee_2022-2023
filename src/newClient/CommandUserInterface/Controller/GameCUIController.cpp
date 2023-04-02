@@ -100,7 +100,6 @@ void GameCUIController::receiveMsgLoop() {
 
             case QUERY::INFOS_ROLL_DICE: {
                 GameStateParser game_parser(response);
-                this->view->getConsole()->addText(response);
                 DiceInformations dice_i = game_parser.parseDiceLine();
                 if (this->model->isMyTurn()) {
                     this->view->getDice1()->setText(std::to_string(dice_i.first_value), 0);
@@ -245,7 +244,6 @@ void GameCUIController::receiveMsgLoop() {
 
             case QUERY::INFOS_CARD_CELL_TO_GO:{
                 GameStateParser game_parser(response);
-                this->view->getChat()->addText(response);
                 PlayerMoveByCard pmbc = game_parser.parsePlayerMoveByCard();
                 this->view->getBoard()->movePlayer(pmbc.new_pos, pmbc.player);
                 break;
