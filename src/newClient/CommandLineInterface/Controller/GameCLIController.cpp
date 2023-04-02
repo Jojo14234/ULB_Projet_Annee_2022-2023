@@ -45,6 +45,7 @@ void GameCLIController::receiveMsgLoop() {
     while (this->new_state == STATE::GAME) {
         std::string response;
         QUERY query = this->model->receive(response);
+        std::cout << "From receive Msg loop : " << response << std::endl;
 
         switch (query) {
             case QUERY::INFOS_START : break;
@@ -83,7 +84,7 @@ void GameCLIController::receiveMsgLoop() {
 
 //todo
 void GameCLIController::update() {
-
+    this->initGame();
 }
 //todo
 void GameCLIController::move() {
