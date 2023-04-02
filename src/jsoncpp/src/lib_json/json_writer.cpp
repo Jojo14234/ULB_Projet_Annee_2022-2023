@@ -5,7 +5,10 @@
 
 #if !defined(JSON_IS_AMALGAMATION)
 #include "json_tool.h"
-#include <json/writer.h>
+
+//#include <json/writer.h>
+#include "../../include/json//writer.h"
+
 #endif // if !defined(JSON_IS_AMALGAMATION)
 #include <algorithm>
 #include <cassert>
