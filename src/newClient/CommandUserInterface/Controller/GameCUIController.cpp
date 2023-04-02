@@ -8,7 +8,7 @@
 #include "GameCUIController.hpp"
 #include "../View/GameCUIView.hpp"
 #include "../../Model/QueryParser/GameLaunchingParser.hpp"
-#include "../../Model/QueryParser/GameStateParser.hpp"
+#include "../../Model/QueryParser/InGameParser.hpp"
 
 
 // Public
@@ -70,59 +70,59 @@ void GameCUIController::receiveMsgLoop() {
 
         switch(cury) {
             case QUERY::PLAYER_CREATE_GAME:{
-                GameLaunchingParser start_parser(response);
-                std::shared_ptr<JoinInfo> p_i = start_parser.parseCreateQuery();
-                player_nb = p_i->nb_player;
-                players_username = p_i->player_usernames;
-                this->initScreen(p_i->game_code);
+                GameLaunchingParser launching_parser(response);
+                std::shared_ptr<JoinInfo> join_info = launching_parser.parseCreateQuery();
+                player_nb = join_info->nb_player;
+                players_username = join_info->player_usernames;
+                this->initScreen(join_info->game_code);
                 this->playerJoinUpdate();
                 break;
             }
 
             case QUERY::PLAYER_JOIN_GAME:{
-                GameLaunchingParser start_parser(response);
-                std::shared_ptr<JoinInfo> p_i = start_parser.parseJoinQuery();
-                player_nb = p_i->nb_player;
-                players_username = p_i->player_usernames;
-                this->initScreen(p_i->game_code);
+                GameLaunchingParser launching_parser(response);
+                std::shared_ptr<JoinInfo> join_info = launching_parser.parseJoinQuery();
+                player_nb = join_info->nb_player;
+                players_username = join_info->player_usernames;
+                this->initScreen(join_info->game_code);
                 this->playerJoinUpdate();
                 break;
             }
 
             case QUERY::INFOS_START: {
-                GameLaunchingParser start_parser(response);
-                std::shared_ptr<StartInfo> p_i = start_parser.parseStartQuery();
-                player_nb = p_i->player_nb;
-                players_username = p_i->player_usernames;
-                this->startGame(p_i->beginner);
+                GameLaunchingParser launching_parser(response);
+                std::shared_ptr<StartInfo> start_info = launching_parser.parseStartQuery();
+                player_nb = start_info->player_nb;
+                players_username = start_info->player_usernames;
+                this->startGame(start_info->beginner);
                 this->view->getConsole()->addText("La partie commence");
                 break;
             }
 
             case QUERY::INFOS_ROLL_DICE: {
-                GameStateParser game_parser(response);
-                DiceInformations dice_i = game_parser.parseDiceLine();
+                InGameParser game_parser(response);
+                std::shared_ptr<RollDiceInfo> dice_info = game_parser.parseRollDiceQuery();
                 if (this->model->isMyTurn()) {
-                    this->view->getDice1()->setText(std::to_string(dice_i.first_value), 0);
-                    this->view->getDice2()->setText(std::to_string(dice_i.second_value), 0);
-                }  else this->view->getConsole()->addText("Le joueur " + this->model->getPlayerTurn() + " a obtenu un " + std::to_string(dice_i.first_value ) + " et un " + std::to_string(dice_i.second_value));
+                    this->view->getDice1()->setText(std::to_string(dice_info->first_value), 0);
+                    this->view->getDice2()->setText(std::to_string(dice_info->second_value), 0);
+                }  else this->view->getConsole()->addText("Le joueur " + this->model->getPlayerTurn() + " a obtenu un " + std::to_string(dice_info->first_value ) + " et un " + std::to_string(dice_info->second_value));
                 break;
             }
 
             case QUERY::INFOS_GAME: {
-                GameStateParser game_parser(response);
-                std::vector<PlayerInformations> players = game_parser.parseEndTurnLine(player_nb);
+                InGameParser game_parser(response);
+                std::shared_ptr<std::vector<GameInfo>> player_game_info = game_parser.parseInfosGameQuery(player_nb);
                 for (int i = 0; i < player_nb; i++){
-                    this->view->getBoard()->movePlayer(players[i].position, i+1);
-                    for (unsigned int j = 0; j < players[i].properties.size(); j++){
-                        int index = this->view->getBoard()->getCellIndex(players[i].properties[j].name);
-                        if (players[i].properties[j].level == 0){
+                    this->view->getBoard()->movePlayer(player_game_info->at(i).position, i+1);
+                    for (unsigned int j = 0; j < player_game_info->at(i).properties.size(); j++){
+                        int index = this->view->getBoard()->getCellIndex(player_game_info->at(i).properties[j].name);
+                        if (player_game_info->at(i).properties[j].level == 0){
                             this->view->getBoard()->setPurchased(index, i+1);
                         }
                         else this->view->getBoard()->setHouse(index, 2);
                     }
 
-                    this->view->getInfo()->setPlayerInfo(i+1, players[i].money, players[i].jail_card_nb);
+                    this->view->getInfo()->setPlayerInfo(i+1, player_game_info->at(i).money, player_game_info->at(i).jail_card_nb);
                 }
                 break;
             }
@@ -135,19 +135,19 @@ void GameCUIController::receiveMsgLoop() {
             }
 
             case QUERY::INFOS_PLAYER_MOVE: {
-                GameStateParser game_parser(response);
-                PlayerInteractProperty p_i_p = game_parser.parseInteraction();
-                int index = this->view->getBoard()->getCellIndex(p_i_p.property_name);
-                this->view->getBoard()->movePlayer(index, p_i_p.player);
+                InGameParser game_parser(response);
+                std::shared_ptr<PlayerMoveInfo> move_info = game_parser.parsePlayerMoveQuery();
+                int index = this->view->getBoard()->getCellIndex(move_info->property_name);
+                this->view->getBoard()->movePlayer(index, move_info->player);
                 break;
             }
 
             case QUERY::INFOS_PLAYER_BOUGHT: {
-                GameStateParser game_parser(response);
-                PlayerInteractProperty p_i_p = game_parser.parseInteraction();
-                int index = this->view->getBoard()->getCellIndex(p_i_p.property_name);
-                this->view->getBoard()->setPurchased(index, p_i_p.player);
-                this->view->getInfo()->changePlayerMoney(p_i_p.player, p_i_p.player_money);
+                InGameParser game_parser(response);
+                std::shared_ptr<PlayerMoveInfo> move_info = game_parser.parsePlayerMoveQuery();
+                int index = this->view->getBoard()->getCellIndex(move_info->property_name);
+                this->view->getBoard()->setPurchased(index, move_info->player);
+                this->view->getInfo()->changePlayerMoney(move_info->player, move_info->player_money);
                 break;
             }
 
@@ -159,22 +159,22 @@ void GameCUIController::receiveMsgLoop() {
                 // TODO AJOUTER VISUELLE POUR DIRE QUAND UNE PERSONNE A ACHETÉ UNE MAISON/VENDRE + HOTEL
 
             case QUERY::INFOS_PLAYER_PAID_PLAYER:{
-                GameStateParser game_parser(response);
-                PlayerPaidPlayerInformations pppi = game_parser.parsePayement();
+                InGameParser game_parser(response);
+                std::shared_ptr<PlayerPaidPlayerInfo> payement_info = game_parser.parsePlayerPaidPlayerQuery();
                 if (this->model->isMyTurn()) {
-                    this->view->getInfo()->changePlayerMoney(pppi.loser, pppi.loser_money);
-                    this->view->getInfo()->changePlayerMoney(pppi.winner, pppi.winner_money);
-                    this->view->getConsole()->addText("Vous payez " + std::to_string(pppi.amount) + "$ a " + players_username[pppi.winner-1]);
+                    this->view->getInfo()->changePlayerMoney(payement_info->loser, payement_info->loser_money);
+                    this->view->getInfo()->changePlayerMoney(payement_info->winner, payement_info->winner_money);
+                    this->view->getConsole()->addText("Vous payez " + std::to_string(payement_info->amount) + "$ a " + players_username[payement_info->winner-1]);
                 } else {
-                    this->view->getConsole()->addText(players_username[pppi.loser-1] + " a paye " + std::to_string(pppi.amount) + "$ a " + players_username[pppi.winner-1]);
+                    this->view->getConsole()->addText(players_username[payement_info->loser-1] + " a paye " + std::to_string(payement_info->amount) + "$ a " + players_username[payement_info->winner-1]);
                 }
                 break;
             }
 
             case QUERY::INFOS_PLAYER_MOVE_ON_MORTGAGED_CELL:{
-                GameStateParser game_parser(response);
-                PlayerInteractMortgagedCell pimc = game_parser.parseMortgagedLine();
-                this->view->getConsole()->addText(pimc.username + " est tombe sur une propriete hypotheque");
+                InGameParser game_parser(response);
+                std::shared_ptr<MoveMortgagedInfo> mortgaged_info = game_parser.parseMoveMortgagedQuery();
+                this->view->getConsole()->addText(mortgaged_info->username + " est tombe sur une propriete hypotheque");
                 break;
             }
 
@@ -184,16 +184,16 @@ void GameCUIController::receiveMsgLoop() {
             }
 
             case QUERY::INFOS_PLAYER_MOVE_ON_TAX_CELL:{
-                GameStateParser game_parser(response);
-                PlayerInteractTax pit = game_parser.parseTaxLine();
-                int index = this->view->getBoard()->getCellIndex(pit.tax_name);
-                this->view->getBoard()->movePlayer(index, pit.player);
-                this->view->getInfo()->changePlayerMoney(pit.player, pit.player_money);
+                InGameParser game_parser(response);
+                std::shared_ptr<MoveTaxInfo> tax_info = game_parser.parseMoveTaxQuery();
+                int index = this->view->getBoard()->getCellIndex(tax_info->tax_name);
+                this->view->getBoard()->movePlayer(index, tax_info->player);
+                this->view->getInfo()->changePlayerMoney(tax_info->player, tax_info->player_money);
 
                 if (this->model->isMyTurn()) {
-                    this->view->getConsole()->addText("Vous payez " + std::to_string(pit.price) + "$ de taxe");
+                    this->view->getConsole()->addText("Vous payez " + std::to_string(tax_info->price) + "$ de taxe");
                 } else {
-                    this->view->getConsole()->addText(players_username[pit.player-1] + " a paye " + std::to_string(pit.price) + "$ de taxe");
+                    this->view->getConsole()->addText(players_username[tax_info->player-1] + " a paye " + std::to_string(tax_info->price) + "$ de taxe");
                 }
                 break;
             }
@@ -227,37 +227,37 @@ void GameCUIController::receiveMsgLoop() {
             }
 
             case QUERY::INFOS_PLAYER_WON_MONEY:{
-                GameStateParser game_parser(response);
-                PlayerWonOrLoseMoneyInfo pwolmi = game_parser.parseWonOrLoseMoney();
-                this->view->getInfo()->changePlayerMoney(pwolmi.player, pwolmi.player_money);
-                if (! this->model->isMyTurn()) this->view->getConsole()->addText(players_username[pwolmi.player-1] + " a gagne " + std::to_string(pwolmi.amount) + "$");
+                InGameParser game_parser(response);
+                std::shared_ptr<WonOrLoseMoneyInfo> money_info = game_parser.parseWonOrLoseMoneyQuery();
+                this->view->getInfo()->changePlayerMoney(money_info->player, money_info->player_money);
+                if (! this->model->isMyTurn()) this->view->getConsole()->addText(players_username[money_info->player-1] + " a gagne " + std::to_string(money_info->amount) + "$");
                 break;
 
             }
 
             case QUERY::INFOS_PLAYER_LOSE_MONEY:{
-                GameStateParser game_parser(response);
-                PlayerWonOrLoseMoneyInfo pwolmi = game_parser.parseWonOrLoseMoney();
-                this->view->getInfo()->changePlayerMoney(pwolmi.player, pwolmi.player_money);
-                if (! this->model->isMyTurn()) this->view->getConsole()->addText(players_username[pwolmi.player-1] + " a perdu " + std::to_string(-pwolmi.amount) + "$");
+                InGameParser game_parser(response);
+                std::shared_ptr<WonOrLoseMoneyInfo> money_info = game_parser.parseWonOrLoseMoneyQuery();
+                this->view->getInfo()->changePlayerMoney(money_info->player, money_info->player_money);
+                if (! this->model->isMyTurn()) this->view->getConsole()->addText(players_username[money_info->player-1] + " a perdu " + std::to_string(-money_info->amount) + "$");
                 break;
             }
 
             case QUERY::INFOS_CARD_CELL_TO_GO:{
-                GameStateParser game_parser(response);
-                PlayerMoveByCard pmbc = game_parser.parsePlayerMoveByCard();
-                this->view->getBoard()->movePlayer(pmbc.new_pos, pmbc.player);
+                InGameParser game_parser(response);
+                std::shared_ptr<MoveByCardInfo> move_card_info = game_parser.parseMoveByCardQuery();
+                this->view->getBoard()->movePlayer(move_card_info->new_pos, move_card_info->player);
                 break;
             }
 
             case QUERY::INFOS_PLAYER_MOVE_ON_CARD_CELL:{
-                GameStateParser game_parser(response);
-                PlayerMoveOnCardCell pmocc = game_parser.parseMoveOnCardCell();
-                this->view->getBoard()->movePlayer(pmocc.new_pos, pmocc.player);
+                InGameParser game_parser(response);
+                std::shared_ptr<MoveOnCardCellInfo> move_cardcell_info = game_parser.parseMoveOnCardCellQuery();
+                this->view->getBoard()->movePlayer(move_cardcell_info->new_pos, move_cardcell_info->player);
                 if (this->model->isMyTurn()){
                     this->view->getConsole()->addText("Vous venez de piocher une carte :");
-                    this->view->getConsole()->addText(pmocc.description);
-                } else this->view->getConsole()->addText(players_username[pmocc.player-1] + " a pioche un carte.");
+                    this->view->getConsole()->addText(move_cardcell_info->description);
+                } else this->view->getConsole()->addText(players_username[move_cardcell_info->player-1] + " a pioche un carte.");
                 break;
             }
 
@@ -277,10 +277,10 @@ void GameCUIController::receiveMsgLoop() {
             }
 
             case QUERY::INFOS_BUILD_PROP:{
-                GameStateParser game_parser(response);
-                std::vector<std::string> build_mode = game_parser.parsePropertiesName();
+                InGameParser game_parser(response);
+                std::shared_ptr<std::vector<std::string>> build_mode = game_parser.parseBuildOrSellQuery();
                 if (this->model->isMyTurn()){
-                    for (auto property : build_mode){
+                    for (auto property : *build_mode.get()){
                         int index = this->view->getBoard()->getCellIndex(property);
                         this->view->getBoard()->setBuildable(index);
                     }
@@ -289,10 +289,10 @@ void GameCUIController::receiveMsgLoop() {
             }
 
             case QUERY::INFOS_SELL_BUILD:{
-                GameStateParser game_parser(response);
-                std::vector<std::string> build_mode = game_parser.parsePropertiesName();
+                InGameParser game_parser(response);
+                std::shared_ptr<std::vector<std::string>> build_mode = game_parser.parseBuildOrSellQuery();
                 if (this->model->isMyTurn()){
-                    for (auto property : build_mode){
+                    for (auto property : *build_mode.get()){
                         int index = this->view->getBoard()->getCellIndex(property);
                         this->view->getBoard()->setSalable(index);
                     }
@@ -309,10 +309,10 @@ void GameCUIController::receiveMsgLoop() {
             }
 
             case QUERY::INFOS_ASK_FOR_PURCHASE:{
-                GameStateParser game_parser(response);
-                AskPlayerForPurchase purchase = game_parser.parseAskForPurchase();
+                InGameParser game_parser(response);
+                std::shared_ptr<AskForPurchaseInfo> purchase = game_parser.parseAskForPurchaseQuery();
 
-                this->view->getConsole()->addText("Acheter " + purchase.cell_name + " pour " + std::to_string(purchase.amount)+"$ ?");
+                this->view->getConsole()->addText("Acheter " + purchase->cell_name + " pour " + std::to_string(purchase->amount)+"$ ?");
                 this->view->getConsole()->addText("/yes ou /no");
                 this->view->getConsole()->addText("Si vous ne l'achetez pas, des encheres debuteront");
                 break;
