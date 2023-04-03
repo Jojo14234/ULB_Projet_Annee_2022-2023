@@ -288,6 +288,12 @@ void GameCUIController::receiveMsgLoop() {
                 break;
             }
 
+            case QUERY::BAD_COMMAND:{
+                if (this->model->isMyTurn())
+                    this->view->getConsole()->addText("Vous ne pouvez pas utiliser cette commande");
+                break;
+            }
+
             case QUERY::INFOS_BUILD_PROP:{
                 InGameParser game_parser(response);
                 build_mode = *game_parser.parseBuildOrSellQuery().get();

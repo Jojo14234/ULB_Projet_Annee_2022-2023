@@ -391,7 +391,7 @@ void GameServer::processBuild(ClientManager &client, Player *player) {
     while ( query != GAME_QUERY_TYPE::LEAVE_SELECTION ) {
         // QUERY IS NOT SELECT -> SHOW MESSAGE AND ASK FOR ANOTHER INPUT
         if ( query != GAME_QUERY_TYPE::SELECT ) {
-            this->updateThisClientWithQuery(QUERY::FALSEQ, "", client);
+            this->updateThisClientWithQuery(QUERY::BAD_COMMAND, "", client);
             client.receive(query, packet);
             continue;
         }

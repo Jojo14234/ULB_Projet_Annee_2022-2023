@@ -41,6 +41,7 @@ enum class QUERY {
 
     MESSAGE, // All indication message
     USELESS_MESSAGE, // Message useless outside out the terminal app
+    BAD_COMMAND,
 
 
     INFOS_ROLL_DICE, // dice1:dice2:result:isDouble:doubleCount [int]:[int]:[int]:[bool]:[int]
