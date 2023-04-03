@@ -119,7 +119,7 @@ void GameCUIController::receiveMsgLoop() {
                         if (player_game_info->at(i).properties[j].level == 0){
                             this->view->getBoard()->setPurchased(index, i+1);
                         }
-                        else this->view->getBoard()->setHouse(index, 2);
+                        else this->view->getBoard()->setHouse(index, player_game_info->at(i).properties[j].level);
                     }
 
                     this->view->getInfo()->setPlayerInfo(i+1, player_game_info->at(i).money, player_game_info->at(i).jail_card_nb);
@@ -245,7 +245,7 @@ void GameCUIController::receiveMsgLoop() {
                 InGameParser game_parser(response);
                 std::shared_ptr<WonOrLoseMoneyInfo> money_info = game_parser.parseWonOrLoseMoneyQuery();
                 this->view->getInfo()->changePlayerMoney(money_info->player, money_info->player_money);
-                if (! this->model->isMyTurn()) this->view->getConsole()->addText(players_username[money_info->player-1] + " a perdu " + std::to_string(-money_info->amount) + "$");
+                if (! this->model->isMyTurn()) this->view->getConsole()->addText(players_username[money_info->player-1] + " a perdu " + std::to_string(money_info->amount) + "$");
                 else { 
                     if (players_username[money_info->player-1] == this->model->getUsername()){
                         this->view->getConsole()->addText("Vous perdez " + std::to_string(money_info->amount) + "$"); 
@@ -290,9 +290,9 @@ void GameCUIController::receiveMsgLoop() {
 
             case QUERY::INFOS_BUILD_PROP:{
                 InGameParser game_parser(response);
-                std::shared_ptr<std::vector<std::string>> build_mode = game_parser.parseBuildOrSellQuery();
+                build_mode = *game_parser.parseBuildOrSellQuery().get();
                 if (this->model->isMyTurn()){
-                    for (auto property : *build_mode.get()){
+                    for (auto property : build_mode){
                         int index = this->view->getBoard()->getCellIndex(property);
                         this->view->getBoard()->setBuildable(index);
                     }
@@ -302,9 +302,9 @@ void GameCUIController::receiveMsgLoop() {
 
             case QUERY::INFOS_SELL_BUILD:{
                 InGameParser game_parser(response);
-                std::shared_ptr<std::vector<std::string>> build_mode = game_parser.parseBuildOrSellQuery();
+                build_mode = *game_parser.parseBuildOrSellQuery().get();
                 if (this->model->isMyTurn()){
-                    for (auto property : *build_mode.get()){
+                    for (auto& property : build_mode){
                         int index = this->view->getBoard()->getCellIndex(property);
                         this->view->getBoard()->setSalable(index);
                     }
@@ -313,10 +313,20 @@ void GameCUIController::receiveMsgLoop() {
             }
 
             case QUERY::INFOS_LEAVE_BUILD_MODE:{
-                for (auto property : build_mode){
+                for (auto& property : build_mode){
                     int index = this->view->getBoard()->getCellIndex(property);
                     this->view->getBoard()->leaveSelection(index);
                 }
+                break;
+            }
+
+
+            case QUERY::INFOS_BUILD_SUCCESS:{
+                InGameParser game_parser(response);
+                std::shared_ptr<BuildSucessInfo> sucess_info = game_parser.parseBuildSuccesQuery();
+                
+                int index = this->view->getBoard()->getCellIndex(sucess_info->name);
+                this->view->getBoard()->setHouse(index, sucess_info->level);
                 break;
             }
 

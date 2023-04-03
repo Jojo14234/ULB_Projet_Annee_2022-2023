@@ -75,16 +75,7 @@ void Board::setPurchased(int cell, int player){
 }
 
 void Board::setHouse(int cell, int house_nb){
-	if (old_lev_house[cell] < house_nb){
-		board[cell]->addBuilding(house_nb - old_lev_house[cell]);
-		old_lev_house[cell] = house_nb - old_lev_house[cell];
-
-	}
-	else if (old_lev_house[cell] > house_nb){
-		board[cell]->removeBuilding(old_lev_house[cell] - house_nb);
-		old_lev_house[cell] = old_lev_house[cell] - house_nb;
-	}
-	
+	board[cell]->setBuilding(house_nb);
 }
 
 void Board::setBuildable(int cell) { board[cell]->enterBuildMode(); }

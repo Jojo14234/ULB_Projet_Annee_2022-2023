@@ -54,7 +54,7 @@ enum class QUERY {
     INFOS_EXCHANGEABLE_PROP, // username=property_exchangeable:property_exchangeable:|... All teh properties exchangeable by all the player
 
 
-    INFOS_BUILD_SUCCESS, // property_name (indicate the level up) // TODO add lvl
+    INFOS_BUILD_SUCCESS, // property_name:level:mortgaged [string]:[int]:[bool]
     INFOS_SELL_BUILD_SUCCESS, // property_name (indicate the level down) // TODO add lvl
     INFOS_MORTGAGE_SUCCESS, // property name of the mortgaged property
     INFOS_LIFT_MORTGAGE_SUCCESS, // property name of the lift mortgaged property

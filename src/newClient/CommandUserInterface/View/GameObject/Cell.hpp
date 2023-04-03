@@ -6,8 +6,8 @@
 
 class Cell : public TextBox {
 
-	int building_nb=0; // For now, it's useless
 	int owner=0;
+	std::string save;
 
 public :
 
@@ -36,40 +36,30 @@ public :
 	}
 
 	void enterBuildMode(){
-		texts.at(2) = "BUILD";
+		save = texts.at(1);
+		texts.at(1) = "BUILD";
 	}
 
 	void enterSellMode(){
-		texts.at(2) = "SELL";
+		save = texts.at(1);
+		texts.at(1) = "SELL";
 	}
 
 	void leaveBuildMode(){
-		addBuilding(this->building_nb);
+		texts.at(1) = save;
 	}
 
 	void setIdle(){
 		texts.at(2).clear();
-		building_nb = 0;
 		owner = 0;
 	}
 
-	void addBuilding(int nb){
-		if(building_nb == 0) texts.at(2) = std::to_string(owner) + ": ";
-		building_nb += nb;
-		if (building_nb >= 5){
+	void setBuilding(int nb){
+		texts.at(2) = std::to_string(owner) + ": ";
+		if (nb >= 5){
 			texts.at(2) = std::to_string(owner) + ": $";
 		} else {
 			for (int i=0; i<nb; i++) texts.at(2) += "*";
-		}	
-	}
-
-	void removeBuilding(int nb){
-		building_nb -= nb;
-		if (building_nb == 0){
-			this->setOwner(owner);
-		} else {
-			texts.at(2) = std::to_string(owner) + ": ";
-			this->addBuilding(building_nb);
 		}	
 	}
 

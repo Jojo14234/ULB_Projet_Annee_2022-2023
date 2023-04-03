@@ -24,7 +24,6 @@ class Board : public AbstractViewObject {
 	static const int gamebox_nb = 40;
 
 	std::vector<int> old_pos_player;
-	std::array<int, 40> old_lev_house;
 
     int n_player; //number of players in game
 

@@ -7,19 +7,18 @@
 #include <memory>
 
 
+struct BuildSucessInfo {
+	std::string name;
+	int level;
+	bool mortgage;
+};
+
 struct GameInfo {
-
-	struct GamePropertyInfo {
-		std::string name;
-		int level;
-		bool mortgage;
-	};
-
 	std::string username;
 	int position;
 	int money;
 	int jail_card_nb;
-	std::vector<GamePropertyInfo> properties;
+	std::vector<BuildSucessInfo> properties;
 };
 
 struct PlayerMoveInfo {
@@ -90,7 +89,7 @@ public:
 	std::shared_ptr<std::vector<GameInfo>> parseInfosGameQuery(int player_nb) {
 		std::shared_ptr<std::vector<GameInfo>> res = std::make_shared<std::vector<GameInfo>>();
 		std::string tmp;
-		GameInfo::GamePropertyInfo property_info;
+		BuildSucessInfo property_info;
 		res->resize(player_nb);
 		int colon_nb = 0;
 		int semicolon_nb = 0;
@@ -285,6 +284,24 @@ public:
 		while (str[i] != ':' ) { tmp += str[i]; i++; }
 		res->cell_name = tmp;
 		res->amount = atoi(&str[i+1]);
+		return res;
+	}
+
+	std::shared_ptr<BuildSucessInfo> parseBuildSuccesQuery() {
+		std::shared_ptr<BuildSucessInfo> res = std::make_shared<BuildSucessInfo>();
+		int colon_nb = 0;
+		int i = 0;
+		std::string tmp;
+		while (str[i] != ':' || colon_nb < 1) {
+			if (str[i] == ':') {
+				res->name = tmp;
+				colon_nb++;
+				tmp.clear();
+			} else tmp += str[i]; 
+			i++;
+		}
+		res->level = atoi(tmp.c_str());
+		res->mortgage = static_cast<bool>(atoi(&str[i+1]));
 		return res;
 	}
 

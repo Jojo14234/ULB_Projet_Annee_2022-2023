@@ -395,7 +395,8 @@ void GameServer::processBuild(ClientManager &client, Player *player) {
         packet >> property_name;
         // BUILDING PROCESS WORK
         if ( this->game.processBuild(player, property_name) ) {
-            this->updateAllClientsWithQuery(QUERY::INFOS_BUILD_SUCCESS, property_name);
+            Property* prop = dynamic_cast<Property*>(this->game.getLandCell(property_name)->getLand());
+            this->updateAllClientsWithQuery(QUERY::INFOS_BUILD_SUCCESS, property_name + ":" + std::to_string(prop->getIntLevel()) + ":" + std::to_string(prop->isMortgaged()));
         }
 
         // BUILDING PROCESS DIDN'T WORK
