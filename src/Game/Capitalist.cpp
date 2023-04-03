@@ -449,7 +449,10 @@ bool Capitalist::isFastGame() {
 }
 
 void Capitalist::forceAcquisition(Player *player) {
-    //int range = getBoard().getBoardSize();
+    vecotr<Land*> available_land = getBoard().getAllAvailableLand();
+    //for (auto )
+
+    int range = getBoard().getBoardSize();
     //TODO code method to get all avaialble landcells (ça va être moche)
     //TODO select 2 randomly (if possible)
     //TODO force player to pay for both + manage potential bankruptcy

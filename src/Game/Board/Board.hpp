@@ -18,6 +18,7 @@
 #include <memory>
 #include <string>
 #include <vector>
+#include "Obtainable/Cells/Land/Land.hpp"
 
 class Cell;
 
@@ -57,7 +58,17 @@ public:
         else {return this->community_deck.get(); }
     }
 
-
+    std::vector<Land*> getAllAvailableLand() {
+        std::vector<Land*> available_land;
+        for (auto cell : cells){
+            if (cell.get()->isLandCell()){
+                LandCell* l = dynamic_cast<LandCell*>(cell.get());
+                if (l->getLand()->getStatus() == LAND_STATUS::FREE){
+                    available_land.push_back(l->getLand());
+                }
+            }
+        }
+    }
 
     int getBoardSize(){
         return cells.size();
