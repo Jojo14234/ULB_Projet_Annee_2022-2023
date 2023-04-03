@@ -166,6 +166,10 @@ public:
     std::string getAllExchangeablePossession();
     std::string rollInfos(Dice &dice);
 
+    //BOOL
+    bool hasBuildableProperties();
+    bool hasSellableProperties();
+
     // NEW FUNCTION
     std::vector<Land*> getAllLand();
 

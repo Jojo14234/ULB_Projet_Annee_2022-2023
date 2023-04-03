@@ -78,10 +78,8 @@ void GameServer::playerInJailInfos(ClientManager &client) {
  */
 void GameServer::playerBuildInfos(ClientManager &client) {
     Player* me = findMe(client);
-    this->updateThisClientWithQuery(QUERY::INFOS_BUILD_PROP, me->getAllBuildableProperties(), client);
-    std::string str = "Choisir une propriété ( /select [nom] )\n";
-    str +="Quittez le menu de construction ( /leave )";
-    this->updateThisClientWithQuery(QUERY::MESSAGE, str, client);
+    if (me->hasBuildableProperties())
+        this->updateThisClientWithQuery(QUERY::INFOS_BUILD_PROP, me->getAllBuildableProperties(), client);
 }
 
 void GameServer::playerSellBuildInfos(ClientManager &client) {
@@ -383,11 +381,17 @@ void GameServer::processBuild(ClientManager &client, Player *player) {
     std::string property_name;
     sf::Packet packet;
     client.receive(query, packet);
+    
+    Player* me = findMe(client);
+    if (! me->hasBuildableProperties()) {
+        this->updateAllClientsWithQuery(QUERY::NO_BUILDABLE_PROP, "");
+        return;
+    }
 
     while ( query != GAME_QUERY_TYPE::LEAVE_SELECTION ) {
         // QUERY IS NOT SELECT -> SHOW MESSAGE AND ASK FOR ANOTHER INPUT
         if ( query != GAME_QUERY_TYPE::SELECT ) {
-            this->playerBuildInfos(client);
+            this->updateThisClientWithQuery(QUERY::FALSEQ, "", client);
             client.receive(query, packet);
             continue;
         }
@@ -398,9 +402,8 @@ void GameServer::processBuild(ClientManager &client, Player *player) {
             Property* prop = dynamic_cast<Property*>(this->game.getLandCell(property_name)->getLand());
             this->updateAllClientsWithQuery(QUERY::INFOS_BUILD_SUCCESS, property_name + ":" + std::to_string(prop->getIntLevel()) + ":" + std::to_string(prop->isMortgaged()));
         }
-
         // BUILDING PROCESS DIDN'T WORK
-        this->playerBuildInfos(client);
+        else this->updateThisClientWithQuery(QUERY::CANNOT_BUILD, "", client);
         client.receive(query, packet);
     }
     this->updateThisClientWithQuery(QUERY::INFOS_LEAVE_BUILD_MODE, "Vous quittez le mode de sélection", client);

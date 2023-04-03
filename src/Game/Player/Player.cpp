@@ -309,10 +309,6 @@ std::string Player::getAllPossessionLiftMortgageable() {
     for ( auto company : companies ) { if ( company->isMortgaged() ) { str += company->getName() + ":"; } }
     for ( auto station : stations ) { if ( station->isMortgaged() ) { str += station->getName() + ":"; } }
     return str;
-
-
-
-
 }
 std::string Player::getAllBuildableProperties() {
     std::string str = "";
@@ -346,6 +342,18 @@ std::string Player::rollInfos(Dice &dice) {
     std::string d = std::to_string(dice.isDouble());
     std::string dc = std::to_string(dice.getDoubleCounter());
     return r1 + ":" + r2 + ":" + r + ":" + d + ":" + dc;
+}
+
+
+//BOOL
+
+bool Player::hasBuildableProperties(){
+    for ( auto property : this->getAllProperties() ) { if ( property->isBuildable(this) ) return true;}
+    return false;
+}
+bool Player::hasSellableProperties(){
+    for ( auto property : this->getAllProperties() ) { if ( property->canSellBuilding(this) ) return true;}
+    return false;
 }
 
 

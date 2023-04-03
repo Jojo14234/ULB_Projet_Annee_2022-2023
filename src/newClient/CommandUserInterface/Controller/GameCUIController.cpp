@@ -292,11 +292,23 @@ void GameCUIController::receiveMsgLoop() {
                 InGameParser game_parser(response);
                 build_mode = *game_parser.parseBuildOrSellQuery().get();
                 if (this->model->isMyTurn()){
-                    for (auto property : build_mode){
+                    this->view->getConsole()->addText("/select [nom] pour construire un batiment");
+                    this->view->getConsole()->addText("/leave pour quitter le menu de construction");
+                    for (auto& property : build_mode){
                         int index = this->view->getBoard()->getCellIndex(property);
                         this->view->getBoard()->setBuildable(index);
                     }
-                }
+                } else this->view->getConsole()->addText("Consultation du menu de construction...");
+                break;
+            }
+
+            case QUERY::NO_BUILDABLE_PROP:{
+                this->view->getConsole()->addText("Vous n\'avez pas de terrain pouvant avoir de nouveaux batiments");
+                break;
+            }
+
+            case QUERY::CANNOT_BUILD:{
+                this->view->getConsole()->addText("Ce terrain ne peut pas acceuillir de nouveaux batiments");
                 break;
             }
 

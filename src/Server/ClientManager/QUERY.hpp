@@ -46,6 +46,8 @@ enum class QUERY {
     INFOS_ROLL_DICE, // dice1:dice2:result:isDouble:doubleCount [int]:[int]:[int]:[bool]:[int]
 
     INFOS_LEAVE_BUILD_MODE,
+    NO_BUILDABLE_PROP,
+    CANNOT_BUILD,
 
     INFOS_BUILD_PROP, // name:name:... [string]:[string]:... All the property name if they are buildable
     INFOS_SELL_BUILD, // name:name:... [string]:[string]:... All the property name if build can be sell
