@@ -164,9 +164,9 @@ void GameCUIController::receiveMsgLoop() {
                 if (this->model->isMyTurn()) {
                     this->view->getInfo()->changePlayerMoney(payement_info->loser, payement_info->loser_money);
                     this->view->getInfo()->changePlayerMoney(payement_info->winner, payement_info->winner_money);
-                    this->view->getConsole()->addText("Vous payez " + std::to_string(payement_info->amount) + "$ a " + players_username[payement_info->winner-1]);
+                    this->view->getConsole()->addText("Vous devez " + std::to_string(payement_info->amount) + "$ a " + players_username[payement_info->winner-1] + " :");
                 } else {
-                    this->view->getConsole()->addText(players_username[payement_info->loser-1] + " a paye " + std::to_string(payement_info->amount) + "$ a " + players_username[payement_info->winner-1]);
+                    this->view->getConsole()->addText(players_username[payement_info->loser-1] + " doit " + std::to_string(payement_info->amount) + "$ a " + players_username[payement_info->winner-1] + " :");
                 }
                 break;
             }
@@ -191,9 +191,9 @@ void GameCUIController::receiveMsgLoop() {
                 this->view->getInfo()->changePlayerMoney(tax_info->player, tax_info->player_money);
 
                 if (this->model->isMyTurn()) {
-                    this->view->getConsole()->addText("Vous payez " + std::to_string(tax_info->price) + "$ de taxe");
+                    this->view->getConsole()->addText("Vous arrivez sur la case " + tax_info->tax_name + " :");
                 } else {
-                    this->view->getConsole()->addText(players_username[tax_info->player-1] + " a paye " + std::to_string(tax_info->price) + "$ de taxe");
+                    this->view->getConsole()->addText(players_username[tax_info->player-1] + " paie ses taxes : ");
                 }
                 break;
             }
@@ -230,7 +230,13 @@ void GameCUIController::receiveMsgLoop() {
                 InGameParser game_parser(response);
                 std::shared_ptr<WonOrLoseMoneyInfo> money_info = game_parser.parseWonOrLoseMoneyQuery();
                 this->view->getInfo()->changePlayerMoney(money_info->player, money_info->player_money);
-                if (! this->model->isMyTurn()) this->view->getConsole()->addText(players_username[money_info->player-1] + " a gagne " + std::to_string(money_info->amount) + "$");
+                if (! this->model->isMyTurn()) { this->view->getConsole()->addText(players_username[money_info->player-1] + " a gagne " + std::to_string(money_info->amount) + "$"); }
+                else { 
+                    if (players_username[money_info->player-1] == this->model->getUsername()){
+                        this->view->getConsole()->addText("Vous gagnez " + std::to_string(money_info->amount) + "$");
+                    }
+                    else this->view->getConsole()->addText(players_username[money_info->player-1] + " gagne " + std::to_string(money_info->amount) + "$");
+                }
                 break;
 
             }
@@ -240,6 +246,12 @@ void GameCUIController::receiveMsgLoop() {
                 std::shared_ptr<WonOrLoseMoneyInfo> money_info = game_parser.parseWonOrLoseMoneyQuery();
                 this->view->getInfo()->changePlayerMoney(money_info->player, money_info->player_money);
                 if (! this->model->isMyTurn()) this->view->getConsole()->addText(players_username[money_info->player-1] + " a perdu " + std::to_string(-money_info->amount) + "$");
+                else { 
+                    if (players_username[money_info->player-1] == this->model->getUsername()){
+                        this->view->getConsole()->addText("Vous perdez " + std::to_string(money_info->amount) + "$"); 
+                    }
+                    else this->view->getConsole()->addText(players_username[money_info->player-1] + " perd " + std::to_string(money_info->amount) + "$");
+                }
                 break;
             }
 
@@ -257,7 +269,7 @@ void GameCUIController::receiveMsgLoop() {
                 if (this->model->isMyTurn()){
                     this->view->getConsole()->addText("Vous venez de piocher une carte :");
                     this->view->getConsole()->addText(move_cardcell_info->description);
-                } else this->view->getConsole()->addText(players_username[move_cardcell_info->player-1] + " a pioche un carte.");
+                } else this->view->getConsole()->addText(players_username[move_cardcell_info->player-1] + " pioche un carte.");
                 break;
             }
 

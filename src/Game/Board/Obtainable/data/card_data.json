@@ -151,7 +151,7 @@
             },
             
             {
-                "description" :  "C’est votre anniversaire. Chaque joueur doit vous donner 15$.",
+                "description" :  "C'est votre anniversaire. Chaque joueur doit vous donner 15$.",
                 "amount" : 15,
                 "type" : "Birthday"
 

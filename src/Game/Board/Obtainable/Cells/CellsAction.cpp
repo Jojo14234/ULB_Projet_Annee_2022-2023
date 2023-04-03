@@ -72,16 +72,17 @@ void LandCell::pay(Player *player) {
         return;
     }
 
+    std::string str = std::to_string(land->getRentPrice()) + ":";
+    str += std::to_string(player->getIndex()) + ":";
+    str += std::to_string(player->getMoney() - land->getRentPrice()) + ":";
+    str += std::to_string(this->land->getOwner()->getIndex()) + ":";
+    str += std::to_string(this->land->getOwner()->getMoney() + land->getRentPrice());
+    player->getClient()->getGameServer()->updateAllClientsWithQuery(QUERY::INFOS_PLAYER_PAID_PLAYER, str);
+
+
     if (!player->pay(land->getRentPrice(), true)) { player->setPlayerToRefund(this->getOwner()); }
 
     this->getOwner()->receive(land->getRentPrice(), player->getUsername());
-
-    std::string str = std::to_string(land->getRentPrice()) + ":";
-    str += std::to_string(player->getIndex()) + ":";
-    str += std::to_string(player->getMoney()) + ":";
-    str += std::to_string(this->land->getOwner()->getIndex()) + ":";
-    str += std::to_string(this->land->getOwner()->getMoney());
-    player->getClient()->getGameServer()->updateAllClientsWithQuery(QUERY::INFOS_PLAYER_PAID_PLAYER, str);
 
 }
 
@@ -91,10 +92,9 @@ void LandCell::mortgage(Player *player) {
 }
 
 void TaxCell::action(Player* player) {
-    player->pay(tax_price, true);
-
-    std::string str = name + ":" + std::to_string(tax_price) + ":" + std::to_string(player->getIndex()) + ":" + std::to_string(player->getMoney());
+    std::string str = name + ":" + std::to_string(tax_price) + ":" + std::to_string(player->getIndex()) + ":" + std::to_string(player->getMoney()-tax_price);
     player->getClient()->getGameServer()->updateAllClientsWithQuery(QUERY::INFOS_PLAYER_MOVE_ON_TAX_CELL, str); 
+    player->pay(tax_price, true);
 }
 
 void ParkingCell::action(Player *player) {
