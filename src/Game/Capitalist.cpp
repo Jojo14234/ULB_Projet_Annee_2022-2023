@@ -5,6 +5,8 @@
 #include "../utils/randomFunctions.hpp"
 #include <random>
 #include <algorithm>
+#include "Board/Obtainable/Cells/Land/Land.hpp"
+#include <vector>
 
 void Capitalist::receiveQuery(GAME_QUERY_TYPE query, sf::Packet &packet) {
     std::string s1="", s2="";
@@ -449,11 +451,24 @@ bool Capitalist::isFastGame() {
 }
 
 void Capitalist::forceAcquisition(Player *player) {
-    vecotr<Land*> available_land = getBoard().getAllAvailableLand();
-    //for (auto )
+    int land_index_1;
+    int land_index_2 = -1;
 
-    int range = getBoard().getBoardSize();
-    //TODO code method to get all avaialble landcells (ça va être moche)
-    //TODO select 2 randomly (if possible)
-    //TODO force player to pay for both + manage potential bankruptcy
+    std::vector<Land*> available_land = getBoard().getAllAvailableLand();
+    int size = available_land.size();
+
+    if (size >= 2){
+        std::random_device rd;  // Will be used to obtain a seed for the random number engine
+        std::mt19937 gen(rd());
+        std::uniform_int_distribution<> distrib(0, size - 1);
+
+        land_index_1 = distrib(gen);
+        while (land_index_2 == -1 or land_index_1 == land_index_2){
+            land_index_2 = distrib(gen);
+        }
+        player->pay(available_land.at(land_index_1)->getPurchasePrice(), true);
+        player->acquireLand(available_land.at(land_index_1));
+        player->pay(available_land.at(land_index_2)->getPurchasePrice(), true);
+        player->acquireLand(available_land.at(land_index_2));
+    }
 }

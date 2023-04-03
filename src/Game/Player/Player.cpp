@@ -113,7 +113,7 @@ bool Player::pay(int amount, bool forced) {
     if ( !forced ) {this->getClient()->send("Pas assez d'argent !"); return false; }
     // Pas assez d'argent mais forcer de payer -> on passe en status de faillite suspecter mais on ne paye pas non plus.
     this->status = PLAYER_STATUS::BANKRUPT_SUSPECTED;
-    this->money_debt = amount;
+    this->money_debt += amount;
     return false; // TODO PTT FAUT METTRE RETURN TRUE (AVANT ON PAYAIS MÊME SI ON AVAIT PAS LES FONDS).
 }
 void Player::receive(int amount, std::string source) {
