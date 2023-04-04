@@ -48,7 +48,10 @@ public:
 		modal_box.draw(*window);
 	}
 
-	void clear();
+	void clear() {
+		username.clear();
+		password.clear();
+	}
 
 	friend class ConnectionGUIController;
 

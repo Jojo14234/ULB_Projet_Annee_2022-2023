@@ -38,6 +38,7 @@ public:
 	bool sendCommand(MainInputParser &parser);
 	bool sendCommand(GameInputParser &parser);
 
+	QUERY receive();
 	QUERY receive(std::string &output);
 
 	void setGameCode(int gc) { game_code = gc; }
