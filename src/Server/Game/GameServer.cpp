@@ -78,8 +78,7 @@ void GameServer::playerInJailInfos(ClientManager &client) {
  */
 void GameServer::playerBuildInfos(ClientManager &client) {
     Player* me = findMe(client);
-    if (me->hasBuildableProperties())
-        this->updateThisClientWithQuery(QUERY::INFOS_BUILD_PROP, me->getAllBuildableProperties(), client);
+    this->updateAllClientsWithQuery(QUERY::INFOS_BUILD_PROP, me->getAllBuildableProperties());
 }
 
 void GameServer::playerSellBuildInfos(ClientManager &client) {
@@ -376,17 +375,17 @@ void GameServer::processBuild(ClientManager &client, Player *player) {
     // JOUEUR choisis une propriété / ou leave
     // Vérifier si il a assez de thune
     // Ajouter un niveau à la propriété
+
+    if (! player->hasBuildableProperties()) {
+        this->updateThisClientWithQuery(QUERY::NO_BUILDABLE_PROP, "", client);
+        return;
+    }
     this->playerBuildInfos(client);
+
     GAME_QUERY_TYPE query;
     std::string property_name;
     sf::Packet packet;
     client.receive(query, packet);
-    
-    Player* me = findMe(client);
-    if (! me->hasBuildableProperties()) {
-        this->updateAllClientsWithQuery(QUERY::NO_BUILDABLE_PROP, "");
-        return;
-    }
 
     while ( query != GAME_QUERY_TYPE::LEAVE_SELECTION ) {
         // QUERY IS NOT SELECT -> SHOW MESSAGE AND ASK FOR ANOTHER INPUT
