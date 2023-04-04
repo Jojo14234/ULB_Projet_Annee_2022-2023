@@ -134,6 +134,7 @@ void Player::move(Cell *cell, bool pass_by_start) {
         receive(200, "Banque");
     }
     current_cell = cell;
+    this->client->getGameServer()->updateAllClientsWithQuery(QUERY::INFOS_PLAYER_MOVE, this->getUsername() + ":" + this->current_cell->getName() + ":" + std::to_string(this->getMoney()));
 }
 bool Player::passedByStart(Cell* cell, bool pass_by_start) {
     if (cell->getPosition() - current_cell->getPosition() <= 0 and pass_by_start) {
@@ -145,6 +146,7 @@ void Player::goToJail(Cell *cell) {
     move(cell, false);
     this->status = JAILED;
     this->rolls_in_prison = 0;
+    this->has_rolled = true;
 }
 // BOTH processMove are Use
 void Player::processMove(Cell* new_cell, bool gainMoneyIfPassByStart) {
