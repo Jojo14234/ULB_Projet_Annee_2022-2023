@@ -138,8 +138,8 @@ void JailCell::action(Player *player) {
     }
     else {
         std::string str = player->getUsername() + ":" +  this->getName() + ":" + std::to_string(player->getMoney());
-        player->getClient()->getGameServer()->updateAllClientsWithQuery(QUERY::INFOS_PLAYER_MOVE, str);
-        player->getClient()->send("Vous visitez la prison, il ne vous arrive rien.");  
+        std::cout << str << std::endl;
+        player->getClient()->getGameServer()->updateAllClientsWithQuery(QUERY::INFOS_PLAYER_MOVE, str); 
     }
     //envoyer demande de choix au client (reception, receive)
 }

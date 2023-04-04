@@ -139,6 +139,8 @@ void GameCUIController::receiveMsgLoop() {
                 std::shared_ptr<PlayerMoveInfo> move_info = game_parser.parsePlayerMoveQuery();
                 int index = this->view->getBoard()->getCellIndex(move_info->property_name);
                 this->view->getBoard()->movePlayer(index, move_info->player);
+                if (move_info->property_name == "Prison" and this->model->isMyTurn())
+                    this->view->getConsole()->addText("Vous visitez la prison.");
                 break;
             }
 

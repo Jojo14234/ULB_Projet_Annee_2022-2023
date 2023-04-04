@@ -5,7 +5,7 @@ Dice::Dice() {}
 int Dice::roll() {
     result = dice1.roll() + dice2.roll();
     if ( dice1.getResult() == dice2.getResult() ) { double_counter++; }
-    result = 1;
+    //result = 1;
     return result;
 }
 
