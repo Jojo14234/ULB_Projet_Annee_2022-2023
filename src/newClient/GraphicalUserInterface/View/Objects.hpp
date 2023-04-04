@@ -14,3 +14,5 @@
 #include "Objects/ModalBox.hpp"
 #include "Objects/InputText.hpp"
 #include "Objects/InputBox.hpp"
+#include "Objects/HiddenInputText.hpp"
+#include "Objects/HiddenInputBox.hpp"

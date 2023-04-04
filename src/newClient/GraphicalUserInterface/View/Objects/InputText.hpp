@@ -16,20 +16,21 @@
 
 class InputText: public Text, public Button {
 
-	bool is_selected=false;
-	sf::RectangleShape cursor;
 	unsigned int max_length = 32;
-	unsigned int cursor_pos = 0;
 	
 protected:
 
-	void setCursor() {
+	bool is_selected=false;
+	sf::RectangleShape cursor;
+	unsigned int cursor_pos = 0;
+
+	virtual void setCursor() {
 		double x = text.findCharacterPos(cursor_pos).x;
 		double y = info.getY();
 		cursor.setPosition(x, y);
 	}
 
-	void addChar(sf::Uint32 c) {
+	virtual void addChar(sf::Uint32 c) {
 		if (c >= 128 or c <= 32) { return; }
 		if (text.getString().getSize() >= max_length) { return; }
 		// Insert the character at the cursor position
@@ -41,7 +42,7 @@ protected:
 		this->setCursor();
 	}
 
-	void removeChar() {
+	virtual void removeChar() {
 		if (cursor_pos <= 0) { return; }
 		sf::String str = text.getString();
 		str.erase(cursor_pos - 1, 1);
