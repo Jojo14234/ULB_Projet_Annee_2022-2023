@@ -5,6 +5,7 @@
 #include "LandCell.hpp"
 #include "ParkingCell.hpp"
 #include "TaxCell.hpp"
+#include "StartCell.hpp"
 #include "../../../../Server/Game/GameServer.hpp"
 
 void DrawableCardCell::action(Player* player) {
@@ -100,7 +101,12 @@ void TaxCell::action(Player* player) {
 void ParkingCell::action(Player *player) {
     std::string str = player->getUsername() + ":" +  this->getName() + ":" + std::to_string(player->getMoney());
     player->getClient()->getGameServer()->updateAllClientsWithQuery(QUERY::INFOS_PLAYER_MOVE, str);
-    player->getClient()->send("Incroyable! le parc gratuit! il ne se passe rien."); 
+}
+
+void StartCell::action(Player *player) {
+    std::string str = player->getUsername() + ":" +  this->getName() + ":" + std::to_string(player->getMoney());
+    player->getClient()->getGameServer()->updateAllClientsWithQuery(QUERY::INFOS_PLAYER_MOVE, str);
+
 }
 
 void JailCell::action(Player *player) {
