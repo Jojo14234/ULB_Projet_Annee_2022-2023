@@ -102,6 +102,16 @@ bool Client::sendCommand(GameInputParser &parser) {
 
 // Receive Query from the server
 
+QUERY Client::receive() {
+	sf::Packet packet;
+	if (this->socket.receive(packet) != sf::Socket::Done) {
+		throw ReadPipeClientException(); // can't read on the socket
+	}
+	int tmp;
+	packet >> tmp;
+	return static_cast<QUERY>(tmp);
+}
+
 QUERY Client::receive(std::string &output) {
 	sf::Packet packet;
 	if (this->socket.receive(packet) != sf::Socket::Done) {
