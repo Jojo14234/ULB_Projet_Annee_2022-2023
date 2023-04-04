@@ -11,6 +11,7 @@
 const std::string LOGO_PATH = "../assets/images/logo_capitalist.png";
 const std::string REGISTER_BUTTON_PATH = "../assets/images/register_button.png";
 const std::string LOGIN_BUTTON_PATH = "../assets/images/login_button.png";
+const std::string RANK_PATH = "../assets/images/rank.png";
 
 
 // Fonts
