@@ -82,11 +82,6 @@ void GameCLIController::receiveMsgLoop() {
     }
 }
 
-//todo
 void GameCLIController::update() {
     this->initGame();
-}
-//todo
-void GameCLIController::move() {
-
 }

@@ -35,9 +35,3 @@ void MenuCLIController::handle(int event) {
     else { this->new_state = STATE::MENU; }
 
 }
-
-
-//todo
-void MenuCLIController::move() {
-
-}

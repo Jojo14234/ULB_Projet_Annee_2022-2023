@@ -22,7 +22,5 @@ public:
 
     void handle(int event) override;
 
-    void move() override;
-
 };
 

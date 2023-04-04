@@ -22,8 +22,6 @@ public:
 
     void handle(int event) override;
 
-    void move() override;
-
     void receiveMsgLoop();
 
     void initGame();

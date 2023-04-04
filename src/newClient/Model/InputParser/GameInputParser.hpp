@@ -24,9 +24,6 @@ class GameInputParser : public InputParser {
         else if ( query == "/pay" )         { this->query_type = GAME_QUERY_TYPE::PAY; }            // To pay to exit prison
         else if ( query == "/card" )        { this->query_type = GAME_QUERY_TYPE::CARD; }           // Pioche une carte lors qu'on a piocher la carte choix
         else if ( query == "/use" )         { this->query_type = GAME_QUERY_TYPE::USEGOOJCARD; }    // To use the card get out of jail
-        else if ( query == "/select")       { 
-            if (this->size() >= 2)          { this->query_type = GAME_QUERY_TYPE::SELECT; } 
-        }
         else if ( query == "/leave" )       { this->query_type = GAME_QUERY_TYPE::LEAVE_SELECTION; }// Quitte la sélection
         else if ( query == "/build" )       { this->query_type = GAME_QUERY_TYPE::BUILD; }          // passer en mode construction
         else if ( query == "/sell" )        { this->query_type = GAME_QUERY_TYPE::SELL_BUILDINGS; } // passer en mode vente
@@ -38,6 +35,12 @@ class GameInputParser : public InputParser {
         else if ( query == "/accept" )      { this->query_type = GAME_QUERY_TYPE::ACCEPT; }         // refuser
         else if ( query == "/refuse" )      { this->query_type = GAME_QUERY_TYPE::REFUSE; }         // accepter
         else if ( query == "/participate" ) { this->query_type = GAME_QUERY_TYPE::PARTICIPATE; }    // Participe à une enchère
+        else if ( query == "/select")       {
+            if (this->size() >= 2)          { this->query_type = GAME_QUERY_TYPE::SELECT; }
+        }
+        else if ( query == "/bid" )         {
+            if (this->size() >= 2 )         { this->query_type = GAME_QUERY_TYPE::BID; }
+        }
         else if ( query == "/trade" )       {
             if (this->size() >= 2 )         { this->query_type = GAME_QUERY_TYPE::TRADE; }
         }

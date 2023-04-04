@@ -36,11 +36,3 @@ void ConnectionCLIController::handle(int event) {
     }
     else { this->new_state = STATE::CONNECTION; }
 }
-//todo
-void ConnectionCLIController::move() {
-
-}
-//todo
-void ConnectionCLIController::clear() {
-
-}
