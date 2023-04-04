@@ -8,7 +8,6 @@ enum class STATE { CONNECTION, MENU, GAME };
 class Subject {
 public:
 	virtual void update() = 0;
-	virtual void getmenfou() {}
 };
 
 
