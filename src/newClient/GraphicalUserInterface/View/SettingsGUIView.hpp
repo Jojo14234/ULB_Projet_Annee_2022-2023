@@ -16,8 +16,8 @@ class SettingsGUIView: public AbstractGUIView {
 	public:
 
 	//using AbstractGUIView::AbstractGUIView;
-	explicit ConnectionGUIView(sf::RenderWindow* window) : AbstractGUIView(window){
-		popup.addImage(new Image logo{ObjectInfo<>(WINDOW_WIDTH/2.f, WINDOW_WIDTH/2.f * 145.f/788.f, WINDOW_WIDTH/4.f , WINDOW_HEIGHT/10.f), LOGO_PATH});
+	explicit SettingsGUIView(sf::RenderWindow* window) : AbstractGUIView(window){
+		popup.addImage(new Image{ObjectInfo<>(WINDOW_WIDTH/2.f, WINDOW_WIDTH/2.f * 145.f/788.f, WINDOW_WIDTH/4.f , WINDOW_HEIGHT/10.f), LOGO_PATH});
 		
 	}
 	
