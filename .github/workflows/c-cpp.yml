@@ -13,5 +13,7 @@ jobs:
 
     steps:
     - uses: actions/checkout@v3
+    - name: libs
+      run: sudo apt install libsfml-dev libncurses5-dev libjsoncpp-dev && sudo ln -s /usr/include/jsoncpp/json/ /usr/include/json
     - name: make
       run: cd src && make
