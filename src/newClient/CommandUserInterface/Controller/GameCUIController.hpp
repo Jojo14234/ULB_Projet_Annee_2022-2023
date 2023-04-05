@@ -21,6 +21,33 @@ class GameCUIController: public AbstractCUIController, public MenuCUIObserver {
 	std::vector<std::string> players_username;
 	std::vector<std::string> build_mode;
 
+	//Graphical Updates
+	void createGameGU(const std::string& response);
+	void joinGameGU(const std::string& response);
+	void infoStartGU(const std::string& response);
+	void rollDiceGU(const std::string& response);
+	void infoGameGU(const std::string& response);
+	void newTurnGU(const std::string& response);
+	void playerMoveGU(const std::string& response);
+	void playerBoughtGU(const std::string& response);
+	void playerPaidPlayerGU(const std::string& response);
+	void moveOnMortgagedCellGU(const std::string& response);
+	void moveOnTaxCellGU(const std::string& response);
+	void goOutPrisonGU(const std::string& response);
+	void sendPrisonGU(const std::string& response);
+	void getGoOutJailCardGU(const std::string& response);
+	void loseGoOutJailCardGU(const std::string& response);
+	void wonMoneyGU(const std::string& response);
+	void loseMoneyGU(const std::string& response);
+	void cardCellToGoGU(const std::string& response);
+	void moveOnCardCellGU(const std::string& response);
+	void drawCardGU(const std::string& response);
+	void buildPropertyGU(const std::string& response);
+	void sellPropertyGU(const std::string& response);
+	void leaveBuildMenuGU(const std::string& response);
+	void buildSuceedGU(const std::string& response);
+	void askForPurchaseGU(const std::string& response);
+
 public: 
 	
 	GameCUIController(Client* model, GameCUIView* view);
