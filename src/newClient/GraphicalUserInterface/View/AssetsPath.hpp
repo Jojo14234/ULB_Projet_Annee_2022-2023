@@ -18,6 +18,8 @@ const std::string FRIEND_MENU_BUTTON_PATH = "../assets/images/friend_menu_button
 const std::string SETTINGS_BUTTON_PATH = "../assets/images/settings_button.png";
 const std::string JOIN_BUTTON_PATH = "../assets/images/join_button.png";
 const std::string CREATE_BUTTON_PATH = "../assets/images/create_button.png";
+const std::string BACK_BUTTON_PATH = "../assets/images/back_button.png";
+const std::string OK_BUTTON_PATH = "../assets/images/ok_button.png";
 
 // Fonts
 const std::string ARIAL_FONT_PATH = "../assets/fonts/arial.ttf";
