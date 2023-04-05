@@ -297,6 +297,7 @@ void GameServer::clientTurn(ClientManager &client, Player* me) {
         }
     }
     // End of the turn
+    this->game.getDice().resetDoubleCounter();
     this->game.endCurrentTurn();
     this->sendGameData();
     this->sendBetterGameData();
