@@ -16,10 +16,13 @@ class SettingsGUIView: public AbstractGUIView {
 	public:
 
 	//using AbstractGUIView::AbstractGUIView;
-	explicit SettingsGUIView(sf::RenderWindow* window) : AbstractGUIView(window){
-		popup.addImage(new Image{ObjectInfo<>(WINDOW_WIDTH/2.f, WINDOW_WIDTH/2.f * 145.f/788.f, WINDOW_WIDTH/4.f , WINDOW_HEIGHT/10.f), LOGO_PATH});
-		
-	}
+	explicit SettingsGUIView(sf::RenderWindow* window) : AbstractGUIView(window){	// w/4 -> là ou commence la fenetre pop up
+		popup.addText(new Text{ObjectInfo<>(0, WINDOW_WIDTH/40, WINDOW_WIDTH/2.f, WINDOW_HEIGHT/4.f), "Réglages :D"});
+		popup.addText(new Text{ObjectInfo<>(0, WINDOW_WIDTH/50, WINDOW_WIDTH/4.f, WINDOW_HEIGHT/4+WINDOW_HEIGHT/10.f), "Taille de fenêtre:"});
+		popup.addText(new Text{ObjectInfo<>(0, WINDOW_WIDTH/50, WINDOW_WIDTH/4.f, WINDOW_HEIGHT/4+WINDOW_HEIGHT/10*2.f), "Son:"});
+		popup.addText(new Text{ObjectInfo<>(0, WINDOW_WIDTH/50, WINDOW_WIDTH/4.f, WINDOW_HEIGHT/4+WINDOW_HEIGHT/10*3.f), "Changer pseudo:"});
+		popup.addText(new Text{ObjectInfo<>(0, WINDOW_WIDTH/50, WINDOW_WIDTH/4.f, WINDOW_HEIGHT/4+WINDOW_HEIGHT/10*4.f), "Supprimer son compte:"});
+	}											//w/50 c'est la taille de police
 	
 	~SettingsGUIView()=default;
 

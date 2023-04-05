@@ -6,7 +6,7 @@
 void WelcomeGUIController::handle(sf::Event event) {
 	switch(event.type) {
 	case sf::Event::KeyPressed:
-	case sf::Event::MouseButtonPressed: this->new_state = STATE::SETTINGS;
+	case sf::Event::MouseButtonPressed: this->new_state = STATE::CREATE;
 	default: break;
 	}
 }
