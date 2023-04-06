@@ -24,7 +24,7 @@ class Board{
 	std::array<int,40> old_lev_house;
 
     int n_player; //number of players in game
-	std::array<Cell*, gamebox_nb> board;
+	std::array<std::shared_ptr<Cell>, gamebox_nb> board;
 	std::array<std::string, gamebox_nb> cellname; //vector of names of each cells
 	std::array<std::string, gamebox_nb> cell_file; 
 

@@ -35,10 +35,9 @@ public :
 	}
 
 	void setOwner(int player){
-/*
-		Image flag(size,position, "Image/drapeau1.png");
-		flag.setFlag();
-		images.push_back(std::make_shared<Image>(flag));*/
+		Image* flag = new Image (info, "File/Image/drapeau1.png");
+		flag->setFlag();
+		addImage(flag);
 
 	}
 

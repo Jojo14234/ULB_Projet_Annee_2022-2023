@@ -58,7 +58,7 @@ void Board::createBoard(){
             else if ( i == 20){position.x = start_corner.x + 9 *v_cell_size.y + corner_cell_size.x - 1; position.y = start_corner.y - 9 *v_cell_size.y - corner_cell_size.y ;}
             else if ( i == 30){position.x = start_corner.x + 9 *v_cell_size.y + corner_cell_size.x +1; position.y = start_corner.y   ;}
             
-            board[i] = new Cell(ObjectInfo<>(corner_cell_size.x,corner_cell_size.y, position.x,position.y),
+            board[i] = std::make_shared<Cell>(ObjectInfo<>(corner_cell_size.x,corner_cell_size.y, position.x,position.y),
                                                 sf::Color::White, "File/Image/Cell/"+cell_file[i], i);
         }
 
@@ -72,11 +72,9 @@ void Board::createBoard(){
             else if ( i >= 31 and i <= 39){
 				size = h_cell_size;
                 position.x =(start_corner.x+corner_cell_size.x+ 9*v_cell_size.y) - (i-30) * v_cell_size.y ;position.y = start_corner.y ;}
-            board[i] = new Cell(ObjectInfo<>(size.x,size.y, position.x,position.y),
+            board[i] = std::make_shared<Cell>(ObjectInfo<>(size.x,size.y, position.x,position.y),
                                                  sf::Color::White, "File/Image/Cell/"+cell_file[i], i);
-        }}
-    
-        }
+        }}}
 
 
 ////////////////////////////////////////////////////////////////
