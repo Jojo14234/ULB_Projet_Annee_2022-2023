@@ -38,6 +38,7 @@ public:
     // All the function about game Infos
     std::string getStartInfos();
     std::string getGameInfos();
+    std::string getGameInfos2();
     std::string getBetterGameInfos();
 
     // All the function about the player

@@ -16,7 +16,6 @@
 GameCUIController::GameCUIController(Client* model, GameCUIView* view) :
 	AbstractCUIController(model, STATE::GAME), view{view} {};
 
-// todo added from n-curse
 void GameCUIController::handle(int ch) {
     switch(ch) {
         case KEY_MOUSE:
@@ -26,7 +25,8 @@ void GameCUIController::handle(int ch) {
                 if ( this->view->getConsole()->isClicked(Position{event.x, event.y}) ) { this->state = CONSOLE; }
                 else if ( this->view->getChat()->isClicked(Position{event.x, event.y}) ) { this->state = CHAT; }
                 else { this->state = IDLE; }
-            } break;
+            }
+            break;
 
         case '\n':
             switch(this->state) {
@@ -34,7 +34,8 @@ void GameCUIController::handle(int ch) {
                     this->view->getConsole()->addInput();
                     GameInputParser parser(this->view->getConsole()->getInput());
                     if ( not this->model->sendCommand(parser)) this->view->getConsole()->addText("La commande n'existe pas");
-                    break; }
+                    break;
+                }
 
                 case CHAT: {
                     this->view->getChat()->addInput();
@@ -54,7 +55,6 @@ void GameCUIController::handle(int ch) {
     }
 }
 
-// todo added from n-curse
 void GameCUIController::move() {
     switch (this->state) {
         case CHAT: this->view->getChat()->move(); break;
@@ -63,153 +63,52 @@ void GameCUIController::move() {
     }
 }
 
-void GameCUIController::receiveMsgLoop() {
+void GameCUIController::receiveMsgLoop() { // todo il faudrait pas déplacer les fonction appeler par celle-ci dans le view ?
     while (this->new_state == STATE::GAME) {
         std::string response;
-        QUERY cury = this->model->receive(response);
+        QUERY query = this->model->receive(response);
 
-        switch(cury) {
-            case QUERY::PLAYER_CREATE_GAME:{
-                this->createGameGU(response);
-                break;
-            }
-            case QUERY::PLAYER_JOIN_GAME:{
-                this->joinGameGU(response);
-                break;
-            }
-            case QUERY::INFOS_START: {
-                this->infoStartGU(response);
-                break;
-            }
-            case QUERY::INFOS_ROLL_DICE: {
-                this->rollDiceGU(response);
-                break;
-            }
-            case QUERY::INFOS_GAME: {
-                this->infoGameGU(response);
-                break;
-            }
-            case QUERY::INFOS_NEW_TURN: {
-                this->newTurnGU(response);
-                break;
-            }
-            case QUERY::INFOS_PLAYER_MOVE: {
-                this->playerMoveGU(response);
-                break;
-            }
-            case QUERY::INFOS_PLAYER_BOUGHT: {
-                this->playerBoughtGU(response);
-                break;
-            }
-            case QUERY::INFOS_PLAYER_DIDNT_BUY: {
-                if(response != this->model->getUsername()) 
-                    this->view->getConsole()->addText("Le joueur " + response + " n'a pas achete la propriete");
-                break;
-            }
-            case QUERY::INFOS_PLAYER_PAID_PLAYER:{
-                this->playerPaidPlayerGU(response);
-                break;
-            }
-            case QUERY::INFOS_PLAYER_MOVE_ON_MORTGAGED_CELL:{
-                this->moveOnMortgagedCellGU(response);
-                break;
-            }
-            case QUERY::INFOS_PLAYER_MOVE_ON_OWN_CELL:{
-                if (this->model->isMyTurn()) this->view->getConsole()->addText("Vous etes chez vous.");
-                break;
-            }
-            case QUERY::INFOS_PLAYER_MOVE_ON_TAX_CELL:{
-                this->moveOnTaxCellGU(response);
-                break;
-            }
-            case QUERY::INFOS_PLAYER_GO_OUT_PRISON:{
-                this->goOutPrisonGU(response);
-                break;
-            }
-            case QUERY::INFOS_PLAYER_SEND_TO_PRISON:{
-                this->sendPrisonGU(response);
-                break;
-            }
-            case QUERY::GET_GO_OUT_JAIL_CARD:{
-                this->getGoOutJailCardGU(response);
-                break;
-            }
-            case QUERY::LOST_GO_OUT_JAIL_CARD:{
-                this->loseGoOutJailCardGU(response);
-                break;
-            }
-            case QUERY::INFOS_PLAYER_WON_MONEY:{
-                this->wonMoneyGU(response);
-                break;
-            }
-            case QUERY::INFOS_PLAYER_LOSE_MONEY:{
-                this->loseMoneyGU(response);
-                break;
-            }
-            case QUERY::INFOS_CARD_CELL_TO_GO:{
-                this->cardCellToGoGU(response);
-                break;
-            }
-            case QUERY::INFOS_PLAYER_MOVE_ON_CARD_CELL:{
-                this->moveOnCardCellGU(response);
-                break;
-            }
-            case QUERY::INFOS_CARD_DESCRIPTION:{
-                this->drawCardGU(response);
-                break;
-            }
-            case QUERY::CHOICE_MONEY_CARD:{
-                this->view->getConsole()->addText("/pay ou /card");
-                break;
-            }
-            case QUERY::USELESS_MESSAGE:{
-                break;
-            }
-            case QUERY::BAD_COMMAND:{
-                if (this->model->isMyTurn())
-                    this->view->getConsole()->addText("Vous ne pouvez pas utiliser cette commande");
-                break;
-            }
-            case QUERY::INFOS_BUILD_PROP:{
-                this->buildPropertyGU(response);
-                break;
-            }
-            case QUERY::NO_BUILDABLE_PROP:{
-                this->view->getConsole()->addText("Vous n\'avez pas de terrain pouvant avoir de nouveaux batiments");
-                break;
-            }
-            case QUERY::CANNOT_BUILD:{
-                this->view->getConsole()->addText("Ce terrain ne peut pas acceuillir de nouveaux batiments");
-                break;
-            }
-            case QUERY::INFOS_SELL_BUILD:{
-                this->sellPropertyGU(response);
-                break;
-            }
-            case QUERY::INFOS_LEAVE_BUILD_MODE:{
-                this->leaveBuildMenuGU(response);
-                break;
-            }
-            case QUERY::INFOS_BUILD_SUCCESS:{
-                this->buildSuceedGU(response);
-                break;
-            }
-            case QUERY::INFOS_ASK_FOR_PURCHASE:{
-                this->askForPurchaseGU(response);
-                break;
-            }
-            case QUERY::INFOS_NOT_ENOUGH_MONEY:{
-                this->view->getConsole()->addText("Vous ne possedez pas assez d'argent.");
-                break;
-            }
-            default:
-                this->view->getConsole()->addText(response);
-                break;
+        switch(query) {
+            case QUERY::PLAYER_CREATE_GAME :            this->createGameGU(response); break;
+            case QUERY::PLAYER_JOIN_GAME :              this->joinGameGU(response); break;
+            case QUERY::INFOS_START :                   this->infoStartGU(response); break;
+            case QUERY::INFOS_ROLL_DICE :               this->rollDiceGU(response); break;
+            case QUERY::INFOS_GAME :                    this->infoGameGU(response); break;
+            case QUERY::INFOS_NEW_TURN :                this->newTurnGU(response); break;
+            case QUERY::INFOS_PLAYER_MOVE :             this->playerMoveGU(response); break;
+            case QUERY::INFOS_PLAYER_BOUGHT :           this->playerBoughtGU(response); break;
+            case QUERY::INFOS_PLAYER_PAID_PLAYER :      this->playerPaidPlayerGU(response); break;
+            case QUERY::INFOS_PLAYER_MOVE_ON_MORTGAGED_CELL: this->moveOnMortgagedCellGU(response); break;
+            case QUERY::INFOS_PLAYER_MOVE_ON_TAX_CELL : this->moveOnTaxCellGU(response); break;
+            case QUERY::INFOS_PLAYER_GO_OUT_PRISON :    this->goOutPrisonGU(response); break;
+            case QUERY::INFOS_PLAYER_SEND_TO_PRISON :   this->sendPrisonGU(response); break;
+            case QUERY::GET_GO_OUT_JAIL_CARD :          this->getGoOutJailCardGU(response); break;
+            case QUERY::LOST_GO_OUT_JAIL_CARD :         this->loseGoOutJailCardGU(response); break;
+            case QUERY::INFOS_PLAYER_WON_MONEY :        this->wonMoneyGU(response); break;
+            case QUERY::INFOS_PLAYER_LOSE_MONEY :       this->loseMoneyGU(response); break;
+            case QUERY::INFOS_CARD_CELL_TO_GO :         this->cardCellToGoGU(response); break;
+            case QUERY::INFOS_PLAYER_MOVE_ON_CARD_CELL :this->moveOnCardCellGU(response); break;
+            case QUERY::INFOS_CARD_DESCRIPTION :        this->drawCardGU(response); break;
+            case QUERY::USELESS_MESSAGE :               break;
+            case QUERY::INFOS_BUILD_PROP :              this->buildPropertyGU(response); break;
+            case QUERY::INFOS_SELL_BUILD :              this->sellPropertyGU(response); break;
+            case QUERY::INFOS_LEAVE_BUILD_MODE :        this->leaveBuildMenuGU(response); break;
+            case QUERY::INFOS_BUILD_SUCCESS :           this->buildSucceedGU(response); break;
+            case QUERY::INFOS_ASK_FOR_PURCHASE :        this->askForPurchaseGU(response); break;
+
+            case QUERY::INFOS_PLAYER_DIDNT_BUY :        if (response != this->model->getUsername()) { this->view->getConsole()->addText("Le joueur " + response + " n'a pas achete la propriete"); } break;
+            case QUERY::INFOS_PLAYER_MOVE_ON_OWN_CELL : if (this->model->isMyTurn()) { this->view->getConsole()->addText("Vous etes chez vous."); } break;
+            case QUERY::BAD_COMMAND :                   if (this->model->isMyTurn()) { this->view->getConsole()->addText("Vous ne pouvez pas utiliser cette commande"); } break;
+
+            case QUERY::CHOICE_MONEY_CARD :             this->view->getConsole()->addText("/pay ou /card"); break;
+            case QUERY::NO_BUILDABLE_PROP :             this->view->getConsole()->addText("Vous n\'avez pas de terrain pouvant avoir de nouveaux batiments"); break;
+            case QUERY::CANNOT_BUILD :                  this->view->getConsole()->addText("Ce terrain ne peut pas acceuillir de nouveaux batiments"); break;
+            case QUERY::INFOS_NOT_ENOUGH_MONEY :        this->view->getConsole()->addText("Vous ne possedez pas assez d'argent."); break;
+            default :                                   this->view->getConsole()->addText(response); break;
         }
     }
 }
 
-//todo added from n-curse (init())
 void GameCUIController::initGame() {
     // create a thread to receive messages
     std::thread send_thread(&GameCUIController::receiveMsgLoop, this);
@@ -217,13 +116,14 @@ void GameCUIController::initGame() {
 }
 
 void GameCUIController::initScreen(int gamecode) {
-    if (! init) return;
+    if (!init) return;
     this->view->startWaitingRoom();
 
-    if (this->model->isCreator()){
+    if ( this->model->isCreator() ) {
         this->view->getOwnerWaitingText()->addText("Gamecode : " + std::to_string(gamecode));
         this->view->getPlayersWaitingText()->setHidden();
-    } else {
+    }
+    else {
         this->view->getPlayersWaitingText()->addText("Gamecode : " + std::to_string(gamecode));
         this->view->getOwnerWaitingText()->setHidden();
     }
@@ -234,7 +134,7 @@ void GameCUIController::initScreen(int gamecode) {
 void GameCUIController::startGame(int beginner) {
     this->view->endWaitingRoom();
     this->model->setPlayerTurn(players_username[beginner]);
-    if (this->model->getUsername() == players_username[beginner]){
+    if (this->model->getUsername() == players_username[beginner]) {
         this->view->startTurn();
         this->model->startTurn();
     }
@@ -256,8 +156,8 @@ void GameCUIController::update() { this->initGame(); }
 
 
 
-//Graphical Updates
-void GameCUIController::createGameGU(const std::string& response){
+//Graphical Updates // todo il faut pas déplacer ça dans le view ?
+void GameCUIController::createGameGU(const std::string& response) {
     GameLaunchingParser launching_parser(response);
     std::shared_ptr<JoinInfo> join_info = launching_parser.parseCreateQuery();
     player_nb = join_info->nb_player;
@@ -266,7 +166,7 @@ void GameCUIController::createGameGU(const std::string& response){
     this->playerJoinUpdate();
 }
 
-void GameCUIController::joinGameGU(const std::string& response){
+void GameCUIController::joinGameGU(const std::string& response) {
     GameLaunchingParser launching_parser(response);
     std::shared_ptr<JoinInfo> join_info = launching_parser.parseJoinQuery();
     player_nb = join_info->nb_player;
@@ -275,7 +175,7 @@ void GameCUIController::joinGameGU(const std::string& response){
     this->playerJoinUpdate();
 }
 
-void GameCUIController::infoStartGU(const std::string& response){
+void GameCUIController::infoStartGU(const std::string& response) {
     GameLaunchingParser launching_parser(response);
     std::shared_ptr<StartInfo> start_info = launching_parser.parseStartQuery();
     player_nb = start_info->player_nb;
@@ -284,7 +184,7 @@ void GameCUIController::infoStartGU(const std::string& response){
     this->view->getConsole()->addText("La partie commence");
 }
 
-void GameCUIController::rollDiceGU(const std::string& response){
+void GameCUIController::rollDiceGU(const std::string& response) {
     InGameParser game_parser(response);
     std::shared_ptr<RollDiceInfo> dice_info = game_parser.parseRollDiceQuery();
     if (this->model->isMyTurn()) {
@@ -294,7 +194,7 @@ void GameCUIController::rollDiceGU(const std::string& response){
     }  else this->view->getConsole()->addText("Le joueur " + this->model->getPlayerTurn() + " a obtenu un " + std::to_string(dice_info->first_value ) + " et un " + std::to_string(dice_info->second_value));
 }
 
-void GameCUIController::infoGameGU(const std::string& response){
+void GameCUIController::infoGameGU(const std::string& response) {
     //Peut-être comportement commun
     InGameParser game_parser(response);
     std::shared_ptr<std::vector<GameInfo>> player_game_info = game_parser.parseInfosGameQuery(player_nb);
@@ -311,7 +211,7 @@ void GameCUIController::infoGameGU(const std::string& response){
     }
 }
 
-void GameCUIController::newTurnGU(const std::string& response){
+void GameCUIController::newTurnGU(const std::string& response) {
     this->model->setPlayerTurn(response);
     if (response == this->model->getUsername()) { this->view->startTurn(); this->model->startTurn(); }
     else { this->view->endTurn(); this->model->endTurn(); this->view->getConsole()->addText("C'est au tour de " + response + " !"); }
@@ -464,17 +364,18 @@ void GameCUIController::sellPropertyGU(const std::string& response){
 }
 
 void GameCUIController::leaveBuildMenuGU(const std::string& response){
-    for (auto& property : build_mode){
+    response += ""; // to avoid unused parameter
+    for (auto& property : build_mode) {
         int index = this->view->getBoard()->getCellIndex(property);
         this->view->getBoard()->leaveSelection(index);
     }
 }
 
-void GameCUIController::buildSuceedGU(const std::string& response){
+void GameCUIController::buildSucceedGU(const std::string& response){
     InGameParser game_parser(response);
-    std::shared_ptr<BuildSucessInfo> sucess_info = game_parser.parseBuildSuccesQuery();        
-    int index = this->view->getBoard()->getCellIndex(sucess_info->name);
-    this->view->getBoard()->setHouse(index, sucess_info->level);
+    std::shared_ptr<BuildSuccessInfo> success_info = game_parser.parseBuildSuccessQuery();
+    int index = this->view->getBoard()->getCellIndex(success_info->name);
+    this->view->getBoard()->setHouse(index, success_info->level);
 }
 
 void GameCUIController::askForPurchaseGU(const std::string& response){

@@ -62,6 +62,40 @@ std::string Capitalist::getStartInfos() {
  *  level = building level of a property [int]
  *  mortgage = 0 = false / 1 = true [bool]
  */
+std::string Capitalist::getGameInfos2() {
+    std::string ret = "";
+    for ( const auto &player : this->players ) {
+        std::string index =     std::to_string(player.getIndex());
+        std::string username =  player.getUsername();
+        std::string position =  std::to_string(player.getPosition());
+        std::string money =     std::to_string(player.getMoney());
+        std::string jailCard =  std::to_string(player.getAllGOOJCards().size());
+        ret += index + ":" + username + ":" + position + ":" + money + ":" + jailCard;
+
+        for (const auto property : player.getAllProperties()) {
+            std::string property_name =     property->getName();
+            std::string property_level =    std::to_string(property->getIntLevel());
+            std::string property_mortgage = std::to_string(property->isMortgaged());
+            ret += ":" + property_name + ";" + property_level + ";" + property_mortgage;
+        }
+
+        for (const auto station : player.getAllStations()) {
+            std::string station_name =      station->getName();
+            std::string station_level =     "0";
+            std::string station_mortgage =  std::to_string(station->isMortgaged());
+            ret += ":" + station_name + ";" +station_level + ";" + station_mortgage;
+        }
+
+        for (const auto company : player.getAllCompanies()) {
+            std::string company_name =      company->getName();
+            std::string company_level =     "0";
+            std::string company_mortgage =  std::to_string(company->isMortgaged());
+            ret += ":" + company_name + ";" + company_level + ";" + company_mortgage;
+        }
+        ret += "|";
+    }
+    return ret;
+} // todo new
 std::string Capitalist::getGameInfos() {
     std::string ret = "";
     for ( const auto &player : this->players) {

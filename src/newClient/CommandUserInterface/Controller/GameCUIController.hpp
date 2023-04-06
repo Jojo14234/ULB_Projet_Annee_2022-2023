@@ -45,7 +45,7 @@ class GameCUIController: public AbstractCUIController, public MenuCUIObserver {
 	void buildPropertyGU(const std::string& response);
 	void sellPropertyGU(const std::string& response);
 	void leaveBuildMenuGU(const std::string& response);
-	void buildSuceedGU(const std::string& response);
+	void buildSucceedGU(const std::string& response);
 	void askForPurchaseGU(const std::string& response);
 
 public: 

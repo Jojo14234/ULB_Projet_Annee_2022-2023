@@ -25,7 +25,12 @@ void Server::mainLoop() {
 		this->clients.clean();	// join ended threads and remove disconnected clients
 		try { this->connectClient(); }
 		catch (const ConnectClientServerException &exception) {
-			if (SigHandler::askedLeaving()) { this->server_online = false; }
+			if (SigHandler::askedLeaving()) {
+                this->server_online = false;
+                for (auto client : this->clients) {
+                    client->disconnect();
+                }
+            }
 		}
 	}
 }
@@ -119,7 +124,7 @@ void Server::clientProcessDisconnect(ClientManager &client) {
 void Server::clientProcessQuit(ClientManager &client) {
     std::cout << "[Received 'quit' query from client]" << std::endl;
     client.sendQueryMsg("DISCONNECT", QUERY::DISCONNECT);
-    client.setAccount(nullptr);
+    client.removeAccount();
 }
 
 

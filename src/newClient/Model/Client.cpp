@@ -105,7 +105,6 @@ bool Client::sendCommand(GameInputParser &&parser) { return this->sendCommand(pa
 bool Client::sendCommand(MainInputParser &&parser) { return this->sendCommand(parser);}
 
 // Receive Query from the server
-// todo different from n-curse
 QUERY Client::receive(std::string &output) {
 	sf::Packet packet;
 	if (this->socket.receive(packet) != sf::Socket::Done) {
