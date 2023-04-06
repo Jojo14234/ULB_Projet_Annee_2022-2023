@@ -16,6 +16,7 @@ MODEL_PARSER_BINS = $(patsubst Model/InputParser/%.cpp, Model/InputParser/%.o, $
 GUI_BINS = $(patsubst GraphicalUserInterface/%.cpp, GraphicalUserInterface/%.o, $(wildcard GraphicalUserInterface/*.cpp))
 GUI_CONTROLLER_BINS = $(patsubst GraphicalUserInterface/Controller/%.cpp, GraphicalUserInterface/Controller/%.o, $(wildcard GraphicalUserInterface/Controller/*.cpp))
 GUI_VIEW_BINS = $(patsubst GraphicalUserInterface/View/%.cpp, GraphicalUserInterface/View/%.o, $(wildcard GraphicalUserInterface/View/*.cpp))
+GUI_BOARD = $(patsubst GraphicalUserInterface/View/GameObject/%.cpp, GraphicalUserInterface/View/GameObject/%.o, $(wildcard GraphicalUserInterface/View/GameObject/*.cpp))
 
 # CUI
 CUI_BINS = $(patsubst CommandUserInterface/%.cpp, CommandUserInterface/%.o, $(wildcard CommandUserInterface/*.cpp))
@@ -44,7 +45,7 @@ CUI: _CUI clean
 CLI: _CLI clean
 
 
-_GUI: ${GUI_BINS} ${GUI_CONTROLLER_BINS} ${GUI_VIEW_BINS} ${MODEL_BINS} ${MODEL_PARSER_BINS}
+_GUI: ${GUI_BINS} ${GUI_CONTROLLER_BINS} ${GUI_VIEW_BINS} ${GUI_BOARD} ${MODEL_BINS} ${MODEL_PARSER_BINS}
 	${CXX} ${CXXFLAGS} -o ../capitalistGUI $^ ${LDLIBS}
 
 _CUI: ${CUI_BINS} ${CUI_CONTROLLER_BINS} ${CUI_VIEW_BINS} ${MODEL_BINS} ${MODEL_PARSER_BINS}

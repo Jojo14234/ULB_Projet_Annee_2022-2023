@@ -23,8 +23,8 @@ class GameGUIView: public AbstractGUIView {
 
 public:
 
-	explicit GameGUIView(sf::RenderWindow* window, int player_nb) : AbstractGUIView(window)
-	,board{sf::Vector2f{100,80},sf::Vector2f{100,100}, player_nb}
+	explicit GameGUIView(sf::RenderWindow* window) : AbstractGUIView(window)
+	,board{sf::Vector2f{100,80},sf::Vector2f{100,100}}
 	,actionBox{ObjectInfo<>(300, window->getSize().y,0,0), sf::Color::Red }
 	{
 		 actionBox.setButton(act,24);

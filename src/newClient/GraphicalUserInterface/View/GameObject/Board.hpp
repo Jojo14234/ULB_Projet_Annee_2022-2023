@@ -49,8 +49,8 @@ class Board{
 public: 
 
     
-	Board(sf::Vector2f cell_size, sf::Vector2f corner_cell_size, int n_player): 
-        start_corner{350,900},v_cell_size{cell_size}, h_cell_size(cell_size.y,cell_size.x), corner_cell_size{corner_cell_size}, n_player{n_player}{
+	Board(sf::Vector2f cell_size, sf::Vector2f corner_cell_size): 
+        start_corner{350,900},v_cell_size{cell_size}, h_cell_size(cell_size.y,cell_size.x), corner_cell_size{corner_cell_size} {
 		this->loadCellNames();
 		this->loadCellFile();
 		this->createBoard();

@@ -12,6 +12,7 @@ const std::string LOGO_PATH = "../assets/images/logo_capitalist.png";
 const std::string REGISTER_BUTTON_PATH = "../assets/images/register_button.png";
 const std::string LOGIN_BUTTON_PATH = "../assets/images/login_button.png";
 const std::string RANK_PATH = "../assets/images/rank.png";
+const std::string MY_RANK_PATH = "../assets/images/myrank.png";
 
 const std::string RANK_BUTTON_PATH = "../assets/images/rank_button.png";
 const std::string FRIEND_MENU_BUTTON_PATH = "../assets/images/friend_menu_button.png";
