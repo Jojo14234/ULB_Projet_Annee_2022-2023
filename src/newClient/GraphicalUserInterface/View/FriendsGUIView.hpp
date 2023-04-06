@@ -31,8 +31,9 @@ class FriendsGUIView: public AbstractGUIView {
 	//ImageButton no_button
 
 	//FRIEND LIST
-	//Box friend_list_box{ObjectInfo<>( WINDOW_WIDTH/2.f-WINDOW_WIDTH/6.f - WINDOW_WIDTH/25.f, WINDOW_HEIGHT/5,WINDOW_WIDTH/2.f+WINDOW_WIDTH/6.f + WINDOW_WIDTH/18 , WINDOW_HEIGHT/10.f +(WINDOW_WIDTH/2.f+WINDOW_WIDTH/6.f)), RANK_COLOR};
-	Text friend_list{ObjectInfo<>(0.f, WINDOW_WIDTH/50.f, WINDOW_WIDTH/2.f + WINDOW_WIDTH/6.f + 100 , WINDOW_HEIGHT/8.f+WINDOW_HEIGHT/4), "Liste d'amis"};
+	Box friend_list_box{ObjectInfo<>( WINDOW_WIDTH/2.f-WINDOW_WIDTH/6.f - WINDOW_WIDTH/25.f, WINDOW_HEIGHT/2+WINDOW_HEIGHT/6,WINDOW_WIDTH/2.f+WINDOW_WIDTH/6.f + WINDOW_WIDTH/18, WINDOW_HEIGHT/8.f+WINDOW_HEIGHT/5), RANK_COLOR};
+
+	Text friend_list{ObjectInfo<>(0.f, WINDOW_WIDTH/50.f, WINDOW_WIDTH/2.f + WINDOW_WIDTH/6.f + 100 , WINDOW_HEIGHT/8.f+WINDOW_HEIGHT/5+10), "Liste d'amis"};
 
 	//Box friend_list2_bbox{ObjectInfo<>( , , , ), TOP_BOX_COLOR};
 	//5 friends box + bouton message et bouton supprimer pour chacun 
@@ -59,7 +60,7 @@ public:
 		friend_request.draw(*window);
 
 		//FRIEND LIST
-		//friend_list_box.draw(*window);
+		friend_list_box.draw(*window);
 		friend_list.draw(*window);
 	}
 
