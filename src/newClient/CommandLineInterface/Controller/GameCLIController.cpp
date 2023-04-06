@@ -10,11 +10,13 @@
 #include "../../Model/InputParser/GameInputParser.hpp"
 
 
-GameCLIController::GameCLIController(Client *model, GameCLIView *view)
-        : AbstractCLIController{model, STATE::GAME}, view{view} {};
+GameCLIController::GameCLIController(Client *model)
+        : AbstractCLIController{model, STATE::GAME} {};
 
 
 void GameCLIController::handle(int event) {
+    if (event) {} // to use the param
+
     std::cout << "> ";
     std::string input;
     std::getline(std::cin, input);
@@ -28,7 +30,8 @@ void GameCLIController::handle(int event) {
 
     if ( parser.getQuery() != GAME_QUERY_TYPE::NONE ) {
         std::string response;
-        QUERY query = this->model->receive(response);
+        //QUERY query = this->model->receive(response);
+        this->model->receive(response);
         std::cout << response << std::endl;
     }
     else { this->new_state = STATE::GAME; }

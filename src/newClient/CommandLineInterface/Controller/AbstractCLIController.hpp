@@ -21,6 +21,8 @@ public:
 
     virtual void handle(int event) override = 0;
 
+    void move() override {}
+
 };
 
 #endif //INFO_F209_GR5_2022_ABSTRACTCLICONTROLLER_HPP

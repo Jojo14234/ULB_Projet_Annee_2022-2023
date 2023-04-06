@@ -17,3 +17,7 @@ void GameCLIView::draw() {
     std::cout << "|      - Faire un échange -> /exchange + /trade [property] [money]       |" << std::endl;
     std::cout << "+————————————————————————————————————————————————————————————————————————+" << std::endl;
 }
+
+void GameCLIView::draw2() {
+    // to avoid unused view in GameCLIController
+}

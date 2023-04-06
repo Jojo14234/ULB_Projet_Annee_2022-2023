@@ -10,11 +10,13 @@
 #include "../../Model/Client.hpp"
 
 
-ConnectionCLIController::ConnectionCLIController(Client *model, ConnectionCLIView *view)
-        : AbstractCLIController{model, STATE::CONNECTION}, view{view} {};
+ConnectionCLIController::ConnectionCLIController(Client *model)
+        : AbstractCLIController{model, STATE::CONNECTION} {};
 
 //todo
 void ConnectionCLIController::handle(int event) {
+    if (event) {} // to use the param
+
     std::cout << "> ";
     std::string input;
     std::getline(std::cin, input);

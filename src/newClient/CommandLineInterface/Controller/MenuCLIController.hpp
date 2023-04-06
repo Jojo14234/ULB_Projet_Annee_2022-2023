@@ -8,15 +8,12 @@
 #include "../configs.hpp"
 
 class Client; // forward declaration
-class MenuCLIView; // forward declaration
 
 class MenuCLIController : public AbstractCLIController, public GameCLISubject {
 
-    MenuCLIView* view;
-
 public:
 
-    MenuCLIController(Client* model, MenuCLIView* view, MenuCLIObserver* subject);
+    MenuCLIController(Client* model, MenuCLIObserver* subject);
 
     ~MenuCLIController()=default;
 

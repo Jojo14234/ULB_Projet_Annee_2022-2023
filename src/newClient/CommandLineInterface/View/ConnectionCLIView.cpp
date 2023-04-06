@@ -15,3 +15,7 @@ void ConnectionCLIView::draw() {
     std::cout << "|      Quitter l'application    -> /disconnect                           |" << std::endl;
     std::cout << "+————————————————————————————————————————————————————————————————————————+" << std::endl;
 }
+
+void ConnectionCLIView::draw2() {
+    //to avoid unused parameter
+}

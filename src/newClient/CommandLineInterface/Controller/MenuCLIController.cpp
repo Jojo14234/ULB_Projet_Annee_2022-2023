@@ -7,10 +7,12 @@
 #include "../../Model/InputParser/MainInputParser.hpp"
 
 
-MenuCLIController::MenuCLIController(Client *model, MenuCLIView *view, MenuCLIObserver* subject)
-        : AbstractCLIController{model, STATE::MENU}, GameCLISubject{subject}, view{view} {};
+MenuCLIController::MenuCLIController(Client *model, MenuCLIObserver* subject)
+        : AbstractCLIController{model, STATE::MENU}, GameCLISubject{subject} {};
 
 void MenuCLIController::handle(int event) {
+    if (event) {} // to use the param
+
     std::cout << "> ";
     std::string input;
     std::getline(std::cin, input);

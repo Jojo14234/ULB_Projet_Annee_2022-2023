@@ -11,16 +11,12 @@
 
 
 class Client; // forward declaration
-class ConnectionCLIView; // forward declaration
-
 
 class ConnectionCLIController: public AbstractCLIController {
 
-    ConnectionCLIView* view;
-
 public:
 
-    ConnectionCLIController(Client* model, ConnectionCLIView* view);
+    ConnectionCLIController(Client* model);
 
     ~ConnectionCLIController()=default;
 

@@ -12,4 +12,6 @@ public:
     ~GameCLIView()=default;
 
     void draw() override;
+
+    void draw2();
 };

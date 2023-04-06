@@ -12,11 +12,9 @@ class GameCLIView; // forward declaration
 
 class GameCLIController : public AbstractCLIController, public MenuCLIObserver {
 
-    GameCLIView* view;
-
 public:
 
-    GameCLIController(Client* model, GameCLIView* view);
+    GameCLIController(Client* model);
 
     ~GameCLIController()=default;
 

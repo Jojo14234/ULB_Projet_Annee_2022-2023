@@ -26,8 +26,8 @@ class Client {
     std::string player_turn;
 
     //todo added from terminal
-    bool connected_to_an_account = false;
-    bool in_game = false;
+    //bool connected_to_an_account = false;
+    //bool in_game = false;
 
 public:
 

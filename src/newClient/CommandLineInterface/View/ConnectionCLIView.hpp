@@ -16,5 +16,7 @@ public:
 
     void draw() override;
 
+    void draw2();
+
 };
 
