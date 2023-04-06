@@ -16,6 +16,7 @@
 
 
 class ModalBox : public Box {
+protected:
 
 	Box background{ObjectInfo<>(WINDOW_WIDTH, WINDOW_HEIGHT, 0.f, 0.f), sf::Color(0, 0, 0, 180)};
 	std::vector<std::unique_ptr<Text>> texts;
