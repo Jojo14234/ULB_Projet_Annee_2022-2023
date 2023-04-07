@@ -30,7 +30,7 @@ void MainCLIWindow::initAttributes() {
     this->view.setViews({connection_view, menu_view, game_view});
 
     ConnectionCLIController* connection_controller = new ConnectionCLIController(&this->model);
-    GameCLIController* game_controller = new GameCLIController(&this->model);
+    GameCLIController* game_controller = new GameCLIController(&this->model, game_view);
     MenuCLIController* menu_controller = new MenuCLIController(&this->model, game_controller);
 
     this->controller.setController({connection_controller, menu_controller, game_controller});

@@ -157,6 +157,8 @@ void GameCUIController::update() { this->initGame(); }
 
 
 //Graphical Updates // todo il faut pas déplacer ça dans le view ?
+
+// Les 2 fonctions ci-dessous sont les mêmes WHY ??????
 void GameCUIController::createGameGU(const std::string& response) {
     GameLaunchingParser launching_parser(response);
     std::shared_ptr<JoinInfo> join_info = launching_parser.parseCreateQuery();
@@ -165,7 +167,6 @@ void GameCUIController::createGameGU(const std::string& response) {
     this->initScreen(join_info->game_code);
     this->playerJoinUpdate();
 }
-
 void GameCUIController::joinGameGU(const std::string& response) {
     GameLaunchingParser launching_parser(response);
     std::shared_ptr<JoinInfo> join_info = launching_parser.parseJoinQuery();
@@ -174,7 +175,7 @@ void GameCUIController::joinGameGU(const std::string& response) {
     this->initScreen(join_info->game_code);
     this->playerJoinUpdate();
 }
-
+// Quasi la même mais y'a La partie commence en plus
 void GameCUIController::infoStartGU(const std::string& response) {
     GameLaunchingParser launching_parser(response);
     std::shared_ptr<StartInfo> start_info = launching_parser.parseStartQuery();
@@ -364,7 +365,6 @@ void GameCUIController::sellPropertyGU(const std::string& response){
 }
 
 void GameCUIController::leaveBuildMenuGU(const std::string& response){
-    response += ""; // to avoid unused parameter
     for (auto& property : build_mode) {
         int index = this->view->getBoard()->getCellIndex(property);
         this->view->getBoard()->leaveSelection(index);
