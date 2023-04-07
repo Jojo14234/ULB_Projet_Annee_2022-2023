@@ -52,7 +52,6 @@ class FriendsGUIView: public AbstractGUIView {
 	float del_button_x = (fbox_x_pos+fbox_x_size) - fbutton_size - 10;
 	float mess_button_x = del_button_x - fbutton_size - 10;
 	float fbutton_y = fbox_y_pos+15;
-	//float fbutton_n_y = fbutton_y
 
 	ImageButton mess1_button{ObjectInfo<>(fbutton_size, fbutton_size, mess_button_x, fbutton_y), MESSAGE_BUTTON_PATH};
 	ImageButton del1_button{ObjectInfo<>(fbutton_size, fbutton_size, del_button_x, fbutton_y), DELETE_BUTTON_PATH};
@@ -69,8 +68,14 @@ class FriendsGUIView: public AbstractGUIView {
 	ImageButton mess5_button{ObjectInfo<>(fbutton_size, fbutton_size, mess_button_x, fbox_y_pos+40+15 + fbox_y_size*4), MESSAGE_BUTTON_PATH};
 	ImageButton del5_button{ObjectInfo<>(fbutton_size, fbutton_size, del_button_x, fbox_y_pos+40+15 + fbox_y_size*4), DELETE_BUTTON_PATH};
 
-	//Box friend_list2_bbox{ObjectInfo<>( , , , ), TOP_BOX_COLOR};
-	//5 friends box + bouton message et bouton supprimer pour chacun 
+
+
+	Text name1{ObjectInfo<>(0.f, WINDOW_WIDTH/55.f, WINDOW_WIDTH*8/12.f + 100 , fbutton_y), "xX_.h4w3n._Xx"};
+	Text name2{ObjectInfo<>(0.f, WINDOW_WIDTH/55.f, WINDOW_WIDTH*8/12.f + 100 , fbox_y_pos+10+15 + fbox_y_size), "lolcatz1287"};
+	Text name3{ObjectInfo<>(0.f, WINDOW_WIDTH/55.f, WINDOW_WIDTH*8/12.f + 100 , fbox_y_pos+20+15 + fbox_y_size*2), "m4cr0n_c4lvitie"};
+	Text name4{ObjectInfo<>(0.f, WINDOW_WIDTH/55.f, WINDOW_WIDTH*8/12.f + 100 , fbox_y_pos+30+15 + fbox_y_size*3), "__t0rtUe._.m4UdiT3__"};
+	Text name5{ObjectInfo<>(0.f, WINDOW_WIDTH/55.f, WINDOW_WIDTH*8/12.f + 100 , fbox_y_pos+40+15 + fbox_y_size*4), "x3l0w0"};
+
 
 
 public:
@@ -114,6 +119,11 @@ public:
 		del4_button.draw(*window);
 		mess5_button.draw(*window);
 		del5_button.draw(*window);
+		name1.draw(*window);
+		name2.draw(*window);
+		name3.draw(*window);
+		name4.draw(*window);
+		name5.draw(*window);
 		
 	}
 
