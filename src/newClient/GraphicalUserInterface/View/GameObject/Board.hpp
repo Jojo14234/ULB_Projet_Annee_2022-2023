@@ -11,6 +11,7 @@
 #include <array>
 #include <memory>
 
+#include "../AssetsPath.hpp"
 #include "Cell.hpp"
 
 //Class representing the gameboard with the different game spaces and the spaces for the cards.
@@ -30,10 +31,10 @@ class Board{
 
 	int text_size = 10;
 
-    sf::Vector2f v_cell_size;  // vertical cell's size 
-	sf::Vector2f h_cell_size;  // horizontal cell's size 
-    sf::Vector2f corner_cell_size;
-    sf::Vector2f start_corner;  //bottom left position
+    sf::Vector2f v_cell_size{80,100};  // vertical cell's size 
+	sf::Vector2f h_cell_size{v_cell_size.y,h_cell_size.x};  // horizontal cell's size 
+    sf::Vector2f corner_cell_size{100,100} ;
+    sf::Vector2f start_corner{350,900};  //bottom left position
 
     /*
 
@@ -49,17 +50,16 @@ class Board{
 public: 
 
     
-	Board(sf::Vector2f cell_size, sf::Vector2f corner_cell_size): 
-        start_corner{350,900},v_cell_size{cell_size}, h_cell_size(cell_size.y,cell_size.x), corner_cell_size{corner_cell_size} {
+	Board(){
 		this->loadCellNames();
 		this->loadCellFile();
-		this->createBoard();
-		
-	}
+		this->createBoard();}
+	
     void draw(sf::RenderWindow &window);
-
-    int getNPlayer() { return n_player; }
 	int getCellIndex(std::string cell);
+
+    /*int getNPlayer() { return n_player; }
+	
 	void setPlayer(int cell, int player);
 	void unsetPlayer(int player);
 	void movePlayer(int cell, int player);
@@ -69,7 +69,7 @@ public:
 	//void removeHouse(int cell, int house_nb);
 	void setBuildable(int cell);
 	void setSalable(int cell);
-	void leaveSelection(int cell);
+	void leaveSelection(int cell);*/
 
 };
 

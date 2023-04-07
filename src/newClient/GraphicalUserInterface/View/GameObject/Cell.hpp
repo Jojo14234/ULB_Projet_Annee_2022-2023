@@ -27,21 +27,28 @@ public :
 		for (auto &button : buttons) button->draw(window);
 	}
 
-	void setPlayer(int player) {
+	/*void setPlayer(int player) {
 
 	}
 
 	void removePlayer(int player) {
-	}
+	}*/
 
 	void setOwner(int player){
-		Image* flag = new Image (info, "File/Image/drapeau1.png");
+		std::string path ;
+		if (player == 0){
+			std::string path = FLAG_PATH;
+		}
+		else {
+			std::string path = FLAG_PATH;
+		}
+		Image* flag = new Image (info, path);
 		flag->setFlag();
 		addImage(flag);
 
 	}
 
-	void enterBuildMode(){
+	/*void enterBuildMode(){
 	}
 
 	void enterSellMode(){
@@ -57,7 +64,7 @@ public :
 	}
 
 	void removeBuilding(int nb){
-	}
+	}*/
 
 };
 

@@ -11,7 +11,7 @@ void Board::draw(sf::RenderWindow& window) {
 //method to have a list of name for the cells
 void Board::loadCellNames(){
 	std::string cell;
-	std::ifstream cell_names_file("File/utils/cellname.txt");
+	std::ifstream cell_names_file(CELL_NAME);
 	if (cell_names_file.is_open()){
 		int i=0;
 		while (std::getline(cell_names_file , cell)) {cellname[i] = cell; i++;}
@@ -23,7 +23,7 @@ void Board::loadCellNames(){
 
 void Board::loadCellFile(){
 	std::string cell;
-	std::ifstream cell_names_file("File/utils/cellfile.txt");
+	std::ifstream cell_names_file(FILE_NAME);
 	if (cell_names_file.is_open()){
 		int i=0;
 		while (std::getline(cell_names_file , cell)) {
@@ -59,7 +59,7 @@ void Board::createBoard(){
             else if ( i == 30){position.x = start_corner.x + 9 *v_cell_size.y + corner_cell_size.x +1; position.y = start_corner.y   ;}
             
             board[i] = std::make_shared<Cell>(ObjectInfo<>(corner_cell_size.x,corner_cell_size.y, position.x,position.y),
-                                                sf::Color::White, "File/Image/Cell/"+cell_file[i], i);
+                                                sf::Color::White, CELL_PATH + cell_file[i], i);
         }
 
         else {
@@ -73,13 +73,13 @@ void Board::createBoard(){
 				size = h_cell_size;
                 position.x =(start_corner.x+corner_cell_size.x+ 9*v_cell_size.y) - (i-30) * v_cell_size.y ;position.y = start_corner.y ;}
             board[i] = std::make_shared<Cell>(ObjectInfo<>(size.x,size.y, position.x,position.y),
-                                                 sf::Color::White, "File/Image/Cell/"+cell_file[i], i);
+                                                 sf::Color::White,  CELL_PATH + cell_file[i] , i);
         }}}
 
 
 ////////////////////////////////////////////////////////////////
 //method for setting and unsetting player
-void Board::unsetPlayer(int player){}
+/*void Board::unsetPlayer(int player){}
 
 void Board::setPlayer(int cell,int player){
 	old_pos_player[player-1] = cell;
@@ -103,5 +103,5 @@ void Board::setBuildable(int cell) {}
 
 void Board::setSalable(int cell) {}
 
-void Board::leaveSelection(int cell) {}
+void Board::leaveSelection(int cell) {}*/
 

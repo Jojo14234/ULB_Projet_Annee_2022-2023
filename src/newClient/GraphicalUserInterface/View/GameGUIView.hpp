@@ -24,23 +24,23 @@ class GameGUIView: public AbstractGUIView {
 public:
 
 	explicit GameGUIView(sf::RenderWindow* window) : AbstractGUIView(window)
-	,board{sf::Vector2f{100,80},sf::Vector2f{100,100}}
+	,board{}
 	,actionBox{ObjectInfo<>(300, window->getSize().y,0,0), sf::Color::Red }
 	{
-		 actionBox.setButton(act,24);
+		 //actionBox.setButton(act,24);
 	}
 
 	
 	~GameGUIView()=default;
 
 	void draw() override {
-		board.draw(*window);
+		//board.draw(*window);
 		actionBox.draw(*window);
 	}
 
 	void clear();
 
 	friend class GameGUIController;
-	Board* getBoard() { return &board; }
+	//Board* getBoard() { return &board; }
 
 };

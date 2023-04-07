@@ -22,6 +22,11 @@ const std::string CREATE_BUTTON_PATH = "../assets/images/create_button.png";
 const std::string BACK_BUTTON_PATH = "../assets/images/back_button.png";
 const std::string OK_BUTTON_PATH = "../assets/images/ok_button.png";
 
+const std::string FILE_NAME = "../assets/utils/cellfile.txt";
+const std::string CELL_NAME = "../assets/utils/cellname.txt";
+const std::string CELL_PATH = "../assets/images/Cell/";
+const std::string FLAG_PATH = "../assets/images/drapeau1.png";
+
 // Fonts
 const std::string ARIAL_FONT_PATH = "../assets/fonts/arial.ttf";
 const std::string SERIF_FONT_PATH = "../assets/fonts/hvd-comic-serif-pro.ttf";

@@ -32,13 +32,13 @@ public:
 
 	void rotate(int degrees){
             this->sprite.setRotation(degrees);
-            if (degrees == 90 or degrees == -90){
+            if ((degrees == 90) or (degrees == -90)){
                 this->sprite.setScale((this->info.getHeight() )/ (float)texture.getSize().x,(this->info.getWidth() )/ (float)texture.getSize().y);
 				this->sprite.setOrigin(sprite.getLocalBounds().width / 2, sprite.getLocalBounds().height / 2);
 				this->sprite.setPosition(this->info.getX() +  this->info.getWidth() / 2.0f, this->info.getY() + this->info.getHeight() / 2.0f);
 			}
 
-			else if (degrees = 180){
+			else if ((degrees = 180)){
 				this->sprite.setOrigin(sprite.getLocalBounds().width / 2, sprite.getLocalBounds().height / 2);
 				this->sprite.setPosition(this->info.getX() +  this->info.getWidth() / 2.0f, this->info.getY() + this->info.getHeight() / 2.0f);}}
 		

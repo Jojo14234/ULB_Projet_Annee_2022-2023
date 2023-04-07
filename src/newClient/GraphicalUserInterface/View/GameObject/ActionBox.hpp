@@ -8,11 +8,11 @@
 #include <memory>
 
 
-class ActionBox: public Box{
+class ActionBox: public  Box{
     std::vector<std::shared_ptr<TextButton>> buttons;
 
     public:
-        ActionBox(ObjectInfo<>info, sf::Color color): Box(info,color), AbstractViewObject(info){}
+        ActionBox(ObjectInfo<>info, sf::Color color): AbstractViewObject{info}, Box{info,color}{}
 
 
         void draw(sf::RenderWindow& window) const override{
@@ -25,7 +25,7 @@ class ActionBox: public Box{
 
         void setButton(std::vector<std::string> action, int text_size ){
             buttons.clear();
-            for (int i = 0; i < action.size(); i++){
+            for (int i = 0; i < int(action.size()); i++){
                 buttons.push_back(std::make_shared<TextButton>(ObjectInfo<>(200, 150,50, i *  info.getHeight()/action.size() + 20 ),
                 ObjectInfo<>(text_size,0,50+200/2,i * (info.getHeight()/action.size() + 20 )+ 50/2), action[i]) );
             }}
