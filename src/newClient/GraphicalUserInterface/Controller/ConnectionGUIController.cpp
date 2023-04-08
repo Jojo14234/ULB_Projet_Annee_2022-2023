@@ -13,11 +13,11 @@ void ConnectionGUIController::handle(sf::Event event) {
 			if (this->view->login_button.contains(event.mouseButton.x, event.mouseButton.y)) {
 				this->model->sendLogin(this->view->username.getText(), this->view->password.getText());
 				if (this->model->receive() == QUERY::TRUEQ) { this->new_state = STATE::MENU; }
-				else { this->view->clear(); }
+				this->view->clear();
 			} else if (this->view->register_button.contains(event.mouseButton.x, event.mouseButton.y)) {
 				this->model->sendRegister(this->view->username.getText(), this->view->password.getText());
 				if (this->model->receive() == QUERY::TRUEQ) { this->new_state = STATE::MENU; }
-				else { this->view->clear(); }
+				this->view->clear();
 			} else {
 				this->view->username.deselect();
 				this->view->password.deselect();

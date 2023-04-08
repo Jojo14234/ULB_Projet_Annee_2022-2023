@@ -38,6 +38,8 @@ public:
 	bool sendCommand(MainInputParser &parser);
 	bool sendCommand(GameInputParser &parser);
 
+	void disconnectAccount();
+
 	QUERY receive();
 	QUERY receive(std::string &output);
 

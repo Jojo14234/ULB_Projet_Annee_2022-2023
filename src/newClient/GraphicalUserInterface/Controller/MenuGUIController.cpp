@@ -2,6 +2,7 @@
 
 #include "MenuGUIController.hpp"
 #include "../View/MenuGUIView.hpp"
+#include "../../Model/Client.hpp"
 #include "../configs.hpp"
 
 
@@ -9,7 +10,8 @@ void MenuGUIController::handle(sf::Event event) {
 	if (event.type != sf::Event::MouseButtonPressed) return;
 	// buttons
 	if (this->view->quit_button.contains(event.mouseButton.x, event.mouseButton.y)) {
-		// TODO
+		this->new_state = STATE::CONNECTION;
+		this->model->disconnectAccount();
 	} else if (this->view->join.contains(event.mouseButton.x, event.mouseButton.y)) {
 		// TODO
 	} else if (this->view->create.contains(event.mouseButton.x, event.mouseButton.y)) {

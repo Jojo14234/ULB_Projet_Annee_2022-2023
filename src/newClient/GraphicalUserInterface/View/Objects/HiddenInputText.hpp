@@ -58,4 +58,9 @@ public:
 		window.draw(cursor);
 	}
 
+	void clear() override {
+		InputText::clear();
+		this->updateText();
+	}
+
 };

@@ -100,6 +100,12 @@ bool Client::sendCommand(GameInputParser &parser) {
 }
 
 
+void Client::disconnectAccount() {
+	sf::Packet packet;
+	packet << static_cast<int>(QUERY_TYPE::DISCONNECT);
+	sendPacket(packet);
+}
+
 // Receive Query from the server
 
 QUERY Client::receive() {
