@@ -277,14 +277,19 @@ GameStats GameServer::clientLoop(ClientManager &client) {
  * Gestion des action possible durant le tour du client
  */
 void GameServer::clientTurn(ClientManager &client, Player* me) {
-    while ( !me->hasRolled() ) {
+
+    if ( game.isFastGame() ){
+        game.forceAcquisition(me);
+        checkAndManageBankruptcy(me);
+    }
+
+    while ( !me->hasRolled() and me->getStatus() != PLAYER_STATUS::LOST) {
         GAME_QUERY_TYPE query = this->getGameQuery(client);
         if ( query == GAME_QUERY_TYPE::BUILD )          { this->processBuild(client, me); continue; }
         if ( query == GAME_QUERY_TYPE::SELL_BUILDINGS ) { this->processSellBuild(client, me); continue; }
         if ( query == GAME_QUERY_TYPE::MORTGAGE )       { this->processMortgage(client, me); continue; }
         if ( query == GAME_QUERY_TYPE::LIFT_MORTGAGE )  { this->processLiftMortgage(client, me); continue; }
         if ( query == GAME_QUERY_TYPE::EXCHANGE )       { this->processExchange(client, me); continue; }
-
 
 
         if ( query == GAME_QUERY_TYPE::ROLL_DICE ) {
@@ -296,16 +301,21 @@ void GameServer::clientTurn(ClientManager &client, Player* me) {
             if ( landCell && !landCell->getLand()->getOwner() ) { this->processAuction(client, me, landCell->getLand()); }
 
             // Vérification si le joueur est en faillite
-            if ( me->getStatus() == PLAYER_STATUS::BANKRUPT_SUSPECTED ) { this->suspectBankrupt(me); }
-            if ( me->getStatus() == PLAYER_STATUS::DEBT ) { this->processPayDebt(client, me); continue; }
-            if ( me->getStatus() == PLAYER_STATUS::BANKRUPT_CONFIRMED ) { this->processBankrupt(client, me); }
-            if ( me->getStatus() == PLAYER_STATUS::LOST ) { this->processLost(client); break; }
+            checkAndManageBankruptcy(me);
         }
     }
     // End of the turn
     this->game.endCurrentTurn();
     this->sendGameData();
     this->sendBetterGameData();
+
+}
+
+void GameServer::checkAndManageBankruptcy(Player* me){
+    if ( me->getStatus() == PLAYER_STATUS::BANKRUPT_SUSPECTED ) { this->suspectBankrupt(me); }
+    if ( me->getStatus() == PLAYER_STATUS::DEBT ) { this->processPayDebt(client, me); continue; }
+    if ( me->getStatus() == PLAYER_STATUS::BANKRUPT_CONFIRMED ) { this->processBankrupt(client, me); }
+    if ( me->getStatus() == PLAYER_STATUS::LOST ) { this->processLost(client); break; }
 }
 
 
