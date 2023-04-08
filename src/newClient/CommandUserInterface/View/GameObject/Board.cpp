@@ -82,5 +82,11 @@ void Board::setBuildable(int cell) { board[cell]->enterBuildMode(); }
 
 void Board::setSalable(int cell) { board[cell]->enterSellMode(); }
 
-void Board::leaveSelection(int cell) { board[cell]->leaveBuildMode(); }
+void Board::setMortgaged(int cell) { board[cell]->setMortgaged(); }
+
+void Board::setMortgageable(int cell) { board[cell]->enterMortgageMode(); }
+
+void Board::setLiftMortgageable(int cell) { board[cell]->enterMortgageMode(); }
+
+void Board::leaveSelection(int cell) { board[cell]->leaveSpecialMode(); }
 

@@ -357,6 +357,14 @@ bool Player::hasSellableProperties(){
     for ( auto property : this->getAllProperties() ) { if ( property->canSellBuilding(this) ) return true;}
     return false;
 }
+bool Player::hasMortgageableProperties(){
+    for ( auto property : this->getAllProperties() ) { if ( property->isMortgageable(this) ) return true;}
+    return false;
+}
+bool Player::hasUnmortgageableProperties(){
+    for ( auto property : this->getAllProperties() ) { if ( property->isMortgaged() ) return true;}
+    return false;
+}
 
 
 // NEW FUNCTION

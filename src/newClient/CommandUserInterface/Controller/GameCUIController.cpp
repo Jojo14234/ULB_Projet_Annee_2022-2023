@@ -92,7 +92,7 @@ void GameCUIController::receiveMsgLoop() { // todo il faudrait pas déplacer les
             case QUERY::USELESS_MESSAGE :               break;
             case QUERY::INFOS_BUILD_PROP :              this->buildPropertyGU(response); break;
             case QUERY::INFOS_SELL_BUILD :              this->sellPropertyGU(response); break;
-            case QUERY::INFOS_LEAVE_BUILD_MODE :        this->leaveBuildMenuGU(response); break;
+            case QUERY::INFOS_LEAVE_SELECTION_MODE :    this->leaveSelectionMenuGU(response); break;
             case QUERY::INFOS_BUILD_SUCCESS :           this->buildSucceedGU(response); break;
             case QUERY::INFOS_ASK_FOR_PURCHASE :        this->askForPurchaseGU(response); break;
 
@@ -342,30 +342,48 @@ void GameCUIController::drawCardGU(const std::string& response){
 
 void GameCUIController::buildPropertyGU(const std::string& response){
     InGameParser game_parser(response);
-    build_mode = *game_parser.parseBuildOrSellQuery().get();
+    selection_mode = *game_parser.parseBuildOrSellQuery().get();
     if (this->model->isMyTurn()){
         this->view->getConsole()->addText("/select [nom] pour construire un batiment");
         this->view->getConsole()->addText("/leave pour quitter le menu de construction");
-        for (auto& property : build_mode){
+        for (auto& property : selection_mode){
             int index = this->view->getBoard()->getCellIndex(property);
             this->view->getBoard()->setBuildable(index);
         }
-    } else this->view->getConsole()->addText("Consultation du menu de construction...");
+    } else this->view->getConsole()->addText("Consultation des batiments a construire...");
 }
 
 void GameCUIController::sellPropertyGU(const std::string& response){
     InGameParser game_parser(response);
-    build_mode = *game_parser.parseBuildOrSellQuery().get();
+    selection_mode = *game_parser.parseBuildOrSellQuery().get();
     if (this->model->isMyTurn()){
-        for (auto& property : build_mode){
+        this->view->getConsole()->addText("/select [nom] pour vendre un batiment");
+        this->view->getConsole()->addText("/leave pour quitter le menu de vente");
+        for (auto& property : selection_mode){
             int index = this->view->getBoard()->getCellIndex(property);
             this->view->getBoard()->setSalable(index);
         }
-    }
+    } else this->view->getConsole()->addText("Consultation des proprietes a vendre ...");
 }
 
-void GameCUIController::leaveBuildMenuGU(const std::string& response){
-    for (auto& property : build_mode) {
+void GameCUIController::exchangePropertyGU(const std::string& response){
+}
+
+void GameCUIController::mortgagePropertyGU(const std::string& response){
+    InGameParser game_parser(response);
+    selection_mode = *game_parser.parseBuildOrSellQuery().get();
+    if (this->model->isMyTurn()){
+        this->view->getConsole()->addText("/select [nom] pour hypotequer un batiment");
+        this->view->getConsole()->addText("/leave pour quitter le menu de selection");
+        for (auto& property : selection_mode){
+            int index = this->view->getBoard()->getCellIndex(property);
+            this->view->getBoard()->setMortgageable(index);
+        }
+    } else this->view->getConsole()->addText("Consultation des proprietes a hypotequer ...");
+}
+
+void GameCUIController::leaveSelectionMenuGU(const std::string& response){
+    for (auto& property : selection_mode) {
         int index = this->view->getBoard()->getCellIndex(property);
         this->view->getBoard()->leaveSelection(index);
     }

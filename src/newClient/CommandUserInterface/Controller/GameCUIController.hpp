@@ -19,7 +19,7 @@ class GameCUIController: public AbstractCUIController, public MenuCUIObserver {
 	int player_nb;
 	bool init = true;
 	std::vector<std::string> players_username;
-	std::vector<std::string> build_mode;
+	std::vector<std::string> selection_mode;
 
 	//Graphical Updates
 	void createGameGU(const std::string& response);
@@ -44,7 +44,9 @@ class GameCUIController: public AbstractCUIController, public MenuCUIObserver {
 	void drawCardGU(const std::string& response);
 	void buildPropertyGU(const std::string& response);
 	void sellPropertyGU(const std::string& response);
-	void leaveBuildMenuGU(const std::string& response);
+	void exchangePropertyGU(const std::string& response);
+	void mortgagePropertyGU(const std::string& response);
+	void leaveSelectionMenuGU(const std::string& response);
 	void buildSucceedGU(const std::string& response);
 	void askForPurchaseGU(const std::string& response);
 

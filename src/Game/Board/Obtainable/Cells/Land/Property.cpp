@@ -61,6 +61,14 @@ bool Property::canSellBuilding(Player* player) {
     if ( !this->AllSameColorPropertiesHaveGoodLevel(player, true) ) { return false;}
     return true;
 }
+
+bool Property::isMortgageable(Player* player) {
+    if ( this->owner != player ) return false; 
+    if ( this->isMortgaged() ) return false; 
+    if ( this->getLevel() != PROPERTY_LEVEL::EMPTY ) return false; 
+    if ( this->AllSameColorPropertiesHaveNoBuilding(player)) return false;
+    return true;
+}
 /*
  * Renvoie true si le player possède toutes les cartes de la même couleur que cette carte-ci.
  * Ci cette carte est une carte brune ou bleu foncé, il ne faut qu'une seule autre carte
@@ -84,6 +92,12 @@ bool Property::AllSameColorPropertiesHaveGoodLevel(Player* player, bool sell) {
     return true;
 }
 
+bool Property::AllSameColorPropertiesHaveNoBuilding(Player* player) {
+    for (auto property : getOtherSameColorPropFromPlayer(player)) {
+        if (property->getLevel() != PROPERTY_LEVEL::EMPTY) return false;
+    }
+    return true;
+}
 
 // Operation
 

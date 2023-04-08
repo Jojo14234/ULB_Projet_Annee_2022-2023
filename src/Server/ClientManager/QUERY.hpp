@@ -46,14 +46,20 @@ enum class QUERY {
 
     INFOS_ROLL_DICE, // dice1:dice2:result:isDouble:doubleCount [int]:[int]:[int]:[bool]:[int]
 
-    INFOS_LEAVE_BUILD_MODE,
+    INFOS_LEAVE_SELECTION_MODE,
     NO_BUILDABLE_PROP,
     CANNOT_BUILD,
+    NO_SALABLE_PROP,
+    CANNOT_SELL,
+    NO_MORTGAGEABLE_PROP,
+    CANNOT_MORTAGE,
+    NO_UNMORTGAGEABLE_PROP,
+    CANNOT_UNMORTGAGE,
 
     INFOS_BUILD_PROP, // name:name:... [string]:[string]:... All the property name if they are buildable
     INFOS_SELL_BUILD, // name:name:... [string]:[string]:... All the property name if build can be sell
-    INFOS_MORTGAGEABLE_PROP, // All the property mortgageable by a player
-    INFOS_LIFT_MORTGAGEABLE_PROP, // All the property lift mortgageable by a player
+    INFOS_MORTGAGEABLE_PROP, // name:name:... [string]:[string]:... All the property name 
+    INFOS_LIFT_MORTGAGEABLE_PROP, // name:name:... [string]:[string]:... All the property name 
     INFOS_EXCHANGEABLE_PROP, // username=property_exchangeable:property_exchangeable:|... All teh properties exchangeable by all the player
 
 

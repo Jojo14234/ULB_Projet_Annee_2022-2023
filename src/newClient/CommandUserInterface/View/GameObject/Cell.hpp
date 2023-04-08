@@ -45,7 +45,22 @@ public :
 		texts.at(1) = "SELL";
 	}
 
-	void leaveBuildMode(){
+	void enterMortgageMode(){
+		save = texts.at(1);
+		texts.at(1) = "MORTGAGE";
+	}
+
+	void enterLiftMortgageMode(){
+		save = texts.at(1);
+		texts.at(1) = "UNMRTGAG"; //on ne peut pas avoir un string de taille >9
+	}
+
+	void enterExchangeMode(){
+		save = texts.at(1);
+		texts.at(1) = "EXCHANGE";
+	}
+
+	void leaveSpecialMode(){
 		texts.at(1) = save;
 	}
 
@@ -61,6 +76,10 @@ public :
 		} else {
 			for (int i=0; i<nb; i++) texts.at(2) += "*";
 		}	
+	}
+
+	void setMortgaged(){
+		texts.at(2) = "MRTGAGED"; //on ne peut pas avoir un string de taille >9
 	}
 
 };

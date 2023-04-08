@@ -53,6 +53,8 @@ public:
     bool canSellBuilding(Player* player);
     bool hasAllSameColorProperties(Player* player);
     bool AllSameColorPropertiesHaveGoodLevel(Player* player, bool sell = false);
+    bool isMortgageable(Player* player);
+    bool AllSameColorPropertiesHaveNoBuilding(Player* player);
 
     // Operation
     bool playerPurchase(Player* player) override;

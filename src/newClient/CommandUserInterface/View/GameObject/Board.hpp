@@ -63,6 +63,9 @@ public:
 	//void removeHouse(int cell, int house_nb);
 	void setBuildable(int cell);
 	void setSalable(int cell);
+	void setMortgageable(int cell);
+	void setMortgaged(int cell);
+	void setLiftMortgageable(int cell);
 	void leaveSelection(int cell);
 
 };

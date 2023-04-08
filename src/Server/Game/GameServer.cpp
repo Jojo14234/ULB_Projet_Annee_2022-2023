@@ -406,11 +406,15 @@ void GameServer::processBuild(ClientManager &client, Player *player) {
         else this->updateThisClientWithQuery(QUERY::CANNOT_BUILD, "", client);
         client.receive(query, packet);
     }
-    this->updateThisClientWithQuery(QUERY::INFOS_LEAVE_BUILD_MODE, "Vous quittez le mode de sélection", client);
+    this->updateThisClientWithQuery(QUERY::INFOS_LEAVE_SELECTION_MODE, "Vous quittez le mode de sélection", client);
 }
 
 void GameServer::processSellBuild(ClientManager &client, Player *player) {
     // récupérer toute les propriétés en état de perdre une maison
+    if (! player->hasSellableProperties()) {
+        this->updateThisClientWithQuery(QUERY::NO_SALABLE_PROP, "", client);
+        return;
+    }
     this->playerSellBuildInfos(client);
 
     GAME_QUERY_TYPE query;
@@ -420,7 +424,7 @@ void GameServer::processSellBuild(ClientManager &client, Player *player) {
 
     while ( query != GAME_QUERY_TYPE::LEAVE_SELECTION ) {
         if ( query != GAME_QUERY_TYPE::SELECT ) {
-            this->playerSellBuildInfos(client);
+            this->updateThisClientWithQuery(QUERY::BAD_COMMAND, "", client);
             client.receive(query, packet);
             continue;
         }
@@ -435,7 +439,7 @@ void GameServer::processSellBuild(ClientManager &client, Player *player) {
         this->playerSellBuildInfos(client);
         client.receive(query, packet);
     }
-    this->updateThisClientWithQuery(QUERY::MESSAGE, "Vous quittez le mode de sélection", client);
+    this->updateThisClientWithQuery(QUERY::INFOS_LEAVE_SELECTION_MODE, "Vous quittez le mode de sélection", client);
 
 }
 
@@ -443,6 +447,10 @@ void GameServer::processMortgage(ClientManager &client, Player *player) {
     // montrer toutes les propriété hypothécable du joueur
     // Choisir cell a hypothéquer / quitter le menu
     // passer la case en hypothèque + recevoir / prix achat
+    if (! player->hasMortgageableProperties()) {
+        this->updateThisClientWithQuery(QUERY::NO_MORTGAGEABLE_PROP, "", client);
+        return;
+    }
     this->playerMortgageInfos(client);
 
     GAME_QUERY_TYPE query;
@@ -453,7 +461,7 @@ void GameServer::processMortgage(ClientManager &client, Player *player) {
     while ( query != GAME_QUERY_TYPE::LEAVE_SELECTION ) {
         // QUERY IS NOT SELECT -> SHOW MESSAGE AND ASK FOR ANOTHER INPUT
         if ( query != GAME_QUERY_TYPE::SELECT ) {
-            this->playerMortgageInfos(client);
+            this->updateThisClientWithQuery(QUERY::BAD_COMMAND, "", client);
             client.receive(query, packet);
             continue;
         }
@@ -468,13 +476,17 @@ void GameServer::processMortgage(ClientManager &client, Player *player) {
         this->playerMortgageInfos(client);
         client.receive(query, packet);
     }
-    this->updateThisClientWithQuery(QUERY::MESSAGE, "Vous quittez le mode de sélection", client);
+    this->updateThisClientWithQuery(QUERY::INFOS_LEAVE_SELECTION_MODE, "Vous quittez le mode de sélection", client);
 }
 
 void GameServer::processLiftMortgage(ClientManager &client, Player *player) {
     // montrer toutes les propriété des-hypothécable du joueur
     // Choisir cell a des-hypothéquer / quitter le menu
     // passer la case en normale + perdre / prix de rachat
+    if (! player->hasUnmortgageableProperties()) {
+        this->updateThisClientWithQuery(QUERY::NO_UNMORTGAGEABLE_PROP, "", client);
+        return;
+    }
     this->playerLiftMortgageInfos(client);
 
     GAME_QUERY_TYPE query;
@@ -485,7 +497,7 @@ void GameServer::processLiftMortgage(ClientManager &client, Player *player) {
     while ( query != GAME_QUERY_TYPE::LEAVE_SELECTION ) {
         // QUERY IS NOT SELECT -> SHOW MESSAGE AND ASK FOR ANOTHER INPUT
         if ( query != GAME_QUERY_TYPE::SELECT ) {
-            this->playerLiftMortgageInfos(client);
+            this->updateThisClientWithQuery(QUERY::BAD_COMMAND, "", client);
             client.receive(query, packet);
             continue;
         }
@@ -500,7 +512,7 @@ void GameServer::processLiftMortgage(ClientManager &client, Player *player) {
         this->playerLiftMortgageInfos(client);
         client.receive(query, packet);
     }
-    this->updateThisClientWithQuery(QUERY::MESSAGE, "Vous quittez le mode de sélection", client);
+    this->updateThisClientWithQuery(QUERY::INFOS_LEAVE_SELECTION_MODE, "Vous quittez le mode de sélection", client);
 }
 
 void GameServer::processExchange(ClientManager &client, Player *player) {
