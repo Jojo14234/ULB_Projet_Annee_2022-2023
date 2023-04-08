@@ -39,7 +39,7 @@ public:
 
 	// GETTERS
     int getId() const { return id; }
-    const std::string getUsername() const { return std::string{username}; }
+    const std::string getUsername() const {std::cout << (void*)username << std::endl; return std::string{username}; }
 	const char* getPassword() const { return password; }
 	const GameStats& getStats() const { return stats; }
 	const FriendList& getFriendList() const { return friend_list; }

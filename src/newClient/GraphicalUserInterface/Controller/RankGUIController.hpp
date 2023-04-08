@@ -25,6 +25,4 @@ public:
 
 	void handle(sf::Event event) override;
 
-	// ...
-
 };

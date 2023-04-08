@@ -69,6 +69,8 @@ bool Client::sendCommand(MainInputParser &parser) {
 	sf::Packet packet;
 	packet << static_cast<int>(query);
 	switch(query) {
+	case QUERY_TYPE::RANKING_POS:
+	case QUERY_TYPE::RANKING_TOP: break;
 	case QUERY_TYPE::FRIENDS_ACCEPT:
 	case QUERY_TYPE::FRIENDS_REFUSE:
 	case QUERY_TYPE::FRIENDS_ADD:

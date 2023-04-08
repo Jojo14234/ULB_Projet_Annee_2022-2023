@@ -1,6 +1,8 @@
 #include <SFML/Window.hpp>
 
 #include "FriendsGUIController.hpp"
+#include "../View/FriendsGUIView.hpp"
+#include "../../Model/Client.hpp"
 
 
 void FriendsGUIController::handle(sf::Event event) {

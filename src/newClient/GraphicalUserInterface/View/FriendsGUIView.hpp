@@ -5,6 +5,10 @@
 #pragma once
 
 #include "AbstractGUIView.hpp"
+#include "Objects.hpp"
+#include "AssetsPath.hpp"
+#include "configs.hpp"
+
 
 
 class FriendsGUIController; // forward declaration

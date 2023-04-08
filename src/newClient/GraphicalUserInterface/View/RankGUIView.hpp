@@ -48,6 +48,7 @@ class RankGUIView: public AbstractGUIView {
 	TextButton top {ObjectInfo<>(WINDOW_WIDTH/15, WINDOW_WIDTH/40, WINDOW_WIDTH/3.f - 5 , WINDOW_HEIGHT/4.f-10), ObjectInfo<>(WINDOW_WIDTH/50, WINDOW_WIDTH/50 , WINDOW_WIDTH/3.f , WINDOW_HEIGHT/4.f - 10), "TOP 5", BLACK, RANK_COLOR}; 
 	TextButton my_rank {ObjectInfo<>(WINDOW_WIDTH/12 + 5, WINDOW_WIDTH/40, WINDOW_WIDTH/2.f + 140 , WINDOW_HEIGHT/4.f-10), ObjectInfo<>(WINDOW_WIDTH/50, WINDOW_WIDTH/50 , WINDOW_WIDTH/2.f + 145 , WINDOW_HEIGHT/4.f - 10), "My Rank", BLACK, RANK_COLOR};
 
+	
 
 	void hideTop() {
 		top_box.setHidden();
@@ -91,6 +92,11 @@ class RankGUIView: public AbstractGUIView {
 		my_top.setVisible();
 	}
 
+	void textaff(std::string txt) {
+		Text teext {ObjectInfo<>(WINDOW_WIDTH/50, WINDOW_WIDTH/50, WINDOW_WIDTH/3.f + 60, WINDOW_HEIGHT/2.f - 50), txt, BLACK};
+		teext.draw(*window);
+	} 
+
 
 public:
 
@@ -99,6 +105,8 @@ public:
 	}
 	
 	~RankGUIView()=default;
+
+	
 
 	void drawTop() {
 		top_box.draw(*window);
