@@ -26,10 +26,21 @@ class MenuGUIView: public AbstractGUIView {
 	ImageButton friend_menu{ObjectInfo<>(WINDOW_WIDTH/5.f,WINDOW_HEIGHT/2.f,WINDOW_WIDTH/20.f+(WINDOW_WIDTH/4*2.f),WINDOW_HEIGHT/8.f),FRIEND_MENU_BUTTON_PATH};
 
 	ImageButton settings{ObjectInfo<>(WINDOW_WIDTH/5.f,WINDOW_HEIGHT/2.f,WINDOW_WIDTH/20.f+(WINDOW_WIDTH/4*3.f),WINDOW_HEIGHT/8.f),SETTINGS_BUTTON_PATH};
+	ModalBox settings_popup{ObjectInfo<>(WINDOW_WIDTH/2.f, WINDOW_HEIGHT/2.f, WINDOW_WIDTH/4.f, WINDOW_HEIGHT/4.f), BOX_COLOR};
 
 public:
 
-	using AbstractGUIView::AbstractGUIView;
+	explicit MenuGUIView(sf::RenderWindow* window) : AbstractGUIView(window) {
+		settings_popup.setHidden();
+		settings_popup.addText(new Text{ObjectInfo<>(0, WINDOW_WIDTH/40, WINDOW_WIDTH/2.f, WINDOW_HEIGHT/4.f), "Réglages :D"});
+		settings_popup.addText(new Text{ObjectInfo<>(0, WINDOW_WIDTH/50, WINDOW_WIDTH/4.f, WINDOW_HEIGHT/4+WINDOW_HEIGHT/10.f), "Taille de fenêtre:"});
+		settings_popup.addText(new Text{ObjectInfo<>(0, WINDOW_WIDTH/50, WINDOW_WIDTH/4.f, WINDOW_HEIGHT/4+WINDOW_HEIGHT/10*2.f), "Son:"});
+		settings_popup.addText(new Text{ObjectInfo<>(0, WINDOW_WIDTH/50, WINDOW_WIDTH/4.f, WINDOW_HEIGHT/4+WINDOW_HEIGHT/10*3.f), "Changer pseudo:"});
+		settings_popup.addText(new Text{ObjectInfo<>(0, WINDOW_WIDTH/50, WINDOW_WIDTH/4.f, WINDOW_HEIGHT/4+WINDOW_HEIGHT/10*4.f), "Supprimer son compte:"});
+
+		settings_popup.addButton(new ImageButton{ObjectInfo<>(WINDOW_WIDTH/12.f, WINDOW_HEIGHT/12.f, WINDOW_WIDTH/4.f, WINDOW_HEIGHT/4+WINDOW_HEIGHT/10*5.f-WINDOW_HEIGHT/12.f), BACK_BUTTON_PATH});
+		settings_popup.addButton(new ImageButton{ObjectInfo<>(WINDOW_WIDTH/12.f, WINDOW_HEIGHT/12.f, WINDOW_WIDTH/4*3-WINDOW_WIDTH/12.f, WINDOW_HEIGHT/4+WINDOW_HEIGHT/10*5.f-WINDOW_HEIGHT/12.f), OK_BUTTON_PATH});
+	}
 	
 	~MenuGUIView()=default;
 
@@ -37,11 +48,11 @@ public:
 		//bordure draw puis box draw
 		quit_border.draw(*window);
 		quit_button.draw(*window);
-
 		join.draw(*window);
 		rank.draw(*window);
 		friend_menu.draw(*window);
 		settings.draw(*window);
+		settings_popup.draw(*window);
 	}
 
 	friend class MenuGUIController;
