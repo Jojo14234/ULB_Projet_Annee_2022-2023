@@ -293,7 +293,7 @@ void Capitalist::endCurrentTurn() {
 ClientManager *Capitalist::getWinner() {
     if ( isFastGame() ){
         if ( (getNumberOfPlayersAtStart() - getPlayersSize()) == 2 ){
-            return calculateFastGameWinner();
+            return calculateGameWinner();
         }
     }
     if (this->players.size() > 1) return nullptr;
@@ -303,7 +303,7 @@ ClientManager *Capitalist::getWinner() {
 ClientManager *Capitalist::calculateGameWinner() {
     ClientManager* winner;
     int current_winning_patrimoine = 0;
-    for (auto player : getPlayers()){
+    for (auto player : *getPlayers()){
         int patrimoine = player.getPatrimoine(isFastGame());
         if ( patrimoine > current_winning_patrimoine ){
             winner = player.getClient();
