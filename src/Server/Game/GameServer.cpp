@@ -319,7 +319,7 @@ void GameServer::checkAndManageBankruptcy(Player* me){
     if ( me->getStatus() == PLAYER_STATUS::BANKRUPT_SUSPECTED ) { this->suspectBankrupt(me); }
     if ( me->getStatus() == PLAYER_STATUS::DEBT ) { this->processPayDebt(me->getClient(), me); }
     if ( me->getStatus() == PLAYER_STATUS::BANKRUPT_CONFIRMED ) { this->processBankrupt(me->getClient(), me); }
-    if ( me->getStatus() == PLAYER_STATUS::LOST ) { this->processLost(client); }
+    if ( me->getStatus() == PLAYER_STATUS::LOST ) { this->processLost(me->getClient()); }
 }
 
 
