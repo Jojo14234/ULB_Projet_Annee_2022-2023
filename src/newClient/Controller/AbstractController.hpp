@@ -14,16 +14,19 @@ protected:
 
 	Client* model;
 	StateType new_state;
+	StateType initial_state;
 
 public: 
 	
-	AbstractController(Client* model, StateType new_state) : model(model), new_state(new_state) {}
+	AbstractController(Client* model, StateType new_state) : model(model), new_state(new_state), initial_state(new_state) {}
 
 	virtual ~AbstractController()=default;
 	
 	virtual void handle(EventType event)=0;
 
 	virtual void move() {}
+
+	void resetState() { new_state = initial_state; }
 
 	StateType getNewState() { return new_state; }
 

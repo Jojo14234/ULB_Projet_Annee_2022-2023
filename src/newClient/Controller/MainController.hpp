@@ -29,6 +29,7 @@ public:
 		AbstractController<StateType, EventType>* controller = this->getController(state);
 		controller->handle(event);
 		state = controller->getNewState();
+		controller->resetState();
 	}
 
 	void move(StateType &state) {
