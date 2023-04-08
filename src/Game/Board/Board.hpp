@@ -68,6 +68,7 @@ public:
                 }
             }
         }
+        return available_land;
     }
 
     int getBoardSize(){
