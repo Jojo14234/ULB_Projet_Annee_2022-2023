@@ -280,7 +280,7 @@ void GameServer::clientTurn(ClientManager &client, Player* me) {
 
     if ( game.isFastGame() ){
         game.forceAcquisition(me);
-        checkAndManageBankruptcy(me);
+        checkAndManageBankruptcy(client, me);
     }
 
     while ( !me->hasRolled() and me->getStatus() != PLAYER_STATUS::LOST) {
@@ -301,13 +301,14 @@ void GameServer::clientTurn(ClientManager &client, Player* me) {
             if ( landCell && !landCell->getLand()->getOwner() ) { this->processAuction(client, me, landCell->getLand()); }
 
             // Vérification si le joueur est en faillite
-            checkAndManageBankruptcy(me);
+
+            checkAndManageBankruptcy(client, me);
         }
     }
     // End of the turn
     if ( game.isFastGame() ){
         me->pay(20, true);
-        checkAndManageBankruptcy(me);
+        checkAndManageBankruptcy(client, me);
     }
     this->game.endCurrentTurn();
     this->sendGameData();
@@ -315,11 +316,11 @@ void GameServer::clientTurn(ClientManager &client, Player* me) {
 
 }
 
-void GameServer::checkAndManageBankruptcy(Player* me){
+void GameServer::checkAndManageBankruptcy(ClientManager* client, Player* me){
     if ( me->getStatus() == PLAYER_STATUS::BANKRUPT_SUSPECTED ) { this->suspectBankrupt(me); }
-    if ( me->getStatus() == PLAYER_STATUS::DEBT ) { this->processPayDebt(me->getClient(), me); }
-    if ( me->getStatus() == PLAYER_STATUS::BANKRUPT_CONFIRMED ) { this->processBankrupt(me->getClient(), me); }
-    if ( me->getStatus() == PLAYER_STATUS::LOST ) { this->processLost(me->getClient()); }
+    if ( me->getStatus() == PLAYER_STATUS::DEBT ) { this->processPayDebt(client, me); }
+    if ( me->getStatus() == PLAYER_STATUS::BANKRUPT_CONFIRMED ) { this->processBankrupt(client, me); }
+    if ( me->getStatus() == PLAYER_STATUS::LOST ) { this->processLost(client); }
 }
 
 
