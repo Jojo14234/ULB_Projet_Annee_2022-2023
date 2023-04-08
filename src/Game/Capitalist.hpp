@@ -20,6 +20,7 @@ class Capitalist {
     int current_player_index = 0;
     bool running = false;
     bool fast = false;
+    int number_of_players_at_start;
 
     AuctionStatus auction_in_progress = AuctionStatus::STOP;
     ExchangeStatus exchange_in_progress = ExchangeStatus::STOP;
@@ -77,6 +78,7 @@ public:
 
     ///////////////////////////////////////
     ClientManager* getWinner();
+    ClientManager* calculateGameWinner();
 
     void processJailPay(Player* player);
     void processJailUseCard(Player* player);
@@ -96,6 +98,8 @@ public:
 
     bool isFastGame();
     void setFastGame(bool is_fast);
+    void setNumberOfPlayers(int nbr);
+    int getNumberOfPlayersAtStart();
 
     void forceAcquisition(Player *player);
 

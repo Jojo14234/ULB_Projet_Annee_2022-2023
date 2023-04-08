@@ -305,6 +305,10 @@ void GameServer::clientTurn(ClientManager &client, Player* me) {
         }
     }
     // End of the turn
+    if ( game.isFastGame() ){
+        me->pay(20, true);
+        checkAndManageBankruptcy(me);
+    }
     this->game.endCurrentTurn();
     this->sendGameData();
     this->sendBetterGameData();

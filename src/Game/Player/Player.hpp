@@ -93,7 +93,7 @@ public:
     int getPosition() const;
     int getMoney() const;
     Player* getPlayerToRefund();
-    int getPatrimoine();
+    int getPatrimoine(bool is_fast_game);
     int getIndex() const;
     int getDebt() const;
 

@@ -260,6 +260,7 @@ ExchangeStatus Capitalist::getExchangeStatus() const {
  * Allow the first Player to play by setting to [TRUE] his attribut currently playing.
  */
 void Capitalist::startGame() {
+    this->setNumberOfPlayers(getPlayersSize());
     this->shufflePlayers();
     this->players[this->current_player_index].setCurrentlyPlaying(true);
     this->running = true;
@@ -290,8 +291,26 @@ void Capitalist::endCurrentTurn() {
 
 ////////////////////////////////////////////
 ClientManager *Capitalist::getWinner() {
+    if ( isFastGame() ){
+        if ( (getNumberOfPlayersAtStart() - getPlayersSize()) == 2 ){
+            return calculateFastGameWinner();
+        }
+    }
     if (this->players.size() > 1) return nullptr;
     return this->players[0].getClient();
+}
+
+ClientManager *Capitalist::calculateGameWinner() {
+    ClientManager* winner;
+    int current_winning_patrimoine = 0;
+    for (auto player : getPlayers()){
+        int patrimoine = player.getPatrimoine(isFastGame());
+        if ( patrimoine > current_winning_patrimoine ){
+            winner = player.getClient();
+            current_winning_patrimoine = patrimoine;
+        }
+    }
+    return winner;
 }
 
 void Capitalist::processJailPay(Player *player) {
@@ -426,7 +445,7 @@ void Capitalist::shufflePlayers() {
 
 
 bool Capitalist::checkBankrupt(Player *player) {
-    return player->getDebt() > player->getPatrimoine();
+    return player->getDebt() > player->getPatrimoine(isFastGame());
 }
 
 void Capitalist::processBankruptByPlayer(Player *player, Player *other) {
@@ -448,6 +467,14 @@ void Capitalist::setFastGame(bool is_fast) {
 
 bool Capitalist::isFastGame() {
     return fast;
+}
+
+void Capitalist::setNumberOfPlayers(int nbr) {
+    number_of_players_at_start = nbr;
+}
+
+int Capitalist::getNumberOfPlayersAtStart() {
+    return number_of_players_at_start;
 }
 
 void Capitalist::forceAcquisition(Player *player) {
