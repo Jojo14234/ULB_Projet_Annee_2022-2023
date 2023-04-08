@@ -31,10 +31,10 @@ class Board{
 
 	int text_size = 10;
 
-    sf::Vector2f v_cell_size{80,100};  // vertical cell's size 
-	sf::Vector2f h_cell_size{v_cell_size.y,h_cell_size.x};  // horizontal cell's size 
-    sf::Vector2f corner_cell_size{100,100} ;
-    sf::Vector2f start_corner{350,900};  //bottom left position
+    sf::Vector2f v_cell_size{90,70};  // vertical cell's size 
+	sf::Vector2f h_cell_size{v_cell_size.y,v_cell_size.x};  // horizontal cell's size 
+    sf::Vector2f corner_cell_size{90,90} ;
+    sf::Vector2f start_corner{350,800};  //bottom left position
 
     /*
 

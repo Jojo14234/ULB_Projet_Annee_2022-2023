@@ -35,5 +35,22 @@ public:
 		window.draw(text);
 	}
 
+	void setMiddleRect(ObjectInfo<> rect_info){
+        sf::FloatRect textBounds = text.getLocalBounds();
+        this->text.setOrigin(textBounds.left + textBounds.width / 2.0f, textBounds.top + textBounds.height / 2.0f);
+        this->text.setPosition( rect_info.getX() + rect_info.getWidth()/ 2.0f,  rect_info.getY() +  rect_info.getHeight()/ 2.0f);
+    }
+
+	void setThickness(float thickness){
+		this->text.setOutlineThickness(thickness);
+	}
+
+	void setBold(){
+		this->text.setStyle(sf::Text::Bold);}
+
+	void setString(std::string new_text){
+		this->text.setString(new_text);
+	}
+
 
 };

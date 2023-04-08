@@ -26,8 +26,10 @@ class ActionBox: public  Box{
         void setButton(std::vector<std::string> action, int text_size ){
             buttons.clear();
             for (int i = 0; i < int(action.size()); i++){
-                buttons.push_back(std::make_shared<TextButton>(ObjectInfo<>(200, 150,50, i *  info.getHeight()/action.size() + 20 ),
-                ObjectInfo<>(text_size,0,50+200/2,i * (info.getHeight()/action.size() + 20 )+ 50/2), action[i]) );
+                ObjectInfo<> rect_info(200, 150,50, i *  info.getHeight()/action.size() + 20 );
+                buttons.push_back(std::make_shared<TextButton>(rect_info,
+                ObjectInfo<>(0,text_size,0,0), "test"));
+                buttons[i]->setMiddleRect(rect_info);
             }}
 
         std::vector<std::shared_ptr<TextButton>> getButtons(){

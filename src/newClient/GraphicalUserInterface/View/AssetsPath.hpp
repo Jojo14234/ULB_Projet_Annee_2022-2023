@@ -37,6 +37,8 @@ const std::string FILE_NAME = "../assets/utils/cellfile.txt";
 const std::string CELL_NAME = "../assets/utils/cellname.txt";
 const std::string CELL_PATH = "../assets/images/Cell/";
 const std::string FLAG_PATH = "../assets/images/drapeau1.png";
+const std::string INFOBOX_PATH = "../assets/images/InfoBox/suitcase.png";
+const std::string MONEY_PATH = "../assets/images/InfoBox/money.png";
 
 // Fonts
 const std::string ARIAL_FONT_PATH = "../assets/fonts/arial.ttf";

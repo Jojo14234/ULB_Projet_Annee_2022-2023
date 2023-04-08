@@ -37,10 +37,10 @@ public :
 	void setOwner(int player){
 		std::string path ;
 		if (player == 0){
-			std::string path = FLAG_PATH;
+			path = FLAG_PATH;
 		}
 		else {
-			std::string path = FLAG_PATH;
+			path = FLAG_PATH;
 		}
 		Image* flag = new Image (info, path);
 		flag->setFlag();
@@ -60,7 +60,8 @@ public :
 	void setIdle(){
 	}
 
-	void addBuilding(int nb){	
+	void addBuilding(int nb){
+		delete image[1]; // delete le flag 	
 	}
 
 	void removeBuilding(int nb){
