@@ -15,10 +15,6 @@ class RankGUIView; // forward declaration
 
 class RankGUIController: public AbstractGUIController {
 
-	enum RANK_STATE { TOP, MY_RANK };
-	RANK_STATE state = TOP;
-
-
 	RankGUIView* view;
 
 public: 

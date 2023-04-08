@@ -6,15 +6,14 @@
 
 
 void RankGUIController::handle(sf::Event event) {
-    switch (event.type) {
-        case sf::Event::MouseButtonPressed: {
-            if ( this->view->top.contains(event.mouseButton.x, event.mouseButton.y)) {
-                this->state = TOP;
-                this->view->drawTopBox();
-            } else if (this->view->my_rank.contains(event.mouseButton.x, event.mouseButton.y)) {
-                this->state = MY_RANK;
-                this->view->drawMyRankBox();
-            }
-        }
+	if (event.type != sf::Event::MouseButtonPressed) return;
+	if (this->view->back_button.contains(event.mouseButton.x, event.mouseButton.y)) {
+		this->new_state = STATE::MENU;
+	} else if ( this->view->top.contains(event.mouseButton.x, event.mouseButton.y)) {
+        this->view->hideMyRank();
+		this->view->showTop();
+    } else if (this->view->my_rank.contains(event.mouseButton.x, event.mouseButton.y)) {
+        this->view->hideTop();
+		this->view->showMyRank();
     }
 }

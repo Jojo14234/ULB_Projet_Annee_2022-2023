@@ -48,15 +48,60 @@ class RankGUIView: public AbstractGUIView {
 	TextButton top {ObjectInfo<>(WINDOW_WIDTH/15, WINDOW_WIDTH/40, WINDOW_WIDTH/3.f - 5 , WINDOW_HEIGHT/4.f-10), ObjectInfo<>(WINDOW_WIDTH/50, WINDOW_WIDTH/50 , WINDOW_WIDTH/3.f , WINDOW_HEIGHT/4.f - 10), "TOP 5", BLACK, RANK_COLOR}; 
 	TextButton my_rank {ObjectInfo<>(WINDOW_WIDTH/12 + 5, WINDOW_WIDTH/40, WINDOW_WIDTH/2.f + 140 , WINDOW_HEIGHT/4.f-10), ObjectInfo<>(WINDOW_WIDTH/50, WINDOW_WIDTH/50 , WINDOW_WIDTH/2.f + 145 , WINDOW_HEIGHT/4.f - 10), "My Rank", BLACK, RANK_COLOR};
 
+
+	void hideTop() {
+		top_box.setHidden();
+		player1.setHidden();
+		player2.setHidden();
+		player3.setHidden();
+		player4.setHidden();
+		player5.setHidden();
+		score1.setHidden();
+		score2.setHidden();
+		score3.setHidden();
+		score4.setHidden();
+		score5.setHidden();
+	}
+
+	void showTop() {
+		top_box.setVisible();
+		player1.setVisible();
+		player2.setVisible();
+		player3.setVisible();
+		player4.setVisible();
+		player5.setVisible();
+		score1.setVisible();
+		score2.setVisible();
+		score3.setVisible();
+		score4.setVisible();
+		score5.setVisible();
+	}
+
+	void hideMyRank() {
+		my_rank_box.setHidden();
+		my_player.setHidden();
+		my_score.setHidden();
+		my_top.setHidden();
+	}
+
+	void showMyRank() {
+		my_rank_box.setVisible();
+		my_player.setVisible();
+		my_score.setVisible();
+		my_top.setVisible();
+	}
+
+
 public:
 
-	using AbstractGUIView::AbstractGUIView;
+	explicit RankGUIView(sf::RenderWindow* window) : AbstractGUIView(window) {
+		this->hideMyRank();
+	}
 	
 	~RankGUIView()=default;
 
-	void drawTopBox() {
+	void drawTop() {
 		top_box.draw(*window);
-
 		player1.draw(*window);
 		player2.draw(*window);
 		player3.draw(*window);
@@ -69,10 +114,8 @@ public:
 		score5.draw(*window);
 	}
 
-	void drawMyRankBox() {
-		
+	void drawMyRank() {
 		my_rank_box.draw(*window);
-
 		my_player.draw(*window);
 		my_score.draw(*window);
 		my_top.draw(*window);
@@ -82,13 +125,12 @@ public:
 		box_border.draw(*window);
 		box.draw(*window);
 		rank.draw(*window);
-
 		top.draw(*window);
 		my_rank.draw(*window);
-		
 		back_button.draw(*window);
 
-
+		drawTop();
+		drawMyRank();
 	}
 
 	friend class RankGUIController;
