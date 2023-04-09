@@ -100,7 +100,7 @@ void GameServer::playerExchangeInfos(ClientManager &client) {
     std::string str = "";
     for ( auto &player : *this->game.getPlayers() ) {
         if ( player.getClient() == &client ) { continue; }
-        str += player.getUsername() + "=" + player.getAllExchangeablePossession() + "|";
+        str += std::to_string(player.getIndex()) + "=" + player.getAllExchangeablePossession() + "|";
     }
     this->updateThisClientWithQuery(QUERY::INFOS_EXCHANGEABLE_PROP, str, client);
     str = "Choisir une propriété ( /trade [nom_prop_voulue] [argent] )\n";

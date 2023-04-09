@@ -88,6 +88,8 @@ void Board::setMortgageable(int cell) { board[cell]->enterMortgageMode(); }
 
 void Board::setUnmortgageable(int cell) { board[cell]->enterUnmortgageMode(); }
 
+void Board::setExchangeable(int cell) { board[cell]->enterExchangeMode(); }
+
 void Board::leaveSelection(int cell) { board[cell]->leaveSpecialMode(); }
 
 void Board::unmortgage(int cell) { board[cell]->unmortgage(); }

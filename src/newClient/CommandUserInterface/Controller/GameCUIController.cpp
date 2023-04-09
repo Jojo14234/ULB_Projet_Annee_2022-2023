@@ -95,6 +95,7 @@ void GameCUIController::receiveMsgLoop() { // todo il faudrait pas déplacer les
             case QUERY::INFOS_SELL_BUILD :              this->sellPropertyGU(response); break;
             case QUERY::INFOS_MORTGAGEABLE_PROP :       this->mortgagePropertyGU(response); break;
             case QUERY::INFOS_LIFT_MORTGAGEABLE_PROP :  this->unmortgagePropertyGU(response); break;
+            case QUERY::INFOS_EXCHANGEABLE_PROP :       this->exchangePropertyGU(response); break;            
             case QUERY::INFOS_LEAVE_SELECTION_MODE :    this->leaveSelectionMenuGU(response); break;
 
             case QUERY::INFOS_BUILD_SUCCESS :
@@ -383,6 +384,19 @@ void GameCUIController::sellPropertyGU(const std::string& response){
 }
 
 void GameCUIController::exchangePropertyGU(const std::string& response){
+    ExchangeInfo exchanges{response, player_nb};
+
+    if (this->model->isMyTurn()){
+        this->view->getConsole()->addText("/trade [nom_propiete_voulue] [argent]");
+        this->view->getConsole()->addText("/leave pour quitter le menu d'echange");
+        for (int i=0; i<player_nb; i++){
+            for (auto& property : exchanges.player_properties.at(i)){
+                int index = this->view->getBoard()->getCellIndex(property);
+                this->view->getBoard()->setExchangeable(index);
+            }
+        }
+    } else this->view->getConsole()->addText("Consultation des echanges ...");
+
 }
 
 void GameCUIController::mortgagePropertyGU(const std::string& response){
@@ -428,9 +442,7 @@ void GameCUIController::buildOrSellSucceedGU(const std::string& response){
 void GameCUIController::mortgageSucceedGU(const std::string& response){
     InGameParser game_parser(response);
     std::shared_ptr<BuildInfo> success_info = game_parser.parseBuildQuery();
-    this->view->getConsole()->addText("aaa");
     int index = this->view->getBoard()->getCellIndex(success_info->name);
-    this->view->getConsole()->addText("bbb");
     this->view->getBoard()->setMortgaged(index);
 }
 

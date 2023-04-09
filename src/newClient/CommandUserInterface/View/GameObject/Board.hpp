@@ -66,6 +66,7 @@ public:
 	void setMortgageable(int cell);
 	void setMortgaged(int cell);
 	void setUnmortgageable(int cell);
+	void setExchangeable(int cell);
 	void leaveSelection(int cell);
 	void unmortgage(int cell);
 

@@ -345,6 +345,23 @@ struct BuildOrSellList {
     }
 };
 
+struct ExchangeInfo {
+	std::vector<std::vector<std::string>> player_properties;
+
+	ExchangeInfo(const std::string &str, int nb_player) {
+		player_properties.resize(nb_player);
+		int player_index;
+		std::string tmp = "";
+
+		for (char c : str) {
+			if (c == '=') { player_index = atoi(tmp.c_str()); tmp.clear(); }
+			else if (c == '|') { tmp.clear(); }
+			else if (c == ':') { player_properties.at(player_index).push_back(tmp); tmp.clear(); }
+			else tmp += c;
+		}
+	}
+};
+
 class InGameParser {
 
 	std::string str;

@@ -60,7 +60,7 @@ enum class QUERY {
     INFOS_SELL_BUILD, // name:name:... [string]:[string]:... All the property name if build can be sell
     INFOS_MORTGAGEABLE_PROP, // name:name:... [string]:[string]:... All the property name 
     INFOS_LIFT_MORTGAGEABLE_PROP, // name:name:... [string]:[string]:... All the property name 
-    INFOS_EXCHANGEABLE_PROP, // username=property_exchangeable:property_exchangeable:|... All teh properties exchangeable by all the player
+    INFOS_EXCHANGEABLE_PROP, // index=property_exchangeable:property_exchangeable:|... All the properties exchangeable by all the player
 
 
     INFOS_BUILD_SUCCESS, // property_name:level:mortgaged [string]:[int]:[bool]
