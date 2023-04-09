@@ -6,14 +6,12 @@
 #include "View/FriendsGUIView.hpp"
 #include "View/RankGUIView.hpp"
 #include "View/GameGUIView.hpp"
-#include "View/CreateGameGUIView.hpp"
 #include "Controller/WelcomeGUIController.hpp"
 #include "Controller/ConnectionGUIController.hpp"
 #include "Controller/MenuGUIController.hpp"
 #include "Controller/FriendsGUIController.hpp"
 #include "Controller/RankGUIController.hpp"
 #include "Controller/GameGUIController.hpp"
-#include "Controller/CreateGameGUIController.hpp"
 #include "View/configs.hpp"
 
 
@@ -26,18 +24,16 @@ void MainGUIWindow::initAttributes() {
 	MenuGUIView* menu_view = new MenuGUIView(&this->window);
 	FriendsGUIView* friends_view = new FriendsGUIView(&this->window);
 	RankGUIView* rank_view = new RankGUIView(&this->window);
-	CreateGameGUIView* create_view = new CreateGameGUIView(&this->window);
 	//GameGUIView* game_view = new GameGUIView(&this->window);
-	this->view.setViews({welcome_view, connection_view, menu_view, friends_view, rank_view, create_view});// j'ai suppr game_view qui se trouve juste après rank_view
+	this->view.setViews({welcome_view, connection_view, menu_view, friends_view, rank_view});// j'ai suppr game_view qui se trouve juste après rank_view
 	// Controllers
 	WelcomeGUIController* welcome_controller = new WelcomeGUIController(&this->model, welcome_view);
 	ConnectionGUIController* connection_controller = new ConnectionGUIController(&this->model, connection_view);
 	MenuGUIController* menu_controller = new MenuGUIController(&this->model, menu_view);
 	FriendsGUIController* friends_controller = new FriendsGUIController(&this->model, friends_view);
 	RankGUIController* rank_controller = new RankGUIController(&this->model, rank_view);
-	CreateGameGUIController* create_controller = new CreateGameGUIController(&this->model, create_view);
 	//GameGUIController* game_controller = new GameGUIController(&this->model, game_view);
-	this->controller.setController({welcome_controller, connection_controller, menu_controller, friends_controller, rank_controller, create_controller}); // j'ai suppr game_controller qui se trouve juste après rank_controller
+	this->controller.setController({welcome_controller, connection_controller, menu_controller, friends_controller, rank_controller}); // j'ai suppr game_controller qui se trouve juste après rank_controller
 }
 
 void MainGUIWindow::draw() {

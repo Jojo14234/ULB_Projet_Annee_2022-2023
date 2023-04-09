@@ -18,14 +18,23 @@ void MenuGUIController::handle(sf::Event event) {
 			// TODO
 			// ok button
 		}
+	} else if (this->view->create_popup.isVisible()) {
+		if (this->view->create_popup.getButton(0)->contains(event.mouseButton.x, event.mouseButton.y)) {
+			// TODO
+			// back button
+			this->view->create_popup.setHidden();
+		} else if (this->view->create_popup.getButton(1)->contains(event.mouseButton.x, event.mouseButton.y)) {
+			// TODO
+			// ok button
+		}
 	} else {
 		if (this->view->quit_button.contains(event.mouseButton.x, event.mouseButton.y)) {
 			this->new_state = STATE::CONNECTION;
 			this->model->disconnectAccount();
-		} else if (this->view->join.contains(event.mouseButton.x, event.mouseButton.y)) {
+		/*} else if (this->view->join.isVisible() and this->view->join.contains(event.mouseButton.x, event.mouseButton.y)) {
 			// TODO
-		} else if (this->view->create.contains(event.mouseButton.x, event.mouseButton.y)) {
-			this->new_state = STATE::CREATE;
+		*/} else if (this->view->create.isVisible() and this->view->create.contains(event.mouseButton.x, event.mouseButton.y)) {
+			this->view->create_popup.setVisible();
 		} else if (this->view->rank.contains(event.mouseButton.x, event.mouseButton.y)) {
 			this->new_state = STATE::RANK;
 		} else if (this->view->friend_menu.contains(event.mouseButton.x, event.mouseButton.y)) {
