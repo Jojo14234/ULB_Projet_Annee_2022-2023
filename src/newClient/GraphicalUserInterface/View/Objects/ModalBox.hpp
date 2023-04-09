@@ -12,6 +12,7 @@
 #include "Text.hpp"
 #include "Image.hpp"
 #include "ImageButton.hpp"
+#include "InputBox.hpp"
 #include "../../configs.hpp"
 
 
@@ -22,7 +23,7 @@ protected:
 	std::vector<std::unique_ptr<Text>> texts;
 	std::vector<std::unique_ptr<Image>> images;
 	std::vector<std::unique_ptr<ImageButton>> buttons;
-
+	std::vector<std::unique_ptr<InputBox>> inputs;
 public:
 
 	explicit ModalBox(ObjectInfo<> info, sf::Color color=sf::Color::Black) : AbstractViewObject(info), Box(info, color) {}
@@ -36,21 +37,25 @@ public:
 		for (auto &image : images) image->draw(window);
 		for (auto &text : texts) text->draw(window);
 		for (auto &button : buttons) button->draw(window);
+		for (auto &input : inputs) input->draw(window);
 	}
 
 	// Setters
 	void addText(Text* text) { texts.emplace_back(text); }
 	void addImage(Image* image) { images.emplace_back(image); }
 	void addButton(ImageButton* button) { buttons.emplace_back(button); }
+	void addInput(InputBox* input) { inputs.emplace_back(input); }
 
 	void addTexts(std::initializer_list<Text*> texts) { for (Text* text : texts) this->addText(text); }
 	void addImages(std::initializer_list<Image*> images) { for (Image* image : images) this->addImage(image); }
 	void addButtons(std::initializer_list<ImageButton*> buttons) { for (ImageButton* button : buttons) this->addButton(button); }
+	void addInputs(std::initializer_list<InputBox*> inputs) { for (InputBox* input : inputs) this->addInput(input); }
 
 
 	// Getters
 	Text* getText(int index) { return texts[index].get(); }
 	Image* getImage(int index) { return images[index].get(); }
 	ImageButton* getButton(int index) { return buttons[index].get(); }
+	InputBox* getInput(int index) { return inputs[index].get(); }
 
 };
