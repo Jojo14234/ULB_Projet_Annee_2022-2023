@@ -171,6 +171,7 @@ public:
     bool hasSellableProperties();
     bool hasMortgageableProperties();
     bool hasUnmortgageableProperties();
+    bool canExchangeProperties();
 
     // NEW FUNCTION
     std::vector<Land*> getAllLand();

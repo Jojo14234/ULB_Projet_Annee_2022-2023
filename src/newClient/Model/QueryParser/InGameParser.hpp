@@ -362,6 +362,20 @@ struct ExchangeInfo {
 	}
 };
 
+struct ExchangeSucceedInfo {
+	std::string property;
+	int player;
+
+	ExchangeSucceedInfo(const std::string &str) {
+		int i = 0;
+		std::string tmp;
+		while (str[i] != ':' ) { tmp += str[i]; i++; }
+		property = tmp;
+		player = atoi(&str[i+1]+1);
+	}
+};
+
+
 class InGameParser {
 
 	std::string str;

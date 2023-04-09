@@ -102,6 +102,7 @@ void GameCUIController::receiveMsgLoop() { // todo il faudrait pas déplacer les
             case QUERY::INFOS_SELL_BUILD_SUCCESS :      this->buildOrSellSucceedGU(response); break;
             case QUERY::INFOS_MORTGAGE_SUCCESS :        this->mortgageSucceedGU(response); break;
             case QUERY::INFOS_LIFT_MORTGAGE_SUCCESS :   this->unmortgageSucceedGU(response); break;
+			case QUERY::INFOS_EXCHANGE_SUCCESS : 		this->exchangeSucceedGU(response); break;
 
             case QUERY::INFOS_ASK_FOR_PURCHASE :        this->askForPurchaseGU(response); break;
 
@@ -114,12 +115,14 @@ void GameCUIController::receiveMsgLoop() { // todo il faudrait pas déplacer les
             case QUERY::NO_SALABLE_PROP :               this->view->getConsole()->addText("Vous n\'avez pas de terrain pouvant etre vendu"); break;
             case QUERY::NO_MORTGAGEABLE_PROP :          this->view->getConsole()->addText("Vous n\'avez pas de terrain pouvant etre hypoteque"); break;
             case QUERY::NO_UNMORTGAGEABLE_PROP :        this->view->getConsole()->addText("Vous n\'avez pas de terrain pouvant etre deshypotheque"); break;
-            
+            case QUERY::NO_EXCHANGEABLE_PROP :			this->view->getConsole()->addText("Il n'y a pas de terrain disponible a l'echange"); break;
+
             case QUERY::CANNOT_BUILD :                  this->view->getConsole()->addText("Ce terrain ne peut pas acceuillir de nouveaux batiments"); break;
             case QUERY::CANNOT_SELL :                   this->view->getConsole()->addText("Ce terrain ne peut pas perdre des batiments"); break;
             case QUERY::CANNOT_MORTAGE :                this->view->getConsole()->addText("Ce terrain ne peut pas etre hypotheque"); break;
             case QUERY::CANNOT_UNMORTGAGE :             this->view->getConsole()->addText("Ce terrain ne peut pas etre deshypotheque"); break;
-            
+            case QUERY::CANNOT_EXCHANGE :				this->view->getConsole()->addText("Ce terrain ne peut pas etre echange"); break;
+
             case QUERY::INFOS_NOT_ENOUGH_MONEY :        this->view->getConsole()->addText("Vous ne possedez pas assez d'argent."); break;
             default :                                   this->view->getConsole()->addText(response); break;
         }
@@ -451,6 +454,13 @@ void GameCUIController::unmortgageSucceedGU(const std::string& response){
     std::shared_ptr<BuildInfo> success_info = game_parser.parseBuildQuery();
     int index = this->view->getBoard()->getCellIndex(success_info->name);
     this->view->getBoard()->unmortgage(index);
+}
+
+void GameCUIController::exchangeSucceedGU(const std::string & response){
+	ExchangeSucceedInfo succeed(response);
+	int index = this->view->getBoard()->getCellIndex(succeed.property);
+	this->view->getBoard()->leaveSelection(index);
+	this->view->getBoard()->setPurchased(index, succeed.player);
 }
 
 void GameCUIController::askForPurchaseGU(const std::string& response){

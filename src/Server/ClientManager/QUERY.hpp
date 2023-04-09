@@ -55,6 +55,8 @@ enum class QUERY {
     CANNOT_MORTAGE,
     NO_UNMORTGAGEABLE_PROP,
     CANNOT_UNMORTGAGE,
+    NO_EXCHANGEABLE_PROP,
+    CANNOT_EXCHANGE,
 
     INFOS_BUILD_PROP, // name:name:... [string]:[string]:... All the property name if they are buildable
     INFOS_SELL_BUILD, // name:name:... [string]:[string]:... All the property name if build can be sell
@@ -64,10 +66,10 @@ enum class QUERY {
 
 
     INFOS_BUILD_SUCCESS, // property_name:level:mortgaged [string]:[int]:[bool]
-    INFOS_SELL_BUILD_SUCCESS, // property_name (indicate the level down) // TODO add lvl
-    INFOS_MORTGAGE_SUCCESS, // property name of the mortgaged property
-    INFOS_LIFT_MORTGAGE_SUCCESS, // property name of the lift mortgaged property
-    INFOS_EXCHANGE_SUCCESS, // PropertyName:new_propriétaire nom // Tells that the exchange was successfully made
+    INFOS_SELL_BUILD_SUCCESS, // property_name:level:mortgaged [string]:[int]:[bool]
+    INFOS_MORTGAGE_SUCCESS, // property_name:level:mortgaged [string]:[int]:[bool]
+    INFOS_LIFT_MORTGAGE_SUCCESS, // property_name:level:mortgaged [string]:[int]:[bool]
+    INFOS_EXCHANGE_SUCCESS, // property_name:new_proprio_index  [string]:[int]
 
     INFOS_AUCTION_BID,
 

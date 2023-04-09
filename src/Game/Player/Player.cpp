@@ -365,6 +365,13 @@ bool Player::hasUnmortgageableProperties(){
     for ( auto property : this->getAllProperties() ) { if ( property->isMortgaged() ) return true;}
     return false;
 }
+bool Player::canExchangeProperties(){
+    for ( auto& player : * (this->getClient()->getGameServer()->getGame()->getPlayers())){
+        if (player.getIndex() == this->getIndex()) continue;
+        if (player.getAllProperties().size() > 0) return true;
+    }
+    return false;
+}
 
 
 // NEW FUNCTION

@@ -510,6 +510,10 @@ void GameServer::processLiftMortgage(ClientManager &client, Player *player) {
 void GameServer::processExchange(ClientManager &client, Player *player) {
     // Récupérer toutes les cases échangeable d'une partie
     // Une case échangeable = une case qui n'a pas de bâtiment
+    if (! player->canExchangeProperties()) {
+        this->updateThisClientWithQuery(QUERY::NO_EXCHANGEABLE_PROP, "", client);
+        return;
+    }
     this->playerExchangeInfos(client);
 
     GAME_QUERY_TYPE query;
@@ -521,24 +525,24 @@ void GameServer::processExchange(ClientManager &client, Player *player) {
     while ( query != GAME_QUERY_TYPE::LEAVE_SELECTION ) {
         // QUERY IS NOT SELECT -> SHOW MESSAGE AND ASK FOR ANOTHER INPUT–
         if ( query != GAME_QUERY_TYPE::TRADE ) {
-            this->playerExchangeInfos(client);
+            this->updateThisClientWithQuery(QUERY::BAD_COMMAND, "", client);
             client.receive(query, packet);
             continue;
         }
         // QUERY IS SELECT
-        packet >> property_name >> money_s ;
-        int money = std::stoi(money_s);
+        packet >> property_name >> money_s;
+        int money = std::atoi(money_s.c_str());
 
         // BUILDING PROCESS WORK
         if ( this->game.processSendExchangeRequest(player, property_name, money) ) {
-            this->updateAllClientsWithQuery(QUERY::INFOS_EXCHANGE_SUCCESS, property_name + ":" + player->getUsername());
+            this->updateAllClientsWithQuery(QUERY::INFOS_EXCHANGE_SUCCESS, property_name + ":" + std::to_string(player->getIndex()));
         }
 
         // SELL PROCESS DIDN'T WORK
-        this->playerExchangeInfos(client);
+        else this->updateThisClientWithQuery(QUERY::CANNOT_EXCHANGE, "", client);
         client.receive(query, packet);
     }
-    this->updateThisClientWithQuery(QUERY::MESSAGE, "Vous quittez le mode d'échange", client);
+    this->updateThisClientWithQuery(QUERY::INFOS_LEAVE_SELECTION_MODE, "Vous quittez le mode de sélection", client);
 }
 
 void GameServer::processAskExchange(ClientManager &client, Player *player) {

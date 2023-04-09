@@ -421,12 +421,14 @@ bool Capitalist::processLiftMortgage(Player *player, std::string &name) {
 
 bool Capitalist::processSendExchangeRequest(Player *player, std::string &name, int money) {
     LandCell* land = getLandCell(name);
+    if (!land ) { return false; }
     if ( player->getBankAccount()->getMoney() < money ) { return false; }
     Property* prop = dynamic_cast<Property*>(land->getLand());
     if (prop && prop->getLevel() != PROPERTY_LEVEL::EMPTY) { return false; }
 
     Player* trader = land->getLand()->getOwner();
     trader->setStatus(PLAYER_STATUS::IN_EXCHANGE);
+    // while true ?
     trader->getClient()->sendQueryMsg(land->getLand()->getName() + ":" + std::to_string(money), QUERY::ASK_EXCHANGE);
 
     GAME_QUERY_TYPE query;
