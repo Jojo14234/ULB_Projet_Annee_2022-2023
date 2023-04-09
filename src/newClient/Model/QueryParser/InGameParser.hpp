@@ -25,7 +25,7 @@ struct BuildSuccessInfo2 {
         }
     }
 }; // todo new
-struct BuildSuccessInfo {
+struct BuildInfo {
 	std::string name;
 	int level;
 	bool mortgage;
@@ -57,7 +57,7 @@ struct GameInfo {
 	int position;
 	int money;
 	int jail_card_nb;
-	std::vector<BuildSuccessInfo> properties;
+	std::vector<BuildInfo> properties;
 };
 
 struct GameInfoList{
@@ -360,7 +360,7 @@ public:
 	std::shared_ptr<std::vector<GameInfo>> parseInfosGameQuery(int player_nb) {
 		std::shared_ptr<std::vector<GameInfo>> res = std::make_shared<std::vector<GameInfo>>();
 		std::string tmp;
-		BuildSuccessInfo property_info;
+		BuildInfo property_info;
 		res->resize(player_nb);
 		int colon_nb = 0;
 		int semicolon_nb = 0;
@@ -552,7 +552,7 @@ public:
         std::shared_ptr<BuildOrSellList> res = std::make_shared<BuildOrSellList>(this->str);
         return res;
     } // todo new
-	std::shared_ptr<std::vector<std::string>> parseBuildOrSellQuery() {
+	std::shared_ptr<std::vector<std::string>> parseSelectPropertyQuery() {
 		std::shared_ptr<std::vector<std::string>> res = std::make_shared<std::vector<std::string>>();
 		std::string tmp;
 		for (char c : str){
@@ -604,8 +604,8 @@ public:
         std::shared_ptr<BuildSuccessInfo2> res2 = std::make_shared<BuildSuccessInfo2>(this->str);
         return res2;
     } // todo new
-	std::shared_ptr<BuildSuccessInfo> parseBuildSuccessQuery() {
-		std::shared_ptr<BuildSuccessInfo> res = std::make_shared<BuildSuccessInfo>();
+	std::shared_ptr<BuildInfo> parseBuildQuery() {
+		std::shared_ptr<BuildInfo> res = std::make_shared<BuildInfo>();
 		int colon_nb = 0;
 		int i = 0;
 		std::string tmp;

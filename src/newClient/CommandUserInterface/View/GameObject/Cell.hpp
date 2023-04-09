@@ -50,7 +50,7 @@ public :
 		texts.at(1) = "MORTGAGE";
 	}
 
-	void enterLiftMortgageMode(){
+	void enterUnmortgageMode(){
 		save = texts.at(1);
 		texts.at(1) = "UNMRTGAG"; //on ne peut pas avoir un string de taille >9
 	}
@@ -70,6 +70,8 @@ public :
 	}
 
 	void setBuilding(int nb){
+		if (nb == 0) { setOwner(owner); return; }
+
 		texts.at(2) = std::to_string(owner) + ": ";
 		if (nb >= 5){
 			texts.at(2) = std::to_string(owner) + ": $";
@@ -80,6 +82,10 @@ public :
 
 	void setMortgaged(){
 		texts.at(2) = "MRTGAGED"; //on ne peut pas avoir un string de taille >9
+	}
+
+	void unmortgage(){
+		this->setOwner(owner);
 	}
 
 };

@@ -90,10 +90,18 @@ void GameCUIController::receiveMsgLoop() { // todo il faudrait pas déplacer les
             case QUERY::INFOS_PLAYER_MOVE_ON_CARD_CELL :this->moveOnCardCellGU(response); break;
             case QUERY::INFOS_CARD_DESCRIPTION :        this->drawCardGU(response); break;
             case QUERY::USELESS_MESSAGE :               break;
+
             case QUERY::INFOS_BUILD_PROP :              this->buildPropertyGU(response); break;
             case QUERY::INFOS_SELL_BUILD :              this->sellPropertyGU(response); break;
+            case QUERY::INFOS_MORTGAGEABLE_PROP :       this->mortgagePropertyGU(response); break;
+            case QUERY::INFOS_LIFT_MORTGAGEABLE_PROP :  this->unmortgagePropertyGU(response); break;
             case QUERY::INFOS_LEAVE_SELECTION_MODE :    this->leaveSelectionMenuGU(response); break;
-            case QUERY::INFOS_BUILD_SUCCESS :           this->buildSucceedGU(response); break;
+
+            case QUERY::INFOS_BUILD_SUCCESS :
+            case QUERY::INFOS_SELL_BUILD_SUCCESS :      this->buildOrSellSucceedGU(response); break;
+            case QUERY::INFOS_MORTGAGE_SUCCESS :        this->mortgageSucceedGU(response); break;
+            case QUERY::INFOS_LIFT_MORTGAGE_SUCCESS :   this->unmortgageSucceedGU(response); break;
+
             case QUERY::INFOS_ASK_FOR_PURCHASE :        this->askForPurchaseGU(response); break;
 
             case QUERY::INFOS_PLAYER_DIDNT_BUY :        if (response != this->model->getUsername()) { this->view->getConsole()->addText("Le joueur " + response + " n'a pas achete la propriete"); } break;
@@ -102,7 +110,15 @@ void GameCUIController::receiveMsgLoop() { // todo il faudrait pas déplacer les
 
             case QUERY::CHOICE_MONEY_CARD :             this->view->getConsole()->addText("/pay ou /card"); break;
             case QUERY::NO_BUILDABLE_PROP :             this->view->getConsole()->addText("Vous n\'avez pas de terrain pouvant avoir de nouveaux batiments"); break;
+            case QUERY::NO_SALABLE_PROP :               this->view->getConsole()->addText("Vous n\'avez pas de terrain pouvant etre vendu"); break;
+            case QUERY::NO_MORTGAGEABLE_PROP :          this->view->getConsole()->addText("Vous n\'avez pas de terrain pouvant etre hypoteque"); break;
+            case QUERY::NO_UNMORTGAGEABLE_PROP :        this->view->getConsole()->addText("Vous n\'avez pas de terrain pouvant etre deshypotheque"); break;
+            
             case QUERY::CANNOT_BUILD :                  this->view->getConsole()->addText("Ce terrain ne peut pas acceuillir de nouveaux batiments"); break;
+            case QUERY::CANNOT_SELL :                   this->view->getConsole()->addText("Ce terrain ne peut pas perdre des batiments"); break;
+            case QUERY::CANNOT_MORTAGE :                this->view->getConsole()->addText("Ce terrain ne peut pas etre hypotheque"); break;
+            case QUERY::CANNOT_UNMORTGAGE :             this->view->getConsole()->addText("Ce terrain ne peut pas etre deshypotheque"); break;
+            
             case QUERY::INFOS_NOT_ENOUGH_MONEY :        this->view->getConsole()->addText("Vous ne possedez pas assez d'argent."); break;
             default :                                   this->view->getConsole()->addText(response); break;
         }
@@ -342,7 +358,7 @@ void GameCUIController::drawCardGU(const std::string& response){
 
 void GameCUIController::buildPropertyGU(const std::string& response){
     InGameParser game_parser(response);
-    selection_mode = *game_parser.parseBuildOrSellQuery().get();
+    selection_mode = *game_parser.parseSelectPropertyQuery().get();
     if (this->model->isMyTurn()){
         this->view->getConsole()->addText("/select [nom] pour construire un batiment");
         this->view->getConsole()->addText("/leave pour quitter le menu de construction");
@@ -355,7 +371,7 @@ void GameCUIController::buildPropertyGU(const std::string& response){
 
 void GameCUIController::sellPropertyGU(const std::string& response){
     InGameParser game_parser(response);
-    selection_mode = *game_parser.parseBuildOrSellQuery().get();
+    selection_mode = *game_parser.parseSelectPropertyQuery().get();
     if (this->model->isMyTurn()){
         this->view->getConsole()->addText("/select [nom] pour vendre un batiment");
         this->view->getConsole()->addText("/leave pour quitter le menu de vente");
@@ -371,7 +387,7 @@ void GameCUIController::exchangePropertyGU(const std::string& response){
 
 void GameCUIController::mortgagePropertyGU(const std::string& response){
     InGameParser game_parser(response);
-    selection_mode = *game_parser.parseBuildOrSellQuery().get();
+    selection_mode = *game_parser.parseSelectPropertyQuery().get();
     if (this->model->isMyTurn()){
         this->view->getConsole()->addText("/select [nom] pour hypotequer un batiment");
         this->view->getConsole()->addText("/leave pour quitter le menu de selection");
@@ -382,6 +398,19 @@ void GameCUIController::mortgagePropertyGU(const std::string& response){
     } else this->view->getConsole()->addText("Consultation des proprietes a hypotequer ...");
 }
 
+void GameCUIController::unmortgagePropertyGU(const std::string& response){
+    InGameParser game_parser(response);
+    selection_mode = *game_parser.parseSelectPropertyQuery().get();
+    if (this->model->isMyTurn()){
+        this->view->getConsole()->addText("/select [nom] pour deshypotequer un batiment");
+        this->view->getConsole()->addText("/leave pour quitter le menu de selection");
+        for (auto& property : selection_mode){
+            int index = this->view->getBoard()->getCellIndex(property);
+            this->view->getBoard()->setUnmortgageable(index);
+        }
+    } else this->view->getConsole()->addText("Consultation des proprietes a deshypotequer ...");
+}
+
 void GameCUIController::leaveSelectionMenuGU(const std::string& response){
     for (auto& property : selection_mode) {
         int index = this->view->getBoard()->getCellIndex(property);
@@ -389,11 +418,27 @@ void GameCUIController::leaveSelectionMenuGU(const std::string& response){
     }
 }
 
-void GameCUIController::buildSucceedGU(const std::string& response){
+void GameCUIController::buildOrSellSucceedGU(const std::string& response){
     InGameParser game_parser(response);
-    std::shared_ptr<BuildSuccessInfo> success_info = game_parser.parseBuildSuccessQuery();
+    std::shared_ptr<BuildInfo> success_info = game_parser.parseBuildQuery();
     int index = this->view->getBoard()->getCellIndex(success_info->name);
     this->view->getBoard()->setHouse(index, success_info->level);
+}
+
+void GameCUIController::mortgageSucceedGU(const std::string& response){
+    InGameParser game_parser(response);
+    std::shared_ptr<BuildInfo> success_info = game_parser.parseBuildQuery();
+    this->view->getConsole()->addText("aaa");
+    int index = this->view->getBoard()->getCellIndex(success_info->name);
+    this->view->getConsole()->addText("bbb");
+    this->view->getBoard()->setMortgaged(index);
+}
+
+void GameCUIController::unmortgageSucceedGU(const std::string& response){
+    InGameParser game_parser(response);
+    std::shared_ptr<BuildInfo> success_info = game_parser.parseBuildQuery();
+    int index = this->view->getBoard()->getCellIndex(success_info->name);
+    this->view->getBoard()->unmortgage(index);
 }
 
 void GameCUIController::askForPurchaseGU(const std::string& response){

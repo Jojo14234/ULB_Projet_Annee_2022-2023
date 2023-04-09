@@ -406,8 +406,9 @@ bool Capitalist::processMortgage(Player *player, std::string &name) {
     LandCell* land = getLandCell(name);
     if (!land or land->getLand()->isMortgaged() ) { return false; }
     Property* prop = dynamic_cast<Property*>(land->getLand());
-    if (!prop || prop->getLevel() == PROPERTY_LEVEL::EMPTY ) { land->getLand()->mortgage(player); return true; }
-    return false;
+    if (prop && ! prop->isMortgageable(player)) return false;
+    land->getLand()->mortgage(player); 
+    return true;
 }
 
 bool Capitalist::processLiftMortgage(Player *player, std::string &name) {

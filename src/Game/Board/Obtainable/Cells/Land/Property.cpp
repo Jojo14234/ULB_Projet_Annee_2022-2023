@@ -66,7 +66,7 @@ bool Property::isMortgageable(Player* player) {
     if ( this->owner != player ) return false; 
     if ( this->isMortgaged() ) return false; 
     if ( this->getLevel() != PROPERTY_LEVEL::EMPTY ) return false; 
-    if ( this->AllSameColorPropertiesHaveNoBuilding(player)) return false;
+    if ( ! this->AllSameColorPropertiesHaveNoBuilding(player)) return false;
     return true;
 }
 /*

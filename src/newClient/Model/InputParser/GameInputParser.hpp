@@ -28,7 +28,7 @@ class GameInputParser : public InputParser {
         else if ( query == "/build" )       { this->query_type = GAME_QUERY_TYPE::BUILD; }          // passer en mode construction
         else if ( query == "/sell" )        { this->query_type = GAME_QUERY_TYPE::SELL_BUILDINGS; } // passer en mode vente
         else if ( query == "/mortgage" )    { this->query_type = GAME_QUERY_TYPE::MORTGAGE; }       // Passe en mode hypothèque
-        else if ( query == "/liftMortgage" ){ this->query_type = GAME_QUERY_TYPE::LIFT_MORTGAGE; }  // Passer en mode lift hypothèque
+        else if ( query == "/liftMortgage" || query == "/liftmortgage" || query == "/unmortgage" ){ this->query_type = GAME_QUERY_TYPE::LIFT_MORTGAGE; }  // Passer en mode lift hypothèque
         else if ( query == "/exchange" )    { this->query_type = GAME_QUERY_TYPE::EXCHANGE;}        // Commence un échange
         else if ( query == "/yes" )         { this->query_type = GAME_QUERY_TYPE::YES; }            // C'est un oui
         else if ( query == "/no" )          { this->query_type = GAME_QUERY_TYPE::NO; }             // C'est un non
