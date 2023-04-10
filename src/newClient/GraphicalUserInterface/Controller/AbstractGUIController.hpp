@@ -19,6 +19,8 @@ public:
 
 	virtual ~AbstractGUIController()=default;
 
+	virtual void move() override {}
+
 	virtual void handle(sf::Event event) override = 0;
 
 };
