@@ -8,7 +8,6 @@
 #include <iostream>
 #include <unistd.h>
 #include <signal.h>
-#include "../ClientManager/ClientManager.hpp"
 
 //TODO AJOUTER SOURCE
 
@@ -49,15 +48,18 @@ private:
 
 #include <thread>
 #include <random>
+#include "../ClientManager/ClientManager.hpp"
+
 
 
 class Timer2 {
     int seed = 0;
     int duration;
     ClientManager* client;
+    std::string stopMessage;
 
 public:
-    Timer2(int duration, ClientManager* client): duration{duration} {};
+    Timer2(int duration, ClientManager* client, std::string stopMessage): duration{duration} {};
 
     void start() {
         // 1 il faut créer un autre thread
@@ -75,7 +77,7 @@ public:
         sleep(this->duration);
 
         // 3 a la fin du thread, on compare si les seed sont toujours identique, auquel cas
-        if (this->seed == random_seed) {this->client->sendQueryMsg("STOP", QUERY::STOP_WAIT);}
+        if (this->seed == random_seed) {this->client->sendQueryMsg(this->stopMessage, QUERY::STOP_WAIT);}
     }
 
     void resetSeed() { this->seed = 0; }
