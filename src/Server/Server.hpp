@@ -43,6 +43,7 @@ class Server {
 	// For the game
 	void clientProcessJoinGame(ClientManager &client);
 	void clientProcessCreateGame(ClientManager &client);
+    void clientProcessCreateFastGame(ClientManager &client);
 	// For ranking
 	void clientProcessRankingTop(ClientManager &client);
 	void clientProcessRankingPos(ClientManager &client);

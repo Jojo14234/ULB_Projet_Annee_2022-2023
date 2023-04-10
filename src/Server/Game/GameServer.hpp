@@ -47,6 +47,8 @@ public:
 
     void clientTurn(ClientManager &client, Player* me);
 
+    void checkAndManageBankruptcy(ClientManager& client, Player* me);
+
     void processRollDice(ClientManager&, Player* player);
 
     void processBuild(ClientManager &client, Player* player);

@@ -2,8 +2,9 @@
 #include "GameServer.hpp"
 
 
-int GameServerList::createGame(ClientManager* client) {
+int GameServerList::createGame(ClientManager* client, bool fast) {
 	std::shared_ptr<GameServer> gs = this->emplace_back(new GameServer());
+    gs->getGame()->setFastGame(fast);
     gs->connectClientToThisGame(*client);
 	return gs->getCode();
 }

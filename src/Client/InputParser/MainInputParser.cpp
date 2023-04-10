@@ -8,6 +8,7 @@ void MainInputParser::parse() {
     if      (query == "/login")         { this->query_type = QUERY_TYPE::LOGIN; }
     else if (query == "/register")      { this->query_type = QUERY_TYPE::REGISTER; }
     else if (query == "/create")        { this->query_type = QUERY_TYPE::CREATE_GAME; }
+    else if (query == "/createfast")    { this->query_type = QUERY_TYPE::CREATE_FAST_GAME; }
     else if (query == "/disconnect")    { this->query_type = QUERY_TYPE::DISCONNECT; }
     else if (query == "/d")             { this->query_type = QUERY_TYPE::DISCONNECT; }
     else if (query == "/join")          { this->joinInput(); }

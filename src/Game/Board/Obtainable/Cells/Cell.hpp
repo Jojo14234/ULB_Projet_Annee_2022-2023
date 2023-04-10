@@ -15,7 +15,7 @@ class Cell: public Obtainable {
 
 public:
 
-	Cell(int pos, std::string name = "Undefined"): position{pos}, name{name} {}
+    Cell(int pos, std::string name = "Undefined"): position{pos}, name{name} {}
     
 	virtual ~Cell()=default;
 
@@ -25,6 +25,7 @@ public:
 
     std::string getName() const { return name; }
 
+    bool isLandCell() { return false; }
 };
 
 #endif
