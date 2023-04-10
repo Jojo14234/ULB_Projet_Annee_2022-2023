@@ -123,7 +123,7 @@ public:
     bool passedByStart(Cell* cell, bool passed_by_start);
     void goToJail(Cell *cell);
 
-    Cell* processMove(int n, Board &board);
+    Cell* processMove(int step, Board &board);
     void processMove(Cell* new_cell, bool gainMoneyIfPassByStart);
 
 
@@ -165,6 +165,13 @@ public:
     std::string getAllSellableBuildProperties();
     std::string getAllExchangeablePossession();
     std::string rollInfos(Dice &dice);
+
+    //BOOL
+    bool hasBuildableProperties();
+    bool hasSellableProperties();
+    bool hasMortgageableProperties();
+    bool hasUnmortgageableProperties();
+    bool canExchangeProperties();
 
     // NEW FUNCTION
     std::vector<Land*> getAllLand();

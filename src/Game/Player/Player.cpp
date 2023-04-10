@@ -4,6 +4,7 @@
 
 #include "Player.hpp"
 #include "BankAccount.hpp"
+#include "../../Server/Game/GameServer.hpp"
 //#include "../../Server/ClientManager/ClientManager.hpp"
 
 /*
@@ -108,7 +109,11 @@ void Player::send(std::string &&s) const { if ( client ) client->send(s); }
 // ABOUT bankAccount
 bool Player::pay(int amount, bool forced) {
     // Assez d'argent -> on paye et tout va bien
-    if ( bank_account.canPay(amount) ) { bank_account.pay(amount); return true; }
+    if ( bank_account.canPay(amount) ) { 
+        bank_account.pay(amount);
+        this->client->getGameServer()->updateAllClientsWithQuery(QUERY::INFOS_PLAYER_LOSE_MONEY, std::to_string(this->getIndex()) + ":" + std::to_string(amount) + ":" + std::to_string(this->getMoney()));
+        return true;
+    }
     // Pas assez d'argent, mais pas forcer -> on ne paye pas et on renvoie qu'on a pas payer.
     if ( !forced ) {this->getClient()->sendQueryMsg("", QUERY::INFOS_NOT_ENOUGH_MONEY); return false; }
     // Pas assez d'argent mais forcer de payer -> on passe en status de faillite suspecter mais on ne paye pas non plus.
@@ -119,6 +124,7 @@ bool Player::pay(int amount, bool forced) {
 void Player::receive(int amount, std::string source) {
     source += "menfou"; //TODO UTILISR MOI CE PARAMETRE
     bank_account.gain(amount);
+    this->client->getGameServer()->updateAllClientsWithQuery(QUERY::INFOS_PLAYER_WON_MONEY, std::to_string(this->getIndex()) + ":" + std::to_string(amount) + ":" + std::to_string(this->getMoney()));
     //getClient()->send("Vous avez reçu " + std::to_string(amount) + "e de " + source);
 }
     
@@ -129,6 +135,7 @@ void Player::move(Cell *cell, bool pass_by_start) {
         receive(200, "Banque");
     }
     current_cell = cell;
+    this->client->getGameServer()->updateAllClientsWithQuery(QUERY::INFOS_PLAYER_MOVE, this->getUsername() + ":" + this->current_cell->getName() + ":" + std::to_string(this->getMoney()));
 }
 bool Player::passedByStart(Cell* cell, bool pass_by_start) {
     if (cell->getPosition() - current_cell->getPosition() <= 0 and pass_by_start) {
@@ -140,17 +147,18 @@ void Player::goToJail(Cell *cell) {
     move(cell, false);
     this->status = JAILED;
     this->rolls_in_prison = 0;
+    this->has_rolled = true;
 }
 // BOTH processMove are Use
 void Player::processMove(Cell* new_cell, bool gainMoneyIfPassByStart) {
     if ( gainMoneyIfPassByStart && this->current_cell->getPosition() > new_cell->getPosition() ) {
-        this->receive(STARTING_MONEY, "la banque");
+        this->receive(MONEY_START_CELL, "la banque");
     }
     this->current_cell = new_cell;
 }
-Cell* Player::processMove(int n, Board &board) {
+Cell* Player::processMove(int step, Board &board) {
     // Calcul of the new Cell idx
-    int new_cell_idx = this->current_cell->getPosition() + n;
+    int new_cell_idx = this->current_cell->getPosition() + step;
     // If the new idx is greater than the board size then we are on the start_cell and we receive money
     if (new_cell_idx >= BOARD_SIZE) { this->receive(MONEY_START_CELL, "la banque"); }
     // set the new current_cell
@@ -304,10 +312,6 @@ std::string Player::getAllPossessionLiftMortgageable() {
     for ( auto company : companies ) { if ( company->isMortgaged() ) { str += company->getName() + ":"; } }
     for ( auto station : stations ) { if ( station->isMortgaged() ) { str += station->getName() + ":"; } }
     return str;
-
-
-
-
 }
 std::string Player::getAllBuildableProperties() {
     std::string str = "";
@@ -341,6 +345,33 @@ std::string Player::rollInfos(Dice &dice) {
     std::string d = std::to_string(dice.isDouble());
     std::string dc = std::to_string(dice.getDoubleCounter());
     return r1 + ":" + r2 + ":" + r + ":" + d + ":" + dc;
+}
+
+
+//BOOL
+
+bool Player::hasBuildableProperties(){
+    for ( auto property : this->getAllProperties() ) { if ( property->isBuildable(this) ) return true;}
+    return false;
+}
+bool Player::hasSellableProperties(){
+    for ( auto property : this->getAllProperties() ) { if ( property->canSellBuilding(this) ) return true;}
+    return false;
+}
+bool Player::hasMortgageableProperties(){
+    for ( auto property : this->getAllProperties() ) { if ( property->isMortgageable(this) ) return true;}
+    return false;
+}
+bool Player::hasUnmortgageableProperties(){
+    for ( auto property : this->getAllProperties() ) { if ( property->isMortgaged() ) return true;}
+    return false;
+}
+bool Player::canExchangeProperties(){
+    for ( auto& player : * (this->getClient()->getGameServer()->getGame()->getPlayers())){
+        if (player.getIndex() == this->getIndex()) continue;
+        if (player.getAllProperties().size() > 0) return true;
+    }
+    return false;
 }
 
 

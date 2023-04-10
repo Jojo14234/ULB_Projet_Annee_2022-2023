@@ -11,6 +11,7 @@
 
 enum class AuctionStatus {STOP, START, OTHER};
 enum class ExchangeStatus{STOP, START, OTHER};
+enum class ExchangeResult{ACCEPTED, REFUSED, NON_CHOICE};
 class ClientManager;
 
 
@@ -38,6 +39,7 @@ public:
     // All the function about game Infos
     std::string getStartInfos();
     std::string getGameInfos();
+    std::string getGameInfos2();
     std::string getBetterGameInfos();
 
     // All the function about the player
@@ -84,7 +86,7 @@ public:
     bool processSellBuild(Player *player, std::string &name);
     bool processMortgage(Player *player, std::string &name);
     bool processLiftMortgage(Player *player, std::string &name);
-    bool processSendExchangeRequest(Player *player, std::string &name, int money);
+    ExchangeResult processSendExchangeRequest(Player *player, std::string &name, int money);
     std::vector<Player*> processAskAuction(Player *player, std::string &name);
     bool checkBankrupt(Player *player);
     void processBankruptByPlayer(Player *player, Player* other);

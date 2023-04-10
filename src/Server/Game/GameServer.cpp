@@ -49,21 +49,10 @@ void GameServer::sendBetterGameData() {
  * Send a Message with the username and the game code to everyone
  */
 void GameServer::client_has_join_the_game(ClientManager &client) {
-    std::string name = client.getUsername();
-    std::string gc = std::to_string(this->getCode());
-    this->updateAllClientsWithQuery(QUERY::PLAYER_JOIN_GAME, name + ":" + gc);
-}
-
-/*
- * Send a message with the new player and the size of the clients connected to this game
- */
-void GameServer::clientsSizeData(ClientManager &client) {
-    client.getAccount(); // TODO UTILISER MOI CE PTIN DE PARAMETRE 
-    std::string clientsSize = std::to_string(this->clients.size());
-    std::string str = clientsSize + "|";
-    for (auto& e : this->clients){
-        str += e->getUsername();
-        str += ";";
+    std::string str = client.getUsername() + ":" + std::to_string(this->getCode()) + ":" + std::to_string(this->clients.size()) + ":";
+    for (size_t i = 0; i < this->clients.size(); i++){
+        str += this->clients[i]->getUsername();
+        if (i != this->clients.size()-1) str += ":"; 
     }
     this->updateAllClientsWithQuery(QUERY::PLAYER_JOIN_GAME, str);
 }
@@ -89,41 +78,29 @@ void GameServer::playerInJailInfos(ClientManager &client) {
  */
 void GameServer::playerBuildInfos(ClientManager &client) {
     Player* me = findMe(client);
-    this->updateThisClientWithQuery(QUERY::INFOS_BUILD_PROP, me->getAllBuildableProperties(), client);
-    std::string str = "Choisir une propriété ( /select [nom] )\n";
-    str +="Quittez le menu de construction ( /leave )";
-    this->updateThisClientWithQuery(QUERY::MESSAGE, str, client);
+    this->updateAllClientsWithQuery(QUERY::INFOS_BUILD_PROP, me->getAllBuildableProperties());
 }
 
 void GameServer::playerSellBuildInfos(ClientManager &client) {
     Player* me = findMe(client);
     this->updateThisClientWithQuery(QUERY::INFOS_SELL_BUILD, me->getAllSellableBuildProperties(), client);
-    std::string str = "Choisir une propriété ( /select [nom] )\n";
-    str +="Quittez le menu de construction ( /leave )";
-    this->updateThisClientWithQuery(QUERY::MESSAGE, str, client);
 }
 
 void GameServer::playerMortgageInfos(ClientManager &client) {
     Player* me = findMe(client);
     this->updateThisClientWithQuery(QUERY::INFOS_MORTGAGEABLE_PROP, me->getAllPossessionMortgageable(), client);
-    std::string str = "Choisir une propriété ( /select [nom] )\n";
-    str +="Quittez le menu de construction ( /leave )";
-    this->updateThisClientWithQuery(QUERY::MESSAGE, str, client);
 }
 
 void GameServer::playerLiftMortgageInfos(ClientManager &client) {
     Player* me = findMe(client);
-    this->updateThisClientWithQuery(QUERY::INFOS_LIFT_MORTGAGEABLE_PROP, me->getAllPossessionLiftMortgageable(), client);
-    std::string str = "Choisir une propriété ( /select [nom] )\n";
-    str += "Quittez le menu de construction ( /leave )";
-    this->updateThisClientWithQuery(QUERY::MESSAGE, str, client);
+    this->updateThisClientWithQuery(QUERY::INFOS_LIFT_MORTGAGEABLE_PROP, me->getAllPossessionLiftMortgageable(), client);   
 }
 
 void GameServer::playerExchangeInfos(ClientManager &client) {
     std::string str = "";
     for ( auto &player : *this->game.getPlayers() ) {
         if ( player.getClient() == &client ) { continue; }
-        str += player.getUsername() + "=" + player.getAllExchangeablePossession() + "|";
+        str += std::to_string(player.getIndex()) + "=" + player.getAllExchangeablePossession() + "|";
     }
     this->updateThisClientWithQuery(QUERY::INFOS_EXCHANGEABLE_PROP, str, client);
     str = "Choisir une propriété ( /trade [nom_prop_voulue] [argent] )\n";
@@ -229,7 +206,7 @@ GAME_QUERY_TYPE GameServer::getGameQuery(ClientManager &client) {
  */
 GameStats GameServer::clientLoop(ClientManager &client) {
     Player* me = this->findMe(client);
-    this->clientsSizeData(client); // MESSAGE
+    this->client_has_join_the_game(client);
 
     // LOOP UNTIL THE HOST START THE GAME
     while ( !this->game.isRunning() ) {
@@ -311,6 +288,7 @@ void GameServer::clientTurn(ClientManager &client, Player* me) {
         }
     }
     // End of the turn
+    this->game.getDice().resetDoubleCounter();
     this->game.endCurrentTurn();
     this->sendGameData();
     this->sendBetterGameData();
@@ -330,7 +308,6 @@ void GameServer::processStart(ClientManager* client) {
     if ( this->game.getPlayersSize() < 2 ) { this->updateThisClientWithQuery(QUERY::MESSAGE,"Attend tes amis avant de lancer la partie !" ,*client); return; }
     this->game.startGame();
     this->sendStartData();
-    this->updateAllClientsWithQuery(QUERY::MESSAGE, "Lancement de la partie");
 }
 
 /*
@@ -390,7 +367,13 @@ void GameServer::processBuild(ClientManager &client, Player *player) {
     // JOUEUR choisis une propriété / ou leave
     // Vérifier si il a assez de thune
     // Ajouter un niveau à la propriété
+
+    if (! player->hasBuildableProperties()) {
+        this->updateThisClientWithQuery(QUERY::NO_BUILDABLE_PROP, "", client);
+        return;
+    }
     this->playerBuildInfos(client);
+
     GAME_QUERY_TYPE query;
     std::string property_name;
     sf::Packet packet;
@@ -399,7 +382,7 @@ void GameServer::processBuild(ClientManager &client, Player *player) {
     while ( query != GAME_QUERY_TYPE::LEAVE_SELECTION ) {
         // QUERY IS NOT SELECT -> SHOW MESSAGE AND ASK FOR ANOTHER INPUT
         if ( query != GAME_QUERY_TYPE::SELECT ) {
-            this->playerBuildInfos(client);
+            this->updateThisClientWithQuery(QUERY::BAD_COMMAND, "", client);
             client.receive(query, packet);
             continue;
         }
@@ -407,18 +390,22 @@ void GameServer::processBuild(ClientManager &client, Player *player) {
         packet >> property_name;
         // BUILDING PROCESS WORK
         if ( this->game.processBuild(player, property_name) ) {
-            this->updateAllClientsWithQuery(QUERY::INFOS_BUILD_SUCCESS, property_name);
+            Property* prop = dynamic_cast<Property*>(this->game.getLandCell(property_name)->getLand());
+            this->updateAllClientsWithQuery(QUERY::INFOS_BUILD_SUCCESS, property_name + ":" + std::to_string(prop->getIntLevel()) + ":" + std::to_string(prop->isMortgaged()));
         }
-
         // BUILDING PROCESS DIDN'T WORK
-        this->playerBuildInfos(client);
+        else this->updateThisClientWithQuery(QUERY::CANNOT_BUILD, "", client);
         client.receive(query, packet);
     }
-    this->updateThisClientWithQuery(QUERY::INFOS_LEAVE_BUILD_MODE, "Vous quittez le mode de sélection", client);
+    this->updateThisClientWithQuery(QUERY::INFOS_LEAVE_SELECTION_MODE, "Vous quittez le mode de sélection", client);
 }
 
 void GameServer::processSellBuild(ClientManager &client, Player *player) {
     // récupérer toute les propriétés en état de perdre une maison
+    if (! player->hasSellableProperties()) {
+        this->updateThisClientWithQuery(QUERY::NO_SALABLE_PROP, "", client);
+        return;
+    }
     this->playerSellBuildInfos(client);
 
     GAME_QUERY_TYPE query;
@@ -428,7 +415,7 @@ void GameServer::processSellBuild(ClientManager &client, Player *player) {
 
     while ( query != GAME_QUERY_TYPE::LEAVE_SELECTION ) {
         if ( query != GAME_QUERY_TYPE::SELECT ) {
-            this->playerSellBuildInfos(client);
+            this->updateThisClientWithQuery(QUERY::BAD_COMMAND, "", client);
             client.receive(query, packet);
             continue;
         }
@@ -436,14 +423,15 @@ void GameServer::processSellBuild(ClientManager &client, Player *player) {
         packet >> property_name;
         // BUILDING PROCESS WORK
         if ( this->game.processSellBuild(player, property_name) ) {
-            this->updateAllClientsWithQuery(QUERY::INFOS_SELL_BUILD_SUCCESS, property_name);
+            Property* prop = dynamic_cast<Property*>(this->game.getLandCell(property_name)->getLand());
+            this->updateAllClientsWithQuery(QUERY::INFOS_SELL_BUILD_SUCCESS, property_name + ":" + std::to_string(prop->getIntLevel()) + ":" + std::to_string(prop->isMortgaged()));
         }
 
         // SELL PROCESS DIDN'T WORK
-        this->playerSellBuildInfos(client);
+        else this->updateThisClientWithQuery(QUERY::CANNOT_SELL, "", client);
         client.receive(query, packet);
     }
-    this->updateThisClientWithQuery(QUERY::MESSAGE, "Vous quittez le mode de sélection", client);
+    this->updateThisClientWithQuery(QUERY::INFOS_LEAVE_SELECTION_MODE, "Vous quittez le mode de sélection", client);
 
 }
 
@@ -451,6 +439,10 @@ void GameServer::processMortgage(ClientManager &client, Player *player) {
     // montrer toutes les propriété hypothécable du joueur
     // Choisir cell a hypothéquer / quitter le menu
     // passer la case en hypothèque + recevoir / prix achat
+    if (! player->hasMortgageableProperties()) {
+        this->updateThisClientWithQuery(QUERY::NO_MORTGAGEABLE_PROP, "", client);
+        return;
+    }
     this->playerMortgageInfos(client);
 
     GAME_QUERY_TYPE query;
@@ -461,7 +453,7 @@ void GameServer::processMortgage(ClientManager &client, Player *player) {
     while ( query != GAME_QUERY_TYPE::LEAVE_SELECTION ) {
         // QUERY IS NOT SELECT -> SHOW MESSAGE AND ASK FOR ANOTHER INPUT
         if ( query != GAME_QUERY_TYPE::SELECT ) {
-            this->playerMortgageInfos(client);
+            this->updateThisClientWithQuery(QUERY::BAD_COMMAND, "", client);
             client.receive(query, packet);
             continue;
         }
@@ -469,20 +461,24 @@ void GameServer::processMortgage(ClientManager &client, Player *player) {
         packet >> property_name;
         // BUILDING PROCESS WORK
         if ( this->game.processMortgage(player, property_name) ) {
-            this->updateAllClientsWithQuery(QUERY::INFOS_MORTGAGE_SUCCESS, property_name);
+            this->updateAllClientsWithQuery(QUERY::INFOS_MORTGAGE_SUCCESS, property_name + ":0:1");
         }
 
         // SELL PROCESS DIDN'T WORK
-        this->playerMortgageInfos(client);
+        else this->updateThisClientWithQuery(QUERY::CANNOT_MORTAGE, "", client);
         client.receive(query, packet);
     }
-    this->updateThisClientWithQuery(QUERY::MESSAGE, "Vous quittez le mode de sélection", client);
+    this->updateThisClientWithQuery(QUERY::INFOS_LEAVE_SELECTION_MODE, "Vous quittez le mode de sélection", client);
 }
 
 void GameServer::processLiftMortgage(ClientManager &client, Player *player) {
     // montrer toutes les propriété des-hypothécable du joueur
     // Choisir cell a des-hypothéquer / quitter le menu
     // passer la case en normale + perdre / prix de rachat
+    if (! player->hasUnmortgageableProperties()) {
+        this->updateThisClientWithQuery(QUERY::NO_UNMORTGAGEABLE_PROP, "", client);
+        return;
+    }
     this->playerLiftMortgageInfos(client);
 
     GAME_QUERY_TYPE query;
@@ -493,7 +489,7 @@ void GameServer::processLiftMortgage(ClientManager &client, Player *player) {
     while ( query != GAME_QUERY_TYPE::LEAVE_SELECTION ) {
         // QUERY IS NOT SELECT -> SHOW MESSAGE AND ASK FOR ANOTHER INPUT
         if ( query != GAME_QUERY_TYPE::SELECT ) {
-            this->playerLiftMortgageInfos(client);
+            this->updateThisClientWithQuery(QUERY::BAD_COMMAND, "", client);
             client.receive(query, packet);
             continue;
         }
@@ -501,19 +497,23 @@ void GameServer::processLiftMortgage(ClientManager &client, Player *player) {
         packet >> property_name;
         // BUILDING PROCESS WORK
         if ( this->game.processLiftMortgage(player, property_name) ) {
-            this->updateAllClientsWithQuery(QUERY::INFOS_LIFT_MORTGAGE_SUCCESS, property_name);
+            this->updateAllClientsWithQuery(QUERY::INFOS_LIFT_MORTGAGE_SUCCESS, property_name + ":0:0");
         }
 
         // SELL PROCESS DIDN'T WORK
-        this->playerLiftMortgageInfos(client);
+        else this->updateThisClientWithQuery(QUERY::CANNOT_UNMORTGAGE, "", client);
         client.receive(query, packet);
     }
-    this->updateThisClientWithQuery(QUERY::MESSAGE, "Vous quittez le mode de sélection", client);
+    this->updateThisClientWithQuery(QUERY::INFOS_LEAVE_SELECTION_MODE, "Vous quittez le mode de sélection", client);
 }
 
 void GameServer::processExchange(ClientManager &client, Player *player) {
     // Récupérer toutes les cases échangeable d'une partie
     // Une case échangeable = une case qui n'a pas de bâtiment
+    if (! player->canExchangeProperties()) {
+        this->updateThisClientWithQuery(QUERY::NO_EXCHANGEABLE_PROP, "", client);
+        return;
+    }
     this->playerExchangeInfos(client);
 
     GAME_QUERY_TYPE query;
@@ -525,24 +525,28 @@ void GameServer::processExchange(ClientManager &client, Player *player) {
     while ( query != GAME_QUERY_TYPE::LEAVE_SELECTION ) {
         // QUERY IS NOT SELECT -> SHOW MESSAGE AND ASK FOR ANOTHER INPUT–
         if ( query != GAME_QUERY_TYPE::TRADE ) {
-            this->playerExchangeInfos(client);
+            this->updateThisClientWithQuery(QUERY::BAD_COMMAND, "", client);
             client.receive(query, packet);
             continue;
         }
         // QUERY IS SELECT
-        packet >> property_name >> money_s ;
-        int money = std::stoi(money_s);
+        packet >> property_name >> money_s;
+        int money = std::atoi(money_s.c_str());
 
         // BUILDING PROCESS WORK
-        if ( this->game.processSendExchangeRequest(player, property_name, money) ) {
-            this->updateAllClientsWithQuery(QUERY::INFOS_EXCHANGE_SUCCESS, property_name + ":" + player->getUsername());
+        ExchangeResult result = this->game.processSendExchangeRequest(player, property_name, money);
+        if ( result == ExchangeResult::ACCEPTED ) {
+            this->updateAllClientsWithQuery(QUERY::INFOS_EXCHANGE_SUCCESS, property_name + ":" + std::to_string(player->getIndex()));
+        }
+        else if ( result == ExchangeResult::REFUSED) {
+            this->updateThisClientWithQuery(QUERY::EXCHANGE_REFUSED, "", client);
         }
 
         // SELL PROCESS DIDN'T WORK
-        this->playerExchangeInfos(client);
+        else this->updateThisClientWithQuery(QUERY::CANNOT_EXCHANGE, "", client);
         client.receive(query, packet);
     }
-    this->updateThisClientWithQuery(QUERY::MESSAGE, "Vous quittez le mode d'échange", client);
+    this->updateThisClientWithQuery(QUERY::INFOS_LEAVE_SELECTION_MODE, "Vous quittez le mode de sélection", client);
 }
 
 void GameServer::processAskExchange(ClientManager &client, Player *player) {

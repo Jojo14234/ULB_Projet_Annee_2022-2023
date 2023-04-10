@@ -7,6 +7,7 @@
 #include "Obtainable/Cells/GoJailCell.hpp"
 #include "Obtainable/Cells/DrawableCardCell.hpp"
 #include "Obtainable/Cells/TaxCell.hpp"
+#include "Obtainable/Cells/StartCell.hpp"
 #include "../../utils/Configs.hpp"
 
 
@@ -41,10 +42,12 @@ void Board::initNonPropertyLand() {
     std::ifstream file(CELL_DATA);
     file >> root;
 
-    this->cells.at(root["Start"]["pos"].asInt())        = std::make_shared<ParkingCell>(root["Start"]["pos"].asInt(), "START");
-    this->cells.at(root["Go to jail"]["pos"].asInt())   = std::make_shared<GoJailCell>(root["Go to jail"]["pos"].asInt(), "GoToJail");
-    this->cells.at(root["Jail"]["pos"].asInt())         = std::make_shared<JailCell>(root["Jail"]["pos"].asInt(), "Jail/Visit");
-    this->cells.at(root["Parking"]["pos"].asInt())      = std::make_shared<ParkingCell>(root["Parking"]["pos"].asInt(), "FreeParking");
+    this->cells.at(root["Start"]["pos"].asInt())        = std::make_shared<StartCell>(root["Start"]["pos"].asInt(), "Depart");
+    this->cells.at(root["Jail"]["pos"].asInt())         = std::make_shared<JailCell>(root["Jail"]["pos"].asInt(), "Prison");
+    this->cells.at(root["Parking"]["pos"].asInt())      = std::make_shared<ParkingCell>(root["Parking"]["pos"].asInt(), "Parc");
+    JailCell* jail = dynamic_cast<JailCell*>(this->cells.at(root["Jail"]["pos"].asInt()).get());
+    std::string name = "EnPrison";
+    this->cells.at(root["Go to jail"]["pos"].asInt())   = std::make_shared<GoJailCell>(root["Go to jail"]["pos"].asInt(), jail, name);
 
     for (auto tax : root["TAX"]) {
         int position = tax["pos"].asInt();

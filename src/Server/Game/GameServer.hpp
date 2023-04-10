@@ -37,8 +37,6 @@ public:
     void sendGameData();
     void sendBetterGameData();
 
-    void clientsSizeData(ClientManager &client);
-
     // Player
 
     void client_has_join_the_game(ClientManager &client);
@@ -138,7 +136,6 @@ public:
 
 
     void connectClientToThisGame(ClientManager &client);
-
 
     CardDeck* getDeck(std::string name);
 

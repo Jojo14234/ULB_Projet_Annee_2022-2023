@@ -11,7 +11,7 @@
  */
 void CellCard::action(Player *player) {
     // On vérifie si la destination est négative, on calcule la position de destination
-    if ( this->destination < 0 ) { this->destination = ( player->getPosition() - std::abs(this->destination) + BOARD_SIZE ) % BOARD_SIZE; }
+    if ( this->destination < 0 ) { this->destination = (( player->getPosition() + this->destination + BOARD_SIZE ) % BOARD_SIZE); }
     // Message pour l'affichage
     player->getClient()->getGameServer()->updateAllClientsWithQuery(QUERY::INFOS_CARD_CELL_TO_GO, std::to_string(player->getIndex()) + ":" + std::to_string(this->destination));
     // Case de destination
@@ -20,7 +20,8 @@ void CellCard::action(Player *player) {
     player->processMove(destination_cell, this->receive_money);
     // Si joueur est en prison, il devient prisonnier
     if ( this->destination == PRISON_INDEX ) { 
-        player->setStatus(PLAYER_STATUS::JAILED); 
+        player->setStatus(PLAYER_STATUS::JAILED);
+        player->setRolled(true);
         player->getClient()->getGameServer()->updateAllClientsWithQuery(QUERY::INFOS_PLAYER_SEND_TO_PRISON, player->getUsername());
     }
     // Sinon il exécute l'action de la case.

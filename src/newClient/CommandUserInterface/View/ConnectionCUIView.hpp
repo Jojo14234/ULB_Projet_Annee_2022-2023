@@ -1,7 +1,3 @@
-/**
- * Project Untitled
- */
-
 #pragma once
 
 #include <ncurses.h>
@@ -34,5 +30,11 @@ public:
 	void clear();
 
 	friend class ConnectionCUIController;
+
+    //todo added frm n-curse
+    InputBox *getUsernameInputBox() { return &username_input_box; }
+    HiddenInputBox *getPasswordInputBox() { return &password_input_box; }
+    TextButton *getLoginButton() { return &login_button; }
+    TextButton *getRegisterButton() { return &register_button; }
 
 };

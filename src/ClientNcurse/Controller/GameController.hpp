@@ -9,7 +9,7 @@
 #include "AbstractController.hpp"
 #include "../View/GameView.hpp"
 #include "../InputParser/GameInputParser.hpp"
-#include "../InputParser/GameStateParser.hpp"
+#include "../../newClient/Model/QueryParser/GameStateParser.hpp"
 #include "../utils.hpp"
 #include "../InputParser/GameLaunchingParser.hpp"
 
@@ -326,7 +326,6 @@ public:
 		}
 	}
 
-	
 	void init() {
 		this->initScreen();
 		// create a thread to receive messages

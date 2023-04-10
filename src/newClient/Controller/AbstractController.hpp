@@ -1,7 +1,3 @@
-/**
- * Project Untitled
- */
-
 #pragma once
 
 //#include "../Model/Client.hpp"
@@ -24,10 +20,9 @@ public:
 	
 	virtual void handle(EventType event)=0;
 
-	virtual void move() {}
+	virtual void move()=0;
 
 	void resetState() { new_state = initial_state; }
 
 	StateType getNewState() { return new_state; }
-
 };

@@ -1,18 +1,15 @@
-/**
- * Project Untitled
- */
-
 #pragma once
 
 #include "../../View/AbstractView.hpp"
 #include "../AbstractCUI.hpp"
+#include "../../Model/Client.hpp"
 
 
 class AbstractCUIView: public AbstractView, public AbstractCUI {
 
 public: 
 
-	using AbstractView::AbstractView;
+	AbstractCUIView(): AbstractView(), AbstractCUI(){}
 
 	virtual ~AbstractCUIView()=default;
 
