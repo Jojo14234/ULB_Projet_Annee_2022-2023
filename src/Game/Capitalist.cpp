@@ -419,17 +419,18 @@ bool Capitalist::processLiftMortgage(Player *player, std::string &name) {
     return true;
 }
 
-bool Capitalist::processSendExchangeRequest(Player *player, std::string &name, int money) {
+ExchangeResult Capitalist::processSendExchangeRequest(Player *player, std::string &name, int money) {
     LandCell* land = getLandCell(name);
-    if (!land ) { return false; }
-    if ( player->getBankAccount()->getMoney() < money ) { return false; }
+    if (!land ) { return ExchangeResult::NON_CHOICE; }
+    if ( player->getBankAccount()->getMoney() < money ) { return ExchangeResult::NON_CHOICE; }
     Property* prop = dynamic_cast<Property*>(land->getLand());
-    if (prop && prop->getLevel() != PROPERTY_LEVEL::EMPTY) { return false; }
+    if (prop && prop->getLevel() != PROPERTY_LEVEL::EMPTY) { return ExchangeResult::NON_CHOICE; }
 
     Player* trader = land->getLand()->getOwner();
     trader->setStatus(PLAYER_STATUS::IN_EXCHANGE);
     // while true ?
-    trader->getClient()->sendQueryMsg(land->getLand()->getName() + ":" + std::to_string(money), QUERY::ASK_EXCHANGE);
+    player->getClient()->sendQueryMsg(land->getLand()->getName() + ":" + std::to_string(money) + ":" + trader->getUsername(), QUERY::CONFIRM_EXCHANGE_ASKING);
+    trader->getClient()->sendQueryMsg(land->getLand()->getName() + ":" + std::to_string(money) + ":" + player->getUsername(), QUERY::ASK_EXCHANGE);
 
     GAME_QUERY_TYPE query;
     trader->getClient()->receive(query);
@@ -437,9 +438,12 @@ bool Capitalist::processSendExchangeRequest(Player *player, std::string &name, i
     if ( query == GAME_QUERY_TYPE::ACCEPT ) {
         land->getLand()->exchange(player, money);
         trader->setStatus(PLAYER_STATUS::FREE);
-        return true;
+        return ExchangeResult::ACCEPTED;
+    } else if ( query == GAME_QUERY_TYPE::REFUSE ) {
+        trader->setStatus(PLAYER_STATUS::FREE);
+        return ExchangeResult::REFUSED;
     }
-    return false;
+    return ExchangeResult::NON_CHOICE;
 }
 
 std::vector<Player*> Capitalist::processAskAuction(Player *player, std::string &name) {

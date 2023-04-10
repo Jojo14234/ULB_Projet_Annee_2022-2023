@@ -73,7 +73,9 @@ enum class QUERY {
 
     INFOS_AUCTION_BID,
 
-    ASK_EXCHANGE, // property_name:price // envoyé au propriétaire de la case pour lui demander si il souhaite accepter l'échange ou non
+    ASK_EXCHANGE, // property_name:price:sender_username [string]:[int]:[string] // envoyé au propriétaire de la case pour lui demander si il souhaite accepter l'échange ou non
+    CONFIRM_EXCHANGE_ASKING,
+    EXCHANGE_REFUSED,
     ASK_AUCTION, // property_name // envoyé à tout les joueurs pour leur demander de participer à l'enchère
     STOP_WAIT, // Arrête l'échange ou l'enchère en cas de trop longue attente (NE PAS MODIF NI PARSE autrement DANS LE CLIENT)
 

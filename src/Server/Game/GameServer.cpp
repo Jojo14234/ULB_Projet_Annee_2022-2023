@@ -534,8 +534,12 @@ void GameServer::processExchange(ClientManager &client, Player *player) {
         int money = std::atoi(money_s.c_str());
 
         // BUILDING PROCESS WORK
-        if ( this->game.processSendExchangeRequest(player, property_name, money) ) {
+        ExchangeResult result = this->game.processSendExchangeRequest(player, property_name, money);
+        if ( result == ExchangeResult::ACCEPTED ) {
             this->updateAllClientsWithQuery(QUERY::INFOS_EXCHANGE_SUCCESS, property_name + ":" + std::to_string(player->getIndex()));
+        }
+        else if ( result == ExchangeResult::REFUSED) {
+            this->updateThisClientWithQuery(QUERY::EXCHANGE_REFUSED, "", client);
         }
 
         // SELL PROCESS DIDN'T WORK

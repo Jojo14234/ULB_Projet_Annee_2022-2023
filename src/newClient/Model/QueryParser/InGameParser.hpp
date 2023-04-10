@@ -376,6 +376,29 @@ struct ExchangeSucceedInfo {
 };
 
 
+struct AskExchangeInfo{
+	std::string property;
+	int price;
+	std::string username;
+
+	AskExchangeInfo(const std::string& str) {
+		int colon_nb = 0;
+		int i = 0;
+		std::string tmp;
+		while (str[i] != ':' || colon_nb < 1) {
+			if (str[i] == ':') {
+				property = tmp;
+				colon_nb++;
+				tmp.clear();
+			} else tmp += str[i]; 
+			i++;
+		}
+		price = atoi(tmp.c_str());
+		username = &str[i+1];
+	}
+};
+
+
 class InGameParser {
 
 	std::string str;

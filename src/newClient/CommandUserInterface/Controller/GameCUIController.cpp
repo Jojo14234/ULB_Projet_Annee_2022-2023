@@ -105,6 +105,8 @@ void GameCUIController::receiveMsgLoop() { // todo il faudrait pas déplacer les
 			case QUERY::INFOS_EXCHANGE_SUCCESS : 		this->exchangeSucceedGU(response); break;
 
             case QUERY::INFOS_ASK_FOR_PURCHASE :        this->askForPurchaseGU(response); break;
+            case QUERY::ASK_EXCHANGE :                  this->askExchangeGU(response); break;
+            case QUERY::CONFIRM_EXCHANGE_ASKING :       this->confirmExchangeAskingGU(response); break;
 
             case QUERY::INFOS_PLAYER_DIDNT_BUY :        if (response != this->model->getUsername()) { this->view->getConsole()->addText("Le joueur " + response + " n'a pas achete la propriete"); } break;
             case QUERY::INFOS_PLAYER_MOVE_ON_OWN_CELL : if (this->model->isMyTurn()) { this->view->getConsole()->addText("Vous etes chez vous."); } break;
@@ -123,6 +125,7 @@ void GameCUIController::receiveMsgLoop() { // todo il faudrait pas déplacer les
             case QUERY::CANNOT_UNMORTGAGE :             this->view->getConsole()->addText("Ce terrain ne peut pas etre deshypotheque"); break;
             case QUERY::CANNOT_EXCHANGE :				this->view->getConsole()->addText("Ce terrain ne peut pas etre echange"); break;
 
+            case QUERY::EXCHANGE_REFUSED :              this->view->getConsole()->addText("L'echange a ete refuse"); break;
             case QUERY::INFOS_NOT_ENOUGH_MONEY :        this->view->getConsole()->addText("Vous ne possedez pas assez d'argent."); break;
             default :                                   this->view->getConsole()->addText(response); break;
         }
@@ -461,6 +464,17 @@ void GameCUIController::exchangeSucceedGU(const std::string & response){
 	int index = this->view->getBoard()->getCellIndex(succeed.property);
 	this->view->getBoard()->leaveSelection(index);
 	this->view->getBoard()->setPurchased(index, succeed.player);
+}
+
+void GameCUIController::askExchangeGU(const std::string & response){
+    AskExchangeInfo exchange_info(response);
+    this->view->getConsole()->addText(exchange_info.username + " aimerait vous racheter " + exchange_info.property + " pour " + std::to_string(exchange_info.price) +"$");
+    this->view->getConsole()->addText("/accept ou /refuse");
+}
+
+void GameCUIController::confirmExchangeAskingGU(const std::string& response){
+    AskExchangeInfo exchange_info(response);
+    this->view->getConsole()->addText("La demande de rachat de " + exchange_info.property + " pour " + std::to_string(exchange_info.price) + "$ a ete envoyee a " + exchange_info.username);
 }
 
 void GameCUIController::askForPurchaseGU(const std::string& response){
