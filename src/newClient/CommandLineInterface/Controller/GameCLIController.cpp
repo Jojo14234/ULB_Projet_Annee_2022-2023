@@ -76,13 +76,11 @@ void GameCLIController::receiveMsgLoop() {
             case QUERY::CHOICE_MONEY_CARD :         choiceMoneyCardGU(response);break;
             case QUERY::INFOS_BUILD_PROP :          buildPropertyGU(response); break;
             case QUERY::INFOS_SELL_BUILD :          sellPropertyGU(response); break;
-            case QUERY::INFOS_LEAVE_BUILD_MODE :    leaveBuildMenuGU(response); break;
+            case QUERY::INFOS_LEAVE_SELECTION_MODE :    leaveBuildMenuGU(response); break;
             case QUERY::INFOS_ASK_FOR_PURCHASE :    askForPurchaseGU(response); break;
             case QUERY::INFOS_BUILD_SUCCESS :       buildSucceedGU(response); break;
             case QUERY::CANNOT_BUILD :              cannotBuildGu(response); break;
             case QUERY::NO_BUILDABLE_PROP :         NotBuildableProp(response); break;
-
-
 
             case QUERY::INFOS_NOT_ENOUGH_MONEY :    notEnoughMoneyGU(response); break;
             case QUERY::STOP_WAIT :                 this->model->sendCommand(GameInputParser{response}); break;
