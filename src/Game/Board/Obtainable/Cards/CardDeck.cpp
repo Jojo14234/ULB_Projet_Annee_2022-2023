@@ -44,7 +44,7 @@ CardDeck::CardDeck(std::string name): name{name} {
 
             Json::Value current = cell_cards[i];
     		std::array<int, 4> dest_list;
-    		for (unsighed int i=0; i < current["dest"].size(); i++) {
+    		for (unsigned int i=0; i < current["dest"].size(); i++) {
                 dest_list[i] = current["dest"][i].asInt();
             }
 
