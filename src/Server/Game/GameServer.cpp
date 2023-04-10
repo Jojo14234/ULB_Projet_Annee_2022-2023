@@ -316,7 +316,7 @@ void GameServer::clientTurn(ClientManager &client, Player* me) {
 
 }
 
-void GameServer::checkAndManageBankruptcy(ClientManager client, Player* me){
+void GameServer::checkAndManageBankruptcy(ClientManager &client, Player* me){
     if ( me->getStatus() == PLAYER_STATUS::BANKRUPT_SUSPECTED ) { this->suspectBankrupt(me); }
     if ( me->getStatus() == PLAYER_STATUS::DEBT ) { this->processPayDebt(client, me); }
     if ( me->getStatus() == PLAYER_STATUS::BANKRUPT_CONFIRMED ) { this->processBankrupt(client, me); }
