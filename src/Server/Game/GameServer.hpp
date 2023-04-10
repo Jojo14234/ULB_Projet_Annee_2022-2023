@@ -137,7 +137,6 @@ public:
 
     void connectClientToThisGame(ClientManager &client);
 
-
     CardDeck* getDeck(std::string name);
 
     int getCurrentPlayerIndex();

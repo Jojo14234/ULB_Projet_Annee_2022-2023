@@ -8,6 +8,7 @@
 #include <iostream>
 #include <unistd.h>
 #include <signal.h>
+#include "../ClientManager/ClientManager.hpp"
 
 //TODO AJOUTER SOURCE
 
@@ -43,6 +44,41 @@ private:
         alarm(0);
     }
 #pragma GCC diagnostic pop
+
+};
+
+#include <thread>
+#include <random>
+
+
+class Timer2 {
+    int seed = 0;
+    int duration;
+    ClientManager* client;
+
+public:
+    Timer2(int duration, ClientManager* client): duration{duration} {};
+
+    void start() {
+        // 1 il faut créer un autre thread
+        std::thread timer_thread(&Timer2::timer, this);
+        timer_thread.detach();
+    }
+
+    void timer() {
+        // 2 il faut générer une seed aléatoire
+        std::srand(0);
+        int random_seed = std::rand();
+        this->seed = random_seed;
+
+        // 2 il faut l'envoyer dans une fonction qui sleep pendant duration sec
+        sleep(this->duration);
+
+        // 3 a la fin du thread, on compare si les seed sont toujours identique, auquel cas
+        if (this->seed == random_seed) {this->client->sendQueryMsg("STOP", QUERY::STOP_WAIT);}
+    }
+
+    void resetSeed() { this->seed = 0; }
 
 };
 
