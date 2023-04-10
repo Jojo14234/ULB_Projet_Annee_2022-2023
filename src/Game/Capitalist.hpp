@@ -92,7 +92,6 @@ public:
     ExchangeResult processSendExchangeRequest(Player *player, std::string &name, int money);
     bool processMortgage(Player *player, std::string &name, bool is_fast_game);
     bool processLiftMortgage(Player *player, std::string &name, bool is_fast_game);
-    bool processSendExchangeRequest(Player *player, std::string &name, int money);
     std::vector<Player*> processAskAuction(Player *player, std::string &name);
     bool checkBankrupt(Player *player);
     void processBankruptByPlayer(Player *player, Player* other);

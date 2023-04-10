@@ -68,12 +68,8 @@ public:
     PROPERTY_COLOR getColor() { return this->color; }
 
 	bool isBuildable(Player* player, bool is_fast_game);
-	bool canSellBuilding(Player* player);
 
-    void reset() {
-        this->Land::reset();
-        this->level = PROPERTY_LEVEL::EMPTY;
-    }
+    void reset();
 
     int getConstructPrice() { return this->construct_price; }
 

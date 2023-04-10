@@ -30,17 +30,6 @@ PROPERTY_LEVEL Property::getLevel() const {
 PROPERTY_COLOR Property::getColor() const {
     return this->color;
 }
-/*
- * Return un vecteur contenant les autres propriétés de la même couleur que cette propriété
- * NE CONTIENT PAS LA PROPRIÉTÉ INITIALE
- */
-std::vector<Property*> Property::getOtherSameColorPropFromPlayer(Player* player) {
-    std::vector<Property*> same_color_properties;
-    for (auto property : player->getAllProperties()) {
-        if (property->getName() != this->getName() && property->getColor() == this->getColor()) {same_color_properties.push_back(property);}
-    }
-    return same_color_properties;
-}
 
 // Setter
 
@@ -78,18 +67,6 @@ bool Property::hasAllSameColorProperties(Player* player) {
     std::vector<Property*> same_color_properties = getOtherSameColorPropFromPlayer(player);
     if (this->getColor() == PROPERTY_COLOR::BROWN or this->color == PROPERTY_COLOR::DARK_BLUE) {return same_color_properties.size() == 1;}
     else {return same_color_properties.size() == 2;}
-}
-/*
- * Renvoie false si l'écart de niveau entre cette propriété
- * et les autres que possède le joueur est supérieur à 1.
- */
-bool Property::AllSameColorPropertiesHaveGoodLevel(Player* player, bool sell) {
-    int add_to_level = (sell) ? (-1) : 1 ;
-    for (auto property : getOtherSameColorPropFromPlayer(player)) {
-        int calcLvl = this->getIntLevel() + add_to_level - property->getIntLevel();
-        if ( calcLvl > 1 || calcLvl < -1) { return false; }
-    }
-    return true;
 }
 
 bool Property::AllSameColorPropertiesHaveNoBuilding(Player* player) {
@@ -145,15 +122,6 @@ bool Property::isBuildable(Player *player, bool is_fast_game) {
     return true;
 }
 
-bool Property::canSellBuilding(Player* player) {
-    if ( this->owner != player ) { /*player->getClient()->send("Vous n'êtes pas propriétaire de cette propriété (vente refusée)");*/ return false; }
-    if ( this->getLevel() == PROPERTY_LEVEL::EMPTY ) { /*player->getClient()->send("Aucun bâtiment à vendre sur cette propriété (vente refusée)");*/ return false; }
-    std::cout << std::endl;
-    if ( !this->AllSameColorPropertiesHaveGoodLevel(player, true) ) { /*player->getClient()->send("Les niveaux de vos construction ne seront pas équilibrée (vente refusée)");*/ return false;}
-    return true;
-}
-
-
 
 /*
  * Return un vecteur contenant les autres propriétés de la même couleur que cette propriété
@@ -165,17 +133,6 @@ std::vector<Property*> Property::getOtherSameColorPropFromPlayer(Player* player)
         if (property->getName() != this->getName() && property->getColor() == this->getColor()) {same_color_properties.push_back(property);}
     }
     return same_color_properties;
-}
-
-/*
- * Renvoie true si le player possède toutes les cartes de la même couleur que cette carte-ci.
- * Ci cette carte est une carte brune ou bleu foncé, il ne faut qu'une seule autre carte
- * Sinon il en faut 2 autres.
- */
-bool Property::hasAllSameColorProperties(Player* player) {
-    std::vector<Property*> same_color_properties = getOtherSameColorPropFromPlayer(player);
-    if (this->getColor() == PROPERTY_COLOR::BROWN or this->color == PROPERTY_COLOR::DARK_BLUE) {return same_color_properties.size() == 1;}
-    else {return same_color_properties.size() == 2;}
 }
 
 /*

@@ -1,4 +1,4 @@
-ƒ#ifndef _GAME_LAND_HPP
+#ifndef _GAME_LAND_HPP
 #define _GAME_LAND_HPP
 
 #include <string>

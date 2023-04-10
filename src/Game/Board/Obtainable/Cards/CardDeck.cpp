@@ -27,37 +27,9 @@ CardDeck::CardDeck(std::string name): name{name} {
     Json::Value cell_cards = root[name]["CellCard"];
     this->extractCellCard(cell_cards, idx);
 
-    if (cell_cards[i]["dest"].size() > 1) {	//tester si ça marche (size) !! et mettre tout ça dans dans une fonction ?
-
-        Json::Value current = cell_cards[i];
-        std::array<int, 4> dest_list;
-        for (unsigned int i=0; i < current["dest"].size(); i++) {
-            dest_list[i] = current["dest"][i].asInt();
-        }
-
-        std::string description = current["descript"].asString();
-        bool money = current["money"].asBool();
-
-        this->card_list[idx] = std::make_shared<NearestCellCard>(description, money, dest_list);
-
-    }
-    else if (cell_cards[i]["dest"].asInt() < 0) {
-        Json::Value current = cell_cards[i];
-        std::string description = current["descript"].asString();
-        bool money = current["money"].asBool();
-        int destination = current["dest"].asInt();
-        this->card_list[idx] = std::make_shared<MoveBackCellCard>(description, money, destination);
-    }
-    else {
-        this->card_list[idx] = std::make_shared<CellCard>(cell_cards[i]);
-
-    }
-    idx++;
-
-    // Add Jail card to the deck
-    this->card_list[idx] = std::make_shared<JailCard>(root[name]["JailCard"]);
-
-    std::cout << "[init all     " << name << " : 100%]" << std::endl;
+    // Extraction de la JailCard
+    Json::Value jail_card = root[name]["JailCard"];
+    this->extractJailCard(jail_card, idx);
 }
 
 void CardDeck::debugInfoDescription() {
@@ -139,23 +111,19 @@ std::array<int, 4> CardDeck::extractStationsArray(Json::Value &cards) {
  */
 Card* CardDeck::drawACard() {
     // Seed pour le hasard pris sur le temps en seconde depuis ...
-	std::srand(time(0));
+    std::srand(time(0));
     Card* drawn_card = nullptr;
-    int result;
 
     // Boucle tant qu'on n'a pas tiré une carte
-	while(!drawn_card) {
-		result = std::rand()% 16;
-		drawn_card = this->card_list.at(result).get();
+    while(!drawn_card) {
+        int result = std::rand()% 16;
+        drawn_card = this->card_list.at(result).get();
         // Si la carte est le numéro 15, c'est que c'est la carte sortie de prison,
         // et si elle n'est pas dans le paquet il faut retirer une carte
         if (result == 15 && !isJailCardInside()) { drawn_card = nullptr; }
-	}
-    std::cout << result << std::endl;
-    std::cout << drawn_card->getDescription() << std::endl;
+    }
     return drawn_card;
-    //return this->card_list.at(14).get();;     //gare la + proche / reculer
-    //return this->card_list.at(8).get();;     //aller en prison
+    //return this->card_list.at(8).get();;     //pour debug
 }
 
 /*
