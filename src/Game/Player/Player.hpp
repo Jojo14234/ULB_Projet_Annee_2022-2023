@@ -42,6 +42,7 @@ class Player {
 
     bool has_rolled = false;
     bool currently_playing = false;
+    int build_level = 0;
 
     int money_debt = 0;
 
@@ -93,7 +94,7 @@ public:
     int getPosition() const;
     int getMoney() const;
     Player* getPlayerToRefund();
-    int getPatrimoine();
+    int getPatrimoine(bool is_fast_game);
     int getIndex() const;
     int getDebt() const;
 
@@ -123,7 +124,7 @@ public:
     bool passedByStart(Cell* cell, bool passed_by_start);
     void goToJail(Cell *cell);
 
-    Cell* processMove(int n, Board &board);
+    Cell* processMove(int step, Board &board);
     void processMove(Cell* new_cell, bool gainMoneyIfPassByStart);
 
 
@@ -139,10 +140,13 @@ public:
 
     void resetDebt();
 
-
     int roll(Dice &dice);
     void setResultLastRoll(int new_result);
     int getResultLastRoll();
+
+
+    void increaseBuildLevel();
+    int getBuildLevel();
 
 
     void acquireLand(Land* land);
@@ -161,10 +165,17 @@ public:
     std::string getAllPossession();
     std::string getAllPossessionMortgageable();
     std::string getAllPossessionLiftMortgageable();
-    std::string getAllBuildableProperties();
+    std::string getAllBuildableProperties(bool is_fast_game);
     std::string getAllSellableBuildProperties();
     std::string getAllExchangeablePossession();
     std::string rollInfos(Dice &dice);
+
+    //BOOL
+    bool hasBuildableProperties();
+    bool hasSellableProperties();
+    bool hasMortgageableProperties();
+    bool hasUnmortgageableProperties();
+    bool canExchangeProperties();
 
     // NEW FUNCTION
     std::vector<Land*> getAllLand();

@@ -11,6 +11,7 @@
 
 enum class AuctionStatus {STOP, START, OTHER};
 enum class ExchangeStatus{STOP, START, OTHER};
+enum class ExchangeResult{ACCEPTED, REFUSED, NON_CHOICE};
 class ClientManager;
 
 
@@ -19,6 +20,8 @@ class Capitalist {
     std::vector<Player> players;
     int current_player_index = 0;
     bool running = false;
+    bool fast = false;
+    int number_of_players_at_start;
 
     AuctionStatus auction_in_progress = AuctionStatus::STOP;
     ExchangeStatus exchange_in_progress = ExchangeStatus::STOP;
@@ -38,6 +41,7 @@ public:
     // All the function about game Infos
     std::string getStartInfos();
     std::string getGameInfos();
+    std::string getGameInfos2();
     std::string getBetterGameInfos();
 
     // All the function about the player
@@ -76,6 +80,7 @@ public:
 
     ///////////////////////////////////////
     ClientManager* getWinner();
+    ClientManager* calculateGameWinner();
 
     void processJailPay(Player* player);
     void processJailUseCard(Player* player);
@@ -84,7 +89,9 @@ public:
     bool processSellBuild(Player *player, std::string &name);
     bool processMortgage(Player *player, std::string &name);
     bool processLiftMortgage(Player *player, std::string &name);
-    bool processSendExchangeRequest(Player *player, std::string &name, int money);
+    ExchangeResult processSendExchangeRequest(Player *player, std::string &name, int money);
+    bool processMortgage(Player *player, std::string &name, bool is_fast_game);
+    bool processLiftMortgage(Player *player, std::string &name, bool is_fast_game);
     std::vector<Player*> processAskAuction(Player *player, std::string &name);
     bool checkBankrupt(Player *player);
     void processBankruptByPlayer(Player *player, Player* other);
@@ -93,6 +100,12 @@ public:
 
     void setRunning(bool new_running);
 
+    bool isFastGame();
+    void setFastGame(bool is_fast);
+    void setNumberOfPlayers(int nbr);
+    int getNumberOfPlayersAtStart();
+
+    void forceAcquisition(Player *player);
 
 };
 

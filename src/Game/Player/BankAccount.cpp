@@ -12,6 +12,8 @@ int BankAccount::gain(int amount) { money += amount; return amount; }
 
 int BankAccount::getMoney() const { return money; }
 
+void BankAccount::setMoney(int new_money) { money = new_money; }
+
 bool BankAccount::canPay(int amount) {
     return this->money >= amount;
 }

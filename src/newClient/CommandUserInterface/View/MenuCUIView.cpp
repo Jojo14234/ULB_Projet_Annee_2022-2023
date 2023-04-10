@@ -1,8 +1,3 @@
-/**
- * Project Untitled
- */
-
-
 #include <ncurses.h>
 
 #include "MenuCUIView.hpp"

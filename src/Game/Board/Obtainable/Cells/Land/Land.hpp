@@ -42,6 +42,8 @@ public:
     // Opération
     void mortgage(Player* player);
     void liftMortgage(Player* player);
+	void mortgage(Player* player, bool is_fast_game);
+    void liftMortgage(Player* player, bool is_fast_game);
     void exchange(Player* new_owner, int money);
     void reset();
     int virtual getRentPrice()=0;

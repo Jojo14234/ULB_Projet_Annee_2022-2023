@@ -15,12 +15,12 @@ void MainCUIWindow::initAttributes() {
 	// Views
 	ConnectionCUIView* connection_view = new ConnectionCUIView();
 	MenuCUIView* menu_view = new MenuCUIView();
-	GameCUIView* game_view = new GameCUIView();
+	GameCUIView* game_view = new GameCUIView(6);
 	this->view.setViews({connection_view, menu_view, game_view});
 	// Controllers
 	ConnectionCUIController* connection_controller = new ConnectionCUIController(&this->model, connection_view);
-	MenuCUIController* menu_controller = new MenuCUIController(&this->model, menu_view);
 	GameCUIController* game_controller = new GameCUIController(&this->model, game_view);
+	MenuCUIController* menu_controller = new MenuCUIController(&this->model, menu_view, game_controller);
 	this->controller.setController({connection_controller, menu_controller, game_controller});
 }
 

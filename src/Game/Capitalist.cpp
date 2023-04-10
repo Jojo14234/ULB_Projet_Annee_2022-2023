@@ -5,6 +5,8 @@
 #include "../utils/randomFunctions.hpp"
 #include <random>
 #include <algorithm>
+#include "Board/Obtainable/Cells/Land/Land.hpp"
+#include <vector>
 
 void Capitalist::receiveQuery(GAME_QUERY_TYPE query, sf::Packet &packet) {
     std::string s1="", s2="";
@@ -62,6 +64,40 @@ std::string Capitalist::getStartInfos() {
  *  level = building level of a property [int]
  *  mortgage = 0 = false / 1 = true [bool]
  */
+std::string Capitalist::getGameInfos2() {
+    std::string ret = "";
+    for ( const auto &player : this->players ) {
+        std::string index =     std::to_string(player.getIndex());
+        std::string username =  player.getUsername();
+        std::string position =  std::to_string(player.getPosition());
+        std::string money =     std::to_string(player.getMoney());
+        std::string jailCard =  std::to_string(player.getAllGOOJCards().size());
+        ret += index + ":" + username + ":" + position + ":" + money + ":" + jailCard;
+
+        for (const auto property : player.getAllProperties()) {
+            std::string property_name =     property->getName();
+            std::string property_level =    std::to_string(property->getIntLevel());
+            std::string property_mortgage = std::to_string(property->isMortgaged());
+            ret += ":" + property_name + ";" + property_level + ";" + property_mortgage;
+        }
+
+        for (const auto station : player.getAllStations()) {
+            std::string station_name =      station->getName();
+            std::string station_level =     "0";
+            std::string station_mortgage =  std::to_string(station->isMortgaged());
+            ret += ":" + station_name + ";" +station_level + ";" + station_mortgage;
+        }
+
+        for (const auto company : player.getAllCompanies()) {
+            std::string company_name =      company->getName();
+            std::string company_level =     "0";
+            std::string company_mortgage =  std::to_string(company->isMortgaged());
+            ret += ":" + company_name + ";" + company_level + ";" + company_mortgage;
+        }
+        ret += "|";
+    }
+    return ret;
+} // todo new
 std::string Capitalist::getGameInfos() {
     std::string ret = "";
     for ( const auto &player : this->players) {
@@ -143,6 +179,9 @@ void Capitalist::addPlayer(ClientManager &client) {
     Cell* starting_cell = this->board[0];
     Player player{&client, starting_cell};
     if ( players.empty() ) { player.setAdmin(); }
+    if (isFastGame()){
+        player.getBankAccount()->setMoney(STARTING_MONEY_FAST);
+    }
     players.push_back(player);
 }
 
@@ -257,6 +296,7 @@ ExchangeStatus Capitalist::getExchangeStatus() const {
  * Allow the first Player to play by setting to [TRUE] his attribut currently playing.
  */
 void Capitalist::startGame() {
+    this->setNumberOfPlayers(getPlayersSize());
     this->shufflePlayers();
     this->players[this->current_player_index].setCurrentlyPlaying(true);
     this->running = true;
@@ -282,14 +322,31 @@ void Capitalist::endCurrentTurn() {
 
     this->players[this->current_player_index].setCurrentlyPlaying(true);
     this->players[this->current_player_index].setRolled(false);
-
 }
 
 
 ////////////////////////////////////////////
 ClientManager *Capitalist::getWinner() {
+    if ( isFastGame() ){
+        if ( (getNumberOfPlayersAtStart() - getPlayersSize()) == 2 ){
+            return calculateGameWinner();
+        }
+    }
     if (this->players.size() > 1) return nullptr;
     return this->players[0].getClient();
+}
+
+ClientManager *Capitalist::calculateGameWinner() {
+    ClientManager* winner;
+    int current_winning_patrimoine = 0;
+    for (auto player : *getPlayers()){
+        int patrimoine = player.getPatrimoine(isFastGame());
+        if ( patrimoine > current_winning_patrimoine ){
+            winner = player.getClient();
+            current_winning_patrimoine = patrimoine;
+        }
+    }
+    return winner;
 }
 
 void Capitalist::processJailPay(Player *player) {
@@ -310,12 +367,12 @@ void Capitalist::processJailUseCard(Player *player) {
 }
 
 void Capitalist::processJailRoll(Player *player) {
-    int roll_result = player->roll(this->dice);
+    int roll_result = player->processRollDice(this->dice);
     player->addRollInPrison();
     if ( this->rolledADouble() ) {
         this->dice.resetDoubleCounter();
         player->setStatus(PLAYER_STATUS::FREE);
-        player->processMove(PRISON_INDEX + roll_result, this->getBoard());
+        player->processMove(roll_result, this->getBoard());
         player->getCurrentCell()->action(player);
         player->resetRollInPrison();
         return;
@@ -324,7 +381,7 @@ void Capitalist::processJailRoll(Player *player) {
         this->dice.resetDoubleCounter();
         player->pay(50, true);
         if (player->getStatus() == PLAYER_STATUS::JAILED) { player->setStatus(PLAYER_STATUS::FREE); }
-        player->processMove(PRISON_INDEX + roll_result, this->getBoard());
+        player->processMove(roll_result, this->getBoard());
         player->getCurrentCell()->action(player);
         player->resetRollInPrison();
     }
@@ -342,7 +399,7 @@ bool Capitalist::processBuild(Player *player, std::string &name) {
     // Pas assez de maison disponible
     else if (prop->getIntLevel() < 4 && this->board.getRemainingHome() <= 0) { return false; }
     // Construction à échouer
-    if (!prop->build(player)) { return false; }
+    if (!prop->build(player, isFastGame())) { return false; }
     // On retire un hotel mais on rajoute 4 maison
     if (prop->getLevel() == PROPERTY_LEVEL::HOTEL) { this->board.getRemainingHotel()--; this->board.getRemainingHotel()+= 4; }
     // On retire une maison
@@ -368,31 +425,36 @@ bool Capitalist::processSellBuild(Player *player, std::string &name) {
     return true;
 }
 
-bool Capitalist::processMortgage(Player *player, std::string &name) {
+bool Capitalist::processMortgage(Player *player, std::string &name, bool is_fast_game) {
     LandCell* land = getLandCell(name);
     if (!land or land->getLand()->isMortgaged() ) { return false; }
     Property* prop = dynamic_cast<Property*>(land->getLand());
-    if (!prop || prop->getLevel() == PROPERTY_LEVEL::EMPTY ) { land->getLand()->mortgage(player); return true; }
+    if (!prop || prop->getLevel() == PROPERTY_LEVEL::EMPTY ) { land->getLand()->mortgage(player, is_fast_game); return true; }
     return false;
 }
 
-bool Capitalist::processLiftMortgage(Player *player, std::string &name) {
+bool Capitalist::processLiftMortgage(Player *player, std::string &name, bool is_fast_game) {
     LandCell* land = getLandCell(name);
     if (!land or !land->getLand()->isMortgaged() ) { return false; }
-    if (player->getBankAccount()->getMoney() < land->getLand()->getPurchasePrice()/2 ) { return false; }
-    land->getLand()->liftMortgage(player);
+
+    if ( player->getBankAccount()->getMoney() < land->getLand()->getPurchasePrice()/2 ) { return false; }
+    else if (is_fast_game && player->getBankAccount()->getMoney() < land->getLand()->getPurchasePrice() * 80 / 100) { return false; }
+    land->getLand()->liftMortgage(player, is_fast_game);
     return true;
 }
 
-bool Capitalist::processSendExchangeRequest(Player *player, std::string &name, int money) {
+ExchangeResult Capitalist::processSendExchangeRequest(Player *player, std::string &name, int money) {
     LandCell* land = getLandCell(name);
-    if ( player->getBankAccount()->getMoney() < money ) { return false; }
+    if (!land ) { return ExchangeResult::NON_CHOICE; }
+    if ( player->getBankAccount()->getMoney() < money ) { return ExchangeResult::NON_CHOICE; }
     Property* prop = dynamic_cast<Property*>(land->getLand());
-    if (prop && prop->getLevel() != PROPERTY_LEVEL::EMPTY) { return false; }
+    if (prop && prop->getLevel() != PROPERTY_LEVEL::EMPTY) { return ExchangeResult::NON_CHOICE; }
 
     Player* trader = land->getLand()->getOwner();
     trader->setStatus(PLAYER_STATUS::IN_EXCHANGE);
-    trader->getClient()->sendQueryMsg(land->getLand()->getName() + ":" + std::to_string(money), QUERY::ASK_EXCHANGE);
+    // while true ?
+    player->getClient()->sendQueryMsg(land->getLand()->getName() + ":" + std::to_string(money) + ":" + trader->getUsername(), QUERY::CONFIRM_EXCHANGE_ASKING);
+    trader->getClient()->sendQueryMsg(land->getLand()->getName() + ":" + std::to_string(money) + ":" + player->getUsername(), QUERY::ASK_EXCHANGE);
 
     GAME_QUERY_TYPE query;
     trader->getClient()->receive(query);
@@ -400,9 +462,12 @@ bool Capitalist::processSendExchangeRequest(Player *player, std::string &name, i
     if ( query == GAME_QUERY_TYPE::ACCEPT ) {
         land->getLand()->exchange(player, money);
         trader->setStatus(PLAYER_STATUS::FREE);
-        return true;
+        return ExchangeResult::ACCEPTED;
+    } else if ( query == GAME_QUERY_TYPE::REFUSE ) {
+        trader->setStatus(PLAYER_STATUS::FREE);
+        return ExchangeResult::REFUSED;
     }
-    return false;
+    return ExchangeResult::NON_CHOICE;
 }
 
 std::vector<Player*> Capitalist::processAskAuction(Player *player, std::string &name) {
@@ -444,7 +509,7 @@ void Capitalist::shufflePlayers() {
 
 
 bool Capitalist::checkBankrupt(Player *player) {
-    return player->getDebt() > player->getPatrimoine();
+    return player->getDebt() > player->getPatrimoine(isFastGame());
 }
 
 void Capitalist::processBankruptByPlayer(Player *player, Player *other) {
@@ -458,4 +523,43 @@ void Capitalist::processBankruptByPlayer(Player *player, Player *other) {
 
 void Capitalist::setRunning(bool new_running) {
     this->running = new_running;
+}
+
+void Capitalist::setFastGame(bool is_fast) {
+    fast = is_fast;
+}
+
+bool Capitalist::isFastGame() {
+    return fast;
+}
+
+void Capitalist::setNumberOfPlayers(int nbr) {
+    number_of_players_at_start = nbr;
+}
+
+int Capitalist::getNumberOfPlayersAtStart() {
+    return number_of_players_at_start;
+}
+
+void Capitalist::forceAcquisition(Player *player) {
+    int land_index_1;
+    int land_index_2 = -1;
+
+    std::vector<Land*> available_land = getBoard().getAllAvailableLand();
+    int size = available_land.size();
+
+    if (size >= 2){
+        std::random_device rd;  // Will be used to obtain a seed for the random number engine
+        std::mt19937 gen(rd());
+        std::uniform_int_distribution<> distrib(0, size - 1);
+
+        land_index_1 = distrib(gen);
+        while (land_index_2 == -1 or land_index_1 == land_index_2){
+            land_index_2 = distrib(gen);
+        }
+        player->pay(available_land.at(land_index_1)->getPurchasePrice(), true);
+        player->acquireLand(available_land.at(land_index_1));
+        player->pay(available_land.at(land_index_2)->getPurchasePrice(), true);
+        player->acquireLand(available_land.at(land_index_2));
+    }
 }

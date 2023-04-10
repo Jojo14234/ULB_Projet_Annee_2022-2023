@@ -41,7 +41,8 @@ auquel il pourra par la suite se connecter. Une fois connecté à son compte l'u
 
 ## Gestion partie
 #### Créer une partie
-`/create`
+`/create normale`  
+`/create fast`
 
 #### Rejoindre une partie
 `/join [game_code]`

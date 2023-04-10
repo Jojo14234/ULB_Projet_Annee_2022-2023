@@ -34,4 +34,9 @@ public:
 
 	friend class MenuCUIController;
 
+    //todo from n-curse
+    InputButtonFrame* getConsoleInputBox() { return &console; }
+    IntInputButtonBox* getJoinInputBox() { return &join; }
+    TextButton* getDisconnectButton() { return &disconnect; }
+
 };

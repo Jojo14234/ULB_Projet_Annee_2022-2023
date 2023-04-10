@@ -8,12 +8,15 @@ OTHERFLAGS = -fanalyzer -Walloc-zero -Wcast-align \
 			-Wsuggest-final-types -Wsuggest-override -Wundef -Wuseless-cast -Wvolatile \
 			-Wformat=2  -Wzero-as-null-pointer-constant -fsanitize=address,leak #-Wswitch-default -Wswitch-enum
 #CXXFLAGS += ${OTHERFLAGS}
-LDLIBS 	 = -lpthread -lsfml-network -lsfml-system -lncurses -ljsoncpp
+LDLIBS 	 = -lpthread -lsfml-network -lsfml-system -lncurses
+
 
 ifneq ($(shell uname -s), Linux)
-	CXXFLAGS += -I/opt/homebrew/Cellar/sfml/2.5.1_2/include -I/opt/homebrew/Cellar/jsoncpp/1.9.5/include
-	LDLIBS   += -L/opt/homebrew/Cellar/sfml/2.5.1_2/lib -L/opt/homebrew/Cellar/jsoncpp/1.9.5/lib
+	CXXFLAGS += -I/opt/homebrew/Cellar/sfml/2.5.1_2/include
+	LDLIBS   += -L/opt/homebrew/Cellar/sfml/2.5.1_2/lib
 endif
+
+
 
 # Create Client objects
 CLIENT_BINS = $(patsubst Client/%.cpp, Client/%.o, $(wildcard Client/*.cpp))
@@ -47,6 +50,10 @@ CELLS_BINS = $(patsubst Game/Board/Obtainable/Cells/%.cpp, Game/Board/Obtainable
 LAND_BINS = $(patsubst Game/Board/Obtainable/Cells/Land/%.cpp, Game/Board/Obtainable/Cells/Land/%.o, $(wildcard Game/Board/Obtainable/Cells/Land/*.cpp))
 
 
+#JSON
+JSON_BINS = $(patsubst jsoncpp/src/lib_json/%.cpp, jsoncpp/src/lib_json/%.o, $(wildcard jsoncpp/src/lib_json/*.cpp))
+JSON_TEST_RUNNER_BINS = $(patsubst jsoncpp/src/jsontestrunner/%.cpp,  jsoncpp/src/jsontestrunner/%.o, $(wildcard jsoncpp/src/jsontestrunner/*.cpp))
+
 .PHONY: default
 default: main
 
@@ -55,7 +62,7 @@ clean:
 	-rm *.o */*.o */*/*.o */*/*/*.o */*/*/*/*.o */*/*/*/*/*.o 2> /dev/null
 
 rm:
-	-rm capitalist server_capitalist ncurse 2> /dev/null
+	-rm capitalist capitalistCLI capitalistGUI capitalistCui server_capitalist ncurse 2> /dev/null
 
 
 main: client server
@@ -64,14 +71,13 @@ client: ${CLIENT_BINS} ${CLIENT_INPUTPARSER_BINS}
 	${CXX} ${CXXFLAGS} -o capitalist $^ ${LDLIBS}
 	make clean
 
-server: ${SERVER_BINS} ${SERVER_CM_BINS} ${SERVER_DB_BINS} ${GAME_BINS} ${PLAYER_BINS} ${DICE_BINS} ${BOARD_BINS}  ${OBTAINABLE_BINS} ${CARDS_BINS} ${CELLS_BINS} ${LAND_BINS} ${SERVER_DB_FRIEND_BINS} ${SERVER_DB_CHAT_BINS} ${SERVER_GAME_BINS}
+server: ${SERVER_BINS} ${SERVER_CM_BINS} ${SERVER_DB_BINS} ${GAME_BINS} ${PLAYER_BINS} ${DICE_BINS} ${BOARD_BINS}  ${OBTAINABLE_BINS} ${CARDS_BINS} ${CELLS_BINS} ${LAND_BINS} ${SERVER_DB_FRIEND_BINS} ${SERVER_DB_CHAT_BINS} ${SERVER_GAME_BINS} ${JSON_BINS}
 	${CXX} ${CXXFLAGS} -o server_capitalist $^ ${LDLIBS}
 	make clean
 
 ncurse: ${NCURSE_BINS} ${NCURSE_CONTROLLER_BINS} ${NCURSE_INPUT_PARSER_BINS} ${NCURSE_VIEW_BINS} ${NCURSE_VIEW_GAME_OBJECT_BINS}
 	${CXX} ${CXXFLAGS} -o ncurse $^ ${LDLIBS}
 	make clean
-
 
 # new Client part
 GUI:

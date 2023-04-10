@@ -36,32 +36,46 @@ enum class QUERY {
     INFOS_CARD_DESCRIPTION, // description
 
 
-    PLAYER_JOIN_GAME, // username:gameCode [string]:[int]
+    PLAYER_JOIN_GAME, // username:gameCode:nb_player:all_players [string]:[int]:[int]:[string]
+    PLAYER_CREATE_GAME, // username:gameCode [string]:[int]
 
     MESSAGE, // All indication message
     USELESS_MESSAGE, // Message useless outside out the terminal app
+    BAD_COMMAND,
 
 
     INFOS_ROLL_DICE, // dice1:dice2:result:isDouble:doubleCount [int]:[int]:[int]:[bool]:[int]
 
-    INFOS_LEAVE_BUILD_MODE,
+    INFOS_LEAVE_SELECTION_MODE,
+    NO_BUILDABLE_PROP,
+    CANNOT_BUILD,
+    NO_SALABLE_PROP,
+    CANNOT_SELL,
+    NO_MORTGAGEABLE_PROP,
+    CANNOT_MORTAGE,
+    NO_UNMORTGAGEABLE_PROP,
+    CANNOT_UNMORTGAGE,
+    NO_EXCHANGEABLE_PROP,
+    CANNOT_EXCHANGE,
 
     INFOS_BUILD_PROP, // name:name:... [string]:[string]:... All the property name if they are buildable
     INFOS_SELL_BUILD, // name:name:... [string]:[string]:... All the property name if build can be sell
-    INFOS_MORTGAGEABLE_PROP, // All the property mortgageable by a player
-    INFOS_LIFT_MORTGAGEABLE_PROP, // All the property lift mortgageable by a player
-    INFOS_EXCHANGEABLE_PROP, // username=property_exchangeable:property_exchangeable:|... All teh properties exchangeable by all the player
+    INFOS_MORTGAGEABLE_PROP, // name:name:... [string]:[string]:... All the property name 
+    INFOS_LIFT_MORTGAGEABLE_PROP, // name:name:... [string]:[string]:... All the property name 
+    INFOS_EXCHANGEABLE_PROP, // index=property_exchangeable:property_exchangeable:|... All the properties exchangeable by all the player
 
 
-    INFOS_BUILD_SUCCESS, // property_name (indicate the level up) // TODO add lvl
-    INFOS_SELL_BUILD_SUCCESS, // property_name (indicate the level down) // TODO add lvl
-    INFOS_MORTGAGE_SUCCESS, // property name of the mortgaged property
-    INFOS_LIFT_MORTGAGE_SUCCESS, // property name of the lift mortgaged property
-    INFOS_EXCHANGE_SUCCESS, // PropertyName:new_propriétaire nom // Tells that the exchange was successfully made
+    INFOS_BUILD_SUCCESS, // property_name:level:mortgaged [string]:[int]:[bool]
+    INFOS_SELL_BUILD_SUCCESS, // property_name:level:mortgaged [string]:[int]:[bool]
+    INFOS_MORTGAGE_SUCCESS, // property_name:level:mortgaged [string]:[int]:[bool]
+    INFOS_LIFT_MORTGAGE_SUCCESS, // property_name:level:mortgaged [string]:[int]:[bool]
+    INFOS_EXCHANGE_SUCCESS, // property_name:new_proprio_index  [string]:[int]
 
     INFOS_AUCTION_BID,
 
-    ASK_EXCHANGE, // property_name:price // envoyé au propriétaire de la case pour lui demander si il souhaite accepter l'échange ou non
+    ASK_EXCHANGE, // property_name:price:sender_username [string]:[int]:[string] // envoyé au propriétaire de la case pour lui demander si il souhaite accepter l'échange ou non
+    CONFIRM_EXCHANGE_ASKING,
+    EXCHANGE_REFUSED,
     ASK_AUCTION, // property_name // envoyé à tout les joueurs pour leur demander de participer à l'enchère
     STOP_WAIT, // Arrête l'échange ou l'enchère en cas de trop longue attente (NE PAS MODIF NI PARSE autrement DANS LE CLIENT)
 

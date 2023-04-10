@@ -18,6 +18,10 @@ class MainCLIWindow : public AbstractMainWindow<STATE, int>, public AbstractCLI 
 
 public:
 
+    MainCLIWindow();
+
+    ~MainCLIWindow()=default;
+
     void mainLoop() override;
 
 };

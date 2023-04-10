@@ -34,6 +34,7 @@ class Server {
 
     // For Disconnection of the user
     void clientProcessDisconnect(ClientManager &client);
+    void clientProcessQuit(ClientManager &client);
 	// To process the client query 
 	void clientProcessQuery(ClientManager &client, QUERY_TYPE query);
 	// For connection
@@ -42,6 +43,7 @@ class Server {
 	// For the game
 	void clientProcessJoinGame(ClientManager &client);
 	void clientProcessCreateGame(ClientManager &client);
+    void clientProcessCreateFastGame(ClientManager &client);
 	// For ranking
 	void clientProcessRankingTop(ClientManager &client);
 	void clientProcessRankingPos(ClientManager &client);

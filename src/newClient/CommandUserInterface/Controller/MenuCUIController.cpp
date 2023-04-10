@@ -13,8 +13,8 @@
 
 // Public
 
-MenuCUIController::MenuCUIController(Client* model, MenuCUIView* view) :
-	AbstractCUIController(model, STATE::MENU), view{view} {}
+MenuCUIController::MenuCUIController(Client* model, MenuCUIView* view, MenuCUIObserver* game_cui_controller) :
+	AbstractCUIController(model, STATE::MENU), GameCUISubject{game_cui_controller}, view{view} {}
 
 void MenuCUIController::handle(int event) {
 	switch(event) {
@@ -37,23 +37,26 @@ void MenuCUIController::handle(int event) {
 			this->view->console.addText(response);
 
 
-			if (parser.getQueryType() == QUERY_TYPE::CREATE_GAME){
+			if (parser.getQuery() == QUERY_TYPE::CREATE_GAME) {
 				this->new_state = STATE::GAME;
+                this->notify();
 				int gamecode = atoi(&response[response.length()-4]);
 				this->model->setGameCode(gamecode);
 				this->model->createGame();
 			}
-			break; }
+			break; 
+		}
 		case JOIN: {
 			this->model->sendJoinGame(this->view->join.getValue());
 			std::string response;
 			QUERY query = this->model->receive(response);
-			this->view->console.addText(response);
-			if (response != "aucune partie n'existe avec ce code"){
+			if (query != QUERY::FALSEQ){
 				this->new_state = STATE::GAME;
+				this->notify();
 				this->model->setGameCode(this->view->join.getValue());
-			}
-			break; }
+			} else this->view->console.addText("Il n'existe pas de partie avec ce code");
+			break; 
+		}
 		case IDLE: break;
 		} break;
 	default:

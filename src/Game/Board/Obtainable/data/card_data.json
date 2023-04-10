@@ -4,7 +4,7 @@
 
         "JailCard" :
             {
-                "description" : "Vous êtes libéré de prison. Cette carte peut être conservée jusqu’à ce qu’elle soit utilisée ou vendue."
+                "description" : "Vous êtes libéré de prison. Cette carte peut être conservée jusqu'à ce qu'elle soit utilisée ou vendue."
             },
 		"MoneyCard" : [
 			{
@@ -77,7 +77,7 @@
             },
             
 			{ 
-                "description" : "Avancez jusqu’à la case départ, et touchez 200$",
+                "description" : "Avancez jusqu'à la case départ, et touchez 200$",
                 "dest" : [0],
                 "money" : 1,
                 "type" : "Cell"
@@ -101,7 +101,7 @@
             },
             
 			{ 
-                "description" : "Avancez jusqu’à la Gare 2. Si vous passez par la case départ, recevez 200$.",
+                "description" : "Avancez jusqu'à la Gare 2. Si vous passez par la case départ, recevez 200$.",
                 "dest" : [15],
                 "money" : 1,
                 "type" : "Cell"
@@ -121,7 +121,7 @@
 
         "Jail Card" : {
 
-                "description" : "Vous êtes libéré de prison. Cette carte peut être conservée jusqu’à ce qu’elle soit utilisée ou vendue."
+                "description" : "Vous êtes libéré de prison. Cette carte peut être conservée jusqu'à ce qu'elle soit utilisée ou vendue."
             },
        
 		"MoneyCard" : [
@@ -151,7 +151,7 @@
             },
             
             {
-                "description" :  "C’est votre anniversaire. Chaque joueur doit vous donner 15$.",
+                "description" :  "C'est votre anniversaire. Chaque joueur doit vous donner 15$.",
                 "amount" : 15,
                 "type" : "Birthday"
 
@@ -164,13 +164,13 @@
             },
             
             {
-                "description" :  "Recevez votre intérêt sur l’emprunt à 7% 25$.",
+                "description" :  "Recevez votre intérêt sur l'emprunt à 7% 25$.",
                 "amount" : 25,
                 "type" : "Money"
             },
             
             {
-                "description" :  "Payez votre Police d’Assurance 50$.",
+                "description" :  "Payez votre Police d'Assurance 50$.",
                 "amount" : -50,
                 "type" : "Money"
             },

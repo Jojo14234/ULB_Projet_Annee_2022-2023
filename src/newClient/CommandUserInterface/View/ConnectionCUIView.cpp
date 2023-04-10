@@ -1,7 +1,3 @@
-/**
- * Project Untitled
- */
-
 #include <ncurses.h>
 
 #include "ConnectionCUIView.hpp"

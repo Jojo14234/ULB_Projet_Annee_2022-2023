@@ -17,8 +17,8 @@ public:
 
 	virtual ~AbstractCUIController()=default;
 
-	virtual void handle(int event) override = 0;
+	virtual void handle(int event) override =0;
 	
-	virtual void move()=0;
+	virtual void move() override =0;
 
 };

@@ -53,14 +53,28 @@ public:
     bool canSellBuilding(Player* player);
     bool hasAllSameColorProperties(Player* player);
     bool AllSameColorPropertiesHaveGoodLevel(Player* player, bool sell = false);
+    bool isMortgageable(Player* player);
+    bool AllSameColorPropertiesHaveNoBuilding(Player* player);
 
     // Operation
     bool playerPurchase(Player* player) override;
     bool build(Player* player);
+    bool build(Player* player, bool is_fast_game);
     bool sellBuilding(Player* player);
     void levelUp();
     void levelDown();
+    int getIntLevel() { return static_cast<int>(level); }
+    PROPERTY_LEVEL getLevel() { return this->level; }
+    PROPERTY_COLOR getColor() { return this->color; }
+
+	bool isBuildable(Player* player, bool is_fast_game);
+
     void reset();
+
+    int getConstructPrice() { return this->construct_price; }
+
+
+	////////////////////////
 
 };
 

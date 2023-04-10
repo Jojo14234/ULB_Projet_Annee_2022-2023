@@ -111,17 +111,17 @@ std::array<int, 4> CardDeck::extractStationsArray(Json::Value &cards) {
  */
 Card* CardDeck::drawACard() {
     // Seed pour le hasard pris sur le temps en seconde depuis ...
-	std::srand(time(0));
+    std::srand(time(0));
     Card* drawn_card = nullptr;
 
     // Boucle tant qu'on n'a pas tiré une carte
-	while(!drawn_card) {
-		int result = std::rand()% 16;
-		drawn_card = this->card_list.at(result).get();
+    while(!drawn_card) {
+        int result = std::rand()% 16;
+        drawn_card = this->card_list.at(result).get();
         // Si la carte est le numéro 15, c'est que c'est la carte sortie de prison,
         // et si elle n'est pas dans le paquet il faut retirer une carte
         if (result == 15 && !isJailCardInside()) { drawn_card = nullptr; }
-	}
+    }
     return drawn_card;
     //return this->card_list.at(8).get();;     //pour debug
 }

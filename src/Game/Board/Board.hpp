@@ -1,18 +1,23 @@
 #ifndef _GAME_BOARD_HPP
 #define _GAME_BOARD_HPP
 
-#ifdef __linux__
-#include <jsoncpp/json/json.h>
-#endif
-
-#ifdef __APPLE__
-#include <json/json.h>
-#endif
+//jsoncpp
+#include "../../jsoncpp/include/json/allocator.h"
+#include "../../jsoncpp/include/json/assertions.h"
+#include "../../jsoncpp/include/json/config.h"
+#include "../../jsoncpp/include/json/forwards.h"
+#include "../../jsoncpp/include/json/json_features.h"
+#include "../../jsoncpp/include/json/json.h"
+#include "../../jsoncpp/include/json/reader.h"
+#include "../../jsoncpp/include/json/value.h"
+#include "../../jsoncpp/include/json/version.h"
+#include "../../jsoncpp/include/json/writer.h"
 
 #include <array>
 #include <memory>
 #include <string>
 #include <vector>
+#include "Obtainable/Cells/Land/Land.hpp"
 
 #include "../../utils/Configs.hpp"
 #include "Obtainable/Cells/LandCell.hpp"
@@ -67,6 +72,24 @@ public:
     // OPERATION
     Cell* operator[](int index);
 
+    LandCell* getCellByName(const std::string &name);
+
+    std::vector<Land*> getAllAvailableLand() {
+        std::vector<Land*> available_land;
+        for (auto cell : cells){
+            if (cell.get()->isLandCell()){
+                LandCell* l = dynamic_cast<LandCell*>(cell.get());
+                if (l->getLand()->getStatus() == LAND_STATUS::FREE){
+                    available_land.push_back(l->getLand());
+                }
+            }
+        }
+        return available_land;
+    }
+
+    int getBoardSize(){
+        return cells.size();
+    }
 
 };
 
