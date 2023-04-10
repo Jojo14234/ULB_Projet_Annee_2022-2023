@@ -59,7 +59,11 @@ class Timer2 {
     std::string stopMessage;
 
 public:
+
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wunused-parameter"
     Timer2(int duration, ClientManager* client, std::string stopMessage): duration{duration} {};
+#pragma GCC diagnostic pop
 
     void start() {
         // 1 il faut créer un autre thread
