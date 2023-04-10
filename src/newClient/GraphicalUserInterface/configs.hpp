@@ -11,7 +11,6 @@ enum class STATE {
 	MENU,
 	FRIENDS,
 	RANK,
-	CREATE,
 	GAME,
 };
 
