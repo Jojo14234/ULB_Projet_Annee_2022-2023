@@ -65,22 +65,29 @@ BankAccount* Player::getBankAccount(){ return &bank_account; }
 int Player::getPosition() const { return this->current_cell->getPosition(); }
 int Player::getMoney() const { return this->bank_account.getMoney(); }
 Player* Player::getPlayerToRefund() { return player_to_refund; }
-int Player::getPatrimoine() {
+int Player::getPatrimoine(bool is_fast_game) {
+    float weighting;
+    if (is_fast_game){
+        weighting = 0.8;
+    }
+    else {
+        weighting = 0.5;
+    }
     int money = getMoney();
     for (auto property : this->properties) {
-        int money_from_sell_buildings = property->getIntLevel() * (property->getConstructPrice()/2);
-        int money_from_hypotheque = property->getPurchasePrice()/2;
+        int money_from_sell_buildings = property->getIntLevel() * (property->getConstructPrice() * weighting);
+        int money_from_hypotheque = property->getPurchasePrice() * weighting;
         money += money_from_sell_buildings;
         money += money_from_hypotheque;
     }
 
     for (auto station : this->stations) {
-        int money_from_hypotheque = station->getPurchasePrice()/2;
+        int money_from_hypotheque = station->getPurchasePrice() * weighting;
         money += money_from_hypotheque;
     }
 
     for (auto company : this->companies) {
-        int money_from_hypotheque = company->getPurchasePrice()/2;
+        int money_from_hypotheque = company->getPurchasePrice() * weighting;
         money += money_from_hypotheque;
     }
     return money;
@@ -118,7 +125,7 @@ bool Player::pay(int amount, bool forced) {
     if ( !forced ) {this->getClient()->sendQueryMsg("", QUERY::INFOS_NOT_ENOUGH_MONEY); return false; }
     // Pas assez d'argent mais forcer de payer -> on passe en status de faillite suspecter mais on ne paye pas non plus.
     this->status = PLAYER_STATUS::BANKRUPT_SUSPECTED;
-    this->money_debt = amount;
+    this->money_debt += amount;
     return false; // TODO PTT FAUT METTRE RETURN TRUE (AVANT ON PAYAIS MÊME SI ON AVAIT PAS LES FONDS).
 }
 void Player::receive(int amount, std::string source) {
@@ -132,7 +139,8 @@ void Player::receive(int amount, std::string source) {
 // MOUVEMENT
 void Player::move(Cell *cell, bool pass_by_start) {
     if (passedByStart(cell, pass_by_start)) {
-        receive(200, "Banque");
+        this->receive(200, "Banque");
+        this->increaseBuildLevel();
     }
     current_cell = cell;
     this->client->getGameServer()->updateAllClientsWithQuery(QUERY::INFOS_PLAYER_MOVE, this->getUsername() + ":" + this->current_cell->getName() + ":" + std::to_string(this->getMoney()));
@@ -153,6 +161,7 @@ void Player::goToJail(Cell *cell) {
 void Player::processMove(Cell* new_cell, bool gainMoneyIfPassByStart) {
     if ( gainMoneyIfPassByStart && this->current_cell->getPosition() > new_cell->getPosition() ) {
         this->receive(MONEY_START_CELL, "la banque");
+        this->increaseBuildLevel();
     }
     this->current_cell = new_cell;
 }
@@ -160,7 +169,7 @@ Cell* Player::processMove(int step, Board &board) {
     // Calcul of the new Cell idx
     int new_cell_idx = this->current_cell->getPosition() + step;
     // If the new idx is greater than the board size then we are on the start_cell and we receive money
-    if (new_cell_idx >= BOARD_SIZE) { this->receive(MONEY_START_CELL, "la banque"); }
+    if (new_cell_idx >= BOARD_SIZE) { this->receive(MONEY_START_CELL, "la banque"); this->increaseBuildLevel(); }
     // set the new current_cell
     this->current_cell = board[new_cell_idx];
     return this->current_cell;
@@ -212,6 +221,12 @@ void Player::setResultLastRoll(int new_result) {
 
 int Player::getResultLastRoll() {
     return this->result_last_roll;
+}
+
+void Player::increaseBuildLevel() {
+    if (build_level < 2){
+        build_level++;
+    }
 }
 
 //ne pas ajouter de méthodes pour payer dans ces méthodes, elles sont aussi utilisées pour les échanges
@@ -313,9 +328,9 @@ std::string Player::getAllPossessionLiftMortgageable() {
     for ( auto station : stations ) { if ( station->isMortgaged() ) { str += station->getName() + ":"; } }
     return str;
 }
-std::string Player::getAllBuildableProperties() {
+std::string Player::getAllBuildableProperties(bool is_fast_game) {
     std::string str = "";
-    for ( auto property : this->getAllProperties() ) { if ( property->isBuildable(this) ) { str += property->getName() + ":"; } }
+    for ( auto property : this->getAllProperties() ) { if ( property->isBuildable(this, is_fast_game) ) { str += property->getName() + ":"; } }
     return str;
 }
 std::string Player::getAllSellableBuildProperties() {
@@ -385,3 +400,6 @@ std::vector<Land *> Player::getAllLand() {
     return lands;
 }
 
+int Player::getBuildLevel() {
+    return build_level;
+}

@@ -59,10 +59,26 @@ public:
     // Operation
     bool playerPurchase(Player* player) override;
     bool build(Player* player);
+    bool build(Player* player, bool is_fast_game);
     bool sellBuilding(Player* player);
     void levelUp();
     void levelDown();
-    void reset();
+    int getIntLevel() { return static_cast<int>(level); }
+    PROPERTY_LEVEL getLevel() { return this->level; }
+    PROPERTY_COLOR getColor() { return this->color; }
+
+	bool isBuildable(Player* player, bool is_fast_game);
+	bool canSellBuilding(Player* player);
+
+    void reset() {
+        this->Land::reset();
+        this->level = PROPERTY_LEVEL::EMPTY;
+    }
+
+    int getConstructPrice() { return this->construct_price; }
+
+
+	////////////////////////
 
 };
 

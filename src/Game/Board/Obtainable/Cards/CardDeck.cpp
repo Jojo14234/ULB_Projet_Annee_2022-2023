@@ -27,9 +27,37 @@ CardDeck::CardDeck(std::string name): name{name} {
     Json::Value cell_cards = root[name]["CellCard"];
     this->extractCellCard(cell_cards, idx);
 
-    // Extraction de la JailCard
-    Json::Value jail_card = root[name]["JailCard"];
-    this->extractJailCard(jail_card, idx);
+    if (cell_cards[i]["dest"].size() > 1) {	//tester si ça marche (size) !! et mettre tout ça dans dans une fonction ?
+
+        Json::Value current = cell_cards[i];
+        std::array<int, 4> dest_list;
+        for (unsigned int i=0; i < current["dest"].size(); i++) {
+            dest_list[i] = current["dest"][i].asInt();
+        }
+
+        std::string description = current["descript"].asString();
+        bool money = current["money"].asBool();
+
+        this->card_list[idx] = std::make_shared<NearestCellCard>(description, money, dest_list);
+
+    }
+    else if (cell_cards[i]["dest"].asInt() < 0) {
+        Json::Value current = cell_cards[i];
+        std::string description = current["descript"].asString();
+        bool money = current["money"].asBool();
+        int destination = current["dest"].asInt();
+        this->card_list[idx] = std::make_shared<MoveBackCellCard>(description, money, destination);
+    }
+    else {
+        this->card_list[idx] = std::make_shared<CellCard>(cell_cards[i]);
+
+    }
+    idx++;
+
+    // Add Jail card to the deck
+    this->card_list[idx] = std::make_shared<JailCard>(root[name]["JailCard"]);
+
+    std::cout << "[init all     " << name << " : 100%]" << std::endl;
 }
 
 void CardDeck::debugInfoDescription() {

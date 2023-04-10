@@ -21,6 +21,9 @@ public:
     ///retrieve amount of money in account
     int getMoney() const;
 
+    //used for fast games
+    void setMoney(int new_money);
+
     // return true if the account can pay this amount, else false
     bool canPay(int amount);
 };
