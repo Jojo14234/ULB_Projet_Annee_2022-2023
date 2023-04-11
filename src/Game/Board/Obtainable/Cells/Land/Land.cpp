@@ -20,6 +20,12 @@ void Land::setStatus(LAND_STATUS new_status) { this->status = new_status; }
 // Check
 bool Land::isMortgaged() const { return status == LAND_STATUS::HYPOTEK; }
 
+bool Land::isMortgageable(Player* player) const {
+    if ( this->owner != player ) return false; 
+    if ( this->isMortgaged() ) return false;
+    return true;
+}
+
 // Opération
 /*
  * Met en hypothèque une propriété et donne la moitié du prix d'achat au player

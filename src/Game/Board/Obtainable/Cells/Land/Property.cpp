@@ -51,7 +51,7 @@ bool Property::canSellBuilding(Player* player) {
     return true;
 }
 
-bool Property::isMortgageable(Player* player) {
+bool Property::isMortgageable(Player* player) const {
     if ( this->owner != player ) return false; 
     if ( this->isMortgaged() ) return false; 
     if ( this->getLevel() != PROPERTY_LEVEL::EMPTY ) return false; 
@@ -69,7 +69,7 @@ bool Property::hasAllSameColorProperties(Player* player) {
     else {return same_color_properties.size() == 2;}
 }
 
-bool Property::AllSameColorPropertiesHaveNoBuilding(Player* player) {
+bool Property::AllSameColorPropertiesHaveNoBuilding(Player* player) const {
     for (auto property : getOtherSameColorPropFromPlayer(player)) {
         if (property->getLevel() != PROPERTY_LEVEL::EMPTY) return false;
     }
@@ -127,7 +127,7 @@ bool Property::isBuildable(Player *player, bool is_fast_game) {
  * Return un vecteur contenant les autres propriétés de la même couleur que cette propriété
  * NE CONTIENT PAS LA PROPRIÉTÉ INITIALE
  */
-std::vector<Property*> Property::getOtherSameColorPropFromPlayer(Player* player) {
+std::vector<Property*> Property::getOtherSameColorPropFromPlayer(Player* player) const {
     std::vector<Property*> same_color_properties;
     for (auto property : player->getAllProperties()) {
         if (property->getName() != this->getName() && property->getColor() == this->getColor()) {same_color_properties.push_back(property);}

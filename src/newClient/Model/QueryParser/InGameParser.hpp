@@ -371,7 +371,7 @@ struct ExchangeSucceedInfo {
 		std::string tmp;
 		while (str[i] != ':' ) { tmp += str[i]; i++; }
 		property = tmp;
-		player = atoi(&str[i+1]+1);
+		player = atoi(&str[i+1])+1;
 	}
 };
 

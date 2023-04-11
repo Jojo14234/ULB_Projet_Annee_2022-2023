@@ -173,9 +173,9 @@ public:
     //BOOL
     bool hasBuildableProperties();
     bool hasSellableProperties();
-    bool hasMortgageableProperties();
-    bool hasUnmortgageableProperties();
-    bool canExchangeProperties();
+    bool hasMortgageableLand();
+    bool hasUnmortgageableLand();
+    bool canExchangeLand();
 
     // NEW FUNCTION
     std::vector<Land*> getAllLand();

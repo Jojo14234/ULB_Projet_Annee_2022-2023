@@ -373,18 +373,18 @@ bool Player::hasSellableProperties(){
     for ( auto property : this->getAllProperties() ) { if ( property->canSellBuilding(this) ) return true;}
     return false;
 }
-bool Player::hasMortgageableProperties(){
-    for ( auto property : this->getAllProperties() ) { if ( property->isMortgageable(this) ) return true;}
+bool Player::hasMortgageableLand(){
+    for ( auto land : this->getAllLand() ) { if ( land->isMortgageable(this) ) return true;}
     return false;
 }
-bool Player::hasUnmortgageableProperties(){
-    for ( auto property : this->getAllProperties() ) { if ( property->isMortgaged() ) return true;}
+bool Player::hasUnmortgageableLand(){
+    for ( auto land : this->getAllLand() ) { if ( land->isMortgaged() ) return true;}
     return false;
 }
-bool Player::canExchangeProperties(){
+bool Player::canExchangeLand(){
     for ( auto& player : * (this->getClient()->getGameServer()->getGame()->getPlayers())){
         if (player.getIndex() == this->getIndex()) continue;
-        if (player.getAllProperties().size() > 0) return true;
+        if (player.getAllLand().size() > 0) return true;
     }
     return false;
 }
