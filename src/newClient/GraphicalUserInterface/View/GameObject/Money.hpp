@@ -18,6 +18,7 @@ class Money : public virtual ModalBox {
             addText(&text);}
         
         void draw(sf::RenderWindow &window)  const override{
+            if (isHidden()) return;
             Box::draw(window);
             for (auto &image : images) image->draw(window);
             for (auto &text : texts) text->draw(window);

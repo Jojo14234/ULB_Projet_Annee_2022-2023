@@ -41,6 +41,22 @@ const std::string FLAG_PATH = "../assets/images/drapeau1.png";
 const std::string INFOBOX_PATH = "../assets/images/InfoBox/suitcase.png";
 const std::string MONEY_PATH = "../assets/images/InfoBox/money.png";
 
+const std::string MORTGAGE_BUTTON = "../assets/images/ActionButton/hypo.png";
+const std::string UNMORTGAGE_BUTTON = "../assets/images/ActionButton/deshypo.png";
+const std::string SELL_BUTTON = "../assets/images/ActionButton/vendre.png";
+const std::string CONSTRUCT_BUTTON = "../assets/images/ActionButton/construire.png";
+const std::string EXCHANGE_BUTTON = "../assets/images/ActionButton/echanger.png";
+const std::string ROLLDICE_BUTTON = "../assets/images/ActionButton/lancerdé.png";
+const std::string BUY_BUTTON = "../assets/images/ActionButton/acheter.png";
+const std::string NOBUY_BUTTON = "../assets/images/ActionButton/pasacheter.png";
+const std::string PAID_BUTTON = "../assets/images/ActionButton/payer.png";
+const std::string DRAWCARD_BUTTON = "../assets/images/ActionButton/piocher.png";
+const std::string PRISONCARD_BUTTON = "../assets/images/ActionButton/carteprison.png";
+const std::string YES_BUTTON = "../assets/images/ActionButton/oui.png";
+const std::string NO_BUTTON = "../assets/images/ActionButton/non.png";
+const std::string FORFAIT_BUTTON = "../assets/images/ActionButton/abandonner.png";
+
+
 // Fonts
 const std::string ARIAL_FONT_PATH = "../assets/fonts/arial.ttf";
 const std::string SERIF_FONT_PATH = "../assets/fonts/hvd-comic-serif-pro.ttf";
