@@ -8,6 +8,7 @@
 #include "Board/Obtainable/Cells/Land/Land.hpp"
 #include <vector>
 
+/*
 void Capitalist::receiveQuery(GAME_QUERY_TYPE query, sf::Packet &packet) {
     std::string s1="", s2="";
     switch (query) {
@@ -18,6 +19,7 @@ void Capitalist::receiveQuery(GAME_QUERY_TYPE query, sf::Packet &packet) {
     }
     std::cout << "in capitalist : " << (int)query << " " << s1 << " " << s2 << std::endl;
 }
+*/
 
 
 
@@ -177,7 +179,7 @@ std::string Capitalist::getBetterGameInfos() {
  */
 void Capitalist::addPlayer(ClientManager &client) {
     Cell* starting_cell = this->board[0];
-    Player player{&client, starting_cell};
+    Player player{&client, starting_cell, this->params.startMoney};
     if ( players.empty() ) { player.setAdmin(); }
     if (isFastGame()){
         player.getBankAccount()->setMoney(STARTING_MONEY_FAST);

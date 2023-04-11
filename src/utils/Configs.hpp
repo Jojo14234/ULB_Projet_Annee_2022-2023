@@ -8,8 +8,11 @@
 // Server
 const auto IP = "127.0.0.1";
 const auto PORT = 8080;
+
+// Capitalist
 const auto STARTING_MONEY = 1500;
 const auto STARTING_MONEY_FAST = 3000;
+const auto MAX_PLAYER_DEFAULT = 8;
 const auto MONEY_START_CELL = 200;
 const auto BOARD_SIZE = 40;
 
@@ -129,8 +132,7 @@ enum class PROPERTY_COLOR {
 };
 
 
-// Game
-const short unsigned int MAX_NB_PLAYER = 6; 
+
 
 
 #endif

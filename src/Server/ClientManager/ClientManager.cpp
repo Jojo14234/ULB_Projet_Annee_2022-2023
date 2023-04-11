@@ -30,6 +30,8 @@ void ClientManager::receive(QUERY_TYPE &query) {
 		
 		case QUERY_TYPE::REGISTER :	// same as under
 		case QUERY_TYPE::LOGIN :    // same as under
+        case QUERY_TYPE::CREATE_GAME :
+        case QUERY_TYPE::CREATE_FAST_GAME :
 		case QUERY_TYPE::MESSAGE_SEND : packet >> args.s1 >> args.s2; break;
 		case QUERY_TYPE::RANKING_POS:
 		case QUERY_TYPE::RANKING_TOP: break;
@@ -94,7 +96,14 @@ void ClientManager::setGameServer(GameServer* gs) { this->game_server = gs; }
 void ClientManager::removeGameServer() { this->game_server = nullptr; }
 
 // Gestion stats
-void ClientManager::setScore(int new_score) { this->Score = new_score; }
+void ClientManager::setScore(int new_score) { this->score = new_score; }
+void ClientManager::setIsWinner(bool winner) { this->isWinner = winner; }
 
-int ClientManager::getScore() const { return this->Score; }
+int ClientManager::getScore() const { return this->score; }
+bool ClientManager::getIsWinner() const { return this->isWinner; }
+
+void ClientManager::resetStat() {
+    this->score = 0;
+    this->isWinner = false;
+}
 

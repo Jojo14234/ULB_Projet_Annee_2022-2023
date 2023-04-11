@@ -14,6 +14,16 @@ enum class ExchangeStatus{STOP, START, OTHER};
 enum class ExchangeResult{ACCEPTED, REFUSED, NON_CHOICE};
 class ClientManager;
 
+struct GameParameters {
+    bool isFastGame = false;
+    int startMoney = STARTING_MONEY;
+    int maxPlayers = MAX_PLAYER_DEFAULT;
+    int maxHome = MAX_HOME;
+    int maxHotel = MAX_HOTEL;
+    //todo add params if needed
+    int max_turn = 10000;
+};
+
 
 class Capitalist {
 
@@ -27,13 +37,15 @@ class Capitalist {
     ExchangeStatus exchange_in_progress = ExchangeStatus::STOP;
 
     Board board;
-    Dice dice;
+    Dice dice{};
+    GameParameters params;
 
 public:
 
-	Capitalist()=default;
+	Capitalist(GameParameters params)
+            : fast{params.isFastGame}, board{params.maxHome, params.maxHotel}, params{params} {};
 
-	void receiveQuery(GAME_QUERY_TYPE query, sf::Packet &packet);
+	//void receiveQuery(GAME_QUERY_TYPE query, sf::Packet &packet);
 
 
     // Refactor order

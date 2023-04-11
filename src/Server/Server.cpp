@@ -92,6 +92,7 @@ void Server::clientProcessQuery(ClientManager &client, QUERY_TYPE query) {
 		// For game
 		case QUERY_TYPE::JOIN_GAME:         this->clientProcessJoinGame(client); break;
 		case QUERY_TYPE::CREATE_GAME:       this->clientProcessCreateGame(client); break;
+		case QUERY_TYPE::CREATE_FAST_GAME:  this->clientProcessCreateGame(client); break;
 		// For ranking
 		case QUERY_TYPE::RANKING_POS:       this->clientProcessRankingPos(client); break;
 		case QUERY_TYPE::RANKING_TOP:       this->clientProcessRankingTop(client); break;
@@ -133,7 +134,7 @@ void Server::clientProcessQuit(ClientManager &client) {
 void Server::clientProcessRegister(ClientManager &client) {
 	std::cout << "[Received 'register' query from client]" << std::endl;
     // Condition du process
-    if ( client.getAccount() != nullptr )                  { client.send("You are already connected"); return; }
+    if ( client.getAccount() != nullptr ) { client.send("You are already connected"); return; }
     if ( this->database.contains(client.getS1().c_str()) ) { client.sendQueryMsg("FALSE", QUERY::FALSEQ); return; }
     // Process of creating the new account
     User* user = database.addUser(client.getS1(), client.getS2());
@@ -174,15 +175,39 @@ void Server::clientProcessJoinGame(ClientManager &client) {
 }
 
 void Server::clientProcessCreateGame(ClientManager &client) {
-	std::cout << "[Received 'create' query from client '" << client.getAccount()->getUsername() << "']\n" << std::endl;
-    int gc = games.createGame(&client, false);
+	std::cout << "[Received 'create normal' query from client '" << client.getAccount()->getUsername() << "']\n" << std::endl;
+    std::istringstream input{client.getS2()};
+    int space = 0;
+    GameParameters params{false};
+    for (std::string word; std::getline(input, word, ' '); space++) {
+        switch (space) {
+            case 1: params.startMoney = std::stoi(word); break;
+            case 2: params.maxPlayers = std::stoi(word); break;
+            case 3: params.maxHome = std::stoi(word); break;
+            case 4: params.maxHotel = std::stoi(word); break;
+            default : break;
+        }
+    }
+    int gc = games.createGame(&client, params);
 	client.sendQueryMsg(client.getUsername() + ":" + std::to_string(gc), QUERY::PLAYER_CREATE_GAME);
 	client.enterGameLoop();
 }
 
 void Server::clientProcessCreateFastGame(ClientManager &client) {
-    std::cout << "[Received 'createfast' query from client '" << client.getAccount()->getUsername() << "']\n" << std::endl;
-    int gc = games.createGame(&client, true);
+    std::cout << "[Received 'create fast' query from client '" << client.getAccount()->getUsername() << "']\n" << std::endl;
+    std::istringstream input{client.getS2()};
+    int space = 0;
+    GameParameters params{true};
+    for (std::string word; std::getline(input, word, ' '); space++) {
+        switch (space) {
+            case 1: params.startMoney = std::stoi(word); break;
+            case 2: params.maxPlayers = std::stoi(word); break;
+            case 3: params.maxHome = std::stoi(word); break;
+            case 4: params.maxHotel = std::stoi(word); break;
+            default : break;
+        }
+    }
+    int gc = games.createGame(&client, params);
     client.send("(clientProcessCreateGame) Vous avez crée une partie rapide avec le code : " + std::to_string(gc));
     client.enterGameLoop();
 }
