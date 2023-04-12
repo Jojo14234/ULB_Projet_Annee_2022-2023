@@ -74,22 +74,34 @@ void Board::createBoard(){
                 position.x =(start_corner.x+corner_cell_size.x+ 9*v_cell_size.y) - (i-30) * v_cell_size.y ;position.y = start_corner.y ;}
             board[i] = std::make_shared<Cell>(ObjectInfo<>(size.x,size.y, position.x,position.y),
                                                  sf::Color::White,  CELL_PATH + cell_file[i] , i);
-        }}}
+        }
+        }}
 
 
 ////////////////////////////////////////////////////////////////
 //method for setting and unsetting player
-/*void Board::unsetPlayer(int player){}
 
-void Board::setPlayer(int cell,int player){
-	old_pos_player[player-1] = cell;
-}
+
+void Board::setColorNumber(std::vector<std::string> color_list){
+		player_color.clear();
+		for (std::string s : color_list ){
+			if(s == "red"){player_color.emplace_back(&red);}
+			else if(s == "blue"){player_color.emplace_back(&blue);}
+			else if(s == "magenta"){player_color.emplace_back(&magenta);}
+			else if(s == "green"){player_color.emplace_back(&green);}
+			else if(s == "yellow"){player_color.emplace_back(&yellow);}
+			else if(s == "cyan"){player_color.emplace_back(&cyan);}}}
+
 
 void Board::movePlayer(int cell, int player){
-	unsetPlayer(player);
-	setPlayer(cell, player);
+    //pas encore tester
+    board[old_pos_player[player-1]]->removePlayer(player_color[player],player);
+    old_pos_player[player-1] = cell;
+	board[cell]->setPlayer(player_color[player], player);
 }
  
+
+/*
 
 
 //method to clear all buildings a cell

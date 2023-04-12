@@ -37,7 +37,6 @@ const std::string DELETE_BUTTON_PATH = "../assets/images/delete_button.png";
 const std::string FILE_NAME = "../assets/utils/cellfile.txt";
 const std::string CELL_NAME = "../assets/utils/cellname.txt";
 const std::string CELL_PATH = "../assets/images/Cell/";
-const std::string FLAG_PATH = "../assets/images/drapeau1.png";
 const std::string INFOBOX_PATH = "../assets/images/InfoBox/suitcase.png";
 const std::string MONEY_PATH = "../assets/images/InfoBox/money.png";
 
@@ -59,6 +58,21 @@ const std::string UP_BUTTON = "../assets/images/ActionButton/up-arrow.png";
 const std::string DOWN_BUTTON = "../assets/images/ActionButton/down-arrow.png";
 const std::string VALIDATE_BUTTON = "../assets/images/ActionButton/validate.png";
 const std::string TEXT_AUCTION = "../assets/images/ActionButton/zonetext.png";
+
+
+const std::string PLAYER_RED = "../assets/images/OnCell/player_red.png";
+const std::string PLAYER_BLUE = "../assets/images/OnCell/player_blue.png";
+const std::string PLAYER_GREEN = "../assets/images/OnCell/player_green.png";
+const std::string PLAYER_YELLOW = "../assets/images/OnCell/player_yellow.png";
+const std::string PLAYER_MAGENTA = "../assets/images/OnCell/player_magenta.png";
+const std::string PLAYER_CYAN = "../assets/images/OnCell/player_cyan.png";
+
+const std::string FLAG_RED = "../assets/images/OnCell/flag_red.png";
+const std::string FLAG_BLUE = "../assets/images/OnCell/flag_blue.png";
+const std::string FLAG_GREEN= "../assets/images/OnCell/flag_green.png";
+const std::string FLAG_YELLOW = "../assets/images/OnCell/flag_yellow.png";
+const std::string FLAG_MAGENTA = "../assets/images/OnCell/flag_magenta.png";
+const std::string FLAG_CYAN = "../assets/images/OnCell/flag_cyan.png";
 
 // Fonts
 const std::string ARIAL_FONT_PATH = "../assets/fonts/arial.ttf";

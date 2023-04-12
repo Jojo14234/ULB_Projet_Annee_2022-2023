@@ -126,13 +126,7 @@ class GameGUIView: public AbstractGUIView {
 			no_exchange.setVisible();
 		}
 	}
-
-	/*
-	void hideAunctionRound(bool hidden){
-		if (hidden == true){}
-		else{}
-	}*/
-
+	
 	void hideBankruptRound(bool hidden){
 		if (hidden == true){
 			bankrupt_round.setHidden(); 
@@ -231,11 +225,6 @@ public:
 		yes_exchange.draw(*window);
 		no_exchange.draw(*window);
 	}
-
-	void drawAuctionRound(){
-		//à rajouter ds une classe à part
-	}
-
 
 	void drawBankruptRound(){
 		bankrupt_round.draw(*window);
