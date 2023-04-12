@@ -55,7 +55,10 @@ const std::string PRISONCARD_BUTTON = "../assets/images/ActionButton/carteprison
 const std::string YES_BUTTON = "../assets/images/ActionButton/oui.png";
 const std::string NO_BUTTON = "../assets/images/ActionButton/non.png";
 const std::string FORFAIT_BUTTON = "../assets/images/ActionButton/abandonner.png";
-
+const std::string UP_BUTTON = "../assets/images/ActionButton/up-arrow.png";
+const std::string DOWN_BUTTON = "../assets/images/ActionButton/down-arrow.png";
+const std::string VALIDATE_BUTTON = "../assets/images/ActionButton/validate.png";
+const std::string TEXT_AUCTION = "../assets/images/ActionButton/zonetext.png";
 
 // Fonts
 const std::string ARIAL_FONT_PATH = "../assets/fonts/arial.ttf";

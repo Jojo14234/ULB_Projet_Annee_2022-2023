@@ -10,14 +10,15 @@
 #include "GameObject/Board.hpp"
 #include "GameObject/InfoBox.hpp"
 #include "Objects/ImageButton.hpp"
-
+#include "GameObject/AuctionBox.hpp"
 #include "GameObject/MessageBox.hpp"
 
 class GameGUIController; // forward declaration
 
 class GameGUIView: public AbstractGUIView {
 	Board board;
-	InfoBox infoBox;
+	InfoBox info_box;
+	AuctionBox auction_box;
 
 	Box start_round{ObjectInfo<>(300, window->getSize().y,0,0), sf::Color::Red };
 	ImageButton mortgage{ObjectInfo<>(200, 150 ,50,window->getSize().y/6*0  ), MORTGAGE_BUTTON};
@@ -52,7 +53,7 @@ class GameGUIView: public AbstractGUIView {
 	
 	std::vector<std::string> colorlist{"red","blue","green","cyan","magenta","yellow"};   //pour tester à enlever
 	
-	MessageBox messageBox;
+	MessageBox message_box;
 	// Objects
 
 	void hideStartRound(bool hidden){
@@ -149,12 +150,13 @@ public:
 
 	explicit GameGUIView(sf::RenderWindow* window) : AbstractGUIView(window)
 	,board{}
-	,infoBox{ObjectInfo<>(400, 400,window->getSize().x -400,window->getSize().y - 350)}
-	,messageBox{ObjectInfo<>(800,60,350,5)}
+	,info_box{ObjectInfo<>(400, 400,window->getSize().x -400,window->getSize().y - 350)}
+	,message_box{ObjectInfo<>(800,60,350,5)}
+	,auction_box{ObjectInfo<>(300, window->getSize().y,0,0), sf::Color::Red }
 	{
-		infoBox.initMoney(colorlist,300000);
-		infoBox.setMoney(4,520);
-		messageBox.setString("C'est le tour de miaou");
+		info_box.initMoney(colorlist,300000);
+		info_box.setMoney(4,520);
+		message_box.setString("C'est le tour de miaou");
 
 
 		//true = hide , false = visible
@@ -164,7 +166,9 @@ public:
 		hideCardCellRound(true);
 		hidePrisonRound(true);
 		hideExchangeRound(true);
-		hideBankruptRound(false);
+		hideBankruptRound(true);
+
+		auction_box.setHidden();
 
 	}
 
@@ -188,8 +192,10 @@ public:
 
 		drawBankruptRound();
 
-		infoBox.draw(*window);
-		messageBox.draw(*window);
+		info_box.draw(*window);
+		message_box.draw(*window);
+		auction_box.draw(*window);
+		auction_box.setTextNumber(18880);
 	}
 
 	void drawStartRound(){
