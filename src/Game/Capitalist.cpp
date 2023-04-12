@@ -395,9 +395,9 @@ bool Capitalist::processBuild(Player *player, std::string &name) {
     // Pas un color property
     if (!prop) { return false; }
     // Pass assez d'hotel disponible
-    if (prop->getLevel() == PROPERTY_LEVEL::FOUR && this->board.getRemainingHotel() <= 0) { return false; }
+    if (prop->getLevel() == PROPERTY_LEVEL::FOUR && (this->board.getRemainingHotel() <= 0 && !this->isFastGame())) { return false; }
     // Pas assez de maison disponible
-    else if (prop->getIntLevel() < 4 && this->board.getRemainingHome() <= 0) { return false; }
+    else if (prop->getIntLevel() < 4 && (this->board.getRemainingHome() <= 0 && !this->isFastGame())) { return false; }
     // Construction à échouer
     if (!prop->build(player, isFastGame())) { return false; }
     // On retire un hotel mais on rajoute 4 maison
