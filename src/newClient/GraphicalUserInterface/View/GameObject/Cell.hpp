@@ -76,6 +76,53 @@ public :
 		images_building.erase(images_building.begin(),images_building.begin()+1);
 	}
 
+	void setHouse(int nb, std::string player_color){
+		std::string path;
+		if (player_color == "red"){path = HOUSE_RED;}
+		else if (player_color == "blue"){path = HOUSE_BLUE;}
+		else if (player_color == "green"){path = HOUSE_GREEN;}
+		else if (player_color == "yellow"){path = HOUSE_YELLOW;}
+		else if (player_color == "magenta"){path = HOUSE_MAGENTA;}
+		else if (player_color == "cyan"){path = HOUSE_CYAN;}
+
+		int pos_x = 5;
+		int pos_y = 5;
+		
+		if(cell_number >20 and cell_number < 30){pos_x = 25;}
+		if (  cell_number >30 and cell_number < 40){pos_y = 30;}
+
+		for ( int i = 0; i< nb;i ++){
+			images_building.emplace_back(std::make_unique<Image>(ObjectInfo<>(15,15,info.getX() + pos_x +(15 * i), info.getY() + pos_y),path));}}
+
+	void setHotel(std::string player_color){
+		std::string path;
+		if (player_color == "red"){path = HOTEL_RED;}
+		else if (player_color == "blue"){path = HOTEL_BLUE;}
+		else if (player_color == "green"){path = HOTEL_GREEN;}
+		else if (player_color == "yellow"){path = HOTEL_YELLOW;}
+		else if (player_color == "magenta"){path = HOTEL_MAGENTA;}
+		else if (player_color == "cyan"){path = HOTEL_CYAN;}
+
+		int pos_x = 20;
+		int pos_y = 3;
+		
+		if(cell_number >20 and cell_number < 30){pos_x = 40;}
+		if (  cell_number >30 and cell_number < 40){pos_y = 22;}
+
+		images_building.emplace_back(std::make_unique<Image>(ObjectInfo<>(25,25,info.getX() + pos_x, info.getY() + pos_y),path));
+	}
+
+
+
+	void addBuilding(int nb, std::string player_color){
+		images_building.clear();
+		if (nb == 0){setOwner(player_color);}
+		else if(nb > 0 and nb <= 4  ){setHouse(nb, player_color);}
+		else if( nb >= 5){setHotel(player_color);}
+		
+		}
+	
+
 	/*void enterBuildMode(){
 	}
 
@@ -88,12 +135,7 @@ public :
 	void setIdle(){
 	}
 
-	void addBuilding(int nb){
-		delete image[1]; // delete le flag 	
-	}
-
-	void removeBuilding(int nb){
-	}*/
+*/
 
 };
 

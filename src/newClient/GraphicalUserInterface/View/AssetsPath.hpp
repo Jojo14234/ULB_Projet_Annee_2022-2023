@@ -74,6 +74,21 @@ const std::string FLAG_YELLOW = "../assets/images/OnCell/flag_yellow.png";
 const std::string FLAG_MAGENTA = "../assets/images/OnCell/flag_magenta.png";
 const std::string FLAG_CYAN = "../assets/images/OnCell/flag_cyan.png";
 
+const std::string HOUSE_RED = "../assets/images/OnCell/house_red.png";
+const std::string HOUSE_BLUE = "../assets/images/OnCell/house_blue.png";
+const std::string HOUSE_GREEN = "../assets/images/OnCell/house_green.png";
+const std::string HOUSE_YELLOW = "../assets/images/OnCell/house_yellow.png";
+const std::string HOUSE_MAGENTA = "../assets/images/OnCell/house_magenta.png";
+const std::string HOUSE_CYAN = "../assets/images/OnCell/house_cyan.png";
+
+
+const std::string HOTEL_RED = "../assets/images/OnCell/hotel_red.png";
+const std::string HOTEL_BLUE = "../assets/images/OnCell/hotel_blue.png";
+const std::string HOTEL_GREEN = "../assets/images/OnCell/hotel_green.png";
+const std::string HOTEL_YELLOW = "../assets/images/OnCell/hotel_yellow.png";
+const std::string HOTEL_MAGENTA = "../assets/images/OnCell/hotel_magenta.png";
+const std::string HOTEL_CYAN = "../assets/images/OnCell/hotel_cyan.png";
+
 // Fonts
 const std::string ARIAL_FONT_PATH = "../assets/fonts/arial.ttf";
 const std::string SERIF_FONT_PATH = "../assets/fonts/hvd-comic-serif-pro.ttf";
