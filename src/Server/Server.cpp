@@ -180,11 +180,12 @@ void Server::clientProcessCreateGame(ClientManager &client) {
     int space = 0;
     GameParameters params{false};
     for (std::string word; std::getline(input, word, ' '); space++) {
+        std::cout << "Bla bla : " << space << word << std::endl;
         switch (space) {
-            case 1: params.startMoney = std::stoi(word); break;
-            case 2: params.maxPlayers = std::stoi(word); break;
-            case 3: params.maxHome = std::stoi(word); break;
-            case 4: params.maxHotel = std::stoi(word); break;
+            case 0: params.startMoney = std::stoi(word); break;
+            case 1: params.maxPlayers = std::stoi(word); break;
+            case 2: params.maxHome = std::stoi(word); break;
+            case 3: params.maxHotel = std::stoi(word); break;
             default : break;
         }
     }
@@ -199,11 +200,12 @@ void Server::clientProcessCreateFastGame(ClientManager &client) {
     int space = 0;
     GameParameters params{true};
     for (std::string word; std::getline(input, word, ' '); space++) {
+        std::cout << word << std::endl;
         switch (space) {
-            case 1: params.startMoney = std::stoi(word); break;
-            case 2: params.maxPlayers = std::stoi(word); break;
-            case 3: params.maxHome = std::stoi(word); break;
-            case 4: params.maxHotel = std::stoi(word); break;
+            case 0: params.startMoney = std::stoi(word); break;
+            case 1: params.maxPlayers = std::stoi(word); break;
+            case 2: params.maxHome = std::stoi(word); break;
+            case 3: params.maxHotel = std::stoi(word); break;
             default : break;
         }
     }
