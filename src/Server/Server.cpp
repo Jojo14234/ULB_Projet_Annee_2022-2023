@@ -1,6 +1,7 @@
 #include <memory>
 #include <pthread.h>
 #include <string>
+#include <vector>
 
 #include "Server.hpp"
 #include "ClientManager/ClientManager.hpp"
@@ -97,6 +98,7 @@ void Server::clientProcessQuery(ClientManager &client, QUERY_TYPE query) {
 		case QUERY_TYPE::RANKING_TOP:       this->clientProcessRankingTop(client); break;
         case QUERY_TYPE::RANKING_RESET:     this->clientProcessRankingReset(client); break;
 		// For friends
+        case QUERY_TYPE::FRIENDS_INFO:      this->clientProcessFriendsInfo(client); break;
 		case QUERY_TYPE::FRIENDS_LIST:      this->clientProcessFriendsList(client); break;
 		case QUERY_TYPE::FRIENDS_REQUEST:   this->clientProcessFriendsRequest(client); break;
 		case QUERY_TYPE::FRIENDS_ACCEPT:    this->clientProcessFriendsAccept(client); break;
@@ -218,6 +220,14 @@ void Server::clientProcessRankingReset(ClientManager &client) {
 }
 
 // For friends
+void Server::clientProcessFriendsInfo(ClientManager &client) {
+    std::cout << "[Received 'friend info' query from client '" << client.getAccount()->getUsername() << "']" << std::endl;
+    const std::vector<std::string> friends = client.getAccount()->getFriendList().toVector(this->database);
+    const std::vector<std::string> requests = client.getAccount()->getFriendRequestList().toVector(this->database);
+    client.sendFriendsInfo(friends, requests);
+    std::cout << "['friend info' query from client '" << client.getAccount()->getUsername() << "' was successful]\n" << std::endl;
+}
+
 void Server::clientProcessFriendsList(ClientManager &client) {
 	std::cout << "[Received 'friend list' query from client '" << client.getAccount()->getUsername() << "']" << std::endl;
 	client.send(client.getAccount()->getFriendList().toString(this->database));

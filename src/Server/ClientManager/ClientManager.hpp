@@ -5,6 +5,7 @@
 #include <pthread.h>
 #include <memory>
 #include <string>
+#include <vector>
 
 #include "../../utils/Configs.hpp"
 #include "../Database/User.hpp"
@@ -41,6 +42,7 @@ public:
 	// Send infos to the client
 	void send(const std::string &input);
     void sendQueryMsg(const std::string &input, QUERY query);
+	void sendFriendsInfo(const std::vector<std::string> &friends, const std::vector<std::string> &requests); 
 
 	// Receive infos from the client
 	void receive(QUERY_TYPE &query);

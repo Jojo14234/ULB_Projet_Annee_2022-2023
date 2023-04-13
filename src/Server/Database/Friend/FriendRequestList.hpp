@@ -37,6 +37,8 @@ public:
 
 	std::string toString(Database &db) const;
 
+	std::vector<std::string> toVector(Database &db) const;
+
 	// WRITE READ
 	void write(FILE* file);
 	void read(FILE* file);
