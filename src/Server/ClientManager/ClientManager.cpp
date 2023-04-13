@@ -1,4 +1,6 @@
 #include <SFML/Network.hpp>
+#include <vector>
+#include <string>
 
 #include "ClientManager.hpp"
 #include "../Game/GameServer.hpp"
@@ -16,6 +18,14 @@ void ClientManager::sendQueryMsg(const std::string &input, QUERY query) {
     sf::Packet packet;
     packet << (int)query << input;
     if ( this->socket.send(packet) !=  sf::Socket::Done ) { throw WritePipeServerException(); } // failed to write on the socket
+}
+
+void ClientManager::sendFriendsInfo(const std::vector<std::string> &friends, const std::vector<std::string> &requests) {
+	sf::Packet packet;
+	packet << (int)friends.size() << (int)requests.size();
+	for ( const auto &arg : friends ) { packet << arg; }
+	for ( const auto &arg : requests ) { packet << arg; }
+	if ( this->socket.send(packet) !=  sf::Socket::Done ) { throw WritePipeServerException(); } // failed to write on the socket
 }
 
 // RECEIVE INFOS FROM THE CLIENT

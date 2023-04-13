@@ -27,6 +27,13 @@ std::string FriendList::toString(Database &db) const {
 	return str;
 }
 
+std::vector<std::string> FriendList::toVector(Database &db) const {
+	std::vector<std::string> vec;
+	for (auto id : ids){ vec.push_back(db.getUsername(id)); }
+	return vec;
+}
+
+
 void FriendList::write(FILE* file) {
 	size_t size = this->ids.size();
 	fwrite(&size, sizeof(size_t), 1, file);
