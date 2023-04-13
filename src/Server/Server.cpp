@@ -205,7 +205,7 @@ void Server::clientProcessCreateGame(ClientManager &client) {
                 try{
                     params.maxHome = std::stoi(word);
                 } catch ( ... ){
-                    params.maxHome = 4;
+                    params.maxHome = 32;
                 }
                 break;
             }
@@ -213,7 +213,7 @@ void Server::clientProcessCreateGame(ClientManager &client) {
                 try {
                     params.maxHotel = std::stoi(word);
                 } catch ( ... ){
-                    params.maxHotel = 1;
+                    params.maxHotel = 12;
                 }
                 break;
             }
