@@ -36,8 +36,8 @@ enum class QUERY {
     INFOS_CARD_DESCRIPTION, // description
 
 
-    PLAYER_JOIN_GAME, // username:gameCode:nb_player:all_players [string]:[int]:[int]:[string]
-    PLAYER_CREATE_GAME, // username:gameCode [string]:[int]
+    PLAYER_JOIN_GAME, // username:gameCode:is_fast_game:start_money:max_players:max_house:max_hotel:max_turn:nb_player:all_players [string]:[int]:[bool]:[int]:[int]:[int]:[int]:[int]:[int]:[string]
+    PLAYER_CREATE_GAME, // username:gameCode:is_fast_game:start_money:max_players:max_house:max_hotel:max_turn [string]:[int]:[bool]:[int]:[int]:[int]:[int]:[int]
 
     MESSAGE, // All indication message
     USELESS_MESSAGE, // Message useless outside out the terminal app

@@ -156,21 +156,21 @@ void GameCUIController::initScreen(int gamecode) {
 //todo added from n-curse
 void GameCUIController::startGame(int beginner) {
     this->view->endWaitingRoom();
-    this->model->setPlayerTurn(players_username[beginner]);
-    if (this->model->getUsername() == players_username[beginner]) {
+    this->model->setPlayerTurn(game_info->player_usernames[beginner]);
+    if (this->model->getUsername() == game_info->player_usernames[beginner]) {
         this->view->startTurn();
         this->model->startTurn();
     }
 
     this->view->getInfo()->clearAllText();
-    for (int i = 1; i<= player_nb; i++) {
+    for (int i = 1; i<= game_info->nb_player; i++) {
         this->view->getBoard()->setPlayer(0, i);
-        this->view->getInfo()->addPlayerLine(players_username[i-1]);
-        this->view->getInfo()->setPlayerInfo(i, 1500, 0);
+        this->view->getInfo()->addPlayerLine(game_info->player_usernames[i-1]);
+        this->view->getInfo()->setPlayerInfo(i, game_info->start_money, 0);
     }
 }
 
-void GameCUIController::playerJoinUpdate() { this->view->getInfo()->setPlayersInGame(players_username); }
+void GameCUIController::playerJoinUpdate() { this->view->getInfo()->setPlayersInGame(game_info->player_usernames); }
 
 
 void GameCUIController::update() { this->initGame(); }
@@ -184,26 +184,32 @@ void GameCUIController::update() { this->initGame(); }
 // Les 2 fonctions ci-dessous sont les mêmes WHY ??????
 void GameCUIController::createGameGU(const std::string& response) {
     GameLaunchingParser launching_parser(response);
-    std::shared_ptr<JoinInfo> join_info = launching_parser.parseCreateQuery();
-    player_nb = join_info->nb_player;
-    players_username = join_info->player_usernames;
-    this->initScreen(join_info->game_code);
+    game_info = launching_parser.parseCreateQuery();
+    this->initScreen(game_info->game_code);
     this->playerJoinUpdate();
 }
 void GameCUIController::joinGameGU(const std::string& response) {
     GameLaunchingParser launching_parser(response);
-    std::shared_ptr<JoinInfo> join_info = launching_parser.parseJoinQuery();
-    player_nb = join_info->nb_player;
-    players_username = join_info->player_usernames;
-    this->initScreen(join_info->game_code);
+    game_info = launching_parser.parseJoinQuery();
+    /*this->view->getConsole()->addText(game_info->username);
+    this->view->getConsole()->addText(std::to_string(game_info->is_fast));
+    this->view->getConsole()->addText(std::to_string(game_info->max_hotels));
+    this->view->getConsole()->addText(std::to_string(game_info->max_house));
+    this->view->getConsole()->addText(std::to_string(game_info->max_players));
+    this->view->getConsole()->addText(std::to_string(game_info->max_turns));
+    this->view->getConsole()->addText(std::to_string(game_info->nb_player));
+    this->view->getConsole()->addText(std::to_string(game_info->start_money));*/
+    //this->view->getConsole()->addText(game_info->player_usernames[0]);
+    //this->view->getConsole()->addText(game_info->player_usernames[1]);
+    this->initScreen(game_info->game_code);
     this->playerJoinUpdate();
 }
 // Quasi la même mais y'a La partie commence en plus
 void GameCUIController::infoStartGU(const std::string& response) {
     GameLaunchingParser launching_parser(response);
     std::shared_ptr<StartInfo> start_info = launching_parser.parseStartQuery();
-    player_nb = start_info->player_nb;
-    players_username = start_info->player_usernames;
+    game_info->nb_player = start_info->player_nb;
+    game_info->player_usernames = start_info->player_usernames;
     this->startGame(start_info->beginner);
     this->view->getConsole()->addText("La partie commence");
 }
@@ -221,8 +227,8 @@ void GameCUIController::rollDiceGU(const std::string& response) {
 void GameCUIController::infoGameGU(const std::string& response) {
     //Peut-être comportement commun
     InGameParser game_parser(response);
-    std::shared_ptr<std::vector<GameInfo>> player_game_info = game_parser.parseInfosGameQuery(player_nb);
-    for (int i = 0; i < player_nb; i++){
+    std::shared_ptr<std::vector<GameInfo>> player_game_info = game_parser.parseInfosGameQuery(game_info->nb_player);
+    for (int i = 0; i < game_info->nb_player; i++){
         this->view->getBoard()->movePlayer(player_game_info->at(i).position, i+1);
         for (unsigned int j = 0; j < player_game_info->at(i).properties.size(); j++){
             int index = this->view->getBoard()->getCellIndex(player_game_info->at(i).properties[j].name);
@@ -269,9 +275,9 @@ void GameCUIController::playerPaidPlayerGU(const std::string& response){
     if (this->model->isMyTurn()) {
         this->view->getInfo()->changePlayerMoney(payement_info->loser, payement_info->loser_money);
         this->view->getInfo()->changePlayerMoney(payement_info->winner, payement_info->winner_money);
-        this->view->getConsole()->addText("Vous devez " + std::to_string(payement_info->amount) + "$ a " + players_username[payement_info->winner-1] + " :");
+        this->view->getConsole()->addText("Vous devez " + std::to_string(payement_info->amount) + "$ a " + game_info->player_usernames[payement_info->winner-1] + " :");
     } else {
-        this->view->getConsole()->addText(players_username[payement_info->loser-1] + " doit " + std::to_string(payement_info->amount) + "$ a " + players_username[payement_info->winner-1] + " :");
+        this->view->getConsole()->addText(game_info->player_usernames[payement_info->loser-1] + " doit " + std::to_string(payement_info->amount) + "$ a " + game_info->player_usernames[payement_info->winner-1] + " :");
     }
 }
 
@@ -291,7 +297,7 @@ void GameCUIController::moveOnTaxCellGU(const std::string& response){
     if (this->model->isMyTurn()) {
         this->view->getConsole()->addText("Vous arrivez sur la case " + tax_info->tax_name + " :");
     } else {
-        this->view->getConsole()->addText(players_username[tax_info->player-1] + " paie ses taxes : ");
+        this->view->getConsole()->addText(game_info->player_usernames[tax_info->player-1] + " paie ses taxes : ");
     }
 }
 
@@ -308,7 +314,7 @@ void GameCUIController::sendPrisonGU(const std::string& response){
 void GameCUIController::getGoOutJailCardGU(const std::string& response){
     this->view->getInfo()->addCardToPlayer(atoi(response.c_str()));
     if (this->model->isMyTurn()){ this->view->getConsole()->addText("Vous obtenez une carte sortie de prison.");
-    } else this->view->getConsole()->addText(players_username[atoi(response.c_str()-1)] + "a obtenu une carte sortie de prison.");
+    } else this->view->getConsole()->addText(game_info->player_usernames[atoi(response.c_str()-1)] + "a obtenu une carte sortie de prison.");
 }
 
 void GameCUIController::loseGoOutJailCardGU(const std::string& response){
@@ -320,12 +326,12 @@ void GameCUIController::wonMoneyGU(const std::string& response){
     InGameParser game_parser(response);
     std::shared_ptr<WonOrLoseMoneyInfo> money_info = game_parser.parseWonOrLoseMoneyQuery();
     this->view->getInfo()->changePlayerMoney(money_info->player, money_info->player_money);
-    if (! this->model->isMyTurn()) { this->view->getConsole()->addText(players_username[money_info->player-1] + " a gagne " + std::to_string(money_info->amount) + "$"); }
+    if (! this->model->isMyTurn()) { this->view->getConsole()->addText(game_info->player_usernames[money_info->player-1] + " a gagne " + std::to_string(money_info->amount) + "$"); }
     else { 
-        if (players_username[money_info->player-1] == this->model->getUsername()){
+        if (game_info->player_usernames[money_info->player-1] == this->model->getUsername()){
             this->view->getConsole()->addText("Vous gagnez " + std::to_string(money_info->amount) + "$");
         }
-        else this->view->getConsole()->addText(players_username[money_info->player-1] + " gagne " + std::to_string(money_info->amount) + "$");
+        else this->view->getConsole()->addText(game_info->player_usernames[money_info->player-1] + " gagne " + std::to_string(money_info->amount) + "$");
     }
 }
 
@@ -333,12 +339,12 @@ void GameCUIController::loseMoneyGU(const std::string& response){
     InGameParser game_parser(response);
     std::shared_ptr<WonOrLoseMoneyInfo> money_info = game_parser.parseWonOrLoseMoneyQuery();
     this->view->getInfo()->changePlayerMoney(money_info->player, money_info->player_money);
-    if (! this->model->isMyTurn()) this->view->getConsole()->addText(players_username[money_info->player-1] + " a perdu " + std::to_string(money_info->amount) + "$");
+    if (! this->model->isMyTurn()) this->view->getConsole()->addText(game_info->player_usernames[money_info->player-1] + " a perdu " + std::to_string(money_info->amount) + "$");
     else { 
-        if (players_username[money_info->player-1] == this->model->getUsername()){
+        if (game_info->player_usernames[money_info->player-1] == this->model->getUsername()){
             this->view->getConsole()->addText("Vous perdez " + std::to_string(money_info->amount) + "$"); 
         }
-        else this->view->getConsole()->addText(players_username[money_info->player-1] + " perd " + std::to_string(money_info->amount) + "$");
+        else this->view->getConsole()->addText(game_info->player_usernames[money_info->player-1] + " perd " + std::to_string(money_info->amount) + "$");
     }
 }
 
@@ -355,7 +361,7 @@ void GameCUIController::moveOnCardCellGU(const std::string& response){
     if (this->model->isMyTurn()){
         this->view->getConsole()->addText("Vous venez de piocher une carte :");
         this->view->getConsole()->addText(move_cardcell_info->description);
-    } else this->view->getConsole()->addText(players_username[move_cardcell_info->player-1] + " pioche un carte.");
+    } else this->view->getConsole()->addText(game_info->player_usernames[move_cardcell_info->player-1] + " pioche un carte.");
 }
 
 void GameCUIController::drawCardGU(const std::string& response){
@@ -389,12 +395,12 @@ void GameCUIController::sellPropertyGU(const std::string& response){
     } else this->view->getConsole()->addText("Consultation des proprietes a vendre ...");
 }
 void GameCUIController::exchangePropertyGU(const std::string& response){
-    ExchangeInfo exchanges{response, player_nb};
+    ExchangeInfo exchanges{response, game_info->nb_player};
     selection_mode = exchanges.all_properties;
     if (this->model->isMyTurn()){
         this->view->getConsole()->addText("/trade [nom_propiete_voulue] [argent]");
         this->view->getConsole()->addText("/leave pour quitter le menu d'echange");
-        for (int i=0; i<player_nb; i++){
+        for (int i=0; i<game_info->nb_player; i++){
             for (auto& property : exchanges.player_properties.at(i)){
                 int index = this->view->getBoard()->getCellIndex(property);
                 this->view->getBoard()->setExchangeable(index);

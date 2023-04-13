@@ -116,6 +116,11 @@ public:
     void setFastGame(bool is_fast);
     void setNumberOfPlayers(int nbr);
     int getNumberOfPlayersAtStart();
+    int getStartMoney();
+    int getMaxPlayers();
+    int getMaxHome();
+    int getMaxHotels();
+    int getMaxTurns();
 
     void forceAcquisition(Player *player);
 

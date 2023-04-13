@@ -48,7 +48,11 @@ void GameServer::sendBetterGameData() {
  * Send a Message with the username and the game code to everyone
  */
 void GameServer::client_has_join_the_game(ClientManager &client) {
-    std::string str = client.getUsername() + ":" + std::to_string(this->getCode()) + ":" + std::to_string(this->clients.size()) + ":";
+    std::string str = client.getUsername() + ":" + std::to_string(this->getCode()) + ":" +
+                      std::to_string(game.isFastGame()) + ":" + std::to_string(game.getStartMoney()) + ":" + 
+                      std::to_string(game.getMaxPlayers()) + ":" + std::to_string(game.getMaxHome()) + ":" + 
+                      std::to_string(game.getMaxHotels()) + ":" + std::to_string(game.getMaxTurns()) + ":" +
+                      std::to_string(this->clients.size()) + ":";
     for (size_t i = 0; i < this->clients.size(); i++){
         str += this->clients[i]->getUsername();
         if (i != this->clients.size()-1) str += ":"; 
