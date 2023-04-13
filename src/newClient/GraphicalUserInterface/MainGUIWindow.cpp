@@ -33,6 +33,7 @@ void MainGUIWindow::initAttributes() {
 	FriendsGUIController* friends_controller = new FriendsGUIController(&this->model, friends_view);
 	RankGUIController* rank_controller = new RankGUIController(&this->model, rank_view);
 	//GameGUIController* game_controller = new GameGUIController(&this->model, game_view);
+	menu_controller->setFriendController(friends_controller);
 	this->controller.setController({welcome_controller, connection_controller, menu_controller, friends_controller, rank_controller}); // j'ai suppr game_controller qui se trouve juste après rank_controller
 }
 

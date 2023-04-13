@@ -1,8 +1,9 @@
 #pragma once
 
+#include <SFML/Network.hpp>
 #include <iostream>
 #include <string>
-#include <SFML/Network.hpp>
+#include <vector>
 
 #include "Client.hpp"
 #include "InputParser/MainInputParser.hpp"
@@ -35,6 +36,7 @@ public:
     ~Client() { this->socket.disconnect(); } // todo Maybe disconnect from server via disconnectFromServer
 
 	// Send Queries
+	void sendQuery(QUERY_TYPE query);
 	void sendLogin(const std::string &username, const std::string &password);
 	void sendRegister(const std::string &username, const std::string &password);
     void sendDisconnect();
@@ -48,6 +50,8 @@ public:
 
 	QUERY receive();
 	QUERY receive(std::string &output);
+
+	void receiveFriendsInfo(std::vector<std::string> &friends_name, std::vector<std::string> &friends_requests);
 
 	void setGameCode(int gc) { game_code = gc; }
 	int getGameCode() const { return game_code; }

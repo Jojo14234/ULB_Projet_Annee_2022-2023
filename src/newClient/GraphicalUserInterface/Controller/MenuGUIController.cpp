@@ -48,6 +48,7 @@ void MenuGUIController::handle(sf::Event event) {
 			this->new_state = STATE::RANK;
 		} else if (this->view->friend_menu.contains(event.mouseButton.x, event.mouseButton.y)) {
 			this->new_state = STATE::FRIENDS;
+			this->friend_controller->update();
 		} else if (this->view->settings.contains(event.mouseButton.x, event.mouseButton.y)) {
 			this->view->settings_popup.setVisible();
 		}

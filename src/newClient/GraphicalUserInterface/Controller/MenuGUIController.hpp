@@ -7,6 +7,7 @@
 #include <SFML/Window.hpp>
 
 #include "AbstractGUIController.hpp"
+#include "SubjectGUIController.hpp"
 #include "../configs.hpp"
 
 
@@ -15,8 +16,8 @@ class MenuGUIView; // forward declaration
 
 class MenuGUIController: public AbstractGUIController {
 
-
 	MenuGUIView* view;
+	SubjectGUIController* friend_controller;
 
 public: 
 	
@@ -26,6 +27,9 @@ public:
 
 	void handle(sf::Event event) override;
 
+	// SETTERS
+	void setFriendController(SubjectGUIController* friend_controller) { this->friend_controller = friend_controller; }
+	
 	// ...
 
 };
