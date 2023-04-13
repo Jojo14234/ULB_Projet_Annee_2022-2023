@@ -180,12 +180,41 @@ void Server::clientProcessCreateGame(ClientManager &client) {
     int space = 0;
     GameParameters params{false};
     for (std::string word; std::getline(input, word, ' '); space++) {
-        std::cout << "Bla bla : " << space << word << std::endl;
+        std::cout << "Param " << space << " : " << word << std::endl;
         switch (space) {
-            case 0: params.startMoney = std::stoi(word); break;
-            case 1: params.maxPlayers = std::stoi(word); break;
-            case 2: params.maxHome = std::stoi(word); break;
-            case 3: params.maxHotel = std::stoi(word); break;
+            case 0: {
+                try{
+                    params.startMoney = std::stoi(word);
+                } catch ( ... ){
+                    params.startMoney = 1500;
+                }
+                break;
+            }
+            case 1: { 
+                try{
+                    params.maxPlayers = std::stoi(word);
+                    if (params.maxPlayers > 6) params.maxPlayers = 6;
+                } catch ( ... ){
+                    params.maxPlayers = 6;
+                }
+                break;
+            }
+            case 2: { 
+                try{
+                    params.maxHome = std::stoi(word);
+                } catch ( ... ){
+                    params.maxHome = 4;
+                }
+                break;
+            }
+            case 3: { 
+                try {
+                    params.maxHotel = std::stoi(word);
+                } catch ( ... ){
+                    params.maxHotel = 1;
+                }
+                break;
+            }
             default : break;
         }
     }
