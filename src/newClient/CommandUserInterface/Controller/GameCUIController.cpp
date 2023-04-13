@@ -209,6 +209,7 @@ void GameCUIController::infoStartGU(const std::string& response) {
 }
 
 void GameCUIController::rollDiceGU(const std::string& response) {
+    this->view->getChat()->addText("a");
     InGameParser game_parser(response);
     std::shared_ptr<RollDiceInfo> dice_info = game_parser.parseRollDiceQuery();
     if (this->model->isMyTurn()) {
@@ -220,6 +221,7 @@ void GameCUIController::rollDiceGU(const std::string& response) {
 
 void GameCUIController::infoGameGU(const std::string& response) {
     //Peut-être comportement commun
+    this->view->getChat()->addText("b : " + response);
     InGameParser game_parser(response);
     std::shared_ptr<std::vector<GameInfo>> player_game_info = game_parser.parseInfosGameQuery(player_nb);
     for (int i = 0; i < player_nb; i++){
@@ -236,12 +238,14 @@ void GameCUIController::infoGameGU(const std::string& response) {
 }
 
 void GameCUIController::newTurnGU(const std::string& response) {
+    this->view->getChat()->addText("c : " + response);
     this->model->setPlayerTurn(response);
     if (response == this->model->getUsername()) { this->view->startTurn(); this->model->startTurn(); }
     else { this->view->endTurn(); this->model->endTurn(); this->view->getConsole()->addText("C'est au tour de " + response + " !"); }
 }
 
 void GameCUIController::playerMoveGU(const std::string& response){
+    this->view->getChat()->addText("d");
     InGameParser game_parser(response);
     std::shared_ptr<PlayerMoveInfo> move_info = game_parser.parsePlayerMoveQuery();
     int index = this->view->getBoard()->getCellIndex(move_info->property_name);
@@ -256,6 +260,7 @@ void GameCUIController::playerMoveGU(const std::string& response){
 }
 
 void GameCUIController::playerBoughtGU(const std::string& response){
+    this->view->getChat()->addText("e : " + response);
     InGameParser game_parser(response);
     std::shared_ptr<PlayerMoveInfo> move_info = game_parser.parsePlayerMoveQuery();
     int index = this->view->getBoard()->getCellIndex(move_info->property_name);
@@ -264,6 +269,7 @@ void GameCUIController::playerBoughtGU(const std::string& response){
 }
 
 void GameCUIController::playerPaidPlayerGU(const std::string& response){
+    this->view->getChat()->addText("f");
     InGameParser game_parser(response);
     std::shared_ptr<PlayerPaidPlayerInfo> payement_info = game_parser.parsePlayerPaidPlayerQuery();
     if (this->model->isMyTurn()) {
@@ -276,12 +282,14 @@ void GameCUIController::playerPaidPlayerGU(const std::string& response){
 }
 
 void GameCUIController::moveOnMortgagedCellGU(const std::string& response){
+    this->view->getChat()->addText("g");
     InGameParser game_parser(response);
     std::shared_ptr<MoveMortgagedInfo> mortgaged_info = game_parser.parseMoveMortgagedQuery();
     this->view->getConsole()->addText(mortgaged_info->username + " est tombe sur une propriete hypotheque");
 }
 
 void GameCUIController::moveOnTaxCellGU(const std::string& response){
+    this->view->getChat()->addText("h");
     InGameParser game_parser(response);
     std::shared_ptr<MoveTaxInfo> tax_info = game_parser.parseMoveTaxQuery();
     int index = this->view->getBoard()->getCellIndex(tax_info->tax_name);
@@ -296,27 +304,32 @@ void GameCUIController::moveOnTaxCellGU(const std::string& response){
 }
 
 void GameCUIController::goOutPrisonGU(const std::string& response){
+    this->view->getChat()->addText("i");
     if (this->model->isMyTurn()){ this->view->getConsole()->addText("Vous sortez de prison.");
     } else this->view->getConsole()->addText(response + "sort de prison.");
 }
 
 void GameCUIController::sendPrisonGU(const std::string& response){
+    this->view->getChat()->addText("j");
     if (this->model->isMyTurn()){this->view->getConsole()->addText("Vous etes envoye en prison.");
     } else this->view->getConsole()->addText(response + " a ete envoye en prison.");
 }
 
 void GameCUIController::getGoOutJailCardGU(const std::string& response){
+    this->view->getChat()->addText("k");
     this->view->getInfo()->addCardToPlayer(atoi(response.c_str()));
     if (this->model->isMyTurn()){ this->view->getConsole()->addText("Vous obtenez une carte sortie de prison.");
     } else this->view->getConsole()->addText(players_username[atoi(response.c_str()-1)] + "a obtenu une carte sortie de prison.");
 }
 
 void GameCUIController::loseGoOutJailCardGU(const std::string& response){
+    this->view->getChat()->addText("l");
     this->view->getInfo()->removeCardToPlayer(atoi(response.c_str()));
     if (this->model->isMyTurn()) this->view->getConsole()->addText("Vous utilisez votre carte.");
 }
 
 void GameCUIController::wonMoneyGU(const std::string& response){
+    this->view->getChat()->addText("m");
     InGameParser game_parser(response);
     std::shared_ptr<WonOrLoseMoneyInfo> money_info = game_parser.parseWonOrLoseMoneyQuery();
     this->view->getInfo()->changePlayerMoney(money_info->player, money_info->player_money);
@@ -330,6 +343,7 @@ void GameCUIController::wonMoneyGU(const std::string& response){
 }
 
 void GameCUIController::loseMoneyGU(const std::string& response){
+    this->view->getChat()->addText("n : " + response);
     InGameParser game_parser(response);
     std::shared_ptr<WonOrLoseMoneyInfo> money_info = game_parser.parseWonOrLoseMoneyQuery();
     this->view->getInfo()->changePlayerMoney(money_info->player, money_info->player_money);
@@ -343,12 +357,14 @@ void GameCUIController::loseMoneyGU(const std::string& response){
 }
 
 void GameCUIController::cardCellToGoGU(const std::string& response){
+    this->view->getChat()->addText("o");
     InGameParser game_parser(response);
     std::shared_ptr<MoveByCardInfo> move_card_info = game_parser.parseMoveByCardQuery();
     this->view->getBoard()->movePlayer(move_card_info->new_pos, move_card_info->player);
 }
 
 void GameCUIController::moveOnCardCellGU(const std::string& response){
+    this->view->getChat()->addText("p");
     InGameParser game_parser(response);
     std::shared_ptr<MoveOnCardCellInfo> move_cardcell_info = game_parser.parseMoveOnCardCellQuery();
     this->view->getBoard()->movePlayer(move_cardcell_info->new_pos, move_cardcell_info->player);
@@ -359,11 +375,13 @@ void GameCUIController::moveOnCardCellGU(const std::string& response){
 }
 
 void GameCUIController::drawCardGU(const std::string& response){
+    this->view->getChat()->addText("q");
     this->view->getConsole()->addText("Vous venez de piocher une carte :");
     this->view->getConsole()->addText(response);
 }
 
 void GameCUIController::buildPropertyGU(const std::string& response){
+    this->view->getChat()->addText("r");
     InGameParser game_parser(response);
     selection_mode = *game_parser.parseSelectPropertyQuery().get();
     if (this->model->isMyTurn()){
@@ -377,6 +395,7 @@ void GameCUIController::buildPropertyGU(const std::string& response){
 }
 
 void GameCUIController::sellPropertyGU(const std::string& response){
+    this->view->getChat()->addText("s");
     InGameParser game_parser(response);
     selection_mode = *game_parser.parseSelectPropertyQuery().get();
     if (this->model->isMyTurn()){
@@ -390,6 +409,7 @@ void GameCUIController::sellPropertyGU(const std::string& response){
 }
 
 void GameCUIController::exchangePropertyGU(const std::string& response){
+    this->view->getChat()->addText("t");
     ExchangeInfo exchanges{response, player_nb};
 
     if (this->model->isMyTurn()){
@@ -406,6 +426,7 @@ void GameCUIController::exchangePropertyGU(const std::string& response){
 }
 
 void GameCUIController::mortgagePropertyGU(const std::string& response){
+    this->view->getChat()->addText("u");
     InGameParser game_parser(response);
     selection_mode = *game_parser.parseSelectPropertyQuery().get();
     if (this->model->isMyTurn()){
@@ -419,6 +440,7 @@ void GameCUIController::mortgagePropertyGU(const std::string& response){
 }
 
 void GameCUIController::unmortgagePropertyGU(const std::string& response){
+    this->view->getChat()->addText("v");
     InGameParser game_parser(response);
     selection_mode = *game_parser.parseSelectPropertyQuery().get();
     if (this->model->isMyTurn()){
@@ -432,6 +454,7 @@ void GameCUIController::unmortgagePropertyGU(const std::string& response){
 }
 
 void GameCUIController::leaveSelectionMenuGU(const std::string& response){
+    this->view->getChat()->addText("w");
     for (auto& property : selection_mode) {
         int index = this->view->getBoard()->getCellIndex(property);
         this->view->getBoard()->leaveSelection(index);
@@ -439,6 +462,7 @@ void GameCUIController::leaveSelectionMenuGU(const std::string& response){
 }
 
 void GameCUIController::buildOrSellSucceedGU(const std::string& response){
+    this->view->getChat()->addText("x");
     InGameParser game_parser(response);
     std::shared_ptr<BuildInfo> success_info = game_parser.parseBuildQuery();
     int index = this->view->getBoard()->getCellIndex(success_info->name);
@@ -446,6 +470,7 @@ void GameCUIController::buildOrSellSucceedGU(const std::string& response){
 }
 
 void GameCUIController::mortgageSucceedGU(const std::string& response){
+    this->view->getChat()->addText("y");
     InGameParser game_parser(response);
     std::shared_ptr<BuildInfo> success_info = game_parser.parseBuildQuery();
     int index = this->view->getBoard()->getCellIndex(success_info->name);
@@ -453,6 +478,7 @@ void GameCUIController::mortgageSucceedGU(const std::string& response){
 }
 
 void GameCUIController::unmortgageSucceedGU(const std::string& response){
+    this->view->getChat()->addText("z");
     InGameParser game_parser(response);
     std::shared_ptr<BuildInfo> success_info = game_parser.parseBuildQuery();
     int index = this->view->getBoard()->getCellIndex(success_info->name);
@@ -460,6 +486,7 @@ void GameCUIController::unmortgageSucceedGU(const std::string& response){
 }
 
 void GameCUIController::exchangeSucceedGU(const std::string & response){
+    this->view->getChat()->addText("1");
 	ExchangeSucceedInfo succeed(response);
 	int index = this->view->getBoard()->getCellIndex(succeed.property);
 	this->view->getBoard()->leaveSelection(index);
@@ -467,20 +494,26 @@ void GameCUIController::exchangeSucceedGU(const std::string & response){
 }
 
 void GameCUIController::askExchangeGU(const std::string & response){
+    this->view->getChat()->addText("2");
     AskExchangeInfo exchange_info(response);
     this->view->getConsole()->addText(exchange_info.username + " aimerait vous racheter " + exchange_info.property + " pour " + std::to_string(exchange_info.price) +"$");
     this->view->getConsole()->addText("/accept ou /refuse");
 }
 
 void GameCUIController::confirmExchangeAskingGU(const std::string& response){
+    this->view->getChat()->addText("3");
     AskExchangeInfo exchange_info(response);
     this->view->getConsole()->addText("La demande de rachat de " + exchange_info.property + " pour " + std::to_string(exchange_info.price) + "$ a ete envoyee a " + exchange_info.username);
 }
 
 void GameCUIController::askForPurchaseGU(const std::string& response){
+    this->view->getChat()->addText("4");
     InGameParser game_parser(response);
     std::shared_ptr<AskForPurchaseInfo> purchase = game_parser.parseAskForPurchaseQuery();
     this->view->getConsole()->addText("Acheter " + purchase->cell_name + " pour " + std::to_string(purchase->amount)+"$ ?");
     this->view->getConsole()->addText("/yes ou /no");
     this->view->getConsole()->addText("Si vous ne l'achetez pas, des encheres debuteront");
 }
+
+
+//nebc

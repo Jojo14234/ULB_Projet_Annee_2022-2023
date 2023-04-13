@@ -4,8 +4,8 @@
 #include "Die.hpp"
 
 class Dice{
-    Die dice1;
-    Die dice2;
+    Die dice1{};
+    Die dice2{};
     int result;
     int double_counter;
 public:

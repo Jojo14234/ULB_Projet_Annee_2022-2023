@@ -34,8 +34,7 @@ void GameServer::sendStartData() {
  */
 void GameServer::sendGameData() {
     this->updateAllClientsWithQuery(QUERY::INFOS_GAME, this->game.getGameInfos());
-    this->updateAllClientsWithQuery(QUERY::INFOS_NEW_TURN, 
-                                    this->game.getCurrentPlayer()->getUsername());
+    //this->updateAllClientsWithQuery(QUERY::INFOS_NEW_TURN, this->game.getCurrentPlayer()->getUsername());
 }
 
 /*
@@ -458,7 +457,7 @@ void GameServer::processMortgage(ClientManager &client, Player *player) {
     // montrer toutes les propriété hypothécable du joueur
     // Choisir cell a hypothéquer / quitter le menu
     // passer la case en hypothèque + recevoir / prix achat
-    if (! player->hasMortgageableProperties()) {
+    if (! player->hasMortgageableLand()) {
         this->updateThisClientWithQuery(QUERY::NO_MORTGAGEABLE_PROP, "", client);
         return;
     }
@@ -494,7 +493,7 @@ void GameServer::processLiftMortgage(ClientManager &client, Player *player) {
     // montrer toutes les propriété des-hypothécable du joueur
     // Choisir cell a des-hypothéquer / quitter le menu
     // passer la case en normale + perdre / prix de rachat
-    if (! player->hasUnmortgageableProperties()) {
+    if (! player->hasUnmortgageableLand()) {
         this->updateThisClientWithQuery(QUERY::NO_UNMORTGAGEABLE_PROP, "", client);
         return;
     }
@@ -529,7 +528,7 @@ void GameServer::processLiftMortgage(ClientManager &client, Player *player) {
 void GameServer::processExchange(ClientManager &client, Player *player) {
     // Récupérer toutes les cases échangeable d'une partie
     // Une case échangeable = une case qui n'a pas de bâtiment
-    if (! player->canExchangeProperties()) {
+    if (! player->canExchangeLand()) {
         this->updateThisClientWithQuery(QUERY::NO_EXCHANGEABLE_PROP, "", client);
         return;
     }

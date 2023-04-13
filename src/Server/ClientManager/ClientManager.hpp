@@ -21,8 +21,9 @@ class ClientManager {
 	// A link to the game server, nullptr if not in game
 	GameServer* game_server;
 
-    // Classement dans la partie, -1 si pas de classement;
-    int Score = -1;
+    // Classement dans la partie
+    int score = 0;
+    bool isWinner = false;
 
 	// If client is connected
 	bool connected = true;
@@ -41,13 +42,14 @@ public:
 
 	// Send infos to the client
 	void send(const std::string &input);
-    void sendQueryMsg(const std::string &input, QUERY query);
+  void sendQueryMsg(const std::string &input, QUERY query);
 	void sendFriendsInfo(const std::vector<std::string> &friends, const std::vector<std::string> &requests); 
+  void send(QUERY &query, const std::string &input);
 
 	// Receive infos from the client
 	void receive(QUERY_TYPE &query);
 	void receive(GAME_QUERY_TYPE &query, sf::Packet &packet);
-    void receive(GAME_QUERY_TYPE &query);
+  void receive(GAME_QUERY_TYPE &query);
 
 	// To compare
 	bool operator==(const ClientManager& other);
@@ -76,6 +78,7 @@ public:
 	const std::string& getS1() const ;
 	const std::string& getS2() const;
     int getScore() const;
+    bool getIsWinner() const;
 
 
 
@@ -85,6 +88,8 @@ public:
 	void setGameServer(GameServer* gs);
 	void removeGameServer();
     void setScore(int score);
+    void setIsWinner(bool winner);
+    void resetStat();
 
 };
 

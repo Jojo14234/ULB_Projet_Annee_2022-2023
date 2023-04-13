@@ -14,6 +14,7 @@
 
 class ClientManager;	// forward declaraction
 
+
 class GameServer {
 
 	// The game
@@ -28,9 +29,11 @@ class GameServer {
 	// if the game is running
 	bool active = true;
 
+    int maxPlayer;
+
 public:
 	
-	GameServer() { clients.reserve(MAX_NB_PLAYER);}
+	GameServer(GameParameters parameters): game{parameters}, maxPlayer{parameters.maxPlayers} { clients.reserve(parameters.maxPlayers); }
 
     // Send big string with infos in it.
     void sendStartData();
@@ -142,6 +145,9 @@ public:
     CardDeck* getDeck(std::string name);
 
     int getCurrentPlayerIndex();
+
+    int getMaxPlayer() const {return this->maxPlayer;}
+    int getNbConnectedClient() const {return this->clients.size();}
 
 };
 

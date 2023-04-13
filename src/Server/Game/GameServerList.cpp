@@ -2,16 +2,16 @@
 #include "GameServer.hpp"
 
 
-int GameServerList::createGame(ClientManager* client, bool fast) {
-	std::shared_ptr<GameServer> gs = this->emplace_back(new GameServer());
-    gs->getGame()->setFastGame(fast);
+int GameServerList::createGame(ClientManager* client, GameParameters parameters) {
+	std::shared_ptr<GameServer> gs = this->emplace_back(new GameServer{parameters});
+    gs->getGame()->setFastGame(parameters.isFastGame);
     gs->connectClientToThisGame(*client);
 	return gs->getCode();
 }
 
 bool GameServerList::joinGame(ClientManager* client, int code) {
 	for (auto &gs : *this) {
-		if (gs->isCode(code)) { gs->connectClientToThisGame(*client); return true; }
+		if (gs->isCode(code) and gs->getMaxPlayer() > gs->getNbConnectedClient()) { gs->connectClientToThisGame(*client); return true; }
 	} return false;
 }
 

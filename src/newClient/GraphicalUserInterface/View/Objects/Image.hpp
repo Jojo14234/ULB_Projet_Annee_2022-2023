@@ -42,11 +42,13 @@ public:
 				this->sprite.setOrigin(sprite.getLocalBounds().width / 2, sprite.getLocalBounds().height / 2);
 				this->sprite.setPosition(this->info.getX() +  this->info.getWidth() / 2.0f, this->info.getY() + this->info.getHeight() / 2.0f);}}
 		
-	void setFlag(){
+	/*void setFlag(){
             this->sprite.setOrigin(sprite.getLocalBounds().width / 2, sprite.getLocalBounds().height / 2);
 			this->sprite.setScale(this->info.getWidth()/2 / (float)this->texture.getSize().x, this->info.getHeight()/2 / (float)this->texture.getSize().y);
-			this->sprite.setPosition(this->info.getX() +  this->info.getWidth() / 2.0f - this->info.getWidth() / 5.0f , this->info.getY() + this->info.getHeight() / 2.0f - this->info.getHeight() / 5.0f);
-        
-        }		
+			this->sprite.setPosition(this->info.getX() +  this->info.getWidth() / 2.0f - this->info.getWidth() / 5.0f , this->info.getY() + this->info.getHeight() / 2.0f - this->info.getHeight() / 5.0f); }*/
+
+	void setPosition(ObjectInfo<> new_info){
+		this->sprite.setPosition(new_info.getX(), new_info.getY());
+	}					
 
 };

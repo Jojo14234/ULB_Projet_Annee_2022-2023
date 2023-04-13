@@ -43,6 +43,17 @@ class Board{
 	TextBox commu_cart{ObjectInfo{6, 30, ((line_nb-1) * (height-1)) - 6 - 1 + info.getY(), 
 								  ((col_nb-1) * (width-1)) - 30 - 3 + info.getX()}, {"","Caisse de communaute"}};*/
 
+	Image red{ObjectInfo<>(15,15,0,0), PLAYER_RED };
+	Image blue{ObjectInfo<>(15,15,0,0), PLAYER_BLUE };
+	Image green{ObjectInfo<>(15,15,0,0), PLAYER_GREEN };
+	Image magenta{ObjectInfo<>(15,15,0,0), PLAYER_MAGENTA };
+	Image yellow{ObjectInfo<>(15,15,0,0), PLAYER_YELLOW };
+	Image cyan{ObjectInfo<>(15,15,0,0), PLAYER_CYAN };
+
+	std::vector<Image*> player_color;
+	std::vector<std::string> player_color_names;
+
+
 	void loadCellNames();
 	void loadCellFile();
 	void createBoard();
@@ -53,23 +64,20 @@ public:
 	Board(){
 		this->loadCellNames();
 		this->loadCellFile();
-		this->createBoard();}
+		this->createBoard();
+
+		}
 	
     void draw(sf::RenderWindow &window);
 	int getCellIndex(std::string cell);
 
-    /*int getNPlayer() { return n_player; }
-	
-	void setPlayer(int cell, int player);
-	void unsetPlayer(int player);
+	void setColorNumber(std::vector<std::string> color_list);
 	void movePlayer(int cell, int player);
+
 	void setIdle(int cell);
 	void setPurchased(int cell, int player);
 	void setHouse(int cell, int house_nb);
-	//void removeHouse(int cell, int house_nb);
-	void setBuildable(int cell);
-	void setSalable(int cell);
-	void leaveSelection(int cell);*/
+
 
 };
 

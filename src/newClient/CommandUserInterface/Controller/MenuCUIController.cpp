@@ -44,6 +44,14 @@ void MenuCUIController::handle(int event) {
 				this->model->setGameCode(gamecode);
 				this->model->createGame();
 			}
+
+            else if (parser.getQuery() == QUERY_TYPE::CREATE_FAST_GAME) {
+                this->new_state = STATE::GAME;
+                this->notify();
+                int gamecode = atoi(&response[response.length()-4]);
+                this->model->setGameCode(gamecode);
+                this->model->createGame();
+            }
 			break; 
 		}
 		case JOIN: {

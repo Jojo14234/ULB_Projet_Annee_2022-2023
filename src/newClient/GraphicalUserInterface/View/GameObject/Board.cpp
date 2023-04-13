@@ -79,29 +79,41 @@ void Board::createBoard(){
 
 ////////////////////////////////////////////////////////////////
 //method for setting and unsetting player
-/*void Board::unsetPlayer(int player){}
 
-void Board::setPlayer(int cell,int player){
-	old_pos_player[player-1] = cell;
-}
+
+void Board::setColorNumber(std::vector<std::string> color_list){
+		player_color.clear();
+		player_color_names = color_list;
+		for (std::string s : color_list ){
+			if(s == "red"){player_color.emplace_back(&red);}
+			else if(s == "blue"){player_color.emplace_back(&blue);}
+			else if(s == "magenta"){player_color.emplace_back(&magenta);}
+			else if(s == "green"){player_color.emplace_back(&green);}
+			else if(s == "yellow"){player_color.emplace_back(&yellow);}
+			else if(s == "cyan"){player_color.emplace_back(&cyan);}}}
+
 
 void Board::movePlayer(int cell, int player){
-	unsetPlayer(player);
-	setPlayer(cell, player);
+    //pas encore tester
+    board[old_pos_player[player-1]]->removePlayer(player);
+    old_pos_player[player-1] = cell;
+	board[cell]->setPlayer(player_color[player], player);
 }
  
 
+//methods for setting or unsetting building
 
-//method to clear all buildings a cell
-void Board::setIdle(int cell){}
+void Board::setIdle(int cell){
+	board[cell]->setIdle();
+}
 
-void Board::setPurchased(int cell, int player){}
+void Board::setPurchased(int cell, int player){
+	board[cell]->setOwner(player_color_names[player]);
+}
 
-void Board::setHouse(int cell, int house_nb){}
+void Board::setHouse(int cell, int house_nb){
+	board[cell]->setBuilding(house_nb);
+}
 
-void Board::setBuildable(int cell) {}
 
-void Board::setSalable(int cell) {}
-
-void Board::leaveSelection(int cell) {}*/
 

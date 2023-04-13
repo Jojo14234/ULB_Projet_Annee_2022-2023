@@ -62,7 +62,8 @@ public:
 
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Wunused-parameter"
-    Timer2(int duration, ClientManager* client, std::string stopMessage): duration{duration} {};
+    Timer2(int duration, ClientManager* client, std::string stopMessage)
+            : duration{duration}, client{client}, stopMessage{stopMessage} { this->start(); };
 #pragma GCC diagnostic pop
 
     void start() {

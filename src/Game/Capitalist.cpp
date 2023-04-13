@@ -8,6 +8,7 @@
 #include "Board/Obtainable/Cells/Land/Land.hpp"
 #include <vector>
 
+/*
 void Capitalist::receiveQuery(GAME_QUERY_TYPE query, sf::Packet &packet) {
     std::string s1="", s2="";
     switch (query) {
@@ -18,6 +19,7 @@ void Capitalist::receiveQuery(GAME_QUERY_TYPE query, sf::Packet &packet) {
     }
     std::cout << "in capitalist : " << (int)query << " " << s1 << " " << s2 << std::endl;
 }
+*/
 
 
 
@@ -177,7 +179,7 @@ std::string Capitalist::getBetterGameInfos() {
  */
 void Capitalist::addPlayer(ClientManager &client) {
     Cell* starting_cell = this->board[0];
-    Player player{&client, starting_cell};
+    Player player{&client, starting_cell, this->params.startMoney};
     if ( players.empty() ) { player.setAdmin(); }
     if (isFastGame()){
         player.getBankAccount()->setMoney(STARTING_MONEY_FAST);
@@ -395,9 +397,9 @@ bool Capitalist::processBuild(Player *player, std::string &name) {
     // Pas un color property
     if (!prop) { return false; }
     // Pass assez d'hotel disponible
-    if (prop->getLevel() == PROPERTY_LEVEL::FOUR && this->board.getRemainingHotel() <= 0) { return false; }
+    if (prop->getLevel() == PROPERTY_LEVEL::FOUR && (this->board.getRemainingHotel() <= 0 && !this->isFastGame())) { return false; }
     // Pas assez de maison disponible
-    else if (prop->getIntLevel() < 4 && this->board.getRemainingHome() <= 0) { return false; }
+    else if (prop->getIntLevel() < 4 && (this->board.getRemainingHome() <= 0 && !this->isFastGame())) { return false; }
     // Construction à échouer
     if (!prop->build(player, isFastGame())) { return false; }
     // On retire un hotel mais on rajoute 4 maison

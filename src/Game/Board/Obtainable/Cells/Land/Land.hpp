@@ -37,6 +37,7 @@ public:
 
     // Check
     bool isMortgaged() const;
+    virtual bool isMortgageable(Player* player) const;
 
 
     // Opération

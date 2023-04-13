@@ -13,7 +13,7 @@ public:
 	using List<GameServer>::List;
 
 	// To create a game and return its code
-	int createGame(ClientManager* client, bool fast);
+	int createGame(ClientManager* client, GameParameters parameters);
 
 	// To make a client join a game by its code
 	bool joinGame(ClientManager* client, int code);

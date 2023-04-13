@@ -8,8 +8,6 @@
 #include <vector>
 #include <string.h>
 
-#include "BankAccount.hpp"
-//#include "Board/Obtainable/Cells/Cell.hpp"
 #include "../Board/Board.hpp"
 #include "../Board/Obtainable/Cards/JailCard.hpp"
 #include "../Board/Obtainable/Cells/Land/Land.hpp"
@@ -19,8 +17,11 @@
 
 
 #include "PLAYER_STATUS.hpp"
+#include "BankAccount.hpp"
 #include "../Dice/Dice.hpp"
 #include "../../utils/Configs.hpp"
+
+//#include "Board/Obtainable/Cells/Cell.hpp"
 //#include "../../Server/ClientManager/ClientManager.hpp"
 
 
@@ -30,7 +31,7 @@ class Board;
 
 class Player {
 
-    BankAccount bank_account = BankAccount{STARTING_MONEY};
+    BankAccount bank_account;
 
     Cell* current_cell;
     ClientManager* client;
@@ -58,7 +59,7 @@ class Player {
 
 public:
 
-    Player(ClientManager* client, Cell* start_cell) : client{client} {current_cell = start_cell;}
+    Player(ClientManager* client, Cell* start_cell, int startMoney) : bank_account{startMoney}, client{client} {current_cell = start_cell;}
 
     int processRollDice(Dice &dice);
 
@@ -173,9 +174,9 @@ public:
     //BOOL
     bool hasBuildableProperties();
     bool hasSellableProperties();
-    bool hasMortgageableProperties();
-    bool hasUnmortgageableProperties();
-    bool canExchangeProperties();
+    bool hasMortgageableLand();
+    bool hasUnmortgageableLand();
+    bool canExchangeLand();
 
     // NEW FUNCTION
     std::vector<Land*> getAllLand();

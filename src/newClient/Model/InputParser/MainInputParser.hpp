@@ -13,7 +13,7 @@ class MainInputParser : public InputParser {
     void createParser() {
         if ( this->size() < 2 ) { return; }
         if ( this->inputs[1] == "normal" )    { this->query_type = QUERY_TYPE::CREATE_GAME; }
-        else if ( this->inputs[1] == "fast" ) { this->query_type = QUERY_TYPE::CREATE_GAME; } // todo add query fast
+        else if ( this->inputs[1] == "fast" ) { this->query_type = QUERY_TYPE::CREATE_FAST_GAME; }
     }
 
     void messageParser() {

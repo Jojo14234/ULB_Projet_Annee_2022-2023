@@ -44,7 +44,7 @@ public:
     int getConstructPrice() const;
     PROPERTY_LEVEL getLevel() const;
     PROPERTY_COLOR getColor() const;
-    std::vector<Property*> getOtherSameColorPropFromPlayer(Player* player);
+    std::vector<Property*> getOtherSameColorPropFromPlayer(Player* player) const ;
 
     // Setter
 
@@ -53,8 +53,8 @@ public:
     bool canSellBuilding(Player* player);
     bool hasAllSameColorProperties(Player* player);
     bool AllSameColorPropertiesHaveGoodLevel(Player* player, bool sell = false);
-    bool isMortgageable(Player* player);
-    bool AllSameColorPropertiesHaveNoBuilding(Player* player);
+    bool isMortgageable(Player* player) const override;
+    bool AllSameColorPropertiesHaveNoBuilding(Player* player) const ;
 
     // Operation
     bool playerPurchase(Player* player) override;
