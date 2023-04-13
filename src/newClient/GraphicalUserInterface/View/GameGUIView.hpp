@@ -178,9 +178,6 @@ public:
 	explicit GameGUIView(sf::RenderWindow* window) : AbstractGUIView(window)
 	,board{}{
 
-		//test
-		info_box.initMoney(colorlist,1500);
-		info_box.setMoney(4,5200);
 		message_box.setString("C'est le tour de miaou");
 
 		hideAllButton();
@@ -250,6 +247,20 @@ public:
 		give_up_button.draw(*window);
 	}
 	void clear();
+
+	//method for setting the game
+
+	void startTurn(){
+        //this->showDice(); à rajouter
+        this->message_box.setString("C'est votre tour!");
+		this->setStartRound(true);
+    }
+
+	void endTurn(){
+        //this->hideDice(); à rajouter
+		this->setStartRound(false);
+    }
+
 
 	friend class GameGUIController;
 	//Board* getBoard() { return &board; }
