@@ -11,6 +11,7 @@ void ConnectionGUIController::handle(sf::Event event) {
 		case sf::Event::MouseButtonPressed: {
 			// buttons
 			if (this->view->login_button.contains(event.mouseButton.x, event.mouseButton.y)) {
+				this->view->login_button.playSound();
 				this->model->sendLogin(this->view->username.getText(), this->view->password.getText());
 				if (this->model->receive() == QUERY::TRUEQ) { this->new_state = STATE::MENU; }
 				this->view->clear();
