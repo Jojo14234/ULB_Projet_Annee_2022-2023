@@ -44,7 +44,9 @@ public:
 		for (auto &text : texts) text->draw(window);
 		for (auto &button : buttons) button->draw(window);
 		for (auto &input : inputs) input->draw(window);
+		std::cout<<"draw modal box before selectors"<<std::endl;
 		for (auto &selector : selectors) selector->draw(window);
+		std::cout<<"draw modal box after selectors"<<std::endl;
 	}
 
 	// Setters
@@ -53,9 +55,13 @@ public:
 	void addButton(ImageButton* button) { buttons.emplace_back(button); }
 	void addInput(InputBox* input) { inputs.emplace_back(input); }
 	void addSelector(Selector* selector) {
+		std::cout<<"in add selector -";
 		selectors.emplace_back(selector);
+		std::cout<<"selector added -";
 		dir_buttons.emplace_back(selector->getLButton());	//new ?
+		std::cout<<"left button there -";
 		dir_buttons.emplace_back(selector->getRButton());
+		std::cout<<"right button here -"<<std::endl;
 	}
 
 	void addTexts(std::initializer_list<Text*> texts) { for (Text* text : texts) this->addText(text); }

@@ -32,9 +32,13 @@ public:
 	}
 
 	virtual void draw(sf::RenderWindow &window) const override {
+		std::cout<<"in draw selector -";
         text.draw(window);
+        std::cout<<"text has been draw -";
         left_button.draw(window);
+        std::cout<<"l button has been draw -";
         right_button.draw(window);
+        std::cout<<"r button has been draw"<<std::endl;
     }
 
     DirectionImButton* getLButton() {
