@@ -18,7 +18,7 @@ protected:
 	sf::Font font;
 
 public:
-
+	Text()=default;
 	Text(ObjectInfo<> info, const std::string &text, sf::Color color=sf::Color::Black, const std::string &font_path=DEFAULT_FONT_PATH) : AbstractViewObject(info) {
 		if (!font.loadFromFile(font_path)) {
 			throw std::runtime_error("Font not found");

@@ -52,10 +52,10 @@ public:
 	void addImage(Image* image) { images.emplace_back(image); }
 	void addButton(ImageButton* button) { buttons.emplace_back(button); }
 	void addInput(InputBox* input) { inputs.emplace_back(input); }
-	void addSelectors(Selector* selector) {
+	void addSelector(Selector* selector) {
 		selectors.emplace_back(selector);
-		dir_buttons.emplace_back(selector.getLButtons());
-		dir_buttons.emplace_back(selector.getRButtons());
+		dir_buttons.emplace_back(selector->getLButton());	//new ?
+		dir_buttons.emplace_back(selector->getRButton());
 	}
 
 	void addTexts(std::initializer_list<Text*> texts) { for (Text* text : texts) this->addText(text); }
@@ -69,5 +69,6 @@ public:
 	Image* getImage(int index) { return images[index].get(); }
 	ImageButton* getButton(int index) { return buttons[index].get(); }
 	InputBox* getInput(int index) { return inputs[index].get(); }
+	DirectionImButton* getDirButton(int index) { return dir_buttons[index].get(); }
 
 };
