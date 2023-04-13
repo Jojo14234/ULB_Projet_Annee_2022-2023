@@ -7,17 +7,19 @@
 
 class Cell : public Box {
 
-	int building_nb=0; // For now, it's useless
-	int owner=0;
 	ImageButton cell_im;
 	int cell_number;
+	std::string owner;
 	std::vector<Image*> images_player {nullptr, nullptr, nullptr, nullptr, nullptr, nullptr};
 	std::vector<std::unique_ptr<Image>> images_building;
+	Box grayed;
 
 public :
 
     explicit Cell(ObjectInfo<> info, sf::Color color, std::string path, int cell_number):
-         AbstractViewObject(info),Box(info,color), cell_im(info, path), cell_number(cell_number){
+         AbstractViewObject(info),Box(info,color), cell_im(info, path), cell_number(cell_number)
+		 ,grayed(info,sf::Color(0, 0, 0, 180)){
+			grayed.setHidden();
 			if (cell_number <= 9){cell_im.rotate(90);}
 			else if(cell_number >= 10 and cell_number <= 19){cell_im.rotate(180);}
 			else if(cell_number >= 20 and cell_number <= 29){cell_im.rotate(-90);}}
@@ -33,6 +35,8 @@ public :
 		for (auto &building : images_building){
 			building->draw(window);
 		}
+
+		grayed.draw(window);
 
 	}
 
@@ -52,13 +56,14 @@ public :
 
 	}
 
-	void removePlayer(Image* player,int player_number ) {
-		images_player [player_number] = nullptr;
+	void removePlayer(int player_number ) {
+		images_player[player_number] = nullptr;
 		
 
 	}
 
 	void setOwner(std::string player_color){
+		owner = player_color;
 		std::string path;
 		if (player_color == "red"){path = FLAG_RED;}
 		else if (player_color == "blue"){path = FLAG_BLUE;}
@@ -74,6 +79,7 @@ public :
 	
 	void removeOwner(){
 		images_building.erase(images_building.begin(),images_building.begin()+1);
+		owner = "";
 	}
 
 	void setHouse(int nb, std::string player_color){
@@ -114,28 +120,32 @@ public :
 
 
 
-	void addBuilding(int nb, std::string player_color){
+	void setBuilding(int nb){
 		images_building.clear();
-		if (nb == 0){setOwner(player_color);}
-		else if(nb > 0 and nb <= 4  ){setHouse(nb, player_color);}
-		else if( nb >= 5){setHotel(player_color);}
-		
-		}
+		if (nb == 0){setOwner(owner);}
+		else if(nb > 0 and nb <= 4  ){setHouse(nb, owner);}
+		else if( nb >= 5){setHotel(owner);}}
+
+	void setGrayed(){grayed.setVisible();}
+
+	void unsetGrayed(){grayed.setHidden();}
+	
+	void setIdle(){
+		setBuilding(0);
+		removeOwner();
+	}
+
+	/*
+
+	void enterBuildMode(std::string player){	}
+
+	void leaveBuildMode(){}
+
+	void enterSellMode(){}*/
+
 	
 
-	/*void enterBuildMode(){
-	}
 
-	void enterSellMode(){
-	}
-
-	void leaveBuildMode(){
-	}
-
-	void setIdle(){
-	}
-
-*/
 
 };
 

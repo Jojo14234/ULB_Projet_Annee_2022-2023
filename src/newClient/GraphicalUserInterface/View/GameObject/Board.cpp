@@ -74,8 +74,7 @@ void Board::createBoard(){
                 position.x =(start_corner.x+corner_cell_size.x+ 9*v_cell_size.y) - (i-30) * v_cell_size.y ;position.y = start_corner.y ;}
             board[i] = std::make_shared<Cell>(ObjectInfo<>(size.x,size.y, position.x,position.y),
                                                  sf::Color::White,  CELL_PATH + cell_file[i] , i);
-        }
-        }}
+        }}}
 
 
 ////////////////////////////////////////////////////////////////
@@ -84,6 +83,7 @@ void Board::createBoard(){
 
 void Board::setColorNumber(std::vector<std::string> color_list){
 		player_color.clear();
+		player_color_names = color_list;
 		for (std::string s : color_list ){
 			if(s == "red"){player_color.emplace_back(&red);}
 			else if(s == "blue"){player_color.emplace_back(&blue);}
@@ -95,25 +95,25 @@ void Board::setColorNumber(std::vector<std::string> color_list){
 
 void Board::movePlayer(int cell, int player){
     //pas encore tester
-    board[old_pos_player[player-1]]->removePlayer(player_color[player],player);
+    board[old_pos_player[player-1]]->removePlayer(player);
     old_pos_player[player-1] = cell;
 	board[cell]->setPlayer(player_color[player], player);
 }
  
 
-/*
+//methods for setting or unsetting building
+
+void Board::setIdle(int cell){
+	board[cell]->setIdle();
+}
+
+void Board::setPurchased(int cell, int player){
+	board[cell]->setOwner(player_color_names[player]);
+}
+
+void Board::setHouse(int cell, int house_nb){
+	board[cell]->setBuilding(house_nb);
+}
 
 
-//method to clear all buildings a cell
-void Board::setIdle(int cell){}
-
-void Board::setPurchased(int cell, int player){}
-
-void Board::setHouse(int cell, int house_nb){}
-
-void Board::setBuildable(int cell) {}
-
-void Board::setSalable(int cell) {}
-
-void Board::leaveSelection(int cell) {}*/
 

@@ -5,7 +5,7 @@
 class MessageBox: public ModalBox{
 	Text text;
     public:
-        MessageBox(ObjectInfo<> info): ModalBox(info,sf::Color::Magenta), AbstractViewObject(info)
+        MessageBox(ObjectInfo<> info):  AbstractViewObject(info),ModalBox(info,sf::Color::Magenta)
 		,text{ObjectInfo<>(0,24,(info.getX() + (info.getWidth() / 3)),info.getY() + info.getHeight() / 3), ""}
 		{
 			addText(&text);

@@ -50,7 +50,8 @@ class Board{
 	Image yellow{ObjectInfo<>(15,15,0,0), PLAYER_YELLOW };
 	Image cyan{ObjectInfo<>(15,15,0,0), PLAYER_CYAN };
 
-	std::vector<Image*> player_color{};
+	std::vector<Image*> player_color;
+	std::vector<std::string> player_color_names;
 
 
 	void loadCellNames();
@@ -64,15 +65,7 @@ public:
 		this->loadCellNames();
 		this->loadCellFile();
 		this->createBoard();
-		
-		board[31]->setPlayer(&red,0);  //tests
-		board[31]->setPlayer(&blue,1);
-		board[31]->setPlayer(&green,2);
-		board[31]->setPlayer(&magenta,3);
-		board[31]->setPlayer(&yellow,4);
-		board[31]->setPlayer(&cyan,5);
 
-		board[31]->addBuilding(5,"magenta");
 		}
 	
     void draw(sf::RenderWindow &window);
@@ -81,18 +74,10 @@ public:
 	void setColorNumber(std::vector<std::string> color_list);
 	void movePlayer(int cell, int player);
 
-
-    /*int getNPlayer() { return n_player; }
-	
-
-	
 	void setIdle(int cell);
 	void setPurchased(int cell, int player);
 	void setHouse(int cell, int house_nb);
-	//void removeHouse(int cell, int house_nb);
-	void setBuildable(int cell);
-	void setSalable(int cell);
-	void leaveSelection(int cell);*/
+
 
 };
 
