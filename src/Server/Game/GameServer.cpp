@@ -34,7 +34,7 @@ void GameServer::sendStartData() {
  */
 void GameServer::sendGameData() {
     this->updateAllClientsWithQuery(QUERY::INFOS_GAME, this->game.getGameInfos());
-    //this->updateAllClientsWithQuery(QUERY::INFOS_NEW_TURN, this->game.getCurrentPlayer()->getUsername());
+    this->updateAllClientsWithQuery(QUERY::INFOS_NEW_TURN, this->game.getCurrentPlayer()->getUsername());
 }
 
 /*
@@ -230,7 +230,6 @@ GameStats GameServer::clientLoop(ClientManager &client) {
         // POSSIBLE ACTION IF IT IS THE CLIENT TURN
         if (this->game.getCurrentPlayer()->getClient() == &client) {
             Player* me = this->game.getCurrentPlayer();
-            this->updateThisClientWithQuery(QUERY::INFOS_NEW_TURN, me->getUsername(), client);
 
             if ( me->getStatus() == PLAYER_STATUS::FREE ) { this->clientTurn(client, me); continue; }
             if ( me->getStatus() == PLAYER_STATUS::JAILED ) { this->processJail(client, me); continue; }
