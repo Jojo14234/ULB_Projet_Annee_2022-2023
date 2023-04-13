@@ -13,6 +13,9 @@
 #include "Image.hpp"
 #include "ImageButton.hpp"
 #include "InputBox.hpp"
+
+#include "Selector.hpp"
+
 #include "../../configs.hpp"
 
 
@@ -24,6 +27,9 @@ protected:
 	std::vector<std::unique_ptr<Image>> images;
 	std::vector<std::unique_ptr<ImageButton>> buttons;
 	std::vector<std::unique_ptr<InputBox>> inputs;
+
+	std::vector<std::unique_ptr<Selector>> selectors;
+	std::vector<std::unique_ptr<DirectionImButton>> dir_buttons;
 public:
 
 	explicit ModalBox(ObjectInfo<> info, sf::Color color=sf::Color::Black) : AbstractViewObject(info), Box(info, color) {}
@@ -38,6 +44,7 @@ public:
 		for (auto &text : texts) text->draw(window);
 		for (auto &button : buttons) button->draw(window);
 		for (auto &input : inputs) input->draw(window);
+		for (auto &selector : selectors) selector->draw(window);
 	}
 
 	// Setters
@@ -45,6 +52,11 @@ public:
 	void addImage(Image* image) { images.emplace_back(image); }
 	void addButton(ImageButton* button) { buttons.emplace_back(button); }
 	void addInput(InputBox* input) { inputs.emplace_back(input); }
+	void addSelectors(Selector* selector) {
+		selectors.emplace_back(selector);
+		dir_buttons.emplace_back(selector.getLButtons());
+		dir_buttons.emplace_back(selector.getRButtons());
+	}
 
 	void addTexts(std::initializer_list<Text*> texts) { for (Text* text : texts) this->addText(text); }
 	void addImages(std::initializer_list<Image*> images) { for (Image* image : images) this->addImage(image); }
