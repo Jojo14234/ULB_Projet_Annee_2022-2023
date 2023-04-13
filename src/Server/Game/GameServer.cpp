@@ -572,6 +572,7 @@ void GameServer::processAskExchange(ClientManager &client, Player *player) {
         this->updateThisClientWithQuery(QUERY::STOP_WAIT, "/refuse", client);
         this->updateThisClientWithQuery(QUERY::MESSAGE, "Vous avez mis trop de temps a répondre à l'offre, elle à été automatiquement annulé",client);
     }
+    player->setStatus(PLAYER_STATUS::FREE);
 }
 
 
@@ -581,6 +582,7 @@ void GameServer::processAskAuction(ClientManager &client, Player *player) {
         this->updateThisClientWithQuery(QUERY::STOP_WAIT, "/refuse", client);
         this->updateThisClientWithQuery(QUERY::MESSAGE, "Vous avez mis trop de temps a répondre à l'offre, elle à été automatiquement annulé",client);
     }
+    player->setStatus(PLAYER_STATUS::FREE);
 }
 
 void GameServer::processAskBid(ClientManager &client, Player *player) {
