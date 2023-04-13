@@ -5,6 +5,7 @@
 #include <pthread.h>
 #include <memory>
 #include <string>
+#include <vector>
 
 #include "../../utils/Configs.hpp"
 #include "../Database/User.hpp"
@@ -41,13 +42,14 @@ public:
 
 	// Send infos to the client
 	void send(const std::string &input);
-    void sendQueryMsg(const std::string &input, QUERY query);
-    void send(QUERY &query, const std::string &input);
+  void sendQueryMsg(const std::string &input, QUERY query);
+	void sendFriendsInfo(const std::vector<std::string> &friends, const std::vector<std::string> &requests); 
+  void send(QUERY &query, const std::string &input);
 
 	// Receive infos from the client
 	void receive(QUERY_TYPE &query);
 	void receive(GAME_QUERY_TYPE &query, sf::Packet &packet);
-    void receive(GAME_QUERY_TYPE &query);
+  void receive(GAME_QUERY_TYPE &query);
 
 	// To compare
 	bool operator==(const ClientManager& other);
