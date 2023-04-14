@@ -207,7 +207,7 @@ struct MoveTaxInfo2 {
         }
     }
     std::string to_string(bool isActualPlayer, std::string username) {
-        std::string str = (isActualPlayer) ? "Vous etes arrive " : username + " est arrivé ";
+        std::string str = (isActualPlayer) ? "Vous êtes arrivé " : username + " est arrivé ";
         str += "sur la taxe " + tax_name + " et paye sa taxe à hauteur de " + std::to_string(price) + "$.";
         return str;
     }
