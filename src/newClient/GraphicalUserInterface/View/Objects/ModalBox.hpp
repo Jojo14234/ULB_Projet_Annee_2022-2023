@@ -44,9 +44,13 @@ public:
 		for (auto &text : texts) text->draw(window);
 		for (auto &button : buttons) button->draw(window);
 		for (auto &input : inputs) input->draw(window);
-		std::cout<<"draw modal box before selectors"<<std::endl;
-		for (auto &selector : selectors) selector->draw(window);
-		std::cout<<"draw modal box after selectors"<<std::endl;
+		std::cout<<"draw modal box -> before selectors"<<std::endl;
+		std::cout<<"taille du selectors: "<<selectors.size()<<std::endl;
+		for (auto &selector : selectors) {
+			std::cout<<&selector<<std::endl;
+			selector->draw(window);
+		}
+		std::cout<<"draw modal box -> after selectors"<<std::endl;
 	}
 
 	// Setters
@@ -57,7 +61,7 @@ public:
 	void addSelector(Selector* selector) {
 		std::cout<<"in add selector -";
 		selectors.emplace_back(selector);
-		std::cout<<"selector added -";
+		std::cout<<"selector added - adress: "<<&(selectors.at(0));
 /*		dir_buttons.emplace_back(selector->getLButton());	//new ?
 		std::cout<<"left button there -";
 		dir_buttons.emplace_back(selector->getRButton());
