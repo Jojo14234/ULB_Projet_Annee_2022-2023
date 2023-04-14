@@ -21,6 +21,9 @@ class MessageBox: public ModalBox{
 	  	void setString(std::string new_string){
 			text.setString(new_string);}
 
+		void clearText(){
+			text.setString("");
+		}
 
 
 };

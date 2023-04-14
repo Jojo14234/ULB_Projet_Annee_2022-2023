@@ -16,6 +16,8 @@ class InfoBox: public Image{
     Image jail_card {ObjectInfo<> {80,80,info.getX() + 400 - 240  , info.getY() + 350 - 225},OUTJAIL_PATH};
 
     Text jail_card_nb {ObjectInfo<> {0,20,info.getX() + 400 - 240 + 35  , info.getY() + 350 - 225 + 35},""};
+
+    int card = 0;
     
 
 
@@ -57,7 +59,18 @@ class InfoBox: public Image{
                     allmoney.push_back(std::make_shared<Money>(ObjectInfo<>(80,40,info.getX() + 400 - 120*(3-(i - 3))  , info.getY() + 350 - 47), color , start_money));
                 }}}
         void setJailCard(int nb_jail_card){
-            jail_card_nb.setString(std::to_string(nb_jail_card));
+            jail_card_nb.setString(std::to_string(card));
+            card = nb_jail_card;
+        }
+
+        void addJailCard(){
+            setJailCard(card + 1);
+        }
+
+        void removeJailCard(){
+            if (card - 1 >= 0){
+                setJailCard(card - 1);
+            }
         }
 
         void setPseudo(int player, std::string pseudo){

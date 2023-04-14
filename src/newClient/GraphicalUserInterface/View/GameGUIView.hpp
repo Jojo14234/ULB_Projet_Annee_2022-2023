@@ -277,13 +277,15 @@ public:
 //method for setting the game
 
 	void startTurn(){
-        //this->showDice(); à rajouter
+		this->dice.setVisible();
         this->message_box.setString("C'est votre tour!");
 		this->setStartRound(true);
     }
 
 	void endTurn(){
-        //this->hideDice(); à rajouter
+        this->dice.setHidden();
 		this->setStartRound(false);
     }
+
+
 };
