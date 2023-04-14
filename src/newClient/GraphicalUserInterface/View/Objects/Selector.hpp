@@ -38,8 +38,10 @@ public:
 	}
 
 	~Selector() {
+		std::cout<<"boum boum boum"<<std::endl;
 		for (auto button:buttons) {
 			button->removeObserver(this);
+			delete button;
 		}
 	}
 
