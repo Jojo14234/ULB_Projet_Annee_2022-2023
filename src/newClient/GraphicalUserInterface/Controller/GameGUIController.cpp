@@ -7,7 +7,10 @@
 
 void GameGUIController::handle(sf::Event event) {
     if (event.type != sf::Event::MouseButtonPressed) return;
-            if(this->view->button_mode == "start_round"){
+            if(this->view->button_mode == "start_game"){
+                if(this->view->startgame_button.contains(event.mouseButton.x, event.mouseButton.y)){//TODO
+                        }}
+            else if(this->view->button_mode == "start_round"){
                 if(this->view->mortgage_button.contains(event.mouseButton.x, event.mouseButton.y)){//TODO
                         }
                 else if(this->view->unmortgage_button.contains(event.mouseButton.x, event.mouseButton.y)){//TODO
@@ -25,11 +28,10 @@ void GameGUIController::handle(sf::Event event) {
                         }
                 else if(this->view->no_buy_button.contains(event.mouseButton.x, event.mouseButton.y)){//TODO
                         }}
-            else if (this->view->button_mode == "paid_cell"){
+            else if (this->view->button_mode == "specard_cell"){
                 if(this->view->paid_button.contains(event.mouseButton.x, event.mouseButton.y)){//TODO
-                        }}
-            else if (this->view->button_mode == "card_cell"){
-                if(this->view->draw_card_button.contains(event.mouseButton.x, event.mouseButton.y)){//TODO
+                        }
+                else if(this->view->draw_card_button.contains(event.mouseButton.x, event.mouseButton.y)){//TODO
                         }}
             else if (this->view->button_mode == "on_prison"){
                 if(this->view->paid_prison_button.contains(event.mouseButton.x, event.mouseButton.y)){//TODO
@@ -155,7 +157,7 @@ void GameGUIController::startGame(int beginner) {
     //this->view->getInfo()->clearAllText();
     this->view->board.setColorNumber(player_nb);
     this->view->info_box.initMoney(player_nb,1500); //à rajouter carte prison
-    for (int i = 1; i<= player_nb; i++) {
+    for (int i = 0; i< player_nb; i++) {
         this->view->board.setPlayer(0, i);
         //this->view->InfoBox.initMoney(players_username[i-1]); à rajouter pseudoc 
        
