@@ -81,17 +81,21 @@ void Board::createBoard(){
 //method for setting and unsetting player
 
 
-void Board::setColorNumber(std::vector<std::string> color_list){
+void Board::setColorNumber(int n_player){
 		player_color.clear();
-		player_color_names = color_list;
-		for (std::string s : color_list ){
-			if(s == "red"){player_color.emplace_back(&red);}
-			else if(s == "blue"){player_color.emplace_back(&blue);}
-			else if(s == "magenta"){player_color.emplace_back(&magenta);}
-			else if(s == "green"){player_color.emplace_back(&green);}
-			else if(s == "yellow"){player_color.emplace_back(&yellow);}
-			else if(s == "cyan"){player_color.emplace_back(&cyan);}}}
+		player_nb = n_player;
+		for (int i = 0; i < n_player;i++){
+			if(player_color_names[i] == "red"){player_color.emplace_back(&red);}
+			else if(player_color_names[i]== "blue"){player_color.emplace_back(&blue);}
+			else if(player_color_names[i] == "magenta"){player_color.emplace_back(&magenta);}
+			else if(player_color_names[i] == "green"){player_color.emplace_back(&green);}
+			else if(player_color_names[i] == "yellow"){player_color.emplace_back(&yellow);}
+			else if(player_color_names[i] == "cyan"){player_color.emplace_back(&cyan);}}}
 
+
+void Board::setPlayer(int cell, int player){
+	board[cell]->setPlayer(player_color[player], player);
+}
 
 void Board::movePlayer(int cell, int player){
     //pas encore tester

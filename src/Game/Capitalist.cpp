@@ -565,3 +565,13 @@ void Capitalist::forceAcquisition(Player *player) {
         player->acquireLand(available_land.at(land_index_2));
     }
 }
+
+int Capitalist::getStartMoney() { return params.startMoney; }
+
+int Capitalist::getMaxPlayers() { return params.maxPlayers; }
+
+int Capitalist::getMaxHome() { return params.maxHome; }
+
+int Capitalist::getMaxHotels() { return params.maxHotel; }
+
+int Capitalist::getMaxTurns() { return params.max_turn; }

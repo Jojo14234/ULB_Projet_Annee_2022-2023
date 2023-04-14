@@ -154,7 +154,7 @@ void Server::clientProcessLogin(ClientManager &client) {
 	if ( user == nullptr )                           { client.sendQueryMsg("FALSE", QUERY::FALSEQ); return; }	// User not find in the db
     if ( !user->isPassword(client.getS2().c_str()) ) { client.sendQueryMsg("FALSE", QUERY::FALSEQ); return; }  // Incorrect password
     if ( this->find(user) )                          { client.sendQueryMsg("FALSE", QUERY::TRUEQ); return; }  // Si le compte utilisateur est déjà
-    // Process of linking account                                                       // utilisé par un autre client
+    // Process of linking account                                                                             // utilisé par un autre client
     client.setAccount(user);
     client.sendQueryMsg("TRUE", QUERY::TRUEQ);	// succeed
     std::cout << "['login' to client account '"<< client.getAccount()->getUsername() <<"' was successful]\n" << std::endl;
@@ -205,7 +205,7 @@ void Server::clientProcessCreateGame(ClientManager &client) {
                 try{
                     params.maxHome = std::stoi(word);
                 } catch ( ... ){
-                    params.maxHome = 4;
+                    params.maxHome = 32;
                 }
                 break;
             }
@@ -213,7 +213,7 @@ void Server::clientProcessCreateGame(ClientManager &client) {
                 try {
                     params.maxHotel = std::stoi(word);
                 } catch ( ... ){
-                    params.maxHotel = 1;
+                    params.maxHotel = 12;
                 }
                 break;
             }
@@ -221,7 +221,10 @@ void Server::clientProcessCreateGame(ClientManager &client) {
         }
     }
     int gc = games.createGame(&client, params);
-	client.sendQueryMsg(client.getUsername() + ":" + std::to_string(gc), QUERY::PLAYER_CREATE_GAME);
+    std::string res = client.getUsername() + ":" + std::to_string(gc) + ":" + std::to_string(params.isFastGame) + ":" +
+                      std::to_string(params.startMoney) + ":" + std::to_string(params.maxPlayers) + ":" +
+                      std::to_string(params.maxHome) + ":" + std::to_string(params.maxHotel) + ":" + std::to_string(params.max_turn);
+	client.sendQueryMsg(res, QUERY::PLAYER_CREATE_GAME);
 	client.enterGameLoop();
 }
 

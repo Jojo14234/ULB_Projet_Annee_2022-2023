@@ -12,7 +12,7 @@
 #include "../AssetsPath.hpp"
 class InfoBox: public Image{
     std::vector<std::shared_ptr<Money>> allmoney;
-
+    std::vector<std::string> colorlist {"red","blue","yellow","green","magenta","cyan"};
     public:
         InfoBox(ObjectInfo <>info): AbstractViewObject{info}, Image{info,INFOBOX_PATH}{}
         
@@ -22,8 +22,8 @@ class InfoBox: public Image{
                 i->draw(window);
             }}
 
-        void initMoney( std::vector<std::string> colorlist, int start_money){
-            for ( int i = 0; i < 6; i++){
+        void initMoney( int n_player, int start_money){
+            for ( int i = 0; i < n_player; i++){
 
                 sf::Color color;
 

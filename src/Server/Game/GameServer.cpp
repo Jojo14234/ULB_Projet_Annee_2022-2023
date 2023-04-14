@@ -34,7 +34,7 @@ void GameServer::sendStartData() {
  */
 void GameServer::sendGameData() {
     this->updateAllClientsWithQuery(QUERY::INFOS_GAME, this->game.getGameInfos());
-    //this->updateAllClientsWithQuery(QUERY::INFOS_NEW_TURN, this->game.getCurrentPlayer()->getUsername());
+    this->updateAllClientsWithQuery(QUERY::INFOS_NEW_TURN, this->game.getCurrentPlayer()->getUsername());
 }
 
 /*
@@ -48,7 +48,11 @@ void GameServer::sendBetterGameData() {
  * Send a Message with the username and the game code to everyone
  */
 void GameServer::client_has_join_the_game(ClientManager &client) {
-    std::string str = client.getUsername() + ":" + std::to_string(this->getCode()) + ":" + std::to_string(this->clients.size()) + ":";
+    std::string str = client.getUsername() + ":" + std::to_string(this->getCode()) + ":" +
+                      std::to_string(game.isFastGame()) + ":" + std::to_string(game.getStartMoney()) + ":" + 
+                      std::to_string(game.getMaxPlayers()) + ":" + std::to_string(game.getMaxHome()) + ":" + 
+                      std::to_string(game.getMaxHotels()) + ":" + std::to_string(game.getMaxTurns()) + ":" +
+                      std::to_string(this->clients.size()) + ":";
     for (size_t i = 0; i < this->clients.size(); i++){
         str += this->clients[i]->getUsername();
         if (i != this->clients.size()-1) str += ":"; 
@@ -230,7 +234,6 @@ GameStats GameServer::clientLoop(ClientManager &client) {
         // POSSIBLE ACTION IF IT IS THE CLIENT TURN
         if (this->game.getCurrentPlayer()->getClient() == &client) {
             Player* me = this->game.getCurrentPlayer();
-            this->updateThisClientWithQuery(QUERY::INFOS_NEW_TURN, me->getUsername(), client);
 
             if ( me->getStatus() == PLAYER_STATUS::FREE ) { this->clientTurn(client, me); continue; }
             if ( me->getStatus() == PLAYER_STATUS::JAILED ) { this->processJail(client, me); continue; }
@@ -573,6 +576,7 @@ void GameServer::processAskExchange(ClientManager &client, Player *player) {
         this->updateThisClientWithQuery(QUERY::STOP_WAIT, "/refuse", client);
         this->updateThisClientWithQuery(QUERY::MESSAGE, "Vous avez mis trop de temps a répondre à l'offre, elle à été automatiquement annulé",client);
     }
+    player->setStatus(PLAYER_STATUS::FREE);
 }
 
 
@@ -582,6 +586,7 @@ void GameServer::processAskAuction(ClientManager &client, Player *player) {
         this->updateThisClientWithQuery(QUERY::STOP_WAIT, "/refuse", client);
         this->updateThisClientWithQuery(QUERY::MESSAGE, "Vous avez mis trop de temps a répondre à l'offre, elle à été automatiquement annulé",client);
     }
+    player->setStatus(PLAYER_STATUS::FREE);
 }
 
 void GameServer::processAskBid(ClientManager &client, Player *player) {

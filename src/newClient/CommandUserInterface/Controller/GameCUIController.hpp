@@ -7,6 +7,7 @@
 
 class Client; // forward declaration
 class GameCUIView; // forward declaration
+struct JoinInfo;
 
 class GameCUIController: public AbstractCUIController, public MenuCUIObserver {
 
@@ -16,9 +17,8 @@ class GameCUIController: public AbstractCUIController, public MenuCUIObserver {
 	GameCUIView* view;
 	Subject* win;
 
-	int player_nb;
 	bool init = true;
-	std::vector<std::string> players_username;
+	std::shared_ptr<JoinInfo> game_info;
 	std::vector<std::string> selection_mode;
 
 	//Graphical Updates
