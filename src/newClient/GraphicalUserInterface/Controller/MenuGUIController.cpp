@@ -17,11 +17,13 @@ void MenuGUIController::handle(sf::Event event) {
 		} else if (this->view->settings_popup.getButton(1)->contains(event.mouseButton.x, event.mouseButton.y)) {
 			// TODO
 			// ok button
-		} /*else if (this->view->settings_popup.getDirButton(0)->contains(event.mouseButton.x, event.mouseButton.y)) {
+		} else if (this->view->settings_popup.getSelector(0)->getLButton()->contains(event.mouseButton.x, event.mouseButton.y)) {
 			//left button window size
-		} else if (this->view->settings_popup.getDirButton(1)->contains(event.mouseButton.x, event.mouseButton.y)) {
-			//right button window size
-		}*/
+			this->view->settings_popup.getSelector(0)->getLButton()->click();
+		} else if (this->view->settings_popup.getSelector(0)->getRButton()->contains(event.mouseButton.x, event.mouseButton.y)) {
+			//left button window size
+			this->view->settings_popup.getSelector(0)->getRButton()->click();
+		}
 	} else if (this->view->create_popup.isVisible()) {
 		if (this->view->create_popup.getButton(0)->contains(event.mouseButton.x, event.mouseButton.y)) {
 			// TODO

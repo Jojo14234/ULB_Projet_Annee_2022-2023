@@ -46,22 +46,19 @@ public:
 	}
 
 	void update(int change) override {
-		this->actual_idx += change % choices_size + choices_size;
+		std::cout<<"before idx -->"<<this->actual_idx<<std::endl;
+		std::cout<<"vector str size -->"<<choices_size<<std::endl;
+		std::cout<<"L = -1, R = 1 -->"<<change<<std::endl;
+		this->actual_idx = (this->actual_idx + change + choices_size) % choices_size;
+		std::cout<<"after idx -->"<<this->actual_idx<<std::endl;
 		this->changeText();
 	}
 
 	virtual void draw(sf::RenderWindow &window) const override {
-		std::cout<<"in draw selector -" << std::endl;
         text.draw(window);
-        std::cout<<"text has been draw -" << std::endl;
         for (auto button:buttons) {
 			button->draw(window);
 		}
-
-        //left_button.draw(window);
-        std::cout<<"l button has been draw -";
-        //right_button.draw(window);
-        std::cout<<"r button has been draw"<<std::endl;
     }
 
     DirectionImButton* getLButton() {
