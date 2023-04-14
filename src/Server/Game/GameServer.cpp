@@ -574,7 +574,6 @@ void GameServer::processAskExchange(ClientManager &client, Player *player) {
     sleep(MAX_WAIT_EXCHANGE);
     if (player->getStatus() == PLAYER_STATUS::IN_EXCHANGE) {
         this->updateThisClientWithQuery(QUERY::STOP_WAIT, "/refuse", client);
-        this->updateThisClientWithQuery(QUERY::MESSAGE, "Vous avez mis trop de temps a répondre à l'offre, elle à été automatiquement annulé",client);
     }
     player->setStatus(PLAYER_STATUS::FREE);
 }
@@ -584,7 +583,6 @@ void GameServer::processAskAuction(ClientManager &client, Player *player) {
     sleep(MAX_WAIT_AUCTION);
     if (player->getStatus() == PLAYER_STATUS::ASK_AUCTION) {
         this->updateThisClientWithQuery(QUERY::STOP_WAIT, "/refuse", client);
-        this->updateThisClientWithQuery(QUERY::MESSAGE, "Vous avez mis trop de temps a répondre à l'offre, elle à été automatiquement annulé",client);
     }
     player->setStatus(PLAYER_STATUS::FREE);
 }
@@ -594,13 +592,12 @@ void GameServer::processAskBid(ClientManager &client, Player *player) {
     sleep(MAX_WAIT_EXCHANGE);
     if (player->getStatus() == PLAYER_STATUS::OTHER) {
         this->updateThisClientWithQuery(QUERY::STOP_WAIT, "/bid 0", client);
-        this->updateThisClientWithQuery(QUERY::MESSAGE, "Vous avez mis trop de temps a répondre à l'offre, elle à été automatiquement annulé",client);
     }
 }
 
 void GameServer::processAuction(ClientManager &client, Player *me, Land* land) {
-    this->updateAllClientsWithQuery(QUERY::MESSAGE, "DÉBUT ENCHÈRE !");
-    this->updateThisClientWithQuery(QUERY::MESSAGE, "Ne parlez pas pendant les enchères !", client);
+    this->updateAllClientsWithQuery(QUERY::INFOS_AUCTION_START, land->getName()+":"+std::to_string(land->getPurchasePrice()));
+    //this->updateThisClientWithQuery(QUERY::MESSAGE, "Ne parlez pas pendant les enchères !", client);
     // Passer tout les joueurs autre que me en status in_auction
     // récupérer un /participate et les ajouter à un vecteur
     // boucler un a un sur leur offres
@@ -619,7 +616,7 @@ void GameServer::processAuction(ClientManager &client, Player *me, Land* land) {
             if (player->getStatus() != PLAYER_STATUS::WAITING_FOR_AUCTION_TURN || player == futur_owner) { continue; }
             player->setStatus(PLAYER_STATUS::AUCTION_TURN);
             // Envoyer que le prix minimum est de starting bid
-            player->getClient()->sendQueryMsg(std::to_string(starting_bid), QUERY::INFOS_AUCTION_BID);
+            player->getClient()->sendQueryMsg(":"+std::to_string(starting_bid), QUERY::INFOS_AUCTION_BID);
 
             GAME_QUERY_TYPE query;
             sf::Packet packet;
@@ -627,16 +624,20 @@ void GameServer::processAuction(ClientManager &client, Player *me, Land* land) {
             int bid;
 
             player->getClient()->receive(query, packet);
-            if ( query != GAME_QUERY_TYPE::BID ) { player->setStatus(PLAYER_STATUS::FREE); continue; }
+            if ( query != GAME_QUERY_TYPE::BID ) { player->getClient()->sendQueryMsg("", QUERY::BAD_COMMAND); continue; }
             // Récupérer une réponse
             packet >> bid_s;
-            bid = std::stoi(bid_s);
+            try { bid = std::stoi(bid_s); }
+            catch ( ... ) { player->getClient()->sendQueryMsg("", QUERY::BAD_AMOUNT); continue; }
             // Vérifier que player possède assez de thune
             if ( player->getBankAccount()->getMoney() < bid ) { player->setStatus(PLAYER_STATUS::FREE); continue; }
             // Vérifier prix > starting bid
-            if ( bid <= starting_bid ) { player->setStatus(PLAYER_STATUS::FREE); continue; }
+            if ( bid <= starting_bid ) { 
+                player->getClient()->sendQueryMsg("", QUERY::NOT_ENOUGH_MONEY_TO_PARTICIPATE); 
+                continue; 
+            }
 
-            this->updateAllClientsWithQuery(QUERY::MESSAGE, player->getUsername() + " à enchéri " + bid_s);
+            this->updateAllClientsWithQuery(QUERY::INFOS_AUCTION_BID, player->getUsername() + " : " + bid_s);
             // starting bid = nouveau prix // futur owner = player
             starting_bid = bid;
             futur_owner = player;

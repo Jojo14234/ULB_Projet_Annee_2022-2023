@@ -479,7 +479,6 @@ std::vector<Player*> Capitalist::processAskAuction(Player *player, std::string &
         if ( &other != player ) {
             other.setStatus(PLAYER_STATUS::ASK_AUCTION);
             other.getClient()->sendQueryMsg(name, QUERY::ASK_AUCTION);
-            other.getClient()->sendQueryMsg("Pour participer à l'enchère /participate !!", QUERY::MESSAGE);
         }
     }
 
@@ -494,7 +493,7 @@ std::vector<Player*> Capitalist::processAskAuction(Player *player, std::string &
                 participants.push_back(&other);
             }
             else {
-                std::cout << "Player " + other.getUsername() + " doe's not participate in auction" << std::endl;
+                std::cout << "Player " + other.getUsername() + " doesn't participate in auction" << std::endl;
                 other.setStatus(PLAYER_STATUS::FREE);
             }
         }

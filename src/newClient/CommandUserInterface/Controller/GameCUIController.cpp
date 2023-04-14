@@ -10,6 +10,7 @@
 #include "../../Model/QueryParser/GameLaunchingParser.hpp"
 #include "../../Model/QueryParser/InGameParser.hpp"
 
+//MAX 64 CHAR / LIGNES
 
 // Public
 
@@ -108,6 +109,12 @@ void GameCUIController::receiveMsgLoop() { // todo il faudrait pas déplacer les
             case QUERY::ASK_EXCHANGE :                  this->askExchangeGU(response); break;
             case QUERY::CONFIRM_EXCHANGE_ASKING :       this->confirmExchangeAskingGU(response); break;
 
+            case QUERY::ASK_AUCTION :                   this->askAuctionGU(response); break;
+            case QUERY::INFOS_AUCTION_START :           this->startAuctionGU(response); break;
+            case QUERY::INFOS_AUCTION_BID :             this->auctionBidGU(response); break;
+            case QUERY::BAD_AMOUNT :                    this->view->getConsole()->addText("Le montant entre n'est pas correct"); break;
+            case QUERY::NOT_ENOUGH_MONEY_TO_PARTICIPATE:this->view->getConsole()->addText("Vous n'avez plus assez d'argent pour continuer a participer."); break;
+
             case QUERY::INFOS_PLAYER_DIDNT_BUY :        if (response != this->model->getUsername()) { this->view->getConsole()->addText("Le joueur " + response + " n'a pas achete la propriete"); } break;
             case QUERY::INFOS_PLAYER_MOVE_ON_OWN_CELL : if (this->model->isMyTurn()) { this->view->getConsole()->addText("Vous etes chez vous."); } break;
             case QUERY::BAD_COMMAND :                   if (this->model->isMyTurn()) { this->view->getConsole()->addText("Vous ne pouvez pas utiliser cette commande"); } break;
@@ -127,6 +134,7 @@ void GameCUIController::receiveMsgLoop() { // todo il faudrait pas déplacer les
 
             case QUERY::EXCHANGE_REFUSED :              this->view->getConsole()->addText("L'echange a ete refuse"); break;
             case QUERY::INFOS_NOT_ENOUGH_MONEY :        this->view->getConsole()->addText("Vous ne possedez pas assez d'argent."); break;
+            case QUERY::STOP_WAIT :                     this->view->getConsole()->addText("Pas assez rapide. L'offre a été automatiquement annulee"); break;
             default :                                   this->view->getConsole()->addText(response); break;
         }
     }
@@ -488,6 +496,23 @@ void GameCUIController::askForPurchaseGU(const std::string& response){
     this->view->getConsole()->addText("Acheter " + purchase->cell_name + " pour " + std::to_string(purchase->amount)+"$ ?");
     this->view->getConsole()->addText("/yes ou /no");
     this->view->getConsole()->addText("Si vous ne l'achetez pas, des encheres debuteront");
+}
+
+void GameCUIController::askAuctionGU(const std::string& response){
+    if (! this->model->isMyTurn()){
+        this->view->getConsole()->addText("Des encheres vont debuter, pour y participer : /participate");
+    }
+}
+
+void GameCUIController::startAuctionGU(const std::string& response){
+    BetInfo bet(response);
+    this->view->getConsole()->addText("Des encheres pour acheter " + bet.property + " debutent !");
+}
+
+void GameCUIController::auctionBidGU(const std::string& response){
+    PlayerBetInfo bet(response);
+    this->view->getConsole()->addText(bet.player + " est sur le point d'acheter le terrain pour : " + std::to_string(bet.amount) + "$");
+    this->view->getConsole()->addText("/bid pour surencherir !");
 }
 
 

@@ -679,6 +679,30 @@ public:
 
 };
 
+struct PlayerBetInfo{
+	std::string player;
+	int amount;
 
+	PlayerBetInfo(const std::string &str){
+		int i = 0;
+		std::string tmp;
+		while (str[i] != ':' ) { tmp += str[i]; i++; }
+		player = tmp;
+		amount = atoi(&str[i+1]);
+	}
+};
+
+struct BetInfo{
+	std::string property;
+	int amount;
+
+	BetInfo(const std::string &str){
+		int i = 0;
+		std::string tmp;
+		while (str[i] != ':' ) { tmp += str[i]; i++; }
+		property = tmp;
+		amount = atoi(&str[i+1]);
+	}
+};
 
 #endif
