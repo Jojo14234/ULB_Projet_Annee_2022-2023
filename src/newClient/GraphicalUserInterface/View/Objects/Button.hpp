@@ -9,21 +9,14 @@
 #include <SFML/Audio.hpp>
 
 #include "AbstractViewObject.hpp"
+#include "../Audibles/Audible.hpp"
 
 
-class Button : public virtual AbstractViewObject {
-	static inline sf::SoundBuffer soundBuffer;
-	static inline bool is_loaded = false;
+class Button : public virtual AbstractViewObject, public Audible<ButtonSound> {
 
-	static bool loadSound() {
-		if (is_loaded) return true;
-
-		soundBuffer.loadFromFile("newclient/GraphicalUserInterface/View/Sound/Walk0.wav") ? is_loaded = true : is_loaded = false;
-        return is_loaded;
-    }
 public:
 
-	explicit Button(ObjectInfo<> info) : AbstractViewObject(info) { Button::loadSound(); }
+	explicit Button(ObjectInfo<> info) : AbstractViewObject(info), Audible<ButtonSound>() {}
 
 	virtual void draw(sf::RenderWindow &window) const override = 0;
 
@@ -35,8 +28,4 @@ public:
 			this->info.getY() <= y && y <= this->info.getY() + this->info.getHeight();
 	}
 
-	void playSound() {
-        sf::Sound sound(soundBuffer);
-        sound.play();
-    }
 };
