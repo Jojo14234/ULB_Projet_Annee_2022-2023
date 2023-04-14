@@ -178,7 +178,7 @@ void Server::clientProcessJoinGame(ClientManager &client) {
 
 void Server::clientProcessCreateGame(ClientManager &client) {
 	std::cout << "[Received 'create normal' query from client '" << client.getAccount()->getUsername() << "']\n" << std::endl;
-    std::istringstream input{client.getS2()};
+    std::istringstream input{client.getS1()};
     int space = 0;
     GameParameters params{false};
     for (std::string word; std::getline(input, word, ' '); space++) {
@@ -224,7 +224,7 @@ void Server::clientProcessCreateGame(ClientManager &client) {
     std::string res = client.getUsername() + ":" + std::to_string(gc) + ":" + std::to_string(params.isFastGame) + ":" +
                       std::to_string(params.startMoney) + ":" + std::to_string(params.maxPlayers) + ":" +
                       std::to_string(params.maxHome) + ":" + std::to_string(params.maxHotel) + ":" + std::to_string(params.max_turn);
-	client.sendQueryMsg(res, QUERY::PLAYER_CREATE_GAME);
+    client.sendQueryMsg(res, QUERY::PLAYER_CREATE_GAME);
 	client.enterGameLoop();
 }
 

@@ -11,7 +11,7 @@ int GameServerList::createGame(ClientManager* client, GameParameters parameters)
 
 bool GameServerList::joinGame(ClientManager* client, int code) {
 	for (auto &gs : *this) {
-		if (gs->isCode(code) and gs->getMaxPlayer() > gs->getNbConnectedClient()) { gs->connectClientToThisGame(*client); return true; }
+		if (gs->isCode(code) and gs->getMaxPlayer() > gs->getNbConnectedClient() and ! gs->getGame()->isRunning()) { gs->connectClientToThisGame(*client); return true; }
 	} return false;
 }
 
