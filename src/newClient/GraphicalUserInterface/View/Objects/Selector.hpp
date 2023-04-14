@@ -13,7 +13,7 @@
 
 #include "observer_struct.hpp"
 
-class Selector : public virtual AbstractViewObject, public Observer {
+class Selector : public AbstractViewObject, public Observer {
 	std::vector<std::string> choices;
 	std::vector<DirectionImButton*> buttons;
 	Text text;
@@ -51,9 +51,9 @@ public:
 	}
 
 	virtual void draw(sf::RenderWindow &window) const override {
-		std::cout<<"in draw selector -";
+		std::cout<<"in draw selector -" << std::endl;
         text.draw(window);
-        std::cout<<"text has been draw -";
+        std::cout<<"text has been draw -" << std::endl;
         for (auto button:buttons) {
 			button->draw(window);
 		}

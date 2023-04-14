@@ -30,6 +30,12 @@ public:
 		this->text.setPosition(info.getX(), info.getY());
 	}
 
+	void operator=(const Text& other) {
+		this->text = other.text;
+		this->font = other.font;
+		this->text.setFont(font);
+	}
+
 	virtual void draw(sf::RenderWindow &window) const override {
 		if (isHidden()) return;
 		window.draw(text);
