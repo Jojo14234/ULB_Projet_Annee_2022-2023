@@ -25,18 +25,8 @@ void GameCLIController::handle(int event) {
 
     GameInputParser parser{input};
 
-    switch (parser.getQuery()) {
-        // todo virer le switch
-        default : this->model->sendCommand(parser);
-    }
+    if ( parser.getQuery() != GAME_QUERY_TYPE::NONE ) { this->model->sendCommand(parser); }
 
-    if ( parser.getQuery() != GAME_QUERY_TYPE::NONE ) {
-        std::string response;
-        //QUERY query = this->model->receive(response);
-        this->model->receive(response);
-        std::cout << response << std::endl;
-    }
-    else { this->new_state = STATE::GAME; }
 }
 
 void GameCLIController::initGame() {
