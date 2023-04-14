@@ -597,6 +597,7 @@ void GameServer::processAskBid(ClientManager &client, Player *player) {
 
 void GameServer::processAuction(ClientManager &client, Player *me, Land* land) {
     this->updateAllClientsWithQuery(QUERY::INFOS_AUCTION_START, land->getName()+":"+std::to_string(land->getPurchasePrice()));
+    client.getUsername(); //stfu l'erreur de compilation
     //this->updateThisClientWithQuery(QUERY::MESSAGE, "Ne parlez pas pendant les enchères !", client);
     // Passer tout les joueurs autre que me en status in_auction
     // récupérer un /participate et les ajouter à un vecteur
