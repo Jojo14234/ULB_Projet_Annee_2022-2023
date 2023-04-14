@@ -36,5 +36,4 @@ void ConnectionCLIController::handle(int event) {
         if ( query == QUERY::TRUEQ ) { this->new_state = STATE::MENU; }
         else if ( query == QUERY::DISCONNECT ) { exit(0); }
     }
-    else { this->new_state = STATE::CONNECTION; }
 }
