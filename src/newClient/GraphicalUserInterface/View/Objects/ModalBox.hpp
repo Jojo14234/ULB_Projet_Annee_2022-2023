@@ -29,7 +29,7 @@ protected:
 	std::vector<std::unique_ptr<InputBox>> inputs;
 
 	std::vector<std::unique_ptr<Selector>> selectors;
-	std::vector<std::unique_ptr<DirectionImButton>> dir_buttons;
+	//std::vector<std::unique_ptr<DirectionImButton>> dir_buttons;
 public:
 
 	explicit ModalBox(ObjectInfo<> info, sf::Color color=sf::Color::Black) : AbstractViewObject(info), Box(info, color) {}
@@ -58,10 +58,10 @@ public:
 		std::cout<<"in add selector -";
 		selectors.emplace_back(selector);
 		std::cout<<"selector added -";
-		dir_buttons.emplace_back(selector->getLButton());	//new ?
+/*		dir_buttons.emplace_back(selector->getLButton());	//new ?
 		std::cout<<"left button there -";
 		dir_buttons.emplace_back(selector->getRButton());
-		std::cout<<"right button here -"<<std::endl;
+		std::cout<<"right button here -"<<std::endl;*/
 	}
 
 	void addTexts(std::initializer_list<Text*> texts) { for (Text* text : texts) this->addText(text); }
@@ -75,6 +75,7 @@ public:
 	Image* getImage(int index) { return images[index].get(); }
 	ImageButton* getButton(int index) { return buttons[index].get(); }
 	InputBox* getInput(int index) { return inputs[index].get(); }
-	DirectionImButton* getDirButton(int index) { return dir_buttons[index].get(); }
+	Selector* getSelector(int index) { return selectors[index].get(); }
+	//DirectionImButton* getDirButton(int index) { return dir_buttons[index].get(); }
 
 };
