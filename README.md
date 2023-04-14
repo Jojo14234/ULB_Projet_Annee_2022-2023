@@ -3,7 +3,7 @@
 ## Dates importantes
  -[X] **Remise _SRD_** : Lundi 19 Décembre 23h59  
  -[X] **Remise version _terminal_**: Vendredi 3 Mars 23h59  
- -[ ] **Remise version _graphique_**: Vendredi 31 Mars 23h59
+ -[ ] **Remise version _graphique_**: Vendredi 21 Avril 23h59
 
 ## Membres du groupe
 - Loïc Blommaert
