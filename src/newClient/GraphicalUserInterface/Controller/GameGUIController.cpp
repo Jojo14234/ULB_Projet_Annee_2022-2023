@@ -7,7 +7,10 @@
 
 void GameGUIController::handle(sf::Event event) {
     if (event.type != sf::Event::MouseButtonPressed) return;
-            if(this->view->button_mode == "start_round"){
+            if(this->view->button_mode == "start_game"){
+                if(this->view->startgame_button.contains(event.mouseButton.x, event.mouseButton.y)){//TODO
+                        }}
+            else if(this->view->button_mode == "start_round"){
                 if(this->view->mortgage_button.contains(event.mouseButton.x, event.mouseButton.y)){//TODO
                         }
                 else if(this->view->unmortgage_button.contains(event.mouseButton.x, event.mouseButton.y)){//TODO
@@ -25,11 +28,10 @@ void GameGUIController::handle(sf::Event event) {
                         }
                 else if(this->view->no_buy_button.contains(event.mouseButton.x, event.mouseButton.y)){//TODO
                         }}
-            else if (this->view->button_mode == "paid_cell"){
+            else if (this->view->button_mode == "specard_cell"){
                 if(this->view->paid_button.contains(event.mouseButton.x, event.mouseButton.y)){//TODO
-                        }}
-            else if (this->view->button_mode == "card_cell"){
-                if(this->view->draw_card_button.contains(event.mouseButton.x, event.mouseButton.y)){//TODO
+                        }
+                else if(this->view->draw_card_button.contains(event.mouseButton.x, event.mouseButton.y)){//TODO
                         }}
             else if (this->view->button_mode == "on_prison"){
                 if(this->view->paid_prison_button.contains(event.mouseButton.x, event.mouseButton.y)){//TODO
@@ -57,8 +59,8 @@ void GameGUIController::handle(sf::Event event) {
                     //TODo
                     this->view->setAuctionRound(false);
                         }}}
-/*
-void GameGUIController::receiveMsgLoop() { // todo il faudrait pas déplacer les fonction appeler par celle-ci dans le view ?
+
+/*void GameGUIController::receiveMsgLoop() { // todo il faudrait pas déplacer les fonction appeler par celle-ci dans le view ?
     while (this->new_state == STATE::GAME){
         std::string response;
         QUERY query = this->model->receive(response);
@@ -130,13 +132,15 @@ void GameGUIController::receiveMsgLoop() { // todo il faudrait pas déplacer les
 
 void GameGUIController::initScreen(int gamecode) {
     if (!init) return;
-    //this->view->startWaitingRoom(); à rajouter dans le plateau
+    this->view->endTurn();
     if ( this->model->isCreator() ) {
-        //this->view->getOwnerWaitingText()->addText("Gamecode : " + std::to_string(gamecode)); à rajouter au milieu du plateau
+        this->view->gamecode_box.setVisible();
+        this->view->gamecode_box.setGamecode(gamecode);
         this->view->message_box.setString("Vous êtes le propriétaire de cette partie, utilisez /start pour lancer la partie");
+        this->view->setStartGame(true);
     }
     else {
-        //this->view->getPlayersWaitingText()->addText("Gamecode : " + std::to_string(gamecode));  à rajouter au milieu du plateau
+        this->view->gamecode_box.setGamecode(gamecode);
         this->view->message_box.setString("En attente du lancement de la partie...");
     }
     init = false;
@@ -144,7 +148,7 @@ void GameGUIController::initScreen(int gamecode) {
 
 
 void GameGUIController::startGame(int beginner) {
-    //this->view->endWaitingRoom(); à rajouter dans le plateau
+    this->view->message_box.clearText();
     this->model->setPlayerTurn(players_username[beginner]);
     if (this->model->getUsername() == players_username[beginner]) {
         this->view->startTurn();
@@ -152,12 +156,12 @@ void GameGUIController::startGame(int beginner) {
         //rajouter sons - début game
     }
 
-    //this->view->getInfo()->clearAllText();
     this->view->board.setColorNumber(player_nb);
-    this->view->info_box.initMoney(player_nb,1500); //à rajouter carte prison
-    for (int i = 1; i<= player_nb; i++) {
+    this->view->info_box.initMoney(player_nb,1500);
+    for (int i = 0; i< player_nb; i++) {
         this->view->board.setPlayer(0, i);
-        //this->view->InfoBox.initMoney(players_username[i-1]); à rajouter pseudoc 
+        this->view->info_box.setPseudo(i,players_username[i]);
+        this->view->info_box.setJailCard(0);
        
     }
 }
@@ -198,10 +202,7 @@ void GameGUIController::rollDiceGU(const std::string& response){
     InGameParser game_parser(response);
     std::shared_ptr<RollDiceInfo> dice_info = game_parser.parseRollDiceQuery();
     if (this->model->isMyTurn()){
-        // à rajouter 
-        //this->view->getDice1()->setText(std::to_string(dice_info->first_value), 0);
-        //this->view->getDice2()->setText(std::to_string(dice_info->second_value), 0);
-
+        this->view->dice.setDice(dice_info->first_value,dice_info->second_value);
         this->view->message_box.setString("Vous avez obtenu un " + std::to_string(dice_info->first_value) + " et un " + std::to_string(dice_info->second_value));}  
     else this->view->message_box.setString("Le joueur " + this->model->getPlayerTurn() + " a obtenu un " + std::to_string(dice_info->first_value ) + " et un " + std::to_string(dice_info->second_value));
 }
@@ -219,11 +220,8 @@ void GameGUIController::infoGameGU(const std::string& response) {
             }
             else this->view->board.setHouse(index, player_game_info->at(i).properties[j].level);
         }
-        this->view->info_box.setMoney(i, player_game_info->at(i).money
-        //, player_game_info->at(i).jail_card_nb
-        );
-        //à rajouter jail card
-    }}
+        this->view->info_box.setMoney(i, player_game_info->at(i).money);
+        this->view->info_box.setJailCard( player_game_info->at(i).jail_card_nb);}}
 
 
 void GameGUIController::newTurnGU(const std::string& response) {
@@ -302,14 +300,14 @@ void GameGUIController::sendPrisonGU(const std::string& response){
 }
 
 void GameGUIController::getGoOutJailCardGU(const std::string& response){
-    //this->view->getInfo()->addCardToPlayer(atoi(response.c_str())); à rajouter
+    //this->view->getInfo()->addCardToPlayer(atoi(response.c_str())); question
     if (this->model->isMyTurn()){ this->view->message_box.setString("Vous obtenez une carte sortie de prison.");
     } else this->view->message_box.setString(players_username[atoi(response.c_str()-1)] + "a obtenu une carte sortie de prison.");
 }
 
 
 void GameGUIController::loseGoOutJailCardGU(const std::string& response){
-    //this->view->getInfo()->removeCardToPlayer(atoi(response.c_str())); à rajouter 
+    //this->view->getInfo()->removeCardToPlayer(atoi(response.c_str())); question 
     if (this->model->isMyTurn()) this->view->message_box.setString("Vous utilisez votre carte.");
 }
 
@@ -351,6 +349,14 @@ void GameGUIController::moveOnCardCellGU(const std::string& response){
     this->view->board.movePlayer(move_cardcell_info->new_pos, move_cardcell_info->player);
     if (this->model->isMyTurn()){
         this->view->message_box.setString("Vous venez de piocher une carte :");
-        //this->view->getConsole()->addText(move_cardcell_info->description); à rajouter zone au milieu pour description
+        this->view->card_title.setHidden();
+        this->view->card_text.setVisible();
+        this->view->card_text.setString(move_cardcell_info->description);
     } else this->view->message_box.setString(players_username[move_cardcell_info->player-1] + " pioche un carte.");
-}*/
+}
+
+void GameGUIController::drawCardGU(const std::string& response){
+    this->view->message_box.setString("Vous venez de piocher une carte :" + response);
+}
+
+*/

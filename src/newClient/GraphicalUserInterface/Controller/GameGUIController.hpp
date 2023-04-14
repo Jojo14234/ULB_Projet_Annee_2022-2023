@@ -8,10 +8,10 @@
 
 #include "AbstractGUIController.hpp"
 #include "../configs.hpp"
-/*
-#include "../../Model/QueryParser/GameLaunchingParser.hpp"
-#include "../../Model/QueryParser/InGameParser.hpp"*/
 
+/*#include "../../Model/QueryParser/GameLaunchingParser.hpp"
+#include "../../Model/QueryParser/InGameParser.hpp"
+*/
 
 class Client; // forward declaration
 class GameGUIView; // forward declaration
@@ -22,6 +22,10 @@ class GameGUIController: public AbstractGUIController {
 	std::vector<std::string> players_username;
 
 	bool init = true;
+/*
+	std::shared_ptr<JoinInfo> game_info;
+	std::vector<std::string> selection_mode;
+*/
 
 	GameGUIView* view;
 
@@ -33,9 +37,9 @@ public:
 
 	void handle(sf::Event event) override;
 
-	/*void receiveMsgLoop();
+	void receiveMsgLoop();
 
-
+/*
 	void createGameGU(const std::string& response);
 	void joinGameGU(const std::string& response);
 	void infoStartGU(const std::string& response);
@@ -55,15 +59,15 @@ public:
 	void loseMoneyGU(const std::string& response);
 	void cardCellToGoGU(const std::string& response);
 	void moveOnCardCellGU(const std::string& response);
-	
-	
-	
-	
-	
-	
-	
-	
 	void drawCardGU(const std::string& response);
+	
+	
+	
+	
+	
+	
+	
+	
 	void buildPropertyGU(const std::string& response);
 	void sellPropertyGU(const std::string& response);
 	void exchangePropertyGU(const std::string& response);
@@ -76,7 +80,7 @@ public:
 	void exchangeSucceedGU(const std::string& response);
 	void askExchangeGU(const std::string& response);
 	void confirmExchangeAskingGU(const std::string& response);
-	void askForPurchaseGU(const std::string& response);
+	void askForPurchaseGU(const std::string& response);*/
 
 
 	void initGame();
@@ -90,6 +94,6 @@ public:
 
 	
 
-	// ...*/
+	// ...
 
 };
