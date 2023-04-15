@@ -19,7 +19,7 @@ class GameGUIController; // forward declaration
 
 class GameGUIView: public AbstractGUIView {
 	Board board;
-	InfoBox info_box{ObjectInfo<>(400, 400,window->getSize().x -400,window->getSize().y - 350)};
+	InfoBox info_box{ObjectInfo<>(400, 400,window->getSize().x -400,window->getSize().y - 400)};
 
 	Box button_zone{ObjectInfo<>(300, window->getSize().y,0,0), sf::Color::Red };
 
@@ -64,6 +64,8 @@ class GameGUIView: public AbstractGUIView {
 	Image card_zone{ObjectInfo<>(390,300,560,500),CARD_TEXT};
 	Text card_text{ObjectInfo<>(0,15,590,600),""};
 	Text card_title{ObjectInfo<>(0,34,585,600),"    CHANCE et\nCAISSE DE COMMU"};
+
+	bool board_click = false;
 	// Objects
 
 	void setStartGame(bool visible){
@@ -191,10 +193,10 @@ public:
 	explicit GameGUIView(sf::RenderWindow* window) : AbstractGUIView(window)
 	,board{}{
 			card_title.setBold();
-		message_box.setString("C'est le tour de miaou");
+		message_box.setString("Vous êtes le propriétaire de cette partie");
+		message_box.addString("utilisez /start pour lancer la partie");
 
 		hideAllButton();
-
 		
 		gamecode_box.setHidden();
 		logo.setHidden();
@@ -286,6 +288,8 @@ public:
         this->dice.setHidden();
 		this->setStartRound(false);
     }
+
+	void setBoardClickMode(bool clickable){board_click = clickable;}
 
 
 };

@@ -12,6 +12,7 @@ class Cell : public Box {
 	std::string owner;
 	std::vector<Image*> images_player {nullptr, nullptr, nullptr, nullptr, nullptr, nullptr};
 	std::vector<std::unique_ptr<Image>> images_building;
+	Image mortgaged{info,PATTERN};
 	Box grayed;
 
 public :
@@ -20,6 +21,7 @@ public :
          AbstractViewObject(info),Box(info,color), cell_im(info, path), cell_number(cell_number)
 		 ,grayed(info,sf::Color(0, 0, 0, 180)){
 			grayed.setHidden();
+			mortgaged.setHidden();
 			if (cell_number <= 9){cell_im.rotate(90);}
 			else if(cell_number >= 10 and cell_number <= 19){cell_im.rotate(180);}
 			else if(cell_number >= 20 and cell_number <= 29){cell_im.rotate(-90);}}
@@ -37,6 +39,7 @@ public :
 		}
 
 		grayed.draw(window);
+		mortgaged.draw(window);
 
 	}
 
@@ -135,15 +138,15 @@ public :
 		removeOwner();
 	}
 
-	/*
+	void setMortgaged(){
+		mortgaged.setVisible();
+	}
 
-	void enterBuildMode(std::string player){	}
+	void unsetMortgaged(){
+		mortgaged.setHidden();
+	}
 
-	void leaveBuildMode(){}
-
-	void enterSellMode(){}*/
-
-	
+	ImageButton* getButton(){return &cell_im; }
 
 
 

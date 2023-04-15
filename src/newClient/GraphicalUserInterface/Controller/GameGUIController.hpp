@@ -9,7 +9,8 @@
 #include "AbstractGUIController.hpp"
 #include "../configs.hpp"
 
-/*#include "../../Model/QueryParser/GameLaunchingParser.hpp"
+/*
+#include "../../Model/QueryParser/GameLaunchingParser.hpp"
 #include "../../Model/QueryParser/InGameParser.hpp"
 */
 
@@ -36,10 +37,10 @@ public:
 	~GameGUIController()=default;
 
 	void handle(sf::Event event) override;
-
+	
 	void receiveMsgLoop();
-
 /*
+
 	void createGameGU(const std::string& response);
 	void joinGameGU(const std::string& response);
 	void infoStartGU(const std::string& response);
@@ -60,14 +61,6 @@ public:
 	void cardCellToGoGU(const std::string& response);
 	void moveOnCardCellGU(const std::string& response);
 	void drawCardGU(const std::string& response);
-	
-	
-	
-	
-	
-	
-	
-	
 	void buildPropertyGU(const std::string& response);
 	void sellPropertyGU(const std::string& response);
 	void exchangePropertyGU(const std::string& response);
@@ -80,7 +73,12 @@ public:
 	void exchangeSucceedGU(const std::string& response);
 	void askExchangeGU(const std::string& response);
 	void confirmExchangeAskingGU(const std::string& response);
-	void askForPurchaseGU(const std::string& response);*/
+	void askForPurchaseGU(const std::string& response);
+	void askAuctionGU(const std::string& response);
+	void startAuctionGU(const std::string& response);
+	void auctionBidGU(const std::string& response);
+	void endAuctionGU(const std::string& response);
+
 
 
 	void initGame();
@@ -89,11 +87,13 @@ public:
 
 	void startGame(int beginner);
 
+	void choiceSpeCard();
+
     //todo add from n-curse
     void playerJoinUpdate();
 
 	
-
+*/
 	// ...
 
 };

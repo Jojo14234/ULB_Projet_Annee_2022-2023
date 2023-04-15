@@ -58,9 +58,17 @@ void GameGUIController::handle(sf::Event event) {
                 else if(this->view->auction_box.getValidateButton()->contains(event.mouseButton.x, event.mouseButton.y)){
                     //TODo
                     this->view->setAuctionRound(false);
-                        }}}
+                        }}
+            else if(this->view->board_click == true){
+                for(auto& i : *(this->view->board.getBoardButton())){
+                    if(i->getButton()->contains(event.mouseButton.x, event.mouseButton.y)){//TODO
+                    this->view->setBoardClickMode(false);
+                    }}
+                }}
+/*
 
-/*void GameGUIController::receiveMsgLoop() { // todo il faudrait pas déplacer les fonction appeler par celle-ci dans le view ?
+
+void GameGUIController::receiveMsgLoop() { // todo il faudrait pas déplacer les fonction appeler par celle-ci dans le view ?
     while (this->new_state == STATE::GAME){
         std::string response;
         QUERY query = this->model->receive(response);
@@ -105,26 +113,37 @@ void GameGUIController::handle(sf::Event event) {
             case QUERY::ASK_EXCHANGE :                  this->askExchangeGU(response); break;
             case QUERY::CONFIRM_EXCHANGE_ASKING :       this->confirmExchangeAskingGU(response); break;
 
-            case QUERY::INFOS_PLAYER_DIDNT_BUY :        if (response != this->model->getUsername()) { this->view->getConsole()->addText("Le joueur " + response + " n'a pas achete la propriete"); } break;
-            case QUERY::INFOS_PLAYER_MOVE_ON_OWN_CELL : if (this->model->isMyTurn()) { this->view->getConsole()->addText("Vous etes chez vous."); } break;
-            case QUERY::BAD_COMMAND :                   if (this->model->isMyTurn()) { this->view->getConsole()->addText("Vous ne pouvez pas utiliser cette commande"); } break;
+            case QUERY::ASK_AUCTION :                   this->askAuctionGU(response); break;
+            case QUERY::INFOS_AUCTION_START :           this->startAuctionGU(response); break;
+            case QUERY::INFOS_AUCTION_BID :             this->auctionBidGU(response); break;
+            case QUERY::INFOS_AUCTION_END :             this->endAuctionGU(response); break;
+            case QUERY::BAD_AMOUNT :                    this->view->message_box.setString("Le montant entre n'est pas correct"); break;
+            case QUERY::NOT_ENOUGH_MONEY_TO_PARTICIPATE:this->view->message_box.setString("Vous n'avez plus assez d'argent pour continuer a participer."); break;
+            case QUERY::LEAVE_BID:                      this->view->message_box.setString("Vous avez abandonne les encheres"); break;
+            case QUERY::WAITING_FOR_PLAYER_ANSWER:      { this->view->message_box.setString("Une proposition d'encheres a ete envoyee aux autres joueurs");
+                                                          this->view->message_box.setString("Veuillez patienter jusqu'a la fin des encheres."); break;
+                                                        }
+            case QUERY::INFOS_PLAYER_DIDNT_BUY :        if (response != this->model->getUsername()) { this->view->message_box.setString("Le joueur " + response + " n'a pas achete la propriete"); } break;
+            case QUERY::INFOS_PLAYER_MOVE_ON_OWN_CELL : if (this->model->isMyTurn()) { this->view->message_box.setString("Vous etes chez vous."); } break;
+            case QUERY::BAD_COMMAND :                   if (this->model->isMyTurn()) { this->view->message_box.setString("Vous ne pouvez pas utiliser cette commande"); } break;
 
-            case QUERY::CHOICE_MONEY_CARD :             this->view->getConsole()->addText("/pay ou /card"); break;
-            case QUERY::NO_BUILDABLE_PROP :             this->view->getConsole()->addText("Vous n\'avez pas de terrain pouvant avoir de nouveaux batiments"); break;
-            case QUERY::NO_SALABLE_PROP :               this->view->getConsole()->addText("Vous n\'avez pas de terrain pouvant etre vendu"); break;
-            case QUERY::NO_MORTGAGEABLE_PROP :          this->view->getConsole()->addText("Vous n\'avez pas de terrain pouvant etre hypoteque"); break;
-            case QUERY::NO_UNMORTGAGEABLE_PROP :        this->view->getConsole()->addText("Vous n\'avez pas de terrain pouvant etre deshypotheque"); break;
-            case QUERY::NO_EXCHANGEABLE_PROP :			this->view->getConsole()->addText("Il n'y a pas de terrain disponible a l'echange"); break;
+            case QUERY::CHOICE_MONEY_CARD :             this->choiceSpeCard(); break;
+            case QUERY::NO_BUILDABLE_PROP :             this->view->message_box.setString("Vous n\'avez pas de terrain pouvant avoir de nouveaux batiments"); break;
+            case QUERY::NO_SALABLE_PROP :               this->view->message_box.setString("Vous n\'avez pas de terrain pouvant etre vendu"); break;
+            case QUERY::NO_MORTGAGEABLE_PROP :          this->view->message_box.setString("Vous n\'avez pas de terrain pouvant etre hypoteque"); break;
+            case QUERY::NO_UNMORTGAGEABLE_PROP :        this->view->message_box.setString("Vous n\'avez pas de terrain pouvant etre deshypotheque"); break;
+            case QUERY::NO_EXCHANGEABLE_PROP :			this->view->message_box.setString("Il n'y a pas de terrain disponible a l'echange"); break;
 
-            case QUERY::CANNOT_BUILD :                  this->view->getConsole()->addText("Ce terrain ne peut pas acceuillir de nouveaux batiments"); break;
-            case QUERY::CANNOT_SELL :                   this->view->getConsole()->addText("Ce terrain ne peut pas perdre des batiments"); break;
-            case QUERY::CANNOT_MORTAGE :                this->view->getConsole()->addText("Ce terrain ne peut pas etre hypotheque"); break;
-            case QUERY::CANNOT_UNMORTGAGE :             this->view->getConsole()->addText("Ce terrain ne peut pas etre deshypotheque"); break;
-            case QUERY::CANNOT_EXCHANGE :				this->view->getConsole()->addText("Ce terrain ne peut pas etre echange"); break;
+            case QUERY::CANNOT_BUILD :                  this->view->message_box.setString("Ce terrain ne peut pas acceuillir de nouveaux batiments"); break;
+            case QUERY::CANNOT_SELL :                   this->view->message_box.setString("Ce terrain ne peut pas perdre des batiments"); break;
+            case QUERY::CANNOT_MORTAGE :                this->view->message_box.setString("Ce terrain ne peut pas etre hypotheque"); break;
+            case QUERY::CANNOT_UNMORTGAGE :             this->view->message_box.setString("Ce terrain ne peut pas etre deshypotheque"); break;
+            case QUERY::CANNOT_EXCHANGE :				this->view->message_box.setString("Ce terrain ne peut pas etre echange"); break;
 
-            case QUERY::EXCHANGE_REFUSED :              this->view->getConsole()->addText("L'echange a ete refuse"); break;
-            case QUERY::INFOS_NOT_ENOUGH_MONEY :        this->view->getConsole()->addText("Vous ne possedez pas assez d'argent."); break;
-            default :                                   this->view->getConsole()->addText(response); break;
+            case QUERY::EXCHANGE_REFUSED :              this->view->message_box.setString("L'echange a ete refuse"); break;
+            case QUERY::INFOS_NOT_ENOUGH_MONEY :        this->view->message_box.setString("Vous ne possedez pas assez d'argent."); break;
+            case QUERY::STOP_WAIT :                     this->view->message_box.setString("Pas assez rapide. L'offre a été automatiquement annulee"); break;
+            default :                                   this->view->message_box.setString(response); break;
         }
     }
 }
@@ -137,6 +156,7 @@ void GameGUIController::initScreen(int gamecode) {
         this->view->gamecode_box.setVisible();
         this->view->gamecode_box.setGamecode(gamecode);
         this->view->message_box.setString("Vous êtes le propriétaire de cette partie, utilisez /start pour lancer la partie");
+        this->view->message_box.addString("Utilisez /start pour lancer la partie");
         this->view->setStartGame(true);
     }
     else {
@@ -165,6 +185,12 @@ void GameGUIController::startGame(int beginner) {
        
     }
 }
+
+void GameGUIController::choiceSpeCard(){
+    this->view->setCardSpeRound(true);
+
+}
+
 
 //////////////////////////////////////////////////////// 
 
@@ -300,14 +326,14 @@ void GameGUIController::sendPrisonGU(const std::string& response){
 }
 
 void GameGUIController::getGoOutJailCardGU(const std::string& response){
-    //this->view->getInfo()->addCardToPlayer(atoi(response.c_str())); question
+    //this->view->getInfo()->addCardToPlayer(atoi(response.c_str())); à rajouter ds vue
     if (this->model->isMyTurn()){ this->view->message_box.setString("Vous obtenez une carte sortie de prison.");
     } else this->view->message_box.setString(players_username[atoi(response.c_str()-1)] + "a obtenu une carte sortie de prison.");
 }
 
 
 void GameGUIController::loseGoOutJailCardGU(const std::string& response){
-    //this->view->getInfo()->removeCardToPlayer(atoi(response.c_str())); question 
+    //this->view->getInfo()->removeCardToPlayer(atoi(response.c_str())); à rajouter ds vue
     if (this->model->isMyTurn()) this->view->message_box.setString("Vous utilisez votre carte.");
 }
 
@@ -356,7 +382,162 @@ void GameGUIController::moveOnCardCellGU(const std::string& response){
 }
 
 void GameGUIController::drawCardGU(const std::string& response){
-    this->view->message_box.setString("Vous venez de piocher une carte :" + response);
+    this->view->message_box.setString("Vous venez de piocher une carte :" + response);}
+
+
+void GameGUIController::buildPropertyGU(const std::string& response){
+    InGameParser game_parser(response);
+    selection_mode = *game_parser.parseSelectPropertyQuery().get();
+    if (this->model->isMyTurn()){
+        this->view->setBoardClickMode(true);
+        this->view->getConsole()->addText("/leave pour quitter le menu de construction"); //
+        this->view->board.setAllGrayed();
+        for (auto& property : selection_mode){
+            int index = this->view->board.getCellIndex(property);
+            this->view->board.setBuildable(index);
+        }
+    } else this->view->message_box.setString("Consultation des batiments a construire...");
 }
 
+void GameGUIController::sellPropertyGU(const std::string& response){
+    InGameParser game_parser(response);
+    selection_mode = *game_parser.parseSelectPropertyQuery().get();
+    if (this->model->isMyTurn()){
+        this->view->setBoardClickMode(true);
+        this->view->getConsole()->addText("/leave pour quitter le menu de vente");
+        this->view->board.setAllGrayed();
+        for (auto& property : selection_mode){
+            int index = this->view->board.getCellIndex(property);
+            this->view->board.setSalable(index);
+        }
+    } else this->view->message_box.setString("Consultation des proprietes a vendre ...");
+}
+
+void GameGUIController::exchangePropertyGU(const std::string& response){
+    ExchangeInfo exchanges{response, game_info->nb_player};
+    selection_mode = exchanges.all_properties;
+    if (this->model->isMyTurn()){
+        tthis->view->setBoardClickMode(true);
+        this->view->getConsole()->addText("/leave pour quitter le menu d'echange");
+        this->view->board.setAllGrayed();
+        for (int i=0; i<game_info->nb_player; i++){
+            for (auto& property : exchanges.player_properties.at(i)){
+                int index = this->view->board.getCellIndex(property);
+                this->view->board.setExchangeable(index);
+            }
+        }
+    } else this->view->message_box.setString("Consultation des echanges ...");
+
+}
+
+void GameGUIController::mortgagePropertyGU(const std::string& response){
+    InGameParser game_parser(response);
+    selection_mode = *game_parser.parseSelectPropertyQuery().get();
+    if (this->model->isMyTurn()){
+        this->view->setBoardClickMode(true);
+        this->view->getConsole()->addText("/leave pour quitter le menu de selection");
+        this->view->board.setAllGrayed();
+        for (auto& property : selection_mode){
+            int index = this->view->board.getCellIndex(property);
+            this->view->board.setMortgageable(index);
+        }
+    } else this->view->message_box.setString("Consultation des proprietes a hypotequer ...");
+}
+
+void GameGUIController::unmortgagePropertyGU(const std::string& response){
+    InGameParser game_parser(response);
+    selection_mode = *game_parser.parseSelectPropertyQuery().get();
+    if (this->model->isMyTurn()){
+        this->view->setBoardClickMode(true);
+        this->view->getConsole()->addText("/leave pour quitter le menu de selection");
+        this->view->board.setAllGrayed();
+        for (auto& property : selection_mode){
+            int index = this->view->board.getCellIndex(property);
+            this->view->board.setUnmortgageable(index);
+        }
+    } else this->view->message_box.setString("Consultation des proprietes a deshypotequer ...");
+}
+
+void GameGUIController::leaveSelectionMenuGU(const std::string& response){
+    for (auto& property : selection_mode) {
+        int index = this->view->board.getCellIndex(property);
+        this->view->board.leaveSelection(index);
+    }
+}
+
+
+void GameGUIController::buildOrSellSucceedGU(const std::string& response){
+    InGameParser game_parser(response);
+    std::shared_ptr<BuildInfo> success_info = game_parser.parseBuildQuery();
+    int index = this->view->board.getCellIndex(success_info->name);
+    this->view->board.setHouse(index, success_info->level);
+}
+
+void GameGUIController::mortgageSucceedGU(const std::string& response){
+    InGameParser game_parser(response);
+    std::shared_ptr<BuildInfo> success_info = game_parser.parseBuildQuery();
+    int index = this->view->board.getCellIndex(success_info->name);
+    this->view->board.setMortgaged(index);
+}
+
+void GameGUIController::unmortgageSucceedGU(const std::string& response){
+    InGameParser game_parser(response);
+    std::shared_ptr<BuildInfo> success_info = game_parser.parseBuildQuery();
+    int index = this->view->board.getCellIndex(success_info->name);
+    this->view->board.unmortgage(index);
+}
+
+
+void GameGUIController::exchangeSucceedGU(const std::string & response){
+	ExchangeSucceedInfo succeed(response);
+	int index = this->view->board.getCellIndex(succeed.property);
+    if (this->model->isMyTurn()){
+        this->view->board.leaveSelection(index); 
+	    this->view->board.setPurchased(index, succeed.player);}
+}
+
+void GameGUIController::askExchangeGU(const std::string & response){
+    AskExchangeInfo exchange_info(response);
+    this->view->message_box.setString(exchange_info.username + " aimerait vous racheter " + exchange_info.property + " pour " + std::to_string(exchange_info.price) +"$");
+    this->view->setExchangeRound(true);
+}
+
+void GameGUIController::confirmExchangeAskingGU(const std::string& response){
+    AskExchangeInfo exchange_info(response);
+    this->view->message_box.setString("La demande de rachat de " + exchange_info.property + " pour " + std::to_string(exchange_info.price) + "$ a ete envoyee a " + exchange_info.username);
+}
+
+void GameGUIController::askForPurchaseGU(const std::string& response){
+    InGameParser game_parser(response);
+    std::shared_ptr<AskForPurchaseInfo> purchase = game_parser.parseAskForPurchaseQuery();
+    this->view->message_box.setString("Acheter " + purchase->cell_name + " pour " + std::to_string(purchase->amount)+"$ ?");
+    this->view->setCellRound(true);
+    this->view->message_box.addString("Si vous ne l'achetez pas, des encheres debuteront");
+}
+
+void GameGUIController::askAuctionGU(const std::string& response){
+    if (! this->model->isMyTurn()){
+        this->view->getConsole()->addText("Des encheres vont debuter, pour y participer : /participate"); //à faire 
+    }
+}
+
+void GameGUIController::startAuctionGU(const std::string& response){
+    BetInfo bet(response);
+    this->view->message_box.setString("Des encheres pour acheter " + bet.property + " debutent !");
+}
+
+void GameGUIController::auctionBidGU(const std::string& response){
+    PlayerBetInfo bet(response);
+    if (bet.player != ""){
+        this->view->message_box.setString(bet.player + " est sur le point d'acheter le terrain pour : " + std::to_string(bet.amount) + "$");
+    }
+    else this->view->message_box.setString("Le prix de depart est : " + std::to_string(bet.amount) + "$ !");
+    if (! this->model->isMyTurn()) this->view->getConsole()->addText("/bid pour surencherir !");  //à faire
+}
+
+void GameGUIController::endAuctionGU(const std::string& response){
+    EndAuctionInfo end(response);
+    this->view->message_box.setString(end.player + " remporte " + end.property + " pour " + std::to_string(end.amount) + "$ !");
+}
 */
+

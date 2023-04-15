@@ -37,9 +37,20 @@ const std::string DELETE_BUTTON_PATH = "../assets/images/delete_button.png";
 const std::string FILE_NAME = "../assets/utils/cellfile.txt";
 const std::string CELL_NAME = "../assets/utils/cellname.txt";
 const std::string CELL_PATH = "../assets/images/Cell/";
-const std::string INFOBOX_PATH = "../assets/images/InfoBox/suitcase.png";
+
+
+
+
 const std::string MONEY_PATH = "../assets/images/InfoBox/money.png";
-const std::string OUTJAIL_PATH  = "../assets/images/InfoBox/jail.png";
+
+const std::string KEYRED_PATH = "../assets/images/InfoBox/key_red.png";
+const std::string KEYBLUE_PATH = "../assets/images/InfoBox/key_blue.png";
+const std::string KEYGREEN_PATH = "../assets/images/InfoBox/key_green.png";
+const std::string KEYYELLOW_PATH = "../assets/images/InfoBox/key_yellow.png";
+const std::string KEYMAGENTA_PATH = "../assets/images/InfoBox/key_magenta.png";
+const std::string KEYCYAN_PATH = "../assets/images/InfoBox/key_cyan.png";
+const std::string INFOBOX_PATH = "../assets/images/InfoBox/square.png";
+
 
 const std::string START_BUTTON = "../assets/images/ActionButton/start.png";
 const std::string MORTGAGE_BUTTON = "../assets/images/ActionButton/hypo.png";
@@ -91,6 +102,8 @@ const std::string HOTEL_YELLOW = "../assets/images/OnCell/hotel_yellow.png";
 const std::string HOTEL_MAGENTA = "../assets/images/OnCell/hotel_magenta.png";
 const std::string HOTEL_CYAN = "../assets/images/OnCell/hotel_cyan.png";
 
+const std::string PATTERN = "../assets/images/OnCell/pattern.png";
+
 const std::string DICE1 = "../assets/images/MiddleBoard/dice1.png";
 const std::string DICE2 = "../assets/images/MiddleBoard/dice2.png";
 const std::string DICE3 = "../assets/images/MiddleBoard/dice3.png";
@@ -105,9 +118,10 @@ const std::string GAMECODE = "../assets/images/MiddleBoard/gamecode.png";
 const std::string CARD_TEXT = "../assets/images/MiddleBoard/rectangle.png";
 
 
+
+
 // Fonts
 const std::string ARIAL_FONT_PATH = "../assets/fonts/arial.ttf";
 const std::string SERIF_FONT_PATH = "../assets/fonts/hvd-comic-serif-pro.ttf";
-
 
 const std::string DEFAULT_FONT_PATH = ARIAL_FONT_PATH;
