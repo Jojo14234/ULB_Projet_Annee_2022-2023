@@ -112,8 +112,13 @@ void GameCUIController::receiveMsgLoop() { // todo il faudrait pas déplacer les
             case QUERY::ASK_AUCTION :                   this->askAuctionGU(response); break;
             case QUERY::INFOS_AUCTION_START :           this->startAuctionGU(response); break;
             case QUERY::INFOS_AUCTION_BID :             this->auctionBidGU(response); break;
+            case QUERY::INFOS_AUCTION_END :             this->endAuctionGU(response); break;
             case QUERY::BAD_AMOUNT :                    this->view->getConsole()->addText("Le montant entre n'est pas correct"); break;
             case QUERY::NOT_ENOUGH_MONEY_TO_PARTICIPATE:this->view->getConsole()->addText("Vous n'avez plus assez d'argent pour continuer a participer."); break;
+            case QUERY::LEAVE_BID:                      this->view->getConsole()->addText("Vous avez abandonne les encheres"); break;
+            case QUERY::WAITING_FOR_PLAYER_ANSWER:      { this->view->getConsole()->addText("Une proposition d'encheres a ete envoyee aux autres joueurs");
+                                                          this->view->getConsole()->addText("Veuillez patienter jusqu'a la fin des encheres."); break;
+                                                        }
 
             case QUERY::INFOS_PLAYER_DIDNT_BUY :        if (response != this->model->getUsername()) { this->view->getConsole()->addText("Le joueur " + response + " n'a pas achete la propriete"); } break;
             case QUERY::INFOS_PLAYER_MOVE_ON_OWN_CELL : if (this->model->isMyTurn()) { this->view->getConsole()->addText("Vous etes chez vous."); } break;
@@ -511,9 +516,14 @@ void GameCUIController::startAuctionGU(const std::string& response){
 
 void GameCUIController::auctionBidGU(const std::string& response){
     PlayerBetInfo bet(response);
-    this->view->getConsole()->addText(bet.player + " est sur le point d'acheter le terrain pour : " + std::to_string(bet.amount) + "$");
-    this->view->getConsole()->addText("/bid pour surencherir !");
+    if (bet.player != ""){
+        this->view->getConsole()->addText(bet.player + " est sur le point d'acheter le terrain pour : " + std::to_string(bet.amount) + "$");
+    }
+    else this->view->getConsole()->addText("Le prix de depart est : " + std::to_string(bet.amount) + "$ !");
+    if (! this->model->isMyTurn()) this->view->getConsole()->addText("/bid pour surencherir !");
 }
 
-
-//nebc
+void GameCUIController::endAuctionGU(const std::string& response){
+    EndAuctionInfo end(response);
+    this->view->getConsole()->addText(end.player + " remporte " + end.property + " pour " + std::to_string(end.amount) + "$ !");
+}

@@ -705,4 +705,26 @@ struct BetInfo{
 	}
 };
 
+struct EndAuctionInfo{
+	std::string player;
+	std::string property;
+	int amount;
+
+	EndAuctionInfo(const std::string &str){
+		int i = 0;
+		int nb_colon = 0;
+		std::string tmp;
+		while (str[i] != ':' || nb_colon < 1) {
+			if (str[i] == ':') {
+				player = tmp;
+				nb_colon++;
+				tmp.clear();
+			} else tmp += str[i]; 
+			i++;
+		}
+		property = tmp.c_str();
+		amount = atoi(&str[i+1]);
+	}
+};
+
 #endif

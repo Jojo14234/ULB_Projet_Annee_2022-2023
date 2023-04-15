@@ -574,8 +574,8 @@ void GameServer::processAskExchange(ClientManager &client, Player *player) {
     sleep(MAX_WAIT_EXCHANGE);
     if (player->getStatus() == PLAYER_STATUS::IN_EXCHANGE) {
         this->updateThisClientWithQuery(QUERY::STOP_WAIT, "/refuse", client);
+        player->setStatus(PLAYER_STATUS::FREE);
     }
-    player->setStatus(PLAYER_STATUS::FREE);
 }
 
 
@@ -583,22 +583,20 @@ void GameServer::processAskAuction(ClientManager &client, Player *player) {
     sleep(MAX_WAIT_AUCTION);
     if (player->getStatus() == PLAYER_STATUS::ASK_AUCTION) {
         this->updateThisClientWithQuery(QUERY::STOP_WAIT, "/refuse", client);
+        player->setStatus(PLAYER_STATUS::FREE);
     }
-    player->setStatus(PLAYER_STATUS::FREE);
 }
 
 void GameServer::processAskBid(ClientManager &client, Player *player) {
     player->setStatus(PLAYER_STATUS::OTHER);
     sleep(MAX_WAIT_EXCHANGE);
     if (player->getStatus() == PLAYER_STATUS::OTHER) {
-        this->updateThisClientWithQuery(QUERY::STOP_WAIT, "/bid 0", client);
+        this->updateThisClientWithQuery(QUERY::STOP_WAIT, "/leave bid", client);
     }
 }
 
 void GameServer::processAuction(ClientManager &client, Player *me, Land* land) {
-    this->updateAllClientsWithQuery(QUERY::INFOS_AUCTION_START, land->getName()+":"+std::to_string(land->getPurchasePrice()));
-    client.getUsername(); //stfu l'erreur de compilation
-    //this->updateThisClientWithQuery(QUERY::MESSAGE, "Ne parlez pas pendant les enchères !", client);
+    this->updateThisClientWithQuery(QUERY::WAITING_FOR_PLAYER_ANSWER, "", client);
     // Passer tout les joueurs autre que me en status in_auction
     // récupérer un /participate et les ajouter à un vecteur
     // boucler un a un sur leur offres
@@ -606,6 +604,8 @@ void GameServer::processAuction(ClientManager &client, Player *me, Land* land) {
 
     std::vector<Player*> participants = this->game.processAskAuction(me, name);
 
+    this->updateAllClientsWithQuery(QUERY::INFOS_AUCTION_START, land->getName()+":"+std::to_string(land->getPurchasePrice()));
+    std::cout << "start" << std::endl;
     // AUCTION
     int starting_bid = land->getPurchasePrice();
 
@@ -613,7 +613,8 @@ void GameServer::processAuction(ClientManager &client, Player *me, Land* land) {
 
     while ( true ) {
 
-        for ( auto player : participants ) {
+        for ( auto& player : participants ) {
+            std::cout << "player" << std::endl;
             if (player->getStatus() != PLAYER_STATUS::WAITING_FOR_AUCTION_TURN || player == futur_owner) { continue; }
             player->setStatus(PLAYER_STATUS::AUCTION_TURN);
             // Envoyer que le prix minimum est de starting bid
@@ -625,7 +626,12 @@ void GameServer::processAuction(ClientManager &client, Player *me, Land* land) {
             int bid;
 
             player->getClient()->receive(query, packet);
-            if ( query != GAME_QUERY_TYPE::BID ) { player->getClient()->sendQueryMsg("", QUERY::BAD_COMMAND); continue; }
+            if (query == GAME_QUERY_TYPE::LEAVE_BID) { 
+                player->getClient()->sendQueryMsg("", QUERY::LEAVE_BID); 
+                player->setStatus(PLAYER_STATUS::FREE);
+                continue; 
+            }
+            else if ( query != GAME_QUERY_TYPE::BID ) { player->getClient()->sendQueryMsg("", QUERY::BAD_COMMAND); continue; }
             // Récupérer une réponse
             packet >> bid_s;
             try { bid = std::stoi(bid_s); }
@@ -644,13 +650,16 @@ void GameServer::processAuction(ClientManager &client, Player *me, Land* land) {
             futur_owner = player;
 
             player->setStatus(PLAYER_STATUS::WAITING_FOR_AUCTION_TURN);
+            std::cout << "next player" << std::endl;
         }
         int count = 0;
-        for ( auto player : participants ) {
+        for ( auto& player : participants ) {
             if (player->getStatus() == PLAYER_STATUS::WAITING_FOR_AUCTION_TURN ) {count++;}
         }
         if (count <= 1) { break; }
     }
+    this->updateAllClientsWithQuery(QUERY::INFOS_AUCTION_END, futur_owner->getUsername() + ":" + land->getName()+ ":" + std::to_string(land->getPurchasePrice()));
+
     // Si futur_owner != nullptr -> futur->owner.acquire.prop
     if (futur_owner) {
         futur_owner->setStatus(PLAYER_STATUS::FREE);

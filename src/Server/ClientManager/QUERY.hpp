@@ -75,6 +75,9 @@ enum class QUERY {
     INFOS_AUCTION_BID, //player:price [string]:[int]
     BAD_AMOUNT,
     NOT_ENOUGH_MONEY_TO_PARTICIPATE,
+    LEAVE_BID,
+    WAITING_FOR_PLAYER_ANSWER,
+    INFOS_AUCTION_END, //player:property_name:price [string]:[string]:[int]
 
     ASK_EXCHANGE, // property_name:price:sender_username [string]:[int]:[string] // envoyé au propriétaire de la case pour lui demander si il souhaite accepter l'échange ou non
     CONFIRM_EXCHANGE_ASKING,

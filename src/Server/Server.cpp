@@ -182,7 +182,6 @@ void Server::clientProcessCreateGame(ClientManager &client) {
     int space = 0;
     GameParameters params{false};
     for (std::string word; std::getline(input, word, ' '); space++) {
-        std::cout << "Param " << space << " : " << word << std::endl;
         switch (space) {
             case 0: {
                 try{
