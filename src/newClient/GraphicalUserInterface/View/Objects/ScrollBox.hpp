@@ -23,7 +23,7 @@ class ScrollBox: public Box, public Button {
 
 	void updateObjects(short x) {
 		for (auto &obj : objects) {
-			obj->move(x*(size + sep));
+			obj->move(x*(size + sep)/3.);
 		}
 	}
 

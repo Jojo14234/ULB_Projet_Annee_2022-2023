@@ -19,5 +19,11 @@ public:
         Text::draw(window);
     }
 
+    void setPosition(double x, double y) override {
+        Text::setPosition(x, y);
+        Box::setPosition(x, y);
+        Button::setPosition(x, y);
+    }
+
 
 };

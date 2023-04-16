@@ -25,6 +25,13 @@ public:
 		this->sprite.setScale(this->info.getWidth() / (float)this->texture.getSize().x, this->info.getHeight() / (float)this->texture.getSize().y);
 	}
 
+	void operator=(const Image &other) {
+		AbstractViewObject::operator=(other);
+		texture = other.texture;
+		sprite = other.sprite;
+		sprite.setTexture(this->texture);
+	}
+
     virtual void draw(sf::RenderWindow &window) const override {
 	    if (isHidden()) return;
         window.draw(this->sprite);

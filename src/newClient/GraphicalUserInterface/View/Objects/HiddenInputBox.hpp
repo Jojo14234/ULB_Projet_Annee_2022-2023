@@ -25,4 +25,10 @@ public:
 		HiddenInputText::draw(window);
 	}
 
+	void setPosition(double x, double y) override {
+		HiddenInputText::setPosition(x, y);
+		Box::setPosition(x, y);
+	}
+
+
 };
