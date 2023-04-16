@@ -47,6 +47,10 @@ class GameGUIView: public AbstractGUIView {
 
 	ImageButton sell_bankrupt_button{ObjectInfo<>(200, 150 ,50,window->getSize().y/3*0 ), SELL_BUTTON};
 	ImageButton give_up_button{ObjectInfo<>(200, 150 ,50,window->getSize().y/3*1 ), FORFAIT_BUTTON};
+
+	ImageButton leave_button{ObjectInfo<>(200, 150 ,50,window->getSize().y/3*1) ,LEAVE_BUTTON};
+
+	ImageButton participate_button{ObjectInfo<>(200, 150 ,50,window->getSize().y/3*1) ,PARTICIPATE_BUTTON};
 	
 	std::vector<std::string> colorlist{"red","blue","green","cyan","magenta","yellow"};   //pour tester à enlever
 
@@ -169,8 +173,28 @@ class GameGUIView: public AbstractGUIView {
 			hideAllButton(); 
 			button_zone.setHidden();
 			button_mode = "auction_round";
-			auction_box.setVisible();
+			auction_box.setVisible();}
+	}
+
+	void setSpeRound(bool visible){
+		if(visible == false){
+			setBoardClickMode(visible);
+			leave_button.setHidden();}
+		else{
+			hideAllButton(); 
+			setBoardClickMode(visible);
+			leave_button.setVisible();
 		}
+	}
+
+	void setJoinAuctionRound(bool visible){
+		if(visible == false){
+			button_mode = "";
+			participate_button.setHidden();}
+		else{
+			hideAllButton(); 
+			button_mode = "participate_round";
+			participate_button.setVisible();}
 	}
 
 	void hideAllButton(){
@@ -184,6 +208,8 @@ class GameGUIView: public AbstractGUIView {
 		setPrisonRound(false);
 		setExchangeRound(false);
 		setBankruptRound(false);
+		setSpeRound(false);
+		setJoinAuctionRound(false);
 
 		auction_box.setHidden();
 	}
@@ -192,12 +218,13 @@ public:
 
 	explicit GameGUIView(sf::RenderWindow* window) : AbstractGUIView(window)
 	,board{}{
-			card_title.setBold();
-		message_box.setString("Vous êtes le propriétaire de cette partie");
-		message_box.addString("utilisez /start pour lancer la partie");
+		card_title.setBold();
+
 
 		hideAllButton();
-		
+
+	
+
 		gamecode_box.setHidden();
 		logo.setHidden();
 		card_text.setHidden();
@@ -228,15 +255,20 @@ public:
 
 		drawBankruptRound();
 
+		drawSpeRound();
+
+		drawJoinAuction();
+
 		gamecode_box.draw(*window);
 		dice.draw(*window);
 		info_box.draw(*window);
 		message_box.draw(*window);
-		auction_box.draw(*window);
+		
 		logo.draw(*window);
 		card_zone.draw(*window);
 		card_text.draw(*window);
 		card_title.draw(*window);
+		auction_box.draw(*window);
 	}
 
 	void drawStartGame(){
@@ -272,6 +304,11 @@ public:
 		sell_bankrupt_button.draw(*window);
 		give_up_button.draw(*window);
 	}
+
+	void drawSpeRound(){leave_button.draw(*window);}
+
+	void drawJoinAuction(){participate_button.draw(*window);}
+
 	void clear();
 	friend class GameGUIController;
 

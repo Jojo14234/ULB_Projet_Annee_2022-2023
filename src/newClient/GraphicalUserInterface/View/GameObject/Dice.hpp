@@ -14,7 +14,8 @@ class Dice{
         else if(d== 3){return DICE3;}
         else if(d== 4){return DICE4;}
         else if(d== 5){return DICE5;}
-        else if(d== 6){return DICE6;}}
+        else if(d== 6){return DICE6;}
+        return DICED;}
     public:
         Dice(){}
         void draw(sf::RenderWindow &window) const{

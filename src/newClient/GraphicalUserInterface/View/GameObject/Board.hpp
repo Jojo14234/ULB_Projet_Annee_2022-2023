@@ -66,16 +66,6 @@ public:
 		this->loadCellNames();
 		this->loadCellFile();
 		this->createBoard();
-
-		board[31]->setPlayer(&red,0);  //tests
-		board[31]->setPlayer(&blue,1);
-		board[31]->setPlayer(&green,2);
-		board[31]->setPlayer(&magenta,3);
-		board[31]->setPlayer(&yellow,4);
-		board[31]->setPlayer(&cyan,5);
-		
-		board[31]->setOwner("red");
-		board[31]->setBuilding(4);
 		}
 	
     void draw(sf::RenderWindow &window);

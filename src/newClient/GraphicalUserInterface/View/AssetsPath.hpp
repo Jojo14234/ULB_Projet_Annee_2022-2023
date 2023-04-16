@@ -71,7 +71,8 @@ const std::string UP_BUTTON = "../assets/images/ActionButton/up-arrow.png";
 const std::string DOWN_BUTTON = "../assets/images/ActionButton/down-arrow.png";
 const std::string VALIDATE_BUTTON = "../assets/images/ActionButton/validate.png";
 const std::string TEXT_AUCTION = "../assets/images/ActionButton/zonetext.png";
-
+const std::string LEAVE_BUTTON = "../assets/images/ActionButton/quitter.png";
+const std::string PARTICIPATE_BUTTON = "../assets/images/ActionButton/participer.png";
 
 const std::string PLAYER_RED = "../assets/images/OnCell/player_red.png";
 const std::string PLAYER_BLUE = "../assets/images/OnCell/player_blue.png";

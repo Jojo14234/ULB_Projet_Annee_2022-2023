@@ -16,6 +16,8 @@ class InfoBox: public Image{
 
     std::vector<std::shared_ptr<Image>> alljailcard;
     std::vector<std::shared_ptr<Text>> jail_card_nb;
+
+    std::vector<int> jc_nb {};
     
 
 
@@ -64,19 +66,19 @@ class InfoBox: public Image{
 
                 alljailcard.push_back(std::make_shared<Image>(ObjectInfo<>(80,40,info.getX() + 400 - 115  , info.getY() + (i * 60) +30), path));
                 jail_card_nb.push_back(std::make_shared<Text>(ObjectInfo<>(0,24,info.getX() + 400 - 115  , info.getY() + (i * 60) +30), std::to_string(jail_card)));
+                jc_nb.push_back(jail_card);
             }
         }
-        
 
-      
+        void addJailCard(int player){setJailCard(player ,jc_nb[player] + 1);}
 
-        void setPseudo(int player, std::string pseudo){
-            pseudo_list[player]->setString(pseudo);
+        void removeJailCard(int player){setJailCard(player ,jc_nb[player] - 1);}
 
-        }
+        void setJailCard(int player, int new_jail_card ){jail_card_nb[player]->setString(std::to_string(new_jail_card));}  
 
-        void setMoney( int player, int new_money){
-            allmoney[player]->setMoney(new_money);}
+        void setPseudo(int player, std::string pseudo){pseudo_list[player]->setString(pseudo);}
+
+        void setMoney( int player, int new_money){allmoney[player]->setMoney(new_money);}
 
 };
 

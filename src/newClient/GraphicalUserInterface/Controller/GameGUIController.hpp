@@ -9,10 +9,10 @@
 #include "AbstractGUIController.hpp"
 #include "../configs.hpp"
 
-/*
+
 #include "../../Model/QueryParser/GameLaunchingParser.hpp"
 #include "../../Model/QueryParser/InGameParser.hpp"
-*/
+
 
 class Client; // forward declaration
 class GameGUIView; // forward declaration
@@ -23,10 +23,9 @@ class GameGUIController: public AbstractGUIController {
 	std::vector<std::string> players_username;
 
 	bool init = true;
-/*
+
 	std::shared_ptr<JoinInfo> game_info;
 	std::vector<std::string> selection_mode;
-*/
 
 	GameGUIView* view;
 
@@ -39,7 +38,7 @@ public:
 	void handle(sf::Event event) override;
 	
 	void receiveMsgLoop();
-/*
+
 
 	void createGameGU(const std::string& response);
 	void joinGameGU(const std::string& response);
@@ -93,7 +92,7 @@ public:
     void playerJoinUpdate();
 
 	
-*/
+
 	// ...
 
 };
