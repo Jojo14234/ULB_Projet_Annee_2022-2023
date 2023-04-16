@@ -17,7 +17,7 @@ class Image : public virtual AbstractViewObject {
 	sf::Sprite sprite;
 
 public:
-
+	Image()=default;
 	Image(ObjectInfo<> info, const std::string &path) : AbstractViewObject(info) {
 		this->texture.loadFromFile(path);
 		this->sprite.setTexture(this->texture);
