@@ -138,6 +138,9 @@ void GameCUIController::receiveMsgLoop() { // todo il faudrait pas déplacer les
             case QUERY::EXCHANGE_REFUSED :              this->view->getConsole()->addText("L'echange a ete refuse"); break;
             case QUERY::INFOS_NOT_ENOUGH_MONEY :        this->view->getConsole()->addText("Vous ne possedez pas assez d'argent."); break;
             case QUERY::STOP_WAIT :                     this->view->getConsole()->addText("Pas assez rapide. L'offre a été automatiquement annulee"); this->model->sendCommand(GameInputParser{response}); break;
+            
+            case QUERY::WIN :                           this->endGameGU(response); break;
+            case QUERY::ENDGAME :                       break;
             default :                                   this->view->getConsole()->addText(response); break;
         }
     }
@@ -528,4 +531,10 @@ void GameCUIController::endAuctionGU(const std::string& response){
         this->view->getConsole()->addText(end.player + " remporte " + end.property + " pour " + std::to_string(end.amount) + "$ !");
     }
     else this->view->getConsole()->addText("Personne ne remporte " + end.property + ".");
+}
+
+void GameCUIController::endGameGU(const std::string& response){
+    this->view->getConsole()->addText("Victoire de " + response + ". Félicitations !");
+    this->view->getConsole()->addText("Entrez /quit pour retourner au menu.");
+    this->view->endTurn();
 }

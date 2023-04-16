@@ -59,6 +59,7 @@ class GameCUIController: public AbstractCUIController, public MenuCUIObserver {
 	void startAuctionGU(const std::string& response);
 	void auctionBidGU(const std::string& response);
 	void endAuctionGU(const std::string& response);
+	void endGameGU(const std::string& response);
 
 public: 
 	

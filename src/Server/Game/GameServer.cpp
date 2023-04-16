@@ -242,7 +242,8 @@ GameStats GameServer::clientLoop(ClientManager &client) {
     // STOP THE GAME
     this->game.setRunning(false);
     // allow client to get out of the receiveFromServerLoop and SendToServerLoop
-    updateThisClientWithQuery(QUERY::ENDGAME, "ENDGAME", client);
+    updateThisClientWithQuery(QUERY::WIN, this->game.getWinner()->getUsername(), client);
+    updateThisClientWithQuery(QUERY::ENDGAME, "", client);
 
     // RETURN STATS for winner and looser.
     if ( this->game.getWinner() == &client ) { return GameStats{(int)this->clients.size(), 1, 1}; }
