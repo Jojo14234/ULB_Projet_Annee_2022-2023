@@ -113,6 +113,7 @@ void GameCUIController::receiveMsgLoop() { // todo il faudrait pas déplacer les
             case QUERY::INFOS_AUCTION_START :           this->startAuctionGU(response); break;
             case QUERY::INFOS_AUCTION_BID :             this->auctionBidGU(response); break;
             case QUERY::INFOS_AUCTION_END :             this->endAuctionGU(response); break;
+            case QUERY::CONFIRM_PARTICIPATION :         this->view->getConsole()->addText("Vous participerez au encheres !"); break;
             case QUERY::BAD_AMOUNT :                    this->view->getConsole()->addText("Le montant entre n'est pas correct"); break;
             case QUERY::NOT_ENOUGH_MONEY_TO_PARTICIPATE:this->view->getConsole()->addText("Vous n'avez plus assez d'argent pour continuer a participer."); break;
             case QUERY::LEAVE_BID:                      this->view->getConsole()->addText("Vous avez abandonne les encheres"); break;
@@ -520,7 +521,7 @@ void GameCUIController::auctionBidGU(const std::string& response){
         this->view->getConsole()->addText(bet.player + " est sur le point d'acheter le terrain pour : " + std::to_string(bet.amount) + "$");
     }
     else this->view->getConsole()->addText("Le prix de depart est : " + std::to_string(bet.amount) + "$ !");
-    if (! this->model->isMyTurn()) this->view->getConsole()->addText("/bid pour surencherir !");
+    if (! this->model->isMyTurn()) this->view->getConsole()->addText("/bid pour surencherir, /out pour vous arreter");
 }
 
 void GameCUIController::endAuctionGU(const std::string& response){

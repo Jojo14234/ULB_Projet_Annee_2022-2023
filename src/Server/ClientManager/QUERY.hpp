@@ -73,6 +73,7 @@ enum class QUERY {
 
     INFOS_AUCTION_START, //name:price [string]:[int]
     INFOS_AUCTION_BID, //player:price [string]:[int]
+    CONFIRM_PARTICIPATION,
     BAD_AMOUNT,
     NOT_ENOUGH_MONEY_TO_PARTICIPATE,
     LEAVE_BID,

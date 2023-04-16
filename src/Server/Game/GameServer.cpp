@@ -3,6 +3,7 @@
 #include "../ClientManager/ClientManager.hpp"
 #include "../../utils/Configs.hpp"
 #include "../../Game/Board/Obtainable/Cells/Land/Land.hpp"
+#include "../../utils/Exceptions.hpp"
 #include "string.h"
 #include "Timer.hpp"
 #include "../../Game/Capitalist.hpp"
@@ -580,18 +581,23 @@ void GameServer::processAskExchange(ClientManager &client, Player *player) {
 
 
 void GameServer::processAskAuction(ClientManager &client, Player *player) {
+    std::cout << "tic tac " << player->getUsername() << std::endl;
     sleep(MAX_WAIT_AUCTION);
     if (player->getStatus() == PLAYER_STATUS::ASK_AUCTION) {
+        std::cout << "aaaaaa " << std::endl;
         this->updateThisClientWithQuery(QUERY::STOP_WAIT, "/refuse", client);
         player->setStatus(PLAYER_STATUS::FREE);
     }
 }
 
 void GameServer::processAskBid(ClientManager &client, Player *player) {
+    std::cout << "tic tac toe " << std::endl;
     player->setStatus(PLAYER_STATUS::OTHER);
     sleep(MAX_WAIT_EXCHANGE);
     if (player->getStatus() == PLAYER_STATUS::OTHER) {
-        this->updateThisClientWithQuery(QUERY::STOP_WAIT, "/leave bid", client);
+        std::cout << "bbbbbbbb " << std::endl;
+        this->updateThisClientWithQuery(QUERY::STOP_WAIT, "/out", client);
+        player->setStatus(PLAYER_STATUS::FREE);
     }
 }
 
@@ -644,7 +650,7 @@ void GameServer::processAuction(ClientManager &client, Player *me, Land* land) {
                 continue; 
             }
 
-            this->updateAllClientsWithQuery(QUERY::INFOS_AUCTION_BID, player->getUsername() + " : " + bid_s);
+            this->updateAllClientsWithQuery(QUERY::INFOS_AUCTION_BID, player->getUsername() + ":" + bid_s);
             // starting bid = nouveau prix // futur owner = player
             starting_bid = bid;
             futur_owner = player;

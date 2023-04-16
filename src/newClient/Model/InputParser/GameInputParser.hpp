@@ -35,6 +35,7 @@ class GameInputParser : public InputParser {
         else if ( query == "/accept" )      { this->query_type = GAME_QUERY_TYPE::ACCEPT; }         // refuser
         else if ( query == "/refuse" )      { this->query_type = GAME_QUERY_TYPE::REFUSE; }         // accepter
         else if ( query == "/participate" ) { this->query_type = GAME_QUERY_TYPE::PARTICIPATE; }    // Participe à une enchère
+        else if ( query == "/out" )         { this->query_type = GAME_QUERY_TYPE::LEAVE_BID; }
         else if ( query == "/select")       {
             if (this->size() >= 2)          { this->query_type = GAME_QUERY_TYPE::SELECT; }
         }

@@ -3,6 +3,9 @@
 #include "Capitalist.hpp"
 #include "../Server/ClientManager/ClientManager.hpp"
 #include "../utils/randomFunctions.hpp"
+#include "../Server/Game/GameServer.hpp"
+#include <unistd.h>  
+#include <thread>
 #include <random>
 #include <algorithm>
 #include "Board/Obtainable/Cells/Land/Land.hpp"
@@ -486,9 +489,12 @@ std::vector<Player*> Capitalist::processAskAuction(Player *player, std::string &
     GAME_QUERY_TYPE query;
     // RÉCUPÉRER LES PARTICIPANTS
     for ( auto &other : this->players ) {
+        std::cout << "PLAYER=" << other.getUsername() << std::endl;
         if (&other != player) {
             other.getClient()->receive(query);
             if ( query == GAME_QUERY_TYPE::PARTICIPATE) {
+                std::cout << "PLAYER=" << other.getUsername() << " participate" << std::endl;
+                other.getClient()->sendQueryMsg("", QUERY::CONFIRM_PARTICIPATION);
                 other.setStatus(PLAYER_STATUS::WAITING_FOR_AUCTION_TURN);
                 participants.push_back(&other);
             }
