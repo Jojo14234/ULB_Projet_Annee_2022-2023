@@ -693,7 +693,7 @@ void GameServer::suspectBankrupt(Player *player) {
 }
 
 
-void GameServer::processBankruptByGame(ClientManager &client, Player *player) {
+void GameServer::processBankruptByGame(Player *player) {
     for ( auto property : player->getAllProperties() ) {
         property->reset();
         this->processAuction(player, property);
@@ -715,7 +715,7 @@ void GameServer::processBankruptByPlayer(ClientManager &client, Player *player, 
 
 void GameServer::processBankrupt(ClientManager &client, Player *player) {
     if ( player->isBankruptToPlayer() ) { this->processBankruptByPlayer(client, player, player->getPlayerToRefund()); }
-    else {this->processBankruptByGame(client, player); }
+    else {this->processBankruptByGame(player); }
     player->setStatus(PLAYER_STATUS::LOST);
 }
 

@@ -90,7 +90,7 @@ public:
 
     void processAuction(Player* player, Land* land);
 
-    void processBankruptByGame(ClientManager &client, Player *player);
+    void processBankruptByGame(Player *player);
     void processBankruptByPlayer(ClientManager &client, Player* player, Player* other);
 
     void playerDebtInfos(ClientManager &client, Player* player);
