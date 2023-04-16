@@ -19,3 +19,5 @@
 #include "Objects/HiddenInputBox.hpp"
 #include "Objects/Selector.hpp"
 #include "Objects/DirectionImButton.hpp"
+#include "Objects/ScrollBox.hpp"
+#include "Objects/FriendBox.hpp"
