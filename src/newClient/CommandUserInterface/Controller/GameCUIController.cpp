@@ -76,6 +76,7 @@ void GameCUIController::receiveMsgLoop() { // todo il faudrait pas déplacer les
             case QUERY::INFOS_ROLL_DICE :               this->rollDiceGU(response); break;
             case QUERY::INFOS_GAME :                    this->infoGameGU(response); break;
             case QUERY::INFOS_NEW_TURN :                this->newTurnGU(response); break;
+            case QUERY::INFOS_NEW_TURN_IN_JAIL:         this->newTurnInJailGU(response); break;
             case QUERY::INFOS_PLAYER_MOVE :             this->playerMoveGU(response); break;
             case QUERY::INFOS_PLAYER_BOUGHT :           this->playerBoughtGU(response); break;
             case QUERY::INFOS_PLAYER_PAID_PLAYER :      this->playerPaidPlayerGU(response); break;
@@ -255,6 +256,13 @@ void GameCUIController::newTurnGU(const std::string& response) {
     this->model->setPlayerTurn(response);
     if (response == this->model->getUsername()) { this->view->startTurn(); this->model->startTurn(); }
     else { this->view->endTurn(); this->model->endTurn(); this->view->getConsole()->addText("C'est au tour de " + response + " !"); }
+}
+
+void GameCUIController::newTurnInJailGU(const std::string& response) {
+    JailInfo jail_info(response);
+    this->view->getConsole()->addText("Vous êtes en prison depuis " + std::to_string(jail_info.nb_turn) + " tours !");
+    std::string str = jail_info.has_card ? "/roll (tenter un double), /pay (50$) ou /card (utiliser carte)" : "/roll (tenter un double) ou /pay (50$)";
+    this->view->getConsole()->addText(str);
 }
 
 void GameCUIController::playerMoveGU(const std::string& response){

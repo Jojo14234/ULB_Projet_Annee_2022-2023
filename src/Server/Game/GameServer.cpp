@@ -66,15 +66,7 @@ void GameServer::client_has_join_the_game(ClientManager &client) {
  */
 void GameServer::playerInJailInfos(ClientManager &client) {
     Player* me = findMe(client);
-    std::string rollInJail = std::to_string(me->getRollsInPrison());
-    std::string str = "Vous êtes en prison depuis [" + rollInJail + "] tours !\n";
-    str += "Pour en sortir vous avez plusieurs options : \n";
-    str += " - Tentez de faire un double ( /roll )\n";
-    str += " - Payer votre caution de 50$ ( /pay )\n";
-    if ( me->getAllGOOJCards().size() > 0 ) {
-        str += " - Utilisez votre carte [Sortie de prison] ( /use )";
-    }
-    updateThisClientWithQuery(QUERY::MESSAGE, str, client);
+    this->updateThisClientWithQuery(QUERY::INFOS_NEW_TURN_IN_JAIL, std::to_string(me->getRollsInPrison()) + ":" + std::to_string(me->getAllGOOJCards().size() > 0), client);
 }
 
 /*
@@ -83,9 +75,6 @@ void GameServer::playerInJailInfos(ClientManager &client) {
 void GameServer::playerBuildInfos(ClientManager &client) {
     Player* me = findMe(client);
     this->updateThisClientWithQuery(QUERY::INFOS_BUILD_PROP, me->getAllBuildableProperties(game.isFastGame()), client);
-    std::string str = "Choisir une propriété ( /select [nom] )\n";
-    str +="Quittez le menu de construction ( /leave )";
-    this->updateThisClientWithQuery(QUERY::MESSAGE, str, client);
 }
 
 void GameServer::playerSellBuildInfos(ClientManager &client) {
@@ -110,10 +99,6 @@ void GameServer::playerExchangeInfos(ClientManager &client) {
         str += std::to_string(player.getIndex()) + "=" + player.getAllExchangeablePossession() + "|";
     }
     this->updateThisClientWithQuery(QUERY::INFOS_EXCHANGEABLE_PROP, str, client);
-    str = "Choisir une propriété ( /trade [nom_prop_voulue] [argent] )\n";
-    str += "Quittez le menu de construction ( /leave )";
-    this->updateThisClientWithQuery(QUERY::MESSAGE, str, client);
-
 }
 
 void GameServer::playerDebtInfos(ClientManager &client, Player* player) {
@@ -418,7 +403,7 @@ void GameServer::processBuild(ClientManager &client, Player *player) {
         else this->updateThisClientWithQuery(QUERY::CANNOT_BUILD, "", client);
         client.receive(query, packet);
     }
-    this->updateThisClientWithQuery(QUERY::INFOS_LEAVE_SELECTION_MODE, "Vous quittez le mode de sélection", client);
+    this->updateThisClientWithQuery(QUERY::INFOS_LEAVE_SELECTION_MODE, "", client);
 }
 
 void GameServer::processSellBuild(ClientManager &client, Player *player) {
@@ -452,7 +437,7 @@ void GameServer::processSellBuild(ClientManager &client, Player *player) {
         else this->updateThisClientWithQuery(QUERY::CANNOT_SELL, "", client);
         client.receive(query, packet);
     }
-    this->updateThisClientWithQuery(QUERY::INFOS_LEAVE_SELECTION_MODE, "Vous quittez le mode de sélection", client);
+    this->updateThisClientWithQuery(QUERY::INFOS_LEAVE_SELECTION_MODE, "", client);
 
 }
 
@@ -489,7 +474,7 @@ void GameServer::processMortgage(ClientManager &client, Player *player) {
         else this->updateThisClientWithQuery(QUERY::CANNOT_MORTAGE, "", client);
         client.receive(query, packet);
     }
-    this->updateThisClientWithQuery(QUERY::INFOS_LEAVE_SELECTION_MODE, "Vous quittez le mode de sélection", client);
+    this->updateThisClientWithQuery(QUERY::INFOS_LEAVE_SELECTION_MODE, "", client);
 }
 
 void GameServer::processLiftMortgage(ClientManager &client, Player *player) {
@@ -525,7 +510,7 @@ void GameServer::processLiftMortgage(ClientManager &client, Player *player) {
         else this->updateThisClientWithQuery(QUERY::CANNOT_UNMORTGAGE, "", client);
         client.receive(query, packet);
     }
-    this->updateThisClientWithQuery(QUERY::INFOS_LEAVE_SELECTION_MODE, "Vous quittez le mode de sélection", client);
+    this->updateThisClientWithQuery(QUERY::INFOS_LEAVE_SELECTION_MODE, "", client);
 }
 
 void GameServer::processExchange(ClientManager &client, Player *player) {
@@ -567,7 +552,7 @@ void GameServer::processExchange(ClientManager &client, Player *player) {
         else this->updateThisClientWithQuery(QUERY::CANNOT_EXCHANGE, "", client);
         client.receive(query, packet);
     }
-    this->updateThisClientWithQuery(QUERY::INFOS_LEAVE_SELECTION_MODE, "Vous quittez le mode de sélection", client);
+    this->updateThisClientWithQuery(QUERY::INFOS_LEAVE_SELECTION_MODE, "", client);
 }
 
 void GameServer::processAskExchange(ClientManager &client, Player *player) {

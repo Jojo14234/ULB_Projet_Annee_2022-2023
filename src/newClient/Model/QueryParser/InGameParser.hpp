@@ -728,4 +728,19 @@ struct EndAuctionInfo{
 	}
 };
 
+
+struct JailInfo{
+	int nb_turn;
+	bool has_card;
+
+	JailInfo(const std::string &str){
+		int i = 0;
+		std::string tmp;
+		while (str[i] != ':' ) { tmp += str[i]; i++; }
+		nb_turn = atoi(tmp.c_str());
+		has_card = static_cast<bool>(atoi(&str[i+1]));
+	}
+};
+
+
 #endif
