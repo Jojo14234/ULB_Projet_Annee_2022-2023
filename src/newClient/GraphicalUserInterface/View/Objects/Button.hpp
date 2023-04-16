@@ -12,11 +12,11 @@
 #include "../Audibles/Audible.hpp"
 
 
-class Button : public virtual AbstractViewObject, public Audible<ButtonSound> {
+class Button : public virtual AbstractViewObject, public Audible<ButtonSoundBuffer> {
 
 public:
 
-	explicit Button(ObjectInfo<> info) : AbstractViewObject(info), Audible<ButtonSound>() {}
+	explicit Button(ObjectInfo<> info) : AbstractViewObject(info) {}
 
 	virtual void draw(sf::RenderWindow &window) const override = 0;
 
