@@ -18,6 +18,8 @@ protected:
 
 public:
 
+	AbstractViewObject()=default;
+
 	explicit AbstractViewObject(ObjectInfo<> info) : info(info) {}
 
 	virtual ~AbstractViewObject()=default;

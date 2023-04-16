@@ -14,7 +14,7 @@
 
 class ImageButton : public Image, public Button {
 public:
-
+	ImageButton()=default;
 	ImageButton(ObjectInfo<> info, const std::string &path) : AbstractViewObject(info), Image(info, path), Button(info) {}
 
 	virtual void draw(sf::RenderWindow &window) const override {
