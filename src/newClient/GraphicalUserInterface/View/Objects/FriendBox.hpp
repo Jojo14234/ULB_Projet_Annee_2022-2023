@@ -24,6 +24,7 @@ public:
 
 	FriendBox(ObjectInfo<> info, const std::string &name) : AbstractViewObject(info), Box(info, TOP_BOX_COLOR) {
 		this->name = Text(ObjectInfo<>(0, 5, info.getX()+5, info.getY() + info.getHeight()/2.f - 2.5f), name, sf::Color::Black, DEFAULT_FONT_PATH);
+
 	}
 
 	virtual void draw(sf::RenderWindow &window) const override {
@@ -35,7 +36,10 @@ public:
 	}
 
 	void move(double new_y) {
-		
+		Box::setPosition(getInfo().getX(), getInfo().getY() + new_y);
+		name.setPosition(name.getInfo().getX(), name.getInfo().getY() + new_y);
+		message.setPosition(message.getInfo().getX(), message.getInfo().getY() + new_y);
+		remove.setPosition(remove.getInfo().getX(), remove.getInfo().getY() + new_y);
 	}
 
 };

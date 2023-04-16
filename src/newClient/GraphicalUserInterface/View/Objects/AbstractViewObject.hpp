@@ -37,4 +37,8 @@ public:
 	void setVisible() { this->visible = true; }
 	void setHidden() { this->visible = false; }
 
+	void setInfo(ObjectInfo<> info) { this->info = info; }
+	void setSize(double width, double height) { this->info.setSize(width, height); }
+	void setPosition(double x, double y) { this->info.setPosition(x, y); }
+
 };
