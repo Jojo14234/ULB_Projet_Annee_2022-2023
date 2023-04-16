@@ -40,29 +40,9 @@ class FriendsGUIView: public AbstractGUIView {
 
 	Text friend_list{ObjectInfo<>(0.f, WINDOW_WIDTH/50.f, WINDOW_WIDTH*8/12.f + 100 , WINDOW_HEIGHT/8.f+WINDOW_HEIGHT/5+10), "Liste d'amis"};
 
-
 	ScrollBox<FriendBox> scroll{ObjectInfo<>(WINDOW_WIDTH*4/12.f - WINDOW_WIDTH/25.f, WINDOW_HEIGHT*8/12,WINDOW_WIDTH*8/12.f + WINDOW_WIDTH/18, WINDOW_HEIGHT/8.f+WINDOW_HEIGHT/5), WINDOW_WIDTH/20.f};
 
 
-
-	float fbox_x_size = WINDOW_WIDTH*4/12.f - WINDOW_WIDTH/25.f;	//do not change
-	float fbox_y_size = WINDOW_WIDTH/20.f;							//do not change
-	float fbox_x_pos = WINDOW_WIDTH*8/12.f + WINDOW_WIDTH/18;		//do not change
-	float fbox_y_pos = WINDOW_WIDTH/30.f + WINDOW_HEIGHT/8.f+WINDOW_HEIGHT/5+30;		// * nième friend
-	//float fbox_n_y_pos = fbox_y_pos+10;
-
-
-	float fbutton_size = WINDOW_WIDTH/30.f;
-	float del_button_x = (fbox_x_pos+fbox_x_size) - fbutton_size - 10;
-	float mess_button_x = del_button_x - fbutton_size - 10;
-	float fbutton_y = fbox_y_pos+15;
-
-
-
-	Text name1{ObjectInfo<>(0.f, WINDOW_WIDTH/55.f, WINDOW_WIDTH*8/12.f + 100 , fbutton_y), "xX_.h4w3n._Xx"};
-	Text name2{ObjectInfo<>(0.f, WINDOW_WIDTH/55.f, WINDOW_WIDTH*8/12.f + 100 , fbox_y_pos+10+15 + fbox_y_size), "lolcatz1287"};
-	Text name3{ObjectInfo<>(0.f, WINDOW_WIDTH/55.f, WINDOW_WIDTH*8/12.f + 100 , fbox_y_pos+20+15 + fbox_y_size*2), "m4cr0n_c4lvitie"};
-	Text name4{ObjectInfo<>(0.f, WINDOW_WIDTH/55.f, WINDOW_WIDTH*8/12.f + 100 , fbox_y_pos+30+15 + fbox_y_size*3), "__t0rtUe._.m4UdiT3__"};
 	Text name5{ObjectInfo<>(0.f, WINDOW_WIDTH/55.f, WINDOW_WIDTH*8/12.f + 100 , fbox_y_pos+40+15 + fbox_y_size*4), "x3l0w0"};
 
 
@@ -71,7 +51,15 @@ public:
 
 	explicit FriendsGUIView(sf::RenderWindow* window) : AbstractGUIView(window) {
 		// TODO prendre les size des attributs et mettre ici
-		this->scroll.addObject(new FriendBox{});
+		const double size_x = WINDOW_WIDTH*4/12.f - WINDOW_WIDTH/25.f;
+		const double size_y = WINDOW_WIDTH/20.f;
+		const double pos_x = WINDOW_WIDTH*8/12.f + WINDOW_WIDTH/18;
+		const double pos_y = WINDOW_WIDTH/30.f + WINDOW_HEIGHT/8.f+WINDOW_HEIGHT/5+30;
+		this->scroll.addObject(new FriendBox{ObjectInfo<>(size_x, size_y, pos_x, pos_y), "xX_.h4w3n._Xx"});
+		this->scroll.addObject(new FriendBox{ObjectInfo<>(size_x, size_y, pos_x, pos_y+10+size_y), "lolcatz1287"});
+		this->scroll.addObject(new FriendBox{ObjectInfo<>(size_x, size_y, pos_x, pos_y+20+size_y*2), "m4cr0n_c4lvitie"});
+		this->scroll.addObject(new FriendBox{ObjectInfo<>(size_x, size_y, pos_x, pos_y+20+size_y*3), "__t0rtUe._.m4UdiT3__"});
+		this->scroll.addObject(new FriendBox{ObjectInfo<>(size_x, size_y, pos_x, pos_y+20+size_y*4), "x3l0w0"});
 	}
 	
 	~FriendsGUIView()=default;

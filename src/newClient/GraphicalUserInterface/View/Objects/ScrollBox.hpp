@@ -7,12 +7,12 @@
 #include <SFML/Graphics.hpp>
 #include <vector>
 
-
 #include "AbstractViewObject.hpp"
+#include "Box.hpp"
 
 
 template<typename Drawable>
-class ScrollBox: public AbstractViewObject {
+class ScrollBox: public Box {
 
 
 	std::vector<std::unique_ptr<Drawable>> objects;
@@ -26,7 +26,7 @@ class ScrollBox: public AbstractViewObject {
 
 public:
 
-	ScrollBox(ObjectInfo<> info, double size) : AbstractViewObject(info), size(size) {
+	ScrollBox(ObjectInfo<> info, double size, sf::Color color=sf::Color(0, 0, 0, 255)) : AbstractViewObject(info), Box(info, color), size(size) {
 		
 	}
 
@@ -36,6 +36,8 @@ public:
 	}
 
 	virtual void draw(sf::RenderWindow &window) const override {
+		if (isHidden()) return;
+		Box::draw(window);
 		for (short i=0; i<5; i++ ) {
 			if (this->scroll+i >= this->objects.size()) break; 
 			this->objects[this->scroll+i]->draw(window);
