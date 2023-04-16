@@ -108,8 +108,8 @@ void MenuGUIController::handle(sf::Event event) {
 		} break;
 		case sf::Event::TextEntered:
 		case sf::Event::KeyPressed: {
-				this->view->join_popup.getInput(0)->handle(event); break;
-			}
+			this->view->join_popup.getInput(0)->handle(event); break;
+		}
 		
 		default: break;
 }

@@ -53,9 +53,10 @@ public:
 		const double pos_y = WINDOW_WIDTH/30.f + WINDOW_HEIGHT/8.f+WINDOW_HEIGHT/5+30;
 		this->scroll.addObject(new FriendBox{ObjectInfo<>(size_x, size_y, pos_x, pos_y), "xX_.h4w3n._Xx"});
 		this->scroll.addObject(new FriendBox{ObjectInfo<>(size_x, size_y, pos_x, pos_y+10+size_y), "lolcatz1287"});
-		this->scroll.addObject(new FriendBox{ObjectInfo<>(size_x, size_y, pos_x, pos_y+20+size_y*2), "m4cr0n_c4lvitie"});
-		this->scroll.addObject(new FriendBox{ObjectInfo<>(size_x, size_y, pos_x, pos_y+20+size_y*3), "__t0rtUe._.m4UdiT3__"});
-		this->scroll.addObject(new FriendBox{ObjectInfo<>(size_x, size_y, pos_x, pos_y+20+size_y*4), "x3l0w0"});
+		this->scroll.addObject(new FriendBox{ObjectInfo<>(size_x, size_y, pos_x, pos_y+(10+size_y)*2), "m4cr0n_c4lvitie"});
+		this->scroll.addObject(new FriendBox{ObjectInfo<>(size_x, size_y, pos_x, pos_y+(10+size_y)*3), "__t0rtUe._.m4UdiT3__"});
+		this->scroll.addObject(new FriendBox{ObjectInfo<>(size_x, size_y, pos_x, pos_y+(10+size_y)*4), "x3l0w0"});
+		this->scroll.addObject(new FriendBox{ObjectInfo<>(size_x, size_y, pos_x, pos_y+(10+size_y)*5), "HUGOGO"});
 	}
 	
 	~FriendsGUIView()=default;
@@ -78,6 +79,7 @@ public:
 		no_button.draw(*window);
 
 		this->scroll.draw(*window);
+		friend_list.draw(*window);
 		
 	}
 

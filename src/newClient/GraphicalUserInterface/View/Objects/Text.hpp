@@ -58,5 +58,10 @@ public:
 		this->text.setString(new_text);
 	}
 
+	void setPosition(double x, double y) {
+		AbstractViewObject::setPosition(x, y);
+		this->text.setPosition(x, y);
+	}
+
 
 };

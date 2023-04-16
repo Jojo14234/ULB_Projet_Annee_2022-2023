@@ -20,6 +20,13 @@ void FriendsGUIController::handle(sf::Event event) {
 		case sf::Event::TextEntered:
 		case sf::Event::KeyPressed: {
 			// TODO
+			break;
+		}
+		case sf::Event::MouseWheelMoved: {
+			if (this->view->scroll.contains(event.mouseWheel.x, event.mouseWheel.y)) {
+				if (event.mouseWheel.delta > 0) this->view->scroll.scrollUp();
+				else this->view->scroll.scrollDown();
+			}
 		}
 		default: break;
 	}
