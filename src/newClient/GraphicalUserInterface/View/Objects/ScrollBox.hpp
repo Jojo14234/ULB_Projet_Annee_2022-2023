@@ -18,15 +18,18 @@ class ScrollBox: public Box {
 	std::vector<std::unique_ptr<Drawable>> objects;
 	short scroll=0;
 	double size;
+	const short sep = 5;
 
-	void updateObjects() {
-
+	void updateObjects(short int x) {
+		for (auto &obj : objects) {
+			obj->move(x*size + x*sep);
+		}
 	}
 
 
 public:
 
-	ScrollBox(ObjectInfo<> info, double size, sf::Color color=sf::Color(0, 0, 0, 255)) : AbstractViewObject(info), Box(info, color), size(size) {
+	ScrollBox(ObjectInfo<> info, double size, sf::Color color=sf::Color(0, 0, 0, 0)) : AbstractViewObject(info), Box(info, color), size(size) {
 		
 	}
 
@@ -48,13 +51,13 @@ public:
 	virtual void scrollUp() {
 		if (this->scroll >= 5) return;
 		this->scroll++; 
-		updateObjects();
+		updateObjects(1);
 	}
 
 	virtual void scrollDown() {
 		if (this->scroll <= 0) return;
 		this->scroll--;
-		updateObjects();
+		updateObjects(-1);
 	}
 
 

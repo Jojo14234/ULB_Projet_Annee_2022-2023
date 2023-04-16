@@ -36,15 +36,11 @@ class FriendsGUIView: public AbstractGUIView {
 	ImageButton no_button{ObjectInfo<>(WINDOW_WIDTH/16.f, WINDOW_HEIGHT/16.f, (WINDOW_WIDTH*8/12.f + WINDOW_WIDTH/18)+(WINDOW_WIDTH*4/12.f - WINDOW_WIDTH/25.f)/2,WINDOW_HEIGHT/5.f), NO_BUTTON_PATH};
 
 	//FRIEND LIST--------------------------------------------------------------
-	Box friend_list_box{ObjectInfo<>(WINDOW_WIDTH*4/12.f - WINDOW_WIDTH/25.f, WINDOW_HEIGHT*8/12,WINDOW_WIDTH*8/12.f + WINDOW_WIDTH/18, WINDOW_HEIGHT/8.f+WINDOW_HEIGHT/5), WHITE};
+	//Box friend_list_box{ObjectInfo<>(WINDOW_WIDTH*4/12.f - WINDOW_WIDTH/25.f, WINDOW_HEIGHT*8/12,WINDOW_WIDTH*8/12.f + WINDOW_WIDTH/18, WINDOW_HEIGHT/8.f+WINDOW_HEIGHT/5), WHITE};
 
 	Text friend_list{ObjectInfo<>(0.f, WINDOW_WIDTH/50.f, WINDOW_WIDTH*8/12.f + 100 , WINDOW_HEIGHT/8.f+WINDOW_HEIGHT/5+10), "Liste d'amis"};
 
-	ScrollBox<FriendBox> scroll{ObjectInfo<>(WINDOW_WIDTH*4/12.f - WINDOW_WIDTH/25.f, WINDOW_HEIGHT*8/12,WINDOW_WIDTH*8/12.f + WINDOW_WIDTH/18, WINDOW_HEIGHT/8.f+WINDOW_HEIGHT/5), WINDOW_WIDTH/20.f};
-
-
-	Text name5{ObjectInfo<>(0.f, WINDOW_WIDTH/55.f, WINDOW_WIDTH*8/12.f + 100 , fbox_y_pos+40+15 + fbox_y_size*4), "x3l0w0"};
-
+	ScrollBox<FriendBox> scroll{ObjectInfo<>(WINDOW_WIDTH*4/12.f - WINDOW_WIDTH/25.f, WINDOW_HEIGHT*8/12,WINDOW_WIDTH*8/12.f + WINDOW_WIDTH/18, WINDOW_HEIGHT/8.f+WINDOW_HEIGHT/5), WINDOW_WIDTH/20.f, WHITE};
 
 
 public:
@@ -81,29 +77,7 @@ public:
 		yes_button.draw(*window);
 		no_button.draw(*window);
 
-		//FRIEND LIST
-		friend_list_box.draw(*window);
-		friend_list.draw(*window);
-		friend1_box.draw(*window);
-		friend2_box.draw(*window);
-		friend3_box.draw(*window);
-		friend4_box.draw(*window);
-		friend5_box.draw(*window);
-		mess1_button.draw(*window);
-		del1_button.draw(*window);
-		mess2_button.draw(*window);
-		del2_button.draw(*window);
-		mess3_button.draw(*window);
-		del3_button.draw(*window);
-		mess4_button.draw(*window);
-		del4_button.draw(*window);
-		mess5_button.draw(*window);
-		del5_button.draw(*window);
-		name1.draw(*window);
-		name2.draw(*window);
-		name3.draw(*window);
-		name4.draw(*window);
-		name5.draw(*window);
+		this->scroll.draw(*window);
 		
 	}
 
