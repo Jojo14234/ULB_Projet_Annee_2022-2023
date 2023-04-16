@@ -164,16 +164,13 @@ void GameGUIController::receiveMsgLoop() { // todo il faudrait pas déplacer les
             case QUERY::ASK_EXCHANGE :                  this->askExchangeGU(response); break;
             case QUERY::CONFIRM_EXCHANGE_ASKING :       this->confirmExchangeAskingGU(response); break;
 
-            case QUERY::ASK_AUCTION :                   this->askAuctionGU(response); break;
             case QUERY::INFOS_AUCTION_START :           this->startAuctionGU(response); break;
             case QUERY::INFOS_AUCTION_BID :             this->auctionBidGU(response); break;
             case QUERY::INFOS_AUCTION_END :             this->endAuctionGU(response); break;
             case QUERY::BAD_AMOUNT :                    this->view->message_box.setString("Le montant entre n'est pas correct"); break;
             case QUERY::NOT_ENOUGH_MONEY_TO_PARTICIPATE:this->view->message_box.setString("Vous n'avez plus assez d'argent pour continuer a participer."); break;
             case QUERY::LEAVE_BID:                      this->view->message_box.setString("Vous avez abandonne les encheres"); break;
-            case QUERY::WAITING_FOR_PLAYER_ANSWER:      { this->view->message_box.setString("Une proposition d'encheres a ete envoyee aux autres joueurs");
-                                                          this->view->message_box.setString("Veuillez patienter jusqu'a la fin des encheres."); break;
-                                                        }
+
             case QUERY::INFOS_PLAYER_DIDNT_BUY :        if (response != this->model->getUsername()) { this->view->message_box.setString("Le joueur " + response + " n'a pas achete la propriete"); } break;
             case QUERY::INFOS_PLAYER_MOVE_ON_OWN_CELL : if (this->model->isMyTurn()) { this->view->message_box.setString("Vous etes chez vous."); } break;
             case QUERY::BAD_COMMAND :                   if (this->model->isMyTurn()) { this->view->message_box.setString("Vous ne pouvez pas utiliser cette commande"); } break;
@@ -571,13 +568,6 @@ void GameGUIController::askForPurchaseGU(const std::string& response){
     this->view->message_box.setString("Acheter " + purchase->cell_name + " pour " + std::to_string(purchase->amount)+"$ ?");
     this->view->setCellRound(true);
     this->view->message_box.addString("Si vous ne l'achetez pas, des encheres debuteront");
-}
-
-void GameGUIController::askAuctionGU(const std::string& response){
-    if (! this->model->isMyTurn()){
-        this->view->message_box.setString("Des encheres vont debuter"); 
-        this->view->setJoinAuctionRound(true);
-    }
 }
 
 
