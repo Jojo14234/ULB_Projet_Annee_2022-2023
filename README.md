@@ -120,8 +120,9 @@ Le joueur possédant la propriété souhaité, aura **15 secondes** pour accepte
 `/accept`  
 `/refuse`
 
-## Participer à une enchère et enchérir 
-`/participate` -> `/bid [somme_proposé]`
+## Quitter une enchère ou enchérir 
+`/out`
+`/bid [somme_proposé]`
 
 
 
