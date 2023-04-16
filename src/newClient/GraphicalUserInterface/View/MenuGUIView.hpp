@@ -109,6 +109,23 @@ public:
 		join_popup.draw(*window);
 	}
 
+	std::string getCreateCmd() {
+		// /create [mode] [startMoney] [MaxPlayer] [MaxHome]
+		std::string cmd = "/create";
+		std::vector<std::string> game_parameters;
+		std::vector<std::unique_ptr<Selector>> selectors = create_popup.getAllSelectors();
+		for (auto &selector: selectors) {
+			game_parameters.push_back(selector->getActualString());
+		}
+		// mode
+		std::string mode = game_parameters.at(1) == "Mode classique" ? "normal" : "fast";
+		std::string start_money = "1500";
+		std::string max_player = game_parameters.at(0);
+
+		return cmd;
+
+	}
+
 	friend class MenuGUIController;
 
 };

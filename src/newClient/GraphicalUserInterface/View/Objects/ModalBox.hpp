@@ -29,7 +29,7 @@ protected:
 	std::vector<std::unique_ptr<InputBox>> inputs;
 
 	std::vector<std::unique_ptr<Selector>> selectors;
-	//std::vector<std::unique_ptr<DirectionImButton>> dir_buttons;
+
 public:
 
 	explicit ModalBox(ObjectInfo<> info, sf::Color color=sf::Color::Black) : AbstractViewObject(info), Box(info, color) {}
@@ -66,6 +66,7 @@ public:
 	ImageButton* getButton(int index) { return buttons[index].get(); }
 	InputBox* getInput(int index) { return inputs[index].get(); }
 	Selector* getSelector(int index) { return selectors[index].get(); }
-	//DirectionImButton* getDirButton(int index) { return dir_buttons[index].get(); }
+	std::vector<std::unique_ptr<Selector>> getAllSelectors() { return this->selectors; } 
+
 
 };

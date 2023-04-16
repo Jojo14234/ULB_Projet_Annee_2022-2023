@@ -38,7 +38,7 @@ public:
 	}
 
 	void update(int change) override {
-		this->actual_idx = (this->actual_idx + change + choices_size) % choices_size;
+		this->actual_idx = (((this->actual_idx + change)% choices_size) +choices_size) % choices_size;
 		this->changeText();
 	}
 
@@ -59,6 +59,10 @@ public:
 
     void changeText(){
     	this->text.setString(choices.at(actual_idx));
+    }
+
+    std::string getActualString() {
+    	return this->choices.at(this->actual_idx);
     }
 
 };

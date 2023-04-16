@@ -30,8 +30,9 @@ void MenuGUIController::handle(sf::Event event) {
 			// back button
 			this->view->create_popup.setHidden();
 		} else if (this->view->create_popup.getButton(1)->contains(event.mouseButton.x, event.mouseButton.y)) {
-			// TODO
 			// ok button
+			std::string cmd = this->view.getCreateGame();
+			this->model->sendCommand(MainInputParser{cmd});
 		} else if (this->view->create_popup.getSelector(0)->getLButton()->contains(event.mouseButton.x, event.mouseButton.y)) {
 			//left 
 			this->view->create_popup.getSelector(0)->getLButton()->click();
