@@ -17,18 +17,18 @@ class ScrollBox: public AbstractViewObject {
 
 	std::vector<std::unique_ptr<Drawable>> objects;
 	short scroll=0;
-
+	double size;
 
 	void updateObjects() {
 
 	}
 
 
-public: 
+public:
 
-	ScrollBox(ObjectInfo<> info) : AbstractViewObject(info) {
-
-	} 
+	ScrollBox(ObjectInfo<> info, double size) : AbstractViewObject(info), size(size) {
+		
+	}
 
 
 	void addObject(Drawable* obj) {
