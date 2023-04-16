@@ -97,7 +97,7 @@ void GameCUIController::receiveMsgLoop() { // todo il faudrait pas déplacer les
             case QUERY::INFOS_MORTGAGEABLE_PROP :       this->mortgagePropertyGU(response); break;
             case QUERY::INFOS_LIFT_MORTGAGEABLE_PROP :  this->unmortgagePropertyGU(response); break;
             case QUERY::INFOS_EXCHANGEABLE_PROP :       this->exchangePropertyGU(response); break;            
-            case QUERY::INFOS_LEAVE_SELECTION_MODE :    this->leaveSelectionMenuGU(response); break;
+            case QUERY::INFOS_LEAVE_SELECTION_MODE :    this->leaveSelectionMenuGU(); break;
 
             case QUERY::INFOS_BUILD_SUCCESS :
             case QUERY::INFOS_SELL_BUILD_SUCCESS :      this->buildOrSellSucceedGU(response); break;
@@ -446,7 +446,7 @@ void GameCUIController::unmortgagePropertyGU(const std::string& response){
     } else this->view->getConsole()->addText("Consultation des proprietes a deshypotequer ...");
 }
 
-void GameCUIController::leaveSelectionMenuGU(const std::string& response){
+void GameCUIController::leaveSelectionMenuGU(){
     for (auto& property : selection_mode) {
         int index = this->view->getBoard()->getCellIndex(property);
         this->view->getBoard()->leaveSelection(index);
@@ -498,12 +498,6 @@ void GameCUIController::askForPurchaseGU(const std::string& response){
     this->view->getConsole()->addText("Acheter " + purchase->cell_name + " pour " + std::to_string(purchase->amount)+"$ ?");
     this->view->getConsole()->addText("/yes ou /no");
     this->view->getConsole()->addText("Si vous ne l'achetez pas, des encheres debuteront");
-}
-
-void GameCUIController::askAuctionGU(const std::string& response){
-    if (! this->model->isMyTurn()){
-        this->view->getConsole()->addText("Des encheres vont debuter, pour y participer : /participate");
-    }
 }
 
 void GameCUIController::startAuctionGU(const std::string& response){

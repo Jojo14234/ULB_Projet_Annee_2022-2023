@@ -289,7 +289,7 @@ void GameServer::clientTurn(ClientManager &client, Player* me) {
 
             // Lancement enchère si c'est une case achetable + si personne ne la possède
             LandCell* landCell = dynamic_cast<LandCell*>(me->getCurrentCell());
-            if ( landCell && !landCell->getLand()->getOwner() ) { this->processAuction(client, me, landCell->getLand()); }
+            if ( landCell && !landCell->getLand()->getOwner() ) { this->processAuction(me, landCell->getLand()); }
 
             // Vérification si le joueur est en faillite
 
@@ -578,17 +578,6 @@ void GameServer::processAskExchange(ClientManager &client, Player *player) {
     }
 }
 
-
-/*void GameServer::processAskAuction(ClientManager &client, Player *player) {
-    std::cout << "tic tac " << player->getUsername() << std::endl;
-    sleep(MAX_WAIT_AUCTION);
-    if (player->getStatus() == PLAYER_STATUS::ASK_AUCTION) {
-        std::cout << "aaaaaa " << std::endl;
-        this->updateThisClientWithQuery(QUERY::STOP_WAIT, "/refuse", client);
-        player->setStatus(PLAYER_STATUS::FREE);
-    }
-}*/
-
 void GameServer::processAskBid(ClientManager &client, Player *player) {
     //std::cout << "tic tac toe " << std::endl;
     player->setStatus(PLAYER_STATUS::OTHER);
@@ -598,7 +587,7 @@ void GameServer::processAskBid(ClientManager &client, Player *player) {
     }
 }
 
-void GameServer::processAuction(ClientManager &client, Player *me, Land* land) {
+void GameServer::processAuction(Player *me, Land* land) {
     // Passer tout les joueurs autre que me en status in_auction
     // récupérer un /participate et les ajouter à un vecteur
     // boucler un a un sur leur offres
@@ -707,15 +696,15 @@ void GameServer::suspectBankrupt(Player *player) {
 void GameServer::processBankruptByGame(ClientManager &client, Player *player) {
     for ( auto property : player->getAllProperties() ) {
         property->reset();
-        this->processAuction(client, player, property);
+        this->processAuction(player, property);
     }
     for ( auto station : player->getAllStations() ) {
         station->reset();
-        this->processAuction(client, player, station);
+        this->processAuction(player, station);
     }
     for ( auto company : player->getAllCompanies() ) {
         company->reset();
-        this->processAuction(client, player, company);
+        this->processAuction(player, company);
     }
 }
 
