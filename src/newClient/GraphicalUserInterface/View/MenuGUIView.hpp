@@ -113,8 +113,8 @@ public:
 		// /create [mode] [startMoney] [MaxPlayer] [MaxHome]
 		std::string cmd = "/create";
 		std::vector<std::string> game_parameters;
-		std::vector<std::unique_ptr<Selector>> selectors = create_popup.getAllSelectors();
-		for (auto &selector: selectors) {
+		const std::vector<std::unique_ptr<Selector>>& selectors = create_popup.getAllSelectors();
+		for (const auto& selector : selectors) {
 			game_parameters.push_back(selector->getActualString());
 		}
 		// mode

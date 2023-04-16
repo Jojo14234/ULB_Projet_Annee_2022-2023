@@ -66,7 +66,6 @@ public:
 	ImageButton* getButton(int index) { return buttons[index].get(); }
 	InputBox* getInput(int index) { return inputs[index].get(); }
 	Selector* getSelector(int index) { return selectors[index].get(); }
-	std::vector<std::unique_ptr<Selector>> getAllSelectors() { return this->selectors; } 
-
+	const std::vector<std::unique_ptr<Selector>> &getAllSelectors() { return this->selectors; } 
 
 };
