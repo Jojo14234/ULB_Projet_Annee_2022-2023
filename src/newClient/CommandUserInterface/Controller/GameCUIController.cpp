@@ -109,17 +109,13 @@ void GameCUIController::receiveMsgLoop() { // todo il faudrait pas déplacer les
             case QUERY::ASK_EXCHANGE :                  this->askExchangeGU(response); break;
             case QUERY::CONFIRM_EXCHANGE_ASKING :       this->confirmExchangeAskingGU(response); break;
 
-            case QUERY::ASK_AUCTION :                   this->askAuctionGU(response); break;
             case QUERY::INFOS_AUCTION_START :           this->startAuctionGU(response); break;
             case QUERY::INFOS_AUCTION_BID :             this->auctionBidGU(response); break;
             case QUERY::INFOS_AUCTION_END :             this->endAuctionGU(response); break;
-            case QUERY::CONFIRM_PARTICIPATION :         this->view->getConsole()->addText("Vous participerez au encheres !"); break;
+            case QUERY::WAIT_YOUR_TURN :                this->view->getConsole()->addText("Votre tour d'enchère a prit fin, attendez le suivant."); break;
             case QUERY::BAD_AMOUNT :                    this->view->getConsole()->addText("Le montant entre n'est pas correct"); break;
             case QUERY::NOT_ENOUGH_MONEY_TO_PARTICIPATE:this->view->getConsole()->addText("Vous n'avez plus assez d'argent pour continuer a participer."); break;
             case QUERY::LEAVE_BID:                      this->view->getConsole()->addText("Vous avez abandonne les encheres"); break;
-            case QUERY::WAITING_FOR_PLAYER_ANSWER:      { this->view->getConsole()->addText("Une proposition d'encheres a ete envoyee aux autres joueurs");
-                                                          this->view->getConsole()->addText("Veuillez patienter jusqu'a la fin des encheres."); break;
-                                                        }
 
             case QUERY::INFOS_PLAYER_DIDNT_BUY :        if (response != this->model->getUsername()) { this->view->getConsole()->addText("Le joueur " + response + " n'a pas achete la propriete"); } break;
             case QUERY::INFOS_PLAYER_MOVE_ON_OWN_CELL : if (this->model->isMyTurn()) { this->view->getConsole()->addText("Vous etes chez vous."); } break;
@@ -140,7 +136,7 @@ void GameCUIController::receiveMsgLoop() { // todo il faudrait pas déplacer les
 
             case QUERY::EXCHANGE_REFUSED :              this->view->getConsole()->addText("L'echange a ete refuse"); break;
             case QUERY::INFOS_NOT_ENOUGH_MONEY :        this->view->getConsole()->addText("Vous ne possedez pas assez d'argent."); break;
-            case QUERY::STOP_WAIT :                     this->view->getConsole()->addText("Pas assez rapide. L'offre a été automatiquement annulee"); break;
+            case QUERY::STOP_WAIT :                     this->view->getConsole()->addText("Pas assez rapide. L'offre a été automatiquement annulee"); this->model->sendCommand(GameInputParser{response}); break;
             default :                                   this->view->getConsole()->addText(response); break;
         }
     }
@@ -520,11 +516,14 @@ void GameCUIController::auctionBidGU(const std::string& response){
     if (bet.player != ""){
         this->view->getConsole()->addText(bet.player + " est sur le point d'acheter le terrain pour : " + std::to_string(bet.amount) + "$");
     }
-    else this->view->getConsole()->addText("Le prix de depart est : " + std::to_string(bet.amount) + "$ !");
-    if (! this->model->isMyTurn()) this->view->getConsole()->addText("/bid pour surencherir, /out pour vous arreter");
+    else this->view->getConsole()->addText("Le prix d'achat est actuellement de : " + std::to_string(bet.amount) + "$ !");
+    if (! this->model->isMyTurn() && bet.player == "") this->view->getConsole()->addText("/bid pour surencherir, /out pour vous arreter");
 }
 
 void GameCUIController::endAuctionGU(const std::string& response){
     EndAuctionInfo end(response);
-    this->view->getConsole()->addText(end.player + " remporte " + end.property + " pour " + std::to_string(end.amount) + "$ !");
+    if (end.player != ""){
+        this->view->getConsole()->addText(end.player + " remporte " + end.property + " pour " + std::to_string(end.amount) + "$ !");
+    }
+    else this->view->getConsole()->addText("Personne ne remporte " + end.property + ".");
 }

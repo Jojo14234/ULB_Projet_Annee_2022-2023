@@ -475,38 +475,17 @@ ExchangeResult Capitalist::processSendExchangeRequest(Player *player, std::strin
     return ExchangeResult::NON_CHOICE;
 }
 
-std::vector<Player*> Capitalist::processAskAuction(Player *player, std::string &name) {
-
-    // ENVOYER DEMANDE DE PARTICIPATION AU CLIENT
+std::vector<Player*> Capitalist::startAuction(Player *player) {
+    // ON INSCRIT LES JOUEURS
+    std::vector<Player*> participants;
     for (auto &other : this->players ) {
         if ( &other != player ) {
-            other.setStatus(PLAYER_STATUS::ASK_AUCTION);
-            other.getClient()->sendQueryMsg(name, QUERY::ASK_AUCTION);
-        }
-    }
-
-    std::vector<Player*> participants;
-    GAME_QUERY_TYPE query;
-    // RÉCUPÉRER LES PARTICIPANTS
-    for ( auto &other : this->players ) {
-        std::cout << "PLAYER=" << other.getUsername() << std::endl;
-        if (&other != player) {
-            other.getClient()->receive(query);
-            if ( query == GAME_QUERY_TYPE::PARTICIPATE) {
-                std::cout << "PLAYER=" << other.getUsername() << " participate" << std::endl;
-                other.getClient()->sendQueryMsg("", QUERY::CONFIRM_PARTICIPATION);
-                other.setStatus(PLAYER_STATUS::WAITING_FOR_AUCTION_TURN);
-                participants.push_back(&other);
-            }
-            else {
-                std::cout << "Player " + other.getUsername() + " doesn't participate in auction" << std::endl;
-                other.setStatus(PLAYER_STATUS::FREE);
-            }
+            participants.push_back(&other);
+            other.setStatus(PLAYER_STATUS::WAITING_FOR_AUCTION_TURN);
         }
     }
     return participants;
 }
-
 
 void Capitalist::shufflePlayers() {
     std::random_device rd;  // Will be used to obtain a seed for the random number engine

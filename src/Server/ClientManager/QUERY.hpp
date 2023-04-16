@@ -72,18 +72,16 @@ enum class QUERY {
     INFOS_EXCHANGE_SUCCESS, // property_name:new_proprio_index  [string]:[int]
 
     INFOS_AUCTION_START, //name:price [string]:[int]
-    INFOS_AUCTION_BID, //player:price [string]:[int]
-    CONFIRM_PARTICIPATION,
+    INFOS_AUCTION_BID, //(player):price ([string]):[int]
+    WAIT_YOUR_TURN,
     BAD_AMOUNT,
     NOT_ENOUGH_MONEY_TO_PARTICIPATE,
     LEAVE_BID,
-    WAITING_FOR_PLAYER_ANSWER,
-    INFOS_AUCTION_END, //player:property_name:price [string]:[string]:[int]
+    INFOS_AUCTION_END, //(player):property_name:price ([string]):[string]:[int]
 
     ASK_EXCHANGE, // property_name:price:sender_username [string]:[int]:[string] // envoyé au propriétaire de la case pour lui demander si il souhaite accepter l'échange ou non
     CONFIRM_EXCHANGE_ASKING,
     EXCHANGE_REFUSED,
-    ASK_AUCTION, // property_name // envoyé à tout les joueurs pour leur demander de participer à l'enchère
     STOP_WAIT, // Arrête l'échange ou l'enchère en cas de trop longue attente (NE PAS MODIF NI PARSE autrement DANS LE CLIENT)
 
     INFOS_DEBT, // amount:username // Montant à rembourser à une joueur [int]:[string], si le username = BANK, c'est qu'il doit de l'argent à la banque
