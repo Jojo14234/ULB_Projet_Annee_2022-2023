@@ -43,7 +43,7 @@ public:
 
     std::string regroup(int idx_b, int idx_e, char join = ' ' ) {
         std::string ret = "";
-        if ( idx_b > this->size() || idx_e > this->size() || idx_b > idx_e ) return ret;
+        if (idx_b > this->size() || idx_e > this->size() || idx_b > idx_e ) return ret;
         for ( int idx = idx_b; idx <= idx_e; idx++ ) {
             ret += this->inputs[idx] + join;
         }

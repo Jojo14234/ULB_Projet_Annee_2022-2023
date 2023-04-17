@@ -18,6 +18,7 @@ class MenuGUIController: public AbstractGUIController {
 
 	MenuGUIView* view;
 	SubjectGUIController* friend_controller;
+	SubjectGUIController* game_controller;
 
 public: 
 	
@@ -29,6 +30,8 @@ public:
 
 	// SETTERS
 	void setFriendController(SubjectGUIController* friend_controller) { this->friend_controller = friend_controller; }
+
+	void setGameController(SubjectGUIController* game_controller) { this->game_controller = game_controller; }
 	
 	// ...
 

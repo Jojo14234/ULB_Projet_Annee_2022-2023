@@ -5,6 +5,7 @@
 #include "../../Model/Client.hpp"
 
 
+
 void GameGUIController::handle(sf::Event event) {
     if (event.type != sf::Event::MouseButtonPressed) return;
             if(this->view->button_mode == "start_game"){
@@ -121,6 +122,7 @@ void GameGUIController::handle(sf::Event event) {
 
 void GameGUIController::receiveMsgLoop() { // todo il faudrait pas déplacer les fonction appeler par celle-ci dans le view ?
     while (this->new_state == STATE::GAME){
+       
         std::string response;
         QUERY query = this->model->receive(response);
 
@@ -175,7 +177,7 @@ void GameGUIController::receiveMsgLoop() { // todo il faudrait pas déplacer les
             case QUERY::INFOS_PLAYER_MOVE_ON_OWN_CELL : if (this->model->isMyTurn()) { this->view->message_box.setString("Vous etes chez vous."); } break;
             case QUERY::BAD_COMMAND :                   if (this->model->isMyTurn()) { this->view->message_box.setString("Vous ne pouvez pas utiliser cette commande"); } break;
 
-            case QUERY::CHOICE_MONEY_CARD :             this->choiceSpeCard(); break;
+            case QUERY::CHOICE_MONEY_CARD :             this->view->setCardSpeRound(true); break;
             case QUERY::NO_BUILDABLE_PROP :             this->view->message_box.setString("Vous n\'avez pas de terrain pouvant avoir de nouveaux batiments"); break;
             case QUERY::NO_SALABLE_PROP :               this->view->message_box.setString("Vous n\'avez pas de terrain pouvant etre vendu"); break;
             case QUERY::NO_MORTGAGEABLE_PROP :          this->view->message_box.setString("Vous n\'avez pas de terrain pouvant etre hypoteque"); break;
@@ -196,7 +198,18 @@ void GameGUIController::receiveMsgLoop() { // todo il faudrait pas déplacer les
     }
 }
 
+void GameGUIController::playerJoinUpdate(){ 
+    //this->view->getInfo()->setPlayersInGame(game_info->player_usernames); à rajouter
+     this->view->message_box.setString("Un joueur a rejoint le lobby");
+}
 
+void GameGUIController::update() { this->initGame();}
+
+void GameGUIController::initGame() {
+    // create a thread to receive messages
+    std::thread send_thread(&GameGUIController::receiveMsgLoop, this);
+    send_thread.detach();
+}
 
 
 void GameGUIController::initScreen(int gamecode) {
@@ -206,10 +219,10 @@ void GameGUIController::initScreen(int gamecode) {
         this->view->gamecode_box.setVisible();
         this->view->gamecode_box.setGamecode(gamecode);
         this->view->message_box.setString("Vous êtes le propriétaire de cette partie, utilisez /start pour lancer la partie");
-        this->view->message_box.addString("Utilisez /start pour lancer la partie");
         this->view->setStartGame(true);
     }
     else {
+        this->view->gamecode_box.setVisible();
         this->view->gamecode_box.setGamecode(gamecode);
         this->view->message_box.setString("En attente du lancement de la partie...");
     }
@@ -225,7 +238,6 @@ void GameGUIController::startGame(int beginner) {
         this->model->startTurn();
         //rajouter sons - début game
     }
-
     this->view->board.setColorNumber(player_nb);
     this->view->info_box.initMoney(player_nb,1500);
     this->view->info_box.initJailcard(player_nb,0);
@@ -233,17 +245,6 @@ void GameGUIController::startGame(int beginner) {
         this->view->board.setPlayer(0, i);
         this->view->info_box.setPseudo(i,players_username[i]);}
 }
-
-void GameGUIController::choiceSpeCard(){
-    this->view->setCardSpeRound(true);
-
-}
-
-void GameGUIController::playerJoinUpdate(){ 
-    //this->view->getInfo()->setPlayersInGame(game_info->player_usernames); à rajouter
-     this->view->message_box.setString("Un joueur a rejoind le lobby");
-}
-
 
 
 
@@ -253,21 +254,19 @@ void GameGUIController::playerJoinUpdate(){
 
 void GameGUIController::createGameGU(const std::string& response) {
     GameLaunchingParser launching_parser(response);
-    std::shared_ptr<JoinInfo> join_info = launching_parser.parseCreateQuery();
-    player_nb = join_info->nb_player;
-    players_username = join_info->player_usernames;
-    this->initScreen(join_info->game_code);
-    this->playerJoinUpdate();
+    game_info = launching_parser.parseCreateQuery();
+    this->model->createGame();
+    std::cout << "aaaaaaa" << std::endl;
+    this->initScreen(game_info->game_code);
+    //this->playerJoinUpdate();
 }
 
 
 void GameGUIController::joinGameGU(const std::string& response) {
     GameLaunchingParser launching_parser(response);
-    std::shared_ptr<JoinInfo> join_info = launching_parser.parseJoinQuery();
-    player_nb = join_info->nb_player;
-    players_username = join_info->player_usernames;
-    this->initScreen(join_info->game_code);
-    this->playerJoinUpdate();
+    game_info = launching_parser.parseJoinQuery();
+    this->initScreen(game_info->game_code);
+    //this->playerJoinUpdate();
 }
 
 

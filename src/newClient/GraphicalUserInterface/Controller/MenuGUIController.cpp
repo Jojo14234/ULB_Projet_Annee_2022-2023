@@ -38,7 +38,12 @@ void MenuGUIController::handle(sf::Event event) {
                 // back button
                 if (this->doJoinPopUpNBtnContain(0, event)) { this->view->join_popup.setHidden(); break; }
                 // ok button
-                if (this->doJoinPopUpNBtnContain(1, event)) { break; /*TODO*/ }
+                if (this->doJoinPopUpNBtnContain(1, event)) {
+					std::string game_code = "/join " + this->view->join_popup.getInput(0)->getText();
+    				this->model->sendCommand(MainInputParser{game_code});
+					this->new_state = STATE::GAME;
+					this->game_controller->update();
+					break; /*TODO*/ }
 
                 // Other
                 this->view->join_popup.getInput(0)->deselect();
@@ -107,9 +112,10 @@ void MenuGUIController::createPopUpClick(int n, bool right_side) {
 }
 
 void MenuGUIController::createProcess() {
-    std::string game_code = "/join " + this->view->join_popup.getInput(0)->getText();
-    this->model->sendCommand(MainInputParser{game_code});
-    //this->new_state = STATE::GAME;
+    std::string cmd = this->view->getCreateCmd();
+	this->model->sendCommand(MainInputParser{cmd});
+	this->new_state = STATE::GAME;
+	this->game_controller->update();
 }
 
 bool MenuGUIController::doJoinPopUpNBtnContain(int n, sf::Event event) {

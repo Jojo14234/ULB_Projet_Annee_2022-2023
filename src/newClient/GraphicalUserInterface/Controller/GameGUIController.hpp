@@ -7,7 +7,10 @@
 #include <SFML/Window.hpp>
 
 #include "AbstractGUIController.hpp"
+#include "SubjectGUIController.hpp"
+
 #include "../configs.hpp"
+#include <thread>
 
 
 #include "../../Model/QueryParser/GameLaunchingParser.hpp"
@@ -17,7 +20,7 @@
 class Client; // forward declaration
 class GameGUIView; // forward declaration
 
-class GameGUIController: public AbstractGUIController {
+class GameGUIController: public AbstractGUIController, public SubjectGUIController{
 
 	int player_nb;
 	std::vector<std::string> players_username;
@@ -90,6 +93,8 @@ public:
 
     //todo add from n-curse
     void playerJoinUpdate();
+
+	void update() override;
 
 	
 

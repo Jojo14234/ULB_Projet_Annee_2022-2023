@@ -223,8 +223,6 @@ public:
 
 		hideAllButton();
 
-	
-
 		gamecode_box.setHidden();
 		logo.setHidden();
 		card_text.setHidden();
