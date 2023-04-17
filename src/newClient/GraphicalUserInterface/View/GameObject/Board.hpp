@@ -51,7 +51,8 @@ class Board{
 	Image cyan{ObjectInfo<>(15,15,0,0), PLAYER_CYAN };
 
 	std::vector<Image*> player_color;
-	std::vector<std::string> player_color_names;
+	std::vector<std::string> player_color_names{"red","blue","yellow","green","magenta","cyan"};
+	int player_nb;
 
 
 	void loadCellNames();
@@ -65,18 +66,35 @@ public:
 		this->loadCellNames();
 		this->loadCellFile();
 		this->createBoard();
-
 		}
 	
     void draw(sf::RenderWindow &window);
 	int getCellIndex(std::string cell);
 
-	void setColorNumber(std::vector<std::string> color_list);
+	void setColorNumber(int n_player);
+	void setPlayer(int cell, int player);
 	void movePlayer(int cell, int player);
 
 	void setIdle(int cell);
 	void setPurchased(int cell, int player);
 	void setHouse(int cell, int house_nb);
+
+
+	void setAllGrayed();
+	void setBuildable(int cell);
+	void setSalable(int cell);
+	void setMortgageable(int cell);
+	void setUnmortgageable(int cell);
+	void setExchangeable(int cell);
+
+	void leaveSelection(int cell);
+	void unsetAllGrayed();
+
+	void setMortgaged(int cell);
+
+	void unmortgage(int cell);
+
+	std::array<std::shared_ptr<Cell>, gamebox_nb>* getBoardButton();
 
 
 };

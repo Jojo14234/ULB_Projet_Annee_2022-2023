@@ -12,14 +12,18 @@
 #include "Objects/ImageButton.hpp"
 #include "GameObject/AuctionBox.hpp"
 #include "GameObject/MessageBox.hpp"
+#include "GameObject/Dice.hpp"
+#include "GameObject/GamecodeBox.hpp"
 
 class GameGUIController; // forward declaration
 
 class GameGUIView: public AbstractGUIView {
 	Board board;
-	InfoBox info_box{ObjectInfo<>(400, 400,window->getSize().x -400,window->getSize().y - 350)};
+	InfoBox info_box{ObjectInfo<>(400, 400,window->getSize().x -400,window->getSize().y - 400)};
 
 	Box button_zone{ObjectInfo<>(300, window->getSize().y,0,0), sf::Color::Red };
+
+	ImageButton startgame_button{ObjectInfo<>(200, 150 ,50,window->getSize().y/6*0  ), START_BUTTON};
 
 	ImageButton mortgage_button{ObjectInfo<>(200, 150 ,50,window->getSize().y/6*0  ), MORTGAGE_BUTTON};
 	ImageButton unmortgage_button{ObjectInfo<>(200, 150 ,50, window->getSize().y/6 *1 ), UNMORTGAGE_BUTTON};
@@ -31,9 +35,8 @@ class GameGUIView: public AbstractGUIView {
 	ImageButton buy_button{ObjectInfo<>(200, 150 ,50,window->getSize().y/2*0  ), BUY_BUTTON};
 	ImageButton no_buy_button{ObjectInfo<>(200, 150 ,50,window->getSize().y/2*1  ), NOBUY_BUTTON};
 
-	ImageButton draw_card_button{ObjectInfo<>(200, 150 ,50,0  ), DRAWCARD_BUTTON};
-
-	ImageButton paid_button{ObjectInfo<>(200, 150 ,50,0 ), PAID_BUTTON};
+	ImageButton draw_card_button{ObjectInfo<>(200, 150 ,50,window->getSize().y/2*0  ), DRAWCARD_BUTTON};
+	ImageButton paid_button{ObjectInfo<>(200, 150 ,50,window->getSize().y/2*1 ), PAID_BUTTON};
 
 	ImageButton paid_prison_button{ObjectInfo<>(200, 150 ,50,0 ), PAID_BUTTON};
 	ImageButton roll_dice_prison_button{ObjectInfo<>(200, 150 ,50,window->getSize().y/3*1 ), ROLLDICE_BUTTON};
@@ -44,6 +47,10 @@ class GameGUIView: public AbstractGUIView {
 
 	ImageButton sell_bankrupt_button{ObjectInfo<>(200, 150 ,50,window->getSize().y/3*0 ), SELL_BUTTON};
 	ImageButton give_up_button{ObjectInfo<>(200, 150 ,50,window->getSize().y/3*1 ), FORFAIT_BUTTON};
+
+	ImageButton leave_button{ObjectInfo<>(200, 150 ,50,window->getSize().y/3*1) ,LEAVE_BUTTON};
+
+	ImageButton participate_button{ObjectInfo<>(200, 150 ,50,window->getSize().y/3*1) ,PARTICIPATE_BUTTON};
 	
 	std::vector<std::string> colorlist{"red","blue","green","cyan","magenta","yellow"};   //pour tester à enlever
 
@@ -52,7 +59,27 @@ class GameGUIView: public AbstractGUIView {
 	std::string button_mode = "";
  
 	MessageBox message_box{ObjectInfo<>(800,60,350,5)};  //zone en haut qui affiche les actions des joueurs
+
+	GamecodeBox gamecode_box{ObjectInfo<>(400,200,550,200)};
+
+	Dice dice;
+
+	Image logo {ObjectInfo<>(615,200,450,200),LOGO_PATH};
+	Image card_zone{ObjectInfo<>(390,300,560,500),CARD_TEXT};
+	Text card_text{ObjectInfo<>(0,15,590,600),""};
+	Text card_title{ObjectInfo<>(0,34,585,600),"    CHANCE et\nCAISSE DE COMMU"};
+
+	bool board_click = false;
 	// Objects
+
+	void setStartGame(bool visible){
+		if (visible == false){
+			button_mode = "";
+			startgame_button.setHidden();}
+		else {
+			hideAllButton();
+			button_mode = "start_game";
+			startgame_button.setVisible();}}
 
 	void setStartRound(bool visible){
 		if (visible == false){
@@ -74,7 +101,7 @@ class GameGUIView: public AbstractGUIView {
 			roll_dice_button.setVisible();}}
 
 
-	void setEmptyCellRound(bool visible){
+	void setCellRound(bool visible){
 		if (visible == false){
 			button_mode = "";
 			buy_button.setHidden();
@@ -85,25 +112,17 @@ class GameGUIView: public AbstractGUIView {
 			buy_button.setVisible();
 			no_buy_button.setVisible();}}
 
-	void setOppCellRound(bool visible){
+	void setCardSpeRound(bool visible){
 		if (visible == false){
 			button_mode = "";
-			paid_button.setHidden();}	
+			paid_button.setHidden();
+			draw_card_button.setHidden();}	
 		else{
 			hideAllButton();
-			button_mode = "paid_cell";
-			paid_button.setVisible();}}
-	
-	void setCardCellRound(bool visible){
-		if (visible == false){
-			button_mode = "";
-			draw_card_button.setHidden();}
-		else{
-			hideAllButton();
-			button_mode = "card_cell";
+			button_mode = "specard_cell";
+			paid_button.setVisible();
 			draw_card_button.setVisible();}}
-		
-
+	
 	void setPrisonRound(bool visible){
 		if (visible == false){
 			button_mode = "";
@@ -154,21 +173,43 @@ class GameGUIView: public AbstractGUIView {
 			hideAllButton(); 
 			button_zone.setHidden();
 			button_mode = "auction_round";
-			auction_box.setVisible();
+			auction_box.setVisible();}
+	}
+
+	void setSpeRound(bool visible){
+		if(visible == false){
+			setBoardClickMode(visible);
+			leave_button.setHidden();}
+		else{
+			hideAllButton(); 
+			setBoardClickMode(visible);
+			leave_button.setVisible();
 		}
+	}
+
+	void setJoinAuctionRound(bool visible){
+		if(visible == false){
+			button_mode = "";
+			participate_button.setHidden();}
+		else{
+			hideAllButton(); 
+			button_mode = "participate_round";
+			participate_button.setVisible();}
 	}
 
 	void hideAllButton(){
 
-		//true = hide , false = visible
-	
+		//false = hide , true = visible
+
+		setStartGame(false);
 		setStartRound(false);
-		setEmptyCellRound(false);
-		setOppCellRound(false);
-		setCardCellRound(false);
+		setCellRound(false);
+		setCardSpeRound(false);
 		setPrisonRound(false);
 		setExchangeRound(false);
 		setBankruptRound(false);
+		setSpeRound(false);
+		setJoinAuctionRound(false);
 
 		auction_box.setHidden();
 	}
@@ -177,16 +218,16 @@ public:
 
 	explicit GameGUIView(sf::RenderWindow* window) : AbstractGUIView(window)
 	,board{}{
+		card_title.setBold();
 
-		//test
-		info_box.initMoney(colorlist,1500);
-		info_box.setMoney(4,5200);
-		message_box.setString("C'est le tour de miaou");
 
 		hideAllButton();
 
-		setAuctionRound(true);
 	
+
+		gamecode_box.setHidden();
+		logo.setHidden();
+		card_text.setHidden();
 
 	}
 
@@ -200,11 +241,13 @@ public:
 
 		button_zone.draw(*window);
 
+		drawStartGame();
+
 		drawStartRound();
 
-		drawEmptyCellRound();
-		drawOppCellRound();
-		drawCardCellRound();
+		drawCellRound();
+
+		drawCardSpeRound();
 
 		drawPrisonRound();
 
@@ -212,10 +255,24 @@ public:
 
 		drawBankruptRound();
 
+		drawSpeRound();
+
+		drawJoinAuction();
+
+		gamecode_box.draw(*window);
+		dice.draw(*window);
 		info_box.draw(*window);
 		message_box.draw(*window);
+		
+		logo.draw(*window);
+		card_zone.draw(*window);
+		card_text.draw(*window);
+		card_title.draw(*window);
 		auction_box.draw(*window);
 	}
+
+	void drawStartGame(){
+		startgame_button.draw(*window);}
 
 	void drawStartRound(){
 		mortgage_button.draw(*window);
@@ -225,16 +282,14 @@ public:
 		exchange_button.draw(*window);
 		roll_dice_button.draw(*window);}
 
-	void drawEmptyCellRound(){
+	void drawCellRound(){
 		buy_button.draw(*window);
 		no_buy_button.draw(*window);}
 
-	void drawOppCellRound(){
-		paid_button.draw(*window);}
-
-	void drawCardCellRound(){
+	void drawCardSpeRound(){
+		paid_button.draw(*window);
 		draw_card_button.draw(*window);}
-	
+
 	void drawPrisonRound(){
 		paid_prison_button.draw(*window);
 		roll_dice_prison_button.draw(*window);
@@ -249,9 +304,29 @@ public:
 		sell_bankrupt_button.draw(*window);
 		give_up_button.draw(*window);
 	}
-	void clear();
 
+	void drawSpeRound(){leave_button.draw(*window);}
+
+	void drawJoinAuction(){participate_button.draw(*window);}
+
+	void clear();
 	friend class GameGUIController;
-	//Board* getBoard() { return &board; }
+
+
+//method for setting the game
+
+	void startTurn(){
+		this->dice.setVisible();
+        this->message_box.setString("C'est votre tour!");
+		this->setStartRound(true);
+    }
+
+	void endTurn(){
+        this->dice.setHidden();
+		this->setStartRound(false);
+    }
+
+	void setBoardClickMode(bool clickable){board_click = clickable;}
+
 
 };

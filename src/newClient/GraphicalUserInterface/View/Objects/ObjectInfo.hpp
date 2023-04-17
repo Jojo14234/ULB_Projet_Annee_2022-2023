@@ -16,6 +16,7 @@ class ObjectInfo {
 
 public:
 
+	ObjectInfo()=default;
 	ObjectInfo(T1 sx, T1 sy, T2 px, T2 py) : size_x(sx), size_y(sy), pos_x(px), pos_y(py) {}
 
 	// GETTERS

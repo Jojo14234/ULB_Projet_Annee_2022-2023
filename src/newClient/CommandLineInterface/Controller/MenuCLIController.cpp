@@ -22,7 +22,6 @@ void MenuCLIController::handle(int event) {
     switch (parser.getQuery()) {
         //todo ici voir si le switch est obligatoire
         case QUERY_TYPE::JOIN_GAME : this->model->sendJoinGame(std::stoi(parser[1])); break;
-        case QUERY_TYPE::CREATE_GAME :
         default : this->model->sendCommand(parser);
     }
 

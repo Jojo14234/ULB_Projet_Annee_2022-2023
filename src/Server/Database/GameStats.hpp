@@ -22,7 +22,10 @@ public:
 	}
 
     // Calculate middle score
-    int calculateMiddleScore() const {return this->score/this->played;}
+    int calculateMiddleScore() const {
+        if (this->played == 0) return 0; 
+        else return this->score/this->played;
+    }
 
     // GETTERS
     int getScore() const { return score; }

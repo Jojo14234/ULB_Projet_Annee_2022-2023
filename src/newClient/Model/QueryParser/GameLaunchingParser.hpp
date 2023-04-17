@@ -5,6 +5,7 @@
 #include <vector>
 #include <array>
 #include <memory>
+#include <sstream>
 #include <iostream>
 
 
@@ -67,6 +68,12 @@ struct JoinInfo2 {
 struct JoinInfo {
 	std::string username;
 	int game_code;
+	bool is_fast;
+	int start_money;
+	int max_players;
+	int max_house;
+	int max_hotels;
+	int max_turns;
 	int nb_player;
 	std::vector<std::string> player_usernames;
 };
@@ -90,13 +97,25 @@ public:
 	std::shared_ptr<JoinInfo> parseCreateQuery() {
 		std::shared_ptr<JoinInfo> res = std::make_shared<JoinInfo>();
 		std::string tmp;
-		int i = 0;
-		while (str[i] != ':' ) { tmp += str[i]; i++; }
-		res->username = tmp;
-		res->game_code = atoi(&str[i+1]);
-		res->nb_player = 1; //the game just has been created, there is only one person.
-		res->player_usernames.push_back(tmp); //he is the only person in the game
-		return res;
+		int colon_nb = 0;
+		res->nb_player = 1;
+		for (char c : str){
+			if (c == ':'){
+				switch (colon_nb){
+					case 0: { res->username = tmp; res->player_usernames.push_back(tmp); break;}
+					case 1: { res->game_code = atoi(tmp.c_str()); break;}
+					case 2: { res->is_fast = static_cast<bool>(atoi(tmp.c_str())); break;}
+					case 3: { res->start_money = atoi(tmp.c_str()); break;}
+					case 4: { res->max_players = atoi(tmp.c_str()); break;}
+					case 5: { res->max_house = atoi(tmp.c_str()); break;}
+					case 6: { res->max_hotels = atoi(tmp.c_str()); break;}
+				}
+				colon_nb++;
+				tmp.clear();
+			} else tmp += c;
+		}
+		res->max_turns = atoi(tmp.c_str());
+		return res;		
 	}
 
 
@@ -108,22 +127,28 @@ public:
 	} // todo new
 	std::shared_ptr<JoinInfo> parseJoinQuery() {
 		std::shared_ptr<JoinInfo> res = std::make_shared<JoinInfo>();
-		std::string tmp = "";
+		std::string tmp;
 		int colon_nb = 0;
 		for (char c : str){
 			if (c == ':'){
 				switch (colon_nb){
-					case 0: { res->username = tmp; break;}
-					case 1: { res->game_code = atoi(tmp.c_str()); break;}
-					case 2: { res->nb_player = atoi(tmp.c_str()); break;}
-					default: { res->player_usernames.push_back(tmp); }
+					case 0: { res->username = tmp; break; }
+					case 1: { res->game_code = atoi(tmp.c_str()); break; }
+					case 2: { res->is_fast = static_cast<bool>(atoi(tmp.c_str())); break; }
+					case 3: { res->start_money = atoi(tmp.c_str()); break; }
+					case 4: { res->max_players = atoi(tmp.c_str()); break; }
+					case 5: { res->max_house = atoi(tmp.c_str()); break; }
+					case 6: { res->max_hotels = atoi(tmp.c_str()); break; }
+					case 7: { res->max_turns = atoi(tmp.c_str()); break; }
+					case 8: { res->nb_player = atoi(tmp.c_str()); break; }
+					default: res->player_usernames.push_back(tmp); break;
 				}
 				colon_nb++;
 				tmp.clear();
 			} else tmp += c;
 		}
 		res->player_usernames.push_back(tmp);
-		return res;
+		return res;		
 	}
 
 

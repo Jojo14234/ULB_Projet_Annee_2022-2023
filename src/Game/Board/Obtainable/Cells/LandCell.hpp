@@ -29,7 +29,7 @@ public:
     Land* getLand() const { return this->land.get(); }
     Player* getOwner() const { return this->land->getOwner(); }
 
-    bool isLandCell() { return true; } //to avoid having to dynamic cast all Cells to check if it's a LandCell
+    bool isLandCell() override { return true; } //to avoid having to dynamic cast all Cells to check if it's a LandCell
 
 };
 

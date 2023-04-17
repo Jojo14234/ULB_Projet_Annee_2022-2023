@@ -22,4 +22,37 @@ public:
 
     void infosGame(GameInfoList &info);
     void newTurn(std::string username);
+    void moveOn(PlayerMoveInfo2 &info);
+    void buyProp(PlayerMoveInfo2 &info);
+    void didntBuy(std::string username);
+    void playerPaidPlayer(PlayerPaidPlayerInfo2 &info);
+    void mortgagedCellMoveOn(MoveMortgagedInfo2 &info);
+    void ownCellMoveOn(std::string username);
+    void taxCellMoveOn(MoveTaxInfo2 &info);
+    void askPurchase(AskForPurchaseInfo2 &info);
+    void getInJail(std::string username);
+    void getOutJail(std::string username);
+
+    void getOutJailCard(std::string username);
+    void UseOutJailCard(std::string username);
+
+    void gainMoney(WonOrLoseMoneyInfo2 &info);
+    void looseMoney(WonOrLoseMoneyInfo2 &info);
+
+    void drawCardMoveOn(MoveOnCardCellInfo2 &info);
+    void drawCardMoveOn(std::string description);
+
+    void joinBuildMode(BuildOrSellList &info);
+    void joinSellMode(BuildOrSellList &info);
+
+    void leaveMode();
+
+    void propInfos(BuildSuccessInfo2 &info);
+
+    void notEnoughMoney();
+
+    void cannotBuild();
+    void dontHavePropBuildable();
+
+    void choiceMoneyCard();
 };

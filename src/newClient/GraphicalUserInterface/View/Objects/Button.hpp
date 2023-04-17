@@ -12,7 +12,7 @@
 
 class Button : public virtual AbstractViewObject {
 public:
-
+	Button()=default;
 	explicit Button(ObjectInfo<> info) : AbstractViewObject(info) {}
 
 	virtual void draw(sf::RenderWindow &window) const override = 0;

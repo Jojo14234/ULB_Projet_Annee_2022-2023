@@ -25,7 +25,7 @@ public:
 
     std::string getName() const { return name; }
 
-    bool isLandCell() { return false; }
+    virtual bool isLandCell() { return false; }
 };
 
 #endif

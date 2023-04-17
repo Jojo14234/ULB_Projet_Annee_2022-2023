@@ -5,45 +5,65 @@
 #include <vector>
 
 #include "AbstractViewObject.hpp"
-#include "ImageButton.hpp"
+#include "DirectionImButton.hpp"
 #include "Text.hpp"
 
 #include "../../configs.hpp"
 #include "../AssetsPath.hpp"
 
-class Selector : public virtual AbstractViewObject {
+#include "observer_struct.hpp"
+
+class Selector : public AbstractViewObject, public Observer {
 	std::vector<std::string> choices;
-	ImageButton left_button;
-	ImageButton right_button;
+	std::vector<DirectionImButton*> buttons;
 	Text text;
-	actual_idx = 0;
+	int actual_idx = 0;
+	int choices_size;
 
 public:
-	Selector(ObjectInfo<> info, std::vector<std::string> str_choices): choices{str_choices} {
+	Selector(ObjectInfo<> info, std::vector<std::string> str_choices,std::vector<DirectionImButton*> buttons): AbstractViewObject(info),choices{str_choices}, buttons{buttons} {
+		for (auto button:buttons) {
+			button->registerObserver(this);
+		}
+
 		this->text = Text{info, choices.at(actual_idx)}; //idx 0
+		this->choices_size = choices.size();
+	}
 
-		float button_size = WINDOW_WIDTH/50.f;
-		float pos_x = info.getX();
-		float pos_y = info.getY() - button_size;
+	~Selector() {
+		for (auto button:buttons) {
+			button->removeObserver(this);
+			delete button;
+		}
+	}
 
-		this->left_button = ImageButton{ObjectInfo<>(button_size, button_size, pos_x-button_size, pos_y)};
-		this->right_button = ImageButton{ObjectInfo<>(button_size, button_size, pos_x-button_size, pos_x+WINDOW_HEIGHT/10.f, pos_y)};
+	void update(int change) override {
+		this->actual_idx = (((this->actual_idx + change)% choices_size) +choices_size) % choices_size;
+		this->changeText();
 	}
 
 	virtual void draw(sf::RenderWindow &window) const override {
         text.draw(window);
-        left_button.draw(window);
-        right_button.draw(window);
+        for (auto button:buttons) {
+			button->draw(window);
+		}
     }
 
-    void clickLeft(){
-    	this->actual_idx = (actual_idx--)%choices.size();
+    DirectionImButton* getLButton() {
+    	return buttons.at(0);
+    }
+
+    DirectionImButton* getRButton() {
+    	return buttons.at(1);
+    }
+
+    void changeText(){
     	this->text.setString(choices.at(actual_idx));
     }
 
-    void clickLeft(){
-    	this->actual_idx = (actual_idx++)%choices.size();
-    	this->text.setString(choices.at(actual_idx));
+    std::string getActualString() {
+    	return this->choices.at(this->actual_idx);
     }
 
-}
+};
+
