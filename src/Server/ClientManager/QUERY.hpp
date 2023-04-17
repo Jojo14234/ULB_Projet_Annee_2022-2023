@@ -88,7 +88,8 @@ enum class QUERY {
     INFOS_DEBT, // amount:username // Montant à rembourser à une joueur [int]:[string], si le username = BANK, c'est qu'il doit de l'argent à la banque
 
     DISCONNECT, // Disconnection
-    RANKING, // Ranking
+    RANKING_TOP, // Ranking TOP
+    RANKING_POS,
     WIN, // username
     ENDGAME, // TO leave the game
 };

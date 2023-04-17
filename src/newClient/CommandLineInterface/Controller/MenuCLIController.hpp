@@ -19,5 +19,10 @@ public:
 
     void handle(int event) override;
 
+    void handleRankingPos(std::string &input);
+
+    void handleRankingTop(std::string &input);
+
+
 };
 

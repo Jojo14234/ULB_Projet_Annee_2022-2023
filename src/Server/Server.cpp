@@ -252,7 +252,8 @@ void Server::clientProcessRankingPos(ClientManager &client) {
 	std::cout << "[Received 'ranking pos' query from client '" << client.getAccount()->getUsername() << "']" << std::endl;
 	std::string pos = std::to_string(database.getRankingPos(client.getAccount()));
     std::string score = std::to_string(client.getAccount()->getStats().getScore());
-	client.send("Votre position dans le classement est " + pos + " avec un score de " + score);
+    std::string user = client.getAccount()->getUsername();
+	client.sendQueryMsg(pos + ":" + user + ":" + score, QUERY::RANKING_POS);
     std::cout << "['ranking pos' query from client '" << client.getAccount()->getUsername() << "' was successful]\n" << std::endl;
 
 }
@@ -265,9 +266,9 @@ void Server::clientProcessRankingTop(ClientManager &client) {
         std::string pos = std::to_string(i+1);
         std::string user = top[i]->getUsername();
         std::string points = std::to_string(top[i]->getStats().getScore());
-		input += pos + ". " + user + " avec " + points + " point(s).\n";
+		input += pos + ":" + user + ":" + points + "|";
 	}
-	client.send(input);
+	client.sendQueryMsg(input, QUERY::RANKING_TOP);
     std::cout << "['ranking top' query from client '" << client.getAccount()->getUsername() << "' was successful]\n" << std::endl;
 
 }
