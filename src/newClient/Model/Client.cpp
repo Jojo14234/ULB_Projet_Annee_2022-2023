@@ -1,4 +1,6 @@
 #include <SFML/Network.hpp>
+#include <string>
+#include <vector>
 
 #include "Client.hpp"
 #include "../../utils/Configs.hpp"
@@ -29,6 +31,12 @@ void Client::sendPacket(sf::Packet &packet) {
 // Public methods
 
 // Send Query to the server
+
+void Client::sendQuery(QUERY_TYPE query) {
+	sf::Packet packet;
+	packet << static_cast<int>(query);
+	this->sendPacket(packet);
+}
 
 // Authentification
 void Client::sendLogin(const std::string &username, const std::string &password) {
@@ -132,4 +140,22 @@ QUERY Client::receive(std::string &output) {
     int tmp;
 	packet >> tmp >> output;
     return static_cast<QUERY>(tmp);
+}
+
+void Client::receiveFriendsInfo(std::vector<std::string> &friends_name, std::vector<std::string> &friends_requests) {
+	sf::Packet packet;
+	if (this->socket.receive(packet) != sf::Socket::Done) { throw ReadPipeClientException(); } // can't read on the socket
+	int friends_nb;
+	int requests_nb;
+	packet >> friends_nb >> requests_nb;
+	for (int i = 0; i < friends_nb; ++i) {
+		std::string name;
+		packet >> name;
+		friends_name.push_back(name);
+	}
+	for (int i = 0; i < requests_nb; ++i) {
+		std::string name;
+		packet >> name;
+		friends_requests.push_back(name);
+	}
 }
