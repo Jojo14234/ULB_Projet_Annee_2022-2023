@@ -32,4 +32,16 @@ public:
 	
 	// ...
 
+    bool doSettingBtnNContain(int n, sf::Event event);
+    bool doSettingBtnNContain(int n, sf::Event event, bool right_side);
+
+    bool doCreatePopUpBtnNContain(int n, sf::Event event);
+    bool doCreatePoUpSelectorNContain(int n, sf::Event event, bool right_side);
+
+    bool doJoinPopUpNBtnContain(int n, sf::Event event);
+
+    void createPopUpClick(int n, bool right_side);
+    void settingPopUpClick(int n, bool right_side);
+
+    void createProcess();
 };
