@@ -33,9 +33,9 @@ bool Land::isMortgageable(Player* player) const {
 void Land::mortgage(Player* player, bool is_fast_game) {
 	this->status = LAND_STATUS::HYPOTEK;
 
-    if (is_fast_game) player->receive(purchase_price * 80 / 100, "hypothèque");
+    if (is_fast_game) player->receive(purchase_price * 80 / 100);
 
-    else player->receive(purchase_price/2, "hypothèque");
+    else player->receive(purchase_price/2);
 }
 /*
  * Le `player` rachète la propriété qui était en hypothèque et la paye moitié prix
@@ -53,7 +53,7 @@ void Land::liftMortgage(Player *player, bool is_fast_game) {
 void Land::exchange(Player *new_owner, int money) {
     this->owner->removeLand(this);
     new_owner->pay(money);
-    this->owner->receive(money, new_owner->getUsername());
+    this->owner->receive(money);
     new_owner->acquireLand(this);
     this->setOwner(new_owner);
 }

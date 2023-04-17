@@ -73,6 +73,8 @@ void GameCUIController::receiveMsgLoop() { // todo il faudrait pas déplacer les
             case QUERY::PLAYER_CREATE_GAME :            this->createGameGU(response); break;
             case QUERY::PLAYER_JOIN_GAME :              this->joinGameGU(response); break;
             case QUERY::INFOS_START :                   this->infoStartGU(response); break;
+            case QUERY::INFOS_NOT_STARTED :             this->view->getConsole()->addText("Pour démarrer la partie ( /start )"); break;
+            case QUERY::INFOS_CANNOT_START :            this->view->getConsole()->addText("Attend tes amis avant de lancer la partie !"); break;
             case QUERY::INFOS_ROLL_DICE :               this->rollDiceGU(response); break;
             case QUERY::INFOS_GAME :                    this->infoGameGU(response); break;
             case QUERY::INFOS_NEW_TURN :                this->newTurnGU(response); break;
@@ -137,8 +139,11 @@ void GameCUIController::receiveMsgLoop() { // todo il faudrait pas déplacer les
 
             case QUERY::EXCHANGE_REFUSED :              this->view->getConsole()->addText("L'echange a ete refuse"); break;
             case QUERY::INFOS_NOT_ENOUGH_MONEY :        this->view->getConsole()->addText("Vous ne possedez pas assez d'argent."); break;
-            case QUERY::STOP_WAIT :                     this->view->getConsole()->addText("Pas assez rapide. L'offre a été automatiquement annulee"); this->model->sendCommand(GameInputParser{response}); break;
+            case QUERY::INFOS_AUTO_OTHER_POSSIBILITY:   this->view->getConsole()->addText("L'autre possibilite a ete automatiquement selectionnee"); break;
+            case QUERY::STOP_WAIT :                     this->view->getConsole()->addText("Pas assez rapide. L'offre a ete automatiquement annulee"); this->model->sendCommand(GameInputParser{response}); break;
             
+            case QUERY::INFOS_DEBT :                    break;
+
             case QUERY::WIN :                           this->endGameGU(response); break;
             case QUERY::ENDGAME :                       break;
             default :                                   this->view->getConsole()->addText(response); break;
@@ -246,7 +251,10 @@ void GameCUIController::infoGameGU(const std::string& response) {
         this->view->getBoard()->movePlayer(player_game_info->at(i).position, i+1);
         for (unsigned int j = 0; j < player_game_info->at(i).properties.size(); j++){
             int index = this->view->getBoard()->getCellIndex(player_game_info->at(i).properties[j].name);
-            if (player_game_info->at(i).properties[j].level == 0){
+            if (player_game_info->at(i).properties[j].mortgage){
+                this->view->getBoard()->setMortgaged(index);
+            }
+            else if (player_game_info->at(i).properties[j].level == 0){
                 this->view->getBoard()->setPurchased(index, i+1);
             }
             else this->view->getBoard()->setHouse(index, player_game_info->at(i).properties[j].level);
@@ -273,13 +281,13 @@ void GameCUIController::playerMoveGU(const std::string& response){
     std::shared_ptr<PlayerMoveInfo> move_info = game_parser.parsePlayerMoveQuery();
     int index = this->view->getBoard()->getCellIndex(move_info->property_name);
     this->view->getBoard()->movePlayer(index, move_info->player);
-    if (move_info->property_name == "Prison" and this->model->isMyTurn()){
+    /*if (move_info->property_name == "Prison" and this->model->isMyTurn()){
         this->view->getConsole()->addText("Vous visitez la prison.");
     } else if (move_info->property_name == "Start" and this->model->isMyTurn()){
         this->view->getConsole()->addText("Vous arrivez sur la case départ.");
     } else if (move_info->property_name == "Parc" and this->model->isMyTurn()){
         this->view->getConsole()->addText("Vous arrivez au parc gratuit.");
-    }
+    }*/
 }
 
 void GameCUIController::playerBoughtGU(const std::string& response){

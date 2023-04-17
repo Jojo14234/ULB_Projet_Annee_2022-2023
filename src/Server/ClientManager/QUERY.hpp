@@ -8,6 +8,8 @@ enum class QUERY {
 
 
     INFOS_START, // See sendStartData in GameServer for formatting
+    INFOS_CANNOT_START,
+    INFOS_NOT_STARTED,
     INFOS_GAME, // See sendGameData in GameServer for formatting
 
     INFOS_NEW_TURN, // pseudo
@@ -33,6 +35,7 @@ enum class QUERY {
     CHOICE_MONEY_CARD, // Informe du choix entre payer ou piocher une carte chance
 
     INFOS_NOT_ENOUGH_MONEY,
+    INFOS_AUTO_OTHER_POSSIBILITY,
     INFOS_ASK_FOR_PURCHASE, // land_name:land_price [string]:[int]
     INFOS_CARD_DESCRIPTION, // description
 

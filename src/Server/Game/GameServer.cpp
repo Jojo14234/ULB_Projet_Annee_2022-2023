@@ -311,8 +311,8 @@ void GameServer::processStart(ClientManager* client) {
     if ( this->game.isRunning() ) { return; }
     GAME_QUERY_TYPE query;
     client->receive(query);
-    if ( query != GAME_QUERY_TYPE::START ) { this->updateThisClientWithQuery(QUERY::MESSAGE,"Pour démarrer la partie ( /start )" ,*client); return; }
-    if ( this->game.getPlayersSize() < 2 ) { this->updateThisClientWithQuery(QUERY::MESSAGE,"Attend tes amis avant de lancer la partie !" ,*client); return; }
+    if ( query != GAME_QUERY_TYPE::START ) { this->updateThisClientWithQuery(QUERY::INFOS_NOT_STARTED, "" ,*client); return; }
+    if ( this->game.getPlayersSize() < 2 ) { this->updateThisClientWithQuery(QUERY::INFOS_CANNOT_START, "" ,*client); return; }
     this->game.startGame();
     this->sendStartData();
 }
@@ -344,6 +344,7 @@ void GameServer::processRollDice(ClientManager &, Player *player) {
     new_cell->action(player);
 }
 
+//a
 void GameServer::processJail(ClientManager &client, Player *player) {
     // Informer de ses droit :
     // - Soit lancer les dés et faire un double
@@ -353,12 +354,23 @@ void GameServer::processJail(ClientManager &client, Player *player) {
     // TODO tester la /use
     this->playerInJailInfos(client);
     GAME_QUERY_TYPE query;
-    client.receive(query);
-    switch (query) {
-        case GAME_QUERY_TYPE::PAY :         this->game.processJailPay(player); break;
-        case GAME_QUERY_TYPE::USEGOOJCARD : this->game.processJailUseCard(player); break;
-        case GAME_QUERY_TYPE::ROLL_DICE :   this->game.processJailRoll(player); break;
-        default: break;
+    bool is_valid=false;
+    while (! is_valid){
+        client.receive(query);
+        switch (query) {
+            case GAME_QUERY_TYPE::PAY : { 
+                if (this->game.processJailPay(player)) {is_valid=true;} 
+                else client.sendQueryMsg("", QUERY::INFOS_NOT_ENOUGH_MONEY);
+                break;
+            }
+            case GAME_QUERY_TYPE::USEGOOJCARD : {
+                if (this->game.processJailUseCard(player)) {is_valid=true;}
+                else client.sendQueryMsg("", QUERY::BAD_COMMAND);
+                break;
+            }
+            case GAME_QUERY_TYPE::ROLL_DICE :   if (this->game.processJailRoll(player)) is_valid=true; break;
+            default: client.sendQueryMsg("", QUERY::BAD_COMMAND); break;
+        }
     }
     // End of the turn
     if ( player->getStatus() != PLAYER_STATUS::BANKRUPT_SUSPECTED ) {
@@ -646,6 +658,7 @@ void GameServer::processAuction(Player *me, Land* land) {
     std::string res = futur_owner ? futur_owner->getUsername() + ":" + land->getName()+ ":" + std::to_string(starting_bid)
                       : ":" + land->getName()+ ":" + std::to_string(starting_bid);
     this->updateAllClientsWithQuery(QUERY::INFOS_AUCTION_END, res);
+    for ( auto& player : participants ) { player->setStatus(PLAYER_STATUS::FREE); } // security
     // Si futur_owner != nullptr -> futur->owner.acquire.prop
     if (futur_owner) {
         futur_owner->setStatus(PLAYER_STATUS::FREE);
@@ -664,7 +677,7 @@ void GameServer::processPayDebt(ClientManager &client, Player *player) {
     }
 
     if ( player->isBankruptToPlayer() ) {
-        player->getPlayerToRefund()->receive(player->getDebt(), player->getUsername());
+        player->getPlayerToRefund()->receive(player->getDebt());
     }
     player->pay(player->getDebt(), true);
     player->resetDebt();

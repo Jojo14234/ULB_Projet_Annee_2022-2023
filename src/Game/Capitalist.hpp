@@ -94,9 +94,9 @@ public:
     ClientManager* getWinner();
     ClientManager* calculateGameWinner();
 
-    void processJailPay(Player* player);
-    void processJailUseCard(Player* player);
-    void processJailRoll(Player* player);
+    bool processJailPay(Player* player);
+    bool processJailUseCard(Player* player);
+    bool processJailRoll(Player* player);
     bool processBuild(Player *player, std::string &name);
     bool processSellBuild(Player *player, std::string &name);
     bool processMortgage(Player *player, std::string &name);

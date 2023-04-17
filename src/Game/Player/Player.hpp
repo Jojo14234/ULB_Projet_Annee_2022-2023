@@ -117,7 +117,7 @@ public:
 
     // ABOUT bankAccount
     bool pay(int amount, bool forced = false);
-    void receive(int amount, std::string source);
+    void receive(int amount);
 
 
     // MOVEMENT

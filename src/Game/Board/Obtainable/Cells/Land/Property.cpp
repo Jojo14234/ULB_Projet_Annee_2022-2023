@@ -157,7 +157,7 @@ bool Property::AllSameColorPropertiesHaveGoodLevel(Player* player, bool sell) {
  */
 bool Property::sellBuilding(Player *player) {
     if ( !this->canSellBuilding(player)) { return false; }
-    player->receive(this->construct_price/2, "la banque");
+    player->receive(this->construct_price/2);
     this->levelDown();
     player->getClient()->send("Vous avez vendu un bâtiment de votre propriété à la moitié de son prix d'achat");
     player->getClient()->send("Vos amis ne vous appel plus Bob désormais !");

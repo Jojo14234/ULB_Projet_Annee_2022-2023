@@ -10,7 +10,7 @@ void MoneyCard2::setAmount(int new_amount) { this->amount = new_amount; }
 
 void MoneyCard2::action(Player *player) {
     if (this->amount > 0) {
-        player->receive(std::abs(this->amount), "la banque");
+        player->receive(std::abs(this->amount));
     }
     else if (this->amount < 0) {
         player->pay(std::abs(this->amount), true);
@@ -34,13 +34,17 @@ void HouseHotelMoneyCard::action(Player *player) {
 void ChoiceMoneyCard::action(Player* player) {
 
     while ( true ) {
+        bool enough_money = true;
         GAME_QUERY_TYPE query;
         player->getClient()->sendQueryMsg("", QUERY::CHOICE_MONEY_CARD);
         player->getClient()->receive(query);
 
-        if ( query == GAME_QUERY_TYPE::PAY ) { MoneyCard2::action(player); break; }
+        if ( query == GAME_QUERY_TYPE::PAY ) { 
+            if ((enough_money = (player->getMoney() >= this->getAmount()))) { MoneyCard2::action(player); break; }
+            else { player->getClient()->sendQueryMsg("", QUERY::INFOS_NOT_ENOUGH_MONEY); player->getClient()->sendQueryMsg("", QUERY::INFOS_AUTO_OTHER_POSSIBILITY); }
+        }
 
-        if ( query == GAME_QUERY_TYPE::CARD ) {
+        if ( query == GAME_QUERY_TYPE::CARD || ! enough_money ) {
             CardDeck* deck = player->getClient()->getGameServer()->getDeck(this->deck_name);
             Card* drawn_card = deck->drawACard();
             player->getClient()->sendQueryMsg(drawn_card->getDescription(), QUERY::INFOS_CARD_DESCRIPTION);

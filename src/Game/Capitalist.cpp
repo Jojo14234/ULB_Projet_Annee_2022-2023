@@ -354,11 +354,15 @@ ClientManager *Capitalist::calculateGameWinner() {
     return winner;
 }
 
-void Capitalist::processJailPay(Player *player) {
-    if ( player->pay(50) ) { player->setStatus(PLAYER_STATUS::FREE); }
+bool Capitalist::processJailPay(Player *player) {
+    if (player->getMoney() > 50){
+        if ( player->pay(50) ) { player->setStatus(PLAYER_STATUS::FREE); }
+        return true;
+    }
+    return false;
 }
 
-void Capitalist::processJailUseCard(Player *player) {
+bool Capitalist::processJailUseCard(Player *player) {
     if ( player->getAllGOOJCards().size() > 0 ) {
         JailCard* card = player->getAllGOOJCards().back();
         card->use();
@@ -368,10 +372,12 @@ void Capitalist::processJailUseCard(Player *player) {
         else if (this->board.getCommunityDeck()->isJailCardInside()) {
             this->board.getCommunityDeck()->replaceJailCard();
         }
+        return true;
     }
+    return false;
 }
 
-void Capitalist::processJailRoll(Player *player) {
+bool Capitalist::processJailRoll(Player *player) {
     int roll_result = player->processRollDice(this->dice);
     player->addRollInPrison();
     if ( this->rolledADouble() ) {
@@ -380,7 +386,7 @@ void Capitalist::processJailRoll(Player *player) {
         player->processMove(roll_result, this->getBoard());
         player->getCurrentCell()->action(player);
         player->resetRollInPrison();
-        return;
+        return true;
     }
     else if ( player->getRollsInPrison() == 3 ) {
         this->dice.resetDoubleCounter();
@@ -390,6 +396,7 @@ void Capitalist::processJailRoll(Player *player) {
         player->getCurrentCell()->action(player);
         player->resetRollInPrison();
     }
+    return true;
 }
 
 bool Capitalist::processBuild(Player *player, std::string &name) {
@@ -503,7 +510,7 @@ void Capitalist::processBankruptByPlayer(Player *player, Player *other) {
     for ( auto station : player->getAllStations() ) { station->exchange(other, 0); }
     for ( auto company : player->getAllCompanies() ) { company->exchange(other, 0); }
     /*TODO : donner les cartes sortie de prison*/
-    other->receive(player->getMoney(), player->getUsername());
+    other->receive(player->getMoney());
     player->pay(player->getMoney(), true);
 }
 
