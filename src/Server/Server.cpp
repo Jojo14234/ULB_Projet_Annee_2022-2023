@@ -93,7 +93,7 @@ void Server::clientProcessQuery(ClientManager &client, QUERY_TYPE query) {
 		// For game
 		case QUERY_TYPE::JOIN_GAME:         this->clientProcessJoinGame(client); break;
 		case QUERY_TYPE::CREATE_GAME:       this->clientProcessCreateGame(client); break;
-		case QUERY_TYPE::CREATE_FAST_GAME:  this->clientProcessCreateGame(client); break;
+		case QUERY_TYPE::CREATE_FAST_GAME:  this->clientProcessCreateFastGame(client); break;
 		// For ranking
 		case QUERY_TYPE::RANKING_POS:       this->clientProcessRankingPos(client); break;
 		case QUERY_TYPE::RANKING_TOP:       this->clientProcessRankingTop(client); break;
