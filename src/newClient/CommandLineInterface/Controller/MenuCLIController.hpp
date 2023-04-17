@@ -6,6 +6,7 @@
 
 #include "AbstractCLIController.hpp"
 #include "../configs.hpp"
+#include <string>
 
 class Client; // forward declaration
 
