@@ -31,6 +31,7 @@ public:
 	}
 
 	void operator=(const Text& other) {
+		AbstractViewObject::operator=(other);
 		this->text = other.text;
 		this->font = other.font;
 		this->text.setFont(font);
@@ -56,6 +57,11 @@ public:
 
 	void setString(std::string new_text){
 		this->text.setString(new_text);
+	}
+
+	void setPosition(double x, double y) override {
+		AbstractViewObject::setPosition(x, y);
+		this->text.setPosition(x, y);
 	}
 
 

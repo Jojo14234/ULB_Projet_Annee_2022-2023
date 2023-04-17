@@ -25,4 +25,9 @@ public:
 		InputText::draw(window);
 	}
 
+	void setPosition(double x, double y) {
+		InputText::setPosition(x, y);
+		Box::setPosition(x, y);
+	}
+
 };

@@ -25,6 +25,13 @@ public:
 		this->sprite.setScale(this->info.getWidth() / (float)this->texture.getSize().x, this->info.getHeight() / (float)this->texture.getSize().y);
 	}
 
+	void operator=(const Image &other) {
+		AbstractViewObject::operator=(other);
+		texture = other.texture;
+		sprite = other.sprite;
+		sprite.setTexture(this->texture);
+	}
+
     virtual void draw(sf::RenderWindow &window) const override {
 	    if (isHidden()) return;
         window.draw(this->sprite);
@@ -43,13 +50,18 @@ public:
 				this->sprite.setPosition(this->info.getX() +  this->info.getWidth() / 2.0f, this->info.getY() + this->info.getHeight() / 2.0f);}}
 		
 	void setPosition(ObjectInfo<> new_info){
-		this->sprite.setPosition(new_info.getX(), new_info.getY());
-	}	
+		setPosition(new_info.getX(), new_info.getY());
+	}
+
+	void setPosition(double x, double y){
+		AbstractViewObject::setPosition(x, y);
+		this->sprite.setPosition(x, y);
+	}
 
 	void setTexture(const std::string &new_path){
 		this->texture.loadFromFile(new_path);
 		this->sprite.setTexture(this->texture);
 		this->sprite.setScale(this->info.getWidth() / (float)this->texture.getSize().x, this->info.getHeight() / (float)this->texture.getSize().y);
-	}				
+	}
 
 };
