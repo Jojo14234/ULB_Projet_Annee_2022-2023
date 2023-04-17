@@ -38,7 +38,6 @@ public:
 	// WRITE READ
 	void write(FILE* file);
 	void read(FILE* file);
-
 };
 
 
