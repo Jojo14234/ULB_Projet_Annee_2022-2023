@@ -15,7 +15,7 @@ void RankGUIController::handle(sf::Event event) {
 		MainInputParser parser("/rank top");
 		std::string response;
 		if (this->model->sendCommand(parser)) { 
-			QUERY query = this->model->receive(response);
+			this->model->receive(response);
 			RankingInfosList ranking{response};
 			
 			for (auto info : ranking.infos) {
@@ -30,7 +30,7 @@ void RankGUIController::handle(sf::Event event) {
 		MainInputParser parser("/rank pos");
 		std::string response;
 		if (this->model->sendCommand(parser)) { 
-			QUERY query = this->model->receive(response);
+			this->model->receive(response);
 			RankingINFO info{response};
 			this->view->setUpMyRank(info.pos, info.username, info.points);
 		}
