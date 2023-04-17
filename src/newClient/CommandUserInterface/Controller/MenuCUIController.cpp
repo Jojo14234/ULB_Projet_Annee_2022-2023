@@ -32,7 +32,7 @@ void MenuCUIController::handle(int event) {
 			this->view->console.addInput();
 			MainInputParser parser(this->view->console.getInput());
 			std::string response;
-			if (this->model->sendCommand(parser)) { QUERY query = this->model->receive(response); }
+			if (this->model->sendCommand(parser)) { /*QUERY query =*/ this->model->receive(response); }
 			else { response = "La commande n'existe pas"; }
 			this->view->console.addText(response);
 
