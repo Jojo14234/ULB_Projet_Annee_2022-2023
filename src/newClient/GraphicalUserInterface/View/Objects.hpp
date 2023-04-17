@@ -21,3 +21,4 @@
 #include "Objects/DirectionImButton.hpp"
 #include "Objects/ScrollBox.hpp"
 #include "Objects/FriendBox.hpp"
+#include "Objects/DirectionImButton.hpp"

@@ -93,7 +93,7 @@ void Server::clientProcessQuery(ClientManager &client, QUERY_TYPE query) {
 		// For game
 		case QUERY_TYPE::JOIN_GAME:         this->clientProcessJoinGame(client); break;
 		case QUERY_TYPE::CREATE_GAME:       this->clientProcessCreateGame(client); break;
-		case QUERY_TYPE::CREATE_FAST_GAME:  this->clientProcessCreateGame(client); break;
+		case QUERY_TYPE::CREATE_FAST_GAME:  this->clientProcessCreateFastGame(client); break;
 		// For ranking
 		case QUERY_TYPE::RANKING_POS:       this->clientProcessRankingPos(client); break;
 		case QUERY_TYPE::RANKING_TOP:       this->clientProcessRankingTop(client); break;
@@ -178,11 +178,10 @@ void Server::clientProcessJoinGame(ClientManager &client) {
 
 void Server::clientProcessCreateGame(ClientManager &client) {
 	std::cout << "[Received 'create normal' query from client '" << client.getAccount()->getUsername() << "']\n" << std::endl;
-    std::istringstream input{client.getS2()};
+    std::istringstream input{client.getS1()};
     int space = 0;
     GameParameters params{false};
     for (std::string word; std::getline(input, word, ' '); space++) {
-        std::cout << "Param " << space << " : " << word << std::endl;
         switch (space) {
             case 0: {
                 try{
@@ -224,7 +223,7 @@ void Server::clientProcessCreateGame(ClientManager &client) {
     std::string res = client.getUsername() + ":" + std::to_string(gc) + ":" + std::to_string(params.isFastGame) + ":" +
                       std::to_string(params.startMoney) + ":" + std::to_string(params.maxPlayers) + ":" +
                       std::to_string(params.maxHome) + ":" + std::to_string(params.maxHotel) + ":" + std::to_string(params.max_turn);
-	client.sendQueryMsg(res, QUERY::PLAYER_CREATE_GAME);
+    client.sendQueryMsg(res, QUERY::PLAYER_CREATE_GAME);
 	client.enterGameLoop();
 }
 

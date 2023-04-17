@@ -10,7 +10,6 @@
 void MenuGUIController::handle(sf::Event event) {
 	//if (event.type != sf::Event::MouseButtonPressed) return;
 	// buttons
-
 	switch(event.type) {
 		case sf::Event::MouseButtonPressed: {
 			if (this->view->settings_popup.isVisible()) {
@@ -101,6 +100,7 @@ void MenuGUIController::handle(sf::Event event) {
 					this->new_state = STATE::RANK;
 				} else if (this->view->friend_menu.contains(event.mouseButton.x, event.mouseButton.y)) {
 					this->new_state = STATE::FRIENDS;
+          this->friend_controller->update();
 				} else if (this->view->settings.contains(event.mouseButton.x, event.mouseButton.y)) {
 					this->view->settings_popup.setVisible();
 				}
@@ -108,10 +108,9 @@ void MenuGUIController::handle(sf::Event event) {
 		} break;
 		case sf::Event::TextEntered:
 		case sf::Event::KeyPressed: {
-			this->view->join_popup.getInput(0)->handle(event); break;
-		}
+				this->view->join_popup.getInput(0)->handle(event); break;
+			}
 		
 		default: break;
-}
-
+  }
 }

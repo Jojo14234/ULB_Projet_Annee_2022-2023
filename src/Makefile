@@ -17,18 +17,6 @@ ifneq ($(shell uname -s), Linux)
 endif
 
 
-
-# Create Client objects
-CLIENT_BINS = $(patsubst Client/%.cpp, Client/%.o, $(wildcard Client/*.cpp))
-CLIENT_INPUTPARSER_BINS = $(patsubst Client/InputParser/%.cpp, Client/InputParser/%.o, $(wildcard Client/InputParser/*.cpp))
-
-# Create Ncurses objects
-NCURSE_BINS = $(patsubst ClientNcurse/%.cpp, ClientNcurse/%.o, $(wildcard ClientNcurse/*.cpp))
-NCURSE_CONTROLLER_BINS = $(patsubst ClientNcurse/Controller/%.cpp, ClientNcurse/Controller/%.o, $(wildcard ClientNcurse/Controller/*.cpp))
-NCURSE_INPUT_PARSER_BINS = $(patsubst ClientNcurse/InputParser/%.cpp, ClientNcurse/InputParser/%.o, $(wildcard ClientNcurse/InputParser/*.cpp))
-NCURSE_VIEW_BINS = $(patsubst ClientNcurse/View/%.cpp, ClientNcurse/View/%.o, $(wildcard ClientNcurse/View/*.cpp))
-NCURSE_VIEW_GAME_OBJECT_BINS = $(patsubst ClientNcurse/View/GameObject/%.cpp, ClientNcurse/View/GameObject/%.o, $(wildcard ClientNcurse/View/GameObject/*.cpp))
-
 # Create Server objects
 SERVER_BINS = $(patsubst Server/%.cpp, Server/%.o, $(wildcard Server/*.cpp))
 SERVER_CM_BINS = $(patsubst Server/ClientManager/%.cpp, Server/ClientManager/%.o, $(wildcard Server/ClientManager/*.cpp))
@@ -54,6 +42,7 @@ LAND_BINS = $(patsubst Game/Board/Obtainable/Cells/Land/%.cpp, Game/Board/Obtain
 JSON_BINS = $(patsubst jsoncpp/src/lib_json/%.cpp, jsoncpp/src/lib_json/%.o, $(wildcard jsoncpp/src/lib_json/*.cpp))
 JSON_TEST_RUNNER_BINS = $(patsubst jsoncpp/src/jsontestrunner/%.cpp,  jsoncpp/src/jsontestrunner/%.o, $(wildcard jsoncpp/src/jsontestrunner/*.cpp))
 
+
 .PHONY: default
 default: main
 
@@ -62,22 +51,17 @@ clean:
 	-rm *.o */*.o */*/*.o */*/*/*.o */*/*/*/*.o */*/*/*/*/*.o 2> /dev/null
 
 rm:
-	-rm capitalist capitalistCLI capitalistGUI capitalistCui server_capitalist ncurse 2> /dev/null
+	-rm capitalistCLI capitalistGUI capitalistCUI server_capitalist 2> /dev/null
 
 
 main: client server
-
-client: ${CLIENT_BINS} ${CLIENT_INPUTPARSER_BINS}
-	${CXX} ${CXXFLAGS} -o capitalist $^ ${LDLIBS}
-	make clean
 
 server: ${SERVER_BINS} ${SERVER_CM_BINS} ${SERVER_DB_BINS} ${GAME_BINS} ${PLAYER_BINS} ${DICE_BINS} ${BOARD_BINS}  ${OBTAINABLE_BINS} ${CARDS_BINS} ${CELLS_BINS} ${LAND_BINS} ${SERVER_DB_FRIEND_BINS} ${SERVER_DB_CHAT_BINS} ${SERVER_GAME_BINS} ${JSON_BINS}
 	${CXX} ${CXXFLAGS} -o server_capitalist $^ ${LDLIBS}
 	make clean
 
-ncurse: ${NCURSE_BINS} ${NCURSE_CONTROLLER_BINS} ${NCURSE_INPUT_PARSER_BINS} ${NCURSE_VIEW_BINS} ${NCURSE_VIEW_GAME_OBJECT_BINS}
-	${CXX} ${CXXFLAGS} -o ncurse $^ ${LDLIBS}
-	make clean
+client:
+	cd newClient && make
 
 # new Client part
 GUI:

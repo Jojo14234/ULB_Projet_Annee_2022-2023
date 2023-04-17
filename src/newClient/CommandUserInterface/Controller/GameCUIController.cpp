@@ -10,6 +10,7 @@
 #include "../../Model/QueryParser/GameLaunchingParser.hpp"
 #include "../../Model/QueryParser/InGameParser.hpp"
 
+//MAX 64 CHAR / LIGNES
 
 // Public
 
@@ -75,6 +76,7 @@ void GameCUIController::receiveMsgLoop() { // todo il faudrait pas déplacer les
             case QUERY::INFOS_ROLL_DICE :               this->rollDiceGU(response); break;
             case QUERY::INFOS_GAME :                    this->infoGameGU(response); break;
             case QUERY::INFOS_NEW_TURN :                this->newTurnGU(response); break;
+            case QUERY::INFOS_NEW_TURN_IN_JAIL:         this->newTurnInJailGU(response); break;
             case QUERY::INFOS_PLAYER_MOVE :             this->playerMoveGU(response); break;
             case QUERY::INFOS_PLAYER_BOUGHT :           this->playerBoughtGU(response); break;
             case QUERY::INFOS_PLAYER_PAID_PLAYER :      this->playerPaidPlayerGU(response); break;
@@ -96,7 +98,7 @@ void GameCUIController::receiveMsgLoop() { // todo il faudrait pas déplacer les
             case QUERY::INFOS_MORTGAGEABLE_PROP :       this->mortgagePropertyGU(response); break;
             case QUERY::INFOS_LIFT_MORTGAGEABLE_PROP :  this->unmortgagePropertyGU(response); break;
             case QUERY::INFOS_EXCHANGEABLE_PROP :       this->exchangePropertyGU(response); break;            
-            case QUERY::INFOS_LEAVE_SELECTION_MODE :    this->leaveSelectionMenuGU(response); break;
+            case QUERY::INFOS_LEAVE_SELECTION_MODE :    this->leaveSelectionMenuGU(); break;
 
             case QUERY::INFOS_BUILD_SUCCESS :
             case QUERY::INFOS_SELL_BUILD_SUCCESS :      this->buildOrSellSucceedGU(response); break;
@@ -107,6 +109,14 @@ void GameCUIController::receiveMsgLoop() { // todo il faudrait pas déplacer les
             case QUERY::INFOS_ASK_FOR_PURCHASE :        this->askForPurchaseGU(response); break;
             case QUERY::ASK_EXCHANGE :                  this->askExchangeGU(response); break;
             case QUERY::CONFIRM_EXCHANGE_ASKING :       this->confirmExchangeAskingGU(response); break;
+
+            case QUERY::INFOS_AUCTION_START :           this->startAuctionGU(response); break;
+            case QUERY::INFOS_AUCTION_BID :             this->auctionBidGU(response); break;
+            case QUERY::INFOS_AUCTION_END :             this->endAuctionGU(response); break;
+            case QUERY::WAIT_YOUR_TURN :                this->view->getConsole()->addText("Votre tour d'enchère a prit fin, attendez le suivant."); break;
+            case QUERY::BAD_AMOUNT :                    this->view->getConsole()->addText("Le montant entre n'est pas correct"); break;
+            case QUERY::NOT_ENOUGH_MONEY_TO_PARTICIPATE:this->view->getConsole()->addText("Vous n'avez plus assez d'argent pour continuer a participer."); break;
+            case QUERY::LEAVE_BID:                      this->view->getConsole()->addText("Vous avez abandonne les encheres"); break;
 
             case QUERY::INFOS_PLAYER_DIDNT_BUY :        if (response != this->model->getUsername()) { this->view->getConsole()->addText("Le joueur " + response + " n'a pas achete la propriete"); } break;
             case QUERY::INFOS_PLAYER_MOVE_ON_OWN_CELL : if (this->model->isMyTurn()) { this->view->getConsole()->addText("Vous etes chez vous."); } break;
@@ -127,6 +137,10 @@ void GameCUIController::receiveMsgLoop() { // todo il faudrait pas déplacer les
 
             case QUERY::EXCHANGE_REFUSED :              this->view->getConsole()->addText("L'echange a ete refuse"); break;
             case QUERY::INFOS_NOT_ENOUGH_MONEY :        this->view->getConsole()->addText("Vous ne possedez pas assez d'argent."); break;
+            case QUERY::STOP_WAIT :                     this->view->getConsole()->addText("Pas assez rapide. L'offre a été automatiquement annulee"); this->model->sendCommand(GameInputParser{response}); break;
+            
+            case QUERY::WIN :                           this->endGameGU(response); break;
+            case QUERY::ENDGAME :                       break;
             default :                                   this->view->getConsole()->addText(response); break;
         }
     }
@@ -245,6 +259,13 @@ void GameCUIController::newTurnGU(const std::string& response) {
     this->model->setPlayerTurn(response);
     if (response == this->model->getUsername()) { this->view->startTurn(); this->model->startTurn(); }
     else { this->view->endTurn(); this->model->endTurn(); this->view->getConsole()->addText("C'est au tour de " + response + " !"); }
+}
+
+void GameCUIController::newTurnInJailGU(const std::string& response) {
+    JailInfo jail_info(response);
+    this->view->getConsole()->addText("Vous êtes en prison depuis " + std::to_string(jail_info.nb_turn) + " tours !");
+    std::string str = jail_info.has_card ? "/roll (tenter un double), /pay (50$) ou /card (utiliser carte)" : "/roll (tenter un double) ou /pay (50$)";
+    this->view->getConsole()->addText(str);
 }
 
 void GameCUIController::playerMoveGU(const std::string& response){
@@ -436,7 +457,7 @@ void GameCUIController::unmortgagePropertyGU(const std::string& response){
     } else this->view->getConsole()->addText("Consultation des proprietes a deshypotequer ...");
 }
 
-void GameCUIController::leaveSelectionMenuGU(const std::string& response){
+void GameCUIController::leaveSelectionMenuGU(){
     for (auto& property : selection_mode) {
         int index = this->view->getBoard()->getCellIndex(property);
         this->view->getBoard()->leaveSelection(index);
@@ -490,5 +511,30 @@ void GameCUIController::askForPurchaseGU(const std::string& response){
     this->view->getConsole()->addText("Si vous ne l'achetez pas, des encheres debuteront");
 }
 
+void GameCUIController::startAuctionGU(const std::string& response){
+    BetInfo bet(response);
+    this->view->getConsole()->addText("Des encheres pour acheter " + bet.property + " debutent !");
+}
 
-//nebc
+void GameCUIController::auctionBidGU(const std::string& response){
+    PlayerBetInfo bet(response);
+    if (bet.player != ""){
+        this->view->getConsole()->addText(bet.player + " est sur le point d'acheter le terrain pour : " + std::to_string(bet.amount) + "$");
+    }
+    else this->view->getConsole()->addText("Le prix d'achat est actuellement de : " + std::to_string(bet.amount) + "$ !");
+    if (! this->model->isMyTurn() && bet.player == "") this->view->getConsole()->addText("/bid pour surencherir, /out pour vous arreter");
+}
+
+void GameCUIController::endAuctionGU(const std::string& response){
+    EndAuctionInfo end(response);
+    if (end.player != ""){
+        this->view->getConsole()->addText(end.player + " remporte " + end.property + " pour " + std::to_string(end.amount) + "$ !");
+    }
+    else this->view->getConsole()->addText("Personne ne remporte " + end.property + ".");
+}
+
+void GameCUIController::endGameGU(const std::string& response){
+    this->view->getConsole()->addText("Victoire de " + response + ". Félicitations !");
+    this->view->getConsole()->addText("Entrez /quit pour retourner au menu.");
+    this->view->endTurn();
+}

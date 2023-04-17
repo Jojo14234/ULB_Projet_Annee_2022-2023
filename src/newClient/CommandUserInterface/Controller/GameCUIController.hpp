@@ -28,6 +28,7 @@ class GameCUIController: public AbstractCUIController, public MenuCUIObserver {
 	void rollDiceGU(const std::string& response);
 	void infoGameGU(const std::string& response);
 	void newTurnGU(const std::string& response);
+	void newTurnInJailGU(const std::string& response);
 	void playerMoveGU(const std::string& response);
 	void playerBoughtGU(const std::string& response);
 	void playerPaidPlayerGU(const std::string& response);
@@ -47,7 +48,7 @@ class GameCUIController: public AbstractCUIController, public MenuCUIObserver {
 	void exchangePropertyGU(const std::string& response);
 	void mortgagePropertyGU(const std::string& response);
 	void unmortgagePropertyGU(const std::string& response);
-	void leaveSelectionMenuGU(const std::string& response);
+	void leaveSelectionMenuGU();
 	void buildOrSellSucceedGU(const std::string& response);
 	void mortgageSucceedGU(const std::string& response);
 	void unmortgageSucceedGU(const std::string& response);
@@ -55,6 +56,10 @@ class GameCUIController: public AbstractCUIController, public MenuCUIObserver {
 	void askExchangeGU(const std::string& response);
 	void confirmExchangeAskingGU(const std::string& response);
 	void askForPurchaseGU(const std::string& response);
+	void startAuctionGU(const std::string& response);
+	void auctionBidGU(const std::string& response);
+	void endAuctionGU(const std::string& response);
+	void endGameGU(const std::string& response);
 
 public: 
 	

@@ -1,8 +1,11 @@
 #include <SFML/Window.hpp>
+#include <string>
+#include <vector>
 
 #include "FriendsGUIController.hpp"
 #include "../View/FriendsGUIView.hpp"
 #include "../../Model/Client.hpp"
+#include "../../../utils/Configs.hpp"
 
 
 void FriendsGUIController::handle(sf::Event event) {
@@ -30,4 +33,14 @@ void FriendsGUIController::handle(sf::Event event) {
 		}
 		default: break;
 	}
+}
+
+
+void FriendsGUIController::update() {
+	// TODO
+	this->model->sendQuery(QUERY_TYPE::FRIENDS_INFO);
+	std::vector<std::string> friends_name;
+	std::vector<std::string> friends_requests;
+	this->model->receiveFriendsInfo(friends_name, friends_requests);
+
 }

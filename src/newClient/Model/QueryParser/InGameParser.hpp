@@ -3,6 +3,7 @@
 
 #include <string>
 #include <vector>
+#include <sstream>
 #include <array>
 #include <memory>
 #include <iostream>
@@ -679,6 +680,67 @@ public:
 
 };
 
+struct PlayerBetInfo{
+	std::string player;
+	int amount;
+
+	PlayerBetInfo(const std::string &str){
+		int i = 0;
+		std::string tmp;
+		while (str[i] != ':' ) { tmp += str[i]; i++; }
+		player = tmp;
+		amount = atoi(&str[i+1]);
+	}
+};
+
+struct BetInfo{
+	std::string property;
+	int amount;
+
+	BetInfo(const std::string &str){
+		int i = 0;
+		std::string tmp;
+		while (str[i] != ':' ) { tmp += str[i]; i++; }
+		property = tmp;
+		amount = atoi(&str[i+1]);
+	}
+};
+
+struct EndAuctionInfo{
+	std::string player;
+	std::string property;
+	int amount;
+
+	EndAuctionInfo(const std::string &str){
+		int i = 0;
+		int nb_colon = 0;
+		std::string tmp;
+		while (str[i] != ':' || nb_colon < 1) {
+			if (str[i] == ':') {
+				player = tmp;
+				nb_colon++;
+				tmp.clear();
+			} else tmp += str[i]; 
+			i++;
+		}
+		property = tmp.c_str();
+		amount = atoi(&str[i+1]);
+	}
+};
+
+
+struct JailInfo{
+	int nb_turn;
+	bool has_card;
+
+	JailInfo(const std::string &str){
+		int i = 0;
+		std::string tmp;
+		while (str[i] != ':' ) { tmp += str[i]; i++; }
+		nb_turn = atoi(tmp.c_str());
+		has_card = static_cast<bool>(atoi(&str[i+1]));
+	}
+};
 
 
 #endif

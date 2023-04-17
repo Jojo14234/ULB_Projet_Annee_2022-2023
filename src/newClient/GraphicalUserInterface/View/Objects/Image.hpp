@@ -49,11 +49,6 @@ public:
 				this->sprite.setOrigin(sprite.getLocalBounds().width / 2, sprite.getLocalBounds().height / 2);
 				this->sprite.setPosition(this->info.getX() +  this->info.getWidth() / 2.0f, this->info.getY() + this->info.getHeight() / 2.0f);}}
 		
-	/*void setFlag(){
-            this->sprite.setOrigin(sprite.getLocalBounds().width / 2, sprite.getLocalBounds().height / 2);
-			this->sprite.setScale(this->info.getWidth()/2 / (float)this->texture.getSize().x, this->info.getHeight()/2 / (float)this->texture.getSize().y);
-			this->sprite.setPosition(this->info.getX() +  this->info.getWidth() / 2.0f - this->info.getWidth() / 5.0f , this->info.getY() + this->info.getHeight() / 2.0f - this->info.getHeight() / 5.0f); }*/
-
 	void setPosition(ObjectInfo<> new_info){
 		setPosition(new_info.getX(), new_info.getY());
 	}
@@ -61,6 +56,12 @@ public:
 	void setPosition(double x, double y){
 		AbstractViewObject::setPosition(x, y);
 		this->sprite.setPosition(x, y);
+	}
+
+	void setTexture(const std::string &new_path){
+		this->texture.loadFromFile(new_path);
+		this->sprite.setTexture(this->texture);
+		this->sprite.setScale(this->info.getWidth() / (float)this->texture.getSize().x, this->info.getHeight() / (float)this->texture.getSize().y);
 	}
 
 };

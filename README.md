@@ -3,7 +3,7 @@
 ## Dates importantes
  -[X] **Remise _SRD_** : Lundi 19 Décembre 23h59  
  -[X] **Remise version _terminal_**: Vendredi 3 Mars 23h59  
- -[ ] **Remise version _graphique_**: Vendredi 31 Mars 23h59
+ -[ ] **Remise version _graphique_**: Vendredi 21 Avril 23h59
 
 ## Membres du groupe
 - Loïc Blommaert
@@ -120,8 +120,9 @@ Le joueur possédant la propriété souhaité, aura **15 secondes** pour accepte
 `/accept`  
 `/refuse`
 
-## Participer à une enchère et enchérir 
-`/participate` -> `/bid [somme_proposé]`
+## Quitter une enchère ou enchérir 
+`/out`
+`/bid [somme_proposé]`
 
 
 

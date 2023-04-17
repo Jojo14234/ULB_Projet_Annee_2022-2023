@@ -66,16 +66,6 @@ public:
 		this->loadCellNames();
 		this->loadCellFile();
 		this->createBoard();
-
-		board[31]->setPlayer(&red,0);  //tests
-		board[31]->setPlayer(&blue,1);
-		board[31]->setPlayer(&green,2);
-		board[31]->setPlayer(&magenta,3);
-		board[31]->setPlayer(&yellow,4);
-		board[31]->setPlayer(&cyan,5);
-		
-		board[31]->setOwner("red");
-		board[31]->setBuilding(4);
 		}
 	
     void draw(sf::RenderWindow &window);
@@ -88,6 +78,23 @@ public:
 	void setIdle(int cell);
 	void setPurchased(int cell, int player);
 	void setHouse(int cell, int house_nb);
+
+
+	void setAllGrayed();
+	void setBuildable(int cell);
+	void setSalable(int cell);
+	void setMortgageable(int cell);
+	void setUnmortgageable(int cell);
+	void setExchangeable(int cell);
+
+	void leaveSelection(int cell);
+	void unsetAllGrayed();
+
+	void setMortgaged(int cell);
+
+	void unmortgage(int cell);
+
+	std::array<std::shared_ptr<Cell>, gamebox_nb>* getBoardButton();
 
 
 };

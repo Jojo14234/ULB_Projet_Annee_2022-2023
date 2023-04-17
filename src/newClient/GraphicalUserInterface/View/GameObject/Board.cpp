@@ -120,4 +120,49 @@ void Board::setHouse(int cell, int house_nb){
 }
 
 
+void Board::setBuildable(int cell){
+	board[cell]->setGrayed();
+
+}
+void Board::setAllGrayed(){
+	for (auto i : board){
+        i->setGrayed();
+    }
+
+}
+
+void Board::setSalable(int cell){
+	board[cell]->unsetGrayed();
+}
+void Board::setMortgageable(int cell){
+	board[cell]->unsetGrayed();
+}
+void Board::setUnmortgageable(int cell){
+	board[cell]->unsetGrayed();
+}
+void Board::setExchangeable(int cell){
+	board[cell]->unsetGrayed();
+}
+
+void Board::leaveSelection(int cell){
+	board[cell]->setGrayed();
+}
+
+void Board::unsetAllGrayed(){
+	for (auto i : board){
+        i->unsetGrayed();
+    }
+}
+
+void Board::setMortgaged(int cell){
+	board[cell]->setMortgaged();
+}
+
+void Board::unmortgage(int cell){
+	board[cell]->unsetMortgaged();
+}
+
+std::array<std::shared_ptr<Cell>,40>* Board::getBoardButton(){
+	return &board;
+}
 
