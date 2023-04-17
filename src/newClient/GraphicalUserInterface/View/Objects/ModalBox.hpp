@@ -51,7 +51,7 @@ public:
 	void addText(Text* text) { texts.emplace_back(text); }
 	void addImage(Image* image) { images.emplace_back(image); }
 	void addButton(ImageButton* button) { buttons.emplace_back(button); }
-	void addInput(InputBox* input) { inputs.emplace_back(input); }
+	void addInput(InputBox* input) { inputs.emplace_back(input);}
 	void addSelector(Selector* selector) { selectors.emplace_back(selector); }
 
 	void addTexts(std::initializer_list<Text*> texts) { for (Text* text : texts) this->addText(text); }
