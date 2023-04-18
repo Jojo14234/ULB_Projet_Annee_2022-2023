@@ -34,8 +34,8 @@ const std::string SEND_BUTTON_PATH = "../assets/images/send_button.png";
 const std::string MESSAGE_BUTTON_PATH = "../assets/images/message_button.png";
 const std::string DELETE_BUTTON_PATH = "../assets/images/delete_button.png";
 
-const std::string FILE_NAME = "../assets/Utils/cellfile.txt";
-const std::string CELL_NAME = "../assets/Utils/cellname.txt";
+const std::string FILE_NAME = "../assets/utils/cellfile.txt";
+const std::string CELL_NAME = "../assets/utils/cellname.txt";
 const std::string CELL_PATH = "../assets/images/Cell/";
 
 
