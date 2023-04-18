@@ -4,23 +4,21 @@
 #include <vector>
 
 #include "Server.hpp"
+#include "Handler/SigHandler.hpp"
 #include "ClientManager/ClientManager.hpp"
 #include "ClientManager/QUERY.hpp"
-#include "Handler/SigHandler.hpp"
 #include "../Utils/Exceptions.hpp"
 #include "../Utils/Config/Configs.hpp"
 #include "../Utils/Sentences/Sentences.hpp"
 
-
-
-// Public
-
+// Constructor
 Server::Server() {
 	// Bind the socket to a port, if return false : the server can't be created
 	if (listener.listen(PORT) != sf::Socket::Done) { throw CreateServerException(); }
 	SigHandler::setup();
 }
 
+// Serveur main loop
 void Server::mainLoop() {
 	while (this->server_online) {
         // join ended threads and remove disconnected clients
@@ -36,6 +34,7 @@ void Server::mainLoop() {
 	}
 }
 
+// Client loop
 void Server::clientLoop(ClientManager &client) {
 	try {
         QUERY_TYPE query;
@@ -52,10 +51,10 @@ void Server::clientLoop(ClientManager &client) {
 	client.disconnect();
 }
 
-
 // Thread
 struct thread_args_t { ClientManager* client; Server* server; };
 
+// Client thread
 void* clientThread(void* args) {
 	Server *server = ((thread_args_t*)args)->server;
 	ClientManager *client = ((thread_args_t*)args)->client;
@@ -65,9 +64,7 @@ void* clientThread(void* args) {
 	return NULL;
 }
 
-
-// Private
-
+// Connect client thread to server
 void Server::connectClient() {
 	// Create a client
 	std::shared_ptr<ClientManager> client = std::make_shared<ClientManager>();
@@ -83,6 +80,7 @@ void Server::connectClient() {
 	SigHandler::unmask();
 }
 
+// Process command from client to server
 void Server::clientProcessQuery(ClientManager &client, QUERY_TYPE query) {
 	switch (query) {
 		// For connection
@@ -209,25 +207,27 @@ void Server::clientProcessCreateFastGame(ClientManager &client) {
 }
 
 
-// For ranking
+// Ranking Position
 void Server::clientProcessRankingPos(ClientManager &client) {
 	client.sendQueryMsg(this->database.getRankingPosString(client.getAccount()), QUERY::RANKING_POS);
     ServerSentence::RankingPos(client.getUsername(), true);
 
 }
 
+// Ranking top 5
 void Server::clientProcessRankingTop(ClientManager &client) {
 	client.sendQueryMsg(this->database.getRankingTopString(), QUERY::RANKING_TOP);
     ServerSentence::RankingTop(client.getUsername(), true);
 }
 
+// Ranking reset
 void Server::clientProcessRankingReset(ClientManager &client) {
     if (client.getUsername() == "admin") { this->database.resetRanking(); }
     client.send(""); // todo vérifier si on est obligé de renvoyer qqch ou pas.
     ServerSentence::ResetRank(client.getUsername());
 }
 
-// For friends
+// Friend infos
 void Server::clientProcessFriendsInfo(ClientManager &client) {
     const std::vector<std::string> friends = client.getAccount()->getFriendList().toVector(this->database);
     const std::vector<std::string> requests = client.getAccount()->getFriendRequestList().toVector(this->database);
@@ -235,16 +235,19 @@ void Server::clientProcessFriendsInfo(ClientManager &client) {
     ServerSentence::FriendInfo(client.getUsername());
 }
 
+// Friend list
 void Server::clientProcessFriendsList(ClientManager &client) {
 	client.send(client.getAccount()->getFriendList().toString(this->database));
     ServerSentence::FriendList(client.getUsername());
 }
 
+// Friend request
 void Server::clientProcessFriendsRequest(ClientManager &client) {
 	client.send(client.getAccount()->getFriendRequestList().toString(this->database));
     ServerSentence::FriendRequest(client.getUsername());
 }
 
+// Friend accept
 void Server::clientProcessFriendsAccept(ClientManager &client) {
     bool success = true;
 	User* new_friend = database.getUser(client.getS1().c_str());
@@ -266,6 +269,7 @@ void Server::clientProcessFriendsAccept(ClientManager &client) {
     ServerSentence::FriendAccept(client.getUsername(), client.getS1(), success);
 }
 
+// Friend refuse
 void Server::clientProcessFriendsRefuse(ClientManager &client) {
     bool success = true;
 	User* remove_friend = database.getUser(client.getS1().c_str());
@@ -285,68 +289,84 @@ void Server::clientProcessFriendsRefuse(ClientManager &client) {
     ServerSentence::FriendRefuse(client.getUsername(), client.getS1().c_str(), success);
 }
 
+// Friend add
 void Server::clientProcessFriendsAdd(ClientManager &client) {
-	std::cout << "[Received 'friend add' query from client '" << client.getAccount()->getUsername() << "']" << std::endl;
+    bool success = true;
 	User* new_friend = database.getUser(client.getS1().c_str());
-	User* client_account = client.getAccount();
-    // Condition du process
-    if (new_friend == nullptr)                                  { client.send("Le pseudo entré n'existe pas."); return; }
-    if ( client_account == new_friend )                         { client.send("Vous ne pouvez pas être ami avec vous même."); return; }
-    if ( client_account->isFriendWith(*new_friend) )            { client.send("Vous êtes déjà ami avec ce joueur !"); return; }
-    if ( client_account->hasSentFriendRequestTo(*new_friend) )  { client.send("Vous avez déjà envoyé une demande d'ami à ce joueur !"); return; }
-    // Process of making them friends
-    if ( client_account->hasReceiveFriendRequestFrom(*new_friend) ) {
-        client_account->acceptRequest(new_friend->getId(), database);
-        client.send("Cet utilisateur vous a déjà demandé en ami.\nVous êtes donc désormais ami avec " + new_friend->getUsername() + " !");
-        std::cout << "['friend add' query from client '" << client.getAccount()->getUsername() << "' was successful]\n" << std::endl;
-        return;
-	}
-    // Process of sending request
-    client_account->sendRequest(new_friend->getId(), database);
-    client.send("La demande d'ami a bien été envoyée !");
-    std::cout << "['friend add' query from client '" << client.getAccount()->getUsername() << "' was successful]\n" << std::endl;
+	User* me = client.getAccount();
+
+    // Process conditions
+    // 1. New friend must exist in the db
+    // 2. New friend cannot be me
+    // 3. Me and new friend are not friend yet
+    // 4. Me should not have already sent a friend request
+    if (new_friend == nullptr)                          { success = false; }
+    else if ( me == new_friend )                        { success = false; }
+    else if ( me->isFriendWith(*new_friend) )           { success = false; }
+    else if ( me->hasSentFriendRequestTo(*new_friend) ) { success = false; }
+
+    //
+    if (success) {
+        // Already receive a friend request -> so they become friend
+        if ( me->hasReceiveFriendRequestFrom(*new_friend) ) { me->acceptRequest(new_friend->getId(), database); }
+        // Just send a friend request
+        else { me->sendRequest(new_friend->getId(), database); }
+    }
+
+    client.send("");
+    ServerSentence::FriendAdd(client.getUsername(), client.getS1().c_str(), success);
 
 }
 
+// Friend remove
 void Server::clientProcessFriendsRemove(ClientManager &client) {
-	std::cout << "\n[Received 'friend remove' query from client '" << client.getAccount()->getUsername() << "']" << std::endl;
-	User* new_friend = database.getUser(client.getS1().c_str());
-	User* client_account = client.getAccount();
+    bool success = true;
+	User* remove_friend = database.getUser(client.getS1().c_str());
+	User* me = client.getAccount();
     // Condition of process
-	if ( new_friend == nullptr )                      { client.send("Le pseudo entré n'existe pas."); return; }
-    if ( !client_account->isFriendWith(*new_friend) ) { client.send("Vous n'êtes pas ami avec ce joueur !"); return; }
+	if ( remove_friend == nullptr )               { success = false; }
+    else if ( !me->isFriendWith(*remove_friend) ) { success = false;}
     // Process of removing one friend
-    client_account->removeFriend(new_friend->getId(), database);
-    client.send("Vous n'êtes désormais plus ami avec " + new_friend->getUsername() + ".");
-    std::cout << "['friend remove' query from client '" << client.getAccount()->getUsername() << "' was successful]\n" << std::endl;
+    if (success) { me->removeFriend(remove_friend->getId(), database); }
 
+    client.send("");
+    ServerSentence::FriendRemove(client.getUsername(), client.getS1(), success);
 }
 
-// For message
-
+// Show messages
 void Server::clientProcessShowMessage(ClientManager &client) {
-	std::cout << "[Received 'message show' query from client '" << client.getAccount()->getUsername() << "']" << std::endl;
-	User* user = database.getUser(client.getS1().c_str());
+    bool success = true;
+    User* user = database.getUser(client.getS1().c_str());
 	Conversation* conv = database.getConv(client.getAccount(), user);
-    // Condition of the process
-    if ( user == nullptr ) { client.send("Le pseudo entré n'existe pas."); return; }
-    if ( conv == nullptr ) { client.send("Aucune conversation avec ce joueur na été trouvée !"); return; }
-    // Process of showing a message
-    client.send(std::string{*conv});
-    std::cout << "['message show' query from client '" << client.getAccount()->getUsername() << "' was successful]\n" << std::endl;
 
+    // Process conditions
+    // 1. User must exist in the db
+    // 2. The conversation between the 2 user must exist
+    if ( user == nullptr )      { success = false; }
+    else if ( conv == nullptr ) { success = false; }
+
+    // Showing messages
+    if (success) { client.send(std::string{*conv}); }
+    else { client.send(""); }
+
+    ServerSentence::ShowConv(client.getUsername(), client.getS1(), success);
 }
 
+// Send message
 void Server::clientProcessSendMessage(ClientManager &client) {
-	std::cout << "[Received 'message send' query from client '" << client.getAccount()->getUsername() << "']" << std::endl;
+    bool success = true;
 	User* user = database.getUser(client.getS1().c_str());
-    // Condition of the process
-	if (user == nullptr)                                     { client.send("Le pseudo entré n'existe pas."); return; }
-    if ( !client.getAccount()->isFriendWith(user->getId()) ) { client.send("Vous n'êtes pas ami avec ce joueur !"); return; }
-    // Process of sending a message
-    database.sendMsg(client.getAccount(), user, client.getS2());
-    client.send("Vous avez bien envoyé un message à " + user->getUsername() + ".");
-    std::cout << "['message send' query from client '" << client.getAccount()->getUsername() << "' was successful]\n" << std::endl;
+
+    // Process conditions
+	if (user == nullptr)                                          { success = false; }
+    else if ( !client.getAccount()->isFriendWith(user->getId()) ) { success = false; }
+
+
+    // Sending message
+    if (success) { database.sendMsg(client.getAccount(), user, client.getS2()); }
+
+    client.send("");
+    ServerSentence::SendMessage(client.getUsername(), client.getS1(), success);
 }
 
 // Search in the connected account if the user is connected

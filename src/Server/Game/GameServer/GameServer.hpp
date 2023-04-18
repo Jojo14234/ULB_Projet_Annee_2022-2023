@@ -1,18 +1,17 @@
-#ifndef _SERVER_GAME_SERVER_HPP
-#define _SERVER_GAME_SERVER_HPP
+#pragma once
 
+#include <SFML/Network.hpp>
 #include <vector>
 
 #include "../Utility/GameCode.hpp"
 #include "../../../Game/Capitalist.hpp"
+#include "../../../Game/Player/Player.hpp"
 #include "../../../Utils/Config/Configs.hpp"
 #include "../../../Game/Board/Obtainable/Cells/Land/Land.hpp"
-#include "../../../Game/Player/Player.hpp"
-#include <SFML/Network.hpp>
 
 
 
-class ClientManager;	// forward declaraction
+class ClientManager;	// forward declaration
 
 
 class GameServer {
@@ -33,122 +32,93 @@ class GameServer {
 
 public:
 	
-	GameServer(GameParameters parameters): game{parameters}, maxPlayer{parameters.maxPlayers} { clients.reserve(parameters.maxPlayers); }
+	GameServer(GameParameters parameters)
+            : game{parameters}, maxPlayer{parameters.maxPlayers} { clients.reserve(parameters.maxPlayers); }
 
     // Send big string with infos in it.
     void sendStartData();
     void sendGameData();
     void sendBetterGameData();
 
-    // Player
 
-    void client_has_join_the_game(ClientManager &client);
-
+    // GAME LOOP
     GameStats clientLoop(ClientManager &client);
-
-    Player* findMe(ClientManager &client);
-
     void clientTurn(ClientManager &client, Player* me);
-
     void checkAndManageBankruptcy(ClientManager& client, Player* me);
 
-    void processRollDice(ClientManager&, Player* player);
 
-    void processBuild(ClientManager &client, Player* player);
-
+    // PROCESS
+    // Start
     void processStart(ClientManager* client);
 
-    void processJail(ClientManager& client, Player *player);
+    // Roll
+    void processRollDice(ClientManager&, Player* player);
 
-    void playerInJailInfos(ClientManager &client);
-
-    void playerBuildInfos(ClientManager &client);
-
+    // Build / Destruct
+    void processBuild(ClientManager &client, Player* player);
     void processSellBuild(ClientManager &client, Player *player);
 
-    void playerSellBuildInfos(ClientManager &client);
-
+    // Mortgage / lift
     void processMortgage(ClientManager &client, Player *player);
-
-    void playerMortgageInfos(ClientManager &client);
-
     void processLiftMortgage(ClientManager &client, Player *player);
 
-    void playerLiftMortgageInfos(ClientManager &client);
-
+    // Exchange
+    void processAskExchange(ClientManager &client, Player *player);
     void processExchange(ClientManager &client, Player *player);
 
-    void playerExchangeInfos(ClientManager &client);
-
-    void processAskExchange(ClientManager &client, Player *player);
-
+    // Auction
     void processAskAuction(ClientManager &client, Player *player);
-
+    void processAskBid(ClientManager &client, Player *player);
+    void processAuction(Player* player, Land* land);
     void participateAuction(ClientManager &client, Player *player);
 
-    void processAskBid(ClientManager &client, Player *player);
+    // Jail
+    void processJail(ClientManager& client, Player *player);
 
-    void processAuction(Player* player, Land* land);
-
+    //Bankrupt
     void processBankruptByGame(Player *player);
     void processBankruptByPlayer(ClientManager &client, Player* player, Player* other);
-
-    void playerDebtInfos(ClientManager &client, Player* player);
-
-    void suspectBankrupt(Player* player);
     void processPayDebt(ClientManager &client, Player* player);
     void processBankrupt(ClientManager &client, Player* player);
 
-
+    // Lost
     void processLost(ClientManager &client);
 
 
+    // INFOS
+    void clientJoinGameInfos(ClientManager &client);
+    void playerBuildInfos(ClientManager &client);
+    void playerSellBuildInfos(ClientManager &client);
+    void playerMortgageInfos(ClientManager &client);
+    void playerLiftMortgageInfos(ClientManager &client);
+    void playerExchangeInfos(ClientManager &client);
+    void playerInJailInfos(ClientManager &client);
+    void playerDebtInfos(ClientManager &client, Player* player);
 
 
-
-
-    // Getter
+    // UTILITY
+    void addPlayer(ClientManager &client);
+    void removeClient(ClientManager* client);
+    void connectClientToThisGame(ClientManager &client);
+    Player* findMe(ClientManager &client);
+    void suspectBankrupt(Player* player);
     GAME_QUERY_TYPE getGameQuery(ClientManager &client);
 
-
-    void clientBankruptLoop(ClientManager &client);
-    void clientAuctionLoop(ClientManager &client, LandCell* land_cell);
-    void participateInAuction(ClientManager &client);
-    void participateInExchange(ClientManager &client);
-    void removeClient(ClientManager* client);
-
-	// GETTERS
-	int getCode() const;
-    Capitalist* getGame();
-	
-	// VERIFIERS
-	bool isCode(int other) const;
-
-    //add Player object to players vector in Capitalist
-    void addPlayer(ClientManager &client);
-
-
+    // Updater
     void updateAllClients(std::string update);
     void updateAllClientsWithQuery(QUERY &&query, std::string update);
     void updateThisClientWithQuery(QUERY &&query, std::string update, ClientManager &client);
+
+	// getter
+	int getCode() const;
+    Capitalist* getGame();
     Land* getLand(std::string &name);
-    void processBankruptcyToPlayer();
-
-
-    /*
-     * Rémy Test
-     */
-
-
-    void connectClientToThisGame(ClientManager &client);
-
     CardDeck* getDeck(std::string name);
-
     int getCurrentPlayerIndex();
-
     int getMaxPlayer() const {return this->maxPlayer;}
     int getNbConnectedClient() const {return this->clients.size();}
 
-};
+    // checker
+	bool isCode(int other) const;
 
-#endif
+};

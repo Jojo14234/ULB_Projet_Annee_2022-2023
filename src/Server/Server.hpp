@@ -6,9 +6,9 @@
 #include <string>
 #include <pthread.h>
 
+#include "Database/Database.hpp"
 #include "ClientManager/ClientManagerList.hpp"
 #include "Game/GameServer/GameServerList.hpp"
-#include "Database/Database.hpp"
 #include "../Utils/Config/Configs.hpp"
 
 

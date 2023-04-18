@@ -1,5 +1,4 @@
-#ifndef _SERVER_GAME_CODE_HPP
-#define _SERVER_GAME_CODE_HPP
+#pragma once
 
 #include <unordered_set>
 #include <cstdlib>
@@ -42,5 +41,3 @@ public:
 	int getCode() const { return code; }
 
 };
-
-#endif

@@ -97,4 +97,24 @@ public:
         string success = (successFull) ? " successfully" : " failed to";
         cout << "[SERVER] > {FRIENDS_ACCEPT} > " << username << success <<" refuse a friend request from " << from << endl;
     }
+
+    static void FriendAdd(string username, string who, bool successFull) {
+        string success = (successFull) ? " successfully" : " failed to";
+        cout << "[SERVER] > {FRIENDS_ADD} > " << username << success <<" sent a friend request to " << who << endl;
+    }
+
+    static void FriendRemove(string username, string who, bool successFull) {
+        string success = (successFull) ? " successfully" : " failed to";
+        cout << "[SERVER] > {FRIENDS_REMOVE} > " << username << success <<" remove " << who <<" from his/her friends." << endl;
+    }
+
+    static void ShowConv(string username, string who, bool successFull) {
+        string success = (successFull) ? " successfully" : " failed to";
+        cout << "[SERVER] > {MSG_SHOW} > " << username << success <<" show its conversation with " << who << endl;
+    }
+
+    static void SendMessage(string username, string who, bool successFull) {
+        string success = (successFull) ? " successfully" : " failed to";
+        cout << "[SERVER] > {MSG_SEND} > " << username << success <<" sent a message to " << who << endl;
+    }
 };

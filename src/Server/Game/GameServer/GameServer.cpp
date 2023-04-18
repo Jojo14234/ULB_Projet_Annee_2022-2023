@@ -48,7 +48,7 @@ void GameServer::sendBetterGameData() {
 /*
  * Send a Message with the username and the game code to everyone
  */
-void GameServer::client_has_join_the_game(ClientManager &client) {
+void GameServer::clientJoinGameInfos(ClientManager &client) {
     std::string str = client.getUsername() + ":" + std::to_string(this->getCode()) + ":" +
                       std::to_string(game.isFastGame()) + ":" + std::to_string(game.getStartMoney()) + ":" + 
                       std::to_string(game.getMaxPlayers()) + ":" + std::to_string(game.getMaxHome()) + ":" + 
@@ -125,7 +125,7 @@ void GameServer::connectClientToThisGame(ClientManager &client) {
     this->clients.push_back(&client);
     client.setGameServer(this);
     this->addPlayer(client);
-    this->client_has_join_the_game(client);
+    this->clientJoinGameInfos(client);
 }
 
 /*
@@ -198,7 +198,7 @@ GAME_QUERY_TYPE GameServer::getGameQuery(ClientManager &client) {
  */
 GameStats GameServer::clientLoop(ClientManager &client) {
     Player* me = this->findMe(client);
-    this->client_has_join_the_game(client);
+    this->clientJoinGameInfos(client);
 
     // LOOP UNTIL THE HOST START THE GAME
     while ( !this->game.isRunning() ) {

@@ -1,10 +1,8 @@
-#ifndef _SERVER_GAME_SERVER_LIST_HPP
-#define _SERVER_GAME_SERVER_LIST_HPP
+#pragma once
 
-#include "../../../Utils/List.hpp"
-#include "../../ClientManager/ClientManager.hpp"
 #include "GameServer.hpp"
-
+#include "../../ClientManager/ClientManager.hpp"
+#include "../../../Utils/List.hpp"
 
 class GameServerList : public List<GameServer> {
 
@@ -21,5 +19,3 @@ public:
     void removeGameServer(int gc);
 
 };
-
-#endif
