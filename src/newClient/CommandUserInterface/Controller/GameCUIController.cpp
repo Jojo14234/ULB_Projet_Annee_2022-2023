@@ -210,16 +210,6 @@ void GameCUIController::createGameGU(const std::string& response) {
 void GameCUIController::joinGameGU(const std::string& response) {
     GameLaunchingParser launching_parser(response);
     game_info = launching_parser.parseJoinQuery();
-    /*this->view->getConsole()->addText(game_info->username);
-    this->view->getConsole()->addText(std::to_string(game_info->is_fast));
-    this->view->getConsole()->addText(std::to_string(game_info->max_hotels));
-    this->view->getConsole()->addText(std::to_string(game_info->max_house));
-    this->view->getConsole()->addText(std::to_string(game_info->max_players));
-    this->view->getConsole()->addText(std::to_string(game_info->max_turns));
-    this->view->getConsole()->addText(std::to_string(game_info->nb_player));
-    this->view->getConsole()->addText(std::to_string(game_info->start_money));*/
-    //this->view->getConsole()->addText(game_info->player_usernames[0]);
-    //this->view->getConsole()->addText(game_info->player_usernames[1]);
     this->initScreen(game_info->game_code);
     this->playerJoinUpdate();
 }
@@ -281,13 +271,13 @@ void GameCUIController::playerMoveGU(const std::string& response){
     std::shared_ptr<PlayerMoveInfo> move_info = game_parser.parsePlayerMoveQuery();
     int index = this->view->getBoard()->getCellIndex(move_info->property_name);
     this->view->getBoard()->movePlayer(index, move_info->player);
-    /*if (move_info->property_name == "Prison" and this->model->isMyTurn()){
-        this->view->getConsole()->addText("Vous visitez la prison.");
+    if (move_info->property_name == "Prison" and this->model->isMyTurn()){
+        this->view->getConsole()->addText("Vous arrivez sur la case prison.");
     } else if (move_info->property_name == "Start" and this->model->isMyTurn()){
         this->view->getConsole()->addText("Vous arrivez sur la case départ.");
     } else if (move_info->property_name == "Parc" and this->model->isMyTurn()){
         this->view->getConsole()->addText("Vous arrivez au parc gratuit.");
-    }*/
+    }
 }
 
 void GameCUIController::playerBoughtGU(const std::string& response){
