@@ -43,6 +43,7 @@ bool ConnectionGUIController::doPasswordContain(sf::Event event) {
     return this->view->password.contains(event.mouseButton.x, event.mouseButton.y);
 }
 
+//TODO check information validity
 void ConnectionGUIController::loginProcess() {
     this->model->sendLogin(this->view->username.getText(), this->view->password.getText());
     if (this->model->receive() == QUERY::TRUEQ) { this->new_state = STATE::MENU; }

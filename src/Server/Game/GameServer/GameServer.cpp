@@ -354,7 +354,7 @@ void GameServer::processJail(ClientManager &client, Player *player) {
     // TODO tester la /use
     this->playerInJailInfos(client);
     GAME_QUERY_TYPE query;
-    bool is_valid=false;
+    bool is_valid = false;
     while (! is_valid){
         client.receive(query);
         switch (query) {
