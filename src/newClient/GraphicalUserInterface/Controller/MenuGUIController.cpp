@@ -39,6 +39,7 @@ void MenuGUIController::handle(sf::Event event) {
                 if (this->doJoinPopUpNBtnContain(0, event)) { this->view->join_popup.setHidden(); break; }
                 // ok button
                 if (this->doJoinPopUpNBtnContain(1, event)) {
+                    std::cout << this->view->join_popup.getInput(0)->getText() << std::endl;
 					std::string game_code = "/join " + this->view->join_popup.getInput(0)->getText();
     				this->model->sendCommand(MainInputParser{game_code});
 					this->new_state = STATE::GAME;
@@ -113,7 +114,8 @@ void MenuGUIController::createPopUpClick(int n, bool right_side) {
 
 void MenuGUIController::createProcess() {
     std::string cmd = this->view->getCreateCmd();
-	this->model->sendCommand(MainInputParser{cmd});
+	//this->model->sendCommand(MainInputParser{cmd});
+    this->model->sendCommand(MainInputParser{"/create normal 15 10 2 3"});
 	this->new_state = STATE::GAME;
 	this->game_controller->update();
 }

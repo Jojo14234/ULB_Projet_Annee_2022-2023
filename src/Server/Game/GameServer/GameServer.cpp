@@ -125,7 +125,7 @@ void GameServer::connectClientToThisGame(ClientManager &client) {
     this->clients.push_back(&client);
     client.setGameServer(this);
     this->addPlayer(client);
-    this->clientJoinGameInfos(client);
+    //this->clientJoinGameInfos(client); // todo c'est ça qui envoie 2 fois Bao
 }
 
 /*

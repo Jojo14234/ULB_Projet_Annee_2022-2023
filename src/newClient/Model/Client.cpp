@@ -86,7 +86,7 @@ bool Client::sendCommand(MainInputParser &parser) {
 	    case QUERY_TYPE::MESSAGE_SHOW: packet << parser[2]; break;
 	    case QUERY_TYPE::MESSAGE_SEND: packet << parser[1] << parser.regroup(2, parser.size(), ' '); break;
 		case QUERY_TYPE::CREATE_FAST_GAME: 
-		//case QUERY_TYPE::CREATE_GAME: packet << parser.regroup(2, parser.size(), ' '); break;
+		case QUERY_TYPE::CREATE_GAME: packet << parser.regroup(2, parser.size(), ' '); break;
 	    default: break;
 	}
 	this->sendPacket(packet);

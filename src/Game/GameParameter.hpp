@@ -3,6 +3,7 @@
 #include "../Utils/Config/ConfigsGame.hpp"
 #include <sstream>
 #include <string>
+#include <iostream>
 
 
 
@@ -20,6 +21,7 @@ struct GameParameters {
         std::istringstream input{str};
         int space = 0;
         for (std::string word; std::getline(input, word, ' '); space++) {
+            std::cout << word << "|" <<space << std::endl;
             switch (space) {
                 case 0: startMoney = stringToInt(word, STARTING_MONEY); break;
                 case 1: maxPlayers = stringToInt(word, MAX_PLAYER_DEFAULT); break;
