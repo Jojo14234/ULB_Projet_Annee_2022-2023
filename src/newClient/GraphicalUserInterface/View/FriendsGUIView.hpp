@@ -30,10 +30,12 @@ class FriendsGUIView: public AbstractGUIView {
 	ImageButton send_button{ObjectInfo<>(WINDOW_HEIGHT/15.f, WINDOW_HEIGHT/15.f, WINDOW_WIDTH/2+WINDOW_WIDTH/8.f + WINDOW_HEIGHT/15*1/2, WINDOW_HEIGHT/6.f + WINDOW_WIDTH/4*2-WINDOW_WIDTH/10), SEND_BUTTON_PATH};
 
 	//FRIEND REQUEST-------------------------------------------------------------- 
-	Box request_box{ObjectInfo<>(WINDOW_WIDTH*4/12.f - WINDOW_WIDTH/25.f ,WINDOW_HEIGHT/5  ,WINDOW_WIDTH*8/12.f + WINDOW_WIDTH/18 ,WINDOW_HEIGHT/10.f ), WHITE};
-	Text friend_request{ObjectInfo<>(0.f, WINDOW_WIDTH/60.f, WINDOW_WIDTH*8/12.f + 100 , WINDOW_HEIGHT/8.f), "MAchin vous a friend request"};
-	ImageButton yes_button{ObjectInfo<>(WINDOW_WIDTH/16.f, WINDOW_HEIGHT/16.f, (WINDOW_WIDTH*8/12.f + WINDOW_WIDTH/18) +((WINDOW_WIDTH*4/12.f - WINDOW_WIDTH/25.f)/2)-WINDOW_WIDTH/16.f-50, WINDOW_HEIGHT/5.f), YES_BUTTON_PATH};
-	ImageButton no_button{ObjectInfo<>(WINDOW_WIDTH/16.f, WINDOW_HEIGHT/16.f, (WINDOW_WIDTH*8/12.f + WINDOW_WIDTH/18)+(WINDOW_WIDTH*4/12.f - WINDOW_WIDTH/25.f)/2,WINDOW_HEIGHT/5.f), NO_BUTTON_PATH};
+	Box manager_box{ObjectInfo<>(WINDOW_WIDTH*4/12.f - WINDOW_WIDTH/25.f ,WINDOW_HEIGHT/5  ,WINDOW_WIDTH*8/12.f + WINDOW_WIDTH/18 ,WINDOW_HEIGHT/10.f ), WHITE};
+	Text friend_request{ObjectInfo<>(0.f, WINDOW_WIDTH/60.f, WINDOW_WIDTH*8/12.f + 100 , WINDOW_HEIGHT/8.f), "Demandes d'ami.e"};
+	ImageButton request_button{ObjectInfo<>(WINDOW_WIDTH/16.f, WINDOW_HEIGHT/16.f, (WINDOW_WIDTH*8/12.f + WINDOW_WIDTH/18) +((WINDOW_WIDTH*4/12.f - WINDOW_WIDTH/25.f)/2)-WINDOW_WIDTH/16.f-50, WINDOW_HEIGHT/5.f), YES_BUTTON_PATH};
+	ImageButton ask_button{ObjectInfo<>(WINDOW_WIDTH/16.f, WINDOW_HEIGHT/16.f, (WINDOW_WIDTH*8/12.f + WINDOW_WIDTH/18)+(WINDOW_WIDTH*4/12.f - WINDOW_WIDTH/25.f)/2,WINDOW_HEIGHT/5.f), NO_BUTTON_PATH};
+	ModalBox request_popup{ObjectInfo<>(WINDOW_WIDTH/2.f, WINDOW_HEIGHT/2.f, WINDOW_WIDTH/4.f, WINDOW_HEIGHT/4.f), BOX_COLOR};
+	ModalBox ask_popup{ObjectInfo<>(WINDOW_WIDTH/2.f, WINDOW_HEIGHT/2.f, WINDOW_WIDTH/4.f, WINDOW_HEIGHT/4.f), BOX_COLOR};
 
 	//FRIEND LIST--------------------------------------------------------------
 	//Box friend_list_box{ObjectInfo<>(WINDOW_WIDTH*4/12.f - WINDOW_WIDTH/25.f, WINDOW_HEIGHT*8/12,WINDOW_WIDTH*8/12.f + WINDOW_WIDTH/18, WINDOW_HEIGHT/8.f+WINDOW_HEIGHT/5), WHITE};
@@ -45,46 +47,19 @@ class FriendsGUIView: public AbstractGUIView {
 
 public:
 
-	explicit FriendsGUIView(sf::RenderWindow* window) : AbstractGUIView(window) {
+	explicit FriendsGUIView(sf::RenderWindow* window);
 		// TODO prendre les size des attributs et mettre ici
-		const double size_x = WINDOW_WIDTH*4/12.f - WINDOW_WIDTH/25.f;
-		const double size_y = WINDOW_WIDTH/20.f;
-		const double pos_x = WINDOW_WIDTH*8/12.f + WINDOW_WIDTH/18;
-		const double pos_y = WINDOW_WIDTH/30.f + WINDOW_HEIGHT/8.f+WINDOW_HEIGHT/5+30;
-		this->scroll.addObject(new FriendBox{ObjectInfo<>(size_x, size_y, pos_x, pos_y), "xX_.h4w3n._Xx"});
-		this->scroll.addObject(new FriendBox{ObjectInfo<>(size_x, size_y, pos_x, pos_y+10+size_y), "lolcatz1287"});
-		this->scroll.addObject(new FriendBox{ObjectInfo<>(size_x, size_y, pos_x, pos_y+(10+size_y)*2), "m4cr0n_c4lvitie"});
-		this->scroll.addObject(new FriendBox{ObjectInfo<>(size_x, size_y, pos_x, pos_y+(10+size_y)*3), "__t0rtUe._.m4UdiT3__"});
-		this->scroll.addObject(new FriendBox{ObjectInfo<>(size_x, size_y, pos_x, pos_y+(10+size_y)*4), "x3l0w0"});
-		this->scroll.addObject(new FriendBox{ObjectInfo<>(size_x, size_y, pos_x, pos_y+(10+size_y)*5), "HUGOGO"});
-	}
 	
 	~FriendsGUIView()=default;
 
-	void draw() override {
-		//MESSAGE
-		back_button.draw(*window);
-		messaging_box.draw(*window);
-		other_user.draw(*window);
-		conversation_bbox.draw(*window);
-		messages.draw(*window);
-		message_border.draw(*window);
-		message_input.draw(*window);
-		send_button.draw(*window);
-
-		//FRIEND REQUEST
-		request_box.draw(*window);
-		friend_request.draw(*window);
-		yes_button.draw(*window);
-		no_button.draw(*window);
-
-		this->scroll.draw(*window);
-		friend_list.draw(*window);
-		
-	}
+	void draw() override;
 
 	void clear();
 
 	friend class FriendsGUIController;
+
+	void initFriendBox();
+	void initRequestPopup();
+	void initAskPopup();
 
 };
