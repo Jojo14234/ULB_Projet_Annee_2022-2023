@@ -1,18 +1,20 @@
 #pragma once
 #include <SFML/Audio.hpp>
+#include <vector>
 
 
 template <typename SoundBuffer>
 class Audible {
 
     static inline SoundBuffer buffer;
+    static inline std::vector<Audible*> instances;
     sf::Sound sound;
 
 public:
-    Audible() { sound.setBuffer(buffer.getBuffer()); }
+    Audible() { instances.push_back(this); sound.setBuffer(buffer.getBuffer()); }
 
     void playSound() { sound.play(); }
-    void setVolume(int value) { sound.setVolume(value); }
+    static void setVolume(int value) { for (auto* e : instances) e->sound.setVolume(value); }
 
 };
 
