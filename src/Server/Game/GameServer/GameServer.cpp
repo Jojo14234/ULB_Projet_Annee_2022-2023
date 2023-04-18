@@ -1,12 +1,12 @@
 #include "GameServer.hpp"
-#include "../../Game/Board/Obtainable/Cells/LandCell.hpp"
-#include "../ClientManager/ClientManager.hpp"
-#include "../../utils/Configs.hpp"
-#include "../../Game/Board/Obtainable/Cells/Land/Land.hpp"
-#include "../../utils/Exceptions.hpp"
+#include "../../../Game/Board/Obtainable/Cells/LandCell.hpp"
+#include "../../ClientManager/ClientManager.hpp"
+#include "../../../Utils/Config/Configs.hpp"
+#include "../../../Game/Board/Obtainable/Cells/Land/Land.hpp"
+#include "../../../Utils/Exceptions.hpp"
 #include "string.h"
-#include "Timer.hpp"
-#include "../../Game/Capitalist.hpp"
+#include "../Utility/Timer.hpp"
+#include "../../../Game/Capitalist.hpp"
 #include <string>
 
 #include <stdlib.h>

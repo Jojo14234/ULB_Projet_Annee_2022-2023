@@ -3,11 +3,11 @@
 
 #include <vector>
 
-#include "GameCode.hpp"
-#include "../../Game/Capitalist.hpp"
-#include "../../utils/Configs.hpp"
-#include "../../Game/Board/Obtainable/Cells/Land/Land.hpp"
-#include "../../Game/Player/Player.hpp"
+#include "../Utility/GameCode.hpp"
+#include "../../../Game/Capitalist.hpp"
+#include "../../../Utils/Config/Configs.hpp"
+#include "../../../Game/Board/Obtainable/Cells/Land/Land.hpp"
+#include "../../../Game/Player/Player.hpp"
 #include <SFML/Network.hpp>
 
 

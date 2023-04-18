@@ -8,7 +8,8 @@
 #include <fstream>
 #include <memory>
 
-#include "../../utils/AccessMonitor.hpp"
+#include "../../Utils/AccessMonitor.hpp"
+#include "../../Utils/Config/ConfigsDatabase.hpp"
 #include "Chat/Conversation.hpp"
 
 
@@ -56,8 +57,10 @@ public:
 	std::string getUsername(const int id);
 
     // GetRanking
-	int getRankingPos(User* user);
+	int getRankingPos(const User* user);
     std::array<const User*, 5> getRanking();
+    std::string getRankingTopString();
+    std::string getRankingPosString(const User* user, int pos = -1);
     void resetRanking();
     void sortByRank(unsigned int size);
 

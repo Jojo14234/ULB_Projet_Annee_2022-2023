@@ -2,16 +2,24 @@
 #include <memory>
 
 #include "Database.hpp"
-#include "User.hpp"
+#include "User/User.hpp"
 #include "Chat/Conversation.hpp"
 
 
 void Database::load() {
 	FILE *file = std::fopen(path.c_str(), "rb");
-	if (!file) { this->data.reserve(10); std::cout << "Database empty !" << std::endl; return; }
+
+
+	if (!file) {
+        this->data.reserve(EMPTY_DATABASE_RESERVE_SPACE);
+        std::cout << "Database empty !" << std::endl;
+        return;
+    }
+
+
 	size_t size;
 	fread(&size, sizeof(size_t), 1, file);
-	this->data.reserve(size + size/4);
+	this->data.reserve(size + size/RESERVE_SPACE_SUPP);
 	for (size_t i = 0; i < size; i++) {
 		std::shared_ptr<User> user = std::make_shared<User>();
 		user->read(file);
@@ -24,10 +32,20 @@ void Database::load() {
 void Database::save() {
 	this->user_am.lockReader();
 	FILE *file = std::fopen(path.c_str(), "w+");
-	if (!file) exit(0);
-	size_t size = this->data.size();
+
+    // The file was not open properly
+    if (!file) {
+        // Impossible en théorie fOpen crée un fichier s'il n'existe pas.
+        std::cout << "Database not saved [ (" << path << ") didn't open properly]" << std::endl;
+        return;
+    }
+
+    // The file was open properly
+    size_t size = this->data.size();
 	fwrite(&size, sizeof(size_t), 1, file);
-	for (size_t i = 0; i < size; i++) this->data[i]->write(file);
+    for (auto user : this->data) {
+        user->write(file);
+    }
 	std::fclose(file);
 	std::cout << "Database saved : [" << this->getSize() << " account saved]"<< std::endl;
 	this->user_am.unlockReader();
@@ -68,7 +86,8 @@ User* Database::addUser(std::string username, std::string password) {
 	std::shared_ptr<User> user = std::make_shared<User>(this->getSize()+1, username.c_str(), password.c_str());
     this->data.push_back(user);
 	this->user_am.unlockWriter();
-	return user.get();
+    this->save();
+    return user.get();
 }
 
 void Database::print_in_file() {
@@ -79,7 +98,7 @@ void Database::print_in_file() {
 	file.close();
 }
 
-int Database::getRankingPos(User* user) {
+int Database::getRankingPos(const User* user) {
     this->sortByRank(this->data.size());
 	int idx = 1;
     for (auto u : this->data) {
@@ -105,6 +124,24 @@ std::array<const User*, 5> Database::getRanking() {
 	for (short unsigned i = 0; i < 5; i++) bests[i] = this->data[i].get();
 	this->user_am.unlockReader();
 	return bests;
+}
+
+std::string Database::getRankingTopString() {
+    std::array<const User*, 5> top = this->getRanking();
+    std::string input = "";
+    for (int i=0; i < 5 && top[i] != nullptr ; i++) {
+        input += this->getRankingPosString(top[i], i);
+    }
+    return input;
+}
+
+std::string Database::getRankingPosString(const User *user, int pos) {
+    std::string input = "";
+    int position = (pos == -1) ? this->getRankingPos(user) : pos;
+    input += std::to_string(position) + ":";
+    input += user->getUsername() + ":";
+    input += std::to_string(user->getStats().getScore()) + "|";
+    return input;
 }
 
 void Database::sortByRank(unsigned int size) {

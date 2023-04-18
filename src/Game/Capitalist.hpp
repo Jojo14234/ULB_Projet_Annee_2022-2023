@@ -3,27 +3,17 @@
 
 #include <SFML/Network.hpp>
 
-#include "../utils/Configs.hpp"
+#include "../Utils/Config/Configs.hpp"
 
 #include "Player/Player.hpp"
 #include "Board/Board.hpp"
 #include "../Game/Board/Obtainable/Cells/LandCell.hpp"
+#include "GameParameter.hpp"
 
 enum class AuctionStatus {STOP, START, OTHER};
 enum class ExchangeStatus{STOP, START, OTHER};
 enum class ExchangeResult{ACCEPTED, REFUSED, NON_CHOICE};
 class ClientManager;
-
-struct GameParameters {
-    bool isFastGame = false;
-    int startMoney = STARTING_MONEY;
-    int maxPlayers = MAX_PLAYER_DEFAULT;
-    int maxHome = MAX_HOME;
-    int maxHotel = MAX_HOTEL;
-    //todo add params if needed
-    int max_turn = 10000;
-};
-
 
 class Capitalist {
 

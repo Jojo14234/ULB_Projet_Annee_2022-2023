@@ -19,7 +19,7 @@
 #include <vector>
 #include "Obtainable/Cells/Land/Land.hpp"
 
-#include "../../utils/Configs.hpp"
+#include "../../Utils/Config/Configs.hpp"
 #include "Obtainable/Cells/LandCell.hpp"
 #include "Obtainable/Cards/CardDeck.hpp"
 #include "Obtainable/Cells/Land/Property.hpp"

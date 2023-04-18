@@ -1,8 +1,8 @@
 #ifndef _SERVER_GAME_SERVER_LIST_HPP
 #define _SERVER_GAME_SERVER_LIST_HPP
 
-#include "../../utils/List.hpp"
-#include "../ClientManager/ClientManager.hpp"
+#include "../../../Utils/List.hpp"
+#include "../../ClientManager/ClientManager.hpp"
 #include "GameServer.hpp"
 
 

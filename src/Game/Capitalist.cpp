@@ -2,8 +2,8 @@
 
 #include "Capitalist.hpp"
 #include "../Server/ClientManager/ClientManager.hpp"
-#include "../utils/randomFunctions.hpp"
-#include "../Server/Game/GameServer.hpp"
+#include "../Utils/randomFunctions.hpp"
+#include "../Server/Game/GameServer/GameServer.hpp"
 #include <unistd.h>  
 #include <thread>
 #include <random>
@@ -565,4 +565,4 @@ int Capitalist::getMaxHome() { return params.maxHome; }
 
 int Capitalist::getMaxHotels() { return params.maxHotel; }
 
-int Capitalist::getMaxTurns() { return params.max_turn; }
+int Capitalist::getMaxTurns() { return params.maxTurn; }

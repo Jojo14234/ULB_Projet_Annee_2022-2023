@@ -1,6 +1,6 @@
 #include "CellCard.hpp"
 
-#include "../../../../Server/Game/GameServer.hpp"
+#include "../../../../Server/Game/GameServer/GameServer.hpp"
 #include "../../../Player/Player.hpp"
 
 /*

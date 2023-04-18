@@ -4,17 +4,18 @@
 #include <string>
 #include <cstring>
 
-#include "GameStats.hpp"
-#include "Friend/FriendList.hpp"
-#include "Friend/FriendRequestList.hpp"
-#include "Database.hpp"
+#include "../Stats/GameStats.hpp"
+#include "../Friend/FriendList.hpp"
+#include "../Friend/FriendRequestList.hpp"
+#include "../Database.hpp"
+#include "../../../Utils/Config/ConfigsDatabase.hpp"
 
 
 class User {
 
 	int id;
-	char username[32];
-	char password[64];
+	char username[MAX_USERNAME_SIZE];
+	char password[MAX_PASSWORD_SIZE];
 
 	GameStats stats;
 	FriendList friend_list;
@@ -26,7 +27,7 @@ public:
 	friend class FriendRequestList;
 
 	User()=default;
-	User(int id, const char username[32], const char password[64]): id{id} {
+	User(int id, const char username[MAX_USERNAME_SIZE], const char password[MAX_PASSWORD_SIZE]): id{id} {
 		strcpy(this->username, username);
 		strcpy(this->password, password);
 	}

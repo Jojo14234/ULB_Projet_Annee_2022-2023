@@ -3,8 +3,8 @@
 #include <vector>
 
 #include "Client.hpp"
-#include "../../utils/Configs.hpp"
-#include "../../utils/Exceptions.hpp"
+#include "../../Utils/Config/Configs.hpp"
+#include "../../Utils/Exceptions.hpp"
 
 
 // Private methods

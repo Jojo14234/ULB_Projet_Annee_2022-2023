@@ -1,5 +1,5 @@
 #include "Message.hpp"
-#include "../User.hpp"
+#include "../User/User.hpp"
 
 
 Message::operator std::string() {

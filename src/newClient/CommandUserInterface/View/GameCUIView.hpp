@@ -9,7 +9,7 @@
 #include "AbstractCUIView.hpp"
 #include "Objects.hpp"
 #include "GameObject/Board.hpp"
-#include "../../../utils/AccessMonitor.hpp"
+#include "../../../Utils/AccessMonitor.hpp"
 #include "../../Model/Client.hpp"
 
 class GameCUIController; // forward declaration

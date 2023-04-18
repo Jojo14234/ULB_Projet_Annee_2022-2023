@@ -4,7 +4,7 @@
 
 #include "Player.hpp"
 #include "BankAccount.hpp"
-#include "../../Server/Game/GameServer.hpp"
+#include "../../Server/Game/GameServer/GameServer.hpp"
 //#include "../../Server/ClientManager/ClientManager.hpp"
 
 /*

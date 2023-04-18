@@ -5,7 +5,7 @@
 #include <string>
 #include <array>
 #include "Land.hpp"
-#include "../../../../../utils/Configs.hpp"
+#include "../../../../../Utils/Config/Configs.hpp"
 
 
 class Player;

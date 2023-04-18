@@ -7,9 +7,9 @@
 #include <pthread.h>
 
 #include "ClientManager/ClientManagerList.hpp"
-#include "Game/GameServerList.hpp"
+#include "Game/GameServer/GameServerList.hpp"
 #include "Database/Database.hpp"
-#include "../utils/Configs.hpp"
+#include "../Utils/Config/Configs.hpp"
 
 
 class Server {
@@ -27,15 +27,14 @@ class Server {
 	bool server_online = true;
 
 	// The Database
-	Database database{DB_PATH};
+	Database database{DATA_PATH};
 
 	// Connect a new client
 	void connectClient();
 
     // For Disconnection of the user
-    void clientProcessDisconnect(ClientManager &client);
-    void clientProcessQuit(ClientManager &client);
-	// To process the client query 
+    void clientProcessDisconnect(ClientManager &client, bool quit);
+	// To process the client query
 	void clientProcessQuery(ClientManager &client, QUERY_TYPE query);
 	// For connection
 	void clientProcessRegister(ClientManager &client);
