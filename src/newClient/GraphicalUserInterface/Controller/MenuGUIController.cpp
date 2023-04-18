@@ -113,6 +113,7 @@ void MenuGUIController::createPopUpClick(int n, bool right_side) {
 
 void MenuGUIController::createProcess() {
     std::string cmd = this->view->getCreateCmd();
+    //std::string a = "/create normal 1500 6 30 40";
 	this->model->sendCommand(MainInputParser{cmd});
 	this->new_state = STATE::GAME;
 	this->game_controller->update();

@@ -128,11 +128,14 @@ void GameGUIController::receiveMsgLoop() { // todo il faudrait pas déplacer les
 
         switch(query) {
             case QUERY::PLAYER_CREATE_GAME :            this->createGameGU(response); break;
-            case QUERY::PLAYER_JOIN_GAME :              this->joinGameGU(response); break;
+            case QUERY::PLAYER_JOIN_GAME :              this->joinGameGU(response);break;
             case QUERY::INFOS_START :                   this->infoStartGU(response); break;
+            case QUERY::INFOS_NOT_STARTED :             this->view->message_box.setString("Pour démarrer la partie ( /start )"); break;
+            case QUERY::INFOS_CANNOT_START :            this->view->message_box.setString("Attend tes amis avant de lancer la partie !"); break;
             case QUERY::INFOS_ROLL_DICE :               this->rollDiceGU(response); break;
             case QUERY::INFOS_GAME :                    this->infoGameGU(response); break;
             case QUERY::INFOS_NEW_TURN :                this->newTurnGU(response); break;
+            case QUERY::INFOS_NEW_TURN_IN_JAIL:         this->newTurnInJailGU(response); break;
             case QUERY::INFOS_PLAYER_MOVE :             this->playerMoveGU(response); break;
             case QUERY::INFOS_PLAYER_BOUGHT :           this->playerBoughtGU(response); break;
             case QUERY::INFOS_PLAYER_PAID_PLAYER :      this->playerPaidPlayerGU(response); break;
@@ -193,7 +196,7 @@ void GameGUIController::receiveMsgLoop() { // todo il faudrait pas déplacer les
             case QUERY::EXCHANGE_REFUSED :              this->view->message_box.setString("L'echange a ete refuse"); break;
             case QUERY::INFOS_NOT_ENOUGH_MONEY :        this->view->message_box.setString("Vous ne possedez pas assez d'argent."); break;
             case QUERY::STOP_WAIT :                     this->view->message_box.setString("Pas assez rapide. L'offre a été automatiquement annulee"); break;
-            default :                                   this->view->message_box.setString(response); break;
+            default :                                   this->view->message_box.setString(response);break;
         }
     }
 }
@@ -218,7 +221,8 @@ void GameGUIController::initScreen(int gamecode) {
     if ( this->model->isCreator() ) {
         this->view->gamecode_box.setVisible();
         this->view->gamecode_box.setGamecode(gamecode);
-        this->view->message_box.setString("Vous êtes le propriétaire de cette partie, utilisez /start pour lancer la partie");
+        this->view->message_box.setString("Vous êtes le propriétaire de cette partie");
+        this->view->message_box.addString("utilisez /start pour lancer la partie");
         this->view->setStartGame(true);
     }
     else {
@@ -256,7 +260,7 @@ void GameGUIController::createGameGU(const std::string& response) {
     GameLaunchingParser launching_parser(response);
     game_info = launching_parser.parseCreateQuery();
     this->model->createGame();
-    std::cout << "aaaaaaa" << std::endl;
+    //std::cout << this->model->isCreator() << std::endl;
     this->initScreen(game_info->game_code);
     //this->playerJoinUpdate();
 }
@@ -265,7 +269,8 @@ void GameGUIController::createGameGU(const std::string& response) {
 void GameGUIController::joinGameGU(const std::string& response) {
     GameLaunchingParser launching_parser(response);
     game_info = launching_parser.parseJoinQuery();
-    this->initScreen(game_info->game_code);
+    //std::cout << this->model->isCreator() << std::endl;
+    //this->initScreen(game_info->game_code);
     //this->playerJoinUpdate();
 }
 
@@ -316,6 +321,13 @@ void GameGUIController::newTurnGU(const std::string& response) {
         this->view->endTurn(); 
         this->model->endTurn(); 
         this->view->message_box.setString("C'est au tour de " + response + " !"); }}
+
+void GameGUIController::newTurnInJailGU(const std::string& response) {
+    JailInfo jail_info(response);
+    this->view->message_box.setString("Vous êtes en prison depuis " + std::to_string(jail_info.nb_turn) + " tours !");
+    this->view->setPrisonRound(true);
+    if (jail_info.has_card == false){this->view->card_prison_button.setHidden();}
+}
 
 
 
