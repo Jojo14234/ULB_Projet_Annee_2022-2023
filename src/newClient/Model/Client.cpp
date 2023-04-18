@@ -79,6 +79,7 @@ bool Client::sendCommand(MainInputParser &parser) {
 	sf::Packet packet;
 	packet << static_cast<int>(query);
 	switch(query) {
+		case QUERY_TYPE::JOIN_GAME: packet << atoi(parser[1].c_str()); break;
 	    case QUERY_TYPE::FRIENDS_ACCEPT:
 	    case QUERY_TYPE::FRIENDS_REFUSE:
 	    case QUERY_TYPE::FRIENDS_ADD:

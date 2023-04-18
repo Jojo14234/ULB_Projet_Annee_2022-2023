@@ -122,6 +122,10 @@ public:
 		std::string start_money = "1500";
 		std::string max_player = game_parameters.at(0);
 
+		cmd += " " + mode;
+		cmd += " " + start_money;
+		cmd += " " + max_player;
+		
 		return cmd;
 
 	}
