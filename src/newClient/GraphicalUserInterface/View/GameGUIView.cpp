@@ -115,6 +115,17 @@ void GameGUIView::setSpeRound(bool visible){
 	}
 }
 
+void GameGUIView::onlyLeaveRound(bool visible){
+	if(visible == false){
+		button_mode = "";
+		leave_button.setHidden();}
+	else{
+		hideAllButton(); 
+		button_mode = "leave_mode";
+		leave_button.setVisible();
+	}
+}
+
 void GameGUIView::setJoinAuctionRound(bool visible){
 	if(visible == false){
 		button_mode = "";

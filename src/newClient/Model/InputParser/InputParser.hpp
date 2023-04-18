@@ -46,9 +46,7 @@ public:
 		if (idx_b > this->size() || idx_e > this->size() || idx_b > idx_e ) return ret;
 		for ( int idx = idx_b; idx <= idx_e and idx < this->size(); idx++ ) {
 			ret += this->inputs[idx] + join;
-			std::cout << this->inputs[idx] << std::endl;
 		}
-		std::cout << ret << std::endl;
 		return ret;
 	}
 

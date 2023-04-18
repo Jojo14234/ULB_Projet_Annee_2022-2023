@@ -87,7 +87,10 @@ class GameGUIView: public AbstractGUIView {
 
 	void setSpeRound(bool visible);
 
+	void onlyLeaveRound(bool visible);
+
 	void setJoinAuctionRound(bool visible);
+	
 	void hideAllButton();
 
 public:
