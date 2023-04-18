@@ -57,6 +57,8 @@ public:
 		this->scroll.addObject(new FriendBox{ObjectInfo<>(size_x, size_y, pos_x, pos_y+(10+size_y)*3), "__t0rtUe._.m4UdiT3__"});
 		this->scroll.addObject(new FriendBox{ObjectInfo<>(size_x, size_y, pos_x, pos_y+(10+size_y)*4), "x3l0w0"});
 		this->scroll.addObject(new FriendBox{ObjectInfo<>(size_x, size_y, pos_x, pos_y+(10+size_y)*5), "HUGOGO"});
+		this->scroll.addObject(new FriendBox{ObjectInfo<>(size_x, size_y, pos_x, pos_y+(10+size_y)*5), "youhou"});
+		this->scroll.setMaxObjToShow(6);
 	}
 	
 	~FriendsGUIView()=default;
