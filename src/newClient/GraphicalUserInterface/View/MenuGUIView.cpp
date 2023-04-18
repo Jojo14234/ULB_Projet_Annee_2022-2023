@@ -113,9 +113,13 @@ std::string MenuGUIView::getCreateCmd() {
 			game_parameters.push_back(selector->getActualString());
 		}
 		// mode
-		std::string mode = game_parameters.at(1) == "Mode classique" ? "normal" : "fast";
-		std::string start_money = "1500";
-		std::string max_player = game_parameters.at(0);
+		std::string mode = game_parameters.at(0) == "classique" ? "normal" : "fast";
+		std::string start_money = game_parameters.at(1);
+		std::string max_player = game_parameters.at(2);
+
+		std::string max_house = game_parameters.at(3);
+		std::string max_hotel = game_parameters.at(4);
+		
 
 		cmd += " " + mode;
 		cmd += " " + start_money;
