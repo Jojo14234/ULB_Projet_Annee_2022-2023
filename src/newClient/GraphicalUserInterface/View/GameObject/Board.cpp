@@ -104,6 +104,7 @@ void Board::movePlayer(int cell, int player){
     old_pos_player[player] = cell;
 	 std::cout << "m3" << std::endl;
 	board[cell]->setPlayer(player_color[player], player);
+	 std::cout << "m4" << std::endl;
 }
  
 
@@ -114,7 +115,9 @@ void Board::setIdle(int cell){
 }
 
 void Board::setPurchased(int cell, int player){
+	std::cout << "pursh" << std::endl;
 	board[cell]->setOwner(player_color_names[player]);
+	std::cout << "purshessh" << std::endl;
 }
 
 void Board::setHouse(int cell, int house_nb){
