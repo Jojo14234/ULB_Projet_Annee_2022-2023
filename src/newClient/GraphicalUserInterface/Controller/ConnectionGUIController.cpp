@@ -38,14 +38,14 @@ bool ConnectionGUIController::doLoginBtnContain(sf::Event event) {
     return false;
 }
 bool ConnectionGUIController::doRegisterBtnContain(sf::Event event) {
-    return this->view->register_button.contains(event.mouseButton.x, event.mouseButton.y);
-}
-bool ConnectionGUIController::doUsernameContain(sf::Event event) {
-    if (this->view->username.contains(event.mouseButton.x, event.mouseButton.y)) {
-        this->view->username.playSound();
-        return true;
+    if (this->view->register_button.contains(event.mouseButton.x, event.mouseButton.y)) {
+        this->view->register_button.playSound();
+        return true;   
     }
     return false;
+}
+bool ConnectionGUIController::doUsernameContain(sf::Event event) {
+    return this->view->username.contains(event.mouseButton.x, event.mouseButton.y);
 }
 bool ConnectionGUIController::doPasswordContain(sf::Event event) {
     return this->view->password.contains(event.mouseButton.x, event.mouseButton.y);

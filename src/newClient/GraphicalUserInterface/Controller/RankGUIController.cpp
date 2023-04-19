@@ -9,9 +9,11 @@
 void RankGUIController::handle(sf::Event event) {
 	if (event.type != sf::Event::MouseButtonPressed) return;
 	if (this->view->back_button.contains(event.mouseButton.x, event.mouseButton.y)) { // return button
+		this->view->back_button.playSound();
 		this->new_state = STATE::MENU;
 	} 
 	else if ( this->view->top.contains(event.mouseButton.x, event.mouseButton.y)) { // top button
+		this->view->top.playSound();
 		MainInputParser parser("/rank top");
 		std::string response;
 		if (this->model->sendCommand(parser)) { 
@@ -27,6 +29,7 @@ void RankGUIController::handle(sf::Event event) {
 		this->view->showTop();
     } 
 	else if (this->view->my_rank.contains(event.mouseButton.x, event.mouseButton.y)) { // my rank button
+		this->view->my_rank.playSound();
 		MainInputParser parser("/rank pos");
 		std::string response;
 		if (this->model->sendCommand(parser)) { 

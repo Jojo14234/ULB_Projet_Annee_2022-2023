@@ -52,28 +52,34 @@ void MenuGUIController::handle(sf::Event event) {
 			else {
 				// Quit
 				if (this->view->quit_button.contains(event.mouseButton.x, event.mouseButton.y)) {
+					this->view->quit_button.playSound();
 					this->new_state = STATE::CONNECTION;
 					this->model->disconnectAccount();
 				}
 				// Join
 				else if (this->view->join.isVisible() and this->view->join.contains(event.mouseButton.x, event.mouseButton.y)) {
+					this->view->join.playSound();
 					this->view->join_popup.setVisible();
 				}
 				// Create
 				else if (this->view->create.isVisible() and this->view->create.contains(event.mouseButton.x, event.mouseButton.y)) {
+					this->view->create.playSound();
 					this->view->create_popup.setVisible();
 				}
 				// Rank
 				else if (this->view->rank.contains(event.mouseButton.x, event.mouseButton.y)) {
+					this->view->rank.playSound();
 					this->new_state = STATE::RANK;
 				}
 				// Friends
 				else if (this->view->friend_menu.contains(event.mouseButton.x, event.mouseButton.y)) {
+					this->view->friend_menu.playSound();
 					this->new_state = STATE::FRIENDS;
 					this->friend_controller->update();
 				}
 				// Settings
 				else if (this->view->settings.contains(event.mouseButton.x, event.mouseButton.y)) {
+					this->view->settings.playSound();
 					this->view->settings_popup.setVisible();
 				}
 				break;

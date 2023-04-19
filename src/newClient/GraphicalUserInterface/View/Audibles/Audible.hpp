@@ -30,5 +30,5 @@ public:
 
 class ButtonSoundBuffer : public SoundBuffer {
 public:
-    ButtonSoundBuffer() { loadSound("newclient/GraphicalUserInterface/View/Sound/Walk0.wav"); }
+    ButtonSoundBuffer() { loadSound("newclient/GraphicalUserInterface/View/Sound/click.wav"); }
 };

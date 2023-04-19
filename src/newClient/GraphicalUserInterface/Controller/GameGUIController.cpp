@@ -10,50 +10,59 @@ void GameGUIController::handle(sf::Event event) {
     if (event.type != sf::Event::MouseButtonPressed) return;
             if(this->view->button_mode == "start_game"){
                 if(this->view->startgame_button.contains(event.mouseButton.x, event.mouseButton.y)){
+                    this->view->startgame_button.playSound();
                     GameInputParser parser("/start");
                     this->model->sendCommand(parser);
                     this->view->setStartGame(false);
                         }}
             else if(this->view->button_mode == "start_round"){
                 if(this->view->mortgage_button.contains(event.mouseButton.x, event.mouseButton.y)){
+                    this->view->mortgage_button.playSound();
                     GameInputParser parser("/mortgaged");
                     this->model->sendCommand(parser);
                     this->view->setStartRound(false);
                         }
                 else if(this->view->unmortgage_button.contains(event.mouseButton.x, event.mouseButton.y)){
+                    this->view->unmortgage_button.playSound();
                     GameInputParser parser("/unmortgage");
                     this->model->sendCommand(parser);
                     this->view->setStartRound(false);
                         }
                 else if(this->view->sell_button.contains(event.mouseButton.x, event.mouseButton.y)){
+                    this->view->sell_button.playSound();
                     GameInputParser parser("/sell");
                     this->model->sendCommand(parser);
                     this->view->setStartRound(false);
                         }
                 else if(this->view->construct_button.contains(event.mouseButton.x, event.mouseButton.y)){
+                    this->view->construct_button.playSound();
                     GameInputParser parser("/build");
                     this->model->sendCommand(parser);
                     this->view->message_box.addString("ahahaha");
                     this->view->setStartRound(false);
                         }
                 else if(this->view->exchange_button.contains(event.mouseButton.x, event.mouseButton.y)){
+                    this->view->exchange_button.playSound();
                     GameInputParser parser("/exchange");
                     this->model->sendCommand(parser);
                     this->view->setStartRound(false);
                         }
                 else if(this->view->roll_dice_button.contains(event.mouseButton.x, event.mouseButton.y)){
+                    this->view->roll_dice_button.playSound();
                     GameInputParser parser("/roll");
                     this->model->sendCommand(parser);
                     this->view->setStartRound(false);
                         }}
             else if (this->view->button_mode == "empty_cell"){
                 if(this->view->buy_button.contains(event.mouseButton.x, event.mouseButton.y)){
+                    this->view->buy_button.playSound();
                     GameInputParser parser("/yes");
                     this->model->sendCommand(parser);
                     std::cout << "clicked" << "yes" << std::endl;
                     this->view->setCellRound(false);
                         }
                 else if(this->view->no_buy_button.contains(event.mouseButton.x, event.mouseButton.y)){
+                    this->view->no_buy_button.playSound();
                     GameInputParser parser("/no");
                     this->model->sendCommand(parser);
                     std::cout << "clicked" << "no" << std::endl;
@@ -61,52 +70,63 @@ void GameGUIController::handle(sf::Event event) {
                         }}
             else if (this->view->button_mode == "specard_cell"){
                 if(this->view->paid_button.contains(event.mouseButton.x, event.mouseButton.y)){
+                    this->view->paid_button.playSound();
                     GameInputParser parser("/paid");
                     this->model->sendCommand(parser);
                     this->view->setCardSpeRound(false);
                         }
                 else if(this->view->draw_card_button.contains(event.mouseButton.x, event.mouseButton.y)){
+                    this->view->draw_card_button.playSound();
                     GameInputParser parser("/card");
                     this->model->sendCommand(parser);
                     this->view->setCardSpeRound(false);
                         }}
             else if (this->view->button_mode == "on_prison"){
                 if(this->view->paid_prison_button.contains(event.mouseButton.x, event.mouseButton.y)){
+                    this->view->paid_prison_button.playSound();
                     GameInputParser parser("/paid");
                     this->model->sendCommand(parser);
                     this->view->setPrisonRound(false);
                         }
                 else if(this->view->roll_dice_button.contains(event.mouseButton.x, event.mouseButton.y)){
+                    this->view->roll_dice_button.playSound();
                     GameInputParser parser("/roll");
                     this->model->sendCommand(parser);
                     this->view->setPrisonRound(false);
                         }
                 else if(this->view->card_prison_button.contains(event.mouseButton.x, event.mouseButton.y)){
+                    this->view->card_prison_button.playSound();
                     GameInputParser parser("/card");
                     this->model->sendCommand(parser);
                     this->view->setPrisonRound(false);
                         }}
             else if (this->view->button_mode == "exchange_round"){
                 if(this->view->yes_exchange_button.contains(event.mouseButton.x, event.mouseButton.y)){
+                    this->view->yes_exchange_button.playSound();
                     GameInputParser parser("/accept");
                     this->model->sendCommand(parser);
                     this->view->setExchangeRound(false);
                         }
                 else if(this->view->no_exchange_button.contains(event.mouseButton.x, event.mouseButton.y)){
+                    this->view->no_exchange_button.playSound();
                     GameInputParser parser("/refuse");
                     this->model->sendCommand(parser);
                     this->view->setExchangeRound(false);
                         }}
             else if (this->view->button_mode == "bankrupt_round"){
                 if(this->view->sell_bankrupt_button.contains(event.mouseButton.x, event.mouseButton.y)){//TODO
+                    this->view->sell_bankrupt_button.playSound();
                         }
                 else if(this->view->give_up_button.contains(event.mouseButton.x, event.mouseButton.y)){//TODO
+                    this->view->give_up_button.playSound();
                         }}
             else if (this->view->button_mode == "participate_round"){
                 if(this->view->participate_button.contains(event.mouseButton.x, event.mouseButton.y)){//TODO
+                    this->view->participate_button.playSound();
                         }}
             else if (this->view->button_mode == "leave_mode"){
                 if(this->view->leave_button.contains(event.mouseButton.x, event.mouseButton.y)){
+                    this->view->leave_button.playSound();
                     this->view->setStartRound(true);
                     this->view->onlyLeaveRound(false);
                         }}
@@ -128,6 +148,7 @@ void GameGUIController::handle(sf::Event event) {
                         }}
             else if(this->view->board_click == true){
                 if (this->view->leave_button.contains(event.mouseButton.x, event.mouseButton.y)){
+                    this->view->leave_button.playSound();
                     GameInputParser parser("/leave");
                     this->model->sendCommand(parser);
                     this->view->board.unsetAllGrayed();
