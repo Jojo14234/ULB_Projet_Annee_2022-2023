@@ -7,6 +7,7 @@
 #include <SFML/Window.hpp>
 
 #include "AbstractGUIController.hpp"
+#include "SubjectGUIController.hpp"
 #include "../configs.hpp"
 
 
@@ -15,8 +16,9 @@ class MenuGUIView; // forward declaration
 
 class MenuGUIController: public AbstractGUIController {
 
-
 	MenuGUIView* view;
+	SubjectGUIController* friend_controller;
+	SubjectGUIController* game_controller;
 
 public: 
 	
@@ -26,6 +28,25 @@ public:
 
 	void handle(sf::Event event) override;
 
+	// SETTERS
+	void setFriendController(SubjectGUIController* friend_controller) { this->friend_controller = friend_controller; }
+
+	void setGameController(SubjectGUIController* game_controller) { this->game_controller = game_controller; }
+	
 	// ...
 
+    bool doSettingBtnNContain(int n, sf::Event event);
+    bool doSettingBtnNContain(int n, sf::Event event, bool right_side);
+
+    bool doCreatePopUpBtnNContain(int n, sf::Event event);
+    bool doCreatePoUpSelectorNContain(int n, sf::Event event, bool right_side);
+
+    bool doJoinPopUpNBtnContain(int n, sf::Event event);
+
+    void createPopUpClick(int n, bool right_side);
+    void settingPopUpClick(int n, bool right_side);
+
+    void createProcess();
+    void joinProcess();
+    
 };

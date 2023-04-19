@@ -4,11 +4,13 @@
 #include "../Objects/ModalBox.hpp"
 class MessageBox: public ModalBox{
 	Text text;
+	Text text2;
     public:
         MessageBox(ObjectInfo<> info):  AbstractViewObject(info),ModalBox(info,sf::Color::Magenta)
-		,text{ObjectInfo<>(0,24,(info.getX() + (info.getWidth() / 3)),info.getY() + info.getHeight() / 3), ""}
+		,text{ObjectInfo<>(0,24,(info.getX() + 40),info.getY() + info.getHeight() / 3 - 20), ""}
+		,text2{ObjectInfo<>(0,24,(info.getX() + 40),info.getY() + info.getHeight() / 3), ""}
 		{
-			addText(&text);
+			addTexts({&text,&text2});
 		}
 
         void draw(sf::RenderWindow &window) const override {
@@ -19,8 +21,17 @@ class MessageBox: public ModalBox{
 		for (auto &button : buttons) button->draw(window);}
 
 	  	void setString(std::string new_string){
+			text2.setString("");
 			text.setString(new_string);}
+		
+		void addString(std::string new_string){
+			text2.setString(new_string);
+		}
 
+		void clearText(){
+			text.setString("");
+			text2.setString("");
+		}
 
 
 };

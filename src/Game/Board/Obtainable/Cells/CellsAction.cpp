@@ -6,7 +6,7 @@
 #include "ParkingCell.hpp"
 #include "TaxCell.hpp"
 #include "StartCell.hpp"
-#include "../../../../Server/Game/GameServer.hpp"
+#include "../../../../Server/Game/GameServer/GameServer.hpp"
 
 void DrawableCardCell::action(Player* player) {
     Card* drawn_card = deck->drawACard();
@@ -83,7 +83,7 @@ void LandCell::pay(Player *player) {
 
     if (!player->pay(land->getRentPrice(), true)) { player->setPlayerToRefund(this->getOwner()); }
 
-    this->getOwner()->receive(land->getRentPrice(), player->getUsername());
+    this->getOwner()->receive(land->getRentPrice());
 
 }
 
@@ -113,7 +113,7 @@ void JailCell::action(Player *player) {
     if (player->isInJail()) {    // y'avais un !
         player->getClient()->send("Vous êtes en prison: /roll, /usecard ou /pay.");
         player->getClient()->send("| Vous possedez " + std::to_string(player->hasGOOJCards()) + " cartes pour sortir de prison.");
-
+        //c kwa ça
         GAME_QUERY_TYPE query;
         sf::Packet packet;
 

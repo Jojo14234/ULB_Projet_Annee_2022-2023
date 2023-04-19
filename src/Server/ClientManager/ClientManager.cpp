@@ -3,8 +3,8 @@
 #include <string>
 
 #include "ClientManager.hpp"
-#include "../Game/GameServer.hpp"
-#include "../../utils/Exceptions.hpp"
+#include "../Game/GameServer/GameServer.hpp"
+#include "../../Utils/Exceptions.hpp"
 
 
 // SEND INFOS TO THE CLIENT
@@ -91,15 +91,20 @@ bool ClientManager::inGame() const { return bool(game_server); }
 sf::TcpSocket &ClientManager::getSocket()   { return this->socket; }
 pthread_t* ClientManager::getTidPtr()       { return &(this->tid); }
 User* ClientManager::getAccount()           const { return this->account; }
-std::string ClientManager::getUsername()    const { return (this->account) ? this->account->getUsername() : "[Account not connected]"; }
+std::string ClientManager::getUsername()    const { return this->username; }
 GameServer* ClientManager::getGameServer()  const { return game_server; }
 int ClientManager::getCode()                const { return this->args.code; }
 const std::string& ClientManager::getS1()   const { return this->args.s1; }
 const std::string& ClientManager::getS2()   const { return this->args.s2; }
 
 // Gestion account
-void ClientManager::setAccount(User *user) { this->account = user; }
-void ClientManager::removeAccount() { this->account = nullptr; }
+void ClientManager::setAccount(User *user) {
+    this->account = user;
+    this->username = user->getUsername();
+}
+void ClientManager::removeAccount() {
+    this->account = nullptr;
+}
 
 // Gestion gameServer
 void ClientManager::setGameServer(GameServer* gs) { this->game_server = gs; }

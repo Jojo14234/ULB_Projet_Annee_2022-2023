@@ -7,8 +7,8 @@
 #include <string>
 #include <vector>
 
-#include "../../utils/Configs.hpp"
-#include "../Database/User.hpp"
+#include "../../Utils/Config/Configs.hpp"
+#include "../Database/User/User.hpp"
 #include "QUERY.hpp"
 
 
@@ -30,6 +30,7 @@ class ClientManager {
 
 	// A link to his account
     User* account = nullptr;
+    std::string username = "";
 
 	// The tid of the thread where the ClientManager is running
 	pthread_t tid;
@@ -42,14 +43,14 @@ public:
 
 	// Send infos to the client
 	void send(const std::string &input);
-  void sendQueryMsg(const std::string &input, QUERY query);
+    void sendQueryMsg(const std::string &input, QUERY query);
 	void sendFriendsInfo(const std::vector<std::string> &friends, const std::vector<std::string> &requests); 
-  void send(QUERY &query, const std::string &input);
+    void send(QUERY &query, const std::string &input);
 
 	// Receive infos from the client
 	void receive(QUERY_TYPE &query);
 	void receive(GAME_QUERY_TYPE &query, sf::Packet &packet);
-  void receive(GAME_QUERY_TYPE &query);
+    void receive(GAME_QUERY_TYPE &query);
 
 	// To compare
 	bool operator==(const ClientManager& other);

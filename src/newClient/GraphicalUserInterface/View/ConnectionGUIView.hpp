@@ -1,7 +1,3 @@
-/**
- * Project Untitled
- */
-
 #pragma once
 
 #include "AbstractGUIView.hpp"
@@ -30,28 +26,13 @@ class ConnectionGUIView: public AbstractGUIView {
 
 public:
 
-	explicit ConnectionGUIView(sf::RenderWindow* window) : AbstractGUIView(window) {
-		modal_box.addText(new Text{ObjectInfo<>(0, 80, WINDOW_WIDTH/4.f, WINDOW_HEIGHT/4.f), "Welcome to the game!"});
-		modal_box.setHidden();
-	}
+	explicit ConnectionGUIView(sf::RenderWindow* window);
 
 	~ConnectionGUIView()=default;
 
-	void draw() override {
-		logo.draw(*window);
-		username_border.draw(*window);
-		password_border.draw(*window);
-		username.draw(*window);
-		password.draw(*window);
-		login_button.draw(*window);
-		register_button.draw(*window);
-		modal_box.draw(*window);
-	}
+	void draw() override;
 
-	void clear() {
-		username.clear();
-		password.clear();
-	}
+	void clear();
 
 	friend class ConnectionGUIController;
 

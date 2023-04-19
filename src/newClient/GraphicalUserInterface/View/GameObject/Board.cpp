@@ -98,10 +98,13 @@ void Board::setPlayer(int cell, int player){
 }
 
 void Board::movePlayer(int cell, int player){
-    //pas encore tester
-    board[old_pos_player[player-1]]->removePlayer(player);
-    old_pos_player[player-1] = cell;
+    std::cout << "m1" << std::endl;
+    board[old_pos_player[player]]->removePlayer(player);
+	 std::cout << "m2" << std::endl;
+    old_pos_player[player] = cell;
+	 std::cout << "m3" << std::endl;
 	board[cell]->setPlayer(player_color[player], player);
+	 std::cout << "m4" << std::endl;
 }
  
 
@@ -112,7 +115,9 @@ void Board::setIdle(int cell){
 }
 
 void Board::setPurchased(int cell, int player){
+	std::cout << "pursh" << std::endl;
 	board[cell]->setOwner(player_color_names[player]);
+	std::cout << "purshessh" << std::endl;
 }
 
 void Board::setHouse(int cell, int house_nb){
@@ -120,4 +125,49 @@ void Board::setHouse(int cell, int house_nb){
 }
 
 
+void Board::setBuildable(int cell){
+	board[cell]->setGrayed();
+
+}
+void Board::setAllGrayed(){
+	for (auto i : board){
+        i->setGrayed();
+    }
+
+}
+
+void Board::setSalable(int cell){
+	board[cell]->unsetGrayed();
+}
+void Board::setMortgageable(int cell){
+	board[cell]->unsetGrayed();
+}
+void Board::setUnmortgageable(int cell){
+	board[cell]->unsetGrayed();
+}
+void Board::setExchangeable(int cell){
+	board[cell]->unsetGrayed();
+}
+
+void Board::leaveSelection(int cell){
+	board[cell]->setGrayed();
+}
+
+void Board::unsetAllGrayed(){
+	for (auto i : board){
+        i->unsetGrayed();
+    }
+}
+
+void Board::setMortgaged(int cell){
+	board[cell]->setMortgaged();
+}
+
+void Board::unmortgage(int cell){
+	board[cell]->unsetMortgaged();
+}
+
+std::array<std::shared_ptr<Cell>,40>* Board::getBoardButton(){
+	return &board;
+}
 

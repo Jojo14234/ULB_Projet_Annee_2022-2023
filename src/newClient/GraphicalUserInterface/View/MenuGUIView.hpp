@@ -22,7 +22,7 @@ class MenuGUIView: public AbstractGUIView {
 	Image play{ObjectInfo<>(WINDOW_WIDTH/5.f,WINDOW_HEIGHT/2.f-WINDOW_HEIGHT/12,WINDOW_WIDTH/20.f,WINDOW_HEIGHT/8.f), PLAY_IMAGE_PATH};
 	ImageButton join{ObjectInfo<>(WINDOW_WIDTH/5.f/2,WINDOW_HEIGHT/12.f,WINDOW_WIDTH/20.f,WINDOW_HEIGHT/8.f+WINDOW_HEIGHT/2.f-WINDOW_HEIGHT/12),JOIN_BUTTON_PATH};
 	ImageButton create{ObjectInfo<>(WINDOW_WIDTH/5.f/2,WINDOW_HEIGHT/12.f,WINDOW_WIDTH/20.f+WINDOW_WIDTH/5.f/2,WINDOW_HEIGHT/8.f+WINDOW_HEIGHT/2.f-WINDOW_HEIGHT/12),CREATE_BUTTON_PATH};
-	ModalBox create_popup{ObjectInfo<>(WINDOW_WIDTH/2.f, WINDOW_HEIGHT/2.f, WINDOW_WIDTH/4.f, WINDOW_HEIGHT/4.f), BOX_COLOR};
+	ModalBox create_popup{ObjectInfo<>(WINDOW_WIDTH/2.f, WINDOW_HEIGHT/2+WINDOW_HEIGHT/3.f, WINDOW_WIDTH/4.f, WINDOW_HEIGHT/6.f), BOX_COLOR};
 	ModalBox join_popup{ObjectInfo<>(WINDOW_WIDTH/2.f, WINDOW_HEIGHT/2.f, WINDOW_WIDTH/4.f, WINDOW_HEIGHT/4.f), BOX_COLOR};
 
 	ImageButton rank{ObjectInfo<>(WINDOW_WIDTH/5.f,WINDOW_HEIGHT/2.f,WINDOW_WIDTH/20.f+WINDOW_WIDTH/4.f,WINDOW_HEIGHT/8.f),RANK_BUTTON_PATH};
@@ -33,64 +33,17 @@ class MenuGUIView: public AbstractGUIView {
 
 public:
 
-	explicit MenuGUIView(sf::RenderWindow* window) : AbstractGUIView(window) {
-		settings_popup.setHidden();
-		settings_popup.addText(new Text{ObjectInfo<>(0, WINDOW_WIDTH/40, WINDOW_WIDTH/2.f, WINDOW_HEIGHT/4.f), "Réglages :D"});
-		settings_popup.addText(new Text{ObjectInfo<>(0, WINDOW_WIDTH/50, WINDOW_WIDTH/4.f, WINDOW_HEIGHT/4+WINDOW_HEIGHT/10.f), "Taille de fenêtre:"});
-		settings_popup.addText(new Text{ObjectInfo<>(0, WINDOW_WIDTH/50, WINDOW_WIDTH/4.f, WINDOW_HEIGHT/4+WINDOW_HEIGHT/10*2.f), "Son:"});
-		settings_popup.addText(new Text{ObjectInfo<>(0, WINDOW_WIDTH/50, WINDOW_WIDTH/4.f, WINDOW_HEIGHT/4+WINDOW_HEIGHT/10*3.f), "Supprimer son compte:"});
-		settings_popup.addButton(new ImageButton{ObjectInfo<>(WINDOW_WIDTH/25.f, WINDOW_HEIGHT/25.f, WINDOW_WIDTH/4.f, WINDOW_HEIGHT/4+WINDOW_HEIGHT/10*5.f-WINDOW_HEIGHT/12.f+WINDOW_HEIGHT/25.f), BACK_BUTTON_PATH});
-		settings_popup.addButton(new ImageButton{ObjectInfo<>(WINDOW_WIDTH/25.f, WINDOW_HEIGHT/25.f, WINDOW_WIDTH/4*3-WINDOW_WIDTH/25.f, WINDOW_HEIGHT/4+WINDOW_HEIGHT/10*5.f-WINDOW_HEIGHT/12.f+WINDOW_HEIGHT/25.f), OK_BUTTON_PATH});
-		settings_popup.addButton(new ImageButton{ObjectInfo<>(WINDOW_WIDTH/50.f, WINDOW_WIDTH/50.f, WINDOW_WIDTH/4*3-WINDOW_WIDTH/12.f+WINDOW_WIDTH/50.f, WINDOW_HEIGHT/4+WINDOW_HEIGHT/10.f), RIGHT_BUTTON_PATH});
-		settings_popup.addButton(new ImageButton{ObjectInfo<>(WINDOW_WIDTH/50.f, WINDOW_WIDTH/50.f,(WINDOW_WIDTH/4*3-WINDOW_WIDTH/12.f) - WINDOW_WIDTH/8.f , WINDOW_HEIGHT/4+WINDOW_HEIGHT/10.f), LEFT_BUTTON_PATH});
-		settings_popup.addText(new Text{ObjectInfo<>(0, WINDOW_WIDTH/50, (WINDOW_WIDTH/4*3-WINDOW_WIDTH/12.f- WINDOW_WIDTH/8.f + WINDOW_WIDTH/50.f ) + WINDOW_WIDTH/50.f, WINDOW_HEIGHT/4+WINDOW_HEIGHT/10.f), "1600 x 900"});
-		settings_popup.addButton(new ImageButton{ObjectInfo<>(WINDOW_WIDTH/30.f, WINDOW_HEIGHT/30.f,(WINDOW_WIDTH/4*3-WINDOW_WIDTH/12.f) - 100 , WINDOW_HEIGHT/4+WINDOW_HEIGHT/10*3.f), YES_BUTTON_PATH});
-
-		create_popup.setHidden();
-		create_popup.addText(new Text{ObjectInfo<>(0, WINDOW_WIDTH/40, WINDOW_WIDTH/2.f, WINDOW_HEIGHT/4.f), "Créer une partie :D"});
-		create_popup.addText(new Text{ObjectInfo<>(0, WINDOW_WIDTH/50, WINDOW_WIDTH/4.f, WINDOW_HEIGHT/4+WINDOW_HEIGHT/10.f), "Nombre de joueur:"});
-		create_popup.addText(new Text{ObjectInfo<>(0, WINDOW_WIDTH/50, WINDOW_WIDTH/4.f, WINDOW_HEIGHT/4+WINDOW_HEIGHT/10*2.f), "Mode:"});
-		create_popup.addText(new Text{ObjectInfo<>(0, WINDOW_WIDTH/50, WINDOW_WIDTH/4.f, WINDOW_HEIGHT/4+WINDOW_HEIGHT/10*3.f), "Chrono:"});
-		create_popup.addText(new Text{ObjectInfo<>(0, WINDOW_WIDTH/50, WINDOW_WIDTH/4.f, WINDOW_HEIGHT/4+WINDOW_HEIGHT/10*4.f), "Durée enchère:"});
-		create_popup.addButton(new ImageButton{ObjectInfo<>(WINDOW_WIDTH/25.f, WINDOW_HEIGHT/25.f, WINDOW_WIDTH/4.f, WINDOW_HEIGHT/4+WINDOW_HEIGHT/10*5.f-WINDOW_HEIGHT/12.f+WINDOW_HEIGHT/25.f), BACK_BUTTON_PATH});
-		create_popup.addButton(new ImageButton{ObjectInfo<>(WINDOW_WIDTH/25.f, WINDOW_HEIGHT/25.f, WINDOW_WIDTH/4*3-WINDOW_WIDTH/25.f, WINDOW_HEIGHT/4+WINDOW_HEIGHT/10*5.f-WINDOW_HEIGHT/12.f+WINDOW_HEIGHT/25.f), OK_BUTTON_PATH});
-		create_popup.addButton(new ImageButton{ObjectInfo<>(WINDOW_WIDTH/50.f, WINDOW_WIDTH/50.f, WINDOW_WIDTH/4*3-WINDOW_WIDTH/12.f+WINDOW_WIDTH/50.f, WINDOW_HEIGHT/4+WINDOW_HEIGHT/10.f), RIGHT_BUTTON_PATH});
-		create_popup.addButton(new ImageButton{ObjectInfo<>(WINDOW_WIDTH/50.f, WINDOW_WIDTH/50.f,(WINDOW_WIDTH/4*3-WINDOW_WIDTH/12.f) - WINDOW_WIDTH/8.f , WINDOW_HEIGHT/4+WINDOW_HEIGHT/10.f), LEFT_BUTTON_PATH});
-		create_popup.addText(new Text{ObjectInfo<>(0, WINDOW_WIDTH/50, (WINDOW_WIDTH/4*3-WINDOW_WIDTH/12.f- WINDOW_WIDTH/8.f + WINDOW_WIDTH/50.f ) + WINDOW_WIDTH/50.f, WINDOW_HEIGHT/4+WINDOW_HEIGHT/10.f), "4"});
-		create_popup.addButton(new ImageButton{ObjectInfo<>(WINDOW_WIDTH/50.f, WINDOW_WIDTH/50.f, WINDOW_WIDTH/4*3-WINDOW_WIDTH/12.f+WINDOW_WIDTH/50.f, WINDOW_HEIGHT/4+WINDOW_HEIGHT/10*2.f), RIGHT_BUTTON_PATH});
-		create_popup.addButton(new ImageButton{ObjectInfo<>(WINDOW_WIDTH/50.f, WINDOW_WIDTH/50.f,(WINDOW_WIDTH/4*3-WINDOW_WIDTH/12.f) - WINDOW_WIDTH/8.f , WINDOW_HEIGHT/4+WINDOW_HEIGHT/10.f*2), LEFT_BUTTON_PATH});
-		create_popup.addText(new Text{ObjectInfo<>(0, WINDOW_WIDTH/50, (WINDOW_WIDTH/4*3-WINDOW_WIDTH/12.f- WINDOW_WIDTH/8.f + WINDOW_WIDTH/50.f ) + WINDOW_WIDTH/50.f, WINDOW_HEIGHT/4+WINDOW_HEIGHT/10.f*2), "Mode classique"});
-		create_popup.addButton(new ImageButton{ObjectInfo<>(WINDOW_WIDTH/50.f, WINDOW_WIDTH/50.f, WINDOW_WIDTH/4*3-WINDOW_WIDTH/12.f+WINDOW_WIDTH/50.f, WINDOW_HEIGHT/4+WINDOW_HEIGHT/10*3.f), RIGHT_BUTTON_PATH});
-		create_popup.addButton(new ImageButton{ObjectInfo<>(WINDOW_WIDTH/50.f, WINDOW_WIDTH/50.f,(WINDOW_WIDTH/4*3-WINDOW_WIDTH/12.f) - WINDOW_WIDTH/8.f , WINDOW_HEIGHT/4+WINDOW_HEIGHT/10.f*3), LEFT_BUTTON_PATH});
-		create_popup.addText(new Text{ObjectInfo<>(0, WINDOW_WIDTH/50, (WINDOW_WIDTH/4*3-WINDOW_WIDTH/12.f- WINDOW_WIDTH/8.f + WINDOW_WIDTH/50.f ) + WINDOW_WIDTH/50.f, WINDOW_HEIGHT/4+WINDOW_HEIGHT/10.f*3), "30 sec"});
-		create_popup.addButton(new ImageButton{ObjectInfo<>(WINDOW_WIDTH/50.f, WINDOW_WIDTH/50.f, WINDOW_WIDTH/4*3-WINDOW_WIDTH/12.f+WINDOW_WIDTH/50.f, WINDOW_HEIGHT/4+WINDOW_HEIGHT/10*4.f), RIGHT_BUTTON_PATH});
-		create_popup.addButton(new ImageButton{ObjectInfo<>(WINDOW_WIDTH/50.f, WINDOW_WIDTH/50.f,(WINDOW_WIDTH/4*3-WINDOW_WIDTH/12.f) - WINDOW_WIDTH/8.f , WINDOW_HEIGHT/4+WINDOW_HEIGHT/10.f*4), LEFT_BUTTON_PATH});
-		create_popup.addText(new Text{ObjectInfo<>(0, WINDOW_WIDTH/50, (WINDOW_WIDTH/4*3-WINDOW_WIDTH/12.f- WINDOW_WIDTH/8.f + WINDOW_WIDTH/50.f ) + WINDOW_WIDTH/50.f, WINDOW_HEIGHT/4+WINDOW_HEIGHT/10.f*4), "15 sec"});
-
-		join_popup.setHidden();
-		join_popup.addText(new Text{ObjectInfo<>(0, WINDOW_WIDTH/40, WINDOW_WIDTH/2.f-WINDOW_WIDTH/8, WINDOW_HEIGHT/4.f), "Rejoindre une partie :D"});
-		join_popup.addText(new Text{ObjectInfo<>(0, WINDOW_WIDTH/50, WINDOW_WIDTH/2.f-WINDOW_WIDTH/8, WINDOW_HEIGHT/4+100.f), "Entrez le code de jeu"});
-		join_popup.addButton(new ImageButton{ObjectInfo<>(WINDOW_WIDTH/25.f, WINDOW_HEIGHT/25.f, WINDOW_WIDTH/4.f, WINDOW_HEIGHT/4+WINDOW_HEIGHT/10*5.f-WINDOW_HEIGHT/12.f+WINDOW_HEIGHT/25.f), BACK_BUTTON_PATH});
-		join_popup.addButton(new ImageButton{ObjectInfo<>(WINDOW_WIDTH/25.f, WINDOW_HEIGHT/25.f, WINDOW_WIDTH/2, WINDOW_HEIGHT/4+WINDOW_HEIGHT/10*5.f-WINDOW_HEIGHT/12.f), OK_BUTTON_PATH});
-		join_popup.addInput(new InputBox{ObjectInfo<>(WINDOW_WIDTH/8, WINDOW_HEIGHT/15.f, WINDOW_WIDTH/2.f-WINDOW_WIDTH/4, WINDOW_HEIGHT/2),BOX_COLOR, SERIF_FONT_PATH});
-	}
+	explicit MenuGUIView(sf::RenderWindow* window);
 	
 	~MenuGUIView()=default;
 
-	void draw() override {
-		//bordure draw puis box draw
-		quit_border.draw(*window);
-		quit_button.draw(*window);
-		play.draw(*window);
-		join.draw(*window);
-		create.draw(*window);
-		rank.draw(*window);
-		friend_menu.draw(*window);
-		settings.draw(*window);
-		settings_popup.draw(*window);
-		create_popup.draw(*window);
-		join_popup.draw(*window);
-	}
+	void initSettingsPopup();
+	void initCreatePopup();
+	void initJoinPopup();
+
+	void draw() override;
+
+	std::string getCreateCmd();
 
 	friend class MenuGUIController;
 

@@ -2,47 +2,71 @@
 
 #include "ConnectionGUIController.hpp"
 #include "../View/ConnectionGUIView.hpp"
-#include "../../../Server/ClientManager/QUERY.hpp"
 #include "../../Model/Client.hpp"
+#include "../../../Server/ClientManager/QUERY.hpp"
 
 
 void ConnectionGUIController::handle(sf::Event event) {
 	switch(event.type) {
-		case sf::Event::MouseButtonPressed: {
-			// buttons
-			if (this->view->login_button.contains(event.mouseButton.x, event.mouseButton.y)) {
-				this->view->login_button.playSound();
-				this->model->sendLogin(this->view->username.getText(), this->view->password.getText());
-				if (this->model->receive() == QUERY::TRUEQ) { this->new_state = STATE::MENU; }
-				this->view->clear();
-			} else if (this->view->register_button.contains(event.mouseButton.x, event.mouseButton.y)) {
-				this->model->sendRegister(this->view->username.getText(), this->view->password.getText());
-				if (this->model->receive() == QUERY::TRUEQ) { this->new_state = STATE::MENU; }
-				this->view->clear();
-			} else {
-				this->view->username.deselect();
-				this->view->password.deselect();
-				if (this->view->username.contains(event.mouseButton.x, event.mouseButton.y)) {
-					this->state = USERNAME;
-					this->view->username.select();
-				} else if (this->view->password.contains(event.mouseButton.x, event.mouseButton.y)) {
-					this->state = PASSWORD;
-					this->view->password.select();
-				} 
-			} break;
-		}
+        // Btn pressed
+		case sf::Event::MouseButtonPressed:
+            // Unselect all
+            this->view->username.deselect();
+            this->view->password.deselect();
+
+			// Which btn was pressed
+			if (this->doLoginBtnContain(event))     { this->loginProcess(); break; }
+            if (this->doRegisterBtnContain(event))  { this->registerProcess(); break; }
+            if (this->doUsernameContain(event))     { this->usernameProcess(); break; }
+            if (this->doPasswordContain(event))     { this->passwordProcess(); break; }
+            break;
+        // Key pressed or text entered
 		case sf::Event::TextEntered:
-		case sf::Event::KeyPressed: {
-			switch(this->state) {
-				case USERNAME: this->view->username.handle(event); break;
-				case PASSWORD: this->view->password.handle(event); break;
-				case DONE: break;
-			}
-		}
+		case sf::Event::KeyPressed:
+			this->keyPressProcess(event); break;
+
+        // else
 		default: break;
 	}
 }
 
-void ConnectionGUIController::clear() {
-	
+bool ConnectionGUIController::doLoginBtnContain(sf::Event event) {
+    return this->view->login_button.contains(event.mouseButton.x, event.mouseButton.y);
+}
+bool ConnectionGUIController::doRegisterBtnContain(sf::Event event) {
+    return this->view->register_button.contains(event.mouseButton.x, event.mouseButton.y);
+}
+bool ConnectionGUIController::doUsernameContain(sf::Event event) {
+    return this->view->username.contains(event.mouseButton.x, event.mouseButton.y);
+}
+bool ConnectionGUIController::doPasswordContain(sf::Event event) {
+    return this->view->password.contains(event.mouseButton.x, event.mouseButton.y);
+}
+
+void ConnectionGUIController::loginProcess() {
+    this->model->sendLogin(this->view->username.getText(), this->view->password.getText());
+    if (this->model->receive() == QUERY::TRUEQ) { this->new_state = STATE::MENU; }
+    this->view->clear();
+}
+void ConnectionGUIController::registerProcess() {
+    this->model->sendRegister(this->view->username.getText(), this->view->password.getText());
+    if (this->model->receive() == QUERY::TRUEQ) { this->new_state = STATE::MENU; }
+    this->view->clear();
+}
+void ConnectionGUIController::usernameProcess() {
+    this->state = USERNAME;
+    this->view->username.select();
+}
+void ConnectionGUIController::passwordProcess() {
+    this->state = PASSWORD;
+    this->view->password.select();
+}
+
+void ConnectionGUIController::keyPressProcess(sf::Event event) {
+    switch(this->state)  {
+        case USERNAME:  this->view->username.handle(event); break;
+        case PASSWORD:  this->view->password.handle(event); break;
+        case DONE:      break;
+        default:        break;
+    }
 }

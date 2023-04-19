@@ -5,7 +5,7 @@
 #include "Land/Land.hpp"
 #include "../../../Player/Player.hpp"
 #include "../../../../Server/ClientManager/ClientManager.hpp"
-#include "../../../../utils/Configs.hpp"
+#include "../../../../Utils/Config/Configs.hpp"
 
 
 class Cell: public Obtainable {
@@ -25,7 +25,7 @@ public:
 
     std::string getName() const { return name; }
 
-    bool isLandCell() { return false; }
+    virtual bool isLandCell() { return false; }
 };
 
 #endif

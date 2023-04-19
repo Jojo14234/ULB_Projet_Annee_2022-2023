@@ -4,7 +4,7 @@
 
 #include "Player.hpp"
 #include "BankAccount.hpp"
-#include "../../Server/Game/GameServer.hpp"
+#include "../../Server/Game/GameServer/GameServer.hpp"
 //#include "../../Server/ClientManager/ClientManager.hpp"
 
 /*
@@ -123,13 +123,13 @@ bool Player::pay(int amount, bool forced) {
     }
     // Pas assez d'argent, mais pas forcer -> on ne paye pas et on renvoie qu'on a pas payer.
     if ( !forced ) {this->getClient()->sendQueryMsg("", QUERY::INFOS_NOT_ENOUGH_MONEY); return false; }
+    else {this->getClient()->sendQueryMsg("", QUERY::INFOS_DEBT); return false;}
     // Pas assez d'argent mais forcer de payer -> on passe en status de faillite suspecter mais on ne paye pas non plus.
     this->status = PLAYER_STATUS::BANKRUPT_SUSPECTED;
     this->money_debt += amount;
     return false; // TODO PTT FAUT METTRE RETURN TRUE (AVANT ON PAYAIS MÊME SI ON AVAIT PAS LES FONDS).
 }
-void Player::receive(int amount, std::string source) {
-    source += "menfou"; //TODO UTILISR MOI CE PARAMETRE
+void Player::receive(int amount) {
     bank_account.gain(amount);
     this->client->getGameServer()->updateAllClientsWithQuery(QUERY::INFOS_PLAYER_WON_MONEY, std::to_string(this->getIndex()) + ":" + std::to_string(amount) + ":" + std::to_string(this->getMoney()));
     //getClient()->send("Vous avez reçu " + std::to_string(amount) + "e de " + source);
@@ -139,7 +139,7 @@ void Player::receive(int amount, std::string source) {
 // MOUVEMENT
 void Player::move(Cell *cell, bool pass_by_start) {
     if (passedByStart(cell, pass_by_start)) {
-        this->receive(200, "Banque");
+        this->receive(200);
         this->increaseBuildLevel();
     }
     current_cell = cell;
@@ -160,7 +160,7 @@ void Player::goToJail(Cell *cell) {
 // BOTH processMove are Use
 void Player::processMove(Cell* new_cell, bool gainMoneyIfPassByStart) {
     if ( gainMoneyIfPassByStart && this->current_cell->getPosition() > new_cell->getPosition() ) {
-        this->receive(MONEY_START_CELL, "la banque");
+        this->receive(MONEY_START_CELL);
         this->increaseBuildLevel();
     }
     this->current_cell = new_cell;
@@ -169,7 +169,7 @@ Cell* Player::processMove(int step, Board &board) {
     // Calcul of the new Cell idx
     int new_cell_idx = this->current_cell->getPosition() + step;
     // If the new idx is greater than the board size then we are on the start_cell and we receive money
-    if (new_cell_idx >= BOARD_SIZE) { this->receive(MONEY_START_CELL, "la banque"); this->increaseBuildLevel(); }
+    if (new_cell_idx >= BOARD_SIZE) { this->receive(MONEY_START_CELL); this->increaseBuildLevel(); }
     // set the new current_cell
     this->current_cell = board[new_cell_idx];
     return this->current_cell;
@@ -186,7 +186,6 @@ void Player::looseGOOJCard(){
     JailCard* card = GOOJ_cards.back();
     this->GOOJ_cards.pop_back();
     card->setOwner(nullptr);
-    //client->send("Vous perdez votre carte prison suite à son utilisation.\n");
 }
 void Player::useGOOJCard() {
     this->status = PLAYER_STATUS::FREE;
@@ -244,18 +243,22 @@ void Player::acquireLand(Land *land) {
 void Player::acquireProperty(Property &prop) {
     prop.setOwner(this);
     properties.push_back(&prop);
+    this->getClient()->getGameServer()->updateAllClientsWithQuery(QUERY::INFOS_WON_LAND, prop.getName()+":"+std::to_string(this->getIndex()));
 }
 void Player::acquireCompany(Company &comp) {
     comp.setOwner(this);
     companies.push_back(&comp);
+    this->getClient()->getGameServer()->updateAllClientsWithQuery(QUERY::INFOS_WON_LAND, comp.getName()+":"+std::to_string(this->getIndex()));
 }
 void Player::acquireStation(Station &station) {
     station.setOwner(this);
     stations.push_back(&station);
+    this->getClient()->getGameServer()->updateAllClientsWithQuery(QUERY::INFOS_WON_LAND, station.getName()+":"+std::to_string(this->getIndex()));
 }
 void Player::acquireGOOJCard(JailCard *jail_card) {
     jail_card->setOwner(this);
     GOOJ_cards.push_back(jail_card);
+    this->getClient()->getGameServer()->updateAllClientsWithQuery(QUERY::GET_GO_OUT_JAIL_CARD, std::to_string(this->getIndex()+1));
 }
 
 //TODO
@@ -366,7 +369,7 @@ std::string Player::rollInfos(Dice &dice) {
 //BOOL
 
 bool Player::hasBuildableProperties(){
-    for ( auto property : this->getAllProperties() ) { if ( property->isBuildable(this) ) return true;}
+    for ( auto property : this->getAllProperties() ) { if ( property->isBuildable(this, this->getClient()->getGameServer()->getGame()->isFastGame()) ) return true;}
     return false;
 }
 bool Player::hasSellableProperties(){

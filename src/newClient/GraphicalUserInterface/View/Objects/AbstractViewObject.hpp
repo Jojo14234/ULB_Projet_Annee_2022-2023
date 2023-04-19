@@ -18,6 +18,8 @@ protected:
 
 public:
 
+	AbstractViewObject()=default;
+
 	explicit AbstractViewObject(ObjectInfo<> info) : info(info) {}
 
 	virtual ~AbstractViewObject()=default;
@@ -34,5 +36,9 @@ public:
 	// SETTERS
 	void setVisible() { this->visible = true; }
 	void setHidden() { this->visible = false; }
+
+	void setInfo(ObjectInfo<> info) { this->info = info; }
+	virtual void setSize(double width, double height) { this->info.setSize(width, height); }
+	virtual void setPosition(double x, double y) { this->info.setPosition(x, y); }
 
 };

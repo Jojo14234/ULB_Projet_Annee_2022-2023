@@ -13,6 +13,7 @@
 
 #include "../AssetsPath.hpp"
 #include "Cell.hpp"
+#include "../configs.hpp"
 
 //Class representing the gameboard with the different game spaces and the spaces for the cards.
 class Board{
@@ -21,7 +22,7 @@ class Board{
 	static const int line_nb = 11; 
 	static const int gamebox_nb = 40;
 
-	std::vector<int> old_pos_player;
+	std::vector<int> old_pos_player{0,0,0,0,0,0};
 	std::array<int,40> old_lev_house;
 
     int n_player; //number of players in game
@@ -31,10 +32,10 @@ class Board{
 
 	int text_size = 10;
 
-    sf::Vector2f v_cell_size{90,70};  // vertical cell's size 
+    sf::Vector2f v_cell_size{WINDOW_HEIGHT / 10,WINDOW_HEIGHT  / 10 - 20};  // vertical cell's size 
 	sf::Vector2f h_cell_size{v_cell_size.y,v_cell_size.x};  // horizontal cell's size 
-    sf::Vector2f corner_cell_size{90,90} ;
-    sf::Vector2f start_corner{350,800};  //bottom left position
+    sf::Vector2f corner_cell_size{WINDOW_HEIGHT / 10,WINDOW_HEIGHT / 10} ;
+    sf::Vector2f start_corner{350 ,WINDOW_HEIGHT - 100};  //bottom left position
 
     /*
 
@@ -66,16 +67,6 @@ public:
 		this->loadCellNames();
 		this->loadCellFile();
 		this->createBoard();
-
-		board[31]->setPlayer(&red,0);  //tests
-		board[31]->setPlayer(&blue,1);
-		board[31]->setPlayer(&green,2);
-		board[31]->setPlayer(&magenta,3);
-		board[31]->setPlayer(&yellow,4);
-		board[31]->setPlayer(&cyan,5);
-		
-		board[31]->setOwner("red");
-		board[31]->setBuilding(4);
 		}
 	
     void draw(sf::RenderWindow &window);
@@ -88,6 +79,23 @@ public:
 	void setIdle(int cell);
 	void setPurchased(int cell, int player);
 	void setHouse(int cell, int house_nb);
+
+
+	void setAllGrayed();
+	void setBuildable(int cell);
+	void setSalable(int cell);
+	void setMortgageable(int cell);
+	void setUnmortgageable(int cell);
+	void setExchangeable(int cell);
+
+	void leaveSelection(int cell);
+	void unsetAllGrayed();
+
+	void setMortgaged(int cell);
+
+	void unmortgage(int cell);
+
+	std::array<std::shared_ptr<Cell>, gamebox_nb>* getBoardButton();
 
 
 };

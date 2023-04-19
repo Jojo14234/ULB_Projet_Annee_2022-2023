@@ -3,27 +3,17 @@
 
 #include <SFML/Network.hpp>
 
-#include "../utils/Configs.hpp"
+#include "../Utils/Config/Configs.hpp"
 
 #include "Player/Player.hpp"
 #include "Board/Board.hpp"
 #include "../Game/Board/Obtainable/Cells/LandCell.hpp"
+#include "GameParameter.hpp"
 
 enum class AuctionStatus {STOP, START, OTHER};
 enum class ExchangeStatus{STOP, START, OTHER};
 enum class ExchangeResult{ACCEPTED, REFUSED, NON_CHOICE};
 class ClientManager;
-
-struct GameParameters {
-    bool isFastGame = false;
-    int startMoney = STARTING_MONEY;
-    int maxPlayers = MAX_PLAYER_DEFAULT;
-    int maxHome = MAX_HOME;
-    int maxHotel = MAX_HOTEL;
-    //todo add params if needed
-    int max_turn = 10000;
-};
-
 
 class Capitalist {
 
@@ -94,9 +84,9 @@ public:
     ClientManager* getWinner();
     ClientManager* calculateGameWinner();
 
-    void processJailPay(Player* player);
-    void processJailUseCard(Player* player);
-    void processJailRoll(Player* player);
+    bool processJailPay(Player* player);
+    bool processJailUseCard(Player* player);
+    bool processJailRoll(Player* player);
     bool processBuild(Player *player, std::string &name);
     bool processSellBuild(Player *player, std::string &name);
     bool processMortgage(Player *player, std::string &name);
@@ -104,7 +94,7 @@ public:
     ExchangeResult processSendExchangeRequest(Player *player, std::string &name, int money);
     bool processMortgage(Player *player, std::string &name, bool is_fast_game);
     bool processLiftMortgage(Player *player, std::string &name, bool is_fast_game);
-    std::vector<Player*> processAskAuction(Player *player, std::string &name);
+    std::vector<Player*> startAuction(Player *player);
     bool checkBankrupt(Player *player);
     void processBankruptByPlayer(Player *player, Player* other);
 

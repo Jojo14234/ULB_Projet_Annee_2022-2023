@@ -29,5 +29,9 @@ public:
 
 	void setColor(sf::Color color) { box.setFillColor(color); }
 
+	void setPosition(double x, double y) override {
+		AbstractViewObject::setPosition(x, y);
+		box.setPosition(x, y);
+	}
 
 };

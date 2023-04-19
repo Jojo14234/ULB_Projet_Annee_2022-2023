@@ -1,7 +1,3 @@
-/**
- * Project Untitled
- */
-
 #pragma once
 
 #include <SFML/Window.hpp>
@@ -16,6 +12,7 @@ class ConnectionGUIView; // forward declaration
 class ConnectionGUIController: public AbstractGUIController {
 
 	enum CONNECTION_STATE { USERNAME, PASSWORD, DONE };
+
 	CONNECTION_STATE state = USERNAME;
 
 	ConnectionGUIView* view;
@@ -28,8 +25,15 @@ public:
 
 	void handle(sf::Event event) override;
 
-	void clear();
+    bool doLoginBtnContain(sf::Event event);
+    bool doRegisterBtnContain(sf::Event event);
+    bool doUsernameContain(sf::Event event);
+    bool doPasswordContain(sf::Event event);
 
-	// ...
+    void loginProcess();
+    void registerProcess();
+    void usernameProcess();
+    void passwordProcess();
+    void keyPressProcess(sf::Event event);
 
 };

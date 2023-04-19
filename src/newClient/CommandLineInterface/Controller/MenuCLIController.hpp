@@ -6,6 +6,7 @@
 
 #include "AbstractCLIController.hpp"
 #include "../configs.hpp"
+#include <string>
 
 class Client; // forward declaration
 
@@ -18,6 +19,11 @@ public:
     ~MenuCLIController()=default;
 
     void handle(int event) override;
+
+    void handleRankingPos(std::string &input);
+
+    void handleRankingTop(std::string &input);
+
 
 };
 

@@ -2,7 +2,10 @@
 
 #include "Capitalist.hpp"
 #include "../Server/ClientManager/ClientManager.hpp"
-#include "../utils/randomFunctions.hpp"
+#include "../Utils/randomFunctions.hpp"
+#include "../Server/Game/GameServer/GameServer.hpp"
+#include <unistd.h>  
+#include <thread>
 #include <random>
 #include <algorithm>
 #include "Board/Obtainable/Cells/Land/Land.hpp"
@@ -351,11 +354,15 @@ ClientManager *Capitalist::calculateGameWinner() {
     return winner;
 }
 
-void Capitalist::processJailPay(Player *player) {
-    if ( player->pay(50) ) { player->setStatus(PLAYER_STATUS::FREE); }
+bool Capitalist::processJailPay(Player *player) {
+    if (player->getMoney() > 50){
+        if ( player->pay(50) ) { player->setStatus(PLAYER_STATUS::FREE); }
+        return true;
+    }
+    return false;
 }
 
-void Capitalist::processJailUseCard(Player *player) {
+bool Capitalist::processJailUseCard(Player *player) {
     if ( player->getAllGOOJCards().size() > 0 ) {
         JailCard* card = player->getAllGOOJCards().back();
         card->use();
@@ -365,10 +372,12 @@ void Capitalist::processJailUseCard(Player *player) {
         else if (this->board.getCommunityDeck()->isJailCardInside()) {
             this->board.getCommunityDeck()->replaceJailCard();
         }
+        return true;
     }
+    return false;
 }
 
-void Capitalist::processJailRoll(Player *player) {
+bool Capitalist::processJailRoll(Player *player) {
     int roll_result = player->processRollDice(this->dice);
     player->addRollInPrison();
     if ( this->rolledADouble() ) {
@@ -377,7 +386,7 @@ void Capitalist::processJailRoll(Player *player) {
         player->processMove(roll_result, this->getBoard());
         player->getCurrentCell()->action(player);
         player->resetRollInPrison();
-        return;
+        return true;
     }
     else if ( player->getRollsInPrison() == 3 ) {
         this->dice.resetDoubleCounter();
@@ -387,6 +396,7 @@ void Capitalist::processJailRoll(Player *player) {
         player->getCurrentCell()->action(player);
         player->resetRollInPrison();
     }
+    return true;
 }
 
 bool Capitalist::processBuild(Player *player, std::string &name) {
@@ -472,36 +482,17 @@ ExchangeResult Capitalist::processSendExchangeRequest(Player *player, std::strin
     return ExchangeResult::NON_CHOICE;
 }
 
-std::vector<Player*> Capitalist::processAskAuction(Player *player, std::string &name) {
-
-    // ENVOYER DEMANDE DE PARTICIPATION AU CLIENT
+std::vector<Player*> Capitalist::startAuction(Player *player) {
+    // ON INSCRIT LES JOUEURS
+    std::vector<Player*> participants;
     for (auto &other : this->players ) {
         if ( &other != player ) {
-            other.setStatus(PLAYER_STATUS::ASK_AUCTION);
-            other.getClient()->sendQueryMsg(name, QUERY::ASK_AUCTION);
-            other.getClient()->sendQueryMsg("Pour participer à l'enchère /participate !!", QUERY::MESSAGE);
-        }
-    }
-
-    std::vector<Player*> participants;
-    GAME_QUERY_TYPE query;
-    // RÉCUPÉRER LES PARTICIPANTS
-    for ( auto &other : this->players ) {
-        if (&other != player) {
-            other.getClient()->receive(query);
-            if ( query == GAME_QUERY_TYPE::PARTICIPATE) {
-                other.setStatus(PLAYER_STATUS::WAITING_FOR_AUCTION_TURN);
-                participants.push_back(&other);
-            }
-            else {
-                std::cout << "Player " + other.getUsername() + " doe's not participate in auction" << std::endl;
-                other.setStatus(PLAYER_STATUS::FREE);
-            }
+            participants.push_back(&other);
+            other.setStatus(PLAYER_STATUS::WAITING_FOR_AUCTION_TURN);
         }
     }
     return participants;
 }
-
 
 void Capitalist::shufflePlayers() {
     std::random_device rd;  // Will be used to obtain a seed for the random number engine
@@ -519,7 +510,7 @@ void Capitalist::processBankruptByPlayer(Player *player, Player *other) {
     for ( auto station : player->getAllStations() ) { station->exchange(other, 0); }
     for ( auto company : player->getAllCompanies() ) { company->exchange(other, 0); }
     /*TODO : donner les cartes sortie de prison*/
-    other->receive(player->getMoney(), player->getUsername());
+    other->receive(player->getMoney());
     player->pay(player->getMoney(), true);
 }
 
@@ -574,4 +565,4 @@ int Capitalist::getMaxHome() { return params.maxHome; }
 
 int Capitalist::getMaxHotels() { return params.maxHotel; }
 
-int Capitalist::getMaxTurns() { return params.max_turn; }
+int Capitalist::getMaxTurns() { return params.maxTurn; }

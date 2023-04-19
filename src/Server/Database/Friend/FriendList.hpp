@@ -4,8 +4,8 @@
 #include <vector>
 #include <string>
 #include <algorithm>
-#include "../../../utils/AccessMonitor.hpp"
-#include "../../../utils/Configs.hpp"
+#include "../../../Utils/AccessMonitor.hpp"
+#include "../../../Utils/Config/Configs.hpp"
 
 
 class Database;
@@ -38,7 +38,6 @@ public:
 	// WRITE READ
 	void write(FILE* file);
 	void read(FILE* file);
-
 };
 
 
