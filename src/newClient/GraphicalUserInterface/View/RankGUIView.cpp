@@ -82,11 +82,11 @@ void RankGUIView::draw() {
 
 void RankGUIView::setUpPlayer(int n, std::string username, int point) {
 	switch (n) {
-		case 1: this->player1.setString(username); this->score1.setString(std::to_string(point)); break;
-		case 2: this->player2.setString(username); this->score2.setString(std::to_string(point)); break;
-		case 3: this->player3.setString(username); this->score3.setString(std::to_string(point)); break;
-		case 4: this->player4.setString(username); this->score4.setString(std::to_string(point)); break;
-		case 5: this->player5.setString(username); this->score5.setString(std::to_string(point)); break;
+		case 0: this->player1.setString(username); this->score1.setString(std::to_string(point)); break;
+		case 1: this->player2.setString(username); this->score2.setString(std::to_string(point)); break;
+		case 2: this->player3.setString(username); this->score3.setString(std::to_string(point)); break;
+		case 3: this->player4.setString(username); this->score4.setString(std::to_string(point)); break;
+		case 4: this->player5.setString(username); this->score5.setString(std::to_string(point)); break;
 		default : break;
 	}
 }

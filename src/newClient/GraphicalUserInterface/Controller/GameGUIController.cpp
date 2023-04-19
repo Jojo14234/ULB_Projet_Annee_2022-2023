@@ -556,6 +556,8 @@ void GameGUIController::unmortgagePropertyGU(const std::string& response){
 }
 
 void GameGUIController::leaveSelectionMenuGU(const std::string& response){
+    //TODO utiliser le response
+    response.c_str();
     for (auto& property : selection_mode) {
         int index = this->view->board.getCellIndex(property);
         this->view->board.leaveSelection(index);
