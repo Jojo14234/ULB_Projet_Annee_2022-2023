@@ -311,13 +311,14 @@ void GameServer::processStart(ClientManager* client) {
     if ( this->game.getPlayersSize() < 2 ) { this->updateThisClientWithQuery(QUERY::INFOS_CANNOT_START, "" ,*client); return; }
     this->game.startGame();
 
+    this->sendStartData();
+
     if ( game.isFastGame() ){
         for (auto p : *(this->game.getPlayers())){
             game.forceAcquisition(&p);
             checkAndManageBankruptcy(*p.getClient(), &p);
         }
     }
-    this->sendStartData();
 }
 
 /*
