@@ -5,7 +5,7 @@
 #include "FriendsGUIController.hpp"
 #include "../View/FriendsGUIView.hpp"
 #include "../../Model/Client.hpp"
-#include "../../../utils/Configs.hpp"
+#include "../../../Utils/Config/Configs.hpp"
 
 
 void FriendsGUIController::handle(sf::Event event) {

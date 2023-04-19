@@ -1,6 +1,6 @@
 
 #include "MoneyCard.hpp"
-#include "../../../../Server/Game/GameServer.hpp"
+#include "../../../../Server/Game/GameServer/GameServer.hpp"
 
 
 

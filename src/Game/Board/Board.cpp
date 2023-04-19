@@ -8,7 +8,7 @@
 #include "Obtainable/Cells/DrawableCardCell.hpp"
 #include "Obtainable/Cells/TaxCell.hpp"
 #include "Obtainable/Cells/StartCell.hpp"
-#include "../../utils/Configs.hpp"
+#include "../../Utils/Config/Configs.hpp"
 
 
 

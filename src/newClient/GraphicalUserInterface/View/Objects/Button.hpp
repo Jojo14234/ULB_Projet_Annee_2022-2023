@@ -6,11 +6,14 @@
 
 #include <string>
 #include <SFML/Graphics.hpp>
+#include <SFML/Audio.hpp>
 
 #include "AbstractViewObject.hpp"
+#include "../Audibles/Audible.hpp"
 
 
-class Button : public virtual AbstractViewObject {
+class Button : public virtual AbstractViewObject, public Audible<ButtonSoundBuffer> {
+
 public:
 	Button()=default;
 	explicit Button(ObjectInfo<> info) : AbstractViewObject(info) {}

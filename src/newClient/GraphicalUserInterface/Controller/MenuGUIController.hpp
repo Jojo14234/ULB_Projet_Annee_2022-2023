@@ -47,4 +47,6 @@ public:
     void settingPopUpClick(int n, bool right_side);
 
     void createProcess();
+    void joinProcess();
+    
 };

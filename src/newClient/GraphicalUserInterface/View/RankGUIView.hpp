@@ -13,145 +13,67 @@ class RankGUIView: public AbstractGUIView {
 	Text rank {ObjectInfo<>(WINDOW_WIDTH/4.f, WINDOW_WIDTH/4.f * 145.f/788.f, (WINDOW_WIDTH/2.f- ((WINDOW_WIDTH/4.f)/3)) , WINDOW_HEIGHT/10.f), "Ranking"};
 
 		// top 5
-	Text player1 {ObjectInfo<>(WINDOW_WIDTH/50, WINDOW_WIDTH/50, WINDOW_WIDTH/3.f + 60, WINDOW_HEIGHT/2.f - 50), "", WHITE};
-	Text player2 {ObjectInfo<>(WINDOW_WIDTH/50, WINDOW_WIDTH/50, WINDOW_WIDTH/3.f + 60, WINDOW_HEIGHT/2.f + 30), "", WHITE};
-	Text player3 {ObjectInfo<>(WINDOW_WIDTH/50, WINDOW_WIDTH/50, WINDOW_WIDTH/3.f + 60, WINDOW_HEIGHT/2.f + 110), "", WHITE};
-	Text player4 {ObjectInfo<>(WINDOW_WIDTH/50, WINDOW_WIDTH/50, WINDOW_WIDTH/3.f + 60, WINDOW_HEIGHT/2.f + 190), "", WHITE};
-	Text player5 {ObjectInfo<>(WINDOW_WIDTH/50, WINDOW_WIDTH/50, WINDOW_WIDTH/3.f + 60, WINDOW_HEIGHT/2.f + 270), "", WHITE};
-	Text score1 {ObjectInfo<>(WINDOW_WIDTH/60, WINDOW_WIDTH/60, WINDOW_WIDTH/2.f + 230, WINDOW_HEIGHT/2.f - 45), "", WHITE};
-	Text score2 {ObjectInfo<>(WINDOW_WIDTH/60, WINDOW_WIDTH/60, WINDOW_WIDTH/2.f + 230, WINDOW_HEIGHT/2.f + 35), "", WHITE};
-	Text score3 {ObjectInfo<>(WINDOW_WIDTH/60, WINDOW_WIDTH/60, WINDOW_WIDTH/2.f + 230, WINDOW_HEIGHT/2.f + 115), "", WHITE};
-	Text score4 {ObjectInfo<>(WINDOW_WIDTH/60, WINDOW_WIDTH/60, WINDOW_WIDTH/2.f + 230, WINDOW_HEIGHT/2.f + 195), "", WHITE};
-	Text score5 {ObjectInfo<>(WINDOW_WIDTH/60, WINDOW_WIDTH/60, WINDOW_WIDTH/2.f + 230, WINDOW_HEIGHT/2.f + 275), "", WHITE};
+	Text player1 {ObjectInfo<>(WINDOW_WIDTH/50.f, WINDOW_HEIGHT/30.f + 2, WINDOW_WIDTH/3.f + 60, WINDOW_HEIGHT/2.f - 50), "", WHITE};
+	Text player2 {ObjectInfo<>(WINDOW_WIDTH/50.f, WINDOW_HEIGHT/30.f + 2, WINDOW_WIDTH/3.f + 60, WINDOW_HEIGHT/2.f + 30), "", WHITE};
+	Text player3 {ObjectInfo<>(WINDOW_WIDTH/50.f, WINDOW_HEIGHT/30.f + 2, WINDOW_WIDTH/3.f + 60, WINDOW_HEIGHT/2.f + 110), "", WHITE};
+	Text player4 {ObjectInfo<>(WINDOW_WIDTH/50.f, WINDOW_HEIGHT/30.f + 2, WINDOW_WIDTH/3.f + 60, WINDOW_HEIGHT/2.f + 190), "", WHITE};
+	Text player5 {ObjectInfo<>(WINDOW_WIDTH/50.f, WINDOW_HEIGHT/30.f + 2, WINDOW_WIDTH/3.f + 60, WINDOW_HEIGHT/2.f + 270), "", WHITE};
+	Text score1 {ObjectInfo<>(WINDOW_WIDTH/60.f, WINDOW_HEIGHT/33.f, WINDOW_WIDTH/2.f + 230, WINDOW_HEIGHT/2.f - 45), "", WHITE};
+	Text score2 {ObjectInfo<>(WINDOW_WIDTH/60.f, WINDOW_HEIGHT/33.f, WINDOW_WIDTH/2.f + 230, WINDOW_HEIGHT/2.f + 35), "", WHITE};
+	Text score3 {ObjectInfo<>(WINDOW_WIDTH/60.f, WINDOW_HEIGHT/33.f, WINDOW_WIDTH/2.f + 230, WINDOW_HEIGHT/2.f + 115), "", WHITE};
+	Text score4 {ObjectInfo<>(WINDOW_WIDTH/60.f, WINDOW_HEIGHT/33.f, WINDOW_WIDTH/2.f + 230, WINDOW_HEIGHT/2.f + 195), "", WHITE};
+	Text score5 {ObjectInfo<>(WINDOW_WIDTH/60.f, WINDOW_HEIGHT/33.f, WINDOW_WIDTH/2.f + 230, WINDOW_HEIGHT/2.f + 275), "", WHITE};
 
 		// my rank
-	Text my_player {ObjectInfo<>(WINDOW_WIDTH/50, WINDOW_WIDTH/50, WINDOW_WIDTH/3.f + 60, WINDOW_HEIGHT/2.f - 50), "PlayerMyRank", WHITE};
-	Text my_score {ObjectInfo<>(WINDOW_WIDTH/50, WINDOW_WIDTH/50, WINDOW_WIDTH/2.f + 230, WINDOW_HEIGHT/2.f - 45), "1", WHITE};
-	Text my_top {ObjectInfo<>(WINDOW_WIDTH/50, WINDOW_WIDTH/50, WINDOW_WIDTH/3.f - 7 , WINDOW_HEIGHT/2.f - 50), "100", BLACK};
+	Text my_player {ObjectInfo<>(WINDOW_WIDTH/50.f, WINDOW_HEIGHT/30.f + 2, WINDOW_WIDTH/3.f + 60, WINDOW_HEIGHT/2.f - 50), "PlayerMyRank", WHITE};
+	Text my_score {ObjectInfo<>(WINDOW_WIDTH/50.f, WINDOW_HEIGHT/30.f + 2, WINDOW_WIDTH/2.f + 230, WINDOW_HEIGHT/2.f - 45), "1", WHITE};
+	Text my_top {ObjectInfo<>(WINDOW_WIDTH/50.f, WINDOW_HEIGHT/30.f + 2, WINDOW_WIDTH/3.f - 7 , WINDOW_HEIGHT/2.f - 50), "100", BLACK};
 
 
 	//Boxe
-	Box box {ObjectInfo<>(WINDOW_WIDTH/2.f, WINDOW_WIDTH/2.f - 50 , WINDOW_WIDTH/4.f , WINDOW_HEIGHT/10.f), WHITE};
+	Box box {ObjectInfo<>(WINDOW_WIDTH/2.f, WINDOW_HEIGHT/2.f + WINDOW_HEIGHT/3.f , WINDOW_WIDTH/4.f , WINDOW_HEIGHT/10.f), WHITE};
 
 	//Border
 	Border box_border {box, 10, BLACK};
 	
 	//Image
-	Image top_box{ObjectInfo<>(WINDOW_WIDTH/4.f + 200, WINDOW_WIDTH/4.f + 80, WINDOW_WIDTH/3.f - 30 , WINDOW_HEIGHT/3.f), RANK_PATH};
-	Image my_rank_box{ObjectInfo<>(WINDOW_WIDTH/4.f + 200, WINDOW_WIDTH/8.f - 35, WINDOW_WIDTH/3.f - 30 , WINDOW_HEIGHT/3.f), MY_RANK_PATH};
+	Image top_box{ObjectInfo<>(WINDOW_WIDTH/4.f + 200, WINDOW_HEIGHT/2.f + WINDOW_HEIGHT/30.f, WINDOW_WIDTH/3.f - 30 , WINDOW_HEIGHT/3.f), RANK_PATH};
+	Image my_rank_box{ObjectInfo<>(WINDOW_WIDTH/4.f + 200, WINDOW_HEIGHT/6.f + WINDOW_HEIGHT/60.f, WINDOW_WIDTH/3.f - 30 , WINDOW_HEIGHT/3.f), MY_RANK_PATH};
 
 	//Image Button
-	ImageButton back_button{ObjectInfo<>(WINDOW_WIDTH/16.f, WINDOW_HEIGHT/16.f, 410,100), BACK_BUTTON_PATH};
+	ImageButton back_button{ObjectInfo<>(WINDOW_WIDTH/16.f, WINDOW_HEIGHT/16.f, WINDOW_WIDTH/4.f + WINDOW_WIDTH/160.f ,WINDOW_HEIGHT/7.f), BACK_BUTTON_PATH};
 
 	//TextButtons
 	// (ObjectInfo<>(width, height, x, y) de la box, ObjectInfo<>(width, height, x, y) du texte, text, text_color, background_color
-	TextButton top {ObjectInfo<>(WINDOW_WIDTH/15, WINDOW_WIDTH/40, WINDOW_WIDTH/3.f - 5 , WINDOW_HEIGHT/4.f-10), ObjectInfo<>(WINDOW_WIDTH/50, WINDOW_WIDTH/50 , WINDOW_WIDTH/3.f , WINDOW_HEIGHT/4.f - 10), "TOP 5", BLACK, RANK_COLOR}; 
-	TextButton my_rank {ObjectInfo<>(WINDOW_WIDTH/12 + 5, WINDOW_WIDTH/40, WINDOW_WIDTH/2.f + 140 , WINDOW_HEIGHT/4.f-10), ObjectInfo<>(WINDOW_WIDTH/50, WINDOW_WIDTH/50 , WINDOW_WIDTH/2.f + 145 , WINDOW_HEIGHT/4.f - 10), "My Rank", BLACK, RANK_COLOR};
+	TextButton top {ObjectInfo<>(WINDOW_WIDTH/15.f, WINDOW_HEIGHT/30.f + WINDOW_HEIGHT/90.f, WINDOW_WIDTH/3.f - 5 , WINDOW_HEIGHT/4.f-10), ObjectInfo<>(WINDOW_WIDTH/50.f, WINDOW_HEIGHT/30.f + 2 , WINDOW_WIDTH/3.f , WINDOW_HEIGHT/4.f - 10), "TOP 5", BLACK, RANK_COLOR}; 
+	TextButton my_rank {ObjectInfo<>(WINDOW_WIDTH/12.f + 5, WINDOW_HEIGHT/30.f + WINDOW_HEIGHT/90.f, WINDOW_WIDTH/2.f + 140 , WINDOW_HEIGHT/4.f-10), ObjectInfo<>(WINDOW_WIDTH/50.f, WINDOW_HEIGHT/30.f + 2 , WINDOW_WIDTH/2.f + 145 , WINDOW_HEIGHT/4.f - 10), "My Rank", BLACK, RANK_COLOR};
 
 	
 
-	void hideTop() {
-		top_box.setHidden();
-		player1.setHidden();
-		player2.setHidden();
-		player3.setHidden();
-		player4.setHidden();
-		player5.setHidden();
-		score1.setHidden();
-		score2.setHidden();
-		score3.setHidden();
-		score4.setHidden();
-		score5.setHidden();
-	}
+	void hideTop();
 
-	void showTop() {
-		top_box.setVisible();
-		player1.setVisible();
-		player2.setVisible();
-		player3.setVisible();
-		player4.setVisible();
-		player5.setVisible();
-		score1.setVisible();
-		score2.setVisible();
-		score3.setVisible();
-		score4.setVisible();
-		score5.setVisible();
-	}
+	void showTop();
 
-	void hideMyRank() {
-		my_rank_box.setHidden();
-		my_player.setHidden();
-		my_score.setHidden();
-		my_top.setHidden();
-	}
+	void hideMyRank();
 
-	void showMyRank() {
-		my_rank_box.setVisible();
-		my_player.setVisible();
-		my_score.setVisible();
-		my_top.setVisible();
-	}
+	void showMyRank();
 
 
 public:
 
-	explicit RankGUIView(sf::RenderWindow* window) : AbstractGUIView(window) {
-		this->hideMyRank();
-	}
-	
+	explicit RankGUIView(sf::RenderWindow* window);
 	~RankGUIView()=default;
 
 	
+	void drawTop();
 
-	void drawTop() {
-		top_box.draw(*window);
-		player1.draw(*window);
-		player2.draw(*window);
-		player3.draw(*window);
-		player4.draw(*window);
-		player5.draw(*window);
-		score1.draw(*window);
-		score2.draw(*window);
-		score3.draw(*window);
-		score4.draw(*window);
-		score5.draw(*window);
-	}
+	void drawMyRank();
 
-	void drawMyRank() {
-		my_rank_box.draw(*window);
-		my_player.draw(*window);
-		my_score.draw(*window);
-		my_top.draw(*window);
-	}
+	void draw() override;
 
-	void draw() override {
-		box_border.draw(*window);
-		box.draw(*window);
-		rank.draw(*window);
-		top.draw(*window);
-		my_rank.draw(*window);
-		back_button.draw(*window);
+	void setUpPlayer(int n, std::string username, int point);
 
-		drawTop();
-		drawMyRank();
-	}
-
-	void setUpPlayer(int n, std::string username, int point) {
-		switch (n) {
-			case 1: this->player1.setString(username); this->score1.setString(std::to_string(point)); break;
-			case 2: this->player2.setString(username); this->score2.setString(std::to_string(point)); break;
-			case 3: this->player3.setString(username); this->score3.setString(std::to_string(point)); break;
-			case 4: this->player4.setString(username); this->score4.setString(std::to_string(point)); break;
-			case 5: this->player5.setString(username); this->score5.setString(std::to_string(point)); break;
-			default : break;
-		}
-	}
-
-	void setUpMyRank(int n, std::string username, int point) {
-		this->my_player.setString(username);
-		this->my_top.setString(std::to_string(n));
-		this->my_score.setString(std::to_string(point));
-	}
+	void setUpMyRank(int n, std::string username, int point);
 
 	friend class RankGUIController;
 

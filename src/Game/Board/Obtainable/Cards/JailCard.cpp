@@ -5,7 +5,6 @@
 void JailCard::action(Player* player) {
 	this->setOwner(player);
 	player->acquireGOOJCard(this);
-	player->getClient()->sendQueryMsg(std::to_string(player->getIndex()+1), QUERY::GET_GO_OUT_JAIL_CARD);
 }
 
 void JailCard::use() {

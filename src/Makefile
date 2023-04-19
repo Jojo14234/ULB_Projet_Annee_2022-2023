@@ -21,9 +21,15 @@ endif
 SERVER_BINS = $(patsubst Server/%.cpp, Server/%.o, $(wildcard Server/*.cpp))
 SERVER_CM_BINS = $(patsubst Server/ClientManager/%.cpp, Server/ClientManager/%.o, $(wildcard Server/ClientManager/*.cpp))
 SERVER_DB_BINS = $(patsubst Server/Database/%.cpp, Server/Database/%.o, $(wildcard Server/Database/*.cpp))
+SERVER_DB_USER = $(patsubst /%.cpp, /%.o, $(wildcard Server/Database/User/*.cpp))
 SERVER_DB_FRIEND_BINS = $(patsubst Server/Database/Friend/%.cpp, Server/Database/Friend/%.o, $(wildcard Server/Database/Friend/*.cpp))
 SERVER_DB_CHAT_BINS = $(patsubst Server/Database/Chat/%.cpp, Server/Database/Chat/%.o, $(wildcard Server/Database/Chat/*.cpp))
-SERVER_GAME_BINS = $(patsubst Server/Game/%.cpp, Server/Game/%.o, $(wildcard Server/Game/*.cpp))
+#SERVER_GAME_BINS = $(patsubst Server/Game/%.cpp, Server/Game/%.o, $(wildcard Server/Game/*.cpp))
+SERVER_GAME_GAME_SERVER = $(patsubst /%.cpp, /%.o, $(wildcard Server/Game/GameServer/*.cpp))
+SERVER_GAME_UTILITY = $(patsubst /%.cpp, /%.o, $(wildcard Server/Game/Utility/*.cpp))
+SERVER_HANDLER =  $(patsubst /%.cpp, /%.o, $(wildcard Server/Handler/*.cpp))
+
+# Capitalist
 GAME_BINS = $(patsubst Game/%.cpp, Game/%.o, $(wildcard Game/*.cpp))
 
 
@@ -56,7 +62,7 @@ rm:
 
 main: client server
 
-server: ${SERVER_BINS} ${SERVER_CM_BINS} ${SERVER_DB_BINS} ${GAME_BINS} ${PLAYER_BINS} ${DICE_BINS} ${BOARD_BINS}  ${OBTAINABLE_BINS} ${CARDS_BINS} ${CELLS_BINS} ${LAND_BINS} ${SERVER_DB_FRIEND_BINS} ${SERVER_DB_CHAT_BINS} ${SERVER_GAME_BINS} ${JSON_BINS}
+server: ${SERVER_BINS} ${SERVER_CM_BINS} ${SERVER_DB_BINS} ${SERVER_DB_USER} ${GAME_BINS} ${SERVER_GAME_UTILITY} ${SERVER_GAME_GAME_SERVER} ${SERVER_HANDLER} ${PLAYER_BINS} ${DICE_BINS} ${BOARD_BINS}  ${OBTAINABLE_BINS} ${CARDS_BINS} ${CELLS_BINS} ${LAND_BINS} ${SERVER_DB_FRIEND_BINS} ${SERVER_DB_CHAT_BINS} ${SERVER_GAME_BINS} ${JSON_BINS}
 	${CXX} ${CXXFLAGS} -o server_capitalist $^ ${LDLIBS}
 	make clean
 

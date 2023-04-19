@@ -3,8 +3,8 @@
 #include <vector>
 
 #include "Client.hpp"
-#include "../../utils/Configs.hpp"
-#include "../../utils/Exceptions.hpp"
+#include "../../Utils/Config/Configs.hpp"
+#include "../../Utils/Exceptions.hpp"
 
 
 // Private methods
@@ -79,6 +79,7 @@ bool Client::sendCommand(MainInputParser &parser) {
 	sf::Packet packet;
 	packet << static_cast<int>(query);
 	switch(query) {
+		case QUERY_TYPE::JOIN_GAME: packet << atoi(parser[1].c_str()); break;
 	    case QUERY_TYPE::FRIENDS_ACCEPT:
 	    case QUERY_TYPE::FRIENDS_REFUSE:
 	    case QUERY_TYPE::FRIENDS_ADD:
@@ -86,7 +87,7 @@ bool Client::sendCommand(MainInputParser &parser) {
 	    case QUERY_TYPE::MESSAGE_SHOW: packet << parser[2]; break;
 	    case QUERY_TYPE::MESSAGE_SEND: packet << parser[1] << parser.regroup(2, parser.size(), ' '); break;
 		case QUERY_TYPE::CREATE_FAST_GAME: 
-		//case QUERY_TYPE::CREATE_GAME: packet << parser.regroup(2, parser.size(), ' '); break;
+		case QUERY_TYPE::CREATE_GAME: packet << parser.regroup(2, parser.size(), ' '); break;
 	    default: break;
 	}
 	this->sendPacket(packet);

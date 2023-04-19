@@ -19,7 +19,7 @@
 #include "PLAYER_STATUS.hpp"
 #include "BankAccount.hpp"
 #include "../Dice/Dice.hpp"
-#include "../../utils/Configs.hpp"
+#include "../../Utils/Config/Configs.hpp"
 
 //#include "Board/Obtainable/Cells/Cell.hpp"
 //#include "../../Server/ClientManager/ClientManager.hpp"

@@ -6,7 +6,7 @@
 #include "ParkingCell.hpp"
 #include "TaxCell.hpp"
 #include "StartCell.hpp"
-#include "../../../../Server/Game/GameServer.hpp"
+#include "../../../../Server/Game/GameServer/GameServer.hpp"
 
 void DrawableCardCell::action(Player* player) {
     Card* drawn_card = deck->drawACard();

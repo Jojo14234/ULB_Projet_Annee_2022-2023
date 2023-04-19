@@ -6,7 +6,7 @@
 #include "MoneyCard.hpp"
 #include "CellCard.hpp"
 #include "JailCard.hpp"
-#include "../../../../utils/Configs.hpp"
+#include "../../../../Utils/Config/Configs.hpp"
 
 
 

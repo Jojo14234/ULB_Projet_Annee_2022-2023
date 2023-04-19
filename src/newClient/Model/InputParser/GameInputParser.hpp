@@ -7,7 +7,7 @@
 #include <vector>
 #include <string>
 
-#include "../../../utils/Configs.hpp"
+#include "../../../Utils/Config/Configs.hpp"
 #include "InputParser.hpp"
 
 

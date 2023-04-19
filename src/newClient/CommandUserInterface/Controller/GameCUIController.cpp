@@ -78,6 +78,7 @@ void GameCUIController::receiveMsgLoop() { // todo il faudrait pas déplacer les
             case QUERY::INFOS_ROLL_DICE :               this->rollDiceGU(response); break;
             case QUERY::INFOS_GAME :                    this->infoGameGU(response); break;
             case QUERY::INFOS_NEW_TURN :                this->newTurnGU(response); break;
+            case QUERY::INFOS_DOUBLE_TURN :             this->doubleTurnGU(response); break;
             case QUERY::INFOS_NEW_TURN_IN_JAIL:         this->newTurnInJailGU(response); break;
             case QUERY::INFOS_PLAYER_MOVE :             this->playerMoveGU(response); break;
             case QUERY::INFOS_PLAYER_BOUGHT :           this->playerBoughtGU(response); break;
@@ -143,6 +144,7 @@ void GameCUIController::receiveMsgLoop() { // todo il faudrait pas déplacer les
             case QUERY::STOP_WAIT :                     this->view->getConsole()->addText("Pas assez rapide. L'offre a ete automatiquement annulee"); this->model->sendCommand(GameInputParser{response}); break;
             
             case QUERY::INFOS_DEBT :                    break;
+            case QUERY::INFOS_WON_LAND :                this->wonLandGU(response); break;
 
             case QUERY::WIN :                           this->endGameGU(response); break;
             case QUERY::ENDGAME :                       break;
@@ -210,16 +212,6 @@ void GameCUIController::createGameGU(const std::string& response) {
 void GameCUIController::joinGameGU(const std::string& response) {
     GameLaunchingParser launching_parser(response);
     game_info = launching_parser.parseJoinQuery();
-    /*this->view->getConsole()->addText(game_info->username);
-    this->view->getConsole()->addText(std::to_string(game_info->is_fast));
-    this->view->getConsole()->addText(std::to_string(game_info->max_hotels));
-    this->view->getConsole()->addText(std::to_string(game_info->max_house));
-    this->view->getConsole()->addText(std::to_string(game_info->max_players));
-    this->view->getConsole()->addText(std::to_string(game_info->max_turns));
-    this->view->getConsole()->addText(std::to_string(game_info->nb_player));
-    this->view->getConsole()->addText(std::to_string(game_info->start_money));*/
-    //this->view->getConsole()->addText(game_info->player_usernames[0]);
-    //this->view->getConsole()->addText(game_info->player_usernames[1]);
     this->initScreen(game_info->game_code);
     this->playerJoinUpdate();
 }
@@ -269,6 +261,12 @@ void GameCUIController::newTurnGU(const std::string& response) {
     else { this->view->endTurn(); this->model->endTurn(); this->view->getConsole()->addText("C'est au tour de " + response + " !"); }
 }
 
+void GameCUIController::doubleTurnGU(const std::string& response) {
+    if (this->model->isMyTurn()) { this->view->startTurn(); }
+    else { this->view->getConsole()->addText(response + " va relancer les dés !"); }
+}
+
+
 void GameCUIController::newTurnInJailGU(const std::string& response) {
     JailInfo jail_info(response);
     this->view->getConsole()->addText("Vous êtes en prison depuis " + std::to_string(jail_info.nb_turn) + " tours !");
@@ -281,13 +279,13 @@ void GameCUIController::playerMoveGU(const std::string& response){
     std::shared_ptr<PlayerMoveInfo> move_info = game_parser.parsePlayerMoveQuery();
     int index = this->view->getBoard()->getCellIndex(move_info->property_name);
     this->view->getBoard()->movePlayer(index, move_info->player);
-    /*if (move_info->property_name == "Prison" and this->model->isMyTurn()){
-        this->view->getConsole()->addText("Vous visitez la prison.");
+    if (move_info->property_name == "Prison" and this->model->isMyTurn()){
+        this->view->getConsole()->addText("Vous arrivez sur la case prison.");
     } else if (move_info->property_name == "Start" and this->model->isMyTurn()){
         this->view->getConsole()->addText("Vous arrivez sur la case départ.");
     } else if (move_info->property_name == "Parc" and this->model->isMyTurn()){
         this->view->getConsole()->addText("Vous arrivez au parc gratuit.");
-    }*/
+    }
 }
 
 void GameCUIController::playerBoughtGU(const std::string& response){
@@ -545,4 +543,10 @@ void GameCUIController::endGameGU(const std::string& response){
     this->view->getConsole()->addText("Victoire de " + response + ". Félicitations !");
     this->view->getConsole()->addText("Entrez /quit pour retourner au menu.");
     this->view->endTurn();
+}
+
+void GameCUIController::wonLandGU(const std::string& response){
+    WonLand won_land(response);
+    int index = this->view->getBoard()->getCellIndex(won_land.land);
+    this->view->getBoard()->setPurchased(index, won_land.player);
 }
