@@ -98,9 +98,11 @@ void Board::setPlayer(int cell, int player){
 }
 
 void Board::movePlayer(int cell, int player){
-    //pas encore tester
-    board[old_pos_player[player-1]]->removePlayer(player);
-    old_pos_player[player-1] = cell;
+    std::cout << "m1" << std::endl;
+    board[old_pos_player[player]]->removePlayer(player);
+	 std::cout << "m2" << std::endl;
+    old_pos_player[player] = cell;
+	 std::cout << "m3" << std::endl;
 	board[cell]->setPlayer(player_color[player], player);
 }
  

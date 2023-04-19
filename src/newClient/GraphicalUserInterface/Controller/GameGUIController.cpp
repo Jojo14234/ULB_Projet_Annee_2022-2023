@@ -126,11 +126,12 @@ void GameGUIController::handle(sf::Event event) {
                 }}
 
 
-void GameGUIController::receiveMsgLoop() { // todo il faudrait pas déplacer les fonction appeler par celle-ci dans le view ?
+void GameGUIController::receiveMsgLoop() {
     while (this->new_state == STATE::GAME){
        
         std::string response;
         QUERY query = this->model->receive(response);
+        std::cout << "->" << response << std::endl;
 
         switch(query) {
             case QUERY::PLAYER_CREATE_GAME :            this->createGameGU(response); break;
@@ -142,7 +143,7 @@ void GameGUIController::receiveMsgLoop() { // todo il faudrait pas déplacer les
             case QUERY::INFOS_GAME :                    this->infoGameGU(response); break;
             case QUERY::INFOS_NEW_TURN :                this->newTurnGU(response); break;
             case QUERY::INFOS_NEW_TURN_IN_JAIL:         this->newTurnInJailGU(response); break;
-            case QUERY::INFOS_PLAYER_MOVE :             this->playerMoveGU(response); break;
+            case QUERY::INFOS_PLAYER_MOVE :             std::cout<<"move"<<std::endl;this->playerMoveGU(response); break;
             case QUERY::INFOS_PLAYER_BOUGHT :           this->playerBoughtGU(response); break;
             case QUERY::INFOS_PLAYER_PAID_PLAYER :      this->playerPaidPlayerGU(response); break;
             case QUERY::INFOS_PLAYER_MOVE_ON_MORTGAGED_CELL: this->moveOnMortgagedCellGU(response); break;
@@ -303,8 +304,9 @@ void GameGUIController::rollDiceGU(const std::string& response){
          std::cout << "ça roule b ?" << std::endl;
         this->view->message_box.setString("Vous avez obtenu un " + std::to_string(dice_info->first_value) + " et un " + std::to_string(dice_info->second_value));}  
     else {
+        std::cout << "ça roule c ?" << std::endl;
         this->view->message_box.setString("Le joueur " + this->model->getPlayerTurn() + " a obtenu un " + std::to_string(dice_info->first_value ) + " et un " + std::to_string(dice_info->second_value));
-         std::cout << "ici?" << std::endl;}
+        std::cout << "ici?" << std::endl;}
 }
 
 
@@ -312,6 +314,7 @@ void GameGUIController::infoGameGU(const std::string& response) {
     InGameParser game_parser(response);
     std::shared_ptr<std::vector<GameInfo>> player_game_info = game_parser.parseInfosGameQuery(player_nb);
     for (int i = 0; i < player_nb; i++){
+        std::cout << "beforemove1" << std::endl;
         this->view->board.movePlayer(player_game_info->at(i).position, i);
         for (unsigned int j = 0; j < player_game_info->at(i).properties.size(); j++){
             int index = this->view->board.getCellIndex(player_game_info->at(i).properties[j].name);
@@ -351,15 +354,22 @@ void GameGUIController::newTurnInJailGU(const std::string& response) {
 void GameGUIController::playerMoveGU(const std::string& response){
     InGameParser game_parser(response);
     std::shared_ptr<PlayerMoveInfo> move_info = game_parser.parsePlayerMoveQuery();
+    std::cout << "aa" << std::endl;
     int index = this->view->board.getCellIndex(move_info->property_name);
+    std::cout << "aa1" << std::endl;
+    std::cout << move_info->player - 1 << std::endl;
+    std::cout << move_info->player - 1 << std::endl;
     this->view->board.movePlayer(index, move_info->player - 1);
+    std::cout << "aa11" << std::endl;
     if (move_info->property_name == "Prison" and this->model->isMyTurn()){
+        std::cout << "aa2" << std::endl;
         this->view->message_box.setString("Vous visitez la prison.");
     } else if (move_info->property_name == "Start" and this->model->isMyTurn()){
         this->view->message_box.setString("Vous arrivez sur la case départ.");
     } else if (move_info->property_name == "Parc" and this->model->isMyTurn()){
         this->view->message_box.setString("Vous arrivez au parc gratuit.");
     }
+    std::cout << "aa3" << std::endl;
 }
 
 void GameGUIController::playerBoughtGU(const std::string& response){
@@ -393,6 +403,7 @@ void GameGUIController::moveOnTaxCellGU(const std::string& response){
     InGameParser game_parser(response);
     std::shared_ptr<MoveTaxInfo> tax_info = game_parser.parseMoveTaxQuery();
     int index = this->view->board.getCellIndex(tax_info->tax_name);
+    std::cout << "beforemove" << std::endl;
     this->view->board.movePlayer(index, tax_info->player);
     this->view->info_box.setMoney(tax_info->player, tax_info->player_money);
 
@@ -455,12 +466,14 @@ void GameGUIController::loseMoneyGU(const std::string& response){
 void GameGUIController::cardCellToGoGU(const std::string& response){
     InGameParser game_parser(response);
     std::shared_ptr<MoveByCardInfo> move_card_info = game_parser.parseMoveByCardQuery();
+    std::cout << "beforemove2" << std::endl;
     this->view->board.movePlayer(move_card_info->new_pos, move_card_info->player-1);
 }
 
 void GameGUIController::moveOnCardCellGU(const std::string& response){
     InGameParser game_parser(response);
     std::shared_ptr<MoveOnCardCellInfo> move_cardcell_info = game_parser.parseMoveOnCardCellQuery();
+    std::cout << "beforemove3" << std::endl;
     this->view->board.movePlayer(move_cardcell_info->new_pos, move_cardcell_info->player);
     if (this->model->isMyTurn()){
         this->view->message_box.setString("Vous venez de piocher une carte :");
