@@ -78,6 +78,7 @@ void GameCUIController::receiveMsgLoop() { // todo il faudrait pas déplacer les
             case QUERY::INFOS_ROLL_DICE :               this->rollDiceGU(response); break;
             case QUERY::INFOS_GAME :                    this->infoGameGU(response); break;
             case QUERY::INFOS_NEW_TURN :                this->newTurnGU(response); break;
+            case QUERY::INFOS_DOUBLE_TURN :             this->doubleTurnGU(response); break;
             case QUERY::INFOS_NEW_TURN_IN_JAIL:         this->newTurnInJailGU(response); break;
             case QUERY::INFOS_PLAYER_MOVE :             this->playerMoveGU(response); break;
             case QUERY::INFOS_PLAYER_BOUGHT :           this->playerBoughtGU(response); break;
@@ -259,6 +260,12 @@ void GameCUIController::newTurnGU(const std::string& response) {
     if (response == this->model->getUsername()) { this->view->startTurn(); this->model->startTurn(); }
     else { this->view->endTurn(); this->model->endTurn(); this->view->getConsole()->addText("C'est au tour de " + response + " !"); }
 }
+
+void GameCUIController::doubleTurnGU(const std::string& response) {
+    if (this->model->isMyTurn()) { this->view->startTurn(); }
+    else { this->view->getConsole()->addText(response + " va relancer les dés !"); }
+}
+
 
 void GameCUIController::newTurnInJailGU(const std::string& response) {
     JailInfo jail_info(response);

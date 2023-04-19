@@ -275,6 +275,7 @@ void GameServer::clientTurn(ClientManager &client, Player* me) {
             // Vérification si le joueur est en faillite
 
             checkAndManageBankruptcy(client, me);
+            if (! me->hasRolled()) client.getGameServer()->updateAllClientsWithQuery(QUERY::INFOS_DOUBLE_TURN, "");
         }
     }
     // End of the turn
