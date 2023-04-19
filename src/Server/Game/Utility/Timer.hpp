@@ -57,13 +57,14 @@ class Timer2 {
     int duration;
     ClientManager* client;
     std::string stopMessage;
+    QUERY to_be_sent_query;
 
 public:
 
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Wunused-parameter"
-    Timer2(int duration, ClientManager* client, std::string stopMessage)
-            : duration{duration}, client{client}, stopMessage{stopMessage} { this->start(); };
+    Timer2(int duration, ClientManager* client, std::string stopMessage, QUERY query)
+            : duration{duration}, client{client}, stopMessage{stopMessage}, to_be_sent_query{query} { this->start(); };
 #pragma GCC diagnostic pop
 
     void start() {
@@ -82,7 +83,7 @@ public:
         sleep(this->duration);
 
         // 3 a la fin du thread, on compare si les seed sont toujours identique, auquel cas
-        if (this->seed == random_seed) {this->client->sendQueryMsg(this->stopMessage, QUERY::STOP_WAIT);}
+        if (this->seed == random_seed) {this->client->sendQueryMsg(this->stopMessage, to_be_sent_query);}
     }
 
     void resetSeed() { this->seed = 0; }

@@ -13,6 +13,7 @@ enum class QUERY {
     INFOS_GAME, // See sendGameData in GameServer for formatting
 
     INFOS_NEW_TURN, // pseudo
+    INFOS_DOUBLE_TURN,
     INFOS_NEW_TURN_IN_JAIL, //nb_tour:possede_carte [int]:[bool]
     INFOS_PLAYER_MOVE, // username:cell_name:player_money
     INFOS_PLAYER_BOUGHT, // username:cell_name:player_money
@@ -49,6 +50,7 @@ enum class QUERY {
 
 
     INFOS_ROLL_DICE, // dice1:dice2:result:isDouble:doubleCount [int]:[int]:[int]:[bool]:[int]
+    INFOS_WON_LAND, //property_name:player
 
     INFOS_LEAVE_SELECTION_MODE,
     NO_BUILDABLE_PROP,

@@ -743,4 +743,18 @@ struct JailInfo{
 };
 
 
+struct WonLand{
+	std::string land;
+	int player;
+
+	WonLand(const std::string &str){
+		int i = 0;
+		std::string tmp;
+		while (str[i] != ':' ) { tmp += str[i]; i++; }
+		land = tmp;
+		player = atoi(&str[i+1])+1;
+	}
+};
+
+
 #endif

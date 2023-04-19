@@ -1,6 +1,8 @@
 CXX = $(shell [ `g++ -v 2>&1 | grep -o 'version [0-9]\+' | cut -d' ' -f2` -le 9 ] && echo g++-10 || echo g++)
+
 CXXFLAGS = -std=c++20 -Wall -Wextra -Wpedantic -D_GNU_SOURCE #-fsanitize=address,leak -g #-Werror=all
-LDLIBS 	 = -lpthread -lsfml-network -lsfml-graphics -lsfml-window -lsfml-system -lncurses
+LDLIBS 	 = -lpthread -lsfml-network -lsfml-graphics -lsfml-window -lsfml-system -lsfml-audio -lncurses
+
 
 ifneq ($(shell uname -s), Linux)
 	CXXFLAGS += -I/opt/homebrew/Cellar/sfml/2.5.1_2/include

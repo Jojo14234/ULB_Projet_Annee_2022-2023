@@ -28,6 +28,11 @@ class Dice{
             dice2.setTexture(choicePath(d2));
         }
 
+        void resetDice(){
+            dice1.setTexture(DICED);
+            dice2.setTexture(DICEE);
+        }
+
         void setHidden(){
             dice1.setHidden();
             dice2.setHidden();

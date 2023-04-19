@@ -34,13 +34,19 @@ PROPERTY_COLOR Property::getColor() const {
 // Setter
 
 // Check
-bool Property::isBuildable(Player *player) {
+bool Property::isBuildable(Player *player, bool is_fast) {
     if ( this->owner != player )                              { return false; }
     if ( this->isMortgaged() )                                { return false; }
     if ( this->getLevel() == PROPERTY_LEVEL::HOTEL )          { return false; }
-    if ( !this->hasAllSameColorProperties(player) )           { return false;}
-    if ( !this->AllSameColorPropertiesHaveGoodLevel(player, false) ) { return false; }
+    if ( ! is_fast && !this->hasAllSameColorProperties(player) ) { return false;}
+    if ( ! is_fast && !this->AllSameColorPropertiesHaveGoodLevel(player, false) ) { return false; }
     if ( player->getBankAccount()->getMoney() < this->construct_price )  { return false; }
+    if ( is_fast ) {
+        switch (player->getBuildLevel()) {
+            case 0: if ( this->getLevel() == PROPERTY_LEVEL::TWO ) { return false; }
+            case 1: if ( this->getLevel() == PROPERTY_LEVEL::FOUR ) { return false; }
+        }
+    }
     return true;
 }
 
@@ -105,23 +111,6 @@ bool Property::build(Player *player, bool is_fast_game = false) {
     player->getClient()->send("Vous avez construit un bâtiment sur " + this->getName() + " son niveau est désormais [" + std::to_string(this->getIntLevel()) + "]");
     return true;
 }
-
-bool Property::isBuildable(Player *player, bool is_fast_game) {
-    if ( this->owner != player )                              { /*player->getClient()->send("Vous n'êtes pas propriétaire de cette propriété (construction refusée)");*/ return false; }
-    if ( this->isMortgaged() )                                { return false; }
-    if ( this->getLevel() == PROPERTY_LEVEL::HOTEL )          { /*player->getClient()->send("Le niveau max de construction est atteint (construction refusée)");*/ return false; }
-    if ( !is_fast_game && !this->hasAllSameColorProperties(player) )           { /*player->getClient()->send("Vous ne possédez pas toutes les propriété de la même couleur (construction refusée)");*/ return false;}
-    if ( !is_fast_game && !this->AllSameColorPropertiesHaveGoodLevel(player, false) ) { /*player->getClient()->send("L'écart de niveau entre vos propriété de la même couleur est trop grand (construction refusée)");*/ return false; }
-    if ( player->getBankAccount()->getMoney() < this->construct_price ) { /*player->getClient()->send("Vous êtes trop pauvre que pour construire un bâtiment sur cette propriété(construction refusée)");*/ return false; }
-    if ( is_fast_game ) {
-        switch (player->getBuildLevel()) {
-            case 0: if ( this->getLevel() == PROPERTY_LEVEL::TWO ) { return false; }
-            case 1: if ( this->getLevel() == PROPERTY_LEVEL::FOUR ) { return false; }
-        }
-    }
-    return true;
-}
-
 
 /*
  * Return un vecteur contenant les autres propriétés de la même couleur que cette propriété
