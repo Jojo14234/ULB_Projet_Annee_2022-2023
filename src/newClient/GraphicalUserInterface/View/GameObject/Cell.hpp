@@ -148,6 +148,8 @@ public :
 
 	ImageButton* getButton(){return &cell_im; }
 
+	int getCellNumber(){return cell_number; }
+
 
 
 };

@@ -10,6 +10,7 @@
 #include "GameObject/MessageBox.hpp"
 #include "GameObject/Dice.hpp"
 #include "GameObject/GamecodeBox.hpp"
+#include "GameObject/ExchangeBox.hpp"
 
 class GameGUIController; // forward declaration
 
@@ -44,13 +45,18 @@ class GameGUIView: public AbstractGUIView {
 	ImageButton sell_bankrupt_button{ObjectInfo<>(200, 150 ,50,window->getSize().y/3*0 ), SELL_BUTTON};
 	ImageButton give_up_button{ObjectInfo<>(200, 150 ,50,window->getSize().y/3*1 ), FORFAIT_BUTTON};
 
-	ImageButton leave_button{ObjectInfo<>(200, 150 ,50,window->getSize().y/3*1) ,LEAVE_BUTTON};
+	ImageButton leave_button{ObjectInfo<>(200, 150 ,50,window->getSize().y/3*3) ,LEAVE_BUTTON};
 
-	ImageButton participate_button{ObjectInfo<>(200, 150 ,50,window->getSize().y/3*1) ,PARTICIPATE_BUTTON};
+	ImageButton participate_button{ObjectInfo<>(200, 150 ,50,window->getSize().y/3*3) ,PARTICIPATE_BUTTON};
 	
 	std::vector<std::string> colorlist{"red","blue","green","cyan","magenta","yellow"};   //pour tester à enlever
 
 	AuctionBox auction_box{ObjectInfo<>(300, window->getSize().y,0,0), sf::Color::Red };  //boutons enchères
+
+	ExchangeBox exchange_box{ObjectInfo<>(300, window->getSize().y,0,0), sf::Color::Red };
+
+	bool exchange_mode = false;
+	bool other_mode = false;
 
 	std::string button_mode = "";
  
@@ -62,7 +68,7 @@ class GameGUIView: public AbstractGUIView {
 
 	Image logo {ObjectInfo<>(615,200,450,200),LOGO_PATH};
 	Image card_zone{ObjectInfo<>(390,300,560,500),CARD_TEXT};
-	Text card_text{ObjectInfo<>(0,15,590,600),""};
+	Text card_text{ObjectInfo<>(0,20,590,600),""};
 	Text card_title{ObjectInfo<>(0,34,585,600),"    CHANCE et\nCAISSE DE COMMU"};
 
 	bool board_click = false;
@@ -71,7 +77,6 @@ class GameGUIView: public AbstractGUIView {
 	void setStartGame(bool visible);
 
 	void setStartRound(bool visible);
-
 
 	void setCellRound(bool visible);
 

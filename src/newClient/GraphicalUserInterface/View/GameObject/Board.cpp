@@ -171,3 +171,9 @@ std::array<std::shared_ptr<Cell>,40>* Board::getBoardButton(){
 	return &board;
 }
 
+std::string Board::getCellName(int pos){
+	return cellname[pos];
+
+}
+
+

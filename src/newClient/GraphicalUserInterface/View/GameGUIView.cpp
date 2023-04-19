@@ -151,6 +151,7 @@ void GameGUIView::hideAllButton(){
 	setJoinAuctionRound(false);
 
 	auction_box.setHidden();
+	exchange_box.setHidden();
 }
 
 GameGUIView::GameGUIView(sf::RenderWindow* window) : AbstractGUIView(window),board{}{
@@ -162,7 +163,6 @@ GameGUIView::GameGUIView(sf::RenderWindow* window) : AbstractGUIView(window),boa
 	gamecode_box.setHidden();
 	logo.setHidden();
 	card_text.setHidden();
-
 }
 
 void GameGUIView::draw() {
@@ -184,7 +184,7 @@ void GameGUIView::draw() {
 
 	drawBankruptRound();
 
-	drawSpeRound();
+	
 
 	drawJoinAuction();
 
@@ -192,12 +192,14 @@ void GameGUIView::draw() {
 	dice.draw(*window);
 	info_box.draw(*window);
 	message_box.draw(*window);
+	exchange_box.draw(*window);
 	
 	logo.draw(*window);
 	card_zone.draw(*window);
 	card_text.draw(*window);
 	card_title.draw(*window);
 	auction_box.draw(*window);
+	drawSpeRound();
 }
 
 void GameGUIView::drawStartGame(){
