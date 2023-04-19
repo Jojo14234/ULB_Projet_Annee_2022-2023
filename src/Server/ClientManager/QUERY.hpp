@@ -49,6 +49,7 @@ enum class QUERY {
 
 
     INFOS_ROLL_DICE, // dice1:dice2:result:isDouble:doubleCount [int]:[int]:[int]:[bool]:[int]
+    INFOS_WON_LAND, //property_name:player
 
     INFOS_LEAVE_SELECTION_MODE,
     NO_BUILDABLE_PROP,

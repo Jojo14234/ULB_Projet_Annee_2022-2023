@@ -34,12 +34,12 @@ PROPERTY_COLOR Property::getColor() const {
 // Setter
 
 // Check
-bool Property::isBuildable(Player *player) {
+bool Property::isBuildable(Player *player, bool is_fast) {
     if ( this->owner != player )                              { return false; }
     if ( this->isMortgaged() )                                { return false; }
     if ( this->getLevel() == PROPERTY_LEVEL::HOTEL )          { return false; }
-    if ( !this->hasAllSameColorProperties(player) )           { return false;}
-    if ( !this->AllSameColorPropertiesHaveGoodLevel(player, false) ) { return false; }
+    if ( ! is_fast && !this->hasAllSameColorProperties(player) ) { return false;}
+    if ( ! is_fast && !this->AllSameColorPropertiesHaveGoodLevel(player, false) ) { return false; }
     if ( player->getBankAccount()->getMoney() < this->construct_price )  { return false; }
     return true;
 }

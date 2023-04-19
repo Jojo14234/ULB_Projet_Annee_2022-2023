@@ -143,6 +143,7 @@ void GameCUIController::receiveMsgLoop() { // todo il faudrait pas déplacer les
             case QUERY::STOP_WAIT :                     this->view->getConsole()->addText("Pas assez rapide. L'offre a ete automatiquement annulee"); this->model->sendCommand(GameInputParser{response}); break;
             
             case QUERY::INFOS_DEBT :                    break;
+            case QUERY::INFOS_WON_LAND :                this->wonLandGU(response); break;
 
             case QUERY::WIN :                           this->endGameGU(response); break;
             case QUERY::ENDGAME :                       break;
@@ -535,4 +536,10 @@ void GameCUIController::endGameGU(const std::string& response){
     this->view->getConsole()->addText("Victoire de " + response + ". Félicitations !");
     this->view->getConsole()->addText("Entrez /quit pour retourner au menu.");
     this->view->endTurn();
+}
+
+void GameCUIController::wonLandGU(const std::string& response){
+    WonLand won_land(response);
+    int index = this->view->getBoard()->getCellIndex(won_land.land);
+    this->view->getBoard()->setPurchased(index, won_land.player);
 }

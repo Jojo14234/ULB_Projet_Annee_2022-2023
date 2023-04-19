@@ -255,11 +255,6 @@ GameStats GameServer::clientLoop(ClientManager &client) {
  */
 void GameServer::clientTurn(ClientManager &client, Player* me) {
 
-    if ( game.isFastGame() ){
-        game.forceAcquisition(me);
-        checkAndManageBankruptcy(client, me);
-    }
-
     while ( !me->hasRolled() and me->getStatus() != PLAYER_STATUS::LOST) {
         GAME_QUERY_TYPE query = this->getGameQuery(client);
         if ( query == GAME_QUERY_TYPE::BUILD )          { this->processBuild(client, me); continue; }
@@ -314,6 +309,13 @@ void GameServer::processStart(ClientManager* client) {
     if ( query != GAME_QUERY_TYPE::START ) { this->updateThisClientWithQuery(QUERY::INFOS_NOT_STARTED, "" ,*client); return; }
     if ( this->game.getPlayersSize() < 2 ) { this->updateThisClientWithQuery(QUERY::INFOS_CANNOT_START, "" ,*client); return; }
     this->game.startGame();
+
+    if ( game.isFastGame() ){
+        for (auto p : *(this->game.getPlayers())){
+            game.forceAcquisition(&p);
+            checkAndManageBankruptcy(*p.getClient(), &p);
+        }
+    }
     this->sendStartData();
 }
 
@@ -374,6 +376,7 @@ void GameServer::processJail(ClientManager &client, Player *player) {
     }
     // End of the turn
     if ( player->getStatus() != PLAYER_STATUS::BANKRUPT_SUSPECTED ) {
+        if (this->game.isFastGame()) player->getBankAccount()->pay(20);
         this->game.endCurrentTurn();
         this->sendGameData();
         this->sendBetterGameData();

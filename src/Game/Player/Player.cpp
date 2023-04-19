@@ -186,7 +186,6 @@ void Player::looseGOOJCard(){
     JailCard* card = GOOJ_cards.back();
     this->GOOJ_cards.pop_back();
     card->setOwner(nullptr);
-    //client->send("Vous perdez votre carte prison suite à son utilisation.\n");
 }
 void Player::useGOOJCard() {
     this->status = PLAYER_STATUS::FREE;
@@ -244,18 +243,22 @@ void Player::acquireLand(Land *land) {
 void Player::acquireProperty(Property &prop) {
     prop.setOwner(this);
     properties.push_back(&prop);
+    this->getClient()->getGameServer()->updateAllClientsWithQuery(QUERY::INFOS_WON_LAND, prop.getName()+":"+std::to_string(this->getIndex()));
 }
 void Player::acquireCompany(Company &comp) {
     comp.setOwner(this);
     companies.push_back(&comp);
+    this->getClient()->getGameServer()->updateAllClientsWithQuery(QUERY::INFOS_WON_LAND, comp.getName()+":"+std::to_string(this->getIndex()));
 }
 void Player::acquireStation(Station &station) {
     station.setOwner(this);
     stations.push_back(&station);
+    this->getClient()->getGameServer()->updateAllClientsWithQuery(QUERY::INFOS_WON_LAND, station.getName()+":"+std::to_string(this->getIndex()));
 }
 void Player::acquireGOOJCard(JailCard *jail_card) {
     jail_card->setOwner(this);
     GOOJ_cards.push_back(jail_card);
+    this->getClient()->getGameServer()->updateAllClientsWithQuery(QUERY::GET_GO_OUT_JAIL_CARD, std::to_string(this->getIndex()+1));
 }
 
 //TODO
@@ -366,7 +369,7 @@ std::string Player::rollInfos(Dice &dice) {
 //BOOL
 
 bool Player::hasBuildableProperties(){
-    for ( auto property : this->getAllProperties() ) { if ( property->isBuildable(this) ) return true;}
+    for ( auto property : this->getAllProperties() ) { if ( property->isBuildable(this, this->getClient()->getGameServer()->getGame()->isFastGame()) ) return true;}
     return false;
 }
 bool Player::hasSellableProperties(){

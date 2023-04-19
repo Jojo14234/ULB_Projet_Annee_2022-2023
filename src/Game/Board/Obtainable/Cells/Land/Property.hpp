@@ -49,7 +49,7 @@ public:
     // Setter
 
     // Check
-    bool isBuildable(Player* player);
+    bool isBuildable(Player* player, bool is_fast);
     bool canSellBuilding(Player* player);
     bool hasAllSameColorProperties(Player* player);
     bool AllSameColorPropertiesHaveGoodLevel(Player* player, bool sell = false);
