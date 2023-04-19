@@ -67,7 +67,6 @@ public:
     PROPERTY_LEVEL getLevel() { return this->level; }
     PROPERTY_COLOR getColor() { return this->color; }
 
-	bool isBuildable(Player* player, bool is_fast_game);
 
     void reset();
 
