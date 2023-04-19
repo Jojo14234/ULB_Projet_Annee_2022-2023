@@ -31,13 +31,21 @@ void ConnectionGUIController::handle(sf::Event event) {
 }
 
 bool ConnectionGUIController::doLoginBtnContain(sf::Event event) {
-    return this->view->login_button.contains(event.mouseButton.x, event.mouseButton.y);
+    if (this->view->login_button.contains(event.mouseButton.x, event.mouseButton.y)) {
+        this->view->login_button.playSound();
+        return true;   
+    }
+    return false;
 }
 bool ConnectionGUIController::doRegisterBtnContain(sf::Event event) {
     return this->view->register_button.contains(event.mouseButton.x, event.mouseButton.y);
 }
 bool ConnectionGUIController::doUsernameContain(sf::Event event) {
-    return this->view->username.contains(event.mouseButton.x, event.mouseButton.y);
+    if (this->view->username.contains(event.mouseButton.x, event.mouseButton.y)) {
+        this->view->username.playSound();
+        return true;
+    }
+    return false;
 }
 bool ConnectionGUIController::doPasswordContain(sf::Event event) {
     return this->view->password.contains(event.mouseButton.x, event.mouseButton.y);
