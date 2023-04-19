@@ -75,20 +75,26 @@ int Player::getPatrimoine(bool is_fast_game) {
     }
     int money = getMoney();
     for (auto property : this->properties) {
-        int money_from_sell_buildings = property->getIntLevel() * (property->getConstructPrice() * weighting);
-        int money_from_hypotheque = property->getPurchasePrice() * weighting;
-        money += money_from_sell_buildings;
-        money += money_from_hypotheque;
+        if (!property->isMortgaged()){
+            int money_from_sell_buildings = property->getIntLevel() * (property->getConstructPrice() * weighting);
+            int money_from_hypotheque = property->getPurchasePrice() * weighting;
+            money += money_from_sell_buildings;
+            money += money_from_hypotheque;
+        }
     }
 
     for (auto station : this->stations) {
-        int money_from_hypotheque = station->getPurchasePrice() * weighting;
-        money += money_from_hypotheque;
+        if (!station->isMortgaged()){
+            int money_from_hypotheque = station->getPurchasePrice() * weighting;
+            money += money_from_hypotheque;
+        }
     }
 
     for (auto company : this->companies) {
-        int money_from_hypotheque = company->getPurchasePrice() * weighting;
-        money += money_from_hypotheque;
+        if (!company->isMortgaged()){
+            int money_from_hypotheque = company->getPurchasePrice() * weighting;
+            money += money_from_hypotheque;
+        }
     }
     return money;
 }

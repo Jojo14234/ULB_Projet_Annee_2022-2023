@@ -82,7 +82,7 @@ public:
         // 2 il faut l'envoyer dans une fonction qui sleep pendant duration sec
         sleep(this->duration);
 
-        // 3 a la fin du thread, on compare si les seed sont toujours identique, auquel cas
+        // 3 a la fin du thread, on compare si les seed sont toujours identiques, auquel cas
         if (this->seed == random_seed) {this->client->sendQueryMsg(this->stopMessage, to_be_sent_query);}
     }
 
