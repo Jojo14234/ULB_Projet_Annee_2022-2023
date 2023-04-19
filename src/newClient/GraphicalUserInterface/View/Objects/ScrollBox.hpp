@@ -20,10 +20,11 @@ class ScrollBox: public Box, public Button {
 	short scroll=0;
 	double size;
 	const short sep = 10;
+	short max_obj_to_show = 5;
 
 	void updateObjects(short x) {
 		for (auto &obj : objects) {
-			obj->move(x*(size + sep)/3.);
+			obj->move(x*(size+sep));
 		}
 	}
 
@@ -42,7 +43,7 @@ public:
 	virtual void draw(sf::RenderWindow &window) const override {
 		if (isHidden()) return;
 		Box::draw(window);
-		for (short i=0; i<3; i++ ) {
+		for (short i=0; i<this->max_obj_to_show; i++ ) {
 			if (this->scroll+i >= this->objects.size()) break; 
 			this->objects[this->scroll+i]->draw(window);
 		}
@@ -52,14 +53,16 @@ public:
 	virtual void scrollUp() {
 		if (this->scroll >= 3) return;
 		this->scroll++; 
-		updateObjects(1);
+		updateObjects(-1);
 	}
 
 	virtual void scrollDown() {
 		if (this->scroll <= 0) return;
 		this->scroll--;
-		updateObjects(-1);
+		updateObjects(1);
 	}
+
+	void setMaxObjToShow(short x) { this->max_obj_to_show = x; }
 
 
 };
