@@ -4,30 +4,30 @@
 
         "JailCard" :
             {
-                "description" : "Vous etes libere de prison. Cette carte peut etre conservee jusqu'a ce qu'elle soit utilisee ou vendue."
+                "description" : "Vous etes libere de prison. Cette \ncarte peut etre conservee jusqu'a \nce qu'elle soit utilisee ou vendue."
             },
 		"MoneyCard" : [
 			{
-                "description" : "Vous etes impose pour les reparations de voirie a raison de 40$ par maison et 100$ par hotel",
+                "description" : "Vous etes impose pour les \nreparations de voirie a raison \nde 40$ par maison et 100$ par hotel",
                 "amount" : -1,
                 "params" : [40, 100],
                 "type" : "HouseHotel"
             },
             
 			{
-                "description" : "Vous avez gagne le prix de mots croises. Recevez 100$.",
+                "description" : "Vous avez gagne le prix de mots \ncroises. Recevez 100$.",
                 "amount" : 100,
                 "type" : "Money"
             },
             
             {
-                "description" : "La banque vous verse un dividende de 50$",
+                "description" : "La banque vous verse un \ndividende de 50$",
                 "amount" : 50,
                 "type" : "Money"
             },
             
             {
-                "description" :  "Faites des reparations dans toutes vos maisons. Versez pour chaque maison 25$. Versez pour chaque hotel 80$.",
+                "description" :  "Faites des reparations dans toutes\nvos maisons. Versez pour chaque \nmaison 25$. Versez pour chaque hotel 80$.",
                 "amount" : -1,
                 "params" : [25, 80],
                 "type" : "HouseHotel"
@@ -52,7 +52,7 @@
             },
             
             {
-                "description" :  "Votre immeuble et votre pret rapportent. Vous touchez 150$",
+                "description" :  "Votre immeuble et votre pret \nrapportent. Vous touchez 150$",
                 "amount" : 150,
                 "type" : "Money"
             }
@@ -61,7 +61,7 @@
 		"CellCard" : [
 
             {
-                "description" : "Allez en prison. Rendez-vous directement en prison. Ne franchissez pas par la case depart, ne touchez pas 200$.",
+                "description" : "Allez en prison. Rendez-vous \ndirectement en prison.\nNe franchissez pas par la case \ndepart, ne touchez pas 200$.",
                 "dest" : [10],
                 "money" : 0,
                 "type" : "Cell"
@@ -69,7 +69,7 @@
             },
         
 			{
-                "description" : "Rendez-vous a la propriete bleu fonce 2",
+                "description" : "Rendez-vous a la propriete \nbleu fonce 2",
                 "dest" : [39],
                 "money" : 0,
                 "type" : "Cell"
@@ -77,7 +77,7 @@
             },
             
 			{ 
-                "description" : "Avancez jusqu'a la case depart, et touchez 200$",
+                "description" : "Avancez jusqu'a la case depart, \net touchez 200$",
                 "dest" : [0],
                 "money" : 1,
                 "type" : "Cell"
@@ -85,7 +85,7 @@
             },
             
 			{ 
-                "description" : "Rendez-vous a la propriete rouge 3. Si vous passez par la case depart, recevez 200$",
+                "description" : "Rendez-vous a la propriete rouge 3. \nSi vous passez par la case depart, recevez 200$",
                 "dest" : [24],
                 "money" : 1,
                 "type" : "Cell"
@@ -93,7 +93,7 @@
             },
             
 			{ 
-                "description" : "Rendez-vous a la propriete rose 1. Si vous passez par la case depart, recevez 200$.",
+                "description" : "Rendez-vous a la propriete rose 1. \nSi vous passez par la case depart, recevez 200$.",
                 "dest" : [11],
                 "money" : 1,
                 "type" : "Cell"
@@ -101,7 +101,7 @@
             },
             
 			{ 
-                "description" : "Avancez jusqu'a la Gare 2. Si vous passez par la case depart, recevez 200$.",
+                "description" : "Avancez jusqu'a la Gare 2. Si vous \npassez par la case depart, recevez 200$.",
                 "dest" : [15],
                 "money" : 1,
                 "type" : "Cell"
@@ -121,13 +121,13 @@
 
         "Jail Card" : {
 
-                "description" : "Vous etes libere de prison. Cette carte peut etre conservee jusqu'a ce qu'elle soit utilisee ou vendue."
+                "description" : "Vous etes libere de prison. Cette \ncarte peut etre conservee jusqu'a \nce qu'elle soit utilisee ou vendue."
             },
        
 		"MoneyCard" : [
         
             {
-                "description" :  "Erreur de la banque en votre faveur. Recevez 200$",
+                "description" :  "Erreur de la banque en votre \nfaveur. Recevez 200$",
                 "amount" : 200,
                 "type" : "Money"
             },
@@ -139,7 +139,7 @@
             },
             
             {
-                "description" :  "La vente de votre stock vous rapporte 50$.",
+                "description" :  "La vente de votre stock vous \nrapporte 50$.",
                 "amount" : 50,
                 "type" : "Money"
             },
@@ -151,20 +151,20 @@
             },
             
             {
-                "description" :  "C'est votre anniversaire. Chaque joueur doit vous donner 15$.",
+                "description" :  "C'est votre anniversaire. Chaque \njoueur doit vous donner 15$.",
                 "amount" : 15,
                 "type" : "Birthday"
 
             },
             
             {
-                "description" : "Les contributions vous remboursent la somme de 40$." ,
+                "description" : "Les contributions vous remboursent \nla somme de 40$." ,
                 "amount" : 40,
                 "type" : "Money"
             },
             
             {
-                "description" :  "Recevez votre interet sur l'emprunt a 7% 25$.",
+                "description" :  "Recevez votre interet sur \nl'emprunt a 7% 25$.",
                 "amount" : 25,
                 "type" : "Money"
             },
@@ -176,13 +176,13 @@
             },
             
 			{
-                "description" :  "Payez une amende de 15$ ou bien tirez une carte « CHANCE ».",
+                "description" :  "Payez une amende de 15$ ou bien \ntirez une carte « CHANCE ».",
                 "amount" : -15,
                 "type" : "Choice"
             },
             
             {
-                "description" : "Vous avez gagne le deuxieme Prix de Beaute. Recevez 10$." ,
+                "description" : "Vous avez gagne le deuxieme Prix \nde Beaute. Recevez 10$." ,
                 "amount" : 10,
                 "type" : "Money"
             },
@@ -197,7 +197,7 @@
 		"CellCard" : [
 
             {
-                "description" : "Allez en prison. Rendez-vous directement en prison. Ne franchissez pas par la case depart, ne touchez pas 200$.",
+                "description" : "Allez en prison. Rendez-vous \ndirectement en prison.\nNe franchissez pas par la case \ndepart, ne touchez pas 200$.",
                 "dest" : [10],
                 "money" : 0,
                 "type" : "Cell"
@@ -205,7 +205,7 @@
             },
         
             { 
-                "description" : "Placez-vous sur la case depart, et recevez 200$",
+                "description" : "Placez-vous sur la case depart, \net recevez 200$",
                 "dest" : [0],
                 "money" : 1,
                 "type" : "Cell"
@@ -213,7 +213,7 @@
             },
             
             { 
-                "description" : "Retournez a la propriete brune 1. Si vous passez par la case depart, recevez 200$",
+                "description" : "Retournez a la propriete brune 1. \nSi vous passez par la case \ndepart, recevez 200$",
                 "dest" : [1],
                 "money" : 1,
                 "type" : "Cell"
@@ -221,7 +221,7 @@
             },
                
             {
-                "description" : "Rendez-vous a la gare la plus proche. Si vous passez par la case depart, recevez 200$.",
+                "description" : "Rendez-vous a la gare la plus \nproche. Si vous passez par la \ncase depart, recevez 200$.",
                 "dest" : [5, 15, 25, 35],
                 "money" : 1,
                 "type" : "Stations"
