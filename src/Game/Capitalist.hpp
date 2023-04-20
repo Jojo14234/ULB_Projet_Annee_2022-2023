@@ -23,7 +23,6 @@ class Capitalist {
     bool fast = false;
     int number_of_players_at_start;
 
-
     AuctionStatus auction_in_progress = AuctionStatus::STOP;
     ExchangeStatus exchange_in_progress = ExchangeStatus::STOP;
 
@@ -33,7 +32,7 @@ class Capitalist {
 
 public:
 
-	Capitalist(GameParameters &params)
+	Capitalist(GameParameters params)
             : fast{params.isFastGame}, board{params.maxHome, params.maxHotel}, params{params} {};
 
 	//void receiveQuery(GAME_QUERY_TYPE query, sf::Packet &packet);
@@ -83,7 +82,7 @@ public:
 
 
     ///////////////////////////////////////
-    ClientManager* getWinner(bool is_finished);
+    ClientManager* getWinner();
     ClientManager* calculateGameWinner();
 
     bool processJailPay(Player* player);
@@ -112,6 +111,7 @@ public:
     int getMaxPlayers();
     int getMaxHome();
     int getMaxHotels();
+    int getMaxTurns();
 
     void forceAcquisition(Player *player);
 

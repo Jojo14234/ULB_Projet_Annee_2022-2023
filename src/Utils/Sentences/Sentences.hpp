@@ -55,8 +55,7 @@ public:
         cout << "] [maxPlayer : " << params.maxPlayers;
         cout << "] [maxHome : " << params.maxHome;
         cout << "] [maxHotel: " << params.maxHotel;
-        cout << "] [maxTimePerGame: " << params.maxTimeForGame;
-        cout << "] [maxTimePerTurn: " << params.maxTimePerTurn << "]" << endl;
+        cout << "] [maxTurn: " << params.maxTurn << "]" << endl;
     }
 
     static void RankingPos(string username, bool successFull = true) {

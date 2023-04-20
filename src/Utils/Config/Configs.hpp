@@ -71,7 +71,6 @@ enum class GAME_QUERY_TYPE {
     CARD,
     YES,
     NO,
-    TIME_EXPIRED,
 
 	ARG1, // temp
 	ARG2, // temp

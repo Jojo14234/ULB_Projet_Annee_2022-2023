@@ -114,7 +114,7 @@ void MenuGUIView::draw() {
 }
 
 std::string MenuGUIView::getCreateCmd() {
-		// /create [mode] [startMoney] [MaxPlayer] [MaxHome] [maxTimeGame] [maxTimeTurn]
+		// /create [mode] [startMoney] [MaxPlayer] [MaxHome]
 		std::string cmd = "/create";
 		std::vector<std::string> game_parameters;
 		const std::vector<std::unique_ptr<Selector>>& selectors = create_popup.getAllSelectors();
@@ -122,12 +122,13 @@ std::string MenuGUIView::getCreateCmd() {
 			game_parameters.push_back(selector->getActualString());
 		}
 		// mode
-		std::string mode = (game_parameters.at(0) == "classique") ? "normal" : "fast";
+		std::string mode = game_parameters.at(0) == "classique" ? "normal" : "fast";
 		std::string start_money = game_parameters.at(1);
 		std::string max_player = game_parameters.at(2);
 
 		std::string max_house = game_parameters.at(3);
 		std::string max_hotel = game_parameters.at(4);
+		
 
 		cmd += " " + mode;
 		cmd += " " + start_money;
