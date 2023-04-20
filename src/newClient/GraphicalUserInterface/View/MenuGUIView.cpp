@@ -31,10 +31,10 @@ void MenuGUIView::initCreatePopup(){
 	create_popup.addText(new Text{ObjectInfo<>(0, WINDOW_WIDTH/50, WINDOW_WIDTH/4.f, WINDOW_HEIGHT/6+WINDOW_HEIGHT/10.f), "Mode"});
 	create_popup.addText(new Text{ObjectInfo<>(0, WINDOW_WIDTH/50, WINDOW_WIDTH/4.f, WINDOW_HEIGHT/6+WINDOW_HEIGHT/10*2.f), "Argent de depart"});
 	create_popup.addText(new Text{ObjectInfo<>(0, WINDOW_WIDTH/50, WINDOW_WIDTH/4.f, WINDOW_HEIGHT/6+WINDOW_HEIGHT/10*3.f), "Nombre de joueurs max:"});
-	create_popup.addText(new Text{ObjectInfo<>(0, WINDOW_WIDTH/50, WINDOW_WIDTH/4.f, WINDOW_HEIGHT/6+WINDOW_HEIGHT/10*4.f), "Pour partie rapide:"});
-	create_popup.addText(new Text{ObjectInfo<>(0, WINDOW_WIDTH/50, WINDOW_WIDTH/4.f, WINDOW_HEIGHT/6+WINDOW_HEIGHT/10*5.f), "Nombre max de maison:"});
-	create_popup.addText(new Text{ObjectInfo<>(0, WINDOW_WIDTH/50, WINDOW_WIDTH/4.f, WINDOW_HEIGHT/6+WINDOW_HEIGHT/10*6.f), "Nombre max d'hotel:"});
-	create_popup.addText(new Text{ObjectInfo<>(0, WINDOW_WIDTH/50, WINDOW_WIDTH/4.f, WINDOW_HEIGHT/6+WINDOW_HEIGHT/10*7.f), "Durée de la partie:"});
+	create_popup.addText(new Text{ObjectInfo<>(0, WINDOW_WIDTH/50, WINDOW_WIDTH/4.f, WINDOW_HEIGHT/6+WINDOW_HEIGHT/10*4.f), "Nombre max de maison:"});
+	create_popup.addText(new Text{ObjectInfo<>(0, WINDOW_WIDTH/50, WINDOW_WIDTH/4.f, WINDOW_HEIGHT/6+WINDOW_HEIGHT/10*5.f), "Nombre max d'hotel:"});
+	create_popup.addText(new Text{ObjectInfo<>(0, WINDOW_WIDTH/50, WINDOW_WIDTH/4.f, WINDOW_HEIGHT/6+WINDOW_HEIGHT/10*6.f), "Duree de la partie (min):"});
+	create_popup.addText(new Text{ObjectInfo<>(0, WINDOW_WIDTH/50, WINDOW_WIDTH/4.f, WINDOW_HEIGHT/6+WINDOW_HEIGHT/10*7.f), "Duree d'un tour (sec)"});
 	//create_popup.addButton(new ImageButton{ObjectInfo<>(WINDOW_WIDTH/25.f, WINDOW_HEIGHT/25.f, WINDOW_WIDTH/4.f, WINDOW_HEIGHT/4+WINDOW_HEIGHT/10*5.f-WINDOW_HEIGHT/12.f+WINDOW_HEIGHT/25.f+WINDOW_HEIGHT/4.f), BACK_BUTTON_PATH});
 	create_popup.addButton(new ImageButton{ObjectInfo<>(WINDOW_WIDTH/6.f, WINDOW_HEIGHT/6.f, WINDOW_WIDTH/2.f - WINDOW_WIDTH/11.f - WINDOW_WIDTH/6.f, WINDOW_HEIGHT - WINDOW_HEIGHT/9), BACK_BUTTON_PATH});
 	//create_popup.addButton(new ImageButton{ObjectInfo<>(WINDOW_WIDTH/35.f, WINDOW_HEIGHT/25.f, WINDOW_WIDTH/4*3-WINDOW_WIDTH/25.f, WINDOW_HEIGHT/4+WINDOW_HEIGHT/10*5.f-WINDOW_HEIGHT/12.f+WINDOW_HEIGHT/25.f+WINDOW_HEIGHT/4.f), OK_BUTTON_PATH});
@@ -48,7 +48,7 @@ void MenuGUIView::initCreatePopup(){
 	std::vector<std::string> max_hotel{"2", "3", "4", "10"};
 
 	std::vector<std::string> game_time{"Pas de limite","5", "10", "15", "20"};
-	//std::vector<std::string> auction{"15s", "20s"};
+	std::vector<std::string> turn_time{"10", "20", "30", "40"};
 
 	DirectionImButton* l_button1= new DirectionImButton{ObjectInfo<>(WINDOW_WIDTH/50.f, WINDOW_WIDTH/50.f, WINDOW_WIDTH/4*3-WINDOW_WIDTH/12.f+WINDOW_WIDTH/50.f, WINDOW_HEIGHT/6+WINDOW_HEIGHT/10.f), RIGHT_BUTTON_PATH};
 	DirectionImButton* r_button1= new DirectionImButton{ObjectInfo<>(WINDOW_WIDTH/50.f, WINDOW_WIDTH/50.f,(WINDOW_WIDTH/4*3-WINDOW_WIDTH/12.f) - WINDOW_WIDTH/8.f , WINDOW_HEIGHT/6+WINDOW_HEIGHT/10.f), LEFT_BUTTON_PATH};
@@ -67,21 +67,25 @@ void MenuGUIView::initCreatePopup(){
 	std::vector<DirectionImButton*> buttons_selector3{l_button3, r_button3};
 	create_popup.addSelector(new Selector{ObjectInfo<>(0, WINDOW_WIDTH/50, (WINDOW_WIDTH/4*3-WINDOW_WIDTH/12.f- WINDOW_WIDTH/8.f + WINDOW_WIDTH/50.f ) + WINDOW_WIDTH/50.f, WINDOW_HEIGHT/6+WINDOW_HEIGHT/10.f*3), player_nbr, buttons_selector3});
 
+	DirectionImButton* l_button4= new DirectionImButton{ObjectInfo<>(WINDOW_WIDTH/50.f, WINDOW_WIDTH/50.f, WINDOW_WIDTH/4*3-WINDOW_WIDTH/12.f+WINDOW_WIDTH/50.f, WINDOW_HEIGHT/6+WINDOW_HEIGHT/10*4.f), RIGHT_BUTTON_PATH};
+	DirectionImButton* r_button4= new DirectionImButton{ObjectInfo<>(WINDOW_WIDTH/50.f, WINDOW_WIDTH/50.f,(WINDOW_WIDTH/4*3-WINDOW_WIDTH/12.f) - WINDOW_WIDTH/8.f , WINDOW_HEIGHT/6+WINDOW_HEIGHT/10.f*4), LEFT_BUTTON_PATH};
+	std::vector<DirectionImButton*> buttons_selector4{l_button4, r_button4};
+	create_popup.addSelector(new Selector{ObjectInfo<>(0, WINDOW_WIDTH/50, (WINDOW_WIDTH/4*3-WINDOW_WIDTH/12.f- WINDOW_WIDTH/8.f + WINDOW_WIDTH/50.f ) + WINDOW_WIDTH/50.f, WINDOW_HEIGHT/6+WINDOW_HEIGHT/10.f*4), max_house, buttons_selector4});
 
 	DirectionImButton* l_button5= new DirectionImButton{ObjectInfo<>(WINDOW_WIDTH/50.f, WINDOW_WIDTH/50.f, WINDOW_WIDTH/4*3-WINDOW_WIDTH/12.f+WINDOW_WIDTH/50.f, WINDOW_HEIGHT/6+WINDOW_HEIGHT/10*5.f), RIGHT_BUTTON_PATH};
 	DirectionImButton* r_button5= new DirectionImButton{ObjectInfo<>(WINDOW_WIDTH/50.f, WINDOW_WIDTH/50.f,(WINDOW_WIDTH/4*3-WINDOW_WIDTH/12.f) - WINDOW_WIDTH/8.f , WINDOW_HEIGHT/6+WINDOW_HEIGHT/10.f*5), LEFT_BUTTON_PATH};
 	std::vector<DirectionImButton*> buttons_selector5{l_button5, r_button5};
-	create_popup.addSelector(new Selector{ObjectInfo<>(0, WINDOW_WIDTH/50, (WINDOW_WIDTH/4*3-WINDOW_WIDTH/12.f- WINDOW_WIDTH/8.f + WINDOW_WIDTH/50.f ) + WINDOW_WIDTH/50.f, WINDOW_HEIGHT/6+WINDOW_HEIGHT/10.f*5), max_house, buttons_selector5});
+	create_popup.addSelector(new Selector{ObjectInfo<>(0, WINDOW_WIDTH/50, (WINDOW_WIDTH/4*3-WINDOW_WIDTH/12.f- WINDOW_WIDTH/8.f + WINDOW_WIDTH/50.f ) + WINDOW_WIDTH/50.f, WINDOW_HEIGHT/6+WINDOW_HEIGHT/10.f*5), max_hotel, buttons_selector5});
 
 	DirectionImButton* l_button6= new DirectionImButton{ObjectInfo<>(WINDOW_WIDTH/50.f, WINDOW_WIDTH/50.f, WINDOW_WIDTH/4*3-WINDOW_WIDTH/12.f+WINDOW_WIDTH/50.f, WINDOW_HEIGHT/6+WINDOW_HEIGHT/10*6.f), RIGHT_BUTTON_PATH};
 	DirectionImButton* r_button6= new DirectionImButton{ObjectInfo<>(WINDOW_WIDTH/50.f, WINDOW_WIDTH/50.f,(WINDOW_WIDTH/4*3-WINDOW_WIDTH/12.f) - WINDOW_WIDTH/8.f , WINDOW_HEIGHT/6+WINDOW_HEIGHT/10.f*6), LEFT_BUTTON_PATH};
 	std::vector<DirectionImButton*> buttons_selector6{l_button6, r_button6};
-	create_popup.addSelector(new Selector{ObjectInfo<>(0, WINDOW_WIDTH/50, (WINDOW_WIDTH/4*3-WINDOW_WIDTH/12.f- WINDOW_WIDTH/8.f + WINDOW_WIDTH/50.f ) + WINDOW_WIDTH/50.f, WINDOW_HEIGHT/6+WINDOW_HEIGHT/10.f*6), max_hotel, buttons_selector6});
+	create_popup.addSelector(new Selector{ObjectInfo<>(0, WINDOW_WIDTH/50, (WINDOW_WIDTH/4*3-WINDOW_WIDTH/12.f- WINDOW_WIDTH/8.f + WINDOW_WIDTH/50.f ) + WINDOW_WIDTH/50.f, WINDOW_HEIGHT/6+WINDOW_HEIGHT/10.f*6), game_time, buttons_selector6});
 
 	DirectionImButton* l_button7= new DirectionImButton{ObjectInfo<>(WINDOW_WIDTH/50.f, WINDOW_WIDTH/50.f, WINDOW_WIDTH/4*3-WINDOW_WIDTH/12.f+WINDOW_WIDTH/50.f, WINDOW_HEIGHT/6+WINDOW_HEIGHT/10*7.f), RIGHT_BUTTON_PATH};
 	DirectionImButton* r_button7= new DirectionImButton{ObjectInfo<>(WINDOW_WIDTH/50.f, WINDOW_WIDTH/50.f,(WINDOW_WIDTH/4*3-WINDOW_WIDTH/12.f) - WINDOW_WIDTH/8.f , WINDOW_HEIGHT/6+WINDOW_HEIGHT/10.f*7), LEFT_BUTTON_PATH};
 	std::vector<DirectionImButton*> buttons_selector7{l_button7, r_button7};
-	create_popup.addSelector(new Selector{ObjectInfo<>(0, WINDOW_WIDTH/50, (WINDOW_WIDTH/4*3-WINDOW_WIDTH/12.f- WINDOW_WIDTH/8.f + WINDOW_WIDTH/50.f ) + WINDOW_WIDTH/50.f, WINDOW_HEIGHT/6+WINDOW_HEIGHT/10.f*7), max_hotel, buttons_selector7});
+	create_popup.addSelector(new Selector{ObjectInfo<>(0, WINDOW_WIDTH/50, (WINDOW_WIDTH/4*3-WINDOW_WIDTH/12.f- WINDOW_WIDTH/8.f + WINDOW_WIDTH/50.f ) + WINDOW_WIDTH/50.f, WINDOW_HEIGHT/6+WINDOW_HEIGHT/10.f*7), turn_time, buttons_selector7});
 
 }
 
