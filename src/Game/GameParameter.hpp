@@ -8,7 +8,7 @@
 
 
 struct GameParameters {
-    bool isFastGame = false;
+    bool isFastGame;
     int startMoney = STARTING_MONEY;
     int maxPlayers = MAX_PLAYER_DEFAULT;
     int maxHome = MAX_HOME;
@@ -17,13 +17,17 @@ struct GameParameters {
     int maxTurn = MAX_TURN;
 
     GameParameters(bool isFast, std::string str) {
-        isFastGame = isFast;
+        if (isFast){ startMoney = STARTING_MONEY_FAST; isFastGame = true; }
+        else { startMoney = STARTING_MONEY; isFastGame = false; }
+
         std::istringstream input{str};
         int space = 0;
         for (std::string word; std::getline(input, word, ' '); space++) {
             std::cout << word << "|" <<space << std::endl;
             switch (space) {
-                case 0: startMoney = stringToInt(word, STARTING_MONEY); break;
+                case 0:
+                    if (!isFast) {startMoney = stringToInt(word, STARTING_MONEY); }
+                    else {startMoney = stringToInt(word, STARTING_MONEY_FAST); } break;
                 case 1: maxPlayers = stringToInt(word, MAX_PLAYER_DEFAULT); break;
                 case 2: maxHome = stringToInt(word, MAX_HOME); break;
                 case 3: maxHotel = stringToInt(word, MAX_HOTEL); break;

@@ -184,9 +184,7 @@ void Capitalist::addPlayer(ClientManager &client) {
     Cell* starting_cell = this->board[0];
     Player player{&client, starting_cell, this->params.startMoney};
     if ( players.empty() ) { player.setAdmin(); }
-    if (isFastGame()){
-        player.getBankAccount()->setMoney(STARTING_MONEY_FAST);
-    }
+
     players.push_back(player);
 }
 
