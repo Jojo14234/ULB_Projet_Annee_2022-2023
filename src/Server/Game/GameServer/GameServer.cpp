@@ -215,7 +215,8 @@ GameStats GameServer::clientLoop(ClientManager &client) {
     }
 
     // LOOP UNTIL THERE IS A WINNER
-    while ( this->game.getWinner() == nullptr ) {
+    Timer3 timer{params.maxTimeForGame};
+    while ( this->game.getWinner(timer.isFinish()) == nullptr) {
 
         // POSSIBLE ACTION IF IT IS THE CLIENT TURN
         if (this->game.getCurrentPlayer()->getClient() == &client) {
@@ -242,7 +243,7 @@ GameStats GameServer::clientLoop(ClientManager &client) {
     // STOP THE GAME
     this->game.setRunning(false);
     // allow client to get out of the receiveFromServerLoop and SendToServerLoop
-    updateThisClientWithQuery(QUERY::WIN, this->game.getWinner()->getUsername(), client);
+    updateThisClientWithQuery(QUERY::WIN, this->game.getWinner(timer.isFinish())->getUsername(), client);
     updateThisClientWithQuery(QUERY::ENDGAME, "", client);
 
     // RETURN STATS for winner and looser.
@@ -317,6 +318,10 @@ void GameServer::processStart(ClientManager* client) {
         for (auto p : this->game.getPlayersAsPointers()){
             game.forceAcquisition(p);
             checkAndManageBankruptcy(*p->getClient(), p);
+            updateAllClients("La durée de cette partie est limitée à " + std:to_string(params.maxTimeForGame / 60) + " minutes. Au-delà de ce délai, le joueur avec le plus important patrimoine gagnera.")
+            for (auto client : clients) {
+                Timer2(params.maxTimeForGame, client, "Le temps maximal de la partie est écoulé.", QUERY::GAME_MUST_END);
+            }
         }
     }
 }

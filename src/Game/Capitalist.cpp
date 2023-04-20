@@ -336,14 +336,22 @@ void Capitalist::endCurrentTurn() {
 
 
 ////////////////////////////////////////////
-ClientManager *Capitalist::getWinner() {
+ClientManager *Capitalist::getWinner(bool is_finished) {
+    if ( is_finished ){
+        return calculateGameWinner();
+    }
+
     if ( isFastGame() ){
-        if ( (getNumberOfPlayersAtStart() - getPlayersSize()) == 2 ){
+        if ( (getNumberOfPlayersAtStart() - getPlayersSize()) == 2 ) {
             return calculateGameWinner();
         }
     }
-    if (this->players.size() > 1) return nullptr;
+
+    if (this->players.size() > 1) { return nullptr; }
+
     return this->players[0].getClient();
+
+
 }
 
 ClientManager *Capitalist::calculateGameWinner() {

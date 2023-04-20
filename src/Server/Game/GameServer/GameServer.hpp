@@ -30,10 +30,12 @@ class GameServer {
 
     int maxPlayer;
 
+    GameParameters &params;
+
 public:
 	
-	GameServer(GameParameters parameters)
-            : game{parameters}, maxPlayer{parameters.maxPlayers} { clients.reserve(parameters.maxPlayers); }
+	GameServer(GameParameters &parameters)
+            : game{parameters}, maxPlayer{parameters.maxPlayers}, params{parameters} { clients.reserve(parameters.maxPlayers); }
 
     // Send big string with infos in it.
     void sendStartData();
