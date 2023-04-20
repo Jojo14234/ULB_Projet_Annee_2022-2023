@@ -245,9 +245,11 @@ void GameGUIView::drawEnd(){leave_button_end.draw(*window);}
 
 //method for setting the game
 void GameGUIView::startTurn(){
+	std::cout << "startin" << std::endl;
 	this->dice.setVisible();
     this->message_box.addString("C'est votre tour!");
 	this->setStartRound(true);
+	std::cout << "startout" << std::endl;
 }
 
 void GameGUIView::endTurn(){

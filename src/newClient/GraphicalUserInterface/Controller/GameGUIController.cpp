@@ -337,9 +337,14 @@ void GameGUIController::startGame(int beginner) {
         std::cout << "aaa4 " << std::endl;
         this->view->startTurn();
         this->model->startTurn();
+        std::cout << "aaa5 " << std::endl;
         //rajouter sons - début game
     }
-    else{ this->view->message_box.setString("C'est au tour de " + players_username[beginner] + " !");}
+    
+    else{ 
+        std::cout << "aaa6 " << std::endl;
+        this->view->message_box.setString("C'est au tour de " + players_username[beginner] + " !");
+        std::cout << "aaa7 " << std::endl;}
     this->view->gamecode_box.setHidden();
     this->view->logo.setVisible();
     this->view->board.setColorNumber(player_nb);
@@ -441,6 +446,7 @@ void GameGUIController::newTurnGU(const std::string& response) {
         this->view->message_box.addString("C'est au tour de " + response + " !"); 
         std::cout << "fin" << std::endl;}}
 
+
 void GameGUIController::doubleTurnGU(const std::string& response) {
     if (this->model->isMyTurn()) { this->view->startTurn(); }
     else { this->view->message_box.setString(response + " va relancer les dés !"); }
@@ -537,6 +543,7 @@ void GameGUIController::goOutPrisonGU(const std::string& response){
 }
 
 void GameGUIController::sendPrisonGU(const std::string& response){
+  
     if (this->model->isMyTurn()){this->view->message_box.setString("Vous etes envoye en prison.");
     } else this->view->message_box.setString(response + " a ete envoye en prison.");
 }
@@ -666,6 +673,8 @@ void GameGUIController::sellPropertyGU(const std::string& response){
 void GameGUIController::exchangePropertyGU(const std::string& response){
     //TODO utiliser le response
     response.c_str();
+    std::cout << "echange0" << std::endl;
+    std::cout << game_info->nb_player << std::endl;
     ExchangeInfo exchanges{response, game_info->nb_player};
     std::cout << "echange" << std::endl;
     selection_mode = exchanges.all_properties;
