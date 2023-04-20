@@ -12,23 +12,27 @@ void FriendsGUIController::handle(sf::Event event) {
 	switch(event.type) {
 		case sf::Event::MouseButtonPressed: {
 			// TODO popup
+			this->view->message_input.deselect();
 			if (this->view->request_popup.isVisible()) {
-				if (this->view->request_popup.getButton(0).contains(event.mouseButton.x, event.mouseButton.y)) {
+				if (this->view->request_popup.getButton(0)->contains(event.mouseButton.x, event.mouseButton.y)) {
 					this->view->request_popup.setHidden();
 				} else if (true) {
 					// TODO
 				}
-
 			} else if (this->view->ask_popup.isVisible()) {
-				if (this->view->ask_popup.getButton(0).contains(event.mouseButton.x, event.mouseButton.y)) {
+				if (this->view->ask_popup.getButton(0)->contains(event.mouseButton.x, event.mouseButton.y)) {
 					this->view->ask_popup.setHidden();
 				} else if (true) {
 					// TODO
 				}
-
-
+			} else if (this->view->request_button.contains(event.mouseButton.x, event.mouseButton.y)) {
+				this->view->request_popup.setVisible();
+			} else if (this->view->ask_button.contains(event.mouseButton.x, event.mouseButton.y)) {
+				this->view->ask_popup.setVisible();
 			} else if (this->view->back_button.contains(event.mouseButton.x, event.mouseButton.y)) {
 				this->new_state = STATE::MENU;
+			} else if (this->view->message_input.contains(event.mouseButton.x, event.mouseButton.y)) {
+				this->view->message_input.select();
 			} else if (this->view->send_button.contains(event.mouseButton.x, event.mouseButton.y)) {
 				std::string msg = this->view->message_input.getString();
 				if (msg.length()==0) break; 
@@ -52,7 +56,7 @@ void FriendsGUIController::handle(sf::Event event) {
 		case sf::Event::TextEntered:
 		case sf::Event::KeyPressed: {
 			if (this->view->ask_popup.isVisible()) {
-				this->view->ask_popup.getInput(0).handle(event);
+				this->view->ask_popup.getInput(0)->handle(event);
 			} else { this->view->message_input.handle(event); }
 			break;
 		}
