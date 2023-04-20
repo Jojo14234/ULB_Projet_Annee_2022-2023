@@ -17,6 +17,7 @@ void ConnectionGUIController::handle(sf::Event event) {
 			// Which btn was pressed
 			if (this->doLoginBtnContain(event))     { this->loginProcess(); break; }
             if (this->doRegisterBtnContain(event))  { this->registerProcess(); break; }
+            if (this->doDisconnectBtnContain(event))  { this->disconnectProcess(); break; }
             if (this->doUsernameContain(event))     { this->usernameProcess(); break; }
             if (this->doPasswordContain(event))     { this->passwordProcess(); break; }
             break;
@@ -44,6 +45,14 @@ bool ConnectionGUIController::doRegisterBtnContain(sf::Event event) {
     }
     return false;
 }
+
+bool ConnectionGUIController::doDisconnectBtnContain(sf::Event event) {
+    if (this->view->disconnect_button.contains(event.mouseButton.x, event.mouseButton.y)) {
+        this->view->disconnect_button.playSound();
+        return true;
+    }
+    return false;
+}
 bool ConnectionGUIController::doUsernameContain(sf::Event event) {
     return this->view->username.contains(event.mouseButton.x, event.mouseButton.y);
 }
@@ -60,6 +69,11 @@ void ConnectionGUIController::registerProcess() {
     this->model->sendRegister(this->view->username.getText(), this->view->password.getText());
     if (this->model->receive() == QUERY::TRUEQ) { this->new_state = STATE::MENU; }
     this->view->clear();
+}
+
+void ConnectionGUIController::disconnectProcess() {
+    this->model->sendDisconnect();
+    if (this->model->receive() == QUERY::DISCONNECT) { exit(0); }
 }
 void ConnectionGUIController::usernameProcess() {
     this->state = USERNAME;
