@@ -10,13 +10,14 @@
 void SigHandler::setup() {
 	signal(SIGINT, SigHandler::handler);
 	signal(SIGPIPE, SIG_IGN);  // Mask SIGPIPE
+	signal(SIGALRM, SigHandler::handler);
 
 	struct sigaction action;
 	action.sa_handler = SigHandler::handler;
 	action.sa_flags = 0;
 	if (sigemptyset(&action.sa_mask) < 0) {
 		perror("sigemptyset()");
-	} else if (sigaction(SIGINT, &action, NULL) < 0) {
+	} else if (sigaction(SIGINT, &action, NULL) < 0 and sigaction(SIGALRM, &action, NULL) < 0) {
 		perror("sigaction()");
 	}
 }
@@ -27,12 +28,14 @@ void SigHandler::handler(int sig) {
 			std::cout << "\nSIGINT Caught" << std::endl;
 			SigHandler::sigint_receipt = true;
 			break;
+		default: break;
 	}
 }
 
 void SigHandler::mask() {
 	sigemptyset(&mask_ptr);
 	sigaddset(&mask_ptr, SIGINT);
+	sigaddset(&mask_ptr, SIGALRM);
 	sigprocmask(SIG_BLOCK, &mask_ptr, NULL);
 }
 
