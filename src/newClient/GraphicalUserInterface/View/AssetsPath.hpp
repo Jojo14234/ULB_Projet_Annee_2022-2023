@@ -11,6 +11,7 @@
 const std::string LOGO_PATH = "../assets/images/logo_capitalist.png";
 const std::string REGISTER_BUTTON_PATH = "../assets/images/register_button.png";
 const std::string LOGIN_BUTTON_PATH = "../assets/images/login_button.png";
+const std::string DISCONNECT_PATH = "../assets/images/disconnectBTN.png";
 const std::string RANK_PATH = "../assets/images/rank.png";
 const std::string MY_RANK_PATH = "../assets/images/myrank.png";
 
@@ -21,8 +22,10 @@ const std::string JOIN_BUTTON_PATH = "../assets/images/join_button.png";
 const std::string CREATE_BUTTON_PATH = "../assets/images/create_button.png";
 const std::string PLAY_IMAGE_PATH = "../assets/images/play_image.png";
 
-const std::string BACK_BUTTON_PATH = "../assets/images/back_button.png";
-const std::string OK_BUTTON_PATH = "../assets/images/ok_button.png";
+//const std::string BACK_BUTTON_PATH = "../assets/images/back_button.png";
+const std::string BACK_BUTTON_PATH = "../assets/images/retour.png";
+//const std::string OK_BUTTON_PATH = "../assets/images/ok_button.png";
+const std::string OK_BUTTON_PATH = "../assets/images/valider.png";
 const std::string YES_BUTTON_PATH = "../assets/images/yes_button.png";
 const std::string NO_BUTTON_PATH = "../assets/images/no_button.png";
 const std::string UP_BUTTON_PATH = "../assets/images/up_button.png";

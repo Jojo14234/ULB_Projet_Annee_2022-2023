@@ -184,9 +184,7 @@ void Capitalist::addPlayer(ClientManager &client) {
     Cell* starting_cell = this->board[0];
     Player player{&client, starting_cell, this->params.startMoney};
     if ( players.empty() ) { player.setAdmin(); }
-    if (isFastGame()){
-        player.getBankAccount()->setMoney(STARTING_MONEY_FAST);
-    }
+
     players.push_back(player);
 }
 
@@ -213,6 +211,13 @@ std::vector<Player>* Capitalist::getPlayers(){
     return &this->players;
 }
 
+std::vector<Player *> Capitalist::getPlayersAsPointers() {
+    std::vector<Player*> player_pointers;
+    for (auto &player : this->players){
+        player_pointers.push_back(&player);
+    }
+    return player_pointers;
+}
 /*
  * Return the address of the player by matching the address of the clientManager
  * If don't find the client return nullptr
@@ -331,19 +336,30 @@ void Capitalist::endCurrentTurn() {
 
 
 ////////////////////////////////////////////
-ClientManager *Capitalist::getWinner() {
+ClientManager *Capitalist::getWinner(bool is_finished) {
+    if ( is_finished ){
+        return calculateGameWinner();
+    }
+
     if ( isFastGame() ){
-        if ( (getNumberOfPlayersAtStart() - getPlayersSize()) == 2 ){
+        if ( (getNumberOfPlayersAtStart() - getPlayersSize()) == 2 ) {
             return calculateGameWinner();
         }
     }
-    if (this->players.size() > 1) return nullptr;
+
+    if (this->players.size() > 1) { return nullptr; }
+
     return this->players[0].getClient();
+
+
 }
 
 ClientManager *Capitalist::calculateGameWinner() {
     ClientManager* winner;
     int current_winning_patrimoine = 0;
+    if (getPlayersSize() == 1){
+        return players.at(0).getClient();
+    }
     for (auto player : *getPlayers()){
         int patrimoine = player.getPatrimoine(isFastGame());
         if ( patrimoine > current_winning_patrimoine ){
@@ -565,4 +581,3 @@ int Capitalist::getMaxHome() { return params.maxHome; }
 
 int Capitalist::getMaxHotels() { return params.maxHotel; }
 
-int Capitalist::getMaxTurns() { return params.maxTurn; }

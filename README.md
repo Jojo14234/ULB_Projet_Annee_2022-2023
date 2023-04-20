@@ -41,8 +41,8 @@ auquel il pourra par la suite se connecter. Une fois connecté à son compte l'u
 
 ## Gestion partie
 #### Créer une partie
-`/create normal [startMoney] [maxPlayer] [maxHome] [maxHotel]`  
-`/create fast [startMoney] [maxPlayer] [maxHome] [maxHotel]`
+`/create normal [startMoney] [maxPlayer] [maxHome] [maxHotel] [maxTimerForGame] [maxTimerForTurn]`  
+`/create fast [startMoney] [maxPlayer] [maxHome] [maxHotel] [maxTimerForGame] [maxTimerForTurn]`
 
 #### Rejoindre une partie
 `/join [game_code]`

@@ -115,17 +115,6 @@ void GameGUIView::setSpeRound(bool visible){
 	}
 }
 
-void GameGUIView::onlyLeaveRound(bool visible){
-	if(visible == false){
-		button_mode = "";
-		leave_button.setHidden();}
-	else{
-		hideAllButton(); 
-		button_mode = "leave_mode";
-		leave_button.setVisible();
-	}
-}
-
 void GameGUIView::setJoinAuctionRound(bool visible){
 	if(visible == false){
 		button_mode = "";
@@ -151,6 +140,7 @@ void GameGUIView::hideAllButton(){
 	setJoinAuctionRound(false);
 
 	auction_box.setHidden();
+	exchange_box.setHidden();
 }
 
 GameGUIView::GameGUIView(sf::RenderWindow* window) : AbstractGUIView(window),board{}{
@@ -162,7 +152,6 @@ GameGUIView::GameGUIView(sf::RenderWindow* window) : AbstractGUIView(window),boa
 	gamecode_box.setHidden();
 	logo.setHidden();
 	card_text.setHidden();
-
 }
 
 void GameGUIView::draw() {
@@ -184,7 +173,7 @@ void GameGUIView::draw() {
 
 	drawBankruptRound();
 
-	drawSpeRound();
+	
 
 	drawJoinAuction();
 
@@ -198,12 +187,14 @@ void GameGUIView::draw() {
 	}
 	lobby.draw(*window);
 	message_box.draw(*window);
+	exchange_box.draw(*window);
 	
 	logo.draw(*window);
 	card_zone.draw(*window);
 	card_text.draw(*window);
 	card_title.draw(*window);
 	auction_box.draw(*window);
+	drawSpeRound();
 }
 
 void GameGUIView::drawStartGame(){
@@ -247,7 +238,7 @@ void GameGUIView::drawJoinAuction(){participate_button.draw(*window);}
 //method for setting the game
 void GameGUIView::startTurn(){
 	this->dice.setVisible();
-    this->message_box.setString("C'est votre tour!");
+    this->message_box.addString("C'est votre tour!");
 	this->setStartRound(true);
 }
 

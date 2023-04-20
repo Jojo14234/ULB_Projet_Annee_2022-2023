@@ -27,11 +27,13 @@ public:
 
     bool doLoginBtnContain(sf::Event event);
     bool doRegisterBtnContain(sf::Event event);
+    bool doDisconnectBtnContain(sf::Event event);
     bool doUsernameContain(sf::Event event);
     bool doPasswordContain(sf::Event event);
 
     void loginProcess();
     void registerProcess();
+    void disconnectProcess();
     void usernameProcess();
     void passwordProcess();
     void keyPressProcess(sf::Event event);

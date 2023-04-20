@@ -14,6 +14,7 @@ void ConnectionGUIView::draw() {
 	password.draw(*window);
 	login_button.draw(*window);
 	register_button.draw(*window);
+    disconnect_button.draw(*window); // Todo new
 	modal_box.draw(*window);
 }
 

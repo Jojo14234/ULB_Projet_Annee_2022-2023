@@ -1,5 +1,5 @@
-#ifndef _AUCTION_BOX_HPP
-#define _AUCTION_BOX_HPP
+#ifndef _EXCHANGE_BOX_HPP
+#define _EXCHANGE_BOX_HPP
 
 #include "../Objects/ModalBox.hpp"
 #include "../Objects/TextButton.hpp"
@@ -8,37 +8,36 @@
 #include <memory>
 
 
-class AuctionBox: public  ModalBox{
+class ExchangeBox: public  ModalBox{
     ImageButton up{ObjectInfo<>(90,90,20,400),UP_BUTTON};
     ImageButton down{ObjectInfo<>(90,90,190,400),DOWN_BUTTON};
-    ImageButton validate{ObjectInfo<>(150,150,50,500),VALIDATE_BUTTON};
-    ImageButton leave{ObjectInfo<>(150,100,75,650),LEAVE_BUTTON};
     Image zone{ObjectInfo<>(250,300,25,100),TEXT_AUCTION};
+    ImageButton leave{ObjectInfo<>(150,100,75,650),LEAVE_BUTTON};
     Text number{ObjectInfo<>(0,60,35,210),""};
 
     int nb = 0;
 
 
     public:
-        AuctionBox(ObjectInfo<>info, sf::Color color): AbstractViewObject{info}, ModalBox{info,color}
+        ExchangeBox(ObjectInfo<>info, sf::Color color): AbstractViewObject{info}, ModalBox{info,color}
         {   number.setBold();
-            addButtons({&up,&down,&validate ,&leave});
+            addButtons({&up,&down, &leave});
             addImage(&zone);
-            addText(&number);}
+            addText(&number);
+            background.setHidden();}
 
         void setTextNumber(int new_number ){
             nb = new_number ;
             number.setString(std::to_string(new_number));
         }
 
-        void upNumber(){this->setTextNumber(nb + 50);}
-        void downNumber(){this->setTextNumber(nb - 50);}
+        void upNumber(){this->setTextNumber(nb + 10);}
+        void downNumber(){if(nb - 10 >= 0){this->setTextNumber(nb - 10);} }
 
         int getValidateNumber(){return nb;}
 
         ImageButton* getUpButton(){return &up;}
         ImageButton* getDownButton(){return &down;}
-        ImageButton* getValidateButton(){return &validate;}
         ImageButton* getLeaveButton(){return &leave;}
 };
 

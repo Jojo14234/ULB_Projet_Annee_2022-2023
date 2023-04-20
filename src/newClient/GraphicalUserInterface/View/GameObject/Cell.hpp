@@ -66,6 +66,7 @@ public :
 	}
 
 	void setOwner(std::string player_color){
+		std::cout << "owner_in" << std::endl;
 		owner = player_color;
 		std::string path;
 		if (player_color == "red"){path = FLAG_RED;}
@@ -78,7 +79,13 @@ public :
 		int pos_x = 30;
 		int pos_y = 3;
 		if (  cell_number >30 and cell_number < 40){pos_y = 20;}
-		images_building.emplace_back(std::make_unique<Image>(ObjectInfo<>(25,25,info.getX() + pos_x, info.getY() + pos_y),path));}
+		std::cout << "owner_in2" << std::endl;
+		std::cout << cell_number << std::endl;
+		std::cout << pos_x << pos_y << path << std::endl;
+		std::cout << "owner_in3" << std::endl;
+		images_building.emplace_back(std::make_unique<Image>(ObjectInfo<>(25,25,info.getX() + pos_x, info.getY() + pos_y),path));
+		std::cout << "owner_out" << std::endl;
+		}
 	
 	void removeOwner(){
 		images_building.erase(images_building.begin(),images_building.begin()+1);
@@ -117,9 +124,7 @@ public :
 		
 		if(cell_number >20 and cell_number < 30){pos_x = 40;}
 		if (  cell_number >30 and cell_number < 40){pos_y = 22;}
-
-		images_building.emplace_back(std::make_unique<Image>(ObjectInfo<>(25,25,info.getX() + pos_x, info.getY() + pos_y),path));
-	}
+		images_building.emplace_back(std::make_unique<Image>(ObjectInfo<>(25,25,info.getX() + pos_x, info.getY() + pos_y),path));}
 
 
 
@@ -147,6 +152,8 @@ public :
 	}
 
 	ImageButton* getButton(){return &cell_im; }
+
+	int getCellNumber(){return cell_number; }
 
 
 

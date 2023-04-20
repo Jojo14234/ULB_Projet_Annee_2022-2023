@@ -167,6 +167,8 @@ void Server::clientProcessJoinGame(ClientManager &client) {
     if ( !games.joinGame(&client, client.getCode()) ) { success = false; }
 
     // Send result to client
+    //client.sendQueryMsg("", static_cast<QUERY>(success));
+    
     if (success){
         client.sendQueryMsg("", QUERY::PLAYER_JOIN_GAME);
     }

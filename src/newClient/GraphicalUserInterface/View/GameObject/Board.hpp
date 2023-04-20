@@ -97,6 +97,8 @@ public:
 
 	std::array<std::shared_ptr<Cell>, gamebox_nb>* getBoardButton();
 
+	std::string getCellName(int pos);
+
 
 };
 
