@@ -213,7 +213,7 @@ GameStats GameServer::clientLoop(ClientManager &client) {
         }
     }
 
-    // LOOP UNTIL THERE IS A WINNER
+    // LOOP UNTIL THERE IS A WINNER OR TIMER IS DONE (only applies de fast games unless passed as a param)
     Timer3 timer{params.maxTimeForGame};
     while ( this->game.getWinner(timer.isFinish()) == nullptr) {
 

@@ -9,7 +9,7 @@ const auto MONEY_START_CELL = 200;
 const auto BOARD_SIZE = 40;
 
 const int PRISON_INDEX = 10;
-const int TIMER_NORMAL = 3600 * 3;
+const int TIMER_NORMAL = 9999999;
 const int TIMER_TURN_NORMAL = 300;
 
 // Chemin fichier JSON

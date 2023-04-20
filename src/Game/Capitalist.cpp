@@ -357,6 +357,9 @@ ClientManager *Capitalist::getWinner(bool is_finished) {
 ClientManager *Capitalist::calculateGameWinner() {
     ClientManager* winner;
     int current_winning_patrimoine = 0;
+    if (getPlayersSize() == 1){
+        return players.at(0).getClient();
+    }
     for (auto player : *getPlayers()){
         int patrimoine = player.getPatrimoine(isFastGame());
         if ( patrimoine > current_winning_patrimoine ){
