@@ -81,13 +81,12 @@ void GameGUIController::handle(sf::Event event) {
             else if (this->view->button_mode == "on_prison"){
                 if(this->view->paid_prison_button.contains(event.mouseButton.x, event.mouseButton.y)){
                     this->view->paid_prison_button.playSound();
-                    std::cout << "clicked" << std::endl;
                     GameInputParser parser("/pay");
                     this->model->sendCommand(parser);
                     this->view->setPrisonRound(false);
                         }
-                else if(this->view->roll_dice_button.contains(event.mouseButton.x, event.mouseButton.y)){
-                    this->view->roll_dice_button.playSound();
+                else if(this->view->roll_dice_prison_button.contains(event.mouseButton.x, event.mouseButton.y)){
+                    this->view->roll_dice_prison_button.playSound();
                     GameInputParser parser("/roll");
                     this->model->sendCommand(parser);
                     this->view->setPrisonRound(false);
@@ -137,6 +136,13 @@ void GameGUIController::handle(sf::Event event) {
                     this->model->sendCommand(parser);
                     this->view->setAuctionRound(false);
                         }}
+            else if(this->view->button_mode == "end_round"){
+                 if(this->view->leave_button_end.contains(event.mouseButton.x, event.mouseButton.y)){
+                        GameInputParser parser("/quit");
+                        std::cout << "clicked" << std::endl;
+                        this->model->sendCommand(parser);
+                        this->new_state = STATE::MENU;}
+            }
             if(this->view->board_click == true){
                 if (this->view->exchange_mode == true){
                     if(this->view->exchange_box.getUpButton()->contains(event.mouseButton.x, event.mouseButton.y)){
@@ -209,10 +215,7 @@ void GameGUIController::receiveMsgLoop() {
             case QUERY::INFOS_CARD_CELL_TO_GO :         std::cout<<"&&"<<"u"<<std::endl;this->cardCellToGoGU(response); break;
             case QUERY::INFOS_PLAYER_MOVE_ON_CARD_CELL :std::cout<<"&&"<<"v"<<std::endl;this->moveOnCardCellGU(response); break;
             case QUERY::INFOS_CARD_DESCRIPTION :        std::cout<<"&&"<<"w"<<std::endl;this->drawCardGU(response); break;
-            case QUERY::INFOS_DOUBLE_TURN:              {std::cout <<"double?"<<std::endl;
-                                                        this->view->message_box.setString("Vous recommencez un tour"); 
-                                                        this->view->setStartRound(true);
-                                                         break;}
+            case QUERY::INFOS_DOUBLE_TURN:              this->doubleTurnGU(response);break;
             case QUERY::USELESS_MESSAGE :               std::cout<<"&&"<<"x"<<std::endl; break;
 
             case QUERY::INFOS_BUILD_PROP :              std::cout<<"&&"<<"y"<<std::endl;this->buildPropertyGU(response); break;
@@ -437,6 +440,12 @@ void GameGUIController::newTurnGU(const std::string& response) {
         this->model->endTurn(); 
         this->view->message_box.addString("C'est au tour de " + response + " !"); 
         std::cout << "fin" << std::endl;}}
+
+void GameGUIController::doubleTurnGU(const std::string& response) {
+    if (this->model->isMyTurn()) { this->view->startTurn(); }
+    else { this->view->message_box.setString(response + " va relancer les dés !"); }
+}
+
 
 void GameGUIController::newTurnInJailGU(const std::string& response) {
     JailInfo jail_info(response);
@@ -795,8 +804,11 @@ void GameGUIController::auctionBidGU(const std::string& response){
 }
 
 void GameGUIController::endAuctionGU(const std::string& response){
-    EndAuctionInfo end(response);
-    this->view->message_box.setString(end.player + " remporte " + end.property + " pour " + std::to_string(end.amount) + "$ !");}
+   EndAuctionInfo end(response);
+    if (end.player != ""){
+        this->view->message_box.setString(end.player + " remporte " + end.property + " pour " + std::to_string(end.amount) + "$ !");
+    }
+    else this->view->message_box.setString("Personne ne remporte " + end.property + ".");}
 
 void GameGUIController::endGameGU(const std::string& response){
     this->view->message_box.setString("Victoire de " + response + ". Félicitations !");

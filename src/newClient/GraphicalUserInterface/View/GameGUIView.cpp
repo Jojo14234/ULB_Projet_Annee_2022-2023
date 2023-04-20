@@ -125,6 +125,16 @@ void GameGUIView::setJoinAuctionRound(bool visible){
 		participate_button.setVisible();}
 }
 
+void GameGUIView::setEnd(bool visible){
+	if(visible == false){
+		button_mode = "";
+		leave_button_end.setHidden();}
+	else{
+		hideAllButton(); 
+		button_mode = "end_round";
+		leave_button_end.setVisible();}
+}
+
 void GameGUIView::hideAllButton(){
 
 	//false = hide , true = visible
@@ -138,6 +148,7 @@ void GameGUIView::hideAllButton(){
 	setBankruptRound(false);
 	setSpeRound(false);
 	setJoinAuctionRound(false);
+	setEnd(false);
 
 	auction_box.setHidden();
 	exchange_box.setHidden();
@@ -189,6 +200,7 @@ void GameGUIView::draw() {
 	card_title.draw(*window);
 	auction_box.draw(*window);
 	drawSpeRound();
+	drawEnd();
 }
 
 void GameGUIView::drawStartGame(){
@@ -228,6 +240,8 @@ void GameGUIView::drawBankruptRound(){
 void GameGUIView::drawSpeRound(){leave_button.draw(*window);}
 
 void GameGUIView::drawJoinAuction(){participate_button.draw(*window);}
+
+void GameGUIView::drawEnd(){leave_button_end.draw(*window);}
 
 //method for setting the game
 void GameGUIView::startTurn(){

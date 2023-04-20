@@ -48,6 +48,9 @@ class GameGUIView: public AbstractGUIView {
 	ImageButton leave_button{ObjectInfo<>(200, 100 ,50,window->getSize().y/3*0) ,LEAVE_BUTTON};
 
 	ImageButton participate_button{ObjectInfo<>(200, 100 ,50,window->getSize().y/3*3) ,PARTICIPATE_BUTTON};
+
+	ImageButton leave_button_end{ObjectInfo<>(200, 100 ,50,window->getSize().y/3*1) ,LEAVE_BUTTON};
+
 	
 	std::vector<std::string> colorlist{"red","blue","green","cyan","magenta","yellow"};   //pour tester à enlever
 
@@ -95,6 +98,8 @@ class GameGUIView: public AbstractGUIView {
 	void onlyLeaveRound(bool visible);
 
 	void setJoinAuctionRound(bool visible);
+
+	void setEnd(bool visible);
 	
 	void hideAllButton();
 
@@ -123,6 +128,8 @@ public:
 	void drawBankruptRound();
 
 	void drawSpeRound();
+
+	void drawEnd();
 
 	void drawJoinAuction();
 
