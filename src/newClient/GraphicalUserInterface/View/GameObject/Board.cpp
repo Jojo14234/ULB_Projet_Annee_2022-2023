@@ -125,10 +125,6 @@ void Board::setHouse(int cell, int house_nb){
 }
 
 
-void Board::setBuildable(int cell){
-	board[cell]->setGrayed();
-
-}
 void Board::setAllGrayed(){
 	for (auto i : board){
         i->setGrayed();
@@ -136,6 +132,10 @@ void Board::setAllGrayed(){
 
 }
 
+void Board::setBuildable(int cell){
+	board[cell]->unsetGrayed();
+
+}
 void Board::setSalable(int cell){
 	board[cell]->unsetGrayed();
 }

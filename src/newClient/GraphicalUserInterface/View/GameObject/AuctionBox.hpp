@@ -11,7 +11,7 @@
 class AuctionBox: public  ModalBox{
     ImageButton up{ObjectInfo<>(90,90,20,400),UP_BUTTON};
     ImageButton down{ObjectInfo<>(90,90,190,400),DOWN_BUTTON};
-    ImageButton validate{ObjectInfo<>(300,300,0,420),VALIDATE_BUTTON};
+    ImageButton validate{ObjectInfo<>(150,150,50,500),VALIDATE_BUTTON};
     ImageButton leave{ObjectInfo<>(150,100,75,650),LEAVE_BUTTON};
     Image zone{ObjectInfo<>(250,300,25,100),TEXT_AUCTION};
     Text number{ObjectInfo<>(0,60,35,210),""};

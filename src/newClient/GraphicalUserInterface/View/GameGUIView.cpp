@@ -232,7 +232,7 @@ void GameGUIView::drawJoinAuction(){participate_button.draw(*window);}
 //method for setting the game
 void GameGUIView::startTurn(){
 	this->dice.setVisible();
-    this->message_box.setString("C'est votre tour!");
+    this->message_box.addString("C'est votre tour!");
 	this->setStartRound(true);
 }
 
