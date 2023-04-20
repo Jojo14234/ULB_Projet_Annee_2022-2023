@@ -255,13 +255,25 @@ GameStats GameServer::clientLoop(ClientManager &client) {
  */
 void GameServer::clientTurn(ClientManager &client, Player* me) {
 
-    while ( !me->hasRolled() and me->getStatus() != PLAYER_STATUS::LOST) {
-        GAME_QUERY_TYPE query = this->getGameQuery(client);
-        if ( query == GAME_QUERY_TYPE::BUILD )          { this->processBuild(client, me); continue; }
-        if ( query == GAME_QUERY_TYPE::SELL_BUILDINGS ) { this->processSellBuild(client, me); continue; }
-        if ( query == GAME_QUERY_TYPE::MORTGAGE )       { this->processMortgage(client, me); continue; }
-        if ( query == GAME_QUERY_TYPE::LIFT_MORTGAGE )  { this->processLiftMortgage(client, me); continue; }
-        if ( query == GAME_QUERY_TYPE::EXCHANGE )       { this->processExchange(client, me); continue; }
+    GAME_QUERY_TYPE query;
+    alarm(params.maxTimePerTurn);
+
+    while ( !me->hasRolled() and me->getStatus() != PLAYER_STATUS::LOST and query != GAME_QUERY_TYPE::TIME_EXPIRED ) {
+
+        try {
+
+            query = this->getGameQuery(client);
+
+            if ( query == GAME_QUERY_TYPE::BUILD )          { this->processBuild(client, me); continue; }
+            if ( query == GAME_QUERY_TYPE::SELL_BUILDINGS ) { this->processSellBuild(client, me); continue; }
+            if ( query == GAME_QUERY_TYPE::MORTGAGE )       { this->processMortgage(client, me); continue; }
+            if ( query == GAME_QUERY_TYPE::LIFT_MORTGAGE )  { this->processLiftMortgage(client, me); continue; }
+            if ( query == GAME_QUERY_TYPE::EXCHANGE )       { this->processExchange(client, me); continue; }
+
+        }
+        catch (const ReadPipeServerException &exception) {
+            query = GAME_QUERY_TYPE::TIME_EXPIRED;
+        }
 
 
         if ( query == GAME_QUERY_TYPE::ROLL_DICE ) {
@@ -278,9 +290,13 @@ void GameServer::clientTurn(ClientManager &client, Player* me) {
             if (! me->hasRolled()) client.getGameServer()->updateAllClientsWithQuery(QUERY::INFOS_DOUBLE_TURN, "");
         }
     }
+
+    if ( query != GAME_QUERY_TYPE::TIME_EXPIRED ) {
+        alarm(0);
+    }
     // End of the turn
     this->game.getDice().resetDoubleCounter();
-    if ( game.isFastGame() ){
+    if ( game.isFastGame() ) {
         me->pay(20, true);
         checkAndManageBankruptcy(client, me);
     }

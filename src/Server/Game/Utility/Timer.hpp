@@ -110,7 +110,7 @@ public:
         if (this->seed == random_seed) { this->seed = 0; }
     }
 
-    bool isFinish() {return this->seed == 0; }
+    bool isFinish() { return this->seed == 0; }
 };
 
 #endif //INFO_F209_GR5_2022_TIMER_HPP
