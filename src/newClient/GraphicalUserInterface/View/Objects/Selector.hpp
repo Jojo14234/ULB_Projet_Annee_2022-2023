@@ -21,6 +21,9 @@ class Selector : public AbstractViewObject, public Observer {
 	int choices_size;
 
 public:
+
+	Selector(ObjectInfo<> info) : AbstractViewObject(info) {}
+
 	Selector(ObjectInfo<> info, std::vector<std::string> str_choices,std::vector<DirectionImButton*> buttons): AbstractViewObject(info),choices{str_choices}, buttons{buttons} {
 		for (auto button:buttons) {
 			button->registerObserver(this);
@@ -35,6 +38,11 @@ public:
 			button->removeObserver(this);
 			delete button;
 		}
+	}
+
+	void addChoice(const std::string &choice) {
+		this->choices.push_back(choice);
+		this->choices_size++;
 	}
 
 	void update(int change) override {

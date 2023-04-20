@@ -16,14 +16,28 @@ void FriendsGUIController::handle(sf::Event event) {
 			if (this->view->request_popup.isVisible()) {
 				if (this->view->request_popup.getButton(0)->contains(event.mouseButton.x, event.mouseButton.y)) {
 					this->view->request_popup.setHidden();
-				} else if (true) {
-					// TODO
+				} else if (this->view->request_popup.getSelector(0)->getLButton()->contains(event.mouseButton.x, event.mouseButton.y)) {
+					this->view->request_popup.getSelector(0)->getLButton()->click();
+				} else if (this->view->request_popup.getSelector(0)->getRButton()->contains(event.mouseButton.x, event.mouseButton.y)) {
+					this->view->request_popup.getSelector(0)->getRButton()->click();
+				} else if (this->view->request_popup.getButton(1)->contains(event.mouseButton.x, event.mouseButton.y)) {
+					this->model->sendCommand(MainInputParser{"/f accept " + this->view->request_popup.getSelector(0)->getActualString()});
+				} else if (this->view->request_popup.getButton(2)->contains(event.mouseButton.x, event.mouseButton.y)) {
+					this->model->sendCommand(MainInputParser{"/f refuse " + this->view->request_popup.getSelector(0)->getActualString()});
 				}
 			} else if (this->view->ask_popup.isVisible()) {
+				this->view->ask_popup.getInput(0)->deselect();
 				if (this->view->ask_popup.getButton(0)->contains(event.mouseButton.x, event.mouseButton.y)) {
 					this->view->ask_popup.setHidden();
-				} else if (true) {
-					// TODO
+				} else if (this->view->ask_popup.getInput(0)->contains(event.mouseButton.x, event.mouseButton.y)) {
+					this->view->ask_popup.getInput(0)->select();
+				} else if (this->view->ask_popup.getButton(1)->contains(event.mouseButton.x, event.mouseButton.y)) {
+					std::string username = this->view->ask_popup.getInput(0)->getString();
+					if (username.length() < 5) break;
+					this->model->sendCommand(MainInputParser{"/f add " + username});
+					if (this->model->receive() == QUERY::TRUEQ) {
+						this->view->ask_popup.setHidden();
+					}
 				}
 			} else if (this->view->request_button.contains(event.mouseButton.x, event.mouseButton.y)) {
 				this->view->request_popup.setVisible();
@@ -76,4 +90,6 @@ void FriendsGUIController::update() {
 	std::vector<std::string> friends_name;
 	std::vector<std::string> friends_requests;
 	this->model->receiveFriendsInfo(friends_name, friends_requests);
+	// TODO remplir scrollbox
+	// TODO remplir request
 }
