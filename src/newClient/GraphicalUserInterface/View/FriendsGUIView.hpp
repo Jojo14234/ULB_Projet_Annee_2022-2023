@@ -52,7 +52,6 @@ public:
 
 	void clear();
 
-	void initFriendBox();
 	void initRequestPopup();
 	void initAskPopup();
 	void addMsg(const std::string &msg, const std::string &sender="moi");

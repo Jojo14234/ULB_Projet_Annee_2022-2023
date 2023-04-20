@@ -74,6 +74,10 @@ public:
 		}
 	}
 
+	void clear() {
+		this->objects.clear();
+		this->scroll = 0;
+	}
 
 
 	class Iterator {

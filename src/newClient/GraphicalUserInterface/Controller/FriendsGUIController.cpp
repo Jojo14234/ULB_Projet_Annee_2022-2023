@@ -20,10 +20,12 @@ void FriendsGUIController::handle(sf::Event event) {
 					this->view->request_popup.getSelector(0)->getLButton()->click();
 				} else if (this->view->request_popup.getSelector(0)->getRButton()->contains(event.mouseButton.x, event.mouseButton.y)) {
 					this->view->request_popup.getSelector(0)->getRButton()->click();
-				} else if (this->view->request_popup.getButton(1)->contains(event.mouseButton.x, event.mouseButton.y)) {
-					this->model->sendCommand(MainInputParser{"/f accept " + this->view->request_popup.getSelector(0)->getActualString()});
-				} else if (this->view->request_popup.getButton(2)->contains(event.mouseButton.x, event.mouseButton.y)) {
-					this->model->sendCommand(MainInputParser{"/f refuse " + this->view->request_popup.getSelector(0)->getActualString()});
+				} else if (this->view->request_popup.getSelector(0)->size() > 0) {
+					if (this->view->request_popup.getButton(1)->contains(event.mouseButton.x, event.mouseButton.y)) {
+						this->model->sendCommand(MainInputParser{"/f accept " + this->view->request_popup.getSelector(0)->getActualString()});
+					} else if (this->view->request_popup.getButton(2)->contains(event.mouseButton.x, event.mouseButton.y)) {
+						this->model->sendCommand(MainInputParser{"/f refuse " + this->view->request_popup.getSelector(0)->getActualString()});
+					}
 				}
 			} else if (this->view->ask_popup.isVisible()) {
 				this->view->ask_popup.getInput(0)->deselect();
@@ -91,5 +93,19 @@ void FriendsGUIController::update() {
 	std::vector<std::string> friends_requests;
 	this->model->receiveFriendsInfo(friends_name, friends_requests);
 	// TODO remplir scrollbox
-	// TODO remplir request
+	for (const auto &name : friends_requests) {
+		this->view->request_popup.getSelector(0)->addChoice(name);
+	}
+
+	const double size_x = WINDOW_WIDTH*4/12.f - WINDOW_WIDTH/25.f;
+	const double size_y = WINDOW_WIDTH/20.f;
+	const double pos_x = WINDOW_WIDTH*8/12.f + WINDOW_WIDTH/18;
+	const double pos_y = WINDOW_WIDTH/30.f + WINDOW_HEIGHT/8.f+WINDOW_HEIGHT/5.+WINDOW_WIDTH/50.f;
+	const int sep = WINDOW_WIDTH/160.f;
+	int i = 0;
+	for (const auto &name : friends_name) {
+		this->view->friend_list.addObject(new FriendBox{ObjectInfo<>(size_x, size_y, pos_x, pos_y +((sep + size_y)*i) ), name});
+		i++;
+	}
+
 }

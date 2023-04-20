@@ -22,7 +22,7 @@ class Selector : public AbstractViewObject, public Observer {
 
 public:
 
-	Selector(ObjectInfo<> info) : AbstractViewObject(info) {}
+	Selector(ObjectInfo<> info, std::vector<DirectionImButton*> buttons) : AbstractViewObject(info), buttons{buttons} {}
 
 	Selector(ObjectInfo<> info, std::vector<std::string> str_choices,std::vector<DirectionImButton*> buttons): AbstractViewObject(info),choices{str_choices}, buttons{buttons} {
 		for (auto button:buttons) {
@@ -40,9 +40,19 @@ public:
 		}
 	}
 
+	int size() { return this->choices_size; }
+
+	void clear() {
+		this->choices.clear();
+		this->actual_idx = 0;
+		this->choices_size = 0;
+		text.setString("");
+	}
+
 	void addChoice(const std::string &choice) {
 		this->choices.push_back(choice);
 		this->choices_size++;
+		this->changeText();
 	}
 
 	void update(int change) override {
