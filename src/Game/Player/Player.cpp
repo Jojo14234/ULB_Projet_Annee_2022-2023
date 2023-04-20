@@ -66,16 +66,19 @@ int Player::getPosition() const { return this->current_cell->getPosition(); }
 int Player::getMoney() const { return this->bank_account.getMoney(); }
 Player* Player::getPlayerToRefund() { return player_to_refund; }
 int Player::getPatrimoine(bool is_fast_game) {
+
     float weighting;
-    if (is_fast_game){
+
+    if (is_fast_game) {
         weighting = 0.8;
     }
     else {
         weighting = 0.5;
     }
+
     int money = getMoney();
     for (auto property : this->properties) {
-        if (!property->isMortgaged()){
+        if (!property->isMortgaged()) {
             int money_from_sell_buildings = property->getIntLevel() * (property->getConstructPrice() * weighting);
             int money_from_hypotheque = property->getPurchasePrice() * weighting;
             money += money_from_sell_buildings;
@@ -84,20 +87,21 @@ int Player::getPatrimoine(bool is_fast_game) {
     }
 
     for (auto station : this->stations) {
-        if (!station->isMortgaged()){
+        if (!station->isMortgaged()) {
             int money_from_hypotheque = station->getPurchasePrice() * weighting;
             money += money_from_hypotheque;
         }
     }
 
     for (auto company : this->companies) {
-        if (!company->isMortgaged()){
+        if (!company->isMortgaged()) {
             int money_from_hypotheque = company->getPurchasePrice() * weighting;
             money += money_from_hypotheque;
         }
     }
     return money;
 }
+
 int Player::getIndex() const { return this->index; }
 int Player::getDebt() const { return this->money_debt; }
 
