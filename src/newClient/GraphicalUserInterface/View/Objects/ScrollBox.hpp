@@ -50,9 +50,8 @@ public:
 		}
 	}
 
-
 	virtual void scrollUp() {
-		if (this->scroll >= (int)(this->objects.size()-1)) return;
+		if (this->scroll >= (int)(this->objects.size()-2)) return;
 		this->scroll++; 
 		updateObjects(-1);
 	}

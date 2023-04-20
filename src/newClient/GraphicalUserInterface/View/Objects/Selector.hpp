@@ -46,11 +46,12 @@ public:
 	}
 
 	void update(int change) override {
-		this->actual_idx = (((this->actual_idx + change)% choices_size) +choices_size) % choices_size;
+		this->actual_idx = (this->actual_idx + change)% choices_size;
 		this->changeText();
 	}
 
 	virtual void draw(sf::RenderWindow &window) const override {
+		if (isHidden()) return;
         text.draw(window);
         for (auto button:buttons) {
 			button->draw(window);
