@@ -35,20 +35,24 @@ void MenuGUIView::initCreatePopup(){
 	create_popup.addText(new Text{ObjectInfo<>(0, WINDOW_WIDTH/50, WINDOW_WIDTH/4.f, WINDOW_HEIGHT/6+WINDOW_HEIGHT/10*5.f), "Nombre max d'hotel:"});
 	create_popup.addText(new Text{ObjectInfo<>(0, WINDOW_WIDTH/50, WINDOW_WIDTH/4.f, WINDOW_HEIGHT/6+WINDOW_HEIGHT/10*6.f), "Duree de la partie (min):"});
 	create_popup.addText(new Text{ObjectInfo<>(0, WINDOW_WIDTH/50, WINDOW_WIDTH/4.f, WINDOW_HEIGHT/6+WINDOW_HEIGHT/10*7.f), "Duree d'un tour (sec)"});
-	//create_popup.addButton(new ImageButton{ObjectInfo<>(WINDOW_WIDTH/25.f, WINDOW_HEIGHT/25.f, WINDOW_WIDTH/4.f, WINDOW_HEIGHT/4+WINDOW_HEIGHT/10*5.f-WINDOW_HEIGHT/12.f+WINDOW_HEIGHT/25.f+WINDOW_HEIGHT/4.f), BACK_BUTTON_PATH});
+
+	create_popup.addText(new Text{ObjectInfo<>(0, WINDOW_WIDTH/80, WINDOW_WIDTH/4.f, WINDOW_HEIGHT/6+WINDOW_HEIGHT/10*2.f+WINDOW_WIDTH/50), "par defaut: 1500(normal), 3000(rapide)"});
+	create_popup.addText(new Text{ObjectInfo<>(0, WINDOW_WIDTH/80, WINDOW_WIDTH/4.f, WINDOW_HEIGHT/6+WINDOW_HEIGHT/10*4.f+WINDOW_WIDTH/50), "en mode rapide: pas de limite"});
+	create_popup.addText(new Text{ObjectInfo<>(0, WINDOW_WIDTH/80, WINDOW_WIDTH/4.f, WINDOW_HEIGHT/6+WINDOW_HEIGHT/10*5.f+WINDOW_WIDTH/50), "en mode rapide: pas de limite"});
+	create_popup.addText(new Text{ObjectInfo<>(0, WINDOW_WIDTH/80, WINDOW_WIDTH/4.f, WINDOW_HEIGHT/6+WINDOW_HEIGHT/10*6.f+WINDOW_WIDTH/50), "par defaut: pas de limite(normal), 50 min(rapide)"});
+
 	create_popup.addButton(new ImageButton{ObjectInfo<>(WINDOW_WIDTH/6.f, WINDOW_HEIGHT/6.f, WINDOW_WIDTH/2.f - WINDOW_WIDTH/11.f - WINDOW_WIDTH/6.f, WINDOW_HEIGHT - WINDOW_HEIGHT/9), BACK_BUTTON_PATH});
-	//create_popup.addButton(new ImageButton{ObjectInfo<>(WINDOW_WIDTH/35.f, WINDOW_HEIGHT/25.f, WINDOW_WIDTH/4*3-WINDOW_WIDTH/25.f, WINDOW_HEIGHT/4+WINDOW_HEIGHT/10*5.f-WINDOW_HEIGHT/12.f+WINDOW_HEIGHT/25.f+WINDOW_HEIGHT/4.f), OK_BUTTON_PATH});
 	create_popup.addButton(new ImageButton{ObjectInfo<>(WINDOW_WIDTH/6.f, WINDOW_HEIGHT/6.f, WINDOW_WIDTH/2.f + WINDOW_WIDTH/11.f, WINDOW_HEIGHT - WINDOW_HEIGHT/9), OK_BUTTON_PATH});
 
 	std::vector<std::string> game_mode{"classique", "rapide"};
-	std::vector<std::string> start_money{"1500", "2000", "2500", "3000", "888"};
+	std::vector<std::string> start_money{"par defaut","1500", "2000", "2500", "3000", "888"};
 	std::vector<std::string> player_nbr{"2", "3", "4", "5", "6"};
 
-	std::vector<std::string> max_house{"2", "3", "4", "10"};
-	std::vector<std::string> max_hotel{"2", "3", "4", "10"};
+	std::vector<std::string> max_house{"par defaut", "2", "3", "4", "10"};
+	std::vector<std::string> max_hotel{"par defaut", "2", "3", "4", "10"};
 
-	std::vector<std::string> game_time{"Pas de limite","5", "10", "15", "20"};
-	std::vector<std::string> turn_time{"10", "20", "30", "40"};
+	std::vector<std::string> game_time{"par defaut","5", "10", "15", "20"};
+	std::vector<std::string> turn_time{"20", "30", "40", "50", "60"};
 
 	DirectionImButton* l_button1= new DirectionImButton{ObjectInfo<>(WINDOW_WIDTH/50.f, WINDOW_WIDTH/50.f, WINDOW_WIDTH/4*3-WINDOW_WIDTH/12.f+WINDOW_WIDTH/50.f, WINDOW_HEIGHT/6+WINDOW_HEIGHT/10.f), RIGHT_BUTTON_PATH};
 	DirectionImButton* r_button1= new DirectionImButton{ObjectInfo<>(WINDOW_WIDTH/50.f, WINDOW_WIDTH/50.f,(WINDOW_WIDTH/4*3-WINDOW_WIDTH/12.f) - WINDOW_WIDTH/8.f , WINDOW_HEIGHT/6+WINDOW_HEIGHT/10.f), LEFT_BUTTON_PATH};
@@ -123,15 +127,30 @@ std::string MenuGUIView::getCreateCmd() {
 		}
 		// mode
 		std::string mode = (game_parameters.at(0) == "classique") ? "normal" : "fast";
-		std::string start_money = game_parameters.at(1);
+		std::string start_money = (game_parameters.at(1) == "par defaut")? "null" : game_parameters.at(1);
 		std::string max_player = game_parameters.at(2);
+		std::string max_house;
+		std::string max_hotel;
 
-		std::string max_house = game_parameters.at(3);
-		std::string max_hotel = game_parameters.at(4);
+		if (mode == "fast") {
+			max_house = "null";
+			max_hotel = "null";
+		}
+		else {
+			max_house = (game_parameters.at(3) == "par defaut")? "null" : game_parameters.at(3);
+			max_hotel = (game_parameters.at(4) == "par defaut")? "null" : game_parameters.at(4);
+		}
+
+		std::string game_time = (game_parameters.at(5) == "par defaut")? "null" : std::to_string(stoi(game_parameters.at(5))*60);
+		std::string turn_time = game_parameters.at(6);
 
 		cmd += " " + mode;
 		cmd += " " + start_money;
 		cmd += " " + max_player;
+		cmd += " " + max_house;
+		cmd += " " + max_hotel;
+		cmd += " " + game_time;
+		cmd += " " + turn_time;
 		
 		return cmd;
 }
