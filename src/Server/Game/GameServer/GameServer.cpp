@@ -239,6 +239,11 @@ GameStats GameServer::clientLoop(ClientManager &client) {
             sleep(1); // fait moins lag
         }
     }
+
+    if (timer.isFinish()) {
+        updateAllClientsWithQuery(QUERY::GAME_TIME_EXPIRED, "");
+    }
+    
     // STOP THE GAME
     this->game.setRunning(false);
     // allow client to get out of the receiveFromServerLoop and SendToServerLoop
@@ -294,6 +299,10 @@ void GameServer::clientTurn(ClientManager &client, Player* me) {
     if ( query != GAME_QUERY_TYPE::TIME_EXPIRED ) {
         alarm(0);
     }
+    else {
+        client.sendQueryMsg("", QUERY::TURN_TIME_EXPIRED);
+    }
+
     // End of the turn
     this->game.getDice().resetDoubleCounter();
     if ( game.isFastGame() ) {
@@ -306,7 +315,7 @@ void GameServer::clientTurn(ClientManager &client, Player* me) {
 
 }
 
-void GameServer::checkAndManageBankruptcy(ClientManager &client, Player* me){
+void GameServer::checkAndManageBankruptcy(ClientManager &client, Player* me) {
     if ( me->getStatus() == PLAYER_STATUS::BANKRUPT_SUSPECTED ) { this->suspectBankrupt(me); }
     if ( me->getStatus() == PLAYER_STATUS::DEBT ) { this->processPayDebt(client, me); }
     if ( me->getStatus() == PLAYER_STATUS::BANKRUPT_CONFIRMED ) { this->processBankrupt(client, me); }

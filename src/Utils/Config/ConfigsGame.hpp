@@ -26,7 +26,7 @@ const int MAX_HOME = 32;
 const int MAX_TURN = 1000;
 
 // Fast Game
-const auto STARTING_MONEY_FAST = 3000;
+const auto STARTING_MONEY_FAST = 3000; //dans les règles
 const int MAX_HOTEL_FAST = 9999;
 const int MAX_HOME_FAST = 9999;
 const int TIMER_FAST = 3600;
