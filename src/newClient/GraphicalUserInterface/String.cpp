@@ -35,7 +35,7 @@
 namespace sf
 {
 ////////////////////////////////////////////////////////////
-const std::size_t String::InvalidPos;
+const std::size_t String::InvalidPos{};
 
 
 ////////////////////////////////////////////////////////////
@@ -55,12 +55,6 @@ String::String(wchar_t wideChar)
     m_string += Utf32::decodeWide(wideChar);
 }
 
-
-////////////////////////////////////////////////////////////
-String::String(char32_t utf32Char)
-{
-    m_string += utf32Char;
-}
 
 
 ////////////////////////////////////////////////////////////
@@ -109,18 +103,6 @@ String::String(const std::wstring& wideString)
 }
 
 
-////////////////////////////////////////////////////////////
-String::String(const char32_t* utf32String)
-{
-    if (utf32String)
-        m_string = utf32String;
-}
-
-
-////////////////////////////////////////////////////////////
-String::String(const std::u32string& utf32String) : m_string(utf32String)
-{
-}
 
 
 ////////////////////////////////////////////////////////////
@@ -180,46 +162,12 @@ std::basic_string<std::uint8_t> String::toUtf8() const
 
 
 ////////////////////////////////////////////////////////////
-std::u16string String::toUtf16() const
-{
-    // Prepare the output string
-    std::u16string output;
-    output.reserve(m_string.length());
-
-    // Convert
-    Utf32::toUtf16(m_string.begin(), m_string.end(), std::back_inserter(output));
-
-    return output;
-}
-
-
-////////////////////////////////////////////////////////////
-std::u32string String::toUtf32() const
-{
-    return m_string;
-}
-
-
-////////////////////////////////////////////////////////////
 String& String::operator+=(const String& right)
 {
     m_string += right.m_string;
     return *this;
 }
 
-
-////////////////////////////////////////////////////////////
-char32_t String::operator[](std::size_t index) const
-{
-    return m_string[index];
-}
-
-
-////////////////////////////////////////////////////////////
-char32_t& String::operator[](std::size_t index)
-{
-    return m_string[index];
-}
 
 
 ////////////////////////////////////////////////////////////
@@ -293,12 +241,6 @@ String String::substring(std::size_t position, std::size_t length) const
     return m_string.substr(position, length);
 }
 
-
-////////////////////////////////////////////////////////////
-const char32_t* String::getData() const
-{
-    return m_string.c_str();
-}
 
 
 ////////////////////////////////////////////////////////////
