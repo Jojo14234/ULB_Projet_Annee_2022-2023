@@ -18,6 +18,6 @@ void ConnectionGUIView::draw() {
 }
 
 void ConnectionGUIView::clear() {
-		username.clear();
-		password.clear();
+	username.clear();
+	password.clear();
 }

@@ -52,12 +52,12 @@ bool ConnectionGUIController::doPasswordContain(sf::Event event) {
 }
 
 void ConnectionGUIController::loginProcess() {
-    this->model->sendLogin(this->view->username.getText(), this->view->password.getText());
+    this->model->sendLogin(this->view->username.getString(), this->view->password.getString());
     if (this->model->receive() == QUERY::TRUEQ) { this->new_state = STATE::MENU; }
     this->view->clear();
 }
 void ConnectionGUIController::registerProcess() {
-    this->model->sendRegister(this->view->username.getText(), this->view->password.getText());
+    this->model->sendRegister(this->view->username.getString(), this->view->password.getString());
     if (this->model->receive() == QUERY::TRUEQ) { this->new_state = STATE::MENU; }
     this->view->clear();
 }

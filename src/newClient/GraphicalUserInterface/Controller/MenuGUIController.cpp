@@ -122,7 +122,7 @@ void MenuGUIController::createProcess() {
 }
 
 void MenuGUIController::joinProcess() {
-	std::string cmd = "/join " + this->view->join_popup.getInput(0)->getText();
+	std::string cmd = "/join " + this->view->join_popup.getInput(0)->getString();
 	this->model->sendCommand(MainInputParser{cmd});
 	if (this->model->receive() == QUERY::TRUEQ) {
 		this->new_state = STATE::GAME;
@@ -131,6 +131,6 @@ void MenuGUIController::joinProcess() {
 }
 
 bool MenuGUIController::doJoinPopUpNBtnContain(int n, sf::Event event) {
-	this->view->join_popup.getButton(n)->contains(event.mouseButton.x, event.mouseButton.y);
+	return this->view->join_popup.getButton(n)->contains(event.mouseButton.x, event.mouseButton.y);
 }
 
