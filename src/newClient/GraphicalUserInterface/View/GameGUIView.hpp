@@ -20,34 +20,34 @@ class GameGUIView: public AbstractGUIView {
 
 	Box button_zone{ObjectInfo<>(300, window->getSize().y,0,0), sf::Color::Red };
 
-	ImageButton startgame_button{ObjectInfo<>(200, 150 ,50,window->getSize().y/6*0  ), START_BUTTON};
+	ImageButton startgame_button{ObjectInfo<>(200, 100 ,50,window->getSize().y/6*0  ), START_BUTTON};
 
-	ImageButton mortgage_button{ObjectInfo<>(200, 150 ,50,window->getSize().y/6*0  ), MORTGAGE_BUTTON};
-	ImageButton unmortgage_button{ObjectInfo<>(200, 150 ,50, window->getSize().y/6 *1 ), UNMORTGAGE_BUTTON};
-	ImageButton sell_button{ObjectInfo<>(200, 150 ,50, window->getSize().y/6 *2), SELL_BUTTON};
-	ImageButton construct_button{ObjectInfo<>(200, 150 ,50, window->getSize().y/6 * 3), CONSTRUCT_BUTTON};
-	ImageButton exchange_button{ObjectInfo<>(200, 150 ,50, window->getSize().y/6 *4), EXCHANGE_BUTTON};
-	ImageButton roll_dice_button{ObjectInfo<>(200, 150 ,50, window->getSize().y/6  * 5), ROLLDICE_BUTTON};
+	ImageButton mortgage_button{ObjectInfo<>(200, 100 ,50,window->getSize().y/6*0  ), MORTGAGE_BUTTON};
+	ImageButton unmortgage_button{ObjectInfo<>(200, 100 ,50, window->getSize().y/6 *1 ), UNMORTGAGE_BUTTON};
+	ImageButton sell_button{ObjectInfo<>(200, 100 ,50, window->getSize().y/6 *2), SELL_BUTTON};
+	ImageButton construct_button{ObjectInfo<>(200, 100 ,50, window->getSize().y/6 * 3), CONSTRUCT_BUTTON};
+	ImageButton exchange_button{ObjectInfo<>(200, 100 ,50, window->getSize().y/6 *4), EXCHANGE_BUTTON};
+	ImageButton roll_dice_button{ObjectInfo<>(200, 100 ,50, window->getSize().y/6  * 5), ROLLDICE_BUTTON};
 
-	ImageButton buy_button{ObjectInfo<>(200, 150 ,50,window->getSize().y/2*0  ), BUY_BUTTON};
-	ImageButton no_buy_button{ObjectInfo<>(200, 150 ,50,window->getSize().y/2*1  ), NOBUY_BUTTON};
+	ImageButton buy_button{ObjectInfo<>(200, 100 ,50,window->getSize().y/2*0  ), BUY_BUTTON};
+	ImageButton no_buy_button{ObjectInfo<>(200, 100 ,50,window->getSize().y/2*1  ), NOBUY_BUTTON};
 
-	ImageButton draw_card_button{ObjectInfo<>(200, 150 ,50,window->getSize().y/2*0  ), DRAWCARD_BUTTON};
-	ImageButton paid_button{ObjectInfo<>(200, 150 ,50,window->getSize().y/2*1 ), PAID_BUTTON};
+	ImageButton draw_card_button{ObjectInfo<>(200, 100 ,50,window->getSize().y/2*0  ), DRAWCARD_BUTTON};
+	ImageButton paid_button{ObjectInfo<>(200, 100 ,50,window->getSize().y/2*1 ), PAID_BUTTON};
 
-	ImageButton paid_prison_button{ObjectInfo<>(200, 150 ,50,0 ), PAID_BUTTON};
-	ImageButton roll_dice_prison_button{ObjectInfo<>(200, 150 ,50,window->getSize().y/3*1 ), ROLLDICE_BUTTON};
-	ImageButton card_prison_button{ObjectInfo<>(200, 150 ,50,window->getSize().y/3*2 ), PRISONCARD_BUTTON};
+	ImageButton paid_prison_button{ObjectInfo<>(200, 100 ,50,0 ), PAID_BUTTON};
+	ImageButton roll_dice_prison_button{ObjectInfo<>(200, 100 ,50,window->getSize().y/3*1 ), ROLLDICE_BUTTON};
+	ImageButton card_prison_button{ObjectInfo<>(200, 100 ,50,window->getSize().y/3*2 ), PRISONCARD_BUTTON};
 
-	ImageButton yes_exchange_button{ObjectInfo<>(200, 150 ,50,window->getSize().y/3*0 ), YES_BUTTON};
-	ImageButton no_exchange_button{ObjectInfo<>(200, 150 ,50,window->getSize().y/3*1 ), NO_BUTTON};
+	ImageButton yes_exchange_button{ObjectInfo<>(200, 100 ,50,window->getSize().y/3*0 ), YES_BUTTON};
+	ImageButton no_exchange_button{ObjectInfo<>(200, 100 ,50,window->getSize().y/3*1 ), NO_BUTTON};
 
-	ImageButton sell_bankrupt_button{ObjectInfo<>(200, 150 ,50,window->getSize().y/3*0 ), SELL_BUTTON};
-	ImageButton give_up_button{ObjectInfo<>(200, 150 ,50,window->getSize().y/3*1 ), FORFAIT_BUTTON};
+	ImageButton sell_bankrupt_button{ObjectInfo<>(200, 100 ,50,window->getSize().y/3*0 ), SELL_BUTTON};
+	ImageButton give_up_button{ObjectInfo<>(200, 100 ,50,window->getSize().y/3*1 ), FORFAIT_BUTTON};
 
-	ImageButton leave_button{ObjectInfo<>(200, 150 ,50,window->getSize().y/3*3) ,LEAVE_BUTTON};
+	ImageButton leave_button{ObjectInfo<>(200, 100 ,50,window->getSize().y/3*0) ,LEAVE_BUTTON};
 
-	ImageButton participate_button{ObjectInfo<>(200, 150 ,50,window->getSize().y/3*3) ,PARTICIPATE_BUTTON};
+	ImageButton participate_button{ObjectInfo<>(200, 100 ,50,window->getSize().y/3*3) ,PARTICIPATE_BUTTON};
 	
 	std::vector<std::string> colorlist{"red","blue","green","cyan","magenta","yellow"};   //pour tester à enlever
 

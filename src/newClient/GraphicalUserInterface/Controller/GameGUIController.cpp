@@ -81,6 +81,7 @@ void GameGUIController::handle(sf::Event event) {
             else if (this->view->button_mode == "on_prison"){
                 if(this->view->paid_prison_button.contains(event.mouseButton.x, event.mouseButton.y)){
                     this->view->paid_prison_button.playSound();
+                    std::cout << "clicked" << std::endl;
                     GameInputParser parser("/paid");
                     this->model->sendCommand(parser);
                     this->view->setPrisonRound(false);
@@ -118,11 +119,6 @@ void GameGUIController::handle(sf::Event event) {
             else if (this->view->button_mode == "participate_round"){
                 if(this->view->participate_button.contains(event.mouseButton.x, event.mouseButton.y)){//TODO
                         }}
-            else if (this->view->button_mode == "leave_mode"){
-                if(this->view->leave_button.contains(event.mouseButton.x, event.mouseButton.y)){
-                    this->view->setStartRound(true);
-                    this->view->onlyLeaveRound(false);
-                        }}
             else if (this->view->button_mode == "auction_round"){
                 if(this->view->auction_box.getUpButton()->contains(event.mouseButton.x, event.mouseButton.y)){
                     this->view->auction_box.upNumber();
@@ -142,13 +138,6 @@ void GameGUIController::handle(sf::Event event) {
                     this->view->setAuctionRound(false);
                         }}
             if(this->view->board_click == true){
-                if (this->view->leave_button.contains(event.mouseButton.x, event.mouseButton.y)){
-                    GameInputParser parser("/leave");
-                    this->model->sendCommand(parser);
-                    this->view->board.unsetAllGrayed();
-                    this->view->setBoardClickMode(false);
-                    this->view->setStartRound(true);
-                }
                 if (this->view->exchange_mode == true){
                     if(this->view->exchange_box.getUpButton()->contains(event.mouseButton.x, event.mouseButton.y)){
                         this->view->exchange_box.upNumber();}
@@ -159,6 +148,17 @@ void GameGUIController::handle(sf::Event event) {
                         this->model->sendCommand(parser);
                         this->view->board.unsetAllGrayed();
                         this->view->setBoardClickMode(false);
+                        this->view->exchange_mode = false;
+                        this->view->setStartRound(true);}}
+
+                else if(this->view->other_mode == true){
+                    if(this->view->leave_button.contains(event.mouseButton.x, event.mouseButton.y)){
+                        GameInputParser parser("/leave");
+                        std::cout << "clicked" << std::endl;
+                        this->model->sendCommand(parser);
+                        this->view->board.unsetAllGrayed();
+                        this->view->setBoardClickMode(false);
+                        this->view->other_mode = false;
                         this->view->setStartRound(true);}
                 }
                 for(auto& i : *(this->view->board.getBoardButton())){
@@ -209,7 +209,7 @@ void GameGUIController::receiveMsgLoop() {
             case QUERY::INFOS_CARD_CELL_TO_GO :         this->cardCellToGoGU(response); break;
             case QUERY::INFOS_PLAYER_MOVE_ON_CARD_CELL :this->moveOnCardCellGU(response); break;
             case QUERY::INFOS_CARD_DESCRIPTION :        this->drawCardGU(response); break;
-            case QUERY::INFOS_DOUBLE_TURN:              this->view->message_box.setString("Vous recommencez un tour"); this->newTurnGU(response); break;
+            //case QUERY::INFOS_DOUBLE_TURN:              std::cout <<"double?"<<std::endl;this->view->message_box.setString("Vous recommencez un tour"); this->newTurnGU(response); break;
             case QUERY::USELESS_MESSAGE :               break;
 
             case QUERY::INFOS_BUILD_PROP :              this->buildPropertyGU(response); break;
@@ -254,7 +254,9 @@ void GameGUIController::receiveMsgLoop() {
             case QUERY::CANNOT_UNMORTGAGE :             this->view->message_box.setString("Ce terrain ne peut pas etre deshypotheque"); break;
             case QUERY::CANNOT_EXCHANGE :				this->view->message_box.setString("Ce terrain ne peut pas etre echange"); break;
 
-            case QUERY::EXCHANGE_REFUSED :              this->view->message_box.setString("L'echange a ete refuse"); break;
+            case QUERY::EXCHANGE_REFUSED :              {this->view->exchange_mode = true;
+                                                        this->view->setBoardClickMode(true);
+                                                        this->view->message_box.setString("L'echange a ete refuse"); break;}
             case QUERY::INFOS_NOT_ENOUGH_MONEY :        this->view->message_box.setString("Vous ne possedez pas assez d'argent."); break;
             case QUERY::INFOS_AUTO_OTHER_POSSIBILITY:   this->view->message_box.setString("L'autre possibilite a ete automatiquement selectionnee"); break;
             case QUERY::STOP_WAIT :                     this->view->message_box.setString("Pas assez rapide. L'offre a été automatiquement annulee"); break;
@@ -354,9 +356,13 @@ void GameGUIController::infoStartGU(const std::string& response) {
     std::shared_ptr<StartInfo> start_info = launching_parser.parseStartQuery();
     std::cout << "start ok" << std::endl;
     player_nb = start_info->player_nb;
+    std::cout << "start ok1" << std::endl;
     players_username = start_info->player_usernames;
+    std::cout << "start ok2" << std::endl;
     this->view->message_box.setString("La partie commence");
+    std::cout << "start ok3" << std::endl;
     this->startGame(start_info->beginner);
+     std::cout << "start fin" << std::endl;
 }
 
 void GameGUIController::rollDiceGU(const std::string& response){
@@ -486,7 +492,9 @@ void GameGUIController::moveOnTaxCellGU(const std::string& response){
     if (this->model->isMyTurn()) {
         this->view->message_box.setString("Vous arrivez sur la case " + tax_info->tax_name + " :");
     } else {
-        this->view->message_box.setString(players_username[tax_info->player] + " paie ses taxes : ");
+         std::cout << "apagnan" << std::endl;
+        this->view->message_box.setString(players_username[tax_info->player - 1] + " paie ses taxes : ");
+         std::cout << "quoicoubeh" << std::endl;
     }
     std::cout << "grrbaw" << std::endl;
 
@@ -594,7 +602,6 @@ void GameGUIController::buildPropertyGU(const std::string& response){
     if (this->model->isMyTurn()){
         this->view->setSpeRound(true);
         this->view->other_mode = true;
-        this->view->onlyLeaveRound(true);
         std::cout << "build2" << std::endl; 
         this->view->board.setAllGrayed();
         std::cout << "build3" << std::endl; 
@@ -612,7 +619,6 @@ void GameGUIController::sellPropertyGU(const std::string& response){
     if (this->model->isMyTurn()){
         this->view->setSpeRound(true);
         this->view->other_mode = true;
-        this->view->onlyLeaveRound(true);
         this->view->board.setAllGrayed();
         for (auto& property : selection_mode){
             int index = this->view->board.getCellIndex(property);
@@ -628,7 +634,7 @@ void GameGUIController::exchangePropertyGU(const std::string& response){
     std::cout << "echange" << std::endl;
     selection_mode = exchanges.all_properties;
     if (this->model->isMyTurn()){
-        this->view->setSpeRound(true);
+        this->view->board_click= true;
         this->view->exchange_mode = true;
         this->view->exchange_box.setVisible();
         this->view->board.setAllGrayed();
@@ -646,9 +652,9 @@ void GameGUIController::mortgagePropertyGU(const std::string& response){
     InGameParser game_parser(response);
     selection_mode = *game_parser.parseSelectPropertyQuery().get();
     if (this->model->isMyTurn()){
+        std::cout << "hypo1" << std::endl;
         this->view->setSpeRound(true);
         this->view->other_mode = true;
-        this->view->onlyLeaveRound(true);
         this->view->board.setAllGrayed();
         for (auto& property : selection_mode){
             int index = this->view->board.getCellIndex(property);
@@ -663,7 +669,6 @@ void GameGUIController::unmortgagePropertyGU(const std::string& response){
     if (this->model->isMyTurn()){
         this->view->setSpeRound(true);
         this->view->other_mode = true;
-        this->view->onlyLeaveRound(true);
         this->view->board.setAllGrayed();
         for (auto& property : selection_mode){
             int index = this->view->board.getCellIndex(property);
@@ -678,6 +683,7 @@ void GameGUIController::leaveSelectionMenuGU(const std::string& response){
         int index = this->view->board.getCellIndex(property);
         this->view->board.leaveSelection(index);
     }
+    this->view->board.unsetAllGrayed();
 }
 
 
@@ -692,6 +698,8 @@ void GameGUIController::buildOrSellSucceedGU(const std::string& response){
 void GameGUIController::mortgageSucceedGU(const std::string& response){
     InGameParser game_parser(response);
     std::shared_ptr<BuildInfo> success_info = game_parser.parseBuildQuery();
+    this->view->setSpeRound(true);
+    this->view->other_mode = true;
     int index = this->view->board.getCellIndex(success_info->name);
     this->view->board.setMortgaged(index);
 }
@@ -699,6 +707,8 @@ void GameGUIController::mortgageSucceedGU(const std::string& response){
 void GameGUIController::unmortgageSucceedGU(const std::string& response){
     InGameParser game_parser(response);
     std::shared_ptr<BuildInfo> success_info = game_parser.parseBuildQuery();
+    this->view->setSpeRound(true);
+    this->view->other_mode = true;
     int index = this->view->board.getCellIndex(success_info->name);
     this->view->board.unmortgage(index);
 }
@@ -709,6 +719,9 @@ void GameGUIController::exchangeSucceedGU(const std::string & response){
     std::cout << "echange okk" << std::endl;
 	int index = this->view->board.getCellIndex(succeed.property);
     if (this->model->isMyTurn()){
+        std::cout << "echange okk in" << std::endl;
+        this->view->exchange_mode = true;
+        this->view->setBoardClickMode(true);
         this->view->board.leaveSelection(index); 
 	    this->view->board.setPurchased(index, succeed.player -1);}
 }
