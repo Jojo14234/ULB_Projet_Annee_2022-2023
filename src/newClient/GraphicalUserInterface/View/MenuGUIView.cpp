@@ -12,9 +12,12 @@ void MenuGUIView::initSettingsPopup(){
 	settings_popup.addText(new Text{ObjectInfo<>(0, WINDOW_WIDTH/50, WINDOW_WIDTH/4.f, WINDOW_HEIGHT/4+WINDOW_HEIGHT/10.f), "Taille de fenêtre:"});
 	settings_popup.addText(new Text{ObjectInfo<>(0, WINDOW_WIDTH/50, WINDOW_WIDTH/4.f, WINDOW_HEIGHT/4+WINDOW_HEIGHT/10*2.f), "Son:"});
 	settings_popup.addText(new Text{ObjectInfo<>(0, WINDOW_WIDTH/50, WINDOW_WIDTH/4.f, WINDOW_HEIGHT/4+WINDOW_HEIGHT/10*3.f), "Supprimer son compte:"});
-	settings_popup.addButton(new ImageButton{ObjectInfo<>(WINDOW_WIDTH/25.f, WINDOW_HEIGHT/25.f, WINDOW_WIDTH/4.f, WINDOW_HEIGHT/4+WINDOW_HEIGHT/10*5.f-WINDOW_HEIGHT/12.f+WINDOW_HEIGHT/25.f), BACK_BUTTON_PATH});
-	settings_popup.addButton(new ImageButton{ObjectInfo<>(WINDOW_WIDTH/25.f, WINDOW_HEIGHT/25.f, WINDOW_WIDTH/4*3-WINDOW_WIDTH/25.f, WINDOW_HEIGHT/4+WINDOW_HEIGHT/10*5.f-WINDOW_HEIGHT/12.f+WINDOW_HEIGHT/25.f), OK_BUTTON_PATH});
-	std::vector<std::string> window_sizes{"1600 x 900", "1920 x 1080", "2560 x 1600"};
+	//settings_popup.addButton(new ImageButton{ObjectInfo<>(WINDOW_WIDTH/10.f, WINDOW_HEIGHT/10.f, WINDOW_WIDTH/4.f, WINDOW_HEIGHT/4+WINDOW_HEIGHT/10*5.f-WINDOW_HEIGHT/12.f+WINDOW_HEIGHT/25.f), BACK_BUTTON_PATH});
+    settings_popup.addButton(new ImageButton{ObjectInfo<>(WINDOW_WIDTH/6.f, WINDOW_HEIGHT/6.f, WINDOW_WIDTH/2.f - WINDOW_WIDTH/11.f - WINDOW_WIDTH/6.f, WINDOW_HEIGHT - WINDOW_HEIGHT/9), BACK_BUTTON_PATH});
+    //settings_popup.addButton(new ImageButton{ObjectInfo<>(WINDOW_WIDTH/10.f, WINDOW_HEIGHT/10.f, WINDOW_WIDTH/4*3-WINDOW_WIDTH/25.f, WINDOW_HEIGHT/4+WINDOW_HEIGHT/10*5.f-WINDOW_HEIGHT/12.f+WINDOW_HEIGHT/25.f), OK_BUTTON_PATH});
+    settings_popup.addButton(new ImageButton{ObjectInfo<>(WINDOW_WIDTH/6.f, WINDOW_HEIGHT/6.f, WINDOW_WIDTH/2.f + WINDOW_WIDTH/11.f, WINDOW_HEIGHT - WINDOW_HEIGHT/9), OK_BUTTON_PATH});
+
+    std::vector<std::string> window_sizes{"1600 x 900", "1920 x 1080", "2560 x 1600"};
 	DirectionImButton* l_button= new DirectionImButton{ObjectInfo<>(WINDOW_WIDTH/50.f, WINDOW_WIDTH/50.f,(WINDOW_WIDTH/4*3-WINDOW_WIDTH/12.f) - WINDOW_WIDTH/8.f , WINDOW_HEIGHT/4+WINDOW_HEIGHT/10.f), LEFT_BUTTON_PATH};
 	DirectionImButton* r_button= new DirectionImButton{ObjectInfo<>(WINDOW_WIDTH/50.f, WINDOW_WIDTH/50.f, WINDOW_WIDTH/4*3-WINDOW_WIDTH/12.f+WINDOW_WIDTH/50.f, WINDOW_HEIGHT/4+WINDOW_HEIGHT/10.f), RIGHT_BUTTON_PATH};
 	std::vector<DirectionImButton*> buttons_selector{l_button, r_button};
@@ -32,8 +35,10 @@ void MenuGUIView::initCreatePopup(){
 	create_popup.addText(new Text{ObjectInfo<>(0, WINDOW_WIDTH/50, WINDOW_WIDTH/4.f, WINDOW_HEIGHT/6+WINDOW_HEIGHT/10*5.f), "Nombre max de maison:"});
 	create_popup.addText(new Text{ObjectInfo<>(0, WINDOW_WIDTH/50, WINDOW_WIDTH/4.f, WINDOW_HEIGHT/6+WINDOW_HEIGHT/10*6.f), "Nombre max d'hotel:"});
 	create_popup.addText(new Text{ObjectInfo<>(0, WINDOW_WIDTH/50, WINDOW_WIDTH/4.f, WINDOW_HEIGHT/6+WINDOW_HEIGHT/10*7.f), "Durée de la partie:"});
-	create_popup.addButton(new ImageButton{ObjectInfo<>(WINDOW_WIDTH/25.f, WINDOW_HEIGHT/25.f, WINDOW_WIDTH/4.f, WINDOW_HEIGHT/4+WINDOW_HEIGHT/10*5.f-WINDOW_HEIGHT/12.f+WINDOW_HEIGHT/25.f+WINDOW_HEIGHT/4.f), BACK_BUTTON_PATH});
-	create_popup.addButton(new ImageButton{ObjectInfo<>(WINDOW_WIDTH/25.f, WINDOW_HEIGHT/25.f, WINDOW_WIDTH/4*3-WINDOW_WIDTH/25.f, WINDOW_HEIGHT/4+WINDOW_HEIGHT/10*5.f-WINDOW_HEIGHT/12.f+WINDOW_HEIGHT/25.f+WINDOW_HEIGHT/4.f), OK_BUTTON_PATH});
+	//create_popup.addButton(new ImageButton{ObjectInfo<>(WINDOW_WIDTH/25.f, WINDOW_HEIGHT/25.f, WINDOW_WIDTH/4.f, WINDOW_HEIGHT/4+WINDOW_HEIGHT/10*5.f-WINDOW_HEIGHT/12.f+WINDOW_HEIGHT/25.f+WINDOW_HEIGHT/4.f), BACK_BUTTON_PATH});
+	create_popup.addButton(new ImageButton{ObjectInfo<>(WINDOW_WIDTH/6.f, WINDOW_HEIGHT/6.f, WINDOW_WIDTH/2.f - WINDOW_WIDTH/11.f - WINDOW_WIDTH/6.f, WINDOW_HEIGHT - WINDOW_HEIGHT/9), BACK_BUTTON_PATH});
+	//create_popup.addButton(new ImageButton{ObjectInfo<>(WINDOW_WIDTH/35.f, WINDOW_HEIGHT/25.f, WINDOW_WIDTH/4*3-WINDOW_WIDTH/25.f, WINDOW_HEIGHT/4+WINDOW_HEIGHT/10*5.f-WINDOW_HEIGHT/12.f+WINDOW_HEIGHT/25.f+WINDOW_HEIGHT/4.f), OK_BUTTON_PATH});
+	create_popup.addButton(new ImageButton{ObjectInfo<>(WINDOW_WIDTH/6.f, WINDOW_HEIGHT/6.f, WINDOW_WIDTH/2.f + WINDOW_WIDTH/11.f, WINDOW_HEIGHT - WINDOW_HEIGHT/9), OK_BUTTON_PATH});
 
 	std::vector<std::string> game_mode{"classique", "rapide"};
 	std::vector<std::string> start_money{"1500", "2000", "2500", "3000", "888"};

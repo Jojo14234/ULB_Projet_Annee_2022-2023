@@ -17,7 +17,7 @@ class FriendsGUIView: public AbstractGUIView {
 
 	// Objects
 
-	ImageButton back_button{ObjectInfo<>(WINDOW_WIDTH/16.f, WINDOW_HEIGHT/16.f, 0+15,0+15), BACK_BUTTON_PATH};
+	ImageButton back_button{ObjectInfo<>(WINDOW_WIDTH/6.f, WINDOW_HEIGHT/6.f, 0+15,0-15), BACK_BUTTON_PATH};
 
 	//MESSAGE-------------------------------------------------------------- 
 	Box messaging_box{ObjectInfo<>(WINDOW_WIDTH/2.f+WINDOW_WIDTH/6.f, WINDOW_WIDTH/4*2 , WINDOW_WIDTH/25.f , WINDOW_HEIGHT/10.f), WHITE};
