@@ -14,7 +14,6 @@ struct GameParameters {
     int maxHome = MAX_HOME;
     int maxHotel = MAX_HOTEL;
     //todo add params if needed
-    int maxTurn = MAX_TURN;
     int maxTimeForGame = TIMER_NORMAL;
     int maxTimePerTurn = TIMER_TURN_NORMAL;
 
@@ -42,12 +41,9 @@ struct GameParameters {
                     maxHotel = stringToInt(word, MAX_HOTEL_FAST);
                     break;
                 case 4:
-                    maxTurn = stringToInt(word, MAX_TURN);
-                    break;
-                case 5:
                     maxTimeForGame = stringToInt(word, TIMER_FAST);
                     break;
-                case 6:
+                case 5:
                     maxTimePerTurn = stringToInt(word, TIMER_TURN_NORMAL);
                     break;
                 default :
@@ -75,12 +71,9 @@ struct GameParameters {
                     maxHotel = stringToInt(word, MAX_HOTEL);
                     break;
                 case 4:
-                    maxTurn = stringToInt(word, MAX_TURN);
-                    break;
-                case 5:
                     maxTimeForGame = stringToInt(word, TIMER_NORMAL);
                     break;
-                case 6:
+                case 5:
                     maxTimePerTurn = stringToInt(word, TIMER_TURN_NORMAL);
                     break;
                 default :
@@ -107,7 +100,8 @@ struct GameParameters {
         res += std::to_string(maxPlayers) + ":";
         res += std::to_string(maxHome) + ":";
         res += std::to_string(maxHotel) + ":";
-        res += std::to_string(maxTurn);
+        res += std::to_string(maxTimeForGame) + ":";
+        res += std::to_string(maxTimePerTurn);
         return res;
     }
 };

@@ -112,7 +112,6 @@ public:
     int getMaxPlayers();
     int getMaxHome();
     int getMaxHotels();
-    int getMaxTurns();
 
     void forceAcquisition(Player *player);
 

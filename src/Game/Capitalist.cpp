@@ -578,4 +578,3 @@ int Capitalist::getMaxHome() { return params.maxHome; }
 
 int Capitalist::getMaxHotels() { return params.maxHotel; }
 
-int Capitalist::getMaxTurns() { return params.maxTurn; }

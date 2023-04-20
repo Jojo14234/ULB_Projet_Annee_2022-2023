@@ -52,8 +52,7 @@ void GameServer::clientJoinGameInfos(ClientManager &client) {
     std::string str = client.getUsername() + ":" + std::to_string(this->getCode()) + ":" +
                       std::to_string(game.isFastGame()) + ":" + std::to_string(game.getStartMoney()) + ":" + 
                       std::to_string(game.getMaxPlayers()) + ":" + std::to_string(game.getMaxHome()) + ":" + 
-                      std::to_string(game.getMaxHotels()) + ":" + std::to_string(game.getMaxTurns()) + ":" +
-                      std::to_string(this->clients.size()) + ":";
+                      std::to_string(game.getMaxHotels()) + ":" + std::to_string(this->clients.size()) + ":";
     for (size_t i = 0; i < this->clients.size(); i++){
         str += this->clients[i]->getUsername();
         if (i != this->clients.size()-1) str += ":"; 
@@ -247,7 +246,7 @@ GameStats GameServer::clientLoop(ClientManager &client) {
     updateThisClientWithQuery(QUERY::ENDGAME, "", client);
 
     // RETURN STATS for winner and looser.
-    if ( this->game.getWinner() == &client ) { return GameStats{(int)this->clients.size(), 1, 1}; }
+    if ( this->game.getWinner(true) == &client ) { return GameStats{(int)this->clients.size(), 1, 1}; }
     else { return GameStats{client.getScore(), 1, 0}; }
 }
 
@@ -318,7 +317,7 @@ void GameServer::processStart(ClientManager* client) {
         for (auto p : this->game.getPlayersAsPointers()){
             game.forceAcquisition(p);
             checkAndManageBankruptcy(*p->getClient(), p);
-            updateAllClients("La durée de cette partie est limitée à " + std:to_string(params.maxTimeForGame / 60) + " minutes. Au-delà de ce délai, le joueur avec le plus important patrimoine gagnera.")
+            updateAllClients("La durée de cette partie est limitée à " + std::to_string(params.maxTimeForGame / 60) + " minutes. Au-delà de ce délai, le joueur avec le plus important patrimoine gagnera.");
             for (auto client : clients) {
                 Timer2(params.maxTimeForGame, client, "Le temps maximal de la partie est écoulé.", QUERY::GAME_MUST_END);
             }
