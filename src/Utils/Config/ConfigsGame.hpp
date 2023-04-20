@@ -10,7 +10,8 @@ const auto BOARD_SIZE = 40;
 
 const int PRISON_INDEX = 10;
 const int TIMER_NORMAL = 9999999;
-const int TIMER_TURN_NORMAL = 300;
+const int TIMER_FAST = 3600;
+const int TIMER_TURN = 300;
 
 // Chemin fichier JSON
 const std::string CARD_DATA = "Game/Board/Obtainable/data/card_data.json";
@@ -29,4 +30,3 @@ const int MAX_TURN = 1000;
 const auto STARTING_MONEY_FAST = 3000; //dans les règles
 const int MAX_HOTEL_FAST = 9999;
 const int MAX_HOME_FAST = 9999;
-const int TIMER_FAST = 3600;

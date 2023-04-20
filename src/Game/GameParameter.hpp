@@ -15,7 +15,7 @@ struct GameParameters {
     int maxHotel = MAX_HOTEL;
     //todo add params if needed
     int maxTimeForGame = TIMER_NORMAL;
-    int maxTimePerTurn = TIMER_TURN_NORMAL;
+    int maxTimePerTurn = TIMER_TURN;
 
     GameParameters(bool isFast, std::string str) {
         if (isFast) { this->initFastParams(str); }
@@ -44,7 +44,7 @@ struct GameParameters {
                     maxTimeForGame = stringToInt(word, TIMER_FAST);
                     break;
                 case 5:
-                    maxTimePerTurn = stringToInt(word, TIMER_TURN_NORMAL);
+                    maxTimePerTurn = stringToInt(word, TIMER_TURN);
                     break;
                 default :
                     break;
@@ -74,7 +74,7 @@ struct GameParameters {
                     maxTimeForGame = stringToInt(word, TIMER_NORMAL);
                     break;
                 case 5:
-                    maxTimePerTurn = stringToInt(word, TIMER_TURN_NORMAL);
+                    maxTimePerTurn = stringToInt(word, TIMER_TURN);
                     break;
                 default :
                     break;
