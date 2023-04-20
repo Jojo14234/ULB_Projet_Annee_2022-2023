@@ -52,8 +52,7 @@ void GameServer::clientJoinGameInfos(ClientManager &client) {
     std::string str = client.getUsername() + ":" + std::to_string(this->getCode()) + ":" +
                       std::to_string(game.isFastGame()) + ":" + std::to_string(game.getStartMoney()) + ":" + 
                       std::to_string(game.getMaxPlayers()) + ":" + std::to_string(game.getMaxHome()) + ":" + 
-                      std::to_string(game.getMaxHotels()) + ":" + std::to_string(game.getMaxTurns()) + ":" +
-                      std::to_string(this->clients.size()) + ":";
+                      std::to_string(game.getMaxHotels()) + ":" + std::to_string(this->clients.size()) + ":";
     for (size_t i = 0; i < this->clients.size(); i++){
         str += this->clients[i]->getUsername();
         if (i != this->clients.size()-1) str += ":"; 
@@ -214,8 +213,9 @@ GameStats GameServer::clientLoop(ClientManager &client) {
         }
     }
 
-    // LOOP UNTIL THERE IS A WINNER
-    while ( this->game.getWinner() == nullptr ) {
+    // LOOP UNTIL THERE IS A WINNER OR TIMER IS DONE (only applies de fast games unless passed as a param)
+    Timer3 timer{params.maxTimeForGame};
+    while ( this->game.getWinner(timer.isFinish()) == nullptr) {
 
         // POSSIBLE ACTION IF IT IS THE CLIENT TURN
         if (this->game.getCurrentPlayer()->getClient() == &client) {
@@ -239,14 +239,19 @@ GameStats GameServer::clientLoop(ClientManager &client) {
             sleep(1); // fait moins lag
         }
     }
+
+    if (timer.isFinish()) {
+        updateAllClientsWithQuery(QUERY::GAME_TIME_EXPIRED, "");
+    }
+    
     // STOP THE GAME
     this->game.setRunning(false);
     // allow client to get out of the receiveFromServerLoop and SendToServerLoop
-    updateThisClientWithQuery(QUERY::WIN, this->game.getWinner()->getUsername(), client);
+    updateThisClientWithQuery(QUERY::WIN, this->game.getWinner(timer.isFinish())->getUsername(), client);
     updateThisClientWithQuery(QUERY::ENDGAME, "", client);
 
     // RETURN STATS for winner and looser.
-    if ( this->game.getWinner() == &client ) { return GameStats{(int)this->clients.size(), 1, 1}; }
+    if ( this->game.getWinner(true) == &client ) { return GameStats{(int)this->clients.size(), 1, 1}; }
     else { return GameStats{client.getScore(), 1, 0}; }
 }
 
@@ -255,13 +260,25 @@ GameStats GameServer::clientLoop(ClientManager &client) {
  */
 void GameServer::clientTurn(ClientManager &client, Player* me) {
 
-    while ( !me->hasRolled() and me->getStatus() != PLAYER_STATUS::LOST) {
-        GAME_QUERY_TYPE query = this->getGameQuery(client);
-        if ( query == GAME_QUERY_TYPE::BUILD )          { this->processBuild(client, me); continue; }
-        if ( query == GAME_QUERY_TYPE::SELL_BUILDINGS ) { this->processSellBuild(client, me); continue; }
-        if ( query == GAME_QUERY_TYPE::MORTGAGE )       { this->processMortgage(client, me); continue; }
-        if ( query == GAME_QUERY_TYPE::LIFT_MORTGAGE )  { this->processLiftMortgage(client, me); continue; }
-        if ( query == GAME_QUERY_TYPE::EXCHANGE )       { this->processExchange(client, me); continue; }
+    GAME_QUERY_TYPE query;
+    alarm(params.maxTimePerTurn);
+
+    while ( !me->hasRolled() and me->getStatus() != PLAYER_STATUS::LOST and query != GAME_QUERY_TYPE::TIME_EXPIRED ) {
+
+        try {
+
+            query = this->getGameQuery(client);
+
+            if ( query == GAME_QUERY_TYPE::BUILD )          { this->processBuild(client, me); continue; }
+            if ( query == GAME_QUERY_TYPE::SELL_BUILDINGS ) { this->processSellBuild(client, me); continue; }
+            if ( query == GAME_QUERY_TYPE::MORTGAGE )       { this->processMortgage(client, me); continue; }
+            if ( query == GAME_QUERY_TYPE::LIFT_MORTGAGE )  { this->processLiftMortgage(client, me); continue; }
+            if ( query == GAME_QUERY_TYPE::EXCHANGE )       { this->processExchange(client, me); continue; }
+
+        }
+        catch (const ReadPipeServerException &exception) {
+            query = GAME_QUERY_TYPE::TIME_EXPIRED;
+        }
 
 
         if ( query == GAME_QUERY_TYPE::ROLL_DICE ) {
@@ -278,9 +295,17 @@ void GameServer::clientTurn(ClientManager &client, Player* me) {
             if (! me->hasRolled()) client.getGameServer()->updateAllClientsWithQuery(QUERY::INFOS_DOUBLE_TURN, "");
         }
     }
+
+    if ( query != GAME_QUERY_TYPE::TIME_EXPIRED ) {
+        alarm(0);
+    }
+    else {
+        client.sendQueryMsg("", QUERY::TURN_TIME_EXPIRED);
+    }
+
     // End of the turn
     this->game.getDice().resetDoubleCounter();
-    if ( game.isFastGame() ){
+    if ( game.isFastGame() ) {
         me->pay(20, true);
         checkAndManageBankruptcy(client, me);
     }
@@ -290,7 +315,7 @@ void GameServer::clientTurn(ClientManager &client, Player* me) {
 
 }
 
-void GameServer::checkAndManageBankruptcy(ClientManager &client, Player* me){
+void GameServer::checkAndManageBankruptcy(ClientManager &client, Player* me) {
     if ( me->getStatus() == PLAYER_STATUS::BANKRUPT_SUSPECTED ) { this->suspectBankrupt(me); }
     if ( me->getStatus() == PLAYER_STATUS::DEBT ) { this->processPayDebt(client, me); }
     if ( me->getStatus() == PLAYER_STATUS::BANKRUPT_CONFIRMED ) { this->processBankrupt(client, me); }
@@ -317,6 +342,10 @@ void GameServer::processStart(ClientManager* client) {
         for (auto p : this->game.getPlayersAsPointers()){
             game.forceAcquisition(p);
             checkAndManageBankruptcy(*p->getClient(), p);
+            updateAllClients("La durée de cette partie est limitée à " + std::to_string(params.maxTimeForGame / 60) + " minutes. Au-delà de ce délai, le joueur avec le plus important patrimoine gagnera.");
+            for (auto client : clients) {
+                Timer2(params.maxTimeForGame, client, "Le temps maximal de la partie est écoulé.", QUERY::GAME_MUST_END);
+            }
         }
     }
 }

@@ -97,4 +97,7 @@ enum class QUERY {
     RANKING_POS,
     WIN, // username
     ENDGAME, // TO leave the game
+    GAME_MUST_END, //client must send request to end game to server (used with a timer)
+    TURN_TIME_EXPIRED,
+    GAME_TIME_EXPIRED,
 };
