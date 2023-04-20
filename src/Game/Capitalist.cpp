@@ -213,6 +213,13 @@ std::vector<Player>* Capitalist::getPlayers(){
     return &this->players;
 }
 
+std::vector<Player *> Capitalist::getPlayersAsPointers() {
+    std::vector<Player*> player_pointers;
+    for (auto &player : this->players){
+        player_pointers.push_back(&player);
+    }
+    return player_pointers;
+}
 /*
  * Return the address of the player by matching the address of the clientManager
  * If don't find the client return nullptr

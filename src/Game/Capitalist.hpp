@@ -50,6 +50,7 @@ public:
     void addPlayer(ClientManager &client);
     void removePlayer(ClientManager &client);
     std::vector<Player>* getPlayers();
+    std::vector<Player*> getPlayersAsPointers();
     Player* getPlayer(ClientManager &client);
     Player* getCurrentPlayer();
     int getPlayersSize();

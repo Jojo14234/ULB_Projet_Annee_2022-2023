@@ -314,9 +314,9 @@ void GameServer::processStart(ClientManager* client) {
     this->sendStartData();
 
     if ( game.isFastGame() ){
-        for (auto p : *(this->game.getPlayers())){
-            game.forceAcquisition(&p);
-            checkAndManageBankruptcy(*p.getClient(), &p);
+        for (auto p : this->game.getPlayersAsPointers()){
+            game.forceAcquisition(p);
+            checkAndManageBankruptcy(*p->getClient(), p);
         }
     }
 }
