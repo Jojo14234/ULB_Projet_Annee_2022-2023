@@ -72,6 +72,7 @@ enum class GAME_QUERY_TYPE {
     YES,
     NO,
     TIME_EXPIRED,
+    USELESS_QUERY,
 
 	ARG1, // temp
 	ARG2, // temp

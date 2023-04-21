@@ -50,6 +50,7 @@ public:
 	void infoGameGU(const std::string& response);
 	void newTurnGU(const std::string& response);
 	void newTurnInJailGU(const std::string& response);
+	void doubleTurnGU(const std::string& response);
 	void playerMoveGU(const std::string& response);
 	void playerBoughtGU(const std::string& response);
 	void playerPaidPlayerGU(const std::string& response);

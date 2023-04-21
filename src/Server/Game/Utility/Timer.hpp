@@ -95,22 +95,29 @@ class Timer3 {
     int duration;
 
 public:
-    Timer3(int duration):duration{duration} {this->start();}
+    Timer3(int duration):duration{duration} { this->start(); }
 
     void start() {
+        // 1 il faut créer un autre thread
+        std::thread timer_thread(&Timer3::timer, this);
+        timer_thread.detach();
+    }
+
+    void timer() {
         // 2 il faut générer une seed aléatoire
         std::srand(0);
         int random_seed = std::rand();
+
         this->seed = random_seed;
 
         // 2 il faut l'envoyer dans une fonction qui sleep pendant duration sec
         sleep(this->duration);
 
         // 3 a la fin du thread, on compare si les seed sont toujours identiques, auquel cas
-        if (this->seed == random_seed) { this->seed = 0; }
+        if (this->seed == random_seed) { this->seed = -1; }
     }
 
-    bool isFinish() { return this->seed == 0; }
+    bool isFinish() {  return this->seed == -1; }
 };
 
 #endif //INFO_F209_GR5_2022_TIMER_HPP

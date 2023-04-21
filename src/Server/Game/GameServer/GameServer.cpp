@@ -280,7 +280,6 @@ void GameServer::clientTurn(ClientManager &client, Player* me) {
             query = GAME_QUERY_TYPE::TIME_EXPIRED;
         }
 
-
         if ( query == GAME_QUERY_TYPE::ROLL_DICE ) {
             // Lancement de dés + dép + action_cell
             this->processRollDice(client, me);
