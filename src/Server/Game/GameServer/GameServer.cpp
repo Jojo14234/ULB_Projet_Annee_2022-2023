@@ -721,10 +721,7 @@ void GameServer::processPayDebt(ClientManager &client, Player *player) {
         if ( query == GAME_QUERY_TYPE::SELL_BUILDINGS ) { this->processSellBuild(client, player); continue; }
         if ( query == GAME_QUERY_TYPE::MORTGAGE )       { this->processMortgage(client, player); continue; }
     }
-
-    if ( player->isBankruptToPlayer() ) {
-        player->getPlayerToRefund()->receive(player->getDebt());
-    }
+    
     player->pay(player->getDebt(), true);
     player->resetDebt();
 }
