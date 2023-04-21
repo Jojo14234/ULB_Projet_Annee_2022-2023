@@ -370,7 +370,8 @@ void Server::clientProcessSendMessage(ClientManager &client) {
     // Sending message
     if (success) { database.sendMsg(client.getAccount(), user, client.getS2()); }
 
-    client.send("");
+    //client.send("");
+    client.sendQueryMsg("", static_cast<QUERY>(success));
     ServerSentence::SendMessage(client.getUsername(), client.getS1(), success);
 }
 

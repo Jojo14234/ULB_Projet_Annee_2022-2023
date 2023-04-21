@@ -80,6 +80,9 @@ void FriendsGUIController::handle(sf::Event event) {
 			if (this->view->friend_list.contains(event.mouseWheel.x, event.mouseWheel.y)) {
 				if (event.mouseWheel.delta > 0) this->view->friend_list.scrollUp();
 				else this->view->friend_list.scrollDown();
+			} else if (this->view->msg_box.contains(event.mouseWheel.x, event.mouseWheel.y)) {
+				if (event.mouseWheel.delta > 0) this->view->friend_list.scrollUp();
+				else this->view->friend_list.scrollDown();
 			}
 		}
 		default: break;
