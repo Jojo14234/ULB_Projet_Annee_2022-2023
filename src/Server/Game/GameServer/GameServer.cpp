@@ -635,6 +635,7 @@ void GameServer::processAuction(Player *me, Land* land) {
             if (player->getStatus() != PLAYER_STATUS::WAITING_FOR_AUCTION_TURN || player == futur_owner) { continue; }
             player->setStatus(PLAYER_STATUS::AUCTION_TURN);
 
+            player->getClient()->sendQueryMsg("", QUERY::YOUR_AUCTION_TURN);
             player->getClient()->sendQueryMsg(":"+std::to_string(starting_bid), QUERY::INFOS_AUCTION_BID);
 
             GAME_QUERY_TYPE query;
