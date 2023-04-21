@@ -24,7 +24,7 @@ class InfoBox: public Image{
     public:
         InfoBox(ObjectInfo <>info): AbstractViewObject{info}, Image{info,INFOBOX_PATH}{
             for(int i =0; i< 6; i++){
-                pseudo_list.push_back(std::make_shared<Text>(ObjectInfo<>(0,18,info.getX() + 400 - 370  , info.getY() + (i * 60) +30), ""));
+                pseudo_list.push_back(std::make_shared<Text>(ObjectInfo<>(0,WINDOW_HEIGHT/40.f,info.getX() + WINDOW_WIDTH/53.33f , info.getY() + (i * 60) + WINDOW_HEIGHT/30.f), ""));
                 pseudo_list[i]->setBold();
             }
         }
@@ -49,7 +49,7 @@ class InfoBox: public Image{
                 else if (colorlist[i] == "cyan"){ color =  sf::Color::Cyan;}
                 else if (colorlist[i] == "yellow"){ color = sf::Color::Yellow;}
 
-                allmoney.push_back(std::make_shared<Money>(ObjectInfo<>(80,40,info.getX() + 400 - 240  , info.getY() + (i * 60) +30), color, start_money));
+                allmoney.push_back(std::make_shared<Money>(ObjectInfo<>(WINDOW_WIDTH/20.f,WINDOW_HEIGHT/22.5f ,info.getX() + WINDOW_WIDTH/10.f, info.getY() + (i * 60) + WINDOW_HEIGHT/30.f), color, start_money));
                 }}
 
         void initJailcard(int n_player, int jail_card){
@@ -64,8 +64,8 @@ class InfoBox: public Image{
                 else if (colorlist[i] == "cyan"){  path = KEYCYAN_PATH;}
                 else if (colorlist[i] == "yellow"){ path = KEYYELLOW_PATH;}
 
-                alljailcard.push_back(std::make_shared<Image>(ObjectInfo<>(80,40,info.getX() + 400 - 115  , info.getY() + (i * 60) +30), path));
-                jail_card_nb.push_back(std::make_shared<Text>(ObjectInfo<>(0,24,info.getX() + 400 - 115  , info.getY() + (i * 60) +30), std::to_string(jail_card)));
+                alljailcard.push_back(std::make_shared<Image>(ObjectInfo<>(WINDOW_WIDTH/20.f ,WINDOW_HEIGHT/22.5f ,info.getX() + WINDOW_WIDTH/5.5f , info.getY() + (i * 60) + WINDOW_HEIGHT/30.f), path));
+                jail_card_nb.push_back(std::make_shared<Text>(ObjectInfo<>(0,WINDOW_HEIGHT/37.5f ,info.getX() + WINDOW_WIDTH/5.5f , info.getY() + (i * 60) + WINDOW_HEIGHT/30.f), std::to_string(jail_card)));
                 jc_nb.push_back(jail_card);
             }
         }

@@ -9,11 +9,11 @@
 
 
 class ExchangeBox: public  ModalBox{
-    ImageButton up{ObjectInfo<>(90,90,20,400),UP_BUTTON};
-    ImageButton down{ObjectInfo<>(90,90,190,400),DOWN_BUTTON};
-    Image zone{ObjectInfo<>(250,300,25,100),TEXT_AUCTION};
-    ImageButton leave{ObjectInfo<>(150,100,75,650),LEAVE_BUTTON};
-    Text number{ObjectInfo<>(0,60,35,210),""};
+    ImageButton up{ObjectInfo<>(WINDOW_WIDTH/17.78f ,WINDOW_HEIGHT/10.f ,WINDOW_WIDTH/80.f ,WINDOW_HEIGHT/2.25f),UP_BUTTON};
+    ImageButton down{ObjectInfo<>(WINDOW_WIDTH/17.78f ,WINDOW_HEIGHT/10.f ,WINDOW_WIDTH/8.42f ,WINDOW_HEIGHT/2.25f),DOWN_BUTTON};
+    Image zone{ObjectInfo<>(WINDOW_WIDTH/6.4f ,WINDOW_HEIGHT/3.f ,WINDOW_WIDTH/64.f ,WINDOW_HEIGHT/9.f),TEXT_AUCTION};
+    ImageButton leave{ObjectInfo<>(WINDOW_WIDTH/10.67f ,WINDOW_HEIGHT/9.f ,WINDOW_WIDTH/21.33f ,WINDOW_HEIGHT/1.384f),LEAVE_BUTTON};
+    Text number{ObjectInfo<>(0 ,WINDOW_HEIGHT/15.f ,WINDOW_WIDTH/45.71f ,WINDOW_HEIGHT/4.285f),""};
 
     int nb = 0;
 
