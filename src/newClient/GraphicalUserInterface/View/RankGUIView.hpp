@@ -41,7 +41,7 @@ class RankGUIView: public AbstractGUIView {
 	Image my_rank_box{ObjectInfo<>(WINDOW_WIDTH/4.f + WINDOW_WIDTH/8.f, WINDOW_HEIGHT/6.f + WINDOW_HEIGHT/60.f, WINDOW_WIDTH/3.f - WINDOW_WIDTH/53.33f , WINDOW_HEIGHT/3.f), MY_RANK_PATH};
 
 	//Image Button
-	ImageButton back_button{ObjectInfo<>(WINDOW_WIDTH/6.f, WINDOW_HEIGHT/6.f, WINDOW_WIDTH/4.f + WINDOW_WIDTH/160.f ,WINDOW_HEIGHT/7.f), BACK_BUTTON_PATH};
+	ImageButton back_button{ObjectInfo<>(WINDOW_WIDTH/10.f, WINDOW_HEIGHT/4.f, WINDOW_WIDTH/4.f + WINDOW_WIDTH/200.f ,WINDOW_HEIGHT/20.f), BACK_BUTTON_PATH};
 
 	//TextButtons
 	// (ObjectInfo<>(width, height, x, y) de la box, ObjectInfo<>(width, height, x, y) du texte, text, text_color, background_color
