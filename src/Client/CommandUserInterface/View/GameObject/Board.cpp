@@ -94,3 +94,8 @@ void Board::leaveSelection(int cell) { board[cell]->leaveSpecialMode(); }
 
 void Board::unmortgage(int cell) { board[cell]->unmortgage(); }
 
+
+void Board::clearAll() {
+	for (auto cell : board) cell->clearAll();
+}
+

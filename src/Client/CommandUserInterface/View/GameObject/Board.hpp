@@ -70,6 +70,8 @@ public:
 	void leaveSelection(int cell);
 	void unmortgage(int cell);
 
+	void clearAll();
+
 };
 
 #endif

@@ -24,3 +24,12 @@ void GameCUIView::draw() {
     its_your_turn.draw();
     this->am.unlockWriter();
 }
+
+void GameCUIView::clearAll(){
+    board.clearAll();
+    dice1.clearResult();
+    dice2.clearResult();
+    info.clear();
+    chat.clear();
+    console.clear();
+}

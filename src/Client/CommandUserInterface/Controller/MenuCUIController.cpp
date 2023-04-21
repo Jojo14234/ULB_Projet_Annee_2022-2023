@@ -33,8 +33,7 @@ void MenuCUIController::handle(int event) {
 			MainInputParser parser(this->view->console.getInput());
 			std::string response;
 			if (this->model->sendCommand(parser)) { /*QUERY query =*/ this->model->receive(response); }
-			else { response = "La commande n'existe pas"; }
-			this->view->console.addText(response);
+			else { response = "La commande n'existe pas"; this->view->console.addText(response); }
 
 
 			if (parser.getQuery() == QUERY_TYPE::CREATE_GAME) {

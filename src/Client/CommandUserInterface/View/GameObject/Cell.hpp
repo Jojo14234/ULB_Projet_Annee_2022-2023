@@ -69,6 +69,11 @@ public :
 		owner = 0;
 	}
 
+	void clearAll(){
+		texts.at(1).clear();
+		setIdle();
+	}
+
 	void setBuilding(int nb){
 		if (nb == 0) { setOwner(owner); return; }
 

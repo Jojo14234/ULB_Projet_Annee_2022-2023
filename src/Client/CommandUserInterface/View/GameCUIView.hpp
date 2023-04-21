@@ -106,4 +106,6 @@ public:
         its_your_turn.setVisible();
     }
 
+    void clearAll();
+
 };
