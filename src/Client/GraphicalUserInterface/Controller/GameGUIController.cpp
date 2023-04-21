@@ -194,54 +194,53 @@ void GameGUIController::receiveMsgLoop() {
        
         std::string response;
         QUERY query = this->model->receive(response);
-        std::cout << "->" << response << std::endl;
 
         switch(query) {
-            case QUERY::PLAYER_CREATE_GAME :            std::cout<<"&&"<<"a"<<std::endl;this->createGameGU(response); break;
-            case QUERY::PLAYER_JOIN_GAME :              std::cout<<"&&"<<"b"<<std::endl;this->joinGameGU(response);break;
-            case QUERY::INFOS_START :                   std::cout<<"&&"<<"c"<<std::endl;this->infoStartGU(response); break;
-            case QUERY::INFOS_NOT_STARTED :             std::cout<<"&&"<<"d"<<std::endl;this->view->message_box.setString("Pour demarrer la partie, appuie sur start)"); break;
-            case QUERY::INFOS_CANNOT_START :            std::cout<<"&&"<<"e"<<std::endl;this->view->message_box.setString("Attend tes amis avant de lancer la partie !"); this->view->setStartGame(true);break;
-            case QUERY::INFOS_ROLL_DICE :               std::cout<<"&&"<<"f"<<std::endl;this->rollDiceGU(response); break;
+            case QUERY::PLAYER_CREATE_GAME :            this->createGameGU(response); break;
+            case QUERY::PLAYER_JOIN_GAME :              this->joinGameGU(response);break;
+            case QUERY::INFOS_START :                   this->infoStartGU(response); break;
+            case QUERY::INFOS_NOT_STARTED :             this->view->message_box.setString("Pour demarrer la partie, appuie sur start)"); break;
+            case QUERY::INFOS_CANNOT_START :            this->view->message_box.setString("Attend tes amis avant de lancer la partie !"); this->view->setStartGame(true);break;
+            case QUERY::INFOS_ROLL_DICE :               this->rollDiceGU(response); break;
             case QUERY::INFOS_GAME :                    //std::cout<<"&&"<<"g"<<std::endl;this->infoGameGU(response); break;
-            case QUERY::INFOS_NEW_TURN :                std::cout<<"&&"<<"h"<<std::endl;this->newTurnGU(response); break;
-            case QUERY::INFOS_NEW_TURN_IN_JAIL:         std::cout<<"&&"<<"i"<<std::endl;this->newTurnInJailGU(response); break;
-            case QUERY::INFOS_PLAYER_MOVE :             std::cout<<"&&"<<"j"<<std::endl;std::cout<<"move"<<std::endl;this->playerMoveGU(response); break;
-            case QUERY::INFOS_PLAYER_BOUGHT :           std::cout<<"&&"<<"k"<<std::endl;;this->playerBoughtGU(response); break;
-            case QUERY::INFOS_PLAYER_PAID_PLAYER :      std::cout<<"&&"<<"l"<<std::endl;this->playerPaidPlayerGU(response); break;
-            case QUERY::INFOS_PLAYER_MOVE_ON_MORTGAGED_CELL: std::cout<<"&&"<<"m"<<std::endl;this->moveOnMortgagedCellGU(response); break;
-            case QUERY::INFOS_PLAYER_MOVE_ON_TAX_CELL : std::cout<<"&&"<<"n"<<std::endl;this->moveOnTaxCellGU(response); break;
-            case QUERY::INFOS_PLAYER_GO_OUT_PRISON :    std::cout<<"&&"<<"o"<<std::endl;this->goOutPrisonGU(response); break;
-            case QUERY::INFOS_PLAYER_SEND_TO_PRISON :   std::cout<<"&&"<<"p"<<std::endl;this->sendPrisonGU(response); break;
-            case QUERY::GET_GO_OUT_JAIL_CARD :          std::cout<<"&&"<<"q"<<std::endl;this->getGoOutJailCardGU(response); break;
-            case QUERY::LOST_GO_OUT_JAIL_CARD :         std::cout<<"&&"<<"r"<<std::endl;this->loseGoOutJailCardGU(response); break;
-            case QUERY::INFOS_PLAYER_WON_MONEY :        std::cout<<"&&"<<"s"<<std::endl;this->wonMoneyGU(response); break;
-            case QUERY::INFOS_PLAYER_LOSE_MONEY :       std::cout<<"&&"<<"t"<<std::endl;this->loseMoneyGU(response);break;
-            case QUERY::INFOS_CARD_CELL_TO_GO :         std::cout<<"&&"<<"u"<<std::endl;this->cardCellToGoGU(response); break;
-            case QUERY::INFOS_PLAYER_MOVE_ON_CARD_CELL :std::cout<<"&&"<<"v"<<std::endl;this->moveOnCardCellGU(response); break;
-            case QUERY::INFOS_CARD_DESCRIPTION :        std::cout<<"&&"<<"w"<<std::endl;this->drawCardGU(response); break;
+            case QUERY::INFOS_NEW_TURN :                this->newTurnGU(response); break;
+            case QUERY::INFOS_NEW_TURN_IN_JAIL:         this->newTurnInJailGU(response); break;
+            case QUERY::INFOS_PLAYER_MOVE :             this->playerMoveGU(response); break;
+            case QUERY::INFOS_PLAYER_BOUGHT :           this->playerBoughtGU(response); break;
+            case QUERY::INFOS_PLAYER_PAID_PLAYER :      this->playerPaidPlayerGU(response); break;
+            case QUERY::INFOS_PLAYER_MOVE_ON_MORTGAGED_CELL: this->moveOnMortgagedCellGU(response); break;
+            case QUERY::INFOS_PLAYER_MOVE_ON_TAX_CELL : this->moveOnTaxCellGU(response); break;
+            case QUERY::INFOS_PLAYER_GO_OUT_PRISON :    this->goOutPrisonGU(response); break;
+            case QUERY::INFOS_PLAYER_SEND_TO_PRISON :   this->sendPrisonGU(response); break;
+            case QUERY::GET_GO_OUT_JAIL_CARD :          this->getGoOutJailCardGU(response); break;
+            case QUERY::LOST_GO_OUT_JAIL_CARD :         this->loseGoOutJailCardGU(response); break;
+            case QUERY::INFOS_PLAYER_WON_MONEY :        this->wonMoneyGU(response); break;
+            case QUERY::INFOS_PLAYER_LOSE_MONEY :       this->loseMoneyGU(response);break;
+            case QUERY::INFOS_CARD_CELL_TO_GO :         this->cardCellToGoGU(response); break;
+            case QUERY::INFOS_PLAYER_MOVE_ON_CARD_CELL :this->moveOnCardCellGU(response); break;
+            case QUERY::INFOS_CARD_DESCRIPTION :        this->drawCardGU(response); break;
             case QUERY::INFOS_DOUBLE_TURN:              this->doubleTurnGU(response);break;
-            case QUERY::USELESS_MESSAGE :               std::cout<<"&&"<<"x"<<std::endl; break;
+            case QUERY::USELESS_MESSAGE :               break;
 
-            case QUERY::INFOS_BUILD_PROP :              std::cout<<"&&"<<"y"<<std::endl;this->buildPropertyGU(response); break;
-            case QUERY::INFOS_SELL_BUILD :              std::cout<<"&&"<<"z"<<std::endl;this->sellPropertyGU(response); break;
-            case QUERY::INFOS_MORTGAGEABLE_PROP :       std::cout<<"&&"<<"A"<<std::endl;this->mortgagePropertyGU(response); break;
-            case QUERY::INFOS_LIFT_MORTGAGEABLE_PROP :  std::cout<<"&&"<<"B"<<std::endl;this->unmortgagePropertyGU(response); break;
-            case QUERY::INFOS_EXCHANGEABLE_PROP :       std::cout<<"&&"<<"C"<<std::endl;this->exchangePropertyGU(response); break;            
-            case QUERY::INFOS_LEAVE_SELECTION_MODE :    std::cout<<"&&"<<"D"<<std::endl;this->leaveSelectionMenuGU(response); break;
+            case QUERY::INFOS_BUILD_PROP :              this->buildPropertyGU(response); break;
+            case QUERY::INFOS_SELL_BUILD :              this->sellPropertyGU(response); break;
+            case QUERY::INFOS_MORTGAGEABLE_PROP :       this->mortgagePropertyGU(response); break;
+            case QUERY::INFOS_LIFT_MORTGAGEABLE_PROP :  this->unmortgagePropertyGU(response); break;
+            case QUERY::INFOS_EXCHANGEABLE_PROP :       this->exchangePropertyGU(response); break;            
+            case QUERY::INFOS_LEAVE_SELECTION_MODE :    this->leaveSelectionMenuGU(response); break;
 
             case QUERY::INFOS_BUILD_SUCCESS :
-            case QUERY::INFOS_SELL_BUILD_SUCCESS :      std::cout<<"&&"<<"E"<<std::endl;this->buildOrSellSucceedGU(response); break;
-            case QUERY::INFOS_MORTGAGE_SUCCESS :        std::cout<<"&&"<<"F"<<std::endl;this->mortgageSucceedGU(response); break;
-            case QUERY::INFOS_LIFT_MORTGAGE_SUCCESS :   std::cout<<"&&"<<"G"<<std::endl;this->unmortgageSucceedGU(response); break;
-			case QUERY::INFOS_EXCHANGE_SUCCESS : 		std::cout<<"&&"<<"H"<<std::endl;this->exchangeSucceedGU(response); break;
+            case QUERY::INFOS_SELL_BUILD_SUCCESS :      this->buildOrSellSucceedGU(response); break;
+            case QUERY::INFOS_MORTGAGE_SUCCESS :        this->mortgageSucceedGU(response); break;
+            case QUERY::INFOS_LIFT_MORTGAGE_SUCCESS :   this->unmortgageSucceedGU(response); break;
+			case QUERY::INFOS_EXCHANGE_SUCCESS : 		this->exchangeSucceedGU(response); break;
 
-            case QUERY::INFOS_ASK_FOR_PURCHASE :        std::cout<<"&&"<<"I"<<std::endl;this->askForPurchaseGU(response); break;
-            case QUERY::ASK_EXCHANGE :                  std::cout<<"&&"<<"J"<<std::endl;this->askExchangeGU(response); break;
-            case QUERY::CONFIRM_EXCHANGE_ASKING :       std::cout<<"&&"<<"K"<<std::endl;this->confirmExchangeAskingGU(response); break;
+            case QUERY::INFOS_ASK_FOR_PURCHASE :        this->askForPurchaseGU(response); break;
+            case QUERY::ASK_EXCHANGE :                  this->askExchangeGU(response); break;
+            case QUERY::CONFIRM_EXCHANGE_ASKING :       this->confirmExchangeAskingGU(response); break;
 
-            case QUERY::INFOS_AUCTION_START :           std::cout<<"&&"<<"L"<<std::endl;this->startAuctionGU(response); break;
-            case QUERY::INFOS_AUCTION_BID :             std::cout<<"&&"<<"M"<<std::endl;this->auctionBidGU(response); break;
+            case QUERY::INFOS_AUCTION_START :           this->startAuctionGU(response); break;
+            case QUERY::INFOS_AUCTION_BID :             this->auctionBidGU(response); break;
             case QUERY::INFOS_AUCTION_END :             std::cout<<"&&"<<"N"<<std::endl;this->endAuctionGU(response); break;
             case QUERY::WAIT_YOUR_TURN :                std::cout<<"&&"<<"O"<<std::endl;this->view->message_box.setString("Votre tour d'enchère a prit fin, attendez le suivant."); break;
             case QUERY::BAD_AMOUNT :                    std::cout<<"&&"<<"P"<<std::endl;this->view->message_box.setString("Le montant entre n'est pas correct"); break;
@@ -367,6 +366,7 @@ void GameGUIController::startGame(int beginner) {
      std::cout << "aaa9 " << std::endl;
     this->view->board.setColorNumber(game_info->nb_player);
      std::cout << "aaa10 " << std::endl;
+     std::cout << game_info->nb_player <<" "<<game_info->start_money<< std::endl;
     this->view->info_box.initMoney(game_info->nb_player,game_info->start_money);
      std::cout << "aaa11 " << std::endl;
     this->view->info_box.initJailcard(game_info->nb_player,0);
@@ -428,6 +428,7 @@ void GameGUIController::rollDiceGU(const std::string& response){
         std::cout << "ça roule c ?" << std::endl;
         this->view->message_box.addString("Le joueur " + this->model->getPlayerTurn() + " a obtenu un " + std::to_string(dice_info->first_value ) + " et un " + std::to_string(dice_info->second_value));
         std::cout << "ici?" << std::endl;}
+        
 }
 
 
@@ -436,16 +437,7 @@ void GameGUIController::infoGameGU(const std::string& response) {
     std::shared_ptr<std::vector<GameInfo>> player_game_info = game_parser.parseInfosGameQuery(game_info->nb_player);
     for (int i = 0; i < game_info->nb_player; i++){
         std::cout << "beforemove1" << std::endl;
-        this->view->board.movePlayer(player_game_info->at(i).position, i);
-        for (unsigned int j = 0; j < player_game_info->at(i).properties.size(); j++){
-            int index = this->view->board.getCellIndex(player_game_info->at(i).properties[j].name);
-            if (player_game_info->at(i).properties[j].level == 0){
-                this->view->board.setPurchased(index, i);
-            }
-            else this->view->board.setHouse(index, player_game_info->at(i).properties[j].level);
-        }
-        this->view->info_box.setMoney(i, player_game_info->at(i).money);
-        this->view->info_box.setJailCard(i, player_game_info->at(i).jail_card_nb);}}
+        this->view->board.movePlayer(player_game_info->at(i).position, i);}}
 
 
 void GameGUIController::newTurnGU(const std::string& response) {
@@ -495,7 +487,7 @@ void GameGUIController::playerMoveGU(const std::string& response){
     std::cout << "aa11" << std::endl;
     if (move_info->property_name == "Prison" and this->model->isMyTurn()){
         std::cout << "aa2" << std::endl;
-        this->view->message_box.setString("Vous visitez la prison.");
+        this->view->message_box.setString("Vous arrivez sur la prison.");
     } else if (move_info->property_name == "Start" and this->model->isMyTurn()){
         this->view->message_box.setString("Vous arrivez sur la case depart.");
     } else if (move_info->property_name == "Parc" and this->model->isMyTurn()){
@@ -573,7 +565,9 @@ void GameGUIController::getGoOutJailCardGU(const std::string& response){
     std::cout << atoi(response.c_str()) << std::endl;
     this->view->info_box.addJailCard(atoi(response.c_str())-1);
     std::cout << "prison card2" << std::endl;
-    if (this->model->isMyTurn()){ this->view->message_box.setString("Vous obtenez une carte sortie de prison.");
+    if (this->model->isMyTurn()){ 
+        std::cout<< "pc32"<< std::endl;
+        this->view->message_box.setString("Vous obtenez une carte sortie de prison.");
     std::cout << "prison card3" << std::endl;
     } else this->view->message_box.setString( game_info->player_usernames[atoi(response.c_str())] + "a obtenu une carte sortie de prison.");
     std::cout << "prison car4" << std::endl;
@@ -858,6 +852,7 @@ void GameGUIController::endGameGU(const std::string& response){
 void GameGUIController::wonLandGU(const std::string& response){
     WonLand won_land(response);
     int index = this->view->board.getCellIndex(won_land.land);
+    std::cout << won_land.player - 1 << std::endl;
     this->view->board.setPurchased(index, won_land.player - 1);
 }
 
