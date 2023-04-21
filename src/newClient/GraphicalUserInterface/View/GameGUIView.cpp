@@ -190,7 +190,13 @@ void GameGUIView::draw() {
 
 	gamecode_box.draw(*window);
 	dice.draw(*window);
-	info_box.draw(*window);
+	if (this->startingGame) {
+		info_box.draw(*window);
+	}
+	else {
+		lobby.draw(*window);
+	}
+	
 	message_box.draw(*window);
 	exchange_box.draw(*window);
 	

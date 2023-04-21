@@ -11,11 +11,15 @@
 #include "GameObject/Dice.hpp"
 #include "GameObject/GamecodeBox.hpp"
 #include "GameObject/ExchangeBox.hpp"
+#include "GameObject/MiniLobbyBox.hpp"
 
 class GameGUIController; // forward declaration
 
 class GameGUIView: public AbstractGUIView {
+	bool startingGame = false;
+public:
 	Board board;
+  MiniLobbyBox lobby{ObjectInfo<>(WINDOW_WIDTH/4.f, WINDOW_HEIGHT/2.25f ,WINDOW_WIDTH/1.33f ,WINDOW_HEIGHT/1.8f), OTHER_BUTTON_COLOR};
 	InfoBox info_box{ObjectInfo<>(WINDOW_WIDTH/4.f, WINDOW_HEIGHT/2.25f ,WINDOW_WIDTH/1.33f ,WINDOW_HEIGHT/1.8f)};
 
 	Box button_zone{ObjectInfo<>(WINDOW_WIDTH/5.33f ,WINDOW_HEIGHT ,0 ,0), sf::Color::Red };
@@ -54,9 +58,11 @@ class GameGUIView: public AbstractGUIView {
 	
 	std::vector<std::string> colorlist{"red","blue","green","cyan","magenta","yellow"};   //pour tester à enlever
 
+
 	AuctionBox auction_box{ObjectInfo<>(WINDOW_WIDTH/5.33f ,WINDOW_HEIGHT ,0,0), sf::Color::Red };  //boutons enchères
 
 	ExchangeBox exchange_box{ObjectInfo<>(WINDOW_WIDTH/5.33f ,WINDOW_HEIGHT ,0,0), sf::Color::Red };
+
 
 	bool exchange_mode = false;
 	bool other_mode = false;

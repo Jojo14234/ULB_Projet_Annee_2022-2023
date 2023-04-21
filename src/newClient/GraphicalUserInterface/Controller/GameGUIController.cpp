@@ -298,9 +298,9 @@ void GameGUIController::receiveMsgLoop() {
     }
 }
 
-void GameGUIController::playerJoinUpdate(){ 
-    //this->view->getInfo()->setPlayersInGame(game_info->player_usernames); à rajouter
-     this->view->message_box.addString("Un joueur a rejoint le lobby");
+void GameGUIController::playerJoinUpdate(std::string new_player){ 
+    this->view->lobby.newPlayerJoin(new_player);
+    this->view->message_box.addString("Un joueur a rejoint le lobby: "+new_player);
 }
 
 void GameGUIController::update() { this->initGame();}
@@ -332,6 +332,7 @@ void GameGUIController::initScreen(int gamecode) {
 
 
 void GameGUIController::startGame(int beginner) {
+    this->view->startingGame = true; //caché le lobby ici
     std::cout << "aaa " << std::endl;
     this->view->message_box.clearText();
     std::cout << "aaa2 " << std::endl;
@@ -344,11 +345,14 @@ void GameGUIController::startGame(int beginner) {
         std::cout << "aaa5 " << std::endl;
         //rajouter sons - début game
     }
+
     
     else{ 
         std::cout << "aaa6 " << std::endl;
         this->view->message_box.setString("C'est au tour de " +  game_info->player_usernames[beginner] + " !");
         std::cout << "aaa7 " << std::endl;}
+
+    
     this->view->gamecode_box.setHidden();
      std::cout << "aaa8 " << std::endl;
     this->view->logo.setVisible();
@@ -382,8 +386,9 @@ void GameGUIController::createGameGU(const std::string& response) {
 void GameGUIController::joinGameGU(const std::string& response) {
     GameLaunchingParser launching_parser(response);
     game_info = launching_parser.parseJoinQuery();
+    std::string new_player = game_info->username;
     this->initScreen(game_info->game_code);
-    this->playerJoinUpdate();
+    this->playerJoinUpdate(new_player);
 }
 
 
