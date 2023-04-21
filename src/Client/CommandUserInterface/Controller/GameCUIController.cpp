@@ -149,6 +149,9 @@ void GameCUIController::receiveMsgLoop() { // todo il faudrait pas déplacer les
 
             case QUERY::WIN :                           this->endGameGU(response); break;
             case QUERY::ENDGAME :                       this->new_state = STATE::MENU; break;
+
+            case QUERY::TURN_TIME_EXPIRED :             this->model->sendGameQuery(GAME_QUERY_TYPE::ROLL_DICE); break;
+
             default :                                   this->view->getConsole()->addText(response); break;
         }
     }

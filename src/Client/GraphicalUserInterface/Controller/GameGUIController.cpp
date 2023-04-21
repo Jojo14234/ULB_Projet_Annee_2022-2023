@@ -291,8 +291,11 @@ void GameGUIController::receiveMsgLoop() {
 
             case QUERY::WIN :                           std::cout<<"&&"<<"13"<<std::endl;this->endGameGU(response); break;
             case QUERY::ENDGAME :                       std::cout<<"&&"<<"14"<<std::endl;break;
-            
-            
+
+            case QUERY::TURN_TIME_EXPIRED :             this->model->sendGameQuery(GAME_QUERY_TYPE::USELESS_QUERY); break;
+
+
+
             default :                                   std::cout << "defaut ? " << std::endl;this->view->message_box.setString(response);break;
         }
     }

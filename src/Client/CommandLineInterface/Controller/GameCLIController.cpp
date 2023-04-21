@@ -41,6 +41,8 @@ void GameCLIController::receiveMsgLoop() {
         std::string response;
         QUERY query = this->model->receive(response);
         switch (query) {
+            case QUERY::TURN_TIME_EXPIRED :         this->model->sendGameQuery(GAME_QUERY_TYPE::ROLL_DICE); break;
+
             case QUERY::PLAYER_CREATE_GAME :        createGameGu(response); break;
             case QUERY::PLAYER_JOIN_GAME :          joinGameGU(response); break;
             case QUERY::INFOS_START :               infoStartGU(response); break;
@@ -74,8 +76,9 @@ void GameCLIController::receiveMsgLoop() {
             case QUERY::NO_BUILDABLE_PROP :         NotBuildableProp(response); break;
 
             case QUERY::INFOS_NOT_ENOUGH_MONEY :    notEnoughMoneyGU(response); break;
-            case QUERY::STOP_WAIT :                 this->model->sendCommand(GameInputParser{response}); break;
+            case QUERY::STOP_WAIT :                 interruptWait(); break;
             case QUERY::ENDGAME :                   this->new_state = STATE::MENU; break;
+
             default : break;
         }
     }
@@ -83,6 +86,10 @@ void GameCLIController::receiveMsgLoop() {
 
 void GameCLIController::update() {
     this->initGame();
+}
+
+void GameCLIController::interruptWait(){
+    this->model->sendCommand(GameInputParser{response});
 }
 
 

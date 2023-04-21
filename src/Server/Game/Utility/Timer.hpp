@@ -85,10 +85,10 @@ public:
 
         // 3 a la fin du thread, on compare si les seed sont toujours identiques, auquel cas
         if (this->seed == random_seed) {
-            this->seed = -1; this->client->sendQueryMsg(this->stopMessage, to_be_sent_query);}
+            this->seed = -1; this->client->sendQueryMsg(this->stopMessage, to_be_sent_query);
+            std::cout << "TIMER IS DONNEEEEE HEHEHEH " << std::endl;
+        }
     }
-
-    void resetSeed() { this->seed = 0; }
 
     bool isFinish() {  return this->seed == -1; }
 

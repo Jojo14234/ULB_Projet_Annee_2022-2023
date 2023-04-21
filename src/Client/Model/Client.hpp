@@ -37,6 +37,7 @@ public:
 
 	// Send Queries
 	void sendQuery(QUERY_TYPE query);
+	void sendGameQuery(GAME_QUERY_TYPE query);
 	void sendLogin(const std::string &username, const std::string &password);
 	void sendRegister(const std::string &username, const std::string &password);
     void sendDisconnect();
@@ -67,5 +68,7 @@ public:
     void setPlayerTurn(const std::string &player) { player_turn = player; }
 	
 	const std::string &getUsername() { return user_name; }
+
+
 
 };

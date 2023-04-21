@@ -65,5 +65,7 @@ public:
 
     void update() override;
 
+    void interruptWait();
+
 };
 

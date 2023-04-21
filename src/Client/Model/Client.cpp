@@ -140,6 +140,7 @@ QUERY Client::receive(std::string &output) {
 	}
     int tmp;
 	packet >> tmp >> output;
+    std::cout << "OUTPUT IS " <<  output << std::endl;
     return static_cast<QUERY>(tmp);
 }
 
@@ -159,4 +160,10 @@ void Client::receiveFriendsInfo(std::vector<std::string> &friends_name, std::vec
 		packet >> name;
 		friends_requests.push_back(name);
 	}
+}
+
+void Client::sendGameQuery(GAME_QUERY_TYPE query){
+    sf::Packet packet;
+    packet << static_cast<int>(query);
+    this->sendPacket(packet);
 }

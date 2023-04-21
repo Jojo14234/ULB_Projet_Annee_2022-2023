@@ -261,30 +261,28 @@ GameStats GameServer::clientLoop(ClientManager &client) {
 void GameServer::clientTurn(ClientManager &client, Player* me) {
 
     GAME_QUERY_TYPE query;
-    Timer2 timer(params.maxTimePerTurn, client, "Time limit exceeded", QUERY::TURN_TIME_EXPIRED);
+    Timer2 timer(params.maxTimePerTurn, &client, "Time limit exceeded", QUERY::TURN_TIME_EXPIRED);
 
-    alarm(params.maxTimePerTurn);
+    //alarm(params.maxTimePerTurn);
 
     while ( !me->hasRolled() and me->getStatus() != PLAYER_STATUS::LOST and query != GAME_QUERY_TYPE::TIME_EXPIRED ) {
 
-        try {
+        query = this->getGameQuery(client);
+        std::cout << "THIS IS HAPPENING FORREAL" << std::endl;
 
-            query = this->getGameQuery(client);
+        if (timer.isFinish()){
 
-            if (timer.isFinish()){
-                query = GAME_QUERY_TYPE::TIME_EXPIRED;
-            }
-
-            if ( query == GAME_QUERY_TYPE::BUILD )          { this->processBuild(client, me); continue; }
-            if ( query == GAME_QUERY_TYPE::SELL_BUILDINGS ) { this->processSellBuild(client, me); continue; }
-            if ( query == GAME_QUERY_TYPE::MORTGAGE )       { this->processMortgage(client, me); continue; }
-            if ( query == GAME_QUERY_TYPE::LIFT_MORTGAGE )  { this->processLiftMortgage(client, me); continue; }
-            if ( query == GAME_QUERY_TYPE::EXCHANGE )       { this->processExchange(client, me); continue; }
-
-        }
-        catch (const ReadPipeServerException &exception) {
             query = GAME_QUERY_TYPE::TIME_EXPIRED;
+            std::cout << "TIMER IS INDEED OVER" << std::endl;
+
         }
+
+        if ( query == GAME_QUERY_TYPE::BUILD )          { this->processBuild(client, me); continue; }
+        if ( query == GAME_QUERY_TYPE::SELL_BUILDINGS ) { this->processSellBuild(client, me); continue; }
+        if ( query == GAME_QUERY_TYPE::MORTGAGE )       { this->processMortgage(client, me); continue; }
+        if ( query == GAME_QUERY_TYPE::LIFT_MORTGAGE )  { this->processLiftMortgage(client, me); continue; }
+        if ( query == GAME_QUERY_TYPE::EXCHANGE )       { this->processExchange(client, me); continue; }
+
 
         if ( query == GAME_QUERY_TYPE::ROLL_DICE ) {
             // Lancement de dés + dép + action_cell
@@ -300,14 +298,7 @@ void GameServer::clientTurn(ClientManager &client, Player* me) {
             if (! me->hasRolled()) client.getGameServer()->updateAllClientsWithQuery(QUERY::INFOS_DOUBLE_TURN, "");
         }
     }
-
-    if ( query != GAME_QUERY_TYPE::TIME_EXPIRED ) {
-        alarm(0);
-    }
-    else {
-        client.sendQueryMsg("", QUERY::TURN_TIME_EXPIRED);
-    }
-
+    std::cout << "TURN IS OVERRR" << std::endl;
     // End of the turn
     this->game.getDice().resetDoubleCounter();
     if ( game.isFastGame() ) {
@@ -317,7 +308,6 @@ void GameServer::clientTurn(ClientManager &client, Player* me) {
     this->game.endCurrentTurn();
     this->sendGameData();
     this->sendBetterGameData();
-
 }
 
 void GameServer::checkAndManageBankruptcy(ClientManager &client, Player* me) {
@@ -347,7 +337,7 @@ void GameServer::processStart(ClientManager* client) {
         for (auto p : this->game.getPlayersAsPointers()){
             game.forceAcquisition(p);
             checkAndManageBankruptcy(*p->getClient(), p);
-            updateAllClients("La durée de cette partie est limitée à " + std::to_string(params.maxTimeForGame / 60) + " minutes. Au-delà de ce délai, le joueur avec le plus important patrimoine gagnera.");
+            updateAllClients("La duree de cette partie est limitee a " + std::to_string(params.maxTimeForGame / 60));
         }
     }
 }
