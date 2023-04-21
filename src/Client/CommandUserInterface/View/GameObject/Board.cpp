@@ -11,7 +11,7 @@ void Board::draw() {
 //method to have a list of name for the cells
 void Board::loadCellNames(){
 	std::string cell;
-	std::ifstream cell_names_file("newClient/CommandUserInterface/View/cellNames.txt");
+	std::ifstream cell_names_file("Client/CommandUserInterface/View/cellNames.txt");
 	
 	if (cell_names_file.is_open()){
 		int i=0;
