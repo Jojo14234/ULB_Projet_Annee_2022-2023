@@ -80,6 +80,10 @@ public:
 	}
 
 
+	float getOffset() {
+		return this->objects.size() * (size + sep);
+	}
+
 	class Iterator {
 
 		std::vector<std::unique_ptr<Drawable>> &objects;

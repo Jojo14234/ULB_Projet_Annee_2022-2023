@@ -88,6 +88,7 @@ void FriendsGUIController::handle(sf::Event event) {
 
 
 void FriendsGUIController::update() {
+	this->view->clear();
 	this->model->sendQuery(QUERY_TYPE::FRIENDS_INFO);
 	std::vector<std::string> friends_name;
 	std::vector<std::string> friends_requests;
@@ -108,4 +109,5 @@ void FriendsGUIController::update() {
 		i++;
 	}
 
+	this->view->addMsg("Miaou Miaou", "yoyo");
 }

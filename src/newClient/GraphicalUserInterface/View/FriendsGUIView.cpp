@@ -34,8 +34,7 @@ void FriendsGUIView::draw() {
 	back_button.draw(*window);
 	messaging_box.draw(*window);
 	other_user.draw(*window);
-	conversation_box.draw(*window);
-	messages.draw(*window);
+	msg_box.draw(*window);
 	message_border.draw(*window);
 	message_input.draw(*window);
 	send_button.draw(*window);
@@ -57,9 +56,12 @@ void FriendsGUIView::clear() {
 	this->friend_list.clear();
 	this->request_popup.getSelector(0)->clear();
 	this->other_user.setString("Nom de l'ami");
+	this->msg_box.clear();
 }
 
 
 void FriendsGUIView::addMsg(const std::string &msg, const std::string &sender) {
-	// TODO
+	float offset = this->msg_box.getOffset();
+	ObjectInfo<> info = ObjectInfo<>(0.f, WINDOW_WIDTH/60.f, WINDOW_WIDTH/25.f+WINDOW_WIDTH/32.f, WINDOW_HEIGHT/6.f+WINDOW_WIDTH/65.f + offset);
+	this->msg_box.addObject(new Message(info, msg, sender));
 }
