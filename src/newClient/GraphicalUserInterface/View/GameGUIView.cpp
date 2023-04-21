@@ -196,7 +196,7 @@ void GameGUIView::draw() {
 	else {
 		lobby.draw(*window);
 	}
-	lobby.draw(*window);
+	
 	message_box.draw(*window);
 	exchange_box.draw(*window);
 	

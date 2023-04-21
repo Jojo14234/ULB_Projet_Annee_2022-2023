@@ -10,20 +10,7 @@ class MiniLobbyBox : public Box{
 	std::vector<std::shared_ptr<Text>> pseudo_list;
 
 public:
-	MiniLobbyBox(ObjectInfo <>info): AbstractViewObject{info}, Box{info} {
-		/*for(int i =0; i< 6; i++){
-				sf::Color color;
-                if (colorlist[i] == "red"){color = sf::Color::Red;}
-                else if (colorlist[i] == "blue"){color = sf::Color::Blue;}
-                else if (colorlist[i] == "green"){ color =  sf::Color::Green;}
-                else if (colorlist[i] == "magenta"){color = sf::Color::Magenta;}
-                else if (colorlist[i] == "cyan"){ color =  sf::Color::Cyan;}
-                else if (colorlist[i] == "yellow"){ color = sf::Color::Yellow;}
-
-                pseudo_list.push_back(std::make_shared<Text>(ObjectInfo<>(0,18,info.getX() + 400 - 370  , info.getY() + (i * 60) +30), "0", color));
-                pseudo_list[i]->setBold();
-            }*/
-	}
+	MiniLobbyBox(ObjectInfo <>info): AbstractViewObject{info}, Box{info} {}
 
 	void draw(sf::RenderWindow &window) const override {
 		Box::draw(window);
@@ -43,7 +30,6 @@ public:
 		int n = pseudo_list.size();
 		sf::Color color = getColor(n);
 		pseudo_list.push_back(std::make_shared<Text>(ObjectInfo<>(0,18,info.getX() + 400 - 370  , info.getY() + (n * 60) +30), new_player, color));
-		pseudo_list[pseudo_list.size()]->setBold();
 	}
 };
 
