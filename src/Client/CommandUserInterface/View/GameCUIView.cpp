@@ -29,7 +29,7 @@ void GameCUIView::clearAll(){
     board.clearAll();
     dice1.clearResult();
     dice2.clearResult();
-    info.clear();
-    chat.clear();
-    console.clear();
+    info.clearAllText();
+    chat.clearAllText();
+    console.clearAllText();
 }
