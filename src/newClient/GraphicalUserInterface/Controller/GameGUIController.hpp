@@ -22,9 +22,6 @@ class GameGUIView; // forward declaration
 
 class GameGUIController: public AbstractGUIController, public SubjectGUIController{
 
-	int player_nb;
-	std::vector<std::string> players_username;
-
 	bool init = true;
 
 	std::shared_ptr<JoinInfo> game_info;
