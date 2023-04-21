@@ -141,8 +141,8 @@ void GameGUIController::handle(sf::Event event) {
                         GameInputParser parser("/quit");
                         std::cout << "clicked" << std::endl;
                         this->model->sendCommand(parser);
-                        this->new_state = STATE::MENU;}
-            }
+                        this->view->setEnd(false);
+                        this->new_state = STATE::MENU;}}
             if(this->view->board_click == true){
                 if (this->view->exchange_mode == true){
                     if(this->view->exchange_box.getUpButton()->contains(event.mouseButton.x, event.mouseButton.y)){
@@ -837,8 +837,8 @@ void GameGUIController::endAuctionGU(const std::string& response){
 
 void GameGUIController::endGameGU(const std::string& response){
     this->view->message_box.setString("Victoire de " + response + ". Félicitations !");
-    this->view->setEnd(true);
     this->view->endTurn();
+    this->view->setEnd(true);
 }
 
 void GameGUIController::wonLandGU(const std::string& response){
