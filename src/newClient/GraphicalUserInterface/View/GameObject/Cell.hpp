@@ -83,7 +83,7 @@ public :
 		std::cout << cell_number << std::endl;
 		std::cout << pos_x << pos_y << path << std::endl;
 		std::cout << "owner_in3" << std::endl;
-		images_building.emplace_back(std::make_unique<Image>(ObjectInfo<>(25,25,info.getX() + pos_x, info.getY() + pos_y),path));
+		images_building.emplace_back(std::make_unique<Image>(ObjectInfo<>(WINDOW_WIDTH/64.f,WINDOW_HEIGHT/36.f,info.getX() + pos_x, info.getY() + pos_y),path));
 		std::cout << "owner_out" << std::endl;
 		}
 	

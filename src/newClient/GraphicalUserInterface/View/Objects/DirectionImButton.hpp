@@ -16,7 +16,7 @@ public:
 
 	DirectionImButton()=default;
 
-	DirectionImButton(ObjectInfo<> info, const std::string &path):AbstractViewObject(info), ImageButton(info,path) {}
+	DirectionImButton(ObjectInfo<> info, const std::string &path):AbstractViewObject(info), ImageButton(info,path), path{path} {}
 
 	virtual void draw(sf::RenderWindow &window) const override {
 		Image::draw(window);
@@ -25,14 +25,8 @@ public:
 	std::string getPath(){return this->path;};
 
 	void click(){
-		int change;
-		if (this->path == LEFT_BUTTON_PATH){
-			change = -1;	//faire le modulo (en gros, + la taille youpi)
-		}
-		else {
-			change = 1;
-		}
-		notifyObserver(change);
+		if (this->path == LEFT_BUTTON_PATH){ notifyObserver(-1); }
+		else { notifyObserver(1); }
 	}
 
 };

@@ -31,11 +31,10 @@ class Board{
 	std::array<std::string, gamebox_nb> cell_file; 
 
 	int text_size = 10;
-
-    sf::Vector2f v_cell_size{WINDOW_HEIGHT / 10,WINDOW_HEIGHT  / 10 - 20};  // vertical cell's size 
+    sf::Vector2f v_cell_size{WINDOW_HEIGHT/10.f,WINDOW_HEIGHT/10.f - WINDOW_HEIGHT/45.f};  // vertical cell's size 
 	sf::Vector2f h_cell_size{v_cell_size.y,v_cell_size.x};  // horizontal cell's size 
-    sf::Vector2f corner_cell_size{WINDOW_HEIGHT / 10,WINDOW_HEIGHT / 10} ;
-    sf::Vector2f start_corner{350 ,WINDOW_HEIGHT - 100};  //bottom left position
+    sf::Vector2f corner_cell_size{WINDOW_HEIGHT/10.f,WINDOW_HEIGHT/10.f} ;
+    sf::Vector2f start_corner{WINDOW_WIDTH/4.57f ,WINDOW_HEIGHT/1.125f};  //bottom left position
 
     /*
 

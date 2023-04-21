@@ -22,8 +22,7 @@ class FriendsGUIView: public AbstractGUIView {
 	//MESSAGE-------------------------------------------------------------- 
 	Box messaging_box{ObjectInfo<>(WINDOW_WIDTH/2.f+WINDOW_WIDTH/6.f, WINDOW_WIDTH/4*2 , WINDOW_WIDTH/25.f , WINDOW_HEIGHT/10.f), WHITE};
 	Text other_user{ObjectInfo<>(0.f, WINDOW_WIDTH/50.f, WINDOW_WIDTH/25+50 , WINDOW_HEIGHT/10.f), "Nom de l'ami"};
-	Box conversation_bbox{ObjectInfo<>(WINDOW_WIDTH/2+WINDOW_WIDTH/8.f, WINDOW_WIDTH/4*2-WINDOW_WIDTH/10 , WINDOW_WIDTH/18.f , WINDOW_HEIGHT/6.f), TOP_BOX_COLOR};
-	Text messages{ObjectInfo<>(0.f, WINDOW_WIDTH/60.f, WINDOW_WIDTH/25+50 , WINDOW_HEIGHT/6+WINDOW_WIDTH/65.f), "Miaou Miaou"};
+	ScrollBox<Message> msg_box{ObjectInfo<>(WINDOW_WIDTH/2+WINDOW_WIDTH/8.f, WINDOW_WIDTH/4*2-WINDOW_WIDTH/10 , WINDOW_WIDTH/18.f , WINDOW_HEIGHT/6.f), WINDOW_WIDTH/20.f, TOP_BOX_COLOR};
 
 	InputBox message_input{ObjectInfo<>(WINDOW_WIDTH/2+WINDOW_WIDTH/8.f- WINDOW_HEIGHT/15.f, WINDOW_HEIGHT/15.f, WINDOW_WIDTH/18.f, WINDOW_HEIGHT/6.f + WINDOW_WIDTH/4*2-WINDOW_WIDTH/10), BOX_COLOR, SERIF_FONT_PATH};
 	Border message_border{message_input, 5};
@@ -38,11 +37,8 @@ class FriendsGUIView: public AbstractGUIView {
 	ModalBox ask_popup{ObjectInfo<>(WINDOW_WIDTH/2.f, WINDOW_HEIGHT/2.f, WINDOW_WIDTH/4.f, WINDOW_HEIGHT/4.f), BOX_COLOR};
 
 	//FRIEND LIST--------------------------------------------------------------
-	//Box friend_list_box{ObjectInfo<>(WINDOW_WIDTH*4/12.f - WINDOW_WIDTH/25.f, WINDOW_HEIGHT*8/12,WINDOW_WIDTH*8/12.f + WINDOW_WIDTH/18, WINDOW_HEIGHT/8.f+WINDOW_HEIGHT/5), WHITE};
-
-	Text friend_list{ObjectInfo<>(0.f, WINDOW_WIDTH/50.f, WINDOW_WIDTH*8/12.f + 100 , WINDOW_HEIGHT/8.f+WINDOW_HEIGHT/5+10), "Liste d'amis"};
-
-	ScrollBox<FriendBox> scroll{ObjectInfo<>(WINDOW_WIDTH*4/12.f - WINDOW_WIDTH/25.f, WINDOW_HEIGHT*8/12,WINDOW_WIDTH*8/12.f + WINDOW_WIDTH/18, WINDOW_HEIGHT/8.f+WINDOW_HEIGHT/5), WINDOW_WIDTH/20.f, WHITE};
+	Text friend_list_title{ObjectInfo<>(0.f, WINDOW_WIDTH/50.f, WINDOW_WIDTH*8/12.f + 100 , WINDOW_HEIGHT/8.f+WINDOW_HEIGHT/5+10), "Liste d'amis"};
+	ScrollBox<FriendBox> friend_list{ObjectInfo<>(WINDOW_WIDTH*4/12.f - WINDOW_WIDTH/25.f, WINDOW_HEIGHT*8/12,WINDOW_WIDTH*8/12.f + WINDOW_WIDTH/18, WINDOW_HEIGHT/8.f+WINDOW_HEIGHT/5), WINDOW_WIDTH/20.f, WHITE};
 
 
 public:
@@ -55,10 +51,13 @@ public:
 
 	void clear();
 
-	friend class FriendsGUIController;
-
-	void initFriendBox();
 	void initRequestPopup();
 	void initAskPopup();
+	void initConversation(const std::string &str);
+	
+	void addMsg(const std::string &msg, const std::string &sender="moi");
+
+
+	friend class FriendsGUIController;
 
 };

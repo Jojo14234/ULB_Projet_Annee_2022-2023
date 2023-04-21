@@ -5,8 +5,8 @@
 #include "../Objects/Image.hpp"
 #include "../AssetsPath.hpp"
 class Dice{
-    Image dice1{ObjectInfo<>(100,100,650,450),DICED};
-    Image dice2{ObjectInfo<>(100,100,750,450),DICEE};
+    Image dice1{ObjectInfo<>(WINDOW_WIDTH/16.f,WINDOW_HEIGHT/9.f,WINDOW_WIDTH/2.46f,WINDOW_HEIGHT/2.f),DICED};
+    Image dice2{ObjectInfo<>(WINDOW_WIDTH/16.f,WINDOW_HEIGHT/9.f,WINDOW_WIDTH/2.133f,WINDOW_HEIGHT/2.f),DICEE};
 
     std::string choicePath(int d){
         if(d== 1){return DICE1;}

@@ -31,3 +31,11 @@ public:
 	}
 
 };
+
+class IntInputBox: public InputBox {
+public:
+	using InputBox::InputBox;
+	bool checkValidity(char c) const override{
+		return isdigit(c) and (this->getString().length()<4);
+	}
+};

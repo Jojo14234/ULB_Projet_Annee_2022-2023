@@ -32,7 +32,7 @@ void GameCLIController::handle(int event) {
 void GameCLIController::initGame() {
     // create a thread to receive messages
     std::thread send_thread(&GameCLIController::receiveMsgLoop, this);
-    send_thread.detach(); // todo dmd a Hugo c'est quoi le .detach
+    send_thread.detach();
     //send_thread.join();
 }
 
@@ -45,7 +45,7 @@ void GameCLIController::receiveMsgLoop() {
             case QUERY::PLAYER_JOIN_GAME :          joinGameGU(response); break;
             case QUERY::INFOS_START :               infoStartGU(response); break;
             case QUERY::INFOS_ROLL_DICE :           rollDiceGU(response); break;
-            case QUERY::INFOS_GAME :                infoGameGU(response); break;
+            //case QUERY::INFOS_GAME :                infoGameGU(response); break;
             case QUERY::INFOS_NEW_TURN :            newTurnGU(response); break;
             case QUERY::INFOS_PLAYER_MOVE :         playerMoveGU(response); break;
             case QUERY::INFOS_PLAYER_BOUGHT :       playerBoughtGU(response); break;
@@ -75,7 +75,7 @@ void GameCLIController::receiveMsgLoop() {
 
             case QUERY::INFOS_NOT_ENOUGH_MONEY :    notEnoughMoneyGU(response); break;
             case QUERY::STOP_WAIT :                 this->model->sendCommand(GameInputParser{response}); break;
-            case QUERY::ENDGAME :                   this->new_state = STATE::MENU; break; // todo verifier
+            case QUERY::ENDGAME :                   this->new_state = STATE::MENU; break;
             default : break;
         }
     }

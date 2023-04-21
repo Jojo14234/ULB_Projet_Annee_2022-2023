@@ -141,8 +141,8 @@ void GameGUIController::handle(sf::Event event) {
                         GameInputParser parser("/quit");
                         std::cout << "clicked" << std::endl;
                         this->model->sendCommand(parser);
-                        this->new_state = STATE::MENU;}
-            }
+                        this->view->setEnd(false);
+                        this->new_state = STATE::MENU;}}
             if(this->view->board_click == true){
                 if (this->view->exchange_mode == true){
                     if(this->view->exchange_box.getUpButton()->contains(event.mouseButton.x, event.mouseButton.y)){
@@ -262,7 +262,9 @@ void GameGUIController::receiveMsgLoop() {
                                                         this->view->setBoardClickMode(true);
                                                         this->view->message_box.setString("Ce terrain ne peut pas perdre des batiments"); 
                                                         break;}
-            case QUERY::CANNOT_MORTAGE :                {this->view->other_mode = true;
+            case QUERY::CANNOT_MORTAGE :                {
+                                                        std::cout<<"&&"<<"grrrrrrr"<<std::endl;
+                                                        this->view->other_mode = true;
                                                         this->view->setBoardClickMode(true);
                                                         this->view->message_box.setString("Ce terrain ne peut pas etre hypotheque");
                                                         break;}
@@ -280,7 +282,9 @@ void GameGUIController::receiveMsgLoop() {
                                                         this->view->message_box.setString("L'echange a ete refuse"); break;}
             case QUERY::INFOS_NOT_ENOUGH_MONEY :        std::cout<<"&&"<<"8"<<std::endl;this->view->message_box.addString("Vous ne possedez pas assez d'argent."); break;
             case QUERY::INFOS_AUTO_OTHER_POSSIBILITY:   std::cout<<"&&"<<"9"<<std::endl;this->view->message_box.setString("L'autre possibilite a ete automatiquement selectionnee"); break;
-            case QUERY::STOP_WAIT :                     std::cout<<"&&"<<"10"<<std::endl;this->view->message_box.setString("Pas assez rapide. L'offre a été automatiquement annulee"); break;
+            case QUERY::STOP_WAIT :                     {std::cout<<"&&"<<"10"<<std::endl;this->view->message_box.setString("Pas assez rapide. L'offre a été automatiquement annulee"); 
+                                                        if (this->model->isMyTurn()){this->view->setStartRound(true);}
+                                                        break;}
             
             case QUERY::INFOS_DEBT :                    std::cout<<"&&"<<"11"<<std::endl;break;
             case QUERY::INFOS_WON_LAND :                std::cout<<"&&"<<"12"<<std::endl;this->wonLandGU(response); break;
@@ -289,7 +293,7 @@ void GameGUIController::receiveMsgLoop() {
             case QUERY::ENDGAME :                       std::cout<<"&&"<<"14"<<std::endl;break;
             
             
-            default :                                   this->view->message_box.setString(response);std::cout << "defaut ? " << std::endl;break;
+            default :                                   std::cout << "defaut ? " << std::endl;this->view->message_box.setString(response);break;
         }
     }
 }
@@ -332,9 +336,9 @@ void GameGUIController::startGame(int beginner) {
     std::cout << "aaa " << std::endl;
     this->view->message_box.clearText();
     std::cout << "aaa2 " << std::endl;
-    this->model->setPlayerTurn(players_username[beginner]);
+    this->model->setPlayerTurn( game_info->player_usernames[beginner]);
     std::cout << "aaa3 " << std::endl;
-    if (this->model->getUsername() == players_username[beginner]) {
+    if (this->model->getUsername() ==  game_info->player_usernames[beginner]) {
         std::cout << "aaa4 " << std::endl;
         this->view->startTurn();
         this->model->startTurn();
@@ -345,19 +349,22 @@ void GameGUIController::startGame(int beginner) {
     
     else{ 
         std::cout << "aaa6 " << std::endl;
-        this->view->message_box.setString("C'est au tour de " + players_username[beginner] + " !");
+        this->view->message_box.setString("C'est au tour de " +  game_info->player_usernames[beginner] + " !");
         std::cout << "aaa7 " << std::endl;}
 
     
     this->view->gamecode_box.setHidden();
+     std::cout << "aaa8 " << std::endl;
     this->view->logo.setVisible();
-    this->view->board.setColorNumber(player_nb);
-    this->view->info_box.initMoney(player_nb,1500);
-    this->view->info_box.initJailcard(player_nb,0);
-    for (int i = 0; i< player_nb; i++) {
+     std::cout << "aaa9 " << std::endl;
+    this->view->board.setColorNumber(game_info->nb_player);
+    this->view->info_box.initMoney(game_info->nb_player,1500);
+    this->view->info_box.initJailcard(game_info->nb_player,0);
+     std::cout << "aaa10 " << std::endl;
+    for (int i = 0; i< game_info->nb_player; i++) {
         std::cout << "b" << std::endl;
         this->view->board.setPlayer(0, i);
-        this->view->info_box.setPseudo(i,players_username[i]);}
+        this->view->info_box.setPseudo(i, game_info->player_usernames[i]);}
     std::cout << "bb" << std::endl;
 
 }
@@ -389,9 +396,8 @@ void GameGUIController::infoStartGU(const std::string& response) {
     GameLaunchingParser launching_parser(response);
     std::shared_ptr<StartInfo> start_info = launching_parser.parseStartQuery();
     std::cout << "start ok" << std::endl;
-    player_nb = start_info->player_nb;
-    std::cout << "start ok1" << std::endl;
-    players_username = start_info->player_usernames;
+    game_info->nb_player = start_info->player_nb;
+    game_info->player_usernames = start_info->player_usernames;
     std::cout << "start ok2" << std::endl;
     this->view->message_box.setString("La partie commence");
     std::cout << "start ok3" << std::endl;
@@ -417,8 +423,8 @@ void GameGUIController::rollDiceGU(const std::string& response){
 
 void GameGUIController::infoGameGU(const std::string& response) {
     InGameParser game_parser(response);
-    std::shared_ptr<std::vector<GameInfo>> player_game_info = game_parser.parseInfosGameQuery(player_nb);
-    for (int i = 0; i < player_nb; i++){
+    std::shared_ptr<std::vector<GameInfo>> player_game_info = game_parser.parseInfosGameQuery(game_info->nb_player);
+    for (int i = 0; i < game_info->nb_player; i++){
         std::cout << "beforemove1" << std::endl;
         this->view->board.movePlayer(player_game_info->at(i).position, i);
         for (unsigned int j = 0; j < player_game_info->at(i).properties.size(); j++){
@@ -511,9 +517,9 @@ void GameGUIController::playerPaidPlayerGU(const std::string& response){
     if (this->model->isMyTurn()) {
         this->view->info_box.setMoney(payement_info->loser - 1, payement_info->loser_money);
         this->view->info_box.setMoney(payement_info->winner - 1, payement_info->winner_money);
-        this->view->message_box.setString("Vous devez " + std::to_string(payement_info->amount) + "$ a " + players_username[payement_info->winner-1] + " :");
+        this->view->message_box.setString("Vous devez " + std::to_string(payement_info->amount) + "$ a " + game_info->player_usernames[payement_info->winner-1] + " :");
     } else {
-        this->view->message_box.setString(players_username[payement_info->loser-1] + " doit " + std::to_string(payement_info->amount) + "$ a " + players_username[payement_info->winner-1] + " :");
+        this->view->message_box.setString( game_info->player_usernames[payement_info->loser-1] + " doit " + std::to_string(payement_info->amount) + "$ a " +  game_info->player_usernames[payement_info->winner-1] + " :");
     }
 }
 
@@ -535,7 +541,7 @@ void GameGUIController::moveOnTaxCellGU(const std::string& response){
         this->view->message_box.setString("Vous arrivez sur la case " + tax_info->tax_name + " :");
     } else {
          std::cout << "tax1" << std::endl;
-        this->view->message_box.setString(players_username[tax_info->player - 1] + " paie ses taxes : ");
+        this->view->message_box.setString( game_info->player_usernames[tax_info->player - 1] + " paie ses taxes : ");
          std::cout << "tax2" << std::endl;
     }
     std::cout << "grrbaw" << std::endl;
@@ -555,11 +561,12 @@ void GameGUIController::sendPrisonGU(const std::string& response){
 
 void GameGUIController::getGoOutJailCardGU(const std::string& response){
     std::cout << "prison card" << std::endl;
+    std::cout << atoi(response.c_str()) << std::endl;
     this->view->info_box.addJailCard(atoi(response.c_str()));
     std::cout << "prison card2" << std::endl;
     if (this->model->isMyTurn()){ this->view->message_box.setString("Vous obtenez une carte sortie de prison.");
     std::cout << "prison card3" << std::endl;
-    } else this->view->message_box.setString(players_username[atoi(response.c_str())] + "a obtenu une carte sortie de prison.");
+    } else this->view->message_box.setString( game_info->player_usernames[atoi(response.c_str())] + "a obtenu une carte sortie de prison.");
     std::cout << "prison car4" << std::endl;
 }
 
@@ -578,16 +585,16 @@ void GameGUIController::wonMoneyGU(const std::string& response){
     std::cout << "la moula2" << std::endl;
     if (! this->model->isMyTurn()) { 
         std::cout << "la moula3" << std::endl;
-        this->view->message_box.setString(players_username[money_info->player-1] + " a gagne " + std::to_string(money_info->amount) + "$");
+        this->view->message_box.setString( game_info->player_usernames[money_info->player-1] + " a gagne " + std::to_string(money_info->amount) + "$");
         std::cout << "la moula4" << std::endl; }
     else { 
         std::cout << "la moula5" << std::endl;
-        if (players_username[money_info->player-1] == this->model->getUsername()){
+        if ( game_info->player_usernames[money_info->player-1] == this->model->getUsername()){
             std::cout << "la moula6" << std::endl;
             this->view->message_box.setString("Vous gagnez " + std::to_string(money_info->amount) + "$");
              std::cout << "la moula7" << std::endl;
         }
-        else this->view->message_box.setString(players_username[money_info->player-1] + " gagne " + std::to_string(money_info->amount) + "$");
+        else this->view->message_box.setString( game_info->player_usernames[money_info->player-1] + " gagne " + std::to_string(money_info->amount) + "$");
         std::cout << "la moula8" << std::endl;
     }
 }
@@ -599,12 +606,12 @@ void GameGUIController::loseMoneyGU(const std::string& response){
     std::cout << money_info->player << "  gggg "  << money_info->player_money << std::endl;
     this->view->info_box.setMoney(money_info->player - 1, money_info->player_money);
     std::cout << "lose money ?" << std::endl;
-    if (! this->model->isMyTurn()) this->view->message_box.setString(players_username[money_info->player-1] + " a perdu " + std::to_string(money_info->amount) + "$");
+    if (! this->model->isMyTurn()) this->view->message_box.setString( game_info->player_usernames[money_info->player-1] + " a perdu " + std::to_string(money_info->amount) + "$");
     else { 
-        if (players_username[money_info->player-1] == this->model->getUsername()){
+        if ( game_info->player_usernames[money_info->player-1] == this->model->getUsername()){
             this->view->message_box.setString("Vous perdez " + std::to_string(money_info->amount) + "$"); 
         }
-        else this->view->message_box.setString(players_username[money_info->player-1] + " perd " + std::to_string(money_info->amount) + "$");
+        else this->view->message_box.setString( game_info->player_usernames[money_info->player-1] + " perd " + std::to_string(money_info->amount) + "$");
     }
 }
 
@@ -634,7 +641,7 @@ void GameGUIController::moveOnCardCellGU(const std::string& response){
     else {
         std::cout << "move_cardcell_info->player" << move_cardcell_info->player << std::endl;
          std::cout << "in" << std::endl;
-        this->view->message_box.setString(players_username[move_cardcell_info->player - 1] + " pioche un carte.");
+        this->view->message_box.setString( game_info->player_usernames[move_cardcell_info->player - 1] + " pioche un carte.");
         std::cout << "out" << std::endl;
         }
 }
@@ -676,11 +683,11 @@ void GameGUIController::sellPropertyGU(const std::string& response){
 }
 
 void GameGUIController::exchangePropertyGU(const std::string& response){
-    //TODO utiliser le response
     response.c_str();
     std::cout << "echange0" << std::endl;
     std::cout << game_info->nb_player << std::endl;
-    ExchangeInfo exchanges{response, game_info->nb_player};
+    std::cout << response<< std::endl;
+    ExchangeInfo exchanges(response, game_info->nb_player);
     std::cout << "echange" << std::endl;
     selection_mode = exchanges.all_properties;
     if (this->model->isMyTurn()){
@@ -801,24 +808,33 @@ void GameGUIController::askForPurchaseGU(const std::string& response){
 
 
 void GameGUIController::startAuctionGU(const std::string& response){
+    std::cout << "ein" << std::endl;
     BetInfo bet(response);
     this->view->message_box.setString("Des encheres pour acheter " + bet.property + " debutent !");
+     std::cout << "eout" << std::endl;
 }
 
 void GameGUIController::auctionBidGU(const std::string& response){
+     std::cout << "ain" << std::endl;
     PlayerBetInfo bet(response);
     if (bet.player != ""){
+          std::cout << "ain2" << std::endl;
         this->view->message_box.setString(bet.player + " est sur le point d'acheter le terrain pour : " + std::to_string(bet.amount) + "$");
     }
-    else this->view->message_box.setString("Le prix de depart est : " + std::to_string(bet.amount) + "$ !");
+    else this->view->message_box.setString( "Le prix de depart est : " + std::to_string(bet.amount) + "$ !");
     if (! this->model->isMyTurn()){
+          std::cout << "ain3" << std::endl;
         this->view->message_box.setString("valider pour surencherir !");
         this->view->setAuctionRound(true);
-        this->view->auction_box.setTextNumber(bet.amount);}  
+        this->view->auction_box.setTextNumber(bet.amount);
+        this->view->auction_box.setAuctionLimit(bet.amount);
+        }  
+        std::cout << "ain4" << std::endl;
 }
 
 void GameGUIController::endAuctionGU(const std::string& response){
    EndAuctionInfo end(response);
+   std::cout << "ench fin1" << std::endl;
     if (end.player != ""){
         this->view->message_box.setString(end.player + " remporte " + end.property + " pour " + std::to_string(end.amount) + "$ !");
     }
@@ -826,8 +842,8 @@ void GameGUIController::endAuctionGU(const std::string& response){
 
 void GameGUIController::endGameGU(const std::string& response){
     this->view->message_box.setString("Victoire de " + response + ". Félicitations !");
-    this->view->message_box.setString("Entrez /quit pour retourner au menu.");
     this->view->endTurn();
+    this->view->setEnd(true);
 }
 
 void GameGUIController::wonLandGU(const std::string& response){

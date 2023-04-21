@@ -371,7 +371,7 @@ ClientManager *Capitalist::calculateGameWinner() {
 }
 
 bool Capitalist::processJailPay(Player *player) {
-    if (player->getMoney() > 50){
+    if (player->getMoney() > 50) {
         if ( player->pay(50) ) { player->setStatus(PLAYER_STATUS::FREE); }
         return true;
     }
@@ -456,6 +456,7 @@ bool Capitalist::processSellBuild(Player *player, std::string &name) {
 bool Capitalist::processMortgage(Player *player, std::string &name, bool is_fast_game) {
     LandCell* land = getLandCell(name);
     if (!land or land->getLand()->isMortgaged() ) { return false; }
+    if (!(land->getOwner() == player)) { return false; }
     Property* prop = dynamic_cast<Property*>(land->getLand());
     if (!prop || prop->getLevel() == PROPERTY_LEVEL::EMPTY ) { land->getLand()->mortgage(player, is_fast_game); return true; }
     return false;
@@ -464,6 +465,7 @@ bool Capitalist::processMortgage(Player *player, std::string &name, bool is_fast
 bool Capitalist::processLiftMortgage(Player *player, std::string &name, bool is_fast_game) {
     LandCell* land = getLandCell(name);
     if (!land or !land->getLand()->isMortgaged() ) { return false; }
+    if (!(land->getOwner() == player)) { return false; }
 
     if ( player->getBankAccount()->getMoney() < land->getLand()->getPurchasePrice()/2 ) { return false; }
     else if (is_fast_game && player->getBankAccount()->getMoney() < land->getLand()->getPurchasePrice() * 80 / 100) { return false; }
