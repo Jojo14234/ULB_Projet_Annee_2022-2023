@@ -10,7 +10,7 @@ class MiniLobbyBox : public Box{
 	std::vector<std::shared_ptr<Text>> pseudo_list;
 
 public:
-	MiniLobbyBox(ObjectInfo <>info): AbstractViewObject{info}, Box{info} {}
+	MiniLobbyBox(ObjectInfo <>info, sf::Color color): AbstractViewObject{info}, Box{info, color} {}
 
 	void draw(sf::RenderWindow &window) const override {
 		Box::draw(window);

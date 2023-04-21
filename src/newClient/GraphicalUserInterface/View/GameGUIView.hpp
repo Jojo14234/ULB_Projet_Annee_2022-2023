@@ -19,10 +19,10 @@ class GameGUIView: public AbstractGUIView {
 	bool startingGame = false;
 public:
 	Board board;
-	MiniLobbyBox lobby{ObjectInfo<>(ObjectInfo<>(400, 400,window->getSize().x -400,window->getSize().y - 400))};
+	MiniLobbyBox lobby{ObjectInfo<>(400, 400,window->getSize().x -400,window->getSize().y - 400), OTHER_BUTTON_COLOR};
 	InfoBox info_box{ObjectInfo<>(400, 400,window->getSize().x -400,window->getSize().y - 400)};
 
-	Box button_zone{ObjectInfo<>(300, window->getSize().y,0,0), sf::Color::Red };
+	Box button_zone{ObjectInfo<>(300, window->getSize().y,0,0), GAME_BUTTON_COLOR };
 
 	ImageButton startgame_button{ObjectInfo<>(200, 100 ,50,window->getSize().y/6*0  ), START_BUTTON};
 
@@ -58,9 +58,9 @@ public:
 	
 	std::vector<std::string> colorlist{"red","blue","green","cyan","magenta","yellow"};   //pour tester à enlever
 
-	AuctionBox auction_box{ObjectInfo<>(300, window->getSize().y,0,0), sf::Color::Red };  //boutons enchères
+	AuctionBox auction_box{ObjectInfo<>(300, window->getSize().y,0,0), OTHER_BUTTON_COLOR };  //boutons enchères
 
-	ExchangeBox exchange_box{ObjectInfo<>(300, window->getSize().y,0,0), sf::Color::Red };
+	ExchangeBox exchange_box{ObjectInfo<>(300, window->getSize().y,0,0), OTHER_BUTTON_COLOR };
 
 	bool exchange_mode = false;
 	bool other_mode = false;
