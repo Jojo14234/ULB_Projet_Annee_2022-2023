@@ -67,14 +67,14 @@ server: ${SERVER_BINS} ${SERVER_CM_BINS} ${SERVER_DB_BINS} ${SERVER_DB_USER} ${G
 	make clean
 
 client:
-	cd newClient && make
+	cd Client && make
 
 # new Client part
 GUI:
-	cd newClient && make GUI
+	cd Client && make GUI
 
 CUI:
-	cd newClient && make CUI
+	cd Client && make CUI
 
 CLI:
-	cd newClient && make CLI
+	cd Client && make CLI
