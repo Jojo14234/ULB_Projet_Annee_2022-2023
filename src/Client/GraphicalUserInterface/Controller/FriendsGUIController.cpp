@@ -106,7 +106,7 @@ void FriendsGUIController::update() {
 
 	const double size_x = WINDOW_WIDTH*4/12.f - WINDOW_WIDTH/25.f;
 	const double size_y = WINDOW_WIDTH/20.f;
-	const double pos_x = WINDOW_WIDTH*8/12.f + WINDOW_WIDTH/18;
+	const double pos_x = WINDOW_WIDTH*8/12.f + WINDOW_WIDTH/18 - WINDOW_WIDTH/35.f;
 	const double pos_y = WINDOW_WIDTH/30.f + WINDOW_HEIGHT/8.f+WINDOW_HEIGHT/5.+WINDOW_WIDTH/50.f;
 	const int sep = WINDOW_WIDTH/160.f;
 	int i = 0;

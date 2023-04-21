@@ -73,6 +73,6 @@ void FriendsGUIView::initConversation(const std::string &str) {
 
 void FriendsGUIView::addMsg(const std::string &msg, const std::string &sender) {
 	float offset = this->msg_box.getOffset();
-	ObjectInfo<> info = ObjectInfo<>(0.f, WINDOW_WIDTH/60.f, WINDOW_WIDTH/25.f+WINDOW_WIDTH/32.f, WINDOW_HEIGHT/6.f+WINDOW_WIDTH/65.f + offset);
+	ObjectInfo<> info = ObjectInfo<>(0.f, WINDOW_WIDTH/60.f, WINDOW_WIDTH/25.f+WINDOW_WIDTH/32.f- WINDOW_WIDTH/35.f, WINDOW_HEIGHT/6.f+WINDOW_WIDTH/65.f + offset);
 	this->msg_box.addObject(new Message(info, msg, sender));
 }
