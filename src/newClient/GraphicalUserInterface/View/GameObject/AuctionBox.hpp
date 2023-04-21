@@ -17,6 +17,7 @@ class AuctionBox: public  ModalBox{
     Text number{ObjectInfo<>(0,60,35,210),""};
 
     int nb = 0;
+    int limit = 0;
 
 
     public:
@@ -31,8 +32,12 @@ class AuctionBox: public  ModalBox{
             number.setString(std::to_string(new_number));
         }
 
+        void setAuctionLimit(int new_number){
+            limit = new_number;
+        }
+
         void upNumber(){this->setTextNumber(nb + 50);}
-        void downNumber(){this->setTextNumber(nb - 50);}
+        void downNumber(){if (nb - 50 >= 0 and nb - 50 >= limit){ this->setTextNumber(nb - 50);}}
 
         int getValidateNumber(){return nb;}
 

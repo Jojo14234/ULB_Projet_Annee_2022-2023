@@ -280,7 +280,9 @@ void GameGUIController::receiveMsgLoop() {
                                                         this->view->message_box.setString("L'echange a ete refuse"); break;}
             case QUERY::INFOS_NOT_ENOUGH_MONEY :        std::cout<<"&&"<<"8"<<std::endl;this->view->message_box.addString("Vous ne possedez pas assez d'argent."); break;
             case QUERY::INFOS_AUTO_OTHER_POSSIBILITY:   std::cout<<"&&"<<"9"<<std::endl;this->view->message_box.setString("L'autre possibilite a ete automatiquement selectionnee"); break;
-            case QUERY::STOP_WAIT :                     std::cout<<"&&"<<"10"<<std::endl;this->view->message_box.setString("Pas assez rapide. L'offre a été automatiquement annulee"); break;
+            case QUERY::STOP_WAIT :                     {std::cout<<"&&"<<"10"<<std::endl;this->view->message_box.setString("Pas assez rapide. L'offre a été automatiquement annulee"); 
+                                                        if (this->model->isMyTurn()){this->view->setStartRound(true);}
+                                                        break;}
             
             case QUERY::INFOS_DEBT :                    std::cout<<"&&"<<"11"<<std::endl;break;
             case QUERY::INFOS_WON_LAND :                std::cout<<"&&"<<"12"<<std::endl;this->wonLandGU(response); break;
@@ -289,7 +291,7 @@ void GameGUIController::receiveMsgLoop() {
             case QUERY::ENDGAME :                       std::cout<<"&&"<<"14"<<std::endl;break;
             
             
-            default :                                   this->view->message_box.setString(response);std::cout << "defaut ? " << std::endl;break;
+            default :                                   std::cout << "defaut ? " << std::endl;this->view->message_box.setString(response);break;
         }
     }
 }
@@ -550,6 +552,7 @@ void GameGUIController::sendPrisonGU(const std::string& response){
 
 void GameGUIController::getGoOutJailCardGU(const std::string& response){
     std::cout << "prison card" << std::endl;
+    std::cout << atoi(response.c_str()) << std::endl;
     this->view->info_box.addJailCard(atoi(response.c_str()));
     std::cout << "prison card2" << std::endl;
     if (this->model->isMyTurn()){ this->view->message_box.setString("Vous obtenez une carte sortie de prison.");
@@ -671,11 +674,10 @@ void GameGUIController::sellPropertyGU(const std::string& response){
 }
 
 void GameGUIController::exchangePropertyGU(const std::string& response){
-    //TODO utiliser le response
     response.c_str();
     std::cout << "echange0" << std::endl;
     std::cout << game_info->nb_player << std::endl;
-    ExchangeInfo exchanges{response, game_info->nb_player};
+    ExchangeInfo exchanges(response, 0);
     std::cout << "echange" << std::endl;
     selection_mode = exchanges.all_properties;
     if (this->model->isMyTurn()){
@@ -796,24 +798,33 @@ void GameGUIController::askForPurchaseGU(const std::string& response){
 
 
 void GameGUIController::startAuctionGU(const std::string& response){
+    std::cout << "ein" << std::endl;
     BetInfo bet(response);
     this->view->message_box.setString("Des encheres pour acheter " + bet.property + " debutent !");
+     std::cout << "eout" << std::endl;
 }
 
 void GameGUIController::auctionBidGU(const std::string& response){
+     std::cout << "ain" << std::endl;
     PlayerBetInfo bet(response);
     if (bet.player != ""){
+          std::cout << "ain2" << std::endl;
         this->view->message_box.setString(bet.player + " est sur le point d'acheter le terrain pour : " + std::to_string(bet.amount) + "$");
     }
-    else this->view->message_box.setString("Le prix de depart est : " + std::to_string(bet.amount) + "$ !");
+    else this->view->message_box.setString( "Le prix de depart est : " + std::to_string(bet.amount) + "$ !");
     if (! this->model->isMyTurn()){
+          std::cout << "ain3" << std::endl;
         this->view->message_box.setString("valider pour surencherir !");
         this->view->setAuctionRound(true);
-        this->view->auction_box.setTextNumber(bet.amount);}  
+        this->view->auction_box.setTextNumber(bet.amount);
+        this->view->auction_box.setAuctionLimit(bet.amount);
+        }  
+        std::cout << "ain4" << std::endl;
 }
 
 void GameGUIController::endAuctionGU(const std::string& response){
    EndAuctionInfo end(response);
+   std::cout << "ench fin1" << std::endl;
     if (end.player != ""){
         this->view->message_box.setString(end.player + " remporte " + end.property + " pour " + std::to_string(end.amount) + "$ !");
     }
@@ -821,7 +832,7 @@ void GameGUIController::endAuctionGU(const std::string& response){
 
 void GameGUIController::endGameGU(const std::string& response){
     this->view->message_box.setString("Victoire de " + response + ". Félicitations !");
-    this->view->message_box.setString("Entrez /quit pour retourner au menu.");
+    this->view->setEnd(true);
     this->view->endTurn();
 }
 
