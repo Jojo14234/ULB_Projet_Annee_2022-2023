@@ -294,10 +294,9 @@ void GameGUIController::receiveMsgLoop() {
     }
 }
 
-void GameGUIController::playerJoinUpdate(){ 
-    //this->view->getInfo()->setPlayersInGame(game_info->player_usernames); //à rajouter
-    //pour fake lobby
-    this->view->message_box.addString("Un joueur a rejoint le lobby");
+void GameGUIController::playerJoinUpdate(std::string new_player){ 
+    this->view->lobby.newPlayerJoin(new_player);
+    this->view->message_box.addString("Un joueur a rejoint le lobby: "+new_player);
 }
 
 void GameGUIController::update() { this->initGame();}
@@ -381,8 +380,9 @@ void GameGUIController::createGameGU(const std::string& response) {
 void GameGUIController::joinGameGU(const std::string& response) {
     GameLaunchingParser launching_parser(response);
     game_info = launching_parser.parseJoinQuery();
+    std::string new_player = game_info->username;
     this->initScreen(game_info->game_code);
-    this->playerJoinUpdate();
+    this->playerJoinUpdate(new_player);
 }
 
 

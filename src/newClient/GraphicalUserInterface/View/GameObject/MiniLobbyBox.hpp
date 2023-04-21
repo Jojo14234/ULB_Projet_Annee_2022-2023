@@ -11,7 +11,7 @@ class MiniLobbyBox : public Box{
 
 public:
 	MiniLobbyBox(ObjectInfo <>info): AbstractViewObject{info}, Box{info} {
-		for(int i =0; i< 6; i++){
+		/*for(int i =0; i< 6; i++){
 				sf::Color color;
                 if (colorlist[i] == "red"){color = sf::Color::Red;}
                 else if (colorlist[i] == "blue"){color = sf::Color::Blue;}
@@ -22,7 +22,7 @@ public:
 
                 pseudo_list.push_back(std::make_shared<Text>(ObjectInfo<>(0,18,info.getX() + 400 - 370  , info.getY() + (i * 60) +30), "0", color));
                 pseudo_list[i]->setBold();
-            }
+            }*/
 	}
 
 	void draw(sf::RenderWindow &window) const override {
@@ -30,10 +30,21 @@ public:
 		for (auto& pseudo : pseudo_list){pseudo->draw(window);}
 	}
 
-/*	void newPlayer(std::string new_player) {
-		int number = pseudo.size() + 1
-		push_back(objet text, avec la couleur i+1)
-	}*/
+	sf::Color getColor(int i){
+		if (colorlist[i] == "red"){return sf::Color::Red;}
+        else if (colorlist[i] == "blue"){return sf::Color::Blue;}
+        else if (colorlist[i] == "green"){ return  sf::Color::Green;}
+        else if (colorlist[i] == "magenta"){return sf::Color::Magenta;}
+        else if (colorlist[i] == "cyan"){ return  sf::Color::Cyan;}
+        else if (colorlist[i] == "yellow"){ return sf::Color::Yellow;}
+	}
+
+	void newPlayerJoin(std::string new_player) {
+		int n = pseudo_list.size();
+		sf::Color color = getColor(n);
+		pseudo_list.push_back(std::make_shared<Text>(ObjectInfo<>(0,18,info.getX() + 400 - 370  , info.getY() + (n * 60) +30), new_player, color));
+		pseudo_list[pseudo_list.size()]->setBold();
+	}
 };
 
 #endif

@@ -94,7 +94,7 @@ public:
 	void choiceSpeCard();
 
     //todo add from n-curse
-    void playerJoinUpdate();
+    void playerJoinUpdate(std::string new_player);
 
 	void update() override;
 
