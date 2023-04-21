@@ -23,9 +23,7 @@ const std::string CREATE_BUTTON_PATH = "../assets/images/create_button.png";
 const std::string PLAY_IMAGE_PATH = "../assets/images/play_image.png";
 
 const std::string BACK_BUTTON_PATH = "../assets/images/back_button.png";
-//const std::string BACK_BUTTON_PATH = "../assets/images/retour.png";
 const std::string OK_BUTTON_PATH = "../assets/images/ok_button.png";
-//const std::string OK_BUTTON_PATH = "../assets/images/valider.png";
 const std::string YES_BUTTON_PATH = "../assets/images/yes_button.png";
 const std::string NO_BUTTON_PATH = "../assets/images/no_button.png";
 const std::string UP_BUTTON_PATH = "../assets/images/up_button.png";
@@ -36,6 +34,9 @@ const std::string RIGHT_BUTTON_PATH = "../assets/images/right_button.png";
 const std::string SEND_BUTTON_PATH = "../assets/images/send_button.png";
 const std::string MESSAGE_BUTTON_PATH = "../assets/images/message_button.png";
 const std::string DELETE_BUTTON_PATH = "../assets/images/delete_button.png";
+const std::string REQUEST_BUTTON_PATH = "../assets/images/request_button.png";
+const std::string ASK_BUTTON_PATH = "../assets/images/ask_button.png";
+
 
 const std::string FILE_NAME = "../assets/utils/cellfile.txt";
 const std::string CELL_NAME = "../assets/utils/cellname.txt";
