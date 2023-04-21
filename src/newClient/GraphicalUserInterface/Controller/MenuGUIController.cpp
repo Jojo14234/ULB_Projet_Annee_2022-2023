@@ -132,6 +132,6 @@ void MenuGUIController::joinProcess() {
 }
 
 bool MenuGUIController::doJoinPopUpNBtnContain(int n, sf::Event event) {
-	this->view->join_popup.getButton(n)->contains(event.mouseButton.x, event.mouseButton.y);
+	return this->view->join_popup.getButton(n)->contains(event.mouseButton.x, event.mouseButton.y);
 }
 
