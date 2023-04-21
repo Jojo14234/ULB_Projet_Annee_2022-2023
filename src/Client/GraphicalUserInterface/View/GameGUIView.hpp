@@ -47,7 +47,7 @@ public:
 	ImageButton no_exchange_button{ObjectInfo<>(WINDOW_WIDTH/8.f ,WINDOW_HEIGHT/9.f ,WINDOW_WIDTH/32.f ,WINDOW_HEIGHT/3.f), NO_BUTTON};
 
 	ImageButton sell_bankrupt_button{ObjectInfo<>(WINDOW_WIDTH/8.f ,WINDOW_HEIGHT/9.f ,WINDOW_WIDTH/32.f ,0), SELL_BUTTON};
-	ImageButton give_up_button{ObjectInfo<>(WINDOW_WIDTH/8.f ,WINDOW_HEIGHT/9.f ,WINDOW_WIDTH/32.f ,WINDOW_HEIGHT/3.f), FORFAIT_BUTTON};
+	ImageButton mortgage_bankrupt_button{ObjectInfo<>(WINDOW_WIDTH/8.f ,WINDOW_HEIGHT/9.f ,WINDOW_WIDTH/32.f ,WINDOW_HEIGHT/3.f), MORTGAGE_BUTTON};
 
 	ImageButton leave_button{ObjectInfo<>(WINDOW_WIDTH/8.f ,WINDOW_HEIGHT/9.f ,WINDOW_WIDTH/32.f ,0) ,LEAVE_BUTTON};
 
@@ -66,6 +66,7 @@ public:
 
 	bool exchange_mode = false;
 	bool other_mode = false;
+
 
 	std::string button_mode = "";
  

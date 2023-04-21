@@ -93,7 +93,7 @@ void GameGUIController::handle(sf::Event event) {
                         }
                 else if(this->view->card_prison_button.contains(event.mouseButton.x, event.mouseButton.y)){
                     this->view->card_prison_button.playSound();
-                    GameInputParser parser("/card");
+                    GameInputParser parser("/use");
                     this->model->sendCommand(parser);
                     this->view->setPrisonRound(false);
                         }}
@@ -111,12 +111,17 @@ void GameGUIController::handle(sf::Event event) {
                     this->view->setExchangeRound(false);
                         }}
             else if (this->view->button_mode == "bankrupt_round"){
-                if(this->view->sell_bankrupt_button.contains(event.mouseButton.x, event.mouseButton.y)){//TODO
+                if(this->view->sell_bankrupt_button.contains(event.mouseButton.x, event.mouseButton.y)){
+                    this->view->sell_button.playSound();
+                    GameInputParser parser("/sell");
+                    this->model->sendCommand(parser);
+                    this->view->setBankruptRound(false);
                         }
-                else if(this->view->give_up_button.contains(event.mouseButton.x, event.mouseButton.y)){//TODO
-                        }}
-            else if (this->view->button_mode == "participate_round"){
-                if(this->view->participate_button.contains(event.mouseButton.x, event.mouseButton.y)){//TODO
+                else if(this->view->mortgage_bankrupt_button.contains(event.mouseButton.x, event.mouseButton.y)){
+                    this->view->mortgage_button.playSound();
+                    GameInputParser parser("/mortgage");
+                    this->model->sendCommand(parser);
+                    this->view->setBankruptRound(false);
                         }}
             else if (this->view->button_mode == "auction_round"){
                 if(this->view->auction_box.getUpButton()->contains(event.mouseButton.x, event.mouseButton.y)){
@@ -127,7 +132,7 @@ void GameGUIController::handle(sf::Event event) {
                         }
                 else if(this->view->auction_box.getValidateButton()->contains(event.mouseButton.x, event.mouseButton.y)){
                     this->view->message_box.setString(std::to_string(this->view->auction_box.getValidateNumber()));
-                    GameInputParser parser("/bid " + this->view->auction_box.getValidateNumber());
+                    GameInputParser parser("/bid " + std::to_string(this->view->auction_box.getValidateNumber()));
                     this->model->sendCommand(parser);
                     this->view->setAuctionRound(false);
                         }
@@ -241,7 +246,9 @@ void GameGUIController::receiveMsgLoop() {
             case QUERY::WAIT_YOUR_TURN :                std::cout<<"&&"<<"O"<<std::endl;this->view->message_box.setString("Votre tour d'enchère a prit fin, attendez le suivant."); break;
             case QUERY::BAD_AMOUNT :                    std::cout<<"&&"<<"P"<<std::endl;this->view->message_box.setString("Le montant entre n'est pas correct"); break;
             case QUERY::NOT_ENOUGH_MONEY_TO_PARTICIPATE:std::cout<<"&&"<<"Q"<<std::endl;this->view->message_box.setString("Vous n'avez plus assez d'argent pour continuer a participer."); break;
-            case QUERY::LEAVE_BID:                      std::cout<<"&&"<<"R"<<std::endl;std::cout<<"&&"<<"a"<<std::endl;this->view->message_box.setString("Vous avez abandonne les encheres"); break;
+            case QUERY::LEAVE_BID:                      std::cout<<"&&"<<"R"<<std::endl;this->view->message_box.setString("Vous avez abandonne les encheres"); break;
+            case QUERY::YOUR_AUCTION_TURN:               std::cout << "&&" << "tuuuuu"<<std::endl; break;
+    
 
             case QUERY::INFOS_PLAYER_DIDNT_BUY :        std::cout<<"&&"<<"S"<<std::endl;if (response != this->model->getUsername()) { this->view->message_box.setString("Le joueur " + response + " n'a pas achete la propriete"); } break;
             case QUERY::INFOS_PLAYER_MOVE_ON_OWN_CELL : std::cout<<"&&"<<"T"<<std::endl;if (this->model->isMyTurn()) { this->view->message_box.setString("Vous etes chez vous."); } break;
@@ -282,15 +289,16 @@ void GameGUIController::receiveMsgLoop() {
                                                         this->view->message_box.setString("L'echange a ete refuse"); break;}
             case QUERY::INFOS_NOT_ENOUGH_MONEY :        std::cout<<"&&"<<"8"<<std::endl;this->view->message_box.addString("Vous ne possedez pas assez d'argent."); break;
             case QUERY::INFOS_AUTO_OTHER_POSSIBILITY:   std::cout<<"&&"<<"9"<<std::endl;this->view->message_box.setString("L'autre possibilite a ete automatiquement selectionnee"); break;
-            case QUERY::STOP_WAIT :                     {std::cout<<"&&"<<"10"<<std::endl;this->view->message_box.setString("Pas assez rapide. L'offre a été automatiquement annulee"); 
-                                                        if (this->model->isMyTurn()){this->view->setStartRound(true);}
-                                                        break;}
+            case QUERY::STOP_WAIT :                     std::cout<<"&&"<<"10"<<std::endl;this->view->message_box.setString("Pas assez rapide. L'offre a été automatiquement annulee"); break;
+                                                       
             
-            case QUERY::INFOS_DEBT :                    std::cout<<"&&"<<"11"<<std::endl;break;
+            case QUERY::INFOS_DEBT :                    std::cout<<"&&"<<"11"<<std::endl;this->debtModeGU(response);break;
             case QUERY::INFOS_WON_LAND :                std::cout<<"&&"<<"12"<<std::endl;this->wonLandGU(response); break;
 
             case QUERY::WIN :                           std::cout<<"&&"<<"13"<<std::endl;this->endGameGU(response); break;
             case QUERY::ENDGAME :                       std::cout<<"&&"<<"14"<<std::endl;break;
+
+            case QUERY::GAME_TIME_EXPIRED:              this->view->message_box.setString("IL N'Y A PLUS DE TEMPS, LA PARTIE SE TERMINE");break;
             
             
             default :                                   std::cout << "defaut ? " << std::endl;this->view->message_box.setString(response);break;
@@ -358,9 +366,11 @@ void GameGUIController::startGame(int beginner) {
     this->view->logo.setVisible();
      std::cout << "aaa9 " << std::endl;
     this->view->board.setColorNumber(game_info->nb_player);
-    this->view->info_box.initMoney(game_info->nb_player,1500);
-    this->view->info_box.initJailcard(game_info->nb_player,0);
      std::cout << "aaa10 " << std::endl;
+    this->view->info_box.initMoney(game_info->nb_player,game_info->start_money);
+     std::cout << "aaa11 " << std::endl;
+    this->view->info_box.initJailcard(game_info->nb_player,0);
+     std::cout << "aaa12 " << std::endl;
     for (int i = 0; i< game_info->nb_player; i++) {
         std::cout << "b" << std::endl;
         this->view->board.setPlayer(0, i);
@@ -554,15 +564,14 @@ void GameGUIController::goOutPrisonGU(const std::string& response){
 }
 
 void GameGUIController::sendPrisonGU(const std::string& response){
-  
-    if (this->model->isMyTurn()){this->view->message_box.setString("Vous etes envoye en prison.");
+    if (this->model->isMyTurn()){this->view->message_box.addString("Vous etes envoye en prison.");
     } else this->view->message_box.setString(response + " a ete envoye en prison.");
 }
 
 void GameGUIController::getGoOutJailCardGU(const std::string& response){
     std::cout << "prison card" << std::endl;
     std::cout << atoi(response.c_str()) << std::endl;
-    this->view->info_box.addJailCard(atoi(response.c_str()));
+    this->view->info_box.addJailCard(atoi(response.c_str())-1);
     std::cout << "prison card2" << std::endl;
     if (this->model->isMyTurn()){ this->view->message_box.setString("Vous obtenez une carte sortie de prison.");
     std::cout << "prison card3" << std::endl;
@@ -850,4 +859,11 @@ void GameGUIController::wonLandGU(const std::string& response){
     WonLand won_land(response);
     int index = this->view->board.getCellIndex(won_land.land);
     this->view->board.setPurchased(index, won_land.player - 1);
+}
+
+void GameGUIController::debtModeGU(const std::string& response){
+    if(this->model->isMyTurn()){
+        this->view->message_box.setString("c'est la hess, que voulez vous faire");
+        this->view->setBankruptRound(true);
+    }
 }
