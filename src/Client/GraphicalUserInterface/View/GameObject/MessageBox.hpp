@@ -7,8 +7,8 @@ class MessageBox: public ModalBox{
 	Text text2;
     public:
         MessageBox(ObjectInfo<> info):  AbstractViewObject(info),ModalBox(info,STATUS_COLOR)
-		,text{ObjectInfo<>(0,24,(info.getX() + 40),info.getY() + info.getHeight() / 3 - 20), ""}
-		,text2{ObjectInfo<>(0,24,(info.getX() + 40),info.getY() + info.getHeight() / 3), ""}
+		,text{ObjectInfo<>(0,20,(info.getX() + 40),info.getY() + info.getHeight() / 3 - 20), ""}
+		,text2{ObjectInfo<>(0,20,(info.getX() + 40),info.getY() + info.getHeight() / 3), ""}
 		{
 			addTexts({&text,&text2});
 		}

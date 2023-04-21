@@ -82,24 +82,22 @@ void GameGUIView::setBankruptRound(bool visible){
 	if (visible == false){
 		button_mode = "";
 		sell_bankrupt_button.setHidden();
-		give_up_button.setHidden();
+		mortgage_bankrupt_button.setHidden();
 	}
 	else{
 		hideAllButton(); 
 		button_mode = "bankrupt_round";
 		sell_bankrupt_button.setVisible(); 
-		give_up_button.setVisible(); 
+		mortgage_bankrupt_button.setVisible(); 
 	}
 }
 
 void GameGUIView::setAuctionRound(bool visible){
 	if (visible == false){
 		button_mode = "";
-		button_zone.setVisible();
 		auction_box.setHidden();}
 	else{
 		hideAllButton(); 
-		button_zone.setHidden();
 		button_mode = "auction_round";
 		auction_box.setVisible();}
 }
@@ -240,7 +238,7 @@ void GameGUIView::drawExchangeRound(){
 
 void GameGUIView::drawBankruptRound(){
 	sell_bankrupt_button.draw(*window);
-	give_up_button.draw(*window);
+	mortgage_bankrupt_button.draw(*window);
 }
 
 void GameGUIView::drawSpeRound(){leave_button.draw(*window);}

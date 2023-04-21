@@ -81,6 +81,7 @@ public:
 	void endAuctionGU(const std::string& response);
 	void endGameGU(const std::string& response);
 	void wonLandGU(const std::string& response);
+	void debtModeGU(const std::string& response);
 
 	void initGame();
 
