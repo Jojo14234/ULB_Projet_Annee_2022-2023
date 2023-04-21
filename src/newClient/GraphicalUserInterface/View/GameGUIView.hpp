@@ -11,11 +11,15 @@
 #include "GameObject/Dice.hpp"
 #include "GameObject/GamecodeBox.hpp"
 #include "GameObject/ExchangeBox.hpp"
+#include "GameObject/MiniLobbyBox.hpp"
 
 class GameGUIController; // forward declaration
 
 class GameGUIView: public AbstractGUIView {
+	bool startingGame = false;
+public:
 	Board board;
+	MiniLobbyBox lobby{ObjectInfo<>(ObjectInfo<>(400, 400,window->getSize().x -400,window->getSize().y - 400))};
 	InfoBox info_box{ObjectInfo<>(400, 400,window->getSize().x -400,window->getSize().y - 400)};
 
 	Box button_zone{ObjectInfo<>(300, window->getSize().y,0,0), sf::Color::Red };

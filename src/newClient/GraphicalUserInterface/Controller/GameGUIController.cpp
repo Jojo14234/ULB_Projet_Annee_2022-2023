@@ -295,8 +295,9 @@ void GameGUIController::receiveMsgLoop() {
 }
 
 void GameGUIController::playerJoinUpdate(){ 
-    //this->view->getInfo()->setPlayersInGame(game_info->player_usernames); à rajouter
-     this->view->message_box.addString("Un joueur a rejoint le lobby");
+    //this->view->getInfo()->setPlayersInGame(game_info->player_usernames); //à rajouter
+    //pour fake lobby
+    this->view->message_box.addString("Un joueur a rejoint le lobby");
 }
 
 void GameGUIController::update() { this->initGame();}
@@ -340,11 +341,16 @@ void GameGUIController::startGame(int beginner) {
         std::cout << "aaa5 " << std::endl;
         //rajouter sons - début game
     }
+
     
     else{ 
         std::cout << "aaa6 " << std::endl;
         this->view->message_box.setString("C'est au tour de " + players_username[beginner] + " !");
         std::cout << "aaa7 " << std::endl;}
+
+    //this->view->startingGame = true; //caché le lobby ici
+
+
     this->view->gamecode_box.setHidden();
     this->view->logo.setVisible();
     this->view->board.setColorNumber(player_nb);
