@@ -4,11 +4,12 @@
 #include "Objects.hpp"
 #include "AssetsPath.hpp"
 #include "configs.hpp"
+#include "Audibles/Ambiancer.hpp"
 
 
 class ConnectionGUIController; // forward declaration
 
-class ConnectionGUIView: public AbstractGUIView {
+class ConnectionGUIView: public AbstractGUIView, public ConnectionAmbiancer {
 
 	// Objects
 	Image logo{ObjectInfo<>(WINDOW_WIDTH/2.f, WINDOW_WIDTH/2.f * 145.f/788.f, WINDOW_WIDTH/4.f , WINDOW_HEIGHT/10.f), LOGO_PATH};

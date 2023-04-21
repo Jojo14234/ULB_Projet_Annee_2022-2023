@@ -19,7 +19,7 @@ class ConnectionGUIController: public AbstractGUIController {
 
 public: 
 	
-	ConnectionGUIController(Client* model, ConnectionGUIView* view) : AbstractGUIController(model, STATE::CONNECTION), view{view} {}
+	ConnectionGUIController(Client* model, ConnectionGUIView* view);
 
 	~ConnectionGUIController()=default;
 

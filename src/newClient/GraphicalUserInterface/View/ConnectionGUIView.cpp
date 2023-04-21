@@ -1,7 +1,7 @@
 
 #include "ConnectionGUIView.hpp"
 
-ConnectionGUIView::ConnectionGUIView(sf::RenderWindow* window) : AbstractGUIView(window) {
+ConnectionGUIView::ConnectionGUIView(sf::RenderWindow* window) : AbstractGUIView(window), ConnectionAmbiancer() {
 		modal_box.addText(new Text{ObjectInfo<>(0, 80, WINDOW_WIDTH/4.f, WINDOW_HEIGHT/4.f), "Welcome to the game!"});
 		modal_box.setHidden();
 }
