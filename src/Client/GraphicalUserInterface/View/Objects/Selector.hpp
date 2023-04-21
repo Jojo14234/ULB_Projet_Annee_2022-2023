@@ -56,7 +56,8 @@ public:
 	}
 
 	void update(int change) override {
-		this->actual_idx = (this->actual_idx + change)% choices_size;
+        if ((this->actual_idx + change) < 0) { this->actual_idx = choices_size - 1; }
+        else { this->actual_idx = (this->actual_idx + change) % choices_size; }
 		this->changeText();
 	}
 
