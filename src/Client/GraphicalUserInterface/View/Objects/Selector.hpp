@@ -22,7 +22,9 @@ class Selector : public AbstractViewObject, public Observer {
 
 public:
 
-	Selector(ObjectInfo<> info, std::vector<DirectionImButton*> buttons) : AbstractViewObject(info), buttons{buttons} {}
+	Selector(ObjectInfo<> info, std::vector<DirectionImButton*> buttons) : AbstractViewObject(info), buttons{buttons} {
+		this->text = Text{info, ""};
+	}
 
 	Selector(ObjectInfo<> info, std::vector<std::string> str_choices,std::vector<DirectionImButton*> buttons): AbstractViewObject(info),choices{str_choices}, buttons{buttons} {
 		for (auto button:buttons) {
