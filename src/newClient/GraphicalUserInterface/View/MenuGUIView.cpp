@@ -8,21 +8,26 @@ MenuGUIView::MenuGUIView(sf::RenderWindow* window) : AbstractGUIView(window){
 
 void MenuGUIView::initSettingsPopup(){
 	settings_popup.setHidden();
-	settings_popup.addText(new Text{ObjectInfo<>(0, WINDOW_WIDTH/40, WINDOW_WIDTH/2.f, WINDOW_HEIGHT/4.f), "Réglages :D"});
-	settings_popup.addText(new Text{ObjectInfo<>(0, WINDOW_WIDTH/50, WINDOW_WIDTH/4.f, WINDOW_HEIGHT/4+WINDOW_HEIGHT/10.f), "Taille de fenêtre:"});
+	settings_popup.addText(new Text{ObjectInfo<>(0, WINDOW_WIDTH/40, WINDOW_WIDTH/2.f, WINDOW_HEIGHT/4.f), "Reglages :D"});
+	settings_popup.addText(new Text{ObjectInfo<>(0, WINDOW_WIDTH/50, WINDOW_WIDTH/4.f, WINDOW_HEIGHT/4+WINDOW_HEIGHT/10.f), "Taille de fenetre:"});
 	settings_popup.addText(new Text{ObjectInfo<>(0, WINDOW_WIDTH/50, WINDOW_WIDTH/4.f, WINDOW_HEIGHT/4+WINDOW_HEIGHT/10*2.f), "Son:"});
-	settings_popup.addText(new Text{ObjectInfo<>(0, WINDOW_WIDTH/50, WINDOW_WIDTH/4.f, WINDOW_HEIGHT/4+WINDOW_HEIGHT/10*3.f), "Supprimer son compte:"});
 	//settings_popup.addButton(new ImageButton{ObjectInfo<>(WINDOW_WIDTH/10.f, WINDOW_HEIGHT/10.f, WINDOW_WIDTH/4.f, WINDOW_HEIGHT/4+WINDOW_HEIGHT/10*5.f-WINDOW_HEIGHT/12.f+WINDOW_HEIGHT/25.f), BACK_BUTTON_PATH});
-    settings_popup.addButton(new ImageButton{ObjectInfo<>(WINDOW_WIDTH/6.f, WINDOW_HEIGHT/6.f, WINDOW_WIDTH/2.f - WINDOW_WIDTH/11.f - WINDOW_WIDTH/6.f, WINDOW_HEIGHT - WINDOW_HEIGHT/9), BACK_BUTTON_PATH});
+    settings_popup.addButton(new ImageButton{ObjectInfo<>(WINDOW_WIDTH/25.f, WINDOW_HEIGHT/25.f, WINDOW_WIDTH/4.f, WINDOW_HEIGHT/4+WINDOW_HEIGHT/10*5.f-WINDOW_HEIGHT/12.f+WINDOW_HEIGHT/25.f), BACK_BUTTON_PATH});
     //settings_popup.addButton(new ImageButton{ObjectInfo<>(WINDOW_WIDTH/10.f, WINDOW_HEIGHT/10.f, WINDOW_WIDTH/4*3-WINDOW_WIDTH/25.f, WINDOW_HEIGHT/4+WINDOW_HEIGHT/10*5.f-WINDOW_HEIGHT/12.f+WINDOW_HEIGHT/25.f), OK_BUTTON_PATH});
-    settings_popup.addButton(new ImageButton{ObjectInfo<>(WINDOW_WIDTH/6.f, WINDOW_HEIGHT/6.f, WINDOW_WIDTH/2.f + WINDOW_WIDTH/11.f, WINDOW_HEIGHT - WINDOW_HEIGHT/9), OK_BUTTON_PATH});
+    settings_popup.addButton(new ImageButton{ObjectInfo<>(WINDOW_WIDTH/25.f, WINDOW_HEIGHT/25.f, WINDOW_WIDTH/4*3-WINDOW_WIDTH/25.f, WINDOW_HEIGHT/4+WINDOW_HEIGHT/10*5.f-WINDOW_HEIGHT/12.f+WINDOW_HEIGHT/25.f), OK_BUTTON_PATH});
 
     std::vector<std::string> window_sizes{"1600 x 900", "1920 x 1080", "2560 x 1600"};
 	DirectionImButton* l_button= new DirectionImButton{ObjectInfo<>(WINDOW_WIDTH/50.f, WINDOW_WIDTH/50.f,(WINDOW_WIDTH/4*3-WINDOW_WIDTH/12.f) - WINDOW_WIDTH/8.f , WINDOW_HEIGHT/4+WINDOW_HEIGHT/10.f), LEFT_BUTTON_PATH};
 	DirectionImButton* r_button= new DirectionImButton{ObjectInfo<>(WINDOW_WIDTH/50.f, WINDOW_WIDTH/50.f, WINDOW_WIDTH/4*3-WINDOW_WIDTH/12.f+WINDOW_WIDTH/50.f, WINDOW_HEIGHT/4+WINDOW_HEIGHT/10.f), RIGHT_BUTTON_PATH};
 	std::vector<DirectionImButton*> buttons_selector{l_button, r_button};
 	settings_popup.addSelector(new Selector{ObjectInfo<>(0, WINDOW_WIDTH/50, (WINDOW_WIDTH/4*3-WINDOW_WIDTH/12.f- WINDOW_WIDTH/8.f + WINDOW_WIDTH/50.f ) + WINDOW_WIDTH/50.f, WINDOW_HEIGHT/4+WINDOW_HEIGHT/10.f), window_sizes, buttons_selector});
-	settings_popup.addButton(new ImageButton{ObjectInfo<>(WINDOW_WIDTH/30.f, WINDOW_HEIGHT/30.f,(WINDOW_WIDTH/4*3-WINDOW_WIDTH/12.f) - 100 , WINDOW_HEIGHT/4+WINDOW_HEIGHT/10*3.f), YES_BUTTON_PATH});
+
+	std::vector<std::string> sound_volume{{ "Pas de son :(","Petit son","Petit moyen son","Moyen son", "Grand moyen son", "Gros son"}};
+	DirectionImButton* l_button2= new DirectionImButton{ObjectInfo<>(WINDOW_WIDTH/50.f, WINDOW_WIDTH/50.f,(WINDOW_WIDTH/4*3-WINDOW_WIDTH/12.f) - WINDOW_WIDTH/8.f , WINDOW_HEIGHT/4+WINDOW_HEIGHT/10.f*2), LEFT_BUTTON_PATH};
+	DirectionImButton* r_button2= new DirectionImButton{ObjectInfo<>(WINDOW_WIDTH/50.f, WINDOW_WIDTH/50.f, WINDOW_WIDTH/4*3-WINDOW_WIDTH/12.f+WINDOW_WIDTH/50.f, WINDOW_HEIGHT/4+WINDOW_HEIGHT/10.f*2), RIGHT_BUTTON_PATH};
+	std::vector<DirectionImButton*> buttons_selector2{l_button2, r_button2};
+	settings_popup.addSelector(new Selector{ObjectInfo<>(0, WINDOW_WIDTH/70, (WINDOW_WIDTH/4*3-WINDOW_WIDTH/12.f- WINDOW_WIDTH/8.f + WINDOW_WIDTH/50.f ) + WINDOW_WIDTH/50.f, WINDOW_HEIGHT/4+WINDOW_HEIGHT/10*2.f), sound_volume, buttons_selector2});
+
 }
 
 void MenuGUIView::initCreatePopup(){
@@ -40,10 +45,10 @@ void MenuGUIView::initCreatePopup(){
 	create_popup.addText(new Text{ObjectInfo<>(0, WINDOW_WIDTH/80, WINDOW_WIDTH/4.f, WINDOW_HEIGHT/6+WINDOW_HEIGHT/10*4.f+WINDOW_WIDTH/50), "en mode rapide: pas de limite"});
 	create_popup.addText(new Text{ObjectInfo<>(0, WINDOW_WIDTH/80, WINDOW_WIDTH/4.f, WINDOW_HEIGHT/6+WINDOW_HEIGHT/10*5.f+WINDOW_WIDTH/50), "en mode rapide: pas de limite"});
 	create_popup.addText(new Text{ObjectInfo<>(0, WINDOW_WIDTH/80, WINDOW_WIDTH/4.f, WINDOW_HEIGHT/6+WINDOW_HEIGHT/10*6.f+WINDOW_WIDTH/50), "par defaut: pas de limite(normal), 50 min(rapide)"});
+											//(WINDOW_WIDTH/25.f, WINDOW_HEIGHT/25.f, WINDOW_WIDTH/4.f, WINDOW_HEIGHT/4+WINDOW_HEIGHT/10*5.f-WINDOW_HEIGHT/12.f+WINDOW_HEIGHT/25.f)
 
-	create_popup.addButton(new ImageButton{ObjectInfo<>(WINDOW_WIDTH/6.f, WINDOW_HEIGHT/6.f, WINDOW_WIDTH/2.f - WINDOW_WIDTH/11.f - WINDOW_WIDTH/6.f, WINDOW_HEIGHT - WINDOW_HEIGHT/9), BACK_BUTTON_PATH});
-	create_popup.addButton(new ImageButton{ObjectInfo<>(WINDOW_WIDTH/6.f, WINDOW_HEIGHT/6.f, WINDOW_WIDTH/2.f + WINDOW_WIDTH/11.f, WINDOW_HEIGHT - WINDOW_HEIGHT/9), OK_BUTTON_PATH});
-
+	create_popup.addButton(new ImageButton{ObjectInfo<>(WINDOW_WIDTH/25.f, WINDOW_HEIGHT/25.f, WINDOW_WIDTH/4.f, WINDOW_HEIGHT/4+WINDOW_HEIGHT/10*5.f-WINDOW_HEIGHT/12.f+WINDOW_HEIGHT/25.f+WINDOW_HEIGHT/4.f), BACK_BUTTON_PATH});
+	create_popup.addButton(new ImageButton{ObjectInfo<>(WINDOW_WIDTH/25.f, WINDOW_HEIGHT/25.f, WINDOW_WIDTH/4*3-WINDOW_WIDTH/25.f, WINDOW_HEIGHT/4+WINDOW_HEIGHT/10*5.f-WINDOW_HEIGHT/12.f+WINDOW_HEIGHT/25.f+WINDOW_HEIGHT/4.f), OK_BUTTON_PATH});
 	std::vector<std::string> game_mode{"classique", "rapide"};
 	std::vector<std::string> start_money{"par defaut","1500", "2000", "2500", "3000", "888"};
 	std::vector<std::string> player_nbr{"2", "3", "4", "5", "6"};
@@ -97,8 +102,8 @@ void MenuGUIView::initJoinPopup(){
 	join_popup.setHidden();
 	join_popup.addText(new Text{ObjectInfo<>(0, WINDOW_WIDTH/40, WINDOW_WIDTH/2.f-WINDOW_WIDTH/8, WINDOW_HEIGHT/4.f), "Rejoindre une partie :D"});
 	join_popup.addText(new Text{ObjectInfo<>(0, WINDOW_WIDTH/50, WINDOW_WIDTH/2.f-WINDOW_WIDTH/8, WINDOW_HEIGHT/4+100.f), "Entrez le code de jeu"});
-	join_popup.addButton(new ImageButton{ObjectInfo<>(WINDOW_WIDTH/6.f, WINDOW_HEIGHT/6.f, WINDOW_WIDTH/4.f, WINDOW_HEIGHT/4+WINDOW_HEIGHT/10*5.f-WINDOW_HEIGHT/12.f+WINDOW_HEIGHT/25.f), BACK_BUTTON_PATH});
-	join_popup.addButton(new ImageButton{ObjectInfo<>(WINDOW_WIDTH/6.f, WINDOW_HEIGHT/6.f, WINDOW_WIDTH/2, WINDOW_HEIGHT/4+WINDOW_HEIGHT/10*5.f-WINDOW_HEIGHT/12.f+WINDOW_HEIGHT/25.f), OK_BUTTON_PATH});
+	join_popup.addButton(new ImageButton{ObjectInfo<>(WINDOW_WIDTH/25.f, WINDOW_HEIGHT/25.f, WINDOW_WIDTH/4.f, WINDOW_HEIGHT/4+WINDOW_HEIGHT/10*5.f-WINDOW_HEIGHT/12.f+WINDOW_HEIGHT/25.f), BACK_BUTTON_PATH});
+	join_popup.addButton(new ImageButton{ObjectInfo<>(WINDOW_HEIGHT/15.f, WINDOW_HEIGHT/15.f, WINDOW_WIDTH/2+WINDOW_HEIGHT/10, WINDOW_HEIGHT/2.f), SEND_BUTTON_PATH});
 	join_popup.addInput(new InputBox{ObjectInfo<>(WINDOW_WIDTH/8, WINDOW_HEIGHT/15.f, WINDOW_WIDTH/2.f-WINDOW_WIDTH/15, WINDOW_HEIGHT/2),RANK_COLOR, SERIF_FONT_PATH});
 
 }

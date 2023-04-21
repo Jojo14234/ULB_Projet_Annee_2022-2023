@@ -59,6 +59,8 @@ public:
 		this->text.setString(new_text);
 	}
 
+	std::string getString() const { return text.getString(); }
+
 	void setPosition(double x, double y) override {
 		AbstractViewObject::setPosition(x, y);
 		this->text.setPosition(x, y);

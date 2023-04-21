@@ -103,7 +103,4 @@ public:
 		}
 	}
 
-	// Getter
-	std::string getText() const { return text.getString(); }
-
 };
