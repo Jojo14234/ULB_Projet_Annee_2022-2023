@@ -16,6 +16,9 @@ ifneq ($(shell uname -s), Linux)
 	LDLIBS   += -L/opt/homebrew/Cellar/sfml/2.5.1_2/lib
 endif
 
+CXXFLAGS += -I/home/lblo0001/SFML-2.5.1/include
+LDLIBS   += -L/home/lblo0001/SFML-2.5.1/lib
+
 
 # Create Server objects
 SERVER_BINS = $(patsubst Server/%.cpp, Server/%.o, $(wildcard Server/*.cpp))
