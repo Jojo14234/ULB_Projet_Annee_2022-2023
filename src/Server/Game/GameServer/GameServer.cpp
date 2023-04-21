@@ -342,9 +342,6 @@ void GameServer::processStart(ClientManager* client) {
             game.forceAcquisition(p);
             checkAndManageBankruptcy(*p->getClient(), p);
             updateAllClients("La durée de cette partie est limitée à " + std::to_string(params.maxTimeForGame / 60) + " minutes. Au-delà de ce délai, le joueur avec le plus important patrimoine gagnera.");
-            for (auto client : clients) {
-                Timer2(params.maxTimeForGame, client, "Le temps maximal de la partie est écoulé.", QUERY::GAME_MUST_END);
-            }
         }
     }
 }
@@ -635,6 +632,7 @@ void GameServer::processAuction(Player *me, Land* land) {
             if (player->getStatus() != PLAYER_STATUS::WAITING_FOR_AUCTION_TURN || player == futur_owner) { continue; }
             player->setStatus(PLAYER_STATUS::AUCTION_TURN);
 
+            player->getClient()->sendQueryMsg("", QUERY::YOUR_AUCTION_TURN);
             player->getClient()->sendQueryMsg(":"+std::to_string(starting_bid), QUERY::INFOS_AUCTION_BID);
 
             GAME_QUERY_TYPE query;

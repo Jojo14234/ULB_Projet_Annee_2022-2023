@@ -116,6 +116,7 @@ void GameCUIController::receiveMsgLoop() { // todo il faudrait pas déplacer les
             case QUERY::INFOS_AUCTION_START :           this->startAuctionGU(response); break;
             case QUERY::INFOS_AUCTION_BID :             this->auctionBidGU(response); break;
             case QUERY::INFOS_AUCTION_END :             this->endAuctionGU(response); break;
+            case QUERY::YOUR_AUCTION_TURN :             this->view->getConsole()->addText("C'est a votre tour d'encherir !"); break;
             case QUERY::WAIT_YOUR_TURN :                this->view->getConsole()->addText("Votre tour d'enchère a prit fin, attendez le suivant."); break;
             case QUERY::BAD_AMOUNT :                    this->view->getConsole()->addText("Le montant entre n'est pas correct"); break;
             case QUERY::NOT_ENOUGH_MONEY_TO_PARTICIPATE:this->view->getConsole()->addText("Vous n'avez plus assez d'argent pour continuer a participer."); break;

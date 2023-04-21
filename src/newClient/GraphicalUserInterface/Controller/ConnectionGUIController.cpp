@@ -6,6 +6,8 @@
 #include "../../../Server/ClientManager/QUERY.hpp"
 
 
+ConnectionGUIController::ConnectionGUIController(Client* model, ConnectionGUIView* view) : AbstractGUIController(model, STATE::CONNECTION), view{view} {view->playMusic();}
+
 void ConnectionGUIController::handle(sf::Event event) {
 	switch(event.type) {
         // Btn pressed
@@ -34,6 +36,7 @@ void ConnectionGUIController::handle(sf::Event event) {
 bool ConnectionGUIController::doLoginBtnContain(sf::Event event) {
     if (this->view->login_button.contains(event.mouseButton.x, event.mouseButton.y)) {
         this->view->login_button.playSound();
+        this->view->stopMusic();
         return true;   
     }
     return false;
@@ -41,6 +44,7 @@ bool ConnectionGUIController::doLoginBtnContain(sf::Event event) {
 bool ConnectionGUIController::doRegisterBtnContain(sf::Event event) {
     if (this->view->register_button.contains(event.mouseButton.x, event.mouseButton.y)) {
         this->view->register_button.playSound();
+        this->view->stopMusic();
         return true;   
     }
     return false;
@@ -49,6 +53,7 @@ bool ConnectionGUIController::doRegisterBtnContain(sf::Event event) {
 bool ConnectionGUIController::doDisconnectBtnContain(sf::Event event) {
     if (this->view->disconnect_button.contains(event.mouseButton.x, event.mouseButton.y)) {
         this->view->disconnect_button.playSound();
+        this->view->stopMusic();
         return true;
     }
     return false;
