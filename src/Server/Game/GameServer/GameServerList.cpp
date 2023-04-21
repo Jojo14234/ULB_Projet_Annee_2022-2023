@@ -18,7 +18,8 @@ bool GameServerList::joinGame(ClientManager* client, int code) {
 void GameServerList::removeGameServer(int gc) {
     for (auto game : *this) {
         if (game->isCode(gc)) {
-            /*TODO remove gameServer*/
+            game = this->back();
+            this->pop_back();
         }
     }
 }

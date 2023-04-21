@@ -76,6 +76,7 @@ bool ClientManager::operator==(const ClientManager& other) { return this->tid ==
 void ClientManager::enterGameLoop() {
     GameStats stats = this->game_server->clientLoop(*this);
     this->getAccount()->updateStats(stats);
+    this->removeGameServer();
 }
 
 void ClientManager::disconnect() { this->connected = false; }

@@ -39,7 +39,7 @@ public:
 
     static void LoginAccount(string username, bool successFull) {
         string success = (successFull) ? " successfully" : " failed to";
-        cout << "[SERVER] > {REGISTER} > "<< username << success << " login." << endl;
+        cout << "[SERVER] > {LOGIN} > "<< username << success << " login." << endl;
     }
 
     static void JoinGame(string username, int gameCode, bool successFull) {

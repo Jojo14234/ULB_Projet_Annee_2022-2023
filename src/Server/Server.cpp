@@ -195,6 +195,8 @@ void Server::clientProcessCreateGame(ClientManager &client) {
 
     // Entering the game
 	client.enterGameLoop();
+
+    this->games.removeGameServer(gc);
 }
 
 // Creating fastGame

@@ -147,7 +147,7 @@ void GameCUIController::receiveMsgLoop() { // todo il faudrait pas déplacer les
             case QUERY::INFOS_WON_LAND :                this->wonLandGU(response); break;
 
             case QUERY::WIN :                           this->endGameGU(response); break;
-            case QUERY::ENDGAME :                       break;
+            case QUERY::ENDGAME :                       this->new_state = STATE::MENU; break;
             default :                                   this->view->getConsole()->addText(response); break;
         }
     }

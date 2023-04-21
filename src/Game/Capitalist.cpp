@@ -371,7 +371,7 @@ ClientManager *Capitalist::calculateGameWinner() {
 }
 
 bool Capitalist::processJailPay(Player *player) {
-    if (player->getMoney() > 50){
+    if (player->getMoney() > 50) {
         if ( player->pay(50) ) { player->setStatus(PLAYER_STATUS::FREE); }
         return true;
     }
