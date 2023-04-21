@@ -21,6 +21,9 @@ class Selector : public AbstractViewObject, public Observer {
 	int choices_size;
 
 public:
+
+	Selector(ObjectInfo<> info, std::vector<DirectionImButton*> buttons) : AbstractViewObject(info), buttons{buttons} {}
+
 	Selector(ObjectInfo<> info, std::vector<std::string> str_choices,std::vector<DirectionImButton*> buttons): AbstractViewObject(info),choices{str_choices}, buttons{buttons} {
 		for (auto button:buttons) {
 			button->registerObserver(this);
@@ -37,12 +40,28 @@ public:
 		}
 	}
 
+	int size() { return this->choices_size; }
+
+	void clear() {
+		this->choices.clear();
+		this->actual_idx = 0;
+		this->choices_size = 0;
+		text.setString("");
+	}
+
+	void addChoice(const std::string &choice) {
+		this->choices.push_back(choice);
+		this->choices_size++;
+		this->changeText();
+	}
+
 	void update(int change) override {
-		this->actual_idx = (((this->actual_idx + change)% choices_size) +choices_size) % choices_size;
+		this->actual_idx = (this->actual_idx + change)% choices_size;
 		this->changeText();
 	}
 
 	virtual void draw(sf::RenderWindow &window) const override {
+		if (isHidden()) return;
         text.draw(window);
         for (auto button:buttons) {
 			button->draw(window);
