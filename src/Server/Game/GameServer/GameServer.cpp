@@ -261,6 +261,8 @@ GameStats GameServer::clientLoop(ClientManager &client) {
 void GameServer::clientTurn(ClientManager &client, Player* me) {
 
     GAME_QUERY_TYPE query;
+    Timer2 timer(params.maxTimePerTurn, client, "Time limit exceeded", QUERY::TURN_TIME_EXPIRED);
+
     alarm(params.maxTimePerTurn);
 
     while ( !me->hasRolled() and me->getStatus() != PLAYER_STATUS::LOST and query != GAME_QUERY_TYPE::TIME_EXPIRED ) {
@@ -268,6 +270,10 @@ void GameServer::clientTurn(ClientManager &client, Player* me) {
         try {
 
             query = this->getGameQuery(client);
+
+            if (timer.isFinish()){
+                query = GAME_QUERY_TYPE::TIME_EXPIRED;
+            }
 
             if ( query == GAME_QUERY_TYPE::BUILD )          { this->processBuild(client, me); continue; }
             if ( query == GAME_QUERY_TYPE::SELL_BUILDINGS ) { this->processSellBuild(client, me); continue; }

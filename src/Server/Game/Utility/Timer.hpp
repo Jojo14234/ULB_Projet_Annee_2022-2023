@@ -9,8 +9,8 @@
 #include <unistd.h>
 #include <signal.h>
 
-//TODO AJOUTER SOURCE
 
+/*
 // Classe Timer qui implémente un timer en utilisant SIGALRM et pause()
 class Timer {
 public:
@@ -44,7 +44,8 @@ private:
     }
 #pragma GCC diagnostic pop
 
-};
+};*/
+
 
 #include <thread>
 #include <random>
@@ -83,10 +84,13 @@ public:
         sleep(this->duration);
 
         // 3 a la fin du thread, on compare si les seed sont toujours identiques, auquel cas
-        if (this->seed == random_seed) {this->client->sendQueryMsg(this->stopMessage, to_be_sent_query);}
+        if (this->seed == random_seed) {
+            this->seed = -1; this->client->sendQueryMsg(this->stopMessage, to_be_sent_query);}
     }
 
     void resetSeed() { this->seed = 0; }
+
+    bool isFinish() {  return this->seed == -1; }
 
 };
 
