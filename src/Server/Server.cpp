@@ -374,7 +374,7 @@ void Server::clientProcessSendMessage(ClientManager &client) {
     // Sending message
     if (success) { database.sendMsg(client.getAccount(), user, client.getS2()); }
 
-    client.send("")
+    client.send("");
     ServerSentence::SendMessage(client.getUsername(), client.getS1(), success);
 }
 
