@@ -22,10 +22,10 @@ const std::string JOIN_BUTTON_PATH = "../assets/images/join_button.png";
 const std::string CREATE_BUTTON_PATH = "../assets/images/create_button.png";
 const std::string PLAY_IMAGE_PATH = "../assets/images/play_image.png";
 
-//const std::string BACK_BUTTON_PATH = "../assets/images/back_button.png";
-const std::string BACK_BUTTON_PATH = "../assets/images/retour.png";
-//const std::string OK_BUTTON_PATH = "../assets/images/ok_button.png";
-const std::string OK_BUTTON_PATH = "../assets/images/valider.png";
+const std::string BACK_BUTTON_PATH = "../assets/images/back_button.png";
+//const std::string BACK_BUTTON_PATH = "../assets/images/retour.png";
+const std::string OK_BUTTON_PATH = "../assets/images/ok_button.png";
+//const std::string OK_BUTTON_PATH = "../assets/images/valider.png";
 const std::string YES_BUTTON_PATH = "../assets/images/yes_button.png";
 const std::string NO_BUTTON_PATH = "../assets/images/no_button.png";
 const std::string UP_BUTTON_PATH = "../assets/images/up_button.png";
