@@ -124,7 +124,8 @@ void MenuGUIController::createProcess() {
 void MenuGUIController::joinProcess() {
 	std::string cmd = "/join " + this->view->join_popup.getInput(0)->getText();
 	this->model->sendCommand(MainInputParser{cmd});
-	if (this->model->receive() == QUERY::TRUEQ or this->model->receive() == QUERY::PLAYER_JOIN_GAME) {
+    QUERY query = this->model->receive();
+	if (query == QUERY::TRUEQ or query == QUERY::PLAYER_JOIN_GAME) {
 		this->new_state = STATE::GAME;
 		this->game_controller->update();
 	}
