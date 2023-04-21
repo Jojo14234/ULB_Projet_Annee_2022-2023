@@ -528,6 +528,7 @@ void Capitalist::processBankruptByPlayer(Player *player, Player *other) {
     for ( auto station : player->getAllStations() ) { station->exchange(other, 0); }
     for ( auto company : player->getAllCompanies() ) { company->exchange(other, 0); }
     /*TODO : donner les cartes sortie de prison*/
+    std::cout << " aaaaaa" << std::endl;
     other->receive(player->getMoney());
     player->pay(player->getMoney(), true);
 }

@@ -205,12 +205,14 @@ void GameCUIController::update() { this->initGame(); }
 
 // Les 2 fonctions ci-dessous sont les mêmes WHY ??????
 void GameCUIController::createGameGU(const std::string& response) {
+    this->view->getConsole()->clearAllText();
     GameLaunchingParser launching_parser(response);
     game_info = launching_parser.parseCreateQuery();
     this->initScreen(game_info->game_code);
     this->playerJoinUpdate();
 }
 void GameCUIController::joinGameGU(const std::string& response) {
+    this->view->getConsole()->clearAllText();
     GameLaunchingParser launching_parser(response);
     game_info = launching_parser.parseJoinQuery();
     this->initScreen(game_info->game_code);
@@ -542,7 +544,7 @@ void GameCUIController::endAuctionGU(const std::string& response){
 
 void GameCUIController::endGameGU(const std::string& response){
     this->view->getConsole()->addText("Victoire de " + response + ". Félicitations !");
-    this->view->getConsole()->addText("Entrez /quit pour retourner au menu.");
+    this->view->getConsole()->addText("Appuyez sur une touche pour revenir au menu.");
     this->view->endTurn();
 }
 

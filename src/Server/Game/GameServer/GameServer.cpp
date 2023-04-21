@@ -444,6 +444,7 @@ void GameServer::processBuild(ClientManager &client, Player *player) {
         }
         // BUILDING PROCESS DIDN'T WORK
         else this->updateThisClientWithQuery(QUERY::CANNOT_BUILD, "", client);
+        this->playerBuildInfos(client);
         client.receive(query, packet);
     }
     this->updateThisClientWithQuery(QUERY::INFOS_LEAVE_SELECTION_MODE, "", client);
@@ -478,6 +479,7 @@ void GameServer::processSellBuild(ClientManager &client, Player *player) {
 
         // SELL PROCESS DIDN'T WORK
         else this->updateThisClientWithQuery(QUERY::CANNOT_SELL, "", client);
+        this->playerSellBuildInfos(client);
         client.receive(query, packet);
     }
     this->updateThisClientWithQuery(QUERY::INFOS_LEAVE_SELECTION_MODE, "", client);
@@ -515,6 +517,7 @@ void GameServer::processMortgage(ClientManager &client, Player *player) {
 
         // SELL PROCESS DIDN'T WORK
         else this->updateThisClientWithQuery(QUERY::CANNOT_MORTAGE, "", client);
+        this->playerMortgageInfos(client);
         client.receive(query, packet);
     }
     this->updateThisClientWithQuery(QUERY::INFOS_LEAVE_SELECTION_MODE, "", client);
@@ -551,6 +554,7 @@ void GameServer::processLiftMortgage(ClientManager &client, Player *player) {
 
         // SELL PROCESS DIDN'T WORK
         else this->updateThisClientWithQuery(QUERY::CANNOT_UNMORTGAGE, "", client);
+        this->playerLiftMortgageInfos(client);
         client.receive(query, packet);
     }
     this->updateThisClientWithQuery(QUERY::INFOS_LEAVE_SELECTION_MODE, "", client);
@@ -581,6 +585,7 @@ void GameServer::processExchange(ClientManager &client, Player *player) {
         // QUERY IS SELECT
         packet >> property_name >> money_s;
         int money = std::atoi(money_s.c_str());
+        if (money < 0) this->updateThisClientWithQuery(QUERY::BAD_AMOUNT, "", client);
 
         // BUILDING PROCESS WORK
         ExchangeResult result = this->game.processSendExchangeRequest(player, property_name, money);
@@ -593,26 +598,36 @@ void GameServer::processExchange(ClientManager &client, Player *player) {
 
         // SELL PROCESS DIDN'T WORK
         else this->updateThisClientWithQuery(QUERY::CANNOT_EXCHANGE, "", client);
+        this->playerExchangeInfos(client);
         client.receive(query, packet);
     }
     this->updateThisClientWithQuery(QUERY::INFOS_LEAVE_SELECTION_MODE, "", client);
 }
 
 void GameServer::processAskExchange(ClientManager &client, Player *player) {
-    sleep(MAX_WAIT_EXCHANGE);
-    if (player->getStatus() == PLAYER_STATUS::IN_EXCHANGE) {
+    int i = 0;
+    bool exchanged = false;
+    while ( i < MAX_WAIT_EXCHANGE && ! exchanged ) {
+        sleep(1);
+        if (player->getStatus() != PLAYER_STATUS::IN_EXCHANGE) exchanged = true;
+        i++;
+    }
+    if (! exchanged) {
         this->updateThisClientWithQuery(QUERY::STOP_WAIT, "/refuse", client);
         player->setStatus(PLAYER_STATUS::FREE);
     }
 }
 
 void GameServer::processAskBid(ClientManager &client, Player *player) {
-    //std::cout << "tic tac toe " << std::endl;
     player->setStatus(PLAYER_STATUS::OTHER);
-    sleep(MAX_WAIT_EXCHANGE);
-    if (player->getStatus() == PLAYER_STATUS::OTHER) {
-        this->updateThisClientWithQuery(QUERY::STOP_WAIT, "/out", client);
+    int i = 0;
+    bool bidded = false;
+    while ( i < MAX_WAIT_AUCTION && ! bidded) {
+        sleep(1);
+        if (player->getStatus() != PLAYER_STATUS::OTHER) bidded = true;
+        i++;
     }
+    if (! bidded) { this->updateThisClientWithQuery(QUERY::STOP_WAIT, "/out", client); }    
 }
 
 void GameServer::processAuction(Player *me, Land* land) {
