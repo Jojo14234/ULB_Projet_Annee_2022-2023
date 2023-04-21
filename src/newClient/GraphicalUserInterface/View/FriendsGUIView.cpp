@@ -51,14 +51,25 @@ void FriendsGUIView::draw() {
 	ask_popup.draw(*window);
 }
 
-
 void FriendsGUIView::clear() {
 	this->friend_list.clear();
 	this->request_popup.getSelector(0)->clear();
 	this->other_user.setString("Nom de l'ami");
 	this->msg_box.clear();
+	this->message_input.clear();
 }
 
+void FriendsGUIView::initConversation(const std::string &str) {
+	std::string tmp = "";
+	std::string username;
+	bool flag = true;
+	for (auto c : str) {
+		if (c == '\n') { flag = true; this->addMsg(tmp, username); tmp=""; username="";}
+		else if (c == ':' and flag) { username = tmp; tmp=""; }
+		else { tmp += c; }
+	}
+
+}
 
 void FriendsGUIView::addMsg(const std::string &msg, const std::string &sender) {
 	float offset = this->msg_box.getOffset();

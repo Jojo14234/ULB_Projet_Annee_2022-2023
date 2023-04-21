@@ -51,15 +51,18 @@ void FriendsGUIController::handle(sf::Event event) {
 				this->view->message_input.select();
 			} else if (this->view->send_button.contains(event.mouseButton.x, event.mouseButton.y)) {
 				std::string msg = this->view->message_input.getString();
-				if (msg.length()==0) break; 
+				if (msg.length()==0 or this->view->other_user.getString() == "Nom de l'ami") break; 
 				this->model->sendCommand(MainInputParser{"/msg " + this->view->other_user.getString() + " " + msg});
-				if (this->model->receive() == QUERY::TRUEQ) {
-					this->view->addMsg(msg);
-				}
+				this->view->addMsg(msg);
+				this->view->message_input.clear();
 			} else {
 				for (const auto &friend_box : this->view->friend_list) {
 					if (friend_box.msgBtnContains(event.mouseButton.x, event.mouseButton.y)) {
 						this->view->other_user.setString(friend_box.getUsername());
+						this->model->sendCommand(MainInputParser{"/msg show " + friend_box.getUsername()});
+						std::string str="";
+						this->model->receive(str);
+						this->view->initConversation(str);
 					} else if (friend_box.rmvBtnContains(event.mouseButton.x, event.mouseButton.y)) {
 						this->model->sendCommand(MainInputParser{"/f remove " + friend_box.getUsername()});
 						if (this->model->receive() == QUERY::TRUEQ) {
@@ -111,6 +114,4 @@ void FriendsGUIController::update() {
 		this->view->friend_list.addObject(new FriendBox{ObjectInfo<>(size_x, size_y, pos_x, pos_y +((sep + size_y)*i) ), name});
 		i++;
 	}
-
-	this->view->addMsg("Miaou Miaou", "yoyo");
 }

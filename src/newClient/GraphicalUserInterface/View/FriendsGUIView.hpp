@@ -53,6 +53,8 @@ public:
 
 	void initRequestPopup();
 	void initAskPopup();
+	void initConversation(const std::string &str);
+	
 	void addMsg(const std::string &msg, const std::string &sender="moi");
 
 
