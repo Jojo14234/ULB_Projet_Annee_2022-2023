@@ -1,0 +1,79 @@
+PLAN de la présentation :
+
+On commence par présenter le jeu en sois
+
+-> CUI 
+	-> Connexion/Création de compte
+	-> Tout ce qui se rapporte au amis
+		- invitation
+		- accepter/refuser
+		- supprimer un amis
+	-> ON LE FAIT SUR NCUSRE CAR SUR GUI C'EST BUGER
+
+	-> On lance une partie et on montre que ça fonctionne
+	
+
+-> GUI
+	-> connexion
+	-> On montre la liste d'amis en montrant que ont bien ajouté les amis avec le CUI 
+	-> On peut montrer les MP
+	
+	-> RANK
+		-> Montrer rank top et pos
+
+	-> Les settings (bien que non fonctionnel, ils sont là) il manque 2-3 ligne de code pour qu'ils soient fonctionnel mais on a manqué de temps
+
+	-> Création d'une partie
+		-> Les paramètres (On peut les expliquer)
+		-> Lancer la game
+
+	-> Rejoindre une partie
+		-> montrer ce qui se passe lorsque le game code n'est pas valide
+		-> Montrer ce qui se passe quand il est valide
+
+	-> JOUER
+		-> lancé les dés
+		-> acheter
+		-> Vendre
+		-> PLACER UNE MAISON SUR UN BATIMENT QU'ON A ACHETER
+		-> détruire le bâtiment
+		-> Hypothéquer le bail
+
+		-> Enchère
+		-> échange
+
+		-> Double des dés, prison, carte chance et communauté
+
+	
+
+ENSUITE on peut fermer le jeu en disant pas le temps de vous montrer la fin d'une partie.
+
+On passe à la présentation du code
+
+Division en 2 groupes : 
+
+BACK :
+
+	- Communication server client
+	- Gestion de la base de donnée
+	- Classement des joueurs la formule et comment on renvoie le classement
+	- Gestion des amis lors de la sauvegarde dans la db pareil pour le loading (on utilise les id des joueur)
+	- Les différent parser
+	- La gestion des thread client dans le server
+	- La représentation d'un client dans le server se fait via ClientManager
+	- Les mécanisme de Game
+	- Les envois de message de game vers le client + le parsing
+
+FRONT :
+
+	- Présentation du MVC (le système de state) 
+	- Présentation des différents objets de view (leur fonctionnement, qu'est ce qui les trigger, quelles sont leurs effets)
+	- Présenter le plateau comment ils fonctionnent quand on reçoit un message du server -> qu'est ce qui est construit comment on affiche des trucs, ...
+
+	
+QUESTION Réponse : 
+	- > oui oui chacun sa merde si j'ai bien compris ils veulent voir notre implication dans le projet grâce à ça.
+
+
+
+
